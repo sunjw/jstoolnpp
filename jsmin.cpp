@@ -54,7 +54,7 @@ int JSMin::get()
 	{
         c = getChar();
     }
-    if (c >= ' ' || c == '\n' || c == EOF || c < 0) 
+    if (c >= ' ' || c == '\n' || c == EOF) 
 	{
         return c;
     }
@@ -90,7 +90,7 @@ int JSMin::next()
             for (;;) 
 			{
                 c = get();
-                if (c <= '\n' && c > 0) 
+                if (c <= '\n') 
 				{
                     return c;
                 }

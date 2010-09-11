@@ -114,16 +114,16 @@ HWND getCurrentScintillaHandle() {
 	return (currentEdit == 0)?nppData._scintillaMainHandle:nppData._scintillaSecondHandle;
 };
 
-void fillZero(char* buffer, size_t length)
+void fillZero(unsigned char* buffer, size_t length)
 {
 	for(size_t i = 0; i < length; ++i)
 		buffer[i] = '\0';
 }
 
-void trim(char* source)
+void trim(unsigned char* source)
 {
 	size_t realStart = 0;
-	size_t len = strlen(source);
+	size_t len = strlen(reinterpret_cast<char*>(source));
 	for(; realStart < len; ++realStart)
 	{
 		if(source[realStart] != ' ' &&
@@ -133,31 +133,12 @@ void trim(char* source)
 			break;
 	}
 
-	strcpy(source, source + realStart);
-}
-
-int getChar(const char* source, size_t i)
-{
-	return source[i];
-}
-
-void put(char* dest, size_t i,int _Ch)
-{
-	dest[i] = _Ch;
+	strcpy(reinterpret_cast<char*>(source), reinterpret_cast<char*>(source + realStart));
 }
 
 void jsMin()
 {
 	HWND hCurrScintilla = getCurrentScintillaHandle();
-
- //   size_t start = 0; //::SendMessage(hCurrScintilla, SCI_GETSELECTIONSTART, 0, 0);
-	//size_t textLength = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
-	//if (end < start)
-	//{
-	//	size_t tmp = start;
-	//	start = end;
-	//	end = tmp;
-	//}
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
     if (jsLen == 0) 
@@ -165,12 +146,12 @@ void jsMin()
 
 	::SendMessage(hCurrScintilla, SCI_SETSEL, 0, jsLen);
 
-    char * pJS = new char[jsLen+1];
+    unsigned char * pJS = new unsigned char[jsLen+1];
     
     ::SendMessage(hCurrScintilla, SCI_GETSELTEXT, 0, (LPARAM)pJS);
 
 	size_t jsMinLen = jsLen;
-	char * pJSMin = new char[jsMinLen+1];
+	unsigned char * pJSMin = new unsigned char[jsMinLen+1];
 
 	fillZero(pJSMin, jsMinLen+1);
 
@@ -182,7 +163,7 @@ void jsMin()
 		trim(pJSMin);
 
 		::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJSMin);
-		//::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+strlen(pJSMin));
+		
 	}
 	catch(std::runtime_error ex)
 	{
@@ -194,26 +175,8 @@ void jsMin()
 	::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)pJSMin);
 	::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+strlen(pJSMin));*/
 
-	//asciiToBase64(pBase64Text, pAsciiText, asciiTextLen);
-	
-	//char *pBase64Text2Display = pBase64Text;
-	//size_t nbEOL = b64Len/64; //nb 0x0A
-	//pBase64Text2Display = new char[b64Len+nbEOL+1];
-
-	//size_t m = 0, n = 0;
-	//for ( ; m < b64Len ; m++)
-	//{
-	//	pBase64Text2Display[n++] = pBase64Text[m];
-
-	//	if ((m+1)%64 == 0)
-	//		pBase64Text2Display[n++] = 0x0A;
-	//}
-	//pBase64Text2Display[n] = '\0';
-
 	delete [] pJS;
 	delete [] pJSMin;
-
-	//delete [] pBase64Text2Display;
 }
 
 BOOL CALLBACK dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 

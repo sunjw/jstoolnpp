@@ -2,7 +2,7 @@
 
 int JSMinCharArray::getChar()
 {
-	if(getPos <= strlen(in))
+	if(getPos <= strlen(reinterpret_cast<const char*>(in)))
 		return in[getPos++];
 	else
 		return EOF;

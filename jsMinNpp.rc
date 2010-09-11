@@ -58,6 +58,6 @@ BEGIN
     LTEXT           "Author : Sun Junwen",IDC_STATIC,30,26,54,8
     LTEXT           "Version : ",IDC_STATIC,30,43,31,8
     LTEXT           "Licence : GPL",IDC_STATIC,30,62,43,8
-    LTEXT           "Special thanks to : Don HO",IDC_STATIC,30,81,130,8
+    LTEXT           "Special thanks to : Don HO and Douglas Crockford",IDC_STATIC,30,81,175,8
     LTEXT           VERSION_VALUE, IDC_STATIC,65,43,19,8
 END

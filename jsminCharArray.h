@@ -8,13 +8,13 @@
 class JSMinCharArray: public JSMin
 {
 public:
-	JSMinCharArray(const char* input, char* output)
+	JSMinCharArray(const unsigned char* input, unsigned char* output)
 		:in(input), out(output), getPos(0), putPos(0)
 	{}
 
 private:
-	const char* in;
-	char* out;
+	const unsigned char* in;
+	unsigned char* out;
 
 	size_t getPos;
 	size_t putPos;
