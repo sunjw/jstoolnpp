@@ -1,5 +1,6 @@
 //this file a source file of JSMinNpp
 //Copyright (C)2007 Don HO <donho@altern.org>
+//Copyright (C)2010 Sun Junwen
 //
 //This program is free software; you can redistribute it and/or
 //modify it under the terms of the GNU General Public License
@@ -17,12 +18,13 @@
 #include <stdexcept> 
 
 #include "PluginInterface.h"
+#include "menuCmdID.h"
 #include "jsMinNpp.h"
 #include "jsminCharArray.h"
 
 
 const TCHAR PLUGIN_NAME[] = TEXT("JSMin");
-const int nbFunc = 3;
+const int nbFunc = 4;
 
 HINSTANCE _hInst;
 NppData nppData;
@@ -37,25 +39,29 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 		case DLL_PROCESS_ATTACH:
 		{
 			_hInst = (HINSTANCE)hModule;
-			funcItem[0]._pFunc = jsMin;
+			funcItem[0]._pFunc = jsMinCurrent;
+			funcItem[1]._pFunc = jsMinNew;
 
-			funcItem[1]._pFunc = NULL;
-			funcItem[2]._pFunc = about;
+			funcItem[2]._pFunc = NULL;
+			funcItem[3]._pFunc = about;
 
 			lstrcpy(funcItem[0]._itemName, TEXT("JSMin"));
+			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (In new file)"));
 			
-			lstrcpy(funcItem[1]._itemName, TEXT("-SEPARATOR-"));
+			lstrcpy(funcItem[2]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[2]._itemName, TEXT("About"));
+			lstrcpy(funcItem[3]._itemName, TEXT("About"));
 
 			funcItem[0]._init2Check = false;
 			funcItem[1]._init2Check = false;
 			funcItem[2]._init2Check = false;
+			funcItem[3]._init2Check = false;
 
 			// If you don't need the shortcut, you have to make it NULL
 			funcItem[0]._pShKey = NULL;
 			funcItem[1]._pShKey = NULL;
 			funcItem[2]._pShKey = NULL;
+			funcItem[3]._pShKey = NULL;
 		}
 		break;
 
@@ -136,7 +142,17 @@ void trim(unsigned char* source)
 	strcpy(reinterpret_cast<char*>(source), reinterpret_cast<char*>(source + realStart));
 }
 
-void jsMin()
+void jsMinCurrent()
+{
+	jsMin(false);
+}
+
+void jsMinNew()
+{
+	jsMin(true);
+}
+
+void jsMin(bool bNewFile)
 {
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
@@ -144,16 +160,16 @@ void jsMin()
     if (jsLen == 0) 
 		return;
 
-	::SendMessage(hCurrScintilla, SCI_SETSEL, 0, jsLen);
+	//::SendMessage(hCurrScintilla, SCI_SETSEL, 0, jsLen);
 
     unsigned char * pJS = new unsigned char[jsLen+1];
     
-    ::SendMessage(hCurrScintilla, SCI_GETSELTEXT, 0, (LPARAM)pJS);
+    ::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
 
-	size_t jsMinLen = jsLen;
+	size_t jsMinLen = jsLen + 1; // seem to be something wrong, so add 1
 	unsigned char * pJSMin = new unsigned char[jsMinLen+1];
 
-	fillZero(pJSMin, jsMinLen+1);
+	fillZero(pJSMin, jsMinLen + 1);
 
 	try
 	{
@@ -162,7 +178,23 @@ void jsMin()
 
 		trim(pJSMin);
 
-		::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJSMin);
+		if(bNewFile)
+		{
+			// Open a new document
+			::SendMessage(nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_FILE_NEW);
+
+			// ReGet the current scintilla
+			hCurrScintilla = getCurrentScintillaHandle();
+
+			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJSMin);
+
+			// Set file's language 
+			::SendMessage(nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
+		}
+		else
+		{
+			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJSMin);
+		}
 		
 	}
 	catch(std::runtime_error ex)

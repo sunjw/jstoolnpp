@@ -381,6 +381,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\menuCmdID.h"
+				>
+			</File>
+			<File
 				RelativePath=".\Notepad_plus_msgs.h"
 				>
 			</File>
