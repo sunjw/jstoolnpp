@@ -18,8 +18,8 @@
 #ifndef NPP_TOOLS_H
 #define NPP_TOOLS_H
 
-#define VERSION_VALUE "1.01\0"
-#define VERSION_DIGITALVALUE 1, 0, 1, 0
+#define VERSION_VALUE "1.05\0"
+#define VERSION_DIGITALVALUE 1, 0, 5, 0
 
 #define IDD_ABOUTBOX 250
 
@@ -27,7 +27,9 @@
 #define IDC_STATIC -1
 #endif
 
-void jsMin();
+void jsMinCurrent();
+void jsMinNew();
+void jsMin(bool bNewFile = false);
 
 void about();
 

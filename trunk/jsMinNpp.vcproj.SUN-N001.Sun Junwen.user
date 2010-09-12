@@ -93,7 +93,7 @@
 			Name="Unicode Debug|Win32"
 			>
 			<DebugSettings
-				Command=""
+				Command="E:\programs\utilities\npp\notepad++.exe"
 				WorkingDirectory=""
 				CommandArguments=""
 				Attach="false"
