@@ -43,9 +43,9 @@ public:
 		bRegular(false),
 		nIndents(0),
 		bNewLine(false),
-		bIfLikeBlock(false),
-		bDoLikeBlock(false),
-		bSwitchBlock(false),
+		nIfLikeBlock(0),
+		nDoLikeBlock(0),
+		nSwitchBlock(0),
 		bBracket(false)
 	{}
 
@@ -62,12 +62,12 @@ private:
 		const string& rightStyle = string("")); // Put a token out with style
 	void PutString(const string& str);
 
-	bool IsNormalChar(int ch);
-	bool IsBlankChar(int ch);
-	bool IsSingleOper(int ch);
-	bool IsQuote(int ch);
-	bool IsComment(); // 要联合判断 charA, charB
-	bool IsType(const string& str);
+	bool inline IsNormalChar(int ch);
+	bool inline IsBlankChar(int ch);
+	bool inline IsSingleOper(int ch);
+	bool inline IsQuote(int ch);
+	bool inline IsComment(); // 要联合判断 charA, charB
+	bool inline IsType(const string& str);
 
 	int charA;
 	int charB;
@@ -81,9 +81,9 @@ private:
 	int nIndents; // 缩进数量，不用计算 blockStack，效果不好
 
 	bool bNewLine; // 准备换行的标志
-	bool bIfLikeBlock; // if, for, while, else if
-	bool bDoLikeBlock; // do, else
-	bool bSwitchBlock; // switch
+	int nIfLikeBlock; // if, for, while, else if
+	int nDoLikeBlock; // do, else
+	int nSwitchBlock; // switch
 	bool bBracket; // if 之类的后面的括号
 };
 
