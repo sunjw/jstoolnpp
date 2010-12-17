@@ -316,7 +316,9 @@ void RealJSFormatter::Go()
 		tokenA = tokenB;
 		tokenAType = tokenBType;
 		GetToken();
-		if(nIfLikeBlock || nDoLikeBlock || nSwitchBlock)
+		//if(nIfLikeBlock || nDoLikeBlock)
+		if(((blockStack.top() == 'i' || blockStack.top() == 'd') && !tokenA.compare(";")) ||
+			((nIfLikeBlock || nDoLikeBlock) && blockStack.top() == '{' && !tokenA.compare("}")))
 		{
 			while(!tokenB.compare("\n") || !tokenB.compare("\r\n"))
 				GetToken(); // 在循环或条件块中忽略读入的换行
@@ -569,7 +571,10 @@ void RealJSFormatter::Go()
 			if(!tokenA.compare(":") && blockStack.top() == 'c')
 			{
 				// case, default
-				PutToken(tokenA, string(""), string("\n"));
+				if(!bHaveNewLine)
+					PutToken(tokenA, string(""), string("\n"));
+				else
+					PutToken(tokenA);
 				blockStack.pop();
 				continue;
 			}
@@ -577,60 +582,52 @@ void RealJSFormatter::Go()
 			PutToken(tokenA, string(" "), string(" ")); // 剩余的操作符都是 空格oper空格
 			break;
 		case STRING_TYPE:
-			if(tokenBType == STRING_TYPE)
+			if((tokenA.compare("case") == 0 || tokenA.compare("default") == 0) && bNewLine)
 			{
-				if((tokenA.compare("case") == 0 || tokenA.compare("default") == 0) && bNewLine)
+				// case, default 往里面缩一格
+				--nIndents;
+				PutToken(tokenA, string(""), string(" "));
+				++nIndents;
+				blockStack.push('c');
+				continue;
+			}
+			
+			if((tokenA.compare("do") == 0 || tokenA.compare("else") == 0) && tokenB.compare("if"))
+			{
+				PutToken(tokenA);
+
+				++nDoLikeBlock;
+				blockStack.push(tokenA[0]);
+				++nIndents; // 无需 ()，直接缩进
+				
+				if(tokenBType == STRING_TYPE)
 				{
-					// case, default 往里面缩一格
-					--nIndents;
-					PutToken(tokenA, string(""), string(" "));
-					++nIndents;
-					blockStack.push('c');
+					PutString(string(" \n"));
 				}
 				else
-					PutToken(tokenA, string(""), string(" "));
-
-				if(blockStack.top() != 't' && IsType(tokenA))
-					//blockStack.push('t'); // 声明变量
-
-				if((tokenA.compare("do") == 0 || tokenA.compare("else") == 0) && tokenB.compare("if"))
 				{
-					++nDoLikeBlock;
-					blockStack.push(tokenA[0]);
-					++nIndents; // 无需 ()，直接缩进
-					
-					PutString(string("\n"));
+					if(!tokenB.compare("{"))
+						PutString(string(" "));
 				}
+				continue;
+			}
+
+			if(tokenBType == STRING_TYPE)
+			{
+				PutToken(tokenA, string(""), string(" "));
+
+				//if(blockStack.top() != 't' && IsType(tokenA))
+					//blockStack.push('t'); // 声明变量
 			}
 			else
 			{
-				// 条件和循环在这里
-				if((tokenA.compare("case") == 0 || tokenA.compare("default") == 0) && bNewLine)
-				{
-					// case, default 往里面缩一格
-					--nIndents;
-					PutToken(tokenA, string(""), string(" "));
-					++nIndents;
-					blockStack.push('c');
-				}
-				else
-					PutToken(tokenA);
+				PutToken(tokenA);
 
 				if(tokenA.compare("if") == 0 || tokenA.compare("for") == 0 || tokenA.compare("while") == 0)
 				{
 					++nIfLikeBlock;
 					bBracket = false; // 等待 ()，() 到来后才能加缩进
 					blockStack.push(tokenA[0]);
-				}
-
-				if(tokenA.compare("do") == 0 || tokenA.compare("else") == 0)
-				{
-					++nDoLikeBlock;
-					blockStack.push(tokenA[0]);
-					++nIndents; // 无需 ()，直接缩进
-
-					if(!tokenB.compare("{"))
-						PutString(string(" "));
 				}
 
 				if(tokenA.compare("switch") == 0)
