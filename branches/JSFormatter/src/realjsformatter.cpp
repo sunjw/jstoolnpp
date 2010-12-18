@@ -47,7 +47,8 @@ bool RealJSFormatter::IsSingleOper(int ch)
 	// 单字符符号
 	return (ch == '.' || ch == '(' || ch == ')' ||
 		ch == '[' || ch == ']' || ch == '{' || ch == '}' || 
-		ch == ':' || ch == ',' || ch == ';' || ch == '\n');
+		ch == ':' || ch == ',' || ch == ';' || ch == '^' ||
+		ch == '\n');
 }
 
 bool RealJSFormatter::IsQuote(int ch)
@@ -174,7 +175,8 @@ void RealJSFormatter::GetToken(bool init)
 			continue;
 		}
 		
-		if(IsNormalChar(charA))
+		if(IsNormalChar(charA) || 
+			((charA == '-' || charA == '+') && IsNormalChar(charB)))
 		{
 			tokenBType = STRING_TYPE;
 			tokenB.push_back(charA);
@@ -479,6 +481,8 @@ void RealJSFormatter::Go()
 					bBracket = true;
 					++nIndents;
 				}
+				else if(!tokenA.compare(")") && !tokenB.compare("{"))
+					PutToken(tokenA, string(""), string(" "));
 				else
 					PutToken(tokenA); // 正常输出
 
