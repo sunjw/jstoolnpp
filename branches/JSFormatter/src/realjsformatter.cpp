@@ -366,8 +366,7 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 {
 	if(!((previousStackTop == 'i' && !tokenB.compare("else")) || 
 		(previousStackTop == 'd' && !tokenB.compare("while")) ||
-		(previousStackTop == 'r' && !tokenB.compare("catch")) ||
-		(previousStackTop == 'h' && !tokenB.compare("catch"))))
+		(previousStackTop == 'r' && !tokenB.compare("catch"))))
 	{
 		char topStack = blockStack.top();
 		// ; 还可能可能结束多个 if, do, while, for, try, catch
@@ -384,9 +383,8 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 
 			if((topStack == 'i' && !tokenB.compare("else")) ||
 				(topStack == 'd' && !tokenB.compare("while")) ||
-				(topStack == 'r' && !tokenB.compare("catch")) ||
-				(topStack == 'h' && !tokenB.compare("catch")))
-				break; // 直到刚刚结束一个 if...else, do...while, try...catch, catch...catch
+				(topStack == 'r' && !tokenB.compare("catch")))
+				break; // 直到刚刚结束一个 if...else, do...while, try...catch
 			topStack = blockStack.top();
 		}
 	}
@@ -593,16 +591,19 @@ void RealJSFormatter::Go()
 					//topStack = blockStack.top();
 				}
 
+				string leftStyle("");
+				if(!bNewLine)
+					leftStyle = "\n";
+
 				if((!bHaveNewLine && tokenBFirst != ';' && tokenBFirst != ',' && tokenBFirst != ')')
 					&& !(topStack == 'd' && !tokenB.compare("while")) && 
 					!(topStack == 'i' && !tokenB.compare("else")) &&
-					!(topStack == 'r' && !tokenB.compare("catch")) &&
-					!(topStack == 'h' && !tokenB.compare("catch")))
-					PutToken(tokenA, string(""), string(" \n")); // 一些情况换行
+					!(topStack == 'r' && !tokenB.compare("catch")))
+					PutToken(tokenA, leftStyle, string(" \n")); // 一些情况换行
 				else if(tokenBType == STRING_TYPE)
-					PutToken(tokenA, string(""), string(" ")); // 为 else 准备的空格
+					PutToken(tokenA, leftStyle, string(" ")); // 为 else 准备的空格
 				else
-					PutToken(tokenA); // }, }; })
+					PutToken(tokenA, leftStyle); // }, }; })
 
 				PopMultiBlock(topStack);
 
