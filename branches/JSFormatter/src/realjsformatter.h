@@ -25,6 +25,7 @@ SOFTWARE.
 #define _REAL_JSFORMATTER_H_
 #include <string>
 #include <stack>
+#include <queue>
 
 using namespace std;
 
@@ -34,10 +35,17 @@ using namespace std;
 #define COMMENT_TYPE_1 9 // 单行注释
 #define COMMENT_TYPE_2 10 // 多行注释
 
+struct TokenAndType
+{
+	string token;
+	int type;
+};
+
 class RealJSFormatter
 {
 public:
 	typedef stack<char> CharStack;
+	typedef queue<TokenAndType> TokenQueue;
 
 	RealJSFormatter():
 		bRegular(false),
@@ -51,7 +59,7 @@ public:
 
 	void Go();
 
-private:
+protected:
 	// Should be implemented in derived class
 	virtual inline int GetChar() = 0; // JUST get next char from input
 	virtual inline void PutChar(int ch) = 0; // JUST put a char to output 
@@ -69,13 +77,18 @@ private:
 	bool inline IsComment(); // 要联合判断 charA, charB
 	bool inline IsType(const string& str);
 
+	void PrepareRegular();
+	void PrepareTokenB();
+	void PopMultiBlock(char previousStackTop);
+
+	bool bRegular; // GetToken 用到的唯一一个成员状态
 	int charA;
 	int charB;
-	bool bRegular; // GetToken 用到的唯一一个成员状态
-	string tokenA;
-	string tokenB;
 	int tokenAType;
 	int tokenBType;
+	string tokenA;
+	string tokenB;
+	TokenQueue tokenBQueue;
 
 	CharStack blockStack;
 	int nIndents; // 缩进数量，不用计算 blockStack，效果不好
