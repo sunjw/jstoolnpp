@@ -90,7 +90,12 @@ protected:
 	string tokenB;
 	TokenQueue tokenBQueue;
 
-	CharStack blockStack;
+	/*
+	 * if-i, else-e, else if-i, 
+	 * for-f, do-d, while-w, switch-s, case-c
+	 * try-r, catch-h
+	 */ 
+	CharStack blockStack; 
 	int nIndents; // 缩进数量，不用计算 blockStack，效果不好
 
 	bool bNewLine; // 准备换行的标志
