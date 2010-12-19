@@ -26,6 +26,7 @@ SOFTWARE.
 #include <string>
 #include <stack>
 #include <queue>
+#include <map>
 
 using namespace std;
 
@@ -34,6 +35,26 @@ using namespace std;
 #define REGULAR_TYPE 2
 #define COMMENT_TYPE_1 9 // 单行注释
 #define COMMENT_TYPE_2 10 // 多行注释
+
+/*
+ * if-i, else-e, else if-i, 
+ * for-f, do-d, while-w, 
+ * switch-s, case-c, default-c
+ * try-r, catch-h
+ * {-BLOCK, (-BRACKET
+ */ 
+#define IF 'i'
+#define ELSE 'e'
+#define FOR 'f'
+#define DO 'd'
+#define WHILE 'w'
+#define SWITCH 's'
+#define CASE 'c'
+#define TRY 'r'
+#define CATCH 'h'
+#define BLOCK '{'
+#define BRACKET '('
+#define SQUARE '['
 
 struct TokenAndType
 {
@@ -46,16 +67,32 @@ class RealJSFormatter
 public:
 	typedef stack<char> CharStack;
 	typedef queue<TokenAndType> TokenQueue;
+	typedef map<string, char> StrCharMap;
 
 	RealJSFormatter():
 		bRegular(false),
+		bPosNeg(false),
 		nIndents(0),
 		bNewLine(false),
 		nIfLikeBlock(0),
 		nDoLikeBlock(0),
 		nSwitchBlock(0),
 		bBracket(false)
-	{}
+	{
+		blockMap[string("if")] = IF;
+		blockMap[string("else")] = ELSE;
+		blockMap[string("for")] = FOR;
+		blockMap[string("do")] = DO;
+		blockMap[string("while")] = WHILE;
+		blockMap[string("switch")] = SWITCH;
+		blockMap[string("case")] = CASE;
+		blockMap[string("default")] = CASE;
+		blockMap[string("try")] = TRY;
+		blockMap[string("catch")] = CATCH;
+		blockMap[string("{")] = BLOCK;
+		blockMap[string("(")] = BRACKET;
+		blockMap[string("[")] = SQUARE;
+	}
 
 	void Go();
 
@@ -63,6 +100,9 @@ protected:
 	// Should be implemented in derived class
 	virtual inline int GetChar() = 0; // JUST get next char from input
 	virtual inline void PutChar(int ch) = 0; // JUST put a char to output 
+
+	void ProcessOper(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
+	void ProcessString(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
 
 	void GetToken(bool init = false);
 	void PutToken(const string& token, 
@@ -77,11 +117,13 @@ protected:
 	bool inline IsComment(); // 要联合判断 charA, charB
 	bool inline IsType(const string& str);
 
-	void PrepareRegular();
+	void PrepareRegular(); // 通过词法判断 tokenB 正则
+	void PreparePosNeg(); // 通过词法判断 tokenB 正负数
 	void PrepareTokenB();
 	void PopMultiBlock(char previousStackTop);
 
-	bool bRegular; // GetToken 用到的唯一一个成员状态
+	bool bRegular; // tokenB 实际是正则 GetToken 用到的两个成员状态
+	bool bPosNeg; // tokenB 实际是正负数
 	int charA;
 	int charB;
 	int tokenAType;
@@ -90,11 +132,7 @@ protected:
 	string tokenB;
 	TokenQueue tokenBQueue;
 
-	/*
-	 * if-i, else-e, else if-i, 
-	 * for-f, do-d, while-w, switch-s, case-c
-	 * try-r, catch-h
-	 */ 
+	StrCharMap blockMap;
 	CharStack blockStack; 
 	int nIndents; // 缩进数量，不用计算 blockStack，效果不好
 

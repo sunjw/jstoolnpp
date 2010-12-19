@@ -79,15 +79,19 @@ void RealJSFormatter::GetToken(bool init)
 	}
 
 	// normal procedure	
-	if(!bRegular)
+	if(!bRegular && !bPosNeg)
 	{
 		tokenBType = STRING_TYPE;
 		tokenB = "";
 	}
-	else
+	else if(bRegular)
 	{
 		tokenBType = REGULAR_TYPE; // 正则
 		//tokenB.push_back('/');
+	}
+	else
+	{
+		tokenBType = STRING_TYPE; // 正负数
 	}
 
 	bool bQuote = false;
@@ -175,13 +179,15 @@ void RealJSFormatter::GetToken(bool init)
 			continue;
 		}
 		
-		if(IsNormalChar(charA) || 
-			((charA == '-' || charA == '+') && IsNormalChar(charB)))
+		if(IsNormalChar(charA))
 		{
 			tokenBType = STRING_TYPE;
 			tokenB.push_back(charA);
 			if(!IsNormalChar(charB)) // loop until charB is not normal char
+			{
+				bPosNeg = false;
 				return;
+			}
 		}
 		else
 		{
@@ -320,6 +326,27 @@ void RealJSFormatter::PrepareRegular()
 	}
 }
 
+void RealJSFormatter::PreparePosNeg()
+{
+	/*
+	 * 如果 tokenB 是 -,+ 号
+	 * 而且 tokenA 不是字符串型也不是正则表达式
+	 * 而且 tokenA 不是 ++, --, ], )
+	 * 而且 charB 是一个 NormalChar
+	 * 那么 tokenB 实际上是一个正负数
+	 */
+	if(tokenBType == OPER_TYPE && (!tokenB.compare("-") || !tokenB.compare("+")) && 
+		tokenAType != STRING_TYPE && tokenAType != REGULAR_TYPE &&
+		tokenA.compare("++") && tokenA.compare("--") && 
+		tokenA.compare("]") && tokenA.compare(")") && 
+		IsNormalChar(charB))
+	{
+		// tokenB 实际上是正负数
+		bPosNeg = true;
+		GetToken();
+	}
+}
+
 void RealJSFormatter::PrepareTokenB()
 {
 	char stackTop = blockStack.top();
@@ -364,26 +391,26 @@ void RealJSFormatter::PrepareTokenB()
 
 void RealJSFormatter::PopMultiBlock(char previousStackTop)
 {
-	if(!((previousStackTop == 'i' && !tokenB.compare("else")) || 
-		(previousStackTop == 'd' && !tokenB.compare("while")) ||
-		(previousStackTop == 'r' && !tokenB.compare("catch"))))
+	if(!((previousStackTop == IF && !tokenB.compare("else")) || 
+		(previousStackTop == DO && !tokenB.compare("while")) ||
+		(previousStackTop == TRY && !tokenB.compare("catch"))))
 	{
 		char topStack = blockStack.top();
 		// ; 还可能可能结束多个 if, do, while, for, try, catch
-		while(topStack == 'i' || topStack == 'f' || topStack == 'w' || 
-			topStack == 'd' || topStack == 'e' || topStack == 'r' || topStack == 'h')
+		while(topStack == IF || topStack == FOR || topStack == WHILE || 
+			topStack == DO || topStack == ELSE || topStack == TRY || topStack == CATCH)
 		{
-			if(topStack == 'i' || topStack == 'f' || topStack == 'w' || topStack == 'h')
+			if(topStack == IF || topStack == FOR || topStack == WHILE || topStack == CATCH)
 				--nIfLikeBlock;
-			else if(topStack == 'd' || topStack == 'e' || topStack == 'r')
+			else if(topStack == DO || topStack == ELSE || topStack == TRY)
 				--nDoLikeBlock;
 
 			blockStack.pop();
 			--nIndents;
 
-			if((topStack == 'i' && !tokenB.compare("else")) ||
-				(topStack == 'd' && !tokenB.compare("while")) ||
-				(topStack == 'r' && !tokenB.compare("catch")))
+			if((topStack == IF && !tokenB.compare("else")) ||
+				(topStack == DO && !tokenB.compare("while")) ||
+				(topStack == TRY && !tokenB.compare("catch")))
 				break; // 直到刚刚结束一个 if...else, do...while, try...catch
 			topStack = blockStack.top();
 		}
@@ -395,9 +422,14 @@ void RealJSFormatter::Go()
 	blockStack.push(' ');
 	GetToken(true);
 
+	bool bHaveNewLine;
+	char tokenAFirst;
+	char tokenBFirst;
+
 	while(charA != EOF)
 	{
 		PrepareRegular(); // 判断正则
+		PreparePosNeg(); // 判断正负数
 
 		tokenA = tokenB;
 		tokenAType = tokenBType;
@@ -417,9 +449,9 @@ void RealJSFormatter::Go()
 			tokenBType = temp.type;
 		}
 
-		bool bHaveNewLine = false;
-		char tokenAFirst = tokenA[0];
-		char tokenBFirst = tokenB[0];
+		bHaveNewLine = false;
+		tokenAFirst = tokenA[0];
+		tokenBFirst = tokenB[0];
 		if(tokenBFirst == '\r')
 			tokenBFirst = '\n';
 		if(tokenBFirst == '\n' || tokenBType == COMMENT_TYPE_1)
@@ -453,250 +485,260 @@ void RealJSFormatter::Go()
 			}
 			break;
 		case OPER_TYPE:
-			if(!tokenA.compare("(") || !tokenA.compare(")") || 
-				!tokenA.compare("[") || !tokenA.compare("]") ||
-				!tokenA.compare("!") || !tokenA.compare("."))
-			{
-				// ()[]!. 都是前后没有样式的运算符
-				if((!tokenA.compare(")") && blockStack.top() == '(') ||
-					(!tokenA.compare("]") && blockStack.top() == '['))
-				{
-					// )] 需要弹栈，减少缩进
-					blockStack.pop();
-					--nIndents;
-				}
+			ProcessOper(bHaveNewLine, tokenAFirst, tokenBFirst);
 
-				if(!tokenA.compare(")") && (nIfLikeBlock || nSwitchBlock) && !bBracket &&
-					(blockStack.top() == 'i' || blockStack.top() == 'f' || blockStack.top() == 'w' ||
-					blockStack.top() == 's' || blockStack.top() == 'h')) 
-				{
-					// 栈顶的 if, switch, catch 正在等待 )，之后换行增加缩进
-					// ) { 之间的空格在输出换行时会处理
-					if(!bHaveNewLine)
-						PutToken(tokenA, string(""), string("\n"));
-					else
-						PutToken(tokenA);
-					bBracket = true;
-					++nIndents;
-				}
-				else if(!tokenA.compare(")") && !tokenB.compare("{"))
-					PutToken(tokenA, string(""), string(" "));
-				else
-					PutToken(tokenA); // 正常输出
-
-				if(!tokenA.compare("(") || !tokenA.compare("["))
-				{
-					// ([ 入栈，增加缩进
-					blockStack.push(tokenAFirst);
-					++nIndents;
-				}
-
-				continue;
-			}
-			
-			if(!tokenA.compare(";"))
-			{
-				if(nIfLikeBlock || nDoLikeBlock)
-				{
-					// ; 结束 if, else, do, while, for, try, catch
-					char topStack = blockStack.top();
-					if(topStack == 'i' || topStack == 'f' || 
-						topStack == 'w' || topStack == 'h')
-					{
-						--nIfLikeBlock;
-						blockStack.pop();
-						--nIndents;
-					}
-					if(topStack == 'd' || topStack == 'e' || topStack == 'r')
-					{
-						--nDoLikeBlock;
-						blockStack.pop();
-						--nIndents;
-					}
-					
-					// 下面的 } 有同样的处理
-					PopMultiBlock(topStack);
-				}
-
-				//if(blockStack.top() == 't')
-					//blockStack.pop(); // ; 也结束变量声明，暂时不压入 t
-
-				if(blockStack.top() != '(' && !bHaveNewLine)
-					PutToken(tokenA, string(""), string(" \n")); // 如果不是 () 里的;就换行
-				else
-					PutToken(tokenA, string(""), string(" "));
-
-				continue;
-			}
-
-			if(!tokenA.compare(","))
-			{
-				if(blockStack.top() == '{' && !bHaveNewLine)
-					PutToken(tokenA, string(""), string(" \n")); // 如果是 {} 里的
-				else
-					PutToken(tokenA, string(""), string(" "));
-
-				continue;
-			}
-			
-			if(!tokenA.compare("{"))
-			{
-				if((nIfLikeBlock || nDoLikeBlock || nSwitchBlock) && 
-					(blockStack.top() == 'i' || blockStack.top() == 'f' || 
-					blockStack.top() == 'w' || blockStack.top() == 'd' || 
-					blockStack.top() == 'e' || blockStack.top() == 's' ||
-					blockStack.top() == 'r' || blockStack.top() == 'h'))
-				{
-					//blockStack.pop(); // 不把那个弹出来，遇到 } 时一起弹
-					--nIndents;
-				}
-
-				blockStack.push(tokenAFirst); // 入栈，增加缩进
-				++nIndents;
-
-				if(!bHaveNewLine) // 需要换行
-					PutToken(tokenA, string(""), string(" \n"));
-				else
-					PutToken(tokenA, string(""), string(" "));
-
-				continue;
-			}
-
-			if(!tokenA.compare("}"))
-			{
-				char topStack = blockStack.top();
-				if(blockStack.top() == '{')
-				{
-					// 弹栈，减小缩进
-					blockStack.pop();
-					--nIndents;
-					topStack = blockStack.top();
-					if(topStack == 'i' || topStack == 'f' || 
-						topStack == 'w' || topStack == 'h')
-					{
-						--nIfLikeBlock;
-						blockStack.pop();
-					}
-					else if(topStack == 'd' || topStack == 'e' || topStack == 'r')
-					{
-						--nDoLikeBlock;
-						blockStack.pop();
-						
-					}
-					else if(topStack == 's')
-					{
-						--nSwitchBlock;
-						blockStack.pop();
-					}
-					//topStack = blockStack.top();
-				}
-
-				string leftStyle("");
-				if(!bNewLine)
-					leftStyle = "\n";
-
-				if((!bHaveNewLine && tokenBFirst != ';' && tokenBFirst != ',' && tokenBFirst != ')')
-					&& !(topStack == 'd' && !tokenB.compare("while")) && 
-					!(topStack == 'i' && !tokenB.compare("else")) &&
-					!(topStack == 'r' && !tokenB.compare("catch")))
-					PutToken(tokenA, leftStyle, string(" \n")); // 一些情况换行
-				else if(tokenBType == STRING_TYPE)
-					PutToken(tokenA, leftStyle, string(" ")); // 为 else 准备的空格
-				else
-					PutToken(tokenA, leftStyle); // }, }; })
-
-				PopMultiBlock(topStack);
-
-				continue;
-			}
-
-			if(!tokenA.compare("++") || !tokenA.compare("--") || 
-				!tokenA.compare("\n") || !tokenA.compare("\r\n"))
-			{
-				PutToken(tokenA);
-				continue;
-			}
-
-			if(!tokenA.compare(":") && blockStack.top() == 'c')
-			{
-				// case, default
-				if(!bHaveNewLine)
-					PutToken(tokenA, string(""), string("\n"));
-				else
-					PutToken(tokenA);
-				blockStack.pop();
-				continue;
-			}
-
-			PutToken(tokenA, string(" "), string(" ")); // 剩余的操作符都是 空格oper空格
 			break;
 		case STRING_TYPE:
-			if((!tokenA.compare("case") || !tokenA.compare("default")) && bNewLine)
-			{
-				// case, default 往里面缩一格
-				--nIndents;
-				PutToken(tokenA, string(""), string(" "));
-				++nIndents;
-				blockStack.push('c');
-				continue;
-			}
-			
-			if(!tokenA.compare("do") || 
-				(!tokenA.compare("else") && tokenB.compare("if")) ||
-				!tokenA.compare("try"))
-			{
-				// do, else (NOT else if), try
-				PutToken(tokenA);
-
-				++nDoLikeBlock;
-				if(tokenA.compare("try"))
-					blockStack.push(tokenA[0]);
-				else
-					blockStack.push('r');
-				++nIndents; // 无需 ()，直接缩进
-				
-				if(tokenBType == STRING_TYPE)
-				{
-					PutString(string(" \n"));
-				}
-				else
-				{
-					if(!tokenB.compare("{"))
-						PutString(string(" "));
-				}
-				continue;
-			}
-
-			if(tokenBType == STRING_TYPE)
-			{
-				PutToken(tokenA, string(""), string(" "));
-
-				//if(blockStack.top() != 't' && IsType(tokenA))
-					//blockStack.push('t'); // 声明变量
-			}
-			else
-			{
-				PutToken(tokenA);
-
-				if(!tokenA.compare("if") || !tokenA.compare("for") || 
-					!tokenA.compare("while") || !tokenA.compare("catch"))
-				{
-					++nIfLikeBlock;
-					bBracket = false; // 等待 ()，() 到来后才能加缩进
-					if(tokenA.compare("catch"))
-						blockStack.push(tokenA[0]);
-					else
-						blockStack.push('h');
-				}
-
-				if(!tokenA.compare("switch"))
-				{
-					++nSwitchBlock;
-					bBracket = false;
-					blockStack.push('s');
-				}
-			}
+			ProcessString(bHaveNewLine, tokenAFirst, tokenBFirst);
 			break;
+		}
+	}
+}
+
+void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char tokenBFirst)
+{
+	if(!tokenA.compare("(") || !tokenA.compare(")") || 
+		!tokenA.compare("[") || !tokenA.compare("]") ||
+		!tokenA.compare("!") || !tokenA.compare("!!") || 
+		!tokenA.compare("."))
+	{
+		// ()[]!. 都是前后没有样式的运算符
+		if((!tokenA.compare(")") && blockStack.top() == BRACKET) ||
+			(!tokenA.compare("]") && blockStack.top() == SQUARE))
+		{
+			// )] 需要弹栈，减少缩进
+			blockStack.pop();
+			--nIndents;
+		}
+
+		if(!tokenA.compare(")") && (nIfLikeBlock || nSwitchBlock) && !bBracket &&
+			(blockStack.top() == IF || blockStack.top() == FOR || blockStack.top() == WHILE ||
+			blockStack.top() == SWITCH || blockStack.top() == CATCH)) 
+		{
+			// 栈顶的 if, switch, catch 正在等待 )，之后换行增加缩进
+			// ) { 之间的空格在输出换行时会处理
+			if(!bHaveNewLine)
+				PutToken(tokenA, string(""), string("\n"));
+			else
+				PutToken(tokenA);
+			bBracket = true;
+			++nIndents;
+		}
+		else if(!tokenA.compare(")") && !tokenB.compare("{"))
+			PutToken(tokenA, string(""), string(" "));
+		else
+			PutToken(tokenA); // 正常输出
+
+		if(!tokenA.compare("(") || !tokenA.compare("["))
+		{
+			// ([ 入栈，增加缩进
+			blockStack.push(blockMap[tokenA]);
+			++nIndents;
+		}
+
+		return;
+	}
+			
+	if(!tokenA.compare(";"))
+	{
+		if(nIfLikeBlock || nDoLikeBlock)
+		{
+			// ; 结束 if, else, do, while, for, try, catch
+			char topStack = blockStack.top();
+			if(topStack == IF || topStack == FOR || 
+				topStack == WHILE || topStack == CATCH)
+			{
+				--nIfLikeBlock;
+				blockStack.pop();
+				--nIndents;
+			}
+			if(topStack == DO || topStack == ELSE || topStack == TRY)
+			{
+				--nDoLikeBlock;
+				blockStack.pop();
+				--nIndents;
+			}
+				
+			// 下面的 } 有同样的处理
+			PopMultiBlock(topStack);
+		}
+
+		//if(blockStack.top() == 't')
+			//blockStack.pop(); // ; 也结束变量声明，暂时不压入 t
+
+		if(blockStack.top() != BRACKET && !bHaveNewLine)
+			PutToken(tokenA, string(""), string(" \n")); // 如果不是 () 里的;就换行
+		else
+			PutToken(tokenA, string(""), string(" "));
+
+		return;
+	}
+
+	if(!tokenA.compare(","))
+	{
+		if(blockStack.top() == BLOCK && !bHaveNewLine)
+			PutToken(tokenA, string(""), string(" \n")); // 如果是 {} 里的
+		else
+			PutToken(tokenA, string(""), string(" "));
+
+		return;
+	}
+			
+	if(!tokenA.compare("{"))
+	{
+		if((nIfLikeBlock || nDoLikeBlock || nSwitchBlock) && 
+			(blockStack.top() == IF || blockStack.top() == FOR || 
+			blockStack.top() == WHILE || blockStack.top() == DO || 
+			blockStack.top() == ELSE || blockStack.top() == SWITCH ||
+			blockStack.top() == TRY || blockStack.top() == CATCH))
+		{
+			//blockStack.pop(); // 不把那个弹出来，遇到 } 时一起弹
+			--nIndents;
+		}
+
+		blockStack.push(blockMap[tokenA]); // 入栈，增加缩进
+		++nIndents;
+
+		if(!bHaveNewLine) // 需要换行
+			PutToken(tokenA, string(""), string(" \n"));
+		else
+			PutToken(tokenA, string(""), string(" "));
+
+		return;
+	}
+
+	if(!tokenA.compare("}"))
+	{
+		char topStack = blockStack.top();
+		if(topStack == BLOCK)
+		{
+			// 弹栈，减小缩进
+			blockStack.pop();
+			--nIndents;
+			topStack = blockStack.top();
+			if(topStack == IF || topStack == FOR || 
+				topStack == WHILE || topStack == CATCH)
+			{
+				--nIfLikeBlock;
+				blockStack.pop();
+			}
+			else if(topStack == DO || topStack == ELSE || topStack == TRY)
+			{
+				--nDoLikeBlock;
+				blockStack.pop();
+					
+			}
+			else if(topStack == SWITCH)
+			{
+				--nSwitchBlock;
+				blockStack.pop();
+			}
+			//topStack = blockStack.top();
+		}
+
+		string leftStyle("");
+		if(!bNewLine)
+			leftStyle = "\n";
+
+		if((!bHaveNewLine && tokenBFirst != ';' && tokenBFirst != ',' && tokenBFirst != ')')
+			&& !(topStack == DO && !tokenB.compare("while")) && 
+			!(topStack == IF && !tokenB.compare("else")) &&
+			!(topStack == TRY && !tokenB.compare("catch")))
+			PutToken(tokenA, leftStyle, string(" \n")); // 一些情况换行
+		else if(tokenBType == STRING_TYPE)
+			PutToken(tokenA, leftStyle, string(" ")); // 为 else 准备的空格
+		else
+			PutToken(tokenA, leftStyle); // }, }; })
+
+		PopMultiBlock(topStack);
+
+		return;
+	}
+
+	if(!tokenA.compare("++") || !tokenA.compare("--") || 
+		!tokenA.compare("\n") || !tokenA.compare("\r\n"))
+	{
+		PutToken(tokenA);
+		return;
+	}
+
+	if(!tokenA.compare(":") && blockStack.top() == CASE)
+	{
+		// case, default
+		if(!bHaveNewLine)
+			PutToken(tokenA, string(""), string("\n"));
+		else
+			PutToken(tokenA);
+		blockStack.pop();
+		return;
+	}
+
+	PutToken(tokenA, string(" "), string(" ")); // 剩余的操作符都是 空格oper空格
+}
+
+void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char tokenBFirst)
+{
+	if((!tokenA.compare("case") || !tokenA.compare("default")) && bNewLine)
+	{
+		// case, default 往里面缩一格
+		--nIndents;
+		PutToken(tokenA, string(""), string(" "));
+		++nIndents;
+		blockStack.push(blockMap[tokenA]);
+		return;
+	}
+			
+	if(!tokenA.compare("do") || 
+		(!tokenA.compare("else") && tokenB.compare("if")) ||
+		!tokenA.compare("try"))
+	{
+		// do, else (NOT else if), try
+		PutToken(tokenA);
+
+		++nDoLikeBlock;
+		blockStack.push(blockMap[tokenA]);
+		++nIndents; // 无需 ()，直接缩进
+				
+		if(tokenBType == STRING_TYPE)
+		{
+			PutString(string(" \n"));
+		}
+		else
+		{
+			if(!tokenB.compare("{"))
+				PutString(string(" "));
+		}
+		return;
+	}
+
+	if(tokenBType == STRING_TYPE)
+	{
+		PutToken(tokenA, string(""), string(" "));
+
+		//if(blockStack.top() != 't' && IsType(tokenA))
+			//blockStack.push('t'); // 声明变量
+	}
+	else
+	{
+		PutToken(tokenA);
+
+		if(!tokenA.compare("if") || !tokenA.compare("for") || 
+			!tokenA.compare("while") || !tokenA.compare("catch"))
+		{
+			++nIfLikeBlock;
+			bBracket = false; // 等待 ()，() 到来后才能加缩进
+			//if(tokenA.compare("catch"))
+			//	blockStack.push(tokenA[0]);
+			//else
+			//	blockStack.push('h');
+			blockStack.push(blockMap[tokenA]);
+		}
+
+		if(!tokenA.compare("switch"))
+		{
+			++nSwitchBlock;
+			bBracket = false;
+			blockStack.push(blockMap[tokenA]);
 		}
 	}
 }
