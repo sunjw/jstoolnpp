@@ -219,6 +219,14 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 		</Filter>
+		<Filter
+			Name="ÎÄµµ"
+			>
+			<File
+				RelativePath=".\doc\JSFormatterÎÄµµ.odt"
+				>
+			</File>
+		</Filter>
 	</Files>
 	<Globals>
 	</Globals>

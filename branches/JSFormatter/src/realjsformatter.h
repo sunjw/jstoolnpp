@@ -77,7 +77,8 @@ public:
 		nIfLikeBlock(0),
 		nDoLikeBlock(0),
 		nSwitchBlock(0),
-		bBracket(false)
+		bBracket(false),
+		bCommentPut(false)
 	{
 		blockMap[string("if")] = IF;
 		blockMap[string("else")] = ELSE;
@@ -141,6 +142,8 @@ protected:
 	int nDoLikeBlock; // do, else
 	int nSwitchBlock; // switch
 	bool bBracket; // if 之类的后面的括号
+
+	bool bCommentPut; // 刚刚输出了注释
 };
 
 #endif
