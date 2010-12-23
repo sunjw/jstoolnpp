@@ -573,7 +573,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		topStack = blockStack.top();
 		if(topStack != BRACKET && !bHaveNewLine)
 			PutToken(tokenA, string(""), string("\n")); // 如果不是 () 里的 ; 就换行
-		else if(topStack == BRACKET)
+		else if(topStack == BRACKET || tokenBType == COMMENT_TYPE_1)
 			PutToken(tokenA, string(""), string(" ")); // (; ) 空格
 		else
 			PutToken(tokenA);
@@ -585,7 +585,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 	{
 		if(blockStack.top() == BLOCK && !bHaveNewLine)
 			PutToken(tokenA, string(""), string("\n")); // 如果是 {} 里的
-		else if(bHaveNewLine)
+		else if(bHaveNewLine && tokenBType != COMMENT_TYPE_1)
 			PutToken(tokenA);
 		else
 			PutToken(tokenA, string(""), string(" "));
@@ -610,6 +610,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 		if(!bHaveNewLine) // 需要换行
 			PutToken(tokenA, string(""), string("\n"));
+		else if(tokenBType == COMMENT_TYPE_1)
+			PutToken(tokenA, string(""), string(" "));
 		else
 			PutToken(tokenA);
 
@@ -692,7 +694,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			!(topStack == IF && !tokenB.compare("else")) &&
 			!(topStack == TRY && !tokenB.compare("catch")))
 			PutToken(tokenA, leftStyle, string("\n")); // 一些情况换行
-		else if(tokenBType == STRING_TYPE)
+		else if(tokenBType == STRING_TYPE || tokenBType == COMMENT_TYPE_1)
 			PutToken(tokenA, leftStyle, string(" ")); // 为 else 准备的空格
 		else
 			PutToken(tokenA, leftStyle); // }, }; })
