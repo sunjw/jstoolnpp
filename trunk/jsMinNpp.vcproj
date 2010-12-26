@@ -351,6 +351,10 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\jsformatString.h"
+				>
+			</File>
+			<File
 				RelativePath=".\jsmin.h"
 				>
 			</File>
@@ -375,11 +379,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\realjsformatter.h"
+				>
+			</File>
+			<File
 				RelativePath=".\resource.h"
 				>
 			</File>
 			<File
 				RelativePath=".\Scintilla.h"
+				>
+			</File>
+			<File
+				RelativePath=".\version.h"
 				>
 			</File>
 		</Filter>
@@ -399,6 +411,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\jsformatString.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\jsmin.cpp"
 				>
 			</File>
@@ -408,6 +424,10 @@
 			</File>
 			<File
 				RelativePath=".\jsMinNpp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\realjsformatter.cpp"
 				>
 			</File>
 		</Filter>
