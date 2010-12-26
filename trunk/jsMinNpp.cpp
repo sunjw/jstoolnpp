@@ -247,6 +247,9 @@ void jsFormat()
 	size_t jsMinLen = jsLen + 1; // seem to be something wrong, so add 1
 	std::string strJSFormat;
 
+	int currentPos = ::SendMessage(hCurrScintilla, SCI_GETCURRENTPOS, 0, 0);
+	int line = ::SendMessage(hCurrScintilla, SCI_LINEFROMPOSITION, currentPos, 0);
+
 	//fillZero(pJSMin, jsMinLen + 1);
 
 	try
@@ -258,6 +261,8 @@ void jsFormat()
 
 		::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)(strJSFormat.c_str()));
 		::SendMessage(nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
+
+		::SendMessage(hCurrScintilla, SCI_GOTOLINE, line, 0);
 	}
 	catch(std::runtime_error ex)
 	{
