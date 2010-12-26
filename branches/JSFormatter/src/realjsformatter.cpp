@@ -749,15 +749,14 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		blockStack.push(blockMap[tokenA]);
 		++nIndents; // 无需 ()，直接缩进
 				
-		//if(tokenBType == STRING_TYPE)
-		//{
+		if(tokenBType == STRING_TYPE)
+		{
 			PutString(string("\n"));
-		///}
-		//else
-		//{
-		//	if(!tokenB.compare("{"))
-		//		PutString(string(" "));
-		//}
+		}
+		else
+		{
+			PutString(string(" "));
+		}
 		return;
 	}
 
