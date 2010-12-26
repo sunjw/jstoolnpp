@@ -15,16 +15,17 @@
 //You should have received a copy of the GNU General Public License
 //along with this program; if not, write to the Free Software
 //Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-#include <stdexcept> 
+#include <stdexcept>
+#include <string>
 
 #include "PluginInterface.h"
 #include "menuCmdID.h"
 #include "jsMinNpp.h"
 #include "jsminCharArray.h"
-
+#include "jsformatString.h"
 
 const TCHAR PLUGIN_NAME[] = TEXT("JSMin");
-const int nbFunc = 4;
+const int nbFunc = 6;
 
 HINSTANCE _hInst;
 NppData nppData;
@@ -41,27 +42,29 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			_hInst = (HINSTANCE)hModule;
 			funcItem[0]._pFunc = jsMinCurrent;
 			funcItem[1]._pFunc = jsMinNew;
-
 			funcItem[2]._pFunc = NULL;
-			funcItem[3]._pFunc = about;
+
+			funcItem[3]._pFunc = jsFormat;
+			funcItem[4]._pFunc = NULL;
+
+			funcItem[5]._pFunc = about;
 
 			lstrcpy(funcItem[0]._itemName, TEXT("JSMin"));
 			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (In new file)"));
-			
 			lstrcpy(funcItem[2]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[3]._itemName, TEXT("About"));
+			lstrcpy(funcItem[3]._itemName, TEXT("JSFormat"));
+			lstrcpy(funcItem[4]._itemName, TEXT("-SEPARATOR-"));
 
-			funcItem[0]._init2Check = false;
-			funcItem[1]._init2Check = false;
-			funcItem[2]._init2Check = false;
-			funcItem[3]._init2Check = false;
+			lstrcpy(funcItem[5]._itemName, TEXT("About..."));
 
-			// If you don't need the shortcut, you have to make it NULL
-			funcItem[0]._pShKey = NULL;
-			funcItem[1]._pShKey = NULL;
-			funcItem[2]._pShKey = NULL;
-			funcItem[3]._pShKey = NULL;
+			for(int i = 0; i < nbFunc; ++i)
+			{
+				funcItem[i]._init2Check = false;
+				// If you don't need the shortcut, you have to make it NULL
+				funcItem[i]._pShKey = NULL;
+			}
+
 		}
 		break;
 
@@ -112,6 +115,24 @@ extern "C" __declspec(dllexport) BOOL isUnicode()
 extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	return TRUE;
+}
+
+BOOL CALLBACK dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
+{
+	switch (message) 
+	{
+		case WM_COMMAND:
+			switch (LOWORD(wParam))
+            {
+                case IDCLOSE :
+			    {
+					::EndDialog(hwnd, 0);
+					return  TRUE;
+				}
+			}
+			return FALSE;
+	}
+	return FALSE;
 }
 
 HWND getCurrentScintillaHandle() {
@@ -211,22 +232,44 @@ void jsMin(bool bNewFile)
 	delete [] pJSMin;
 }
 
-BOOL CALLBACK dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
+void jsFormat()
 {
-	switch (message) 
+	HWND hCurrScintilla = getCurrentScintillaHandle();
+
+	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
+    if (jsLen == 0) 
+		return;
+
+    char * pJS = new char[jsLen+1];
+    
+    ::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
+
+	size_t jsMinLen = jsLen + 1; // seem to be something wrong, so add 1
+	std::string strJSFormat;
+
+	//fillZero(pJSMin, jsMinLen + 1);
+
+	try
 	{
-		case WM_COMMAND:
-			switch (LOWORD(wParam))
-            {
-                case IDCLOSE :
-			    {
-					::EndDialog(hwnd, 0);
-					return  TRUE;
-				}
-			}
-			return FALSE;
+		JSFormatString jsformat(pJS, &strJSFormat);
+		jsformat.Go();
+
+		//trim(pJSMin);
+
+		::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)(strJSFormat.c_str()));
+		::SendMessage(nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
 	}
-	return FALSE;
+	catch(std::runtime_error ex)
+	{
+		::MessageBox(nppData._nppHandle, TEXT("ERROR"), TEXT("JSFormat"), MB_OK);
+		//cout << "Error: " << ex.what() << endl;
+	}
+
+	/*strcpy(pJSMin, pJS);
+	::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)pJSMin);
+	::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+strlen(pJSMin));*/
+
+	delete [] pJS;
 }
 
 void about()

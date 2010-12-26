@@ -37,7 +37,7 @@
 	#define	IDM_FILE_SAVESESSION		(IDM_FILE + 13)
 	#define	IDM_FILE_RELOAD     		(IDM_FILE + 14)
  
- // A mettre à jour si on ajoute nouveau menu item dans le menu "File"
+ // A mettre ?jour si on ajoute nouveau menu item dans le menu "File"
 	#define	IDM_FILEMENU_LASTONE	IDM_FILE_RELOAD
  
 #define	IDM_EDIT       (IDM + 2000)
