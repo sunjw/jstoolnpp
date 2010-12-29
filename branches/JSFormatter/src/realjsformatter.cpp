@@ -47,8 +47,8 @@ bool RealJSFormatter::IsSingleOper(int ch)
 	// 单字符符号
 	return (ch == '.' || ch == '(' || ch == ')' ||
 		ch == '[' || ch == ']' || ch == '{' || ch == '}' || 
-		ch == ':' || ch == ',' || ch == ';' || ch == '^' ||
-		ch == '~' || ch == '\n');
+		ch == ':' || ch == ',' || ch == ';' || ch == '~' || 
+		ch == '\n');
 }
 
 bool RealJSFormatter::IsQuote(int ch)
@@ -232,11 +232,23 @@ void RealJSFormatter::GetToken(bool init)
 				tokenB.push_back(charA);
 				tokenB.push_back(charB);
 				charB = GetChar();
-				if((!tokenB.compare("==") || !tokenB.compare("!=")) && charB == '=')
+				if((!tokenB.compare("==") || !tokenB.compare("!=") ||
+					!tokenB.compare("<<") || !tokenB.compare(">>")) && charB == '=')
 				{
-					// 三字符 ===, !==
+					// 三字符 ===, !==, <<=, >>=
 					tokenB.push_back(charB);
 					charB = GetChar();
+				}
+				else if(!tokenB.compare(">>") && charB == '>')
+				{
+					// >>>, >>>=
+					tokenB.push_back(charB);
+					charB = GetChar();
+					if(charB == '=') // >>>=
+					{
+						tokenB.push_back(charB);
+						charB = GetChar();
+					}
 				}
 				return;
 			}
@@ -504,7 +516,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 	if(!tokenA.compare("(") || !tokenA.compare(")") || 
 		!tokenA.compare("[") || !tokenA.compare("]") ||
 		!tokenA.compare("!") || !tokenA.compare("!!") ||
-		!tokenA.compare("~") || !tokenA.compare("."))
+		!tokenA.compare("~") || !tokenA.compare("^") ||
+		!tokenA.compare("."))
 	{
 		// ()[]!. 都是前后没有样式的运算符
 		if((!tokenA.compare(")") && blockStack.top() == BRACKET) ||

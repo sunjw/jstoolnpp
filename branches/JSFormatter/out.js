@@ -1,3017 +1,3387 @@
-/* See license.txt for terms of usage */
-
-// Debug lines are marked with  at column 120
-// Use variable name "fileName" for href returned by JSD, file:/ not same as DOM
-// Use variable name "url" for normalizedURL, file:/// comparable to DOM
-// Convert from fileName to URL with normalizeURL
-// We probably don't need denormalizeURL since we don't send .fileName back to JSD
-
-// ************************************************************************************************
-// Constants
-
-const Cc = Components.classes;
-const Ci = Components.interfaces;
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-const PrefService = Cc["@mozilla.org/preferences-service;1"];
-const DebuggerService = Cc["@mozilla.org/js/jsd/debugger-service;1"];
-const ConsoleService = Cc["@mozilla.org/consoleservice;1"];
-const Timer = Cc["@mozilla.org/timer;1"];
-const ObserverServiceFactory = Cc["@mozilla.org/observer-service;1"];
-
-const jsdIDebuggerService = Ci.jsdIDebuggerService;
-const jsdIScript = Ci.jsdIScript;
-const jsdIStackFrame = Ci.jsdIStackFrame;
-const jsdICallHook = Ci.jsdICallHook;
-const jsdIExecutionHook = Ci.jsdIExecutionHook;
-const jsdIErrorHook = Ci.jsdIErrorHook;
-const jsdIFilter = Components.interfaces.jsdIFilter;
-const nsISupports = Ci.nsISupports;
-const nsIPrefBranch = Ci.nsIPrefBranch;
-const nsIPrefBranch2 = Ci.nsIPrefBranch2;
-const nsIComponentRegistrar = Ci.nsIComponentRegistrar;
-const nsIFactory = Ci.nsIFactory;
-const nsIConsoleService = Ci.nsIConsoleService;
-const nsITimer = Ci.nsITimer;
-const nsITimerCallback = Ci.nsITimerCallback;
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-const NS_ERROR_NO_INTERFACE = Components.results.NS_ERROR_NO_INTERFACE;
-const NS_ERROR_NOT_IMPLEMENTED = Components.results.NS_ERROR_NOT_IMPLEMENTED;
-const NS_ERROR_NO_AGGREGATION = Components.results.NS_ERROR_NO_AGGREGATION;
-
-const PCMAP_SOURCETEXT = jsdIScript.PCMAP_SOURCETEXT;
-const PCMAP_PRETTYPRINT = jsdIScript.PCMAP_PRETTYPRINT;
-
-const COLLECT_PROFILE_DATA = jsdIDebuggerService.COLLECT_PROFILE_DATA;
-const DISABLE_OBJECT_TRACE = jsdIDebuggerService.DISABLE_OBJECT_TRACE;
-const HIDE_DISABLED_FRAMES = jsdIDebuggerService.HIDE_DISABLED_FRAMES;
-const DEBUG_WHEN_SET = jsdIDebuggerService.DEBUG_WHEN_SET;
-const MASK_TOP_FRAME_ONLY = jsdIDebuggerService.MASK_TOP_FRAME_ONLY;
-
-const TYPE_FUNCTION_CALL = jsdICallHook.TYPE_FUNCTION_CALL;
-const TYPE_FUNCTION_RETURN = jsdICallHook.TYPE_FUNCTION_RETURN;
-const TYPE_TOPLEVEL_START = jsdICallHook.TYPE_TOPLEVEL_START;
-const TYPE_TOPLEVEL_END = jsdICallHook.TYPE_TOPLEVEL_END;
-
-const RETURN_CONTINUE = jsdIExecutionHook.RETURN_CONTINUE;
-const RETURN_VALUE = jsdIExecutionHook.RETURN_RET_WITH_VAL;
-const RETURN_THROW_WITH_VAL = jsdIExecutionHook.RETURN_THROW_WITH_VAL;
-const RETURN_CONTINUE_THROW = jsdIExecutionHook.RETURN_CONTINUE_THROW;
-
-const NS_OS_TEMP_DIR = "TmpD"
-
-const STEP_OVER = 1;
-const STEP_INTO = 2;
-const STEP_OUT = 3;
-const STEP_SUSPEND = 4;
-
-const TYPE_ONE_SHOT = nsITimer.TYPE_ONE_SHOT;
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-const BP_NORMAL = 1;
-const BP_MONITOR = 2;
-const BP_UNTIL = 4;
-const BP_ONRELOAD = 8; // XXXjjb: This is a mark for the UI to test
-const BP_ERROR = 16;
-const BP_TRACE = 32; // BP used to initiate traceCalls
-
-const LEVEL_TOP = 1;
-const LEVEL_EVAL = 2;
-const LEVEL_EVENT = 3;
-
-const COMPONENTS_FILTERS = [
-	new RegExp("^(file:/.*/)extensions/%7B[\\da-fA-F]{8}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{4}-[\\da-fA-F]{12}%7D/components/.*\\.js$"),
-	new RegExp("^(file:/.*/)extensions/firebug@software\\.joehewitt\\.com/modules/.*\\.js$"),
-	new RegExp("^(file:/.*/extensions/)\\w+@mozilla\\.org/components/.*\\.js$"),
-	new RegExp("^(file:/.*/components/)ns[A-Z].*\\.js$"),
-	new RegExp("^(file:/.*/modules/)firebug-[^\\.]*\\.js$"),
-	new RegExp("^(file:/.*/Contents/MacOS/extensions/.*/components/).*\\.js$"),
-	new RegExp("^(file:/.*/modules/).*\\.jsm$"),
-];
-
-const reDBG = /DBG_(.*)/;
-const reXUL = /\.xul$|\.xml$/;
-const reTooMuchRecursion = /too\smuch\srecursion/;
-
-// ************************************************************************************************
-// Globals
-
-
-//https://developer.mozilla.org/en/Using_JavaScript_code_modules
-var EXPORTED_SYMBOLS = ["fbs"];
-
-var jsd, fbs, prefs;
-var consoleService;
-var observerService;
-
-var contextCount = 0;
-
-var urlFilters = [
-	'chrome://',
-	'XStringBundle',
-	'x-jsd:ppbuffer?type=function', // internal script for pretty printing
-];
-
-var clients = [];
-var debuggers = [];
-var netDebuggers = [];
-var scriptListeners = [];
-
-var stepMode = 0;
-var stepFrameLineId;
-var stepStayOnDebuggr; // if set, the debuggr we want to stay within
-var stepFrameCount;
-var stepRecursion = 0; // how many times the caller is the same during TYPE_FUNCTION_CALL
-var hookFrameCount = 0;
-
-var haltDebugger = null; // For reason unknown, fbs.haltDebugger will not work.
-var haltCallBack = null;
-
-var breakpointCount = 0;
-var disabledCount = 0; // These are an optimization I guess, marking whether we are using this feature anywhere.
-var monitorCount = 0;
-var conditionCount = 0;
-var runningUntil = null;
-
-var errorBreakpoints = [];
-
-var profileCount = 0;
-var profileStart;
-
-var enabledDebugger = false;
-var reportNextError = false;
-var errorInfo = null;
-
-var timer = Timer.createInstance(nsITimer);
-var waitingForTimer = false;
-
-var FBTrace = null;
-
-// ************************************************************************************************
-
-
-var fbs = {
-	initialize : function() {
-		Components.utils.import("resource://firebug/firebug-trace-service.js");
-		
-		FBTrace = traceConsoleService.getTracer("extensions.firebug");
-		
-		if(FBTrace.DBG_FBS_ERRORS) 
-			FBTrace.sysout("FirebugService Starting");
-		
-		fbs = this;
-		
-		this.wrappedJSObject = this;
-		this.timeStamp = new Date();
-		/* explore */
-		
-		Components.utils.import("resource://firebug/debuggerHalter.js");
-		fbs.debuggerHalter = debuggerHalter; // ref to a function in a file that passes the jsdIFilter
-		
-		fbs.restoreBreakpoints();
-		
-		this.onDebugRequests = 0; // the number of times we called onError but did not call onDebug
-		fbs._lastErrorDebuggr = null;
-		
-		if(FBTrace.DBG_FBS_ERRORS) 
-			this.osOut("FirebugService Starting, FBTrace should be up\n");
-		
-		this.profiling = false;
-		this.pauseDepth = 0;
-		
-		prefs = PrefService.getService(nsIPrefBranch2);
-		fbs.prefDomain = "extensions.firebug.service."
-		prefs.addObserver(fbs.prefDomain, fbs, false);
-		
-		observerService = ObserverServiceFactory.getService(Ci.nsIObserverService);
-		observerService.addObserver(QuitApplicationGrantedObserver, "quit-application-granted", false);
-		observerService.addObserver(QuitApplicationRequestedObserver, "quit-application-requested", false);
-		observerService.addObserver(QuitApplicationObserver, "quit-application", false);
-		
-		this.scriptsFilter = "all";
-		// XXXjj For some reason the command line will not function if we allow chromebug to see it.?
-		this.alwayFilterURLsStarting = ["chrome://chromebug", "x-jsd:ppbuffer", "chrome://firebug/content/commandLine.js"]; // TODO allow override
-		this.onEvalScriptCreated.kind = "eval";
-		this.onTopLevelScriptCreated.kind = "top-level";
-		this.onEventScriptCreated.kind = "event";
-		this.onXULScriptCreated.kind = "xul";
-		this.pendingXULScripts = [];
-		
-		this.onXScriptCreatedByTag = {
-		}; // fbs functions by script tag
-		this.nestedScriptStack = []; // scripts contained in leveledScript that have not been drained
-		
-		if(FBTrace.DBG_FBS_ERRORS) 
-			FBTrace.sysout("FirebugService Initialized");
-	},
-	
-	osOut : function(str) {
-		if(!this.outChannel) {
-			try {
-				var appShellService = Components.classes["@mozilla.org/appshell/appShellService;1"].
-				getService(Components.interfaces.nsIAppShellService);
-				this.hiddenWindow = appShellService.hiddenDOMWindow;
-				this.outChannel = "hidden";
-			} catch(exc) {
-				consoleService = Cc["@mozilla.org/consoleservice;1"].getService(Ci.nsIConsoleService);
-				consoleService.logStringMessage("Using consoleService because nsIAppShellService.hiddenDOMWindow not available " + exc);
-				this.outChannel = "service";
-			}
-		}
-		if(this.outChannel === "hidden") // apparently can't call via JS function
-			this.hiddenWindow.dump(str);
-		else 
-			consoleService.logStringMessage(str);
-	},
-	
-	shutdown : function() // call disableDebugger first
-	{
-		timer = null;
-		
-		if(!jsd) 
-			return;
-		
-		try {
-			do {
-				var depth = jsd.exitNestedEventLoop();
-			} while(depth > 0) ;
-		} catch(exc) {
-			// Seems to be the normal path...FBTrace.sysout("FirebugService, attempt to exitNestedEventLoop fails "+exc);
-		}
-		
-		try {
-			prefs.removeObserver(fbs.prefDomain, fbs);
-		} catch(exc) {
-			FBTrace.sysout("fbs prefs.removeObserver fails " + exc, exc);
-		}
-		
-		try {
-			observerService.removeObserver(QuitApplicationGrantedObserver, "quit-application-granted");
-			observerService.removeObserver(QuitApplicationRequestedObserver, "quit-application-requested");
-			observerService.removeObserver(QuitApplicationObserver, "quit-application");
-		} catch(exc) {
-			FBTrace.sysout("fbs quit-application-observers removeObserver fails " + exc, exc);
-		}
-		
-		jsd = null;
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	// nsISupports
-	
-	QueryInterface : function(iid) {
-		if(!iid.equals(nsISupports)) 
-			throw NS_ERROR_NO_INTERFACE;
-		
-		return this;
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	// nsIObserver
-	observe : function(subject, topic, data) {
-		fbs.obeyPrefs();
-	},
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	get lastErrorWindow() {
-		var win = this._lastErrorWindow;
-		this._lastErrorWindow = null; // Release to avoid leaks
-		return win;
-	},
-	
-	registerClient : function(client) // clients are essentially XUL windows
-	{
-		clients.push(client);
-		return clients.length;
-	},
-	
-	unregisterClient : function(client) {
-		for(var i = 0; i < clients.length; ++i) {
-			if(clients[i] == client) {
-				clients.splice(i, 1);
-				break;
-			}
-		}
-	},
-	
-	registerDebugger : function(debuggrWrapper) // first one in will be last one called. Returns state enabledDebugger
-	{
-		var debuggr = debuggrWrapper.wrappedJSObject;
-		
-		if(debuggr) {
-			debuggers.push(debuggr);
-			if(debuggers.length == 1) 
-				this.enableDebugger();
-			if(FBTrace.DBG_FBS_FINDDEBUGGER || FBTrace.DBG_ACTIVATION) 
-				FBTrace.sysout("fbs.registerDebugger have " + debuggers.length + " after reg debuggr.debuggerName: " + debuggr.debuggerName + " we are " + (enabledDebugger ? "enabled" : "not enabled") + " " + 
-					"On:" + (jsd ? jsd.isOn : "no jsd") + " jsd.pauseDepth:" + (jsd ? jsd.pauseDepth : "off") + " fbs.pauseDepth:" + fbs.pauseDepth);
-		} else 
-			throw "firebug-service debuggers must have wrappedJSObject";
-		
-		try {
-			if(debuggr.suspendActivity) 
-				netDebuggers.push(debuggr);
-		} catch(exc) {
-		}
-		try {
-			if(debuggr.onScriptCreated) 
-				scriptListeners.push(debuggr);
-		} catch(exc) {
-		}
-		return debuggers.length; // 1.3.1 return to allow Debugger to check progress
-	},
-	
-	unregisterDebugger : function(debuggrWrapper) {
-		var debuggr = debuggrWrapper.wrappedJSObject;
-		
-		for(var i = 0; i < debuggers.length; ++i) {
-			if(debuggers[i] == debuggr) {
-				debuggers.splice(i, 1);
-				break;
-			}
-		}
-		
-		for(var i = 0; i < netDebuggers.length; ++i) {
-			if(netDebuggers[i] == debuggr) {
-				netDebuggers.splice(i, 1);
-				break;
-			}
-		}
-		for(var i = 0; i < scriptListeners.length; ++i) {
-			if(scriptListeners[i] == debuggr) {
-				scriptListeners.splice(i, 1);
-				break;
-			}
-		}
-		
-		if(debuggers.length == 0) 
-			this.disableDebugger();
-		
-		if(FBTrace.DBG_FBS_FINDDEBUGGER || FBTrace.DBG_ACTIVATION) 
-			FBTrace.sysout("fbs.unregisterDebugger have " + debuggers.length + " after unreg debuggr.debuggerName: " + debuggr.debuggerName + " we are " + (enabledDebugger ? "enabled" : "not enabled") + " jsd.isOn:" + (jsd ? jsd.isOn : "no jsd"));
-		
-		return debuggers.length;
-	},
-	
-	lockDebugger : function() {
-		if(this.locked) 
-			return;
-		
-		this.locked = true;
-		
-		dispatch(debuggers, "onLock", [true]);
-	},
-	
-	unlockDebugger : function() {
-		if(!this.locked) 
-			return;
-		
-		this.locked = false;
-		
-		dispatch(debuggers, "onLock", [false]);
-	},
-	
-	getDebuggerByName : function(name) {
-		if(!name) 
-			return;
-		
-		for(var i = 0; i < debuggers.length; i++) 
-			if(debuggers[i].debuggerName === name) 
-				return debuggers[i];
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	forceGarbageCollection : function() {
-		jsd.GC(); // Force the engine to perform garbage collection.
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	enterNestedEventLoop : function(callback) {
-		dispatch(netDebuggers, "suspendActivity");
-		this.activitySuspended = true;
-		
-		fbs.nestedEventLoopDepth = jsd.enterNestedEventLoop({
-				onNest : function() {
-					callback.onNest();
-				}
-			});
-		
-		dispatch(netDebuggers, "resumeActivity");
-		this.activitySuspended = false;
-		return fbs.nestedEventLoopDepth;
-	},
-	
-	exitNestedEventLoop : function() {
-		try {
-			return jsd.exitNestedEventLoop();
-		} catch(exc) {
-			if(FBTrace.DBG_FBS_ERRORS) 
-				FBTrace.sysout("fbs: jsd.exitNestedEventLoop FAILS " + exc, exc);
-		}
-	},
-	
-	/*
-	     * We are running JS code for Firebug, but we want to break into the debugger with a stack frame.
-	     * @param debuggr Debugger object asking for break
-	     * @param fnOfFrame, function(frame) to run on break
-	     */
-	
-	halt : function(debuggr, fnOfFrame) {
-		// store for onDebugger
-		haltDebugger = debuggr;
-		haltCallBack = fnOfFrame;
-		
-		if(FBTrace.DBG_FBS_BP) 
-			FBTrace.sysout('fbs.halt jsd.isOn:' + jsd.isOn + ' jsd.pauseDepth:' + jsd.pauseDepth + " fbs.isChromeBlocked " + fbs.isChromeBlocked + "  jsd.debuggerHook: " + jsd.debuggerHook, jsd.debuggerHook);
-		// call onDebugger via hook
-		fbs.debuggerHalter();
-		return fbs.haltReturnValue;
-	},
-	
-	step : function(mode, startFrame, stayOnDebuggr) {
-		stepMode = mode;
-		
-		stepRecursion = 0;
-		stepFrameTag = startFrame.script.tag;
-		stepFrameLineId = stepRecursion + startFrame.script.fileName + startFrame.line;
-		stepStayOnDebuggr = stayOnDebuggr;
-		
-		if(FBTrace.DBG_FBS_STEP) 
-			FBTrace.sysout("step stepMode = " + getStepName(stepMode) + " stepFrameLineId=" + stepFrameLineId + " stepRecursion=" + stepRecursion + " stepFrameTag " + stepFrameTag + " stepStayOnDebuggr:" + (stepStayOnDebuggr ? stepStayOnDebuggr : "null"));
-	},
-	
-	suspend : function(stayOnDebuggr, context) {
-		stepMode = STEP_SUSPEND;
-		stepFrameLineId = null;
-		stepStayOnDebuggr = stayOnDebuggr;
-		
-		if(FBTrace.DBG_FBS_STEP) 
-			FBTrace.sysout("step stepMode = " + getStepName(stepMode) + " stepFrameLineId=" + stepFrameLineId + " stepRecursion=" + stepRecursion + " stepStayOnDebuggr:" + (stepStayOnDebuggr ? stepStayOnDebuggr : "null"));
-		
-		dispatch(debuggers, "onBreakingNext", [stayOnDebuggr, context]);
-		
-		this.hookInterrupts();
-	},
-	
-	runUntil : function(sourceFile, lineNo, startFrame, debuggr) {
-		runningUntil = this.addBreakpoint(BP_UNTIL, sourceFile, lineNo, null, debuggr);
-		stepRecursion = 0;
-		stepFrameTag = startFrame.script.tag;
-		stepFrameLineId = stepRecursion + startFrame.script.fileName + startFrame.line;
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	setBreakpoint : function(sourceFile, lineNo, props, debuggr) {
-		var bp = this.addBreakpoint(BP_NORMAL, sourceFile, lineNo, props, debuggr);
-		if(bp) {
-			dispatch(debuggers, "onToggleBreakpoint", [sourceFile.href, lineNo, true, bp]);
-			fbs.saveBreakpoints(sourceFile.href); // after every call to onToggleBreakpoint
-			return true;
-		}
-		return false;
-	},
-	
-	clearBreakpoint : function(url, lineNo) {
-		var bp = this.removeBreakpoint(BP_NORMAL, url, lineNo);
-		if(bp) {
-			dispatch(debuggers, "onToggleBreakpoint", [url, lineNo, false, bp]);
-			fbs.saveBreakpoints(url);
-		}
-		return bp;
-	},
-	
-	enableBreakpoint : function(url, lineNo) {
-		var bp = this.findBreakpoint(url, lineNo);
-		if(bp && bp.type & BP_NORMAL) {
-			bp.disabled &= ~BP_NORMAL;
-			dispatch(debuggers, "onToggleBreakpoint", [url, lineNo, true, bp]);
-			fbs.saveBreakpoints(url);
-			--disabledCount;
-		} else {
-			if(FBTrace.DBG_FBS_BP) 
-				FBTrace.sysout("fbs.enableBreakpoint no find for " + lineNo + "@" + url);
-		}
-	},
-	
-	disableBreakpoint : function(url, lineNo) {
-		var bp = this.findBreakpoint(url, lineNo);
-		if(bp && bp.type & BP_NORMAL) {
-			bp.disabled |= BP_NORMAL;
-			++disabledCount;
-			dispatch(debuggers, "onToggleBreakpoint", [url, lineNo, true, bp]);
-			fbs.saveBreakpoints(url);
-		} else {
-			if(FBTrace.DBG_FBS_BP) 
-				FBTrace.sysout("fbs.disableBreakpoint no find for " + lineNo + "@" + url);
-		}
-		
-	},
-	
-	isBreakpointDisabled : function(url, lineNo) {
-		var bp = this.findBreakpoint(url, lineNo);
-		if(bp && bp.type & BP_NORMAL) 
-			return bp.disabled & BP_NORMAL;
-		else 
-			return false;
-	},
-	
-	setBreakpointCondition : function(sourceFile, lineNo, condition, debuggr) {
-		var bp = this.findBreakpoint(sourceFile.href, lineNo);
-		if(!bp) {
-			bp = this.addBreakpoint(BP_NORMAL, sourceFile, lineNo, null, debuggr);
-		}
-		
-		if(!bp) 
-			return;
-		
-		if(bp.hitCount <= 0) {
-			if(bp.condition && !condition) {
-				--conditionCount;
-			} else if(condition && !bp.condition) {
-				++conditionCount;
-			}
-		}
-		bp.condition = condition;
-		
-		dispatch(debuggers, "onToggleBreakpoint", [sourceFile.href, lineNo, true, bp]);
-		fbs.saveBreakpoints(sourceFile.href);
-		return bp;
-	},
-	
-	getBreakpointCondition : function(url, lineNo) {
-		var bp = this.findBreakpoint(url, lineNo);
-		return bp ? bp.condition : "";
-	},
-	
-	clearAllBreakpoints : function(sourceFiles) {
-		for(var i = 0; i < sourceFiles.length; ++i) {
-			var url = sourceFiles[i].href;
-			if(!url) 
-				continue;
-			
-			var urlBreakpoints = fbs.getBreakpoints(url);
-			
-			if(FBTrace.DBG_FBS_BP) 
-				FBTrace.sysout("clearAllBreakpoints " + url + " urlBreakpoints: " + 
-					(urlBreakpoints ? urlBreakpoints.length : "null"));
-			
-			if(!urlBreakpoints) 
-				return false;
-			
-			for(var ibp = 0; ibp < urlBreakpoints.length; ibp++) {
-				var bp = urlBreakpoints[ibp];
-				this.clearBreakpoint(url, bp.lineNo);
-			}
-		}
-	},
-	
-	enumerateBreakpoints : function(url, cb) // url is sourceFile.href, not jsd script.fileName
-	{
-		if(url) {
-			var urlBreakpoints = fbs.getBreakpoints(url);
-			if(urlBreakpoints) {
-				for(var i = 0; i < urlBreakpoints.length; ++i) {
-					var bp = urlBreakpoints[i];
-					if(bp.type & BP_NORMAL && !(bp.type & BP_ERROR)) {
-						if(bp.scriptsWithBreakpoint && bp.scriptsWithBreakpoint.length > 0) {
-							var rc = cb.call.apply(bp, [url, bp.lineNo, bp, bp.scriptsWithBreakpoint]);
-							if(rc) 
-								return[bp];
-						} else {
-							var rc = cb.call.apply(bp, [url, bp.lineNo, bp]);
-							if(rc) 
-								return[bp];
-						}
-					}
-				}
-			}
-		} else {
-			var bps = [];
-			var urls = fbs.getBreakpointURLs();
-			for(var i = 0; i < urls.length; i++) 
-				bps.push(this.enumerateBreakpoints(urls[i], cb));
-			return bps;
-		}
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	// error breakpoints are a way of selecting breakpoint from the Console
-	//
-	setErrorBreakpoint : function(sourceFile, lineNo, debuggr) {
-		var url = sourceFile.href;
-		var index = this.findErrorBreakpoint(url, lineNo);
-		if(index == -1) {
-			try {
-				var bp = this.addBreakpoint(BP_NORMAL | BP_ERROR, sourceFile, lineNo, null, debuggr);
-				if(bp) {
-					errorBreakpoints.push({
-							href : url,
-							lineNo : lineNo,
-							type : BP_ERROR
-						});
-					dispatch(debuggers, "onToggleErrorBreakpoint", [url, lineNo, true, debuggr]);
-					fbs.saveBreakpoints(sourceFile.href); // after every call to onToggleBreakpoint
-				}
-				
-			} catch(exc) {
-				FBTrace.sysout("fbs.setErrorBreakpoint FAILS " + exc, exc);
-			}
-		}
-	},
-	
-	clearErrorBreakpoint : function(url, lineNo, debuggr) {
-		var index = this.findErrorBreakpoint(url, lineNo);
-		if(index != -1) {
-			var bp = this.removeBreakpoint(BP_NORMAL | BP_ERROR, url, lineNo);
-			
-			errorBreakpoints.splice(index, 1);
-			dispatch(debuggers, "onToggleErrorBreakpoint", [url, lineNo, false, debuggr]);
-			fbs.saveBreakpoints(url); // after every call to onToggleBreakpoint
-		}
-	},
-	
-	hasErrorBreakpoint : function(url, lineNo) {
-		return this.findErrorBreakpoint(url, lineNo) != -1;
-	},
-	
-	enumerateErrorBreakpoints : function(url, cb) {
-		if(url) {
-			for(var i = 0; i < errorBreakpoints.length; ++i) {
-				var bp = errorBreakpoints[i];
-				if(bp.href == url) 
-					cb.call(bp.href, bp.lineNo, bp);
-			}
-		} else {
-			for(var i = 0; i < errorBreakpoints.length; ++i) {
-				var bp = errorBreakpoints[i];
-				cb.call(bp.href, bp.lineNo, bp);
-			}
-		}
-	},
-	
-	findErrorBreakpoint : function(url, lineNo) {
-		for(var i = 0; i < errorBreakpoints.length; ++i) {
-			var bp = errorBreakpoints[i];
-			if(bp.lineNo == lineNo && bp.href == url) 
-				return i;
-		}
-		
-		return - 1;
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	traceAll : function(urls, debuggr) {
-		this.hookCalls(debuggr.onFunctionCall, false); // call on all passed urls
-	},
-	
-	untraceAll : function(debuggr) {
-		jsd.functionHook = null; // undo hookCalls()
-	},
-	
-	traceCalls : function(sourceFile, lineNo, debuggr) {
-		var bp = this.monitor(sourceFile, lineNo, debuggr); // set a breakpoint on the starting point
-		bp.type |= BP_TRACE;
-		// when we hit the bp in onBreakPoint we being tracing.
-	},
-	
-	untraceCalls : function(sourceFile, lineNo, debuggr) {
-		var bp = lineNo != -1 ? this.findBreakpoint(url, lineNo) : null;
-		if(bp) {
-			bp.type &= ~BP_TRACE;
-			this.unmonitor(sourceFile.href, lineNo);
-		}
-	},
-	
-	monitor : function(sourceFile, lineNo, debuggr) {
-		if(lineNo == -1) 
-			return null;
-		
-		var bp = this.addBreakpoint(BP_MONITOR, sourceFile, lineNo, null, debuggr);
-		if(bp) {
-			++monitorCount;
-			dispatch(debuggers, "onToggleMonitor", [sourceFile.href, lineNo, true]);
-		}
-		return bp;
-	},
-	
-	unmonitor : function(href, lineNo) {
-		if(lineNo != -1 && this.removeBreakpoint(BP_MONITOR, href, lineNo)) {
-			--monitorCount;
-			dispatch(debuggers, "onToggleMonitor", [href, lineNo, false]);
-		}
-	},
-	
-	isMonitored : function(url, lineNo) {
-		var bp = lineNo != -1 ? this.findBreakpoint(url, lineNo) : null;
-		return bp && bp.type & BP_MONITOR;
-	},
-	
-	enumerateMonitors : function(url, cb) {
-		if(url) {
-			var urlBreakpoints = fbs.getBreakpoints(url);
-			if(urlBreakpoints) {
-				for(var i = 0; i < urlBreakpoints.length; ++i) {
-					var bp = urlBreakpoints[i];
-					if(bp.type & BP_MONITOR) 
-						cb.call(url, bp.lineNo, bp);
-				}
-			}
-		} else {
-			for(var url in breakpoints) 
-				this.enumerateBreakpoints(url, cb);
-		}
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	enumerateScripts : function(length) {
-		var scripts = [];
-		jsd.enumerateScripts({
-				enumerateScript : function(script) {
-					var fileName = script.fileName;
-					if(!isFilteredURL(fileName)) {
-						scripts.push(script);
-					}
-				}
-			});
-		length.value = scripts.length;
-		return scripts;
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	startProfiling : function() {
-		if(!this.profiling) {
-			this.profiling = true;
-			profileStart = new Date();
-			
-			jsd.flags |= COLLECT_PROFILE_DATA;
-		}
-		
-		++profileCount;
-	},
-	
-	stopProfiling : function() {
-		if(--profileCount == 0) {
-			jsd.flags &= ~COLLECT_PROFILE_DATA;
-			
-			var t = profileStart.getTime();
-			
-			this.profiling = false;
-			profileStart = null;
-			
-			return new Date().getTime() - t;
-		} else 
-			return - 1;
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	enableDebugger : function() {
-		if(waitingForTimer) {
-			timer.cancel();
-			waitingForTimer = false;
-		}
-		if(enabledDebugger) 
-			return;
-		
-		enabledDebugger = true;
-		
-		this.obeyPrefs();
-		
-		if(!jsd) {
-			jsd = DebuggerService.getService(jsdIDebuggerService);
-			
-			if(FBTrace.DBG_FBS_ERRORS) 
-				FBTrace.sysout("enableDebugger gets jsd service, isOn:" + jsd.isOn + " initAtStartup:" + jsd.initAtStartup + " now have " + debuggers.length + " debuggers" + " in " + clients.length + " clients");
-			
-			// This property has been removed from Fx40
-			if(jsd.initAtStartup) 
-				jsd.initAtStartup = false;
-		}
-		
-		if(!jsd.isOn) {
-			jsd.on(); // this should be the only call to jsd.on().
-			jsd.flags |= DISABLE_OBJECT_TRACE;
-			
-			if(jsd.pauseDepth && FBTrace.DBG_FBS_ERRORS) 
-				FBTrace.sysout("fbs.enableDebugger found non-zero jsd.pauseDepth !! " + jsd.pauseDepth) 
-		}
-		
-		if(!this.filterChrome) 
-			this.createChromeBlockingFilters();
-		
-		var active = fbs.isJSDActive();
-		
-		dispatch(clients, "onJSDActivate", [active, "fbs enableDebugger"]);
-		this.hookScripts();
-		
-		if(FBTrace.DBG_ACTIVATION) 
-			FBTrace.sysout("enableDebugger with active " + active);
-	},
-	
-	obeyPrefs : function() {
-		fbs.showStackTrace = prefs.getBoolPref("extensions.firebug.service.showStackTrace");
-		fbs.breakOnErrors = prefs.getBoolPref("extensions.firebug.service.breakOnErrors");
-		fbs.trackThrowCatch = prefs.getBoolPref("extensions.firebug.service.trackThrowCatch");
-		
-		var pref = fbs.scriptsFilter;
-		fbs.scriptsFilter = prefs.getCharPref("extensions.firebug.service.scriptsFilter");
-		var mustReset = (pref !== fbs.scriptsFilter) 
-		
-		if(FBTrace.DBG_FBS_ERRORS) 
-			FBTrace.sysout("obeyPrefs mustReset = " + mustReset + " pref: " + pref + " fbs.scriptsFilter: " + fbs.scriptsFilter, fbs);
-		
-		pref = fbs.filterSystemURLs;
-		fbs.filterSystemURLs = prefs.getBoolPref("extensions.firebug.service.filterSystemURLs"); // may not be exposed to users
-		mustReset = mustReset || (pref !== fbs.filterSystemURLs);
-		
-		if(FBTrace.DBG_FBS_ERRORS) 
-			FBTrace.sysout("obeyPrefs mustReset = " + mustReset + " pref: " + pref + " fbs.filterSystemURLs: " + fbs.filterSystemURLs);
-		
-		if(mustReset && jsd && jsd.scriptHook) {
-			fbs.unhookScripts();
-			fbs.hookScripts();
-		}
-		
-		FirebugPrefsObserver.syncFilter();
-		
-		try {
-			if(FBTrace.DBG_FBS_ERRORS) 
-				FBTrace.sysout("fbs.obeyPrefs showStackTrace:" + fbs.showStackTrace + " breakOnErrors:" + fbs.breakOnErrors + " trackThrowCatch:" + fbs.trackThrowCatch + " scriptFilter:" + fbs.scriptsFilter + " filterSystemURLs:" + fbs.filterSystemURLs);
-		} catch(exc) {
-			FBTrace.sysout("firebug-service: constructor getBoolPrefs FAILED with exception=", exc);
-		}
-	},
-	
-	disableDebugger : function() {
-		if(!enabledDebugger) 
-			return;
-		
-		if(!timer) // then we probably shutdown
-			return;
-		
-		enabledDebugger = false;
-		
-		if(jsd.isOn) {
-			jsd.pause();
-			fbs.unhookScripts();
-			while(jsd.pauseDepth > 0) // unwind completely
-				jsd.unPause();
-			fbs.pauseDepth = 0;
-			
-			jsd.off();
-		}
-		
-		var active = fbs.isJSDActive();
-		dispatch(clients, "onJSDDeactivate", [active, "fbs disableDebugger"]);
-		
-		fbs.onXScriptCreatedByTag = {
-		}; // clear any uncleared top level scripts
-		
-		if(FBTrace.DBG_FBS_FINDDEBUGGER || FBTrace.DBG_ACTIVATION) 
-			FBTrace.sysout("fbs.disableDebugger jsd.isOn:" + jsd.isOn + " for enabledDebugger: " + enabledDebugger);
-	},
-	
-	pause : function() // must support multiple calls
-	{
-		if(!enabledDebugger) 
-			return "not enabled";
-		var rejection = [];
-		dispatch(clients, "onPauseJSDRequested", [rejection]);
-		
-		if(rejection.length == 0) // then everyone wants to pause
-		{
-			if(fbs.pauseDepth == 0) // don't pause if we are paused.
-			{
-				fbs.pauseDepth++;
-				jsd.pause();
-				fbs.unhookScripts();
-			}
-			var active = fbs.isJSDActive();
-			dispatch(clients, "onJSDDeactivate", [active, "pause depth " + jsd.pauseDepth]);
-		} else // we don't want to pause
-		{
-			while(fbs.pauseDepth > 0) // make sure we are not paused.
-				fbs.unPause();
-			fbs.pauseDepth = 0;
-		}
-		if(FBTrace.DBG_FBS_FINDDEBUGGER || FBTrace.DBG_ACTIVATION) {
-			FBTrace.sysout("fbs.pause depth " + (jsd.isOn ? jsd.pauseDepth : "jsd OFF") + " fbs.pauseDepth: " + fbs.pauseDepth + " rejection " + rejection.length + " from " + clients.length + " clients ");
-			// The next line gives NS_ERROR_NOT_AVAILABLE
-			// FBTrace.sysout("fbs.pause depth "+(jsd.isOn?jsd.pauseDepth:"jsd OFF")+" rejection "+rejection.length+" from clients "+clients, rejection);
-		}
-		return fbs.pauseDepth;
-	},
-	
-	unPause : function(force) {
-		if(fbs.pauseDepth > 0 || force) {
-			if(FBTrace.DBG_ACTIVATION && (!jsd.isOn || jsd.pauseDepth == 0)) 
-				FBTrace.sysout("fbs.unpause while jsd.isOn is " + jsd.isOn + " and hooked scripts pauseDepth:" + jsd.pauseDepth);
-			
-			fbs.pauseDepth--;
-			fbs.hookScripts();
-			
-			if(jsd.pauseDepth) 
-				var depth = jsd.unPause();
-			
-			var active = fbs.isJSDActive();
-			
-			if(FBTrace.DBG_ACTIVATION) 
-				FBTrace.sysout("fbs.unPause hooked scripts and unPaused, active:" + active + " depth " + depth + " jsd.isOn: " + jsd.isOn + " fbs.pauseDepth " + fbs.pauseDepth);
-			
-			dispatch(clients, "onJSDActivate", [active, "unpause depth" + jsd.pauseDepth]);
-			
-		} else // we were not paused.
-		{
-			if(FBTrace.DBG_ACTIVATION) 
-				FBTrace.sysout("fbs.unPause no action: (jsd.pauseDepth || !jsd.isOn) = (" + jsd.pauseDepth + " || " + !jsd.isOn + ")" + " fbs.pauseDepth " + fbs.pauseDepth);
-		}
-		return fbs.pauseDepth;
-	},
-	
-	isJSDActive : function() {
-		return(jsd && jsd.isOn && (jsd.pauseDepth == 0));
-	},
-	
-	broadcast : function(message, args) // re-transmit the message (string) with args [objs] to XUL windows.
-	{
-		dispatch(clients, message, args);
-		if(FBTrace.DBG_FBS_ERRORS || FBTrace.DBG_ACTIVATION) 
-			FBTrace.sysout("fbs.broadcast " + message + " to " + clients.length + " clients", clients);
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	normalizeURL : function(url) {
-		// For some reason, JSD reports file URLs like "file:/" instead of "file:///", so they
-		// don't match up with the URLs we get back from the DOM
-		return url ? url.replace(/file:\/([^/]) / ,
-		"file:///$1") : "";
-	},
-	
-	denormalizeURL : function(url) {
-		// This should not be called.
-		return url ? url.replace(/file:\/\/\//, "file:/") : "";
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	// jsd Hooks
-	
-	// When (debugger keyword and not halt)||(bp and BP_UNTIL) || (onBreakPoint && no conditions)
-	// || interuptHook.  rv is ignored
-	onBreak : function(frame, type, rv) {
-		try {
-			// avoid step_out from web page to chrome
-			if(type == jsdIExecutionHook.TYPE_INTERRUPTED && stepStayOnDebuggr) {
-				var debuggr = this.reFindDebugger(frame, stepStayOnDebuggr);
-				if(FBTrace.DBG_FBS_STEP && (stepMode != STEP_SUSPEND)) 
-					FBTrace.sysout("fbs.onBreak type=" + getExecutionStopNameFromType(type) + " hookFrameCount:" + hookFrameCount + " stepStayOnDebuggr " + stepStayOnDebuggr + " debuggr:" + (debuggr ? debuggr : "null") + " last_debuggr=" + (fbs.last_debuggr ? fbs.last_debuggr.debuggerName : "null"));
-				
-				if(!debuggr) {
-					// This frame is not for the debugger we want
-					if(stepMode == STEP_OVER || stepMode == STEP_OUT) // then we are in the debuggr we want and returned in to one we don't
-					{
-						this.stopStepping(); // run, you are free.
-					}
-					
-					return RETURN_CONTINUE; // This means that we will continue to take interrupts until  when?
-				} else {
-					if(stepMode == STEP_SUSPEND) // then we have interrupted the outerFunction
-					{
-						var scriptTag = frame.script.tag;
-						if(scriptTag in this.onXScriptCreatedByTag) // yes, we have to create the sourceFile
-							this.onBreakpoint(frame, type, rv); // TODO refactor so we don't get mixed up
-					}
-				}
-			} else {
-				var debuggr = this.findDebugger(frame);
-				
-				if(FBTrace.DBG_FBS_STEP) 
-					FBTrace.sysout("fbs.onBreak type=" + getExecutionStopNameFromType(type) + " debuggr:" + (debuggr ? debuggr : "null") + " last_debuggr=" + (fbs.last_debuggr ? fbs.last_debuggr.debuggerName : "null"));
-			}
-			
-			if(debuggr) 
-				return this.breakIntoDebugger(debuggr, frame, type);
-			
-		} catch(exc) {
-			if(FBTrace.DBG_FBS_ERRORS) 
-				FBTrace.sysout("onBreak failed: " + exc, exc);
-			ERROR("onBreak failed: " + exc);
-		}
-		return RETURN_CONTINUE;
-	},
-	
-	// When engine encounters debugger keyword (only)
-	onDebugger : function(frame, type, rv) {
-		if(FBTrace.DBG_FBS_BP) 
-			FBTrace.sysout("fbs.onDebugger with haltDebugger=" + haltDebugger + " in " + frame.script.fileName, frame.script);
-		try {
-			if(FBTrace.DBG_FBS_SRCUNITS && fbs.isTopLevelScript(frame, type, rv)) 
-				FBTrace.sysout("fbs.onDebugger found topLevelScript " + frame.script.tag);
-			
-			if(FBTrace.DBG_FBS_SRCUNITS && fbs.isNestedScript(frame, type, rv)) 
-				FBTrace.sysout("fbs.onDebugger found nestedScript " + frame.script.tag);
-			
-			if(haltDebugger) {
-				var peelOurselvesOff = frame.callingFrame; // remove debuggerHalter()
-				while(peelOurselvesOff && (peelOurselvesOff.script.fileName.indexOf("content/debugger.js") > 0)) 
-					peelOurselvesOff = peelOurselvesOff.callingFrame;
-				
-				if(peelOurselvesOff) {
-					if(FBTrace.DBG_FBS_BP) 
-						FBTrace.sysout('fbs.onDebugger adjusted newest frame: ' + peelOurselvesOff.line + '@' + peelOurselvesOff.script.fileName + " frames: ", framesToString(frame));
-					
-					var debuggr = haltDebugger;
-					fbs.haltReturnValue = haltCallBack.apply(debuggr, [peelOurselvesOff]);
-				} else {
-					FBTrace.sysout("fbs.halt FAILS " + framesToString(frame));
-					fbs.haltReturnValue = "firebug-service.halt FAILS, no stack frames left ";
-				}
-				
-				haltDebugger = null;
-				return RETURN_CONTINUE;
-			} else {
-				var bp = this.findBreakpointByScript(frame.script, frame.pc);
-				if(bp) // then breakpoints override debugger statements (to allow conditional debugger statements);
-					return this.onBreakpoint(frame, type, rv);
-				else 
-					return this.onBreak(frame, type, rv);
-			}
-		} catch(exc) {
-			if(FBTrace.DBG_FBS_ERRORS) 
-				FBTrace.sysout("onDebugger failed: " + exc, exc);
-			
-			ERROR("onDebugger failed: " + exc);
-			return RETURN_CONTINUE;
-		}
-	},
-	
-	// when the onError handler returns false
-	onDebug : function(frame, type, rv) {
-		if(FBTrace.DBG_FBS_ERRORS) {
-			fbs.onDebugRequests--;
-			FBTrace.sysout("fbs.onDebug (" + fbs.onDebugRequests + ") fileName=" + frame.script.fileName + " reportNextError=" + reportNextError + " breakOnNext:" + this.breakOnErrors);
-		}
-		if(isFilteredURL(frame.script.fileName)) {
-			reportNextError = false;
-			return RETURN_CONTINUE;
-		}
-		
-		try {
-			var breakOnNextError = this.needToBreakForError(reportNextError);
-			var debuggr = (reportNextError || breakOnNextError) ? this.findDebugger(frame) : null;
-			
-			if(reportNextError) {
-				reportNextError = false;
-				if(debuggr) {
-					var hookReturn = debuggr.onError(frame, errorInfo);
-					if(hookReturn >= 0) 
-						return hookReturn;
-					else if(hookReturn == -1) 
-						breakOnNextError = true;
-					if(breakOnNextError) 
-						debuggr = this.reFindDebugger(frame, debuggr);
-				}
-			}
-			
-			if(breakOnNextError) {
-				if(fbs.isTopLevelScript(frame, type, rv) && FBTrace.DBG_FBS_SRCUNITS) 
-					FBTrace.sysout("fbs.onDebug found topLevelScript " + frame.script.tag);
-				if(fbs.isNestedScript(frame, type, rv) && FBTrace.DBG_FBS_SRCUNITS) 
-					FBTrace.sysout("fbs.onDebug found nestedScript " + frame.script.tag);
-				
-				breakOnNextError = false;
-				if(debuggr) 
-					return this.breakIntoDebugger(debuggr, frame, type);
-			}
-		} catch(exc) {
-			ERROR("onDebug failed: " + exc);
-		}
-		return RETURN_CONTINUE;
-	},
-	
-	onBreakpoint : function(frame, type, val) {
-		if(fbs.isTopLevelScript(frame, type, val)) 
-			return RETURN_CONTINUE;
-		
-		var bp = this.findBreakpointByScript(frame.script, frame.pc);
-		if(bp) {
-			var theDebugger = fbs.getDebuggerByName(bp.debuggerName);
-			if(!theDebugger) 
-				theDebugger = this.findDebugger(frame); // sets debuggr.breakContext
-			
-			// See issue 1179, should not break if we resumed from a single step and have not advanced.
-			if(disabledCount || monitorCount || conditionCount || runningUntil) {
-				if(FBTrace.DBG_FBS_BP) {
-					FBTrace.sysout("onBreakpoint(" + getExecutionStopNameFromType(type) + ") disabledCount:" + disabledCount
-						 + " monitorCount:" + monitorCount + " conditionCount:" + conditionCount + " runningUntil:" + runningUntil, bp);
-				}
-				
-				if(bp.type & BP_MONITOR && !(bp.disabled & BP_MONITOR)) {
-					if(bp.type & BP_TRACE && !(bp.disabled & BP_TRACE)) 
-						this.hookCalls(theDebugger.onFunctionCall, true);
-					else 
-						theDebugger.onMonitorScript(frame);
-				}
-				
-				if(bp.type & BP_UNTIL) {
-					this.stopStepping();
-					if(theDebugger) 
-						return this.breakIntoDebugger(theDebugger, frame, type);
-				} else if(!(bp.type & BP_NORMAL) || bp.disabled & BP_NORMAL) {
-					return RETURN_CONTINUE;
-				} else if(bp.type & BP_NORMAL) {
-					var passed = testBreakpoint(frame, bp);
-					if(!passed) 
-						return RETURN_CONTINUE;
-				}
-				// type was normal, but passed test
-			} else // not special, just break for sure
-				return this.breakIntoDebugger(theDebugger, frame, type);
-		} else {
-			if(FBTrace.DBG_FBS_BP) 
-				FBTrace.sysout("onBreakpoint(" + getExecutionStopNameFromType(type) + ") NO bp match with frame.script.tag=" + frame.script.tag + " clearing and continuing");
-			// We did not find a logical breakpoint to match the one set into JSD, so stop trying.
-			frame.script.clearBreakpoint(frame.pc);
-			return RETURN_CONTINUE;
-		}
-		
-		if(runningUntil) 
-			return RETURN_CONTINUE;
-		else 
-			return this.onBreak(frame, type, val);
-	},
-	
-	onThrow : function(frame, type, rv) {
-		if(isFilteredURL(frame.script.fileName)) 
-			return RETURN_CONTINUE_THROW;
-		
-		if(rv && rv.value && rv.value.isValid) {
-			var value = rv.value;
-			if(value.jsClassName == "Error" && reTooMuchRecursion.test(value.stringValue)) {
-				if(fbs._lastErrorCaller) {
-					if(fbs._lastErrorCaller == frame.script.tag) // then are unwinding recursion
-					{
-						fbs._lastErrorCaller = frame.callingFrame ? frame.callingFrame.script.tag : null;
-						return RETURN_CONTINUE_THROW;
-					}
-				} else {
-					fbs._lastErrorCaller = frame.callingFrame.script.tag;
-					frame = fbs.discardRecursionFrames(frame);
-					// go on to process the throw.
-				}
-			} else {
-				delete fbs._lastErrorCaller; // throw is not recursion
-			}
-		} else {
-			delete fbs._lastErrorCaller; // throw is not recursion either
-		}
-		
-		// Remember the error where the last exception is thrown - this will
-		// be used later when the console service reports the error, since
-		// it doesn't currently report the window where the error occurred
-		fbs._lastErrorWindow = null;
-		
-		if(this.showStackTrace) // store these in case the throw is not caught
-		{
-			var debuggr = this.findDebugger(frame); // sets debuggr.breakContext
-			if(debuggr) {
-				fbs._lastErrorScript = frame.script;
-				fbs._lastErrorLine = frame.line;
-				fbs._lastErrorDebuggr = debuggr;
-				fbs._lastErrorContext = debuggr.breakContext; // XXXjjb this is bad API
-				fbs._lastErrorWindow = fbs._lastErrorContext.window;
-			} else 
-				delete fbs._lastErrorDebuggr;
-		}
-		if(!fbs._lastErrorWindow) 
-			this._lastErrorWindow = this.getOutermostScope(frame);
-		
-		if(fbs.trackThrowCatch) {
-			if(FBTrace.DBG_FBS_ERRORS) 
-				FBTrace.sysout("onThrow from tag:" + frame.script.tag + ":" + frame.script.fileName + "@" + frame.line + ": " + frame.pc);
-			
-			var debuggr = this.findDebugger(frame);
-			if(debuggr) 
-				return debuggr.onThrow(frame, rv);
-		}
-		
-		return RETURN_CONTINUE_THROW;
-	},
-	
-	onError : function(message, fileName, lineNo, pos, flags, errnum, exc) {
-		if(FBTrace.DBG_FBS_ERRORS) {
-			var messageKind;
-			if(flags & jsdIErrorHook.REPORT_ERROR) 
-				messageKind = "Error";
-			if(flags & jsdIErrorHook.REPORT_WARNING) 
-				messageKind = "Warning";
-			if(flags & jsdIErrorHook.REPORT_EXCEPTION) 
-				messageKind = "Uncaught-Exception";
-			if(flags & jsdIErrorHook.REPORT_STRICT) 
-				messageKind += "-Strict";
-			FBTrace.sysout("fbs.onError (" + fbs.onDebugRequests + ") with this.showStackTrace=" + this.showStackTrace + " and this.breakOnErrors="
-				+this.breakOnErrors + " kind=" + messageKind + " msg=" + message + "@" + fileName + ":" + lineNo + "." + pos + "\n");
-		}
-		
-		// global to pass info to onDebug. Some duplicate values to support different apis
-		errorInfo = {
-			errorMessage : message,
-			sourceName : fileName,
-			lineNumber : lineNo,
-			message : message,
-			fileName : fileName,
-			lineNo : lineNo,
-			columnNumber : pos,
-			flags : flags,
-			category : "js",
-			errnum : errnum,
-			exc : exc
-		};
-		
-		if(message == "out of memory") // bail
-		{
-			if(FBTrace.DBG_FBS_ERRORS) 
-				fbs.osOut("fbs.onError sees out of memory " + fileName + ":" + lineNo + "\n");
-			return true;
-		}
-		
-		reportNextError = {
-			fileName : fileName,
-			lineNo : lineNo
-		};
-		return false; // Drop into onDebug, sometimes only
-	},
-	
-	onTopLevel : function(frame, type) {
-		if(type === TYPE_TOPLEVEL_START || type === TYPE_TOPLEVEL_END) {
-			if(FBTrace.DBG_TOPLEVEL) 
-				FBTrace.sysout("fbs.onTopLevel with delegate " + fbs.onTopLevelDelegate + " " + frame.script.tag + " " + frame.script.fileName);
-			if(fbs.onTopLevelDelegate) 
-				fbs.onTopLevelDelegate(frame) 
-		}
-	},
-	
-	setTopLevelHook : function(fnOfFrame) {
-		fbs.onTopLevelDelegate = fnOfFrame;
-	},
-	
-	isTopLevelScript : function(frame, type, val) {
-		var scriptTag = frame.script.tag;
-		if(FBTrace.DBG_FBS_SRCUNITS) 
-			FBTrace.sysout("onBreakpoint frame.script.tag=" + frame.script.tag);
-		
-		if(scriptTag in this.onXScriptCreatedByTag) {
-			if(FBTrace.DBG_FBS_TRACKFILES) 
-				trackFiles.def(frame);
-			var onXScriptCreated = this.onXScriptCreatedByTag[scriptTag];
-			if(FBTrace.DBG_FBS_BP) 
-				FBTrace.sysout("onBreakpoint(" + getExecutionStopNameFromType(type) + ") with frame.script.tag="
-					+frame.script.tag + " onXScriptCreated:" + onXScriptCreated.kind + "\n");
-			delete this.onXScriptCreatedByTag[scriptTag];
-			frame.script.clearBreakpoint(0);
-			try {
-				var sourceFile = onXScriptCreated(frame, type, val);
-			} catch(e) {
-				FBTrace.sysout("onBreakpoint called onXScriptCreated and it didn't end well:", e);
-			}
-			
-			if(FBTrace.DBG_FBS_SRCUNITS) {
-				var msg = "Top Scripts Uncleared:";
-				for(p in this.onXScriptCreatedByTag) 
-					msg += (p + "|");
-				FBTrace.sysout(msg);
-			}
-			if(!sourceFile || !sourceFile.breakOnZero || sourceFile.breakOnZero != scriptTag) 
-				return true;
-			else // sourceFile.breakOnZero matches the script we have halted.
-			{
-				if(FBTrace.DBG_FBS_BP) 
-					FBTrace.sysout("fbs.onBreakpoint breakOnZero, continuing for user breakpoint\n");
-			}
-		}
-		return false;
-	},
-	
-	/*
-	     * If true, emergency bailout: a frame is running a script which has not been processed as source
-	     */
-	isNestedScript : function(frame, type, val) {
-		if(fbs.nestedScriptStack.length === 0 || fbs.nestedScriptStack.indexOf(frame.script) === -1) 
-			return false;
-		
-		try {
-			var sourceFile = fbs.onTopLevelScriptCreated(frame, type, val);
-		} catch(e) {
-			FBTrace.sysout("isNestedScript called onXScriptCreated and it didn't end well:", e);
-		}
-		
-		return true;
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	onXULScriptCreated : function(frame, type, val, noNestTest) {
-		// A XUL script hit a breakpoint
-		try {
-			var outerScript = frame.script;
-			var innerScripts = [];
-			for(var i = 0; i < fbs.pendingXULScripts.length; i++) {
-				// Take all the pending script from the same file as part of this sourcefile
-				if(fbs.pendingXULScripts[i].fileName === outerScript.fileName) {
-					var innerScript = fbs.pendingXULScripts[i];
-					innerScripts.push(innerScript);
-					if(innerScript.isValid) 
-						innerScript.clearBreakpoint(0);
-					
-					fbs.pendingXULScripts.splice(i, 1);
-				}
-			}
-			var debuggr = fbs.findDebugger(frame); // sets debuggr.breakContext
-			if(debuggr) {
-				innerScripts.push(outerScript);
-				var innerScriptEnumerator = {
-					index : 0,
-					max : innerScripts.length,
-					hasMoreElements : function() {
-						return this.index < this.max;
-					},
-					getNext : function() {
-						return innerScripts[this.index++];
-					},
-				};
-				var sourceFile = debuggr.onXULScriptCreated(frame, outerScript, innerScriptEnumerator);
-				fbs.resetBreakpoints(sourceFile, debuggr);
-			} else {
-				if(FBTrace.DBG_FBS_CREATION || FBTrace.DBG_FBS_SRCUNITS) 
-					FBTrace.sysout("fbs.onEventScriptCreated no debuggr for " + frame.script.tag + ":" + frame.script.fileName);
-			}
-		} catch(exc) {
-			if(FBTrace.DBG_FBS_ERRORS) 
-				FBTrace.sysout("onXULScriptCreated fails " + exc, exc);
-		}
-	},
-	
-	onEventScriptCreated : function(frame, type, val, noNestTest) {
-		if(fbs.showEvents) {
-			try {
-				if(!noNestTest) {
-					// In onScriptCreated we saw a script with baseLineNumber = 1. We marked it as event and nested.
-					// Now we know its event, not nested.
-					if(fbs.nestedScriptStack.length > 0) {
-						fbs.nestedScriptStack.splice(0, 1);
-					} else {
-						if(FBTrace.DBG_FBS_SRCUNITS) // these seem to be harmless, but...
-						{
-							var script = frame.script;
-							FBTrace.sysout("onEventScriptCreated no nestedScriptStack: " + script.tag + "@(" + script.baseLineNumber + "-"
-								 + (script.baseLineNumber + script.lineExtent) + ")" + script.fileName + "\n");
-							FBTrace.sysout("onEventScriptCreated name: \'" + script.functionName + "\'\n");
-							try {
-								FBTrace.sysout(script.functionSource);
-							} catch(exc) {
-								/*Bug 426692 */
-							}
-							
-						}
-					}
-				}
-				
-				var debuggr = fbs.findDebugger(frame); // sets debuggr.breakContext
-				if(debuggr) {
-					var sourceFile = debuggr.onEventScriptCreated(frame, frame.script, fbs.getNestedScriptEnumerator());
-					fbs.resetBreakpoints(sourceFile, debuggr);
-				} else {
-					if(FBTrace.DBG_FBS_CREATION || FBTrace.DBG_FBS_SRCUNITS) 
-						FBTrace.sysout("fbs.onEventScriptCreated no debuggr for " + frame.script.tag + ":" + frame.script.fileName);
-				}
-			} catch(exc) {
-				if(FBTrace.DBG_ERRORS) 
-					FBTrace.sysout("onEventScriptCreated failed: " + exc, exc);
-			}
-			if(FBTrace.DBG_FBS_CREATION || FBTrace.DBG_FBS_SRCUNITS) 
-				FBTrace.sysout("onEventScriptCreated frame.script.tag:" + frame.script.tag + " href: " + (sourceFile ? sourceFile.href : "no sourceFile"), sourceFile);
-		}
-		
-		fbs.clearNestedScripts();
-		return sourceFile;
-	},
-	
-	onEvalScriptCreated : function(frame, type, val) {
-		if(fbs.showEvals) {
-			try {
-				if(!frame.callingFrame) {
-					if(FBTrace.DBG_FBS_CREATION || FBTrace.DBG_FBS_SRCUNITS) 
-						FBTrace.sysout("No calling Frame for eval frame.script.fileName:" + frame.script.fileName);
-					// These are eval-like things called by native code. They come from .xml files
-					// They should be marked as evals but we'll treat them like event handlers for now.
-					return fbs.onEventScriptCreated(frame, type, val, true);
-				}
-				// In onScriptCreated we found a no-name script, set a bp in PC=0, and a flag.
-				// onBreakpoint saw the flag, cleared the flag, and sent us here.
-				// Start by undoing our damage
-				var outerScript = frame.script;
-				
-				var debuggr = fbs.findDebugger(frame); // sets debuggr.breakContext
-				if(debuggr) {
-					var sourceFile = debuggr.onEvalScriptCreated(frame, outerScript, fbs.getNestedScriptEnumerator());
-					fbs.resetBreakpoints(sourceFile, debuggr);
-				} else {
-					if(FBTrace.DBG_FBS_CREATION || FBTrace.DBG_FBS_SRCUNITS) 
-						FBTrace.sysout("fbs.onEvalScriptCreated no debuggr for " + outerScript.tag + ":" + outerScript.fileName);
-				}
-			} catch(exc) {
-				ERROR("onEvalScriptCreated failed: " + exc);
-				if(FBTrace.DBG_FBS_ERRORS) 
-					FBTrace.sysout("onEvalScriptCreated failed:", exc);
-			}
-		}
-		
-		fbs.clearNestedScripts();
-		if(FBTrace.DBG_FBS_CREATION || FBTrace.DBG_FBS_SRCUNITS) 
-			FBTrace.sysout("onEvalScriptCreated outerScript.tag:" + outerScript.tag + " href: " + (sourceFile ? sourceFile.href : "no sourceFile"));
-		return sourceFile;
-	},
-	
-	onTopLevelScriptCreated : function(frame, type, val) {
-		try {
-			// In onScriptCreated we may have found a script at baseLineNumber=1
-			// Now we know its not an event
-			if(fbs.nestedScriptStack.length > 0) {
-				var firstScript = fbs.nestedScriptStack[0];
-				if(firstScript.tag in fbs.onXScriptCreatedByTag) {
-					delete fbs.onXScriptCreatedByTag[firstScript.tag];
-					if(firstScript.isValid) 
-						firstScript.clearBreakpoint(0);
-					if(FBTrace.DBG_FBS_SRCUNITS) 
-						FBTrace.sysout("fbs.onTopLevelScriptCreated clear bp@0 for firstScript.tag: " + firstScript.tag + "\n");
-				}
-			}
-			
-			// On compilation of a top-level (global-appending) function.
-			// After this top-level script executes we lose the jsdIScript so we can't build its line table.
-			// Therefore we need to build it here.
-			var debuggr = fbs.findDebugger(frame); // sets debuggr.breakContext
-			if(debuggr) {
-				var sourceFile = debuggr.onTopLevelScriptCreated(frame, frame.script, fbs.getNestedScriptEnumerator());
-				if(FBTrace.DBG_FBS_SRCUNITS) 
-					FBTrace.sysout("fbs.onTopLevelScriptCreated got sourceFile:" + sourceFile + " using " + fbs.nestedScriptStack.length + " nestedScripts\n");
-				fbs.resetBreakpoints(sourceFile, debuggr);
-			} else {
-				// modules end up here?
-				if(FBTrace.DBG_FBS_SRCUNITS) 
-					FBTrace.sysout("FBS.onTopLevelScriptCreated no debuggr for " + frame.script.tag);
-			}
-		} catch(exc) {
-			FBTrace.sysout("onTopLevelScriptCreated FAILED: " + exc, exc);
-			ERROR("onTopLevelScriptCreated Fails: " + exc);
-		}
-		
-		fbs.clearNestedScripts();
-		if(FBTrace.DBG_FBS_CREATION || FBTrace.DBG_FBS_SRCUNITS) 
-			FBTrace.sysout("fbs.onTopLevelScriptCreated script.tag:" + frame.script.tag + " href: " + (sourceFile ? sourceFile.href : "no sourceFile"));
-		
-		return sourceFile;
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	getNestedScriptEnumerator : function() {
-		var enumer = {
-			index : 0,
-			hasMoreElements : function() {
-				return(this.index < fbs.nestedScriptStack.length);
-			},
-			getNext : function() {
-				var rv = fbs.nestedScriptStack[this.index];
-				this.index++;
-				return rv;
-			}
-		};
-		return enumer;
-	},
-	
-	clearNestedScripts : function() {
-		var innerScripts = fbs.nestedScriptStack;
-		for(var i = 0; i < innerScripts.length; i++) {
-			var script = innerScripts[i];
-			if(script.isValid && script.baseLineNumber == 1) {
-				script.clearBreakpoint(0);
-				if(this.onXScriptCreatedByTag[script.tag]) 
-					delete this.onXScriptCreatedByTag[script.tag];
-			}
-		}
-		fbs.nestedScriptStack = [];
-	},
-	
-	onScriptCreated : function(script) {
-		if(!fbs) {
-			if(FBTrace.DBG_FBS_CREATION || FBTrace.DBG_FBS_SRCUNITS || FBTrace.DBG_FBS_TRACKFILES) 
-				FBTrace.sysout("onScriptCreated " + script.tag + ", but no fbs for script.fileName=" + script.fileName);
-			return;
-		}
-		
-		try {
-			var fileName = script.fileName;
-			
-			if(FBTrace.DBG_FBS_TRACKFILES) 
-				trackFiles.add(fileName);
-			if(isFilteredURL(fileName) || fbs.isChromebug(fileName)) {
-				try {
-					if(FBTrace.DBG_FBS_CREATION || FBTrace.DBG_FBS_SRCUNITS) 
-						FBTrace.sysout("onScriptCreated " + script.tag + ": filename filtered:\'" + fileName + "\'" + (fbs.filterConsoleInjections ? " console injection" : ""));
-				} catch(exc) {
-					FBTrace.sysout("onScriptCreated " + script.tag + " filtered msg FAILS \'" + script.fileName + "\'");
-					/*? Bug 426692 */
-				}
-				if(FBTrace.DBG_FBS_TRACKFILES) 
-					trackFiles.drop(fileName);
-				return;
-			}
-			
-			if(FBTrace.DBG_FBS_CREATION || FBTrace.DBG_FBS_SRCUNITS) 
-				FBTrace.sysout("onScriptCreated: " + script.tag + "@(" + script.baseLineNumber + "-"
-					 + (script.baseLineNumber + script.lineExtent) + ")" + script.fileName);
-			
-			if(FBTrace.DBG_FBS_CREATION) {
-				try {
-					FBTrace.sysout("onScriptCreated: \'" + script.functionName + "\'", script.functionSource);
-				} catch(exc) {
-					FBTrace.sysout("onScriptCreated " + script.tag + " FAILS \'" + script.fileName + "\'");
-					/*? Bug 426692 */
-				}
-			}
-			
-			if(reXUL.test(script.fileName)) {
-				fbs.onXScriptCreatedByTag[script.tag] = fbs.onXULScriptCreated;
-				fbs.pendingXULScripts.push(script);
-				script.setBreakpoint(0); // Stop in the first one called and assign all with this fileName to sourceFile.
-			} else if(!script.functionName) // top or eval-level
-			{
-				// We need to detect eval() and grab its source.
-				var hasCaller = fbs.createdScriptHasCaller();
-				if(FBTrace.DBG_FBS_SRCUNITS) 
-					FBTrace.sysout("createdScriptHasCaller " + hasCaller);
-				
-				if(hasCaller) {
-					// components end up here
-					fbs.onXScriptCreatedByTag[script.tag] = this.onEvalScriptCreated;
-				} else 
-					fbs.onXScriptCreatedByTag[script.tag] = this.onTopLevelScriptCreated;
-				
-				script.setBreakpoint(0);
-				if(FBTrace.DBG_FBS_CREATION || FBTrace.DBG_FBS_SRCUNITS || FBTrace.DBG_FBS_BP) {
-					FBTrace.sysout("onScriptCreated: set BP at PC 0 in " + (hasCaller ? "eval" : "top") + " level tag=" + script.tag + ":" + script.fileName + " jsd depth:" + (jsd.isOn ? jsd.pauseDepth + "" : "OFF"));
-				}
-			} else if(script.baseLineNumber == 1) {
-				// could be a 1) Browser-generated event handler or 2) a nested script at the top of a file
-				// One way to tell is assume both then wait to see which we hit first:
-				// 1) bp at pc=0 for this script or 2) for a top-level on at the same filename
-				
-				fbs.onXScriptCreatedByTag[script.tag] = this.onEventScriptCreated; // for case 1
-				script.setBreakpoint(0);
-				
-				fbs.nestedScriptStack.push(script); // for case 2
-				
-				if(FBTrace.DBG_FBS_CREATION) 
-					FBTrace.sysout("onScriptCreated: set BP at PC 0 in event level tag=" + script.tag);
-			} else {
-				fbs.nestedScriptStack.push(script);
-				if(FBTrace.DBG_FBS_CREATION) 
-					FBTrace.sysout("onScriptCreated: nested function named: " + script.functionName);
-				dispatch(scriptListeners, "onScriptCreated", [script, fileName, script.baseLineNumber]);
-			}
-		} catch(exc) {
-			ERROR("onScriptCreated failed: " + exc);
-			FBTrace.sysout("onScriptCreated failed: ", exc);
-		}
-	},
-	
-	createdScriptHasCaller : function() {
-		if(FBTrace.DBG_FBS_SRCUNITS) {
-			var msg = [];
-			for(var frame = Components.stack; frame; frame = frame.caller) 
-				msg.push(frame.filename + "@" + frame.lineNumber + ": " + frame.sourceLine);
-			FBTrace.sysout("createdScriptHasCaller " + msg.length, msg);
-		}
-		
-		var frame = Components.stack; // createdScriptHasCaller
-		
-		frame = frame.caller; // onScriptCreated
-		if(!frame) 
-			return frame;
-		
-		frame = frame.caller; // hook apply
-		if(!frame) 
-			return frame;
-		frame = frame.caller; // native interpret?
-		if(!frame) 
-			return frame;
-		frame = frame.caller; // our creator ... or null if we are top level
-		return frame;
-	},
-	
-	onScriptDestroyed : function(script) {
-		if(!fbs) 
-			return;
-		if(script.tag in fbs.onXScriptCreatedByTag) 
-			delete fbs.onXScriptCreatedByTag[script.tag];
-		
-		try {
-			var fileName = script.fileName;
-			if(isFilteredURL(fileName)) 
-				return;
-			if(FBTrace.DBG_FBS_CREATION) 
-				FBTrace.sysout('fbs.onScriptDestroyed ' + script.tag);
-			
-			dispatch(scriptListeners, "onScriptDestroyed", [script]);
-		} catch(exc) {
-			ERROR("onScriptDestroyed failed: " + exc);
-			FBTrace.sysout("onScriptDestroyed failed: ", exc);
-		}
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	createFilter : function(pattern, pass) {
-		var filter = {
-			globalObject : null,
-			flags : pass ? (jsdIFilter.FLAG_ENABLED | jsdIFilter.FLAG_PASS) : jsdIFilter.FLAG_ENABLED,
-			urlPattern : pattern,
-			startLine : 0,
-			endLine : 0
-		};
-		return filter;
-	},
-	
-	setChromeBlockingFilters : function() {
-		if(!fbs.isChromeBlocked) {
-			jsd.appendFilter(this.noFilterHalter); // must be first
-			jsd.appendFilter(this.filterChrome);
-			jsd.appendFilter(this.filterComponents);
-			jsd.appendFilter(this.filterFirebugComponents);
-			jsd.appendFilter(this.filterModules);
-			jsd.appendFilter(this.filterStringBundle);
-			jsd.appendFilter(this.filterPrettyPrint);
-			jsd.appendFilter(this.filterWrapper);
-			
-			for(var i = 0; i < this.componentFilters.length; i++) 
-				jsd.appendFilter(this.componentFilters[i]);
-			
-			fbs.isChromeBlocked = true;
-			
-			if(FBTrace.DBG_FBS_BP) 
-				this.traceFilters("setChromeBlockingFilters with " + this.componentFilters.length + " component filters");
-		}
-	},
-	
-	removeChromeBlockingFilters : function() {
-		if(fbs.isChromeBlocked) {
-			jsd.removeFilter(this.filterChrome);
-			jsd.removeFilter(this.filterComponents);
-			jsd.removeFilter(this.filterFirebugComponents);
-			jsd.removeFilter(this.filterModules);
-			jsd.removeFilter(this.filterStringBundle);
-			jsd.removeFilter(this.filterPrettyPrint);
-			jsd.removeFilter(this.filterWrapper);
-			jsd.removeFilter(this.noFilterHalter);
-			for(var i = 0; i < this.componentFilters.length; i++) 
-				jsd.removeFilter(this.componentFilters[i]);
-			
-			fbs.isChromeBlocked = false;
-		}
-		if(FBTrace.DBG_FBS_BP) 
-			this.traceFilters("removeChromeBlockingFilters");
-	},
-	
-	createChromeBlockingFilters : function() // call after components are loaded.
-	{
-		try {
-			this.filterModules = this.createFilter("*/firefox/modules/*");
-			this.filterComponents = this.createFilter("*/firefox/components/*");
-			this.filterFirebugComponents = this.createFilter("*/modules/firebug-*");
-			this.filterStringBundle = this.createFilter("XStringBundle");
-			this.filterChrome = this.createFilter("chrome://*");
-			this.filterPrettyPrint = this.createFilter("x-jsd:ppbuffer*");
-			this.filterWrapper = this.createFilter("XPCSafeJSObjectWrapper.cpp");
-			this.noFilterHalter = this.createFilter("resource://firebug/debuggerHalter.js", true);
-			
-			// jsdIFilter does not allow full regexp matching.
-			// So to filter components, we filter their directory names, which we obtain by looking for
-			// scripts that match regexps
-			
-			var componentsUnfound = [];
-			for(var i = 0; i < COMPONENTS_FILTERS.length; ++i) {
-				componentsUnfound.push(COMPONENTS_FILTERS[i]);
-			}
-			
-			this.componentFilters = [];
-			
-			jsd.enumerateScripts({
-					enumerateScript : function(script) {
-						var fileName = script.fileName;
-						for(var i = 0; i < componentsUnfound.length; ++i) {
-							if(componentsUnfound[i].test(fileName)) {
-								var match = componentsUnfound[i].exec(fileName);
-								fbs.componentFilters.push(fbs.createFilter(match[1]));
-								componentsUnfound.splice(i, 1);
-								return;
-							}
-						}
-					}
-				});
-		} catch(exc) {
-			FBTrace.sysout("createChromeblockingFilters fails >>>>>>>>>>>>>>>>> " + exc, exc);
-		}
-		
-		if(FBTrace.DBG_FBS_BP) {
-			FBTrace.sysout("createChromeBlockingFilters considered " + COMPONENTS_FILTERS.length + 
-				" regexps and created " + this.componentFilters.length + 
-				" filters with unfound: " + componentsUnfound.length, componentsUnfound);
-			fbs.traceFilters("createChromeBlockingFilters");
-		}
-	},
-	
-	traceFilters : function(from) {
-		FBTrace.sysout("fbs.traceFilters from " + from);
-		jsd.enumerateFilters({
-				enumerateFilter : function(filter) {
-					FBTrace.sysout("jsdIFilter " + filter.urlPattern, filter);
-				}
-			});
-	},
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	eachJSContext : function(callback) {
-		var enumeratedContexts = [];
-		jsd.enumerateContexts({
-				enumerateContext : function(jscontext) {
-					try {
-						if(!jscontext.isValid) 
-							return;
-						
-						var wrappedGlobal = jscontext.globalObject;
-						if(!wrappedGlobal) 
-							return;
-						
-						var unwrappedGlobal = wrappedGlobal.getWrappedValue();
-						if(!unwrappedGlobal) 
-							return;
-						
-						if(unwrappedGlobal instanceof Ci.nsISupports) 
-							var global = new XPCNativeWrapper(unwrappedGlobal);
-						else 
-							var global = unwrappedGlobal;
-						
-						if(FBTrace.DBG_FBS_JSCONTEXTS) 
-							FBTrace.sysout("getJSContexts jsIContext tag:" + jscontext.tag + (jscontext.isValid ? " - isValid\n" : " - NOT valid\n"));
-						
-						if(global) {
-							callback(global, jscontext.tag);
-						} else {
-							if(FBTrace.DBG_FBS_JSCONTEXTS) 
-								FBTrace.sysout("getJSContexts no global object tag:" + jscontext.tag);
-							return; // skip this
-						}
-						
-						enumeratedContexts.push(jscontext);
-					} catch(e) {
-						FBTrace.sysout("jscontext dump FAILED " + e, e);
-					}
-					
-				}
-			});
-		return enumeratedContexts;
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	getOutermostScope : function(frame) {
-		var scope = frame.scope;
-		if(scope) {
-			while(scope.jsParent) 
-				scope = scope.jsParent;
-			
-			// These are just determined by trial and error.
-			if(scope.jsClassName == "Window" || scope.jsClassName == "ChromeWindow" || scope.jsClassName == "ModalContentWindow") {
-				lastWindowScope = wrapIfNative(scope.getWrappedValue());
-				return lastWindowScope;
-			}
-			
-			/*        if (scope.jsClassName == "DedicatedWorkerGlobalScope")
-			            {
-			                //var workerScope = new XPCNativeWrapper(scope.getWrappedValue());
-			
-			                //if (FBTrace.DBG_FBS_FINDDEBUGGER)
-			                //        FBTrace.sysout("fbs.getFrameScopeRoot found WorkerGlobalScope: "+scope.jsClassName, workerScope);
-			                // https://bugzilla.mozilla.org/show_bug.cgi?id=507930 if (FBTrace.DBG_FBS_FINDDEBUGGER)
-			                //        FBTrace.sysout("fbs.getFrameScopeRoot found WorkerGlobalScope.location: "+workerScope.location, workerScope.location);
-			                return null; // https://bugzilla.mozilla.org/show_bug.cgi?id=507783
-			            }
-			    */
-			if(scope.jsClassName == "Sandbox") {
-				var proto = scope.jsPrototype;
-				if(proto.jsClassName == "XPCNativeWrapper") // this is the path if we have web page in a sandbox
-				{
-					proto = proto.jsParent;
-					if(proto.jsClassName == "Window") 
-						return wrapIfNative(proto.getWrappedValue());
-				} else {
-					return wrapIfNative(scope.getWrappedValue());
-				}
-			}
-			
-			if(FBTrace.DBG_FBS_FINDDEBUGGER) 
-				FBTrace.sysout("fbs.getFrameScopeRoot found scope chain bottom, not Window: " + scope.jsClassName, scope);
-			
-			return wrapIfNative(scope.getWrappedValue()); // not a window or a sandbox
-		} else {
-			return null;
-		}
-	},
-	
-	findDebugger : function(frame) {
-		if(debuggers.length < 1) 
-			return;
-		
-		var checkFrame = frame;
-		while(checkFrame) // We may stop in a component, but want the callers Window
-		{
-			var frameScopeRoot = this.getOutermostScope(checkFrame); // the outermost lexical scope of the function running the frame
-			if(frameScopeRoot) 
-				break;
-			
-			if(FBTrace.DBG_FBS_FINDDEBUGGER) 
-				FBTrace.sysout("fbs.findDebugger no frame Window, looking to older stackframes", checkFrame);
-			
-			checkFrame = checkFrame.callingFrame;
-		}
-		
-		if(!checkFrame && FBTrace.DBG_FBS_FINDDEBUGGER) 
-			FBTrace.sysout("fbs.findDebugger fell thru bottom of stack", frame);
-		
-		// frameScopeRoot should be the top window for the scope of the frame function
-		// or null
-		fbs.last_debuggr = fbs.askDebuggersForSupport(frameScopeRoot, frame);
-		if(fbs.last_debuggr) 
-			return fbs.last_debuggr;
-		else 
-			return null;
-	},
-	
-	isChromebug : function(location) {
-		// TODO this is a kludge: isFilteredURL stops users from seeing firebug but chromebug has to disable the filter
-		
-		if(location) {
-			if(location.indexOf("chrome://chromebug/") >= 0 || location.indexOf("chrome://fb4cb/") >= 0) 
-				return true;
-		}
-		return false;
-	},
-	
-	getLocationSafe : function(global) {
-		try {
-			if(global && global.location) // then we have a window, it will be an nsIDOMWindow, right?
-				return global.location.toString();
-			else if(global && global.tag) 
-				return "global_tag_" + global.tag;
-		} catch(exc) {
-			// FF3 gives (NS_ERROR_INVALID_POINTER) [nsIDOMLocation.toString]
-		}
-		return null;
-	},
-	
-	askDebuggersForSupport : function(global, frame) {
-		if(FBTrace.DBG_FBS_FINDDEBUGGER) 
-			FBTrace.sysout("askDebuggersForSupport using global " + global + " for " + frame.script.fileName);
-		if(global && fbs.isChromebug(fbs.getLocationSafe(global))) 
-			return false;
-		
-		if(FBTrace.DBG_FBS_FINDDEBUGGER) 
-			FBTrace.sysout("askDebuggersForSupport " + debuggers.length + " debuggers to check for " + frame.script.fileName, debuggers);
-		
-		for(var i = debuggers.length - 1; i >= 0; i--) {
-			try {
-				var debuggr = debuggers[i];
-				if(debuggr.supportsGlobal(global, frame)) {
-					if(!debuggr.breakContext) 
-						FBTrace.sysout("Debugger with no breakContext:", debuggr.supportsGlobal);
-					if(FBTrace.DBG_FBS_FINDDEBUGGER) 
-						FBTrace.sysout(" findDebugger found debuggr (" + debuggr.debuggerName + ") at " + i + " with breakContext " + debuggr.breakContext.getName() + " for global " + fbs.getLocationSafe(global) + " while processing " + frame.script.fileName);
-					return debuggr;
-				}
-			} catch(exc) {
-				FBTrace.sysout("firebug-service askDebuggersForSupport FAILS: " + exc, exc);
-			}
-		}
-		return null;
-	},
-	
-	dumpIValue : function(value) {
-		var listValue = {
-			value : null
+/*
+ * jQuery JavaScript Library v1.3.2
+ * http://jquery.com/
+ *
+ * Copyright (c) 2009 John Resig
+ * Dual licensed under the MIT and GPL licenses.
+ * http://docs.jquery.com/License
+ *
+ * Date: 2009-02-19 17:34:21 -0500 (Thu, 19 Feb 2009)
+ * Revision: 6246
+ */
+(function() {
+		var l = this,
+		g,
+		y = l.jQuery,
+		p = l.$,
+		o = l.jQuery = l.$ = function(E, F) {
+			return new o.fn.init(E, F)
 		},
-		lengthValue = {
-			value : 0
+		D = /^[^<]*(<(.|\s)+>)[^>]*$|^#([\w-]+)$/,
+		f = /^.[^:#\[\.,]*$/;
+		o.fn = o.prototype = {
+			init : function(E, H) {
+				E = E || document;
+				if(E.nodeType) {
+					this[0] = E;
+					this.length = 1;
+					this.context = E;
+					return this
+				}
+				if(typeof E === "string") {
+					var G = D.exec(E);
+					if(G && (G[1] || !H)) {
+						if(G[1]) {
+							E = o.clean([G[1]], H)
+						} else {
+							var I = document.getElementById(G[3]);
+							if(I && I.id != G[3]) {
+								return o().find(E)
+							}
+							var F = o(I || []);
+							F.context = document;
+							F.selector = E;
+							return F
+						}
+					} else {
+						return o(H).find(E)
+					}
+				} else {
+					if(o.isFunction(E)) {
+						return o(document).ready(E)
+					}
+				}
+				if(E.selector && E.context) {
+					this.selector = E.selector;
+					this.context = E.context
+				}
+				return this.setArray(o.isArray(E) ? E : o.makeArray(E))
+			},
+			selector : "",
+			jquery : "1.3.2",
+			size : function() {
+				return this.length
+			},
+			get : function(E) {
+				return E === g ? Array.prototype.slice.call(this) : this[E]
+			},
+			pushStack : function(F, H, E) {
+				var G = o(F);
+				G.prevObject = this;
+				G.context = this.context;
+				if(H === "find") {
+					G.selector = this.selector + (this.selector ? " " : "") + E
+				} else {
+					if(H) {
+						G.selector = this.selector + "." + H + "(" + E + ")"
+					}
+				}
+				return G
+			},
+			setArray : function(E) {
+				this.length = 0;
+				Array.prototype.push.apply(this, E);
+				return this
+			},
+			each : function(F, E) {
+				return o.each(this, F, E)
+			},
+			index : function(E) {
+				return o.inArray(E && E.jquery ? E[0] : E, this)
+			},
+			attr : function(F, H, G) {
+				var E = F;
+				if(typeof F === "string") {
+					if(H === g) {
+						return this[0] && o[G || "attr"](this[0], F)
+					} else {
+						E = {
+						};
+						E[F] = H
+					}
+				}
+				return this.each(function(I) {
+						for(F in E) {
+							o.attr(G ? this.style : this, F, o.prop(this, E[F], G, I, F))
+						}
+					})
+			},
+			css : function(E, F) {
+				if((E == "width" || E == "height") && parseFloat(F) < 0) {
+					F = g
+				}
+				return this.attr(E, F, "curCSS")
+			},
+			text : function(F) {
+				if(typeof F !== "object" && F != null) {
+					return this.empty().append((this[0] && this[0].ownerDocument || document).createTextNode(F))
+				}
+				var E = "";
+				o.each(F || this, function() {
+						o.each(this.childNodes, function() {
+								if(this.nodeType != 8) {
+									E += this.nodeType != 1 ? this.nodeValue : o.fn.text([this])
+								}
+							})
+					});
+				return E
+			},
+			wrapAll : function(E) {
+				if(this[0]) {
+					var F = o(E, this[0].ownerDocument).clone();
+					if(this[0].parentNode) {
+						F.insertBefore(this[0])
+					}
+					F.map(function() {
+							var G = this;
+							while(G.firstChild) {
+								G = G.firstChild
+							}
+							return G
+						}).append(this)
+				}
+				return this
+			},
+			wrapInner : function(E) {
+				return this.each(function() {
+						o(this).contents().wrapAll(E)
+					})
+			},
+			wrap : function(E) {
+				return this.each(function() {
+						o(this).wrapAll(E)
+					})
+			},
+			append : function() {
+				return this.domManip(arguments, true, function(E) {
+						if(this.nodeType == 1) {
+							this.appendChild(E)
+						}
+					})
+			},
+			prepend : function() {
+				return this.domManip(arguments, true, function(E) {
+						if(this.nodeType == 1) {
+							this.insertBefore(E, this.firstChild)
+						}
+					})
+			},
+			before : function() {
+				return this.domManip(arguments, false, function(E) {
+						this.parentNode.insertBefore(E, this)
+					})
+			},
+			after : function() {
+				return this.domManip(arguments, false, function(E) {
+						this.parentNode.insertBefore(E, this.nextSibling)
+					})
+			},
+			end : function() {
+				return this.prevObject || o([])
+			},
+			push : [].push,
+			sort : [].sort,
+			splice : [].splice,
+			find : function(E) {
+				if(this.length === 1) {
+					var F = this.pushStack([], "find", E);
+					F.length = 0;
+					o.find(E, this[0], F);
+					return F
+				} else {
+					return this.pushStack(o.unique(o.map(this, function(G) {
+									return o.find(E, G)
+								})), "find", E)
+				}
+			},
+			clone : function(G) {
+				var E = this.map(function() {
+						if(!o.support.noCloneEvent && !o.isXMLDoc(this)) {
+							var I = this.outerHTML;
+							if(!I) {
+								var J = this.ownerDocument.createElement("div");
+								J.appendChild(this.cloneNode(true));
+								I = J.innerHTML
+							}
+							return o.clean([I.replace(/ jQuery\d+="(?:\d+|null)"/g, "").replace(/^\s*/, "")])[0]
+						} else {
+							return this.cloneNode(true)
+						}
+					});
+				if(G === true) {
+					var H = this.find("*").andSelf(),
+					F = 0;
+					E.find("*").andSelf().each(function() {
+							if(this.nodeName !== H[F].nodeName) {
+								return
+							}
+							var I = o.data(H[F], "events");
+							for(var K in I) {
+								for(var J in I[K]) {
+									o.event.add(this, K, I[K][J], I[K][J].data)
+								}
+							}
+							F++
+						})
+				}
+				return E
+			},
+			filter : function(E) {
+				return this.pushStack(o.isFunction(E) && o.grep(this, function(G, F) {
+							return E.call(G, F)
+						}) || o.multiFilter(E, o.grep(this, function(F) {
+								return F.nodeType === 1
+							})), "filter", E)
+			},
+			closest : function(E) {
+				var G = o.expr.match.POS.test(E) ? o(E) : null,
+				F = 0;
+				return this.map(function() {
+						var H = this;
+						while(H && H.ownerDocument) {
+							if(G ? G.index(H) > -1 : o(H).is(E)) {
+								o.data(H, "closest", F);
+								return H
+							}
+							H = H.parentNode;
+							F++
+						}
+					})
+			},
+			not : function(E) {
+				if(typeof E === "string") {
+					if(f.test(E)) {
+						return this.pushStack(o.multiFilter(E, this, true), "not", E)
+					} else {
+						E = o.multiFilter(E, this)
+					}
+				}
+				var F = E.length && E[E.length - 1] !== g && !E.nodeType;
+				return this.filter(function() {
+						return F ? o.inArray(this, E) < 0 : this != E
+					})
+			},
+			add : function(E) {
+				return this.pushStack(o.unique(o.merge(this.get(), typeof E === "string" ? o(E) : o.makeArray(E))))
+			},
+			is : function(E) {
+				return!!E && o.multiFilter(E, this).length > 0
+			},
+			hasClass : function(E) {
+				return!!E && this.is("." + E)
+			},
+			val : function(K) {
+				if(K === g) {
+					var E = this[0];
+					if(E) {
+						if(o.nodeName(E, "option")) {
+							return(E.attributes.value || {
+								}).specified ? E.value : E.text
+						}
+						if(o.nodeName(E, "select")) {
+							var I = E.selectedIndex,
+							L = [],
+							M = E.options,
+							H = E.type == "select-one";
+							if(I < 0) {
+								return null
+							}
+							for(var F = H ? I : 0, J = H ? I + 1 : M.length; F < J; F++) {
+								var G = M[F];
+								if(G.selected) {
+									K = o(G).val();
+									if(H) {
+										return K
+									}
+									L.push(K)
+								}
+							}
+							return L
+						}
+						return(E.value || "").replace(/\r/g, "")
+					}
+					return g
+				}
+				if(typeof K === "number") {
+					K += ""
+				}
+				return this.each(function() {
+						if(this.nodeType != 1) {
+							return
+						}
+						if(o.isArray(K) && /radio|checkbox/.test(this.type)) {
+							this.checked = (o.inArray(this.value, K) >= 0 || o.inArray(this.name, K) >= 0)
+						} else {
+							if(o.nodeName(this, "select")) {
+								var N = o.makeArray(K);
+								o("option", this).each(function() {
+										this.selected = (o.inArray(this.value, N) >= 0 || o.inArray(this.text, N) >= 0)
+									});
+								if(!N.length) {
+									this.selectedIndex = -1
+								}
+							} else {
+								this.value = K
+							}
+						}
+					})
+			},
+			html : function(E) {
+				return E === g ? (this[0] ? this[0].innerHTML.replace(/ jQuery\d+="(?:\d+|null)"/g, "") : null) : this.empty().append(E)
+			},
+			replaceWith : function(E) {
+				return this.after(E).remove()
+			},
+			eq : function(E) {
+				return this.slice(E, +E + 1)
+			},
+			slice : function() {
+				return this.pushStack(Array.prototype.slice.apply(this, arguments), "slice", Array.prototype.slice.call(arguments).join(","))
+			},
+			map : function(E) {
+				return this.pushStack(o.map(this, function(G, F) {
+							return E.call(G, F, G)
+						}))
+			},
+			andSelf : function() {
+				return this.add(this.prevObject)
+			},
+			domManip : function(J, M, L) {
+				if(this[0]) {
+					var I = (this[0].ownerDocument || this[0]).createDocumentFragment(),
+					F = o.clean(J, (this[0].ownerDocument || this[0]), I),
+					H = I.firstChild;
+					if(H) {
+						for(var G = 0, E = this.length; G < E; G++) {
+							L.call(K(this[G], H), this.length > 1 || G > 0 ? I.cloneNode(true) : I)
+						}
+					}
+					if(F) {
+						o.each(F, z)
+					}
+				}
+				return this;
+				function K(N, O) {
+					return M && o.nodeName(N, "table") && o.nodeName(O, "tr") ? (N.getElementsByTagName("tbody")[0] || N.appendChild(N.ownerDocument.createElement("tbody"))) : N
+				}
+			}
 		};
-		value.getProperties(listValue, lengthValue);
-		for(var i = 0; i < lengthValue.value; ++i) {
-			var prop = listValue.value[i];
-			try {
-				var name = unwrapIValue(prop.name);
-				FBTrace.sysout(i + "]" + name + "=" + unwrapIValue(prop.value));
-			} catch(e) {
-				FBTrace.sysout(i + "]" + e);
+		o.fn.init.prototype = o.fn;
+		function z(E, F) {
+			if(F.src) {
+				o.ajax({
+						url : F.src,
+						async : false,
+						dataType : "script"
+					})
+			} else {
+				o.globalEval(F.text || F.textContent || F.innerHTML || "")
+			}
+			if(F.parentNode) {
+				F.parentNode.removeChild(F)
 			}
 		}
-	},
-	
-	reFindDebugger : function(frame, debuggr) {
-		var frameScopeRoot = this.getOutermostScope(frame);
-		if(frameScopeRoot && debuggr.supportsGlobal(frameScopeRoot, frame)) 
-			return debuggr;
-		
-		if(FBTrace.DBG_FBS_FINDDEBUGGER) 
-			FBTrace.sysout("reFindDebugger debuggr " + debuggr.debuggerName + " does not support frameScopeRoot " + frameScopeRoot, frameScopeRoot);
-		return null;
-	},
-	
-	discardRecursionFrames : function(frame) {
-		var i = 0;
-		var rest = 0;
-		var mark = frame; // a in abcabcabcdef
-		var point = frame;
-		while(point = point.callingFrame) {
-			i++;
-			if(point.script.tag == mark.script.tag) // then we found a repeating caller abcabcdef
-			{
-				mark = point;
-				rest = i;
-			}
+		function e() {
+			return + new Date
 		}
-		// here point is null and mark is the last repeater, abcdef
-		if(FBTrace.DBG_FBS_ERRORS) 
-			FBTrace.sysout("fbs.discardRecursionFrames dropped " + rest + " of " + i, mark);
-		return mark;
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	// jsd breakpoints are on a PC in a jsdIScript
-	// Users breakpoint on a line of source
-	// Because test.js can be included multiple times, the URL+line number from the UI is not unique.
-	// sourcefile.href != script.fileName, generally script.fileName cannot be used.
-	// If the source is compiled, then we have zero, one, or more jsdIScripts on a line.
-	//    If zero, cannot break at that line
-	//    If one, set a jsd breakpoint
-	//    If more than one, set jsd breakpoint on each script
-	// Else we know that the source will be compiled before it is run.
-	//    Save the sourceFile.href+line and set the jsd breakpoint when we compile
-	//    Venkman called these "future" breakpoints
-	//    We cannot prevent future breakpoints on lines that have no script.  Break onCreate with error?
-	
-	addBreakpoint : function(type, sourceFile, lineNo, props, debuggr) {
-		var url = sourceFile.href;
-		var bp = this.findBreakpoint(url, lineNo);
-		if(bp && bp.type & type) 
-			return null;
-		
-		if(bp) {
-			bp.type |= type;
-			
-			if(debuggr) 
-				bp.debuggerName = debuggr.debuggerName;
-			else {
-				if(FBTrace.DBG_FBS_BP) 
-					FBTrace.sysout("fbs.addBreakpoint with no debuggr:\n");
+		o.extend = o.fn.extend = function() {
+			var J = arguments[0] || {
+			},
+			H = 1,
+			I = arguments.length,
+			E = false,
+			G;
+			if(typeof J === "boolean") {
+				E = J;
+				J = arguments[1] || {
+				};
+				H = 2
 			}
-		} else {
-			bp = this.recordBreakpoint(type, url, lineNo, debuggr, props, sourceFile);
-		}
-		if(FBTrace.DBG_FBS_BP) 
-			FBTrace.sysout("addBreakpoint for " + url, [bp, sourceFile]);
-		return bp;
-	},
-	
-	recordBreakpoint : function(type, url, lineNo, debuggr, props, sourceFile) {
-		var urlBreakpoints = fbs.getBreakpoints(url);
-		if(!urlBreakpoints) 
-			urlBreakpoints = [];
-		
-		var bp = {
-			type : type,
-			href : url,
-			lineNo : lineNo,
-			disabled : 0,
-			debuggerName : debuggr.debuggerName,
-			condition : "",
-			onTrue : true,
-			hitCount : -1,
-			hit : 0
+			if(typeof J !== "object" && !o.isFunction(J)) {
+				J = {
+				}
+			}
+			if(I == H) {
+				J = this;
+				--H
+			}
+			for(; H < I; H++) {
+				if((G = arguments[H]) != null) {
+					for(var F in G) {
+						var K = J[F],
+						L = G[F];
+						if(J === L) {
+							continue
+						}
+						if(E && L && typeof L === "object" && !L.nodeType) {
+							J[F] = o.extend(E, K || (L.length != null ? [] : {
+									}), L)
+						} else {
+							if(L !== g) {
+								J[F] = L
+							}
+						}
+					}
+				}
+			}
+			return J
 		};
-		if(props) {
-			bp.condition = props.condition;
-			bp.onTrue = props.onTrue;
-			bp.hitCount = props.hitCount;
-			if(bp.condition || bp.hitCount > 0) 
-				++conditionCount;
-			if(props.disabled) {
-				bp.disabled |= BP_NORMAL;
-				++disabledCount;
-			}
-		}
-		urlBreakpoints.push(bp);
-		fbs.setJSDBreakpoint(sourceFile, bp);
-		fbs.setBreakpoints(url, urlBreakpoints);
-		++breakpointCount;
-		return bp;
-	},
-	
-	removeBreakpoint : function(type, url, lineNo) {
-		var urlBreakpoints = fbs.getBreakpoints(url);
-		
-		if(FBTrace.DBG_FBS_BP) 
-			FBTrace.sysout("removeBreakpoint for " + url + ", need to check bps=" + (urlBreakpoints ? urlBreakpoints.length : "none"));
-		
-		if(!urlBreakpoints) 
-			return false;
-		
-		for(var i = 0; i < urlBreakpoints.length; ++i) {
-			var bp = urlBreakpoints[i];
-			if(FBTrace.DBG_FBS_BP) 
-				FBTrace.sysout("removeBreakpoint checking bp.lineNo vs lineNo=" + bp.lineNo + " vs " + lineNo);
-			
-			if(bp.lineNo == lineNo) {
-				bp.type &= ~type;
-				if(!bp.type) {
-					if(bp.scriptsWithBreakpoint) {
-						for(var j = 0; j < bp.scriptsWithBreakpoint.length; j++) {
-							var script = bp.scriptsWithBreakpoint[j];
-							if(script && script.isValid) {
-								try {
-									script.clearBreakpoint(bp.pc[j]);
-									if(FBTrace.DBG_FBS_BP) 
-										FBTrace.sysout("removeBreakpoint in tag=" + script.tag + " at " + lineNo + "@" + url);
-								} catch(exc) {
-									FBTrace.sysout("Firebug service failed to remove breakpoint in " + script.tag + " at lineNo=" + lineNo + " pcmap:" + bp.pcmap);
+		var b = /z-?index|font-?weight|opacity|zoom|line-?height/i,
+		q = document.defaultView || {
+		},
+		s = Object.prototype.toString;
+		o.extend({
+				noConflict : function(E) {
+					l.$ = p;
+					if(E) {
+						l.jQuery = y
+					}
+					return o
+				},
+				isFunction : function(E) {
+					return s.call(E) === "[object Function]"
+				},
+				isArray : function(E) {
+					return s.call(E) === "[object Array]"
+				},
+				isXMLDoc : function(E) {
+					return E.nodeType === 9 && E.documentElement.nodeName !== "HTML" || !!E.ownerDocument && o.isXMLDoc(E.ownerDocument)
+				},
+				globalEval : function(G) {
+					if(G && /\S/.test(G)) {
+						var F = document.getElementsByTagName("head")[0] || document.documentElement,
+						E = document.createElement("script");
+						E.type = "text/javascript";
+						if(o.support.scriptEval) {
+							E.appendChild(document.createTextNode(G))
+						} else {
+							E.text = G
+						}
+						F.insertBefore(E, F.firstChild);
+						F.removeChild(E)
+					}
+				},
+				nodeName : function(F, E) {
+					return F.nodeName && F.nodeName.toUpperCase() == E.toUpperCase()
+				},
+				each : function(G, K, F) {
+					var E,
+					H = 0,
+					I = G.length;
+					if(F) {
+						if(I === g) {
+							for(E in G) {
+								if(K.apply(G[E], F) === false) {
+									break
+								}
+							}
+						} else {
+							for(; H < I; ) {
+								if(K.apply(G[H++], F) === false) {
+									break
+								}
+							}
+						}
+					} else {
+						if(I === g) {
+							for(E in G) {
+								if(K.call(G[E], E, G[E]) === false) {
+									break
+								}
+							}
+						} else {
+							for(var J = G[0]; H < I && K.call(J, H, J) !== false; J = G[++H]) {
+							}
+						}
+					}
+					return G
+				},
+				prop : function(H, I, G, F, E) {
+					if(o.isFunction(I)) {
+						I = I.call(H, F)
+					}
+					return typeof I === "number" && G == "curCSS" && !b.test(E) ? I + "px" : I
+				},
+				className : {
+					add : function(E, F) {
+						o.each((F || "").split(/\s+/), function(G, H) {
+								if(E.nodeType == 1 && !o.className.has(E.className, H)) {
+									E.className += (E.className ? " " : "") + H
+								}
+							})
+					},
+					remove : function(E, F) {
+						if(E.nodeType == 1) {
+							E.className = F !== g ? o.grep(E.className.split(/\s+/), function(G) {
+									return!o.className.has(F, G)
+								}).join(" ") : ""
+						}
+					},
+					has : function(F, E) {
+						return F && o.inArray(E, (F.className || F).toString().split(/\s+/)) > -1
+					}
+				},
+				swap : function(H, G, I) {
+					var E = {
+					};
+					for(var F in G) {
+						E[F] = H.style[F];
+						H.style[F] = G[F]
+					}
+					I.call(H);
+					for(var F in G) {
+						H.style[F] = E[F]
+					}
+				},
+				css : function(H, F, J, E) {
+					if(F == "width" || F == "height") {
+						var L,
+						G = {
+							position : "absolute",
+							visibility : "hidden",
+							display : "block"
+						},
+						K = F == "width" ? ["Left", "Right"] : ["Top", "Bottom"];
+						function I() {
+							L = F == "width" ? H.offsetWidth : H.offsetHeight;
+							if(E === "border") {
+								return
+							}
+							o.each(K, function() {
+									if(!E) {
+										L -= parseFloat(o.curCSS(H, "padding" + this, true)) || 0
+									}
+									if(E === "margin") {
+										L += parseFloat(o.curCSS(H, "margin" + this, true)) || 0
+									} else {
+										L -= parseFloat(o.curCSS(H, "border" + this + "Width", true)) || 0
+									}
+								})
+						}
+						if(H.offsetWidth !== 0) {
+							I()
+						} else {
+							o.swap(H, G, I)
+						}
+						return Math.max(0, Math.round(L))
+					}
+					return o.curCSS(H, F, J)
+				},
+				curCSS : function(I, F, G) {
+					var L,
+					E = I.style;
+					if(F == "opacity" && !o.support.opacity) {
+						L = o.attr(E, "opacity");
+						return L == "" ? "1" : L
+					}
+					if(F.match(/float/i)) {
+						F = w
+					}
+					if(!G && E && E[F]) {
+						L = E[F]
+					} else {
+						if(q.getComputedStyle) {
+							if(F.match(/float/i)) {
+								F = "float"
+							}
+							F = F.replace(/([A-Z])/g, "-$1").toLowerCase();
+							var M = q.getComputedStyle(I, null);
+							if(M) {
+								L = M.getPropertyValue(F)
+							}
+							if(F == "opacity" && L == "") {
+								L = "1"
+							}
+						} else {
+							if(I.currentStyle) {
+								var J = F.replace(/\-(\w)/g, function(N, O) {
+										return O.toUpperCase()
+									});
+								L = I.currentStyle[F] || I.currentStyle[J];
+								if(!/^\d+(px)?$/i.test(L) && /^\d/.test(L)) {
+									var H = E.left,
+									K = I.runtimeStyle.left;
+									I.runtimeStyle.left = I.currentStyle.left;
+									E.left = L || 0;
+									L = E.pixelLeft + "px";
+									E.left = H;
+									I.runtimeStyle.left = K
 								}
 							}
 						}
 					}
-					// else this was a future breakpoint that never hit or a script that was GCed
-					
-					urlBreakpoints.splice(i, 1);
-					--breakpointCount;
-					
-					if(bp.disabled) 
-						--disabledCount;
-					
-					if(bp.condition || bp.hitCount > 0) {
-						--conditionCount;
+					return L
+				},
+				clean : function(F, K, I) {
+					K = K || document;
+					if(typeof K.createElement === "undefined") {
+						K = K.ownerDocument || K[0] && K[0].ownerDocument || document
 					}
-					
-					fbs.setBreakpoints(url, urlBreakpoints);
-				}
-				return bp;
-			}
-		}
-		if(FBTrace.DBG_FBS_BP) 
-			FBTrace.sysout("fbs.removeBreakpoint no find for " + lineNo + "@" + url + " in " + urlBreakpoints.length, urlBreakpoints);
-		return false;
-	},
-	
-	findBreakpoint : function(url, lineNo) {
-		var urlBreakpoints = fbs.getBreakpoints(url);
-		if(urlBreakpoints) {
-			for(var i = 0; i < urlBreakpoints.length; ++i) {
-				var bp = urlBreakpoints[i];
-				if(bp.lineNo == lineNo) 
-					return bp;
-			}
-		}
-		if(FBTrace.DBG_FBS_BP) 
-			FBTrace.sysout("findBreakpoint no find for " + lineNo + "@" + url, urlBreakpoints);
-		return null;
-	},
-	
-	// When we are called, scripts have been compiled so all relevant breakpoints are not "future"
-	findBreakpointByScript : function(script, pc) {
-		var urlsWithBreakpoints = fbs.getBreakpointURLs();
-		for(let iURL = 0; iURL < urlsWithBreakpoints.length; iURL++) {
-			var url = urlsWithBreakpoints[iURL];
-			var urlBreakpoints = fbs.getBreakpoints(url);
-			if(urlBreakpoints) {
-				for(var iBreakpoint = 0; iBreakpoint < urlBreakpoints.length; ++iBreakpoint) {
-					var bp = urlBreakpoints[iBreakpoint];
-					if(bp.scriptsWithBreakpoint) {
-						for(let iScript = 0; iScript < bp.scriptsWithBreakpoint.length; iScript++) {
-							if(FBTrace.DBG_FBS_BP) {
-								var vs = (bp.scriptsWithBreakpoint[iScript] ? bp.scriptsWithBreakpoint[iScript].tag + "@" + bp.pc[iScript] : "future") + " on " + url;
-								FBTrace.sysout("findBreakpointByScript[" + iURL + "," + iBreakpoint + "," + iScript + "]" + " looking for " + script.tag + "@" + pc + " vs " + vs);
+					if(!I && F.length === 1 && typeof F[0] === "string") {
+						var H = /^<(\w+)\s*\/?>$/.exec(F[0]);
+						if(H) {
+							return[K.createElement(H[1])]
+						}
+					}
+					var G = [],
+					E = [],
+					L = K.createElement("div");
+					o.each(F, function(P, S) {
+							if(typeof S === "number") {
+								S += ""
 							}
-							if(bp.scriptsWithBreakpoint[iScript] && (bp.scriptsWithBreakpoint[iScript].tag == script.tag) && (bp.pc[iScript] == pc)) 
-								return bp;
+							if(!S) {
+								return
+							}
+							if(typeof S === "string") {
+								S = S.replace(/(<(\w+)[^>]*?)\/>/g, function(U, V, T) {
+										return T.match(/^(abbr|br|col|img|input|link|meta|param|hr|area|embed)$/i) ? U : V + "></" + T + ">"
+									});
+								var O = S.replace(/^\s+/, "").substring(0, 10).toLowerCase();
+								var Q = !O.indexOf("<opt") && [1, "<select multiple='multiple'>", "</select>"] || !O.indexOf("<leg") && [1, "<fieldset>", "</fieldset>"] || O.match(/^<(thead|tbody|tfoot|colg|cap)/) && [1, "<table>", "</table>"] || !O.indexOf("<tr") && [2, "<table><tbody>", "</tbody></table>"] || (!O.indexOf("<td") || !O.indexOf("<th")) && [3, "<table><tbody><tr>", "</tr></tbody></table>"] || !O.indexOf("<col") && [2, "<table><tbody></tbody><colgroup>", "</colgroup></table>"] || !o.support.htmlSerialize && [1, "div<div>", "</div>"] || [0, "", ""];
+								L.innerHTML = Q[1] + S + Q[2];
+								while(Q[0]--) {
+									L = L.lastChild
+								}
+								if(!o.support.tbody) {
+									var R = /<tbody/i.test(S),
+									N = !O.indexOf("<table") && !R ? L.firstChild && L.firstChild.childNodes : Q[1] == "<table>" && !R ? L.childNodes : [];
+									for(var M = N.length - 1; M >= 0; --M) {
+										if(o.nodeName(N[M], "tbody") && !N[M].childNodes.length) {
+											N[M].parentNode.removeChild(N[M])
+										}
+									}
+								}
+								if(!o.support.leadingWhitespace && /^\s/.test(S)) {
+									L.insertBefore(K.createTextNode(S.match(/^\s*/)[0]), L.firstChild)
+								}
+								S = o.makeArray(L.childNodes)
+							}
+							if(S.nodeType) {
+								G.push(S)
+							} else {
+								G = o.merge(G, S)
+							}
+						});
+					if(I) {
+						for(var J = 0; G[J]; J++) {
+							if(o.nodeName(G[J], "script") && (!G[J].type || G[J].type.toLowerCase() === "text/javascript")) {
+								E.push(G[J].parentNode ? G[J].parentNode.removeChild(G[J]) : G[J])
+							} else {
+								if(G[J].nodeType === 1) {
+									G.splice.apply(G, [J + 1, 0].concat(o.makeArray(G[J].getElementsByTagName("script"))))
+								}
+								I.appendChild(G[J])
+							}
+						}
+						return E
+					}
+					return G
+				},
+				attr : function(J, G, K) {
+					if(!J || J.nodeType == 3 || J.nodeType == 8) {
+						return g
+					}
+					var H = !o.isXMLDoc(J),
+					L = K !== g;
+					G = H && o.props[G] || G;
+					if(J.tagName) {
+						var F = /href|src|style/.test(G);
+						if(G == "selected" && J.parentNode) {
+							J.parentNode.selectedIndex
+						}
+						if(G in J && H && !F) {
+							if(L) {
+								if(G == "type" && o.nodeName(J, "input") && J.parentNode) {
+									throw "type property can't be changed"
+								}
+								J[G] = K
+							}
+							if(o.nodeName(J, "form") && J.getAttributeNode(G)) {
+								return J.getAttributeNode(G).nodeValue
+							}
+							if(G == "tabIndex") {
+								var I = J.getAttributeNode("tabIndex");
+								return I && I.specified ? I.value : J.nodeName.match(/(button|input|object|select|textarea)/i) ? 0 : J.nodeName.match(/^(a|area)$/i) && J.href ? 0 : g
+							}
+							return J[G]
+						}
+						if(!o.support.style && H && G == "style") {
+							return o.attr(J.style, "cssText", K)
+						}
+						if(L) {
+							J.setAttribute(G, "" + K)
+						}
+						var E = !o.support.hrefNormalized && H && F ? J.getAttribute(G, 2) : J.getAttribute(G);
+						return E === null ? g : E
+					}
+					if(!o.support.opacity && G == "opacity") {
+						if(L) {
+							J.zoom = 1;
+							J.filter = (J.filter || "").replace(/alpha\([^)]*\)/, "") + (parseInt(K) + "" == "NaN" ? "" : "alpha(opacity=" + K * 100 + ")")
+						}
+						return J.filter && J.filter.indexOf("opacity=") >= 0 ? (parseFloat(J.filter.match(/opacity=([^)]*)/)[1]) / 100) + "" : ""
+					}
+					G = G.replace(/-([a-z])/ig, function(M, N) {
+							return N.toUpperCase()
+						});
+					if(L) {
+						J[G] = K
+					}
+					return J[G]
+				},
+				trim : function(E) {
+					return(E || "").replace(/^\s+|\s+$/g, "")
+				},
+				makeArray : function(G) {
+					var E = [];
+					if(G != null) {
+						var F = G.length;
+						if(F == null || typeof G === "string" || o.isFunction(G) || G.setInterval) {
+							E[0] = G
+						} else {
+							while(F) {
+								E[--F] = G[F]
+							}
+						}
+					}
+					return E
+				},
+				inArray : function(G, H) {
+					for(var E = 0, F = H.length; E < F; E++) {
+						if(H[E] === G) {
+							return E
+						}
+					}
+					return - 1
+				},
+				merge : function(H, E) {
+					var F = 0,
+					G,
+					I = H.length;
+					if(!o.support.getAll) {
+						while((G = E[F++]) != null) {
+							if(G.nodeType != 8) {
+								H[I++] = G
+							}
+						}
+					} else {
+						while((G = E[F++]) != null) {
+							H[I++] = G
+						}
+					}
+					return H
+				},
+				unique : function(K) {
+					var F = [],
+					E = {
+					};
+					try {
+						for(var G = 0, H = K.length; G < H; G++) {
+							var J = o.data(K[G]);
+							if(!E[J]) {
+								E[J] = true;
+								F.push(K[G])
+							}
+						}
+					} catch(I) {
+						F = K
+					}
+					return F
+				},
+				grep : function(F, J, E) {
+					var G = [];
+					for(var H = 0, I = F.length; H < I; H++) {
+						if(!E != !J(F[H], H)) {
+							G.push(F[H])
+						}
+					}
+					return G
+				},
+				map : function(E, J) {
+					var F = [];
+					for(var G = 0, H = E.length; G < H; G++) {
+						var I = J(E[G], G);
+						if(I != null) {
+							F[F.length] = I
+						}
+					}
+					return F.concat.apply([], F)
+				}
+			});
+		var C = navigator.userAgent.toLowerCase();
+		o.browser = {
+			version : (C.match(/.+(?:rv|it|ra|ie)[\/: ]([\d.]+)/) || [0, "0"])[1],
+			safari : /webkit/.test(C),
+			opera : /opera/.test(C),
+			msie : /msie/.test(C) && !/opera/.test(C),
+			mozilla : /mozilla/.test(C) && !/(compatible|webkit)/.test(C)
+		};
+		o.each({
+				parent : function(E) {
+					return E.parentNode
+				},
+				parents : function(E) {
+					return o.dir(E, "parentNode")
+				},
+				next : function(E) {
+					return o.nth(E, 2, "nextSibling")
+				},
+				prev : function(E) {
+					return o.nth(E, 2, "previousSibling")
+				},
+				nextAll : function(E) {
+					return o.dir(E, "nextSibling")
+				},
+				prevAll : function(E) {
+					return o.dir(E, "previousSibling")
+				},
+				siblings : function(E) {
+					return o.sibling(E.parentNode.firstChild, E)
+				},
+				children : function(E) {
+					return o.sibling(E.firstChild)
+				},
+				contents : function(E) {
+					return o.nodeName(E, "iframe") ? E.contentDocument || E.contentWindow.document : o.makeArray(E.childNodes)
+				}
+			}, function(E, F) {
+				o.fn[E] = function(G) {
+					var H = o.map(this, F);
+					if(G && typeof G == "string") {
+						H = o.multiFilter(G, H)
+					}
+					return this.pushStack(o.unique(H), E, G)
+				}
+			});
+		o.each({
+				appendTo : "append",
+				prependTo : "prepend",
+				insertBefore : "before",
+				insertAfter : "after",
+				replaceAll : "replaceWith"
+			}, function(E, F) {
+				o.fn[E] = function(G) {
+					var J = [],
+					L = o(G);
+					for(var K = 0, H = L.length; K < H; K++) {
+						var I = (K > 0 ? this.clone(true) : this).get();
+						o.fn[F].apply(o(L[K]), I);
+						J = J.concat(I)
+					}
+					return this.pushStack(J, E, G)
+				}
+			});
+		o.each({
+				removeAttr : function(E) {
+					o.attr(this, E, "");
+					if(this.nodeType == 1) {
+						this.removeAttribute(E)
+					}
+				},
+				addClass : function(E) {
+					o.className.add(this, E)
+				},
+				removeClass : function(E) {
+					o.className.remove(this, E)
+				},
+				toggleClass : function(F, E) {
+					if(typeof E !== "boolean") {
+						E = !o.className.has(this, F)
+					}
+					o.className[E ? "add" : "remove"](this, F)
+				},
+				remove : function(E) {
+					if(!E || o.filter(E, [this]).length) {
+						o("*", this).add([this]).each(function() {
+								o.event.remove(this);
+								o.removeData(this)
+							});
+						if(this.parentNode) {
+							this.parentNode.removeChild(this)
+						}
+					}
+				},
+				empty : function() {
+					o(this).children().remove();
+					while(this.firstChild) {
+						this.removeChild(this.firstChild)
+					}
+				}
+			}, function(E, F) {
+				o.fn[E] = function() {
+					return this.each(F, arguments)
+				}
+			});
+		function j(E, F) {
+			return E[0] && parseInt(o.curCSS(E[0], F, true), 10) || 0
+		}
+		var h = "jQuery" + e(),
+		v = 0,
+		A = {
+		};
+		o.extend({
+				cache : {
+				},
+				data : function(F, E, G) {
+					F = F == l ? A : F;
+					var H = F[h];
+					if(!H) {
+						H = F[h] = ++v
+					}
+					if(E && !o.cache[H]) {
+						o.cache[H] = {
+						}
+					}
+					if(G !== g) {
+						o.cache[H][E] = G
+					}
+					return E ? o.cache[H][E] : H
+				},
+				removeData : function(F, E) {
+					F = F == l ? A : F;
+					var H = F[h];
+					if(E) {
+						if(o.cache[H]) {
+							delete o.cache[H][E];
+							E = "";
+							for(E in o.cache[H]) {
+								break
+							}
+							if(!E) {
+								o.removeData(F)
+							}
+						}
+					} else {
+						try {
+							delete F[h]
+						} catch(G) {
+							if(F.removeAttribute) {
+								F.removeAttribute(h)
+							}
+						}
+						delete o.cache[H]
+					}
+				},
+				queue : function(F, E, H) {
+					if(F) {
+						E = (E || "fx") + "queue";
+						var G = o.data(F, E);
+						if(!G || o.isArray(H)) {
+							G = o.data(F, E, o.makeArray(H))
+						} else {
+							if(H) {
+								G.push(H)
+							}
+						}
+					}
+					return G
+				},
+				dequeue : function(H, G) {
+					var E = o.queue(H, G),
+					F = E.shift();
+					if(!G || G === "fx") {
+						F = E[0]
+					}
+					if(F !== g) {
+						F.call(H)
+					}
+				}
+			});
+		o.fn.extend({
+				data : function(E, G) {
+					var H = E.split(".");
+					H[1] = H[1] ? "." + H[1] : "";
+					if(G === g) {
+						var F = this.triggerHandler("getData" + H[1] + "!", [H[0]]);
+						if(F === g && this.length) {
+							F = o.data(this[0], E)
+						}
+						return F === g && H[1] ? this.data(H[0]) : F
+					} else {
+						return this.trigger("setData" + H[1] + "!", [H[0], G]).each(function() {
+								o.data(this, E, G)
+							})
+					}
+				},
+				removeData : function(E) {
+					return this.each(function() {
+							o.removeData(this, E)
+						})
+				},
+				queue : function(E, F) {
+					if(typeof E !== "string") {
+						F = E;
+						E = "fx"
+					}
+					if(F === g) {
+						return o.queue(this[0], E)
+					}
+					return this.each(function() {
+							var G = o.queue(this, E, F);
+							if(E == "fx" && G.length == 1) {
+								G[0].call(this)
+							}
+						})
+				},
+				dequeue : function(E) {
+					return this.each(function() {
+							o.dequeue(this, E)
+						})
+				}
+			});
+		/*
+		 * Sizzle CSS Selector Engine - v0.9.3
+		 *  Copyright 2009, The Dojo Foundation
+		 *  Released under the MIT, BSD, and GPL Licenses.
+		 *  More information: http://sizzlejs.com/
+		 */
+		(function() {
+				var R = /((?:\((?:\([^()]+\)|[^()]+)+\)|\[(?:\[[^[\]]*\]|['"][^'"]*['"]|[^[\]'"]+)+\]|\\.|[^ >+~,(\[\\]+)+|[>+~])(\s*,\s*)?/g,
+				L = 0,
+				H = Object.prototype.toString;
+				var F = function(Y, U, ab, ac) {
+					ab = ab || [];
+					U = U || document;
+					if(U.nodeType !== 1 && U.nodeType !== 9) {
+						return[]
+					}
+					if(!Y || typeof Y !== "string") {
+						return ab
+					}
+					var Z = [],
+					W,
+					af,
+					ai,
+					T,
+					ad,
+					V,
+					X = true;
+					R.lastIndex = 0;
+					while((W = R.exec(Y)) !== null) {
+						Z.push(W[1]);
+						if(W[2]) {
+							V = RegExp.rightContext;
+							break
+						}
+					}
+					if(Z.length > 1 && M.exec(Y)) {
+						if(Z.length === 2 && I.relative[Z[0]]) {
+							af = J(Z[0] + Z[1], U)
+						} else {
+							af = I.relative[Z[0]] ? [U] : F(Z.shift(), U);
+							while(Z.length) {
+								Y = Z.shift();
+								if(I.relative[Y]) {
+									Y += Z.shift()
+								}
+								af = J(Y, af)
+							}
+						}
+					} else {
+						var ae = ac ? {
+							expr : Z.pop(),
+							set : E(ac)
+						}
+						 : F.find(Z.pop(), Z.length === 1 && U.parentNode ? U.parentNode : U, Q(U));
+						af = F.filter(ae.expr, ae.set);
+						if(Z.length > 0) {
+							ai = E(af)
+						} else {
+							X = false
+						}
+						while(Z.length) {
+							var ah = Z.pop(),
+							ag = ah;
+							if(!I.relative[ah]) {
+								ah = ""
+							} else {
+								ag = Z.pop()
+							}
+							if(ag == null) {
+								ag = U
+							}
+							I.relative[ah](ai, ag, Q(U))
+						}
+					}
+					if(!ai) {
+						ai = af
+					}
+					if(!ai) {
+						throw "Syntax error, unrecognized expression: " + (ah || Y)
+					}
+					if(H.call(ai) === "[object Array]") {
+						if(!X) {
+							ab.push.apply(ab, ai)
+						} else {
+							if(U.nodeType === 1) {
+								for(var aa = 0; ai[aa] != null; aa++) {
+									if(ai[aa] && (ai[aa] === true || ai[aa].nodeType === 1 && K(U, ai[aa]))) {
+										ab.push(af[aa])
+									}
+								}
+							} else {
+								for(var aa = 0; ai[aa] != null; aa++) {
+									if(ai[aa] && ai[aa].nodeType === 1) {
+										ab.push(af[aa])
+									}
+								}
+							}
+						}
+					} else {
+						E(ai, ab)
+					}
+					if(V) {
+						F(V, U, ab, ac);
+						if(G) {
+							hasDuplicate = false;
+							ab.sort(G);
+							if(hasDuplicate) {
+								for(var aa = 1; aa < ab.length; aa++) {
+									if(ab[aa] === ab[aa - 1]) {
+										ab.splice(aa--, 1)
+									}
+								}
+							}
+						}
+					}
+					return ab
+				};
+				F.matches = function(T, U) {
+					return F(T, null, null, U)
+				};
+				F.find = function(aa, T, ab) {
+					var Z,
+					X;
+					if(!aa) {
+						return[]
+					}
+					for(var W = 0, V = I.order.length; W < V; W++) {
+						var Y = I.order[W],
+						X;
+						if((X = I.match[Y].exec(aa))) {
+							var U = RegExp.leftContext;
+							if(U.substr(U.length - 1) !== "\\") {
+								X[1] = (X[1] || "").replace(/\\/g, "");
+								Z = I.find[Y](X, T, ab);
+								if(Z != null) {
+									aa = aa.replace(I.match[Y], "");
+									break
+								}
+							}
+						}
+					}
+					if(!Z) {
+						Z = T.getElementsByTagName("*")
+					}
+					return{
+						set : Z,
+						expr : aa
+					}
+				};
+				F.filter = function(ad, ac, ag, W) {
+					var V = ad,
+					ai = [],
+					aa = ac,
+					Y,
+					T,
+					Z = ac && ac[0] && Q(ac[0]);
+					while(ad && ac.length) {
+						for(var ab in I.filter) {
+							if((Y = I.match[ab].exec(ad)) != null) {
+								var U = I.filter[ab],
+								ah,
+								af;
+								T = false;
+								if(aa == ai) {
+									ai = []
+								}
+								if(I.preFilter[ab]) {
+									Y = I.preFilter[ab](Y, aa, ag, ai, W, Z);
+									if(!Y) {
+										T = ah = true
+									} else {
+										if(Y === true) {
+											continue
+										}
+									}
+								}
+								if(Y) {
+									for(var X = 0; (af = aa[X]) != null; X++) {
+										if(af) {
+											ah = U(af, Y, X, aa);
+											var ae = W^!!ah;
+											if(ag && ah != null) {
+												if(ae) {
+													T = true
+												} else {
+													aa[X] = false
+												}
+											} else {
+												if(ae) {
+													ai.push(af);
+													T = true
+												}
+											}
+										}
+									}
+								}
+								if(ah !== g) {
+									if(!ag) {
+										aa = ai
+									}
+									ad = ad.replace(I.match[ab], "");
+									if(!T) {
+										return[]
+									}
+									break
+								}
+							}
+						}
+						if(ad == V) {
+							if(T == null) {
+								throw "Syntax error, unrecognized expression: " + ad
+							} else {
+								break
+							}
+						}
+						V = ad
+					}
+					return aa
+				};
+				var I = F.selectors = {
+					order : ["ID", "NAME", "TAG"],
+					match : {
+						ID : /#((?:[\w\u00c0-\uFFFF_-]|\\.)+)/,
+						CLASS : /\.((?:[\w\u00c0-\uFFFF_-]|\\.)+)/,
+						NAME : /\[name=['"]*((?:[\w\u00c0-\uFFFF_-]|\\.)+)['"]*\]/,
+						ATTR : /\[\s*((?:[\w\u00c0-\uFFFF_-]|\\.)+)\s*(?:(\S?=)\s*(['"]*)(.*?)\3|)\s*\]/,
+						TAG : /^((?:[\w\u00c0-\uFFFF\*_-]|\\.)+)/,
+						CHILD : /:(only|nth|last|first)-child(?:\((even|odd|[\dn+-]*)\))?/,
+						POS : /:(nth|eq|gt|lt|first|last|even|odd)(?:\((\d*)\))?(?=[^-]|$)/,
+						PSEUDO : /:((?:[\w\u00c0-\uFFFF_-]|\\.)+)(?:\((['"]*)((?:\([^\)]+\)|[^\2\(\)]*)+)\2\))?/
+					},
+					attrMap : {
+						"class" : "className",
+						"for" : "htmlFor"
+					},
+					attrHandle : {
+						href : function(T) {
+							return T.getAttribute("href")
+						}
+					},
+					relative : {
+						"+" : function(aa, T, Z) {
+							var X = typeof T === "string",
+							ab = X && !/\W/.test(T),
+							Y = X && !ab;
+							if(ab && !Z) {
+								T = T.toUpperCase()
+							}
+							for(var W = 0, V = aa.length, U; W < V; W++) {
+								if((U = aa[W])) {
+									while((U = U.previousSibling) && U.nodeType !== 1) {
+									}
+									aa[W] = Y || U && U.nodeName === T ? U || false : U === T
+								}
+							}
+							if(Y) {
+								F.filter(T, aa, true)
+							}
+						},
+						">" : function(Z, U, aa) {
+							var X = typeof U === "string";
+							if(X && !/\W/.test(U)) {
+								U = aa ? U : U.toUpperCase();
+								for(var V = 0, T = Z.length; V < T; V++) {
+									var Y = Z[V];
+									if(Y) {
+										var W = Y.parentNode;
+										Z[V] = W.nodeName === U ? W : false
+									}
+								}
+							} else {
+								for(var V = 0, T = Z.length; V < T; V++) {
+									var Y = Z[V];
+									if(Y) {
+										Z[V] = X ? Y.parentNode : Y.parentNode === U
+									}
+								}
+								if(X) {
+									F.filter(U, Z, true)
+								}
+							}
+						},
+						"" : function(W, U, Y) {
+							var V = L++,
+							T = S;
+							if(!U.match(/\W/)) {
+								var X = U = Y ? U : U.toUpperCase();
+								T = P
+							}
+							T("parentNode", U, V, W, X, Y)
+						},
+						"~" : function(W, U, Y) {
+							var V = L++,
+							T = S;
+							if(typeof U === "string" && !U.match(/\W/)) {
+								var X = U = Y ? U : U.toUpperCase();
+								T = P
+							}
+							T("previousSibling", U, V, W, X, Y)
+						}
+					},
+					find : {
+						ID : function(U, V, W) {
+							if(typeof V.getElementById !== "undefined" && !W) {
+								var T = V.getElementById(U[1]);
+								return T ? [T] : []
+							}
+						},
+						NAME : function(V, Y, Z) {
+							if(typeof Y.getElementsByName !== "undefined") {
+								var U = [],
+								X = Y.getElementsByName(V[1]);
+								for(var W = 0, T = X.length; W < T; W++) {
+									if(X[W].getAttribute("name") === V[1]) {
+										U.push(X[W])
+									}
+								}
+								return U.length === 0 ? null : U
+							}
+						},
+						TAG : function(T, U) {
+							return U.getElementsByTagName(T[1])
+						}
+					},
+					preFilter : {
+						CLASS : function(W, U, V, T, Z, aa) {
+							W = " " + W[1].replace(/\\/g, "") + " ";
+							if(aa) {
+								return W
+							}
+							for(var X = 0, Y; (Y = U[X]) != null; X++) {
+								if(Y) {
+									if(Z^(Y.className && (" " + Y.className + " ").indexOf(W) >= 0)) {
+										if(!V) {
+											T.push(Y)
+										}
+									} else {
+										if(V) {
+											U[X] = false
+										}
+									}
+								}
+							}
+							return false
+						},
+						ID : function(T) {
+							return T[1].replace(/\\/g, "")
+						},
+						TAG : function(U, T) {
+							for(var V = 0; T[V] === false; V++) {
+							}
+							return T[V] && Q(T[V]) ? U[1] : U[1].toUpperCase()
+						},
+						CHILD : function(T) {
+							if(T[1] == "nth") {
+								var U = /(-?)(\d*)n((?:\+|-)?\d*)/.exec(T[2] == "even" && "2n" || T[2] == "odd" && "2n+1" || !/\D/.test(T[2]) && "0n+" + T[2] || T[2]);
+								T[2] = (U[1] + (U[2] || 1)) - 0;
+								T[3] = U[3] - 0
+							}
+							T[0] = L++;
+							return T
+						},
+						ATTR : function(X, U, V, T, Y, Z) {
+							var W = X[1].replace(/\\/g, "");
+							if(!Z && I.attrMap[W]) {
+								X[1] = I.attrMap[W]
+							}
+							if(X[2] === "~=") {
+								X[4] = " " + X[4] + " "
+							}
+							return X
+						},
+						PSEUDO : function(X, U, V, T, Y) {
+							if(X[1] === "not") {
+								if(X[3].match(R).length > 1 || /^\w/.test(X[3])) {
+									X[3] = F(X[3], null, null, U)
+								} else {
+									var W = F.filter(X[3], U, V, true^Y);
+									if(!V) {
+										T.push.apply(T, W)
+									}
+									return false
+								}
+							} else {
+								if(I.match.POS.test(X[0]) || I.match.CHILD.test(X[0])) {
+									return true
+								}
+							}
+							return X
+						},
+						POS : function(T) {
+							T.unshift(true);
+							return T
+						}
+					},
+					filters : {
+						enabled : function(T) {
+							return T.disabled === false && T.type !== "hidden"
+						},
+						disabled : function(T) {
+							return T.disabled === true
+						},
+						checked : function(T) {
+							return T.checked === true
+						},
+						selected : function(T) {
+							T.parentNode.selectedIndex;
+							return T.selected === true
+						},
+						parent : function(T) {
+							return!!T.firstChild
+						},
+						empty : function(T) {
+							return!T.firstChild
+						},
+						has : function(V, U, T) {
+							return!!F(T[3], V).length
+						},
+						header : function(T) {
+							return/h\d/i.test(T.nodeName)
+						},
+						text : function(T) {
+							return "text" === T.type
+						},
+						radio : function(T) {
+							return "radio" === T.type
+						},
+						checkbox : function(T) {
+							return "checkbox" === T.type
+						},
+						file : function(T) {
+							return "file" === T.type
+						},
+						password : function(T) {
+							return "password" === T.type
+						},
+						submit : function(T) {
+							return "submit" === T.type
+						},
+						image : function(T) {
+							return "image" === T.type
+						},
+						reset : function(T) {
+							return "reset" === T.type
+						},
+						button : function(T) {
+							return "button" === T.type || T.nodeName.toUpperCase() === "BUTTON"
+						},
+						input : function(T) {
+							return/input|select|textarea|button/i.test(T.nodeName)
+						}
+					},
+					setFilters : {
+						first : function(U, T) {
+							return T === 0
+						},
+						last : function(V, U, T, W) {
+							return U === W.length - 1
+						},
+						even : function(U, T) {
+							return T % 2 === 0
+						},
+						odd : function(U, T) {
+							return T % 2 === 1
+						},
+						lt : function(V, U, T) {
+							return U < T[3] - 0
+						},
+						gt : function(V, U, T) {
+							return U > T[3] - 0
+						},
+						nth : function(V, U, T) {
+							return T[3] - 0 == U
+						},
+						eq : function(V, U, T) {
+							return T[3] - 0 == U
+						}
+					},
+					filter : {
+						PSEUDO : function(Z, V, W, aa) {
+							var U = V[1],
+							X = I.filters[U];
+							if(X) {
+								return X(Z, W, V, aa)
+							} else {
+								if(U === "contains") {
+									return(Z.textContent || Z.innerText || "").indexOf(V[3]) >= 0
+								} else {
+									if(U === "not") {
+										var Y = V[3];
+										for(var W = 0, T = Y.length; W < T; W++) {
+											if(Y[W] === Z) {
+												return false
+											}
+										}
+										return true
+									}
+								}
+							}
+						},
+						CHILD : function(T, W) {
+							var Z = W[1],
+							U = T;
+							switch(Z) {
+							case "only": 
+							case "first": 
+								while(U = U.previousSibling) {
+									if(U.nodeType === 1) {
+										return false
+									}
+								}
+								if(Z == "first") {
+									return true
+								}
+								U = T;
+							case "last": 
+								while(U = U.nextSibling) {
+									if(U.nodeType === 1) {
+										return false
+									}
+								}
+								return true;
+							case "nth": 
+								var V = W[2],
+								ac = W[3];
+								if(V == 1 && ac == 0) {
+									return true
+								}
+								var Y = W[0],
+								ab = T.parentNode;
+								if(ab && (ab.sizcache !== Y || !T.nodeIndex)) {
+									var X = 0;
+									for(U = ab.firstChild; U; U = U.nextSibling) {
+										if(U.nodeType === 1) {
+											U.nodeIndex = ++X
+										}
+									}
+									ab.sizcache = Y
+								}
+								var aa = T.nodeIndex - ac;
+								if(V == 0) {
+									return aa == 0
+								} else {
+									return(aa % V == 0 && aa / V >= 0)
+								}
+							}
+						},
+						ID : function(U, T) {
+							return U.nodeType === 1 && U.getAttribute("id") === T
+						},
+						TAG : function(U, T) {
+							return(T === "*" && U.nodeType === 1) || U.nodeName === T
+						},
+						CLASS : function(U, T) {
+							return(" " + (U.className || U.getAttribute("class")) + " ").indexOf(T) > -1
+						},
+						ATTR : function(Y, W) {
+							var V = W[1],
+							T = I.attrHandle[V] ? I.attrHandle[V](Y) : Y[V] != null ? Y[V] : Y.getAttribute(V),
+							Z = T + "",
+							X = W[2],
+							U = W[4];
+							return T == null ? X === "!=" : X === "=" ? Z === U : X === "*=" ? Z.indexOf(U) >= 0 : X === "~=" ? (" " + Z + " ").indexOf(U) >= 0 : !U ? Z && T !== false : X === "!=" ? Z != U : X === "^=" ? Z.indexOf(U) === 0 : X === "$=" ? Z.substr(Z.length - U.length) === U : X === "|=" ? Z === U || Z.substr(0, U.length + 1) === U + "-" : false
+						},
+						POS : function(X, U, V, Y) {
+							var T = U[2],
+							W = I.setFilters[T];
+							if(W) {
+								return W(X, V, U, Y)
+							}
+						}
+					}
+				};
+				var M = I.match.POS;
+				for(var O in I.match) {
+					I.match[O] = RegExp(I.match[O].source + /(?![^\[]*\])(?![^\(]*\))/.source)
+				}
+				var E = function(U, T) {
+					U = Array.prototype.slice.call(U);
+					if(T) {
+						T.push.apply(T, U);
+						return T
+					}
+					return U
+				};
+				try {
+					Array.prototype.slice.call(document.documentElement.childNodes)
+				} catch(N) {
+					E = function(X, W) {
+						var U = W || [];
+						if(H.call(X) === "[object Array]") {
+							Array.prototype.push.apply(U, X)
+						} else {
+							if(typeof X.length === "number") {
+								for(var V = 0, T = X.length; V < T; V++) {
+									U.push(X[V])
+								}
+							} else {
+								for(var V = 0; X[V]; V++) {
+									U.push(X[V])
+								}
+							}
+						}
+						return U
+					}
+				}
+				var G;
+				if(document.documentElement.compareDocumentPosition) {
+					G = function(U, T) {
+						var V = U.compareDocumentPosition(T) & 4 ? -1 : U === T ? 0 : 1;
+						if(V === 0) {
+							hasDuplicate = true
+						}
+						return V
+					}
+				} else {
+					if("sourceIndex" in document.documentElement) {
+						G = function(U, T) {
+							var V = U.sourceIndex - T.sourceIndex;
+							if(V === 0) {
+								hasDuplicate = true
+							}
+							return V
+						}
+					} else {
+						if(document.createRange) {
+							G = function(W, U) {
+								var V = W.ownerDocument.createRange(),
+								T = U.ownerDocument.createRange();
+								V.selectNode(W);
+								V.collapse(true);
+								T.selectNode(U);
+								T.collapse(true);
+								var X = V.compareBoundaryPoints(Range.START_TO_END, T);
+								if(X === 0) {
+									hasDuplicate = true
+								}
+								return X
+							}
+						}
+					}
+				}
+				(function() {
+						var U = document.createElement("form"),
+						V = "script" + (new Date).getTime();
+						U.innerHTML = "<input name='" + V + "'/>";
+						var T = document.documentElement;
+						T.insertBefore(U, T.firstChild);
+						if(!!document.getElementById(V)) {
+							I.find.ID = function(X, Y, Z) {
+								if(typeof Y.getElementById !== "undefined" && !Z) {
+									var W = Y.getElementById(X[1]);
+									return W ? W.id === X[1] || typeof W.getAttributeNode !== "undefined" && W.getAttributeNode("id").nodeValue === X[1] ? [W] : g : []
+								}
+							};
+							I.filter.ID = function(Y, W) {
+								var X = typeof Y.getAttributeNode !== "undefined" && Y.getAttributeNode("id");
+								return Y.nodeType === 1 && X && X.nodeValue === W
+							}
+						}
+						T.removeChild(U)
+					})();
+				(function() {
+						var T = document.createElement("div");
+						T.appendChild(document.createComment(""));
+						if(T.getElementsByTagName("*").length > 0) {
+							I.find.TAG = function(U, Y) {
+								var X = Y.getElementsByTagName(U[1]);
+								if(U[1] === "*") {
+									var W = [];
+									for(var V = 0; X[V]; V++) {
+										if(X[V].nodeType === 1) {
+											W.push(X[V])
+										}
+									}
+									X = W
+								}
+								return X
+							}
+						}
+						T.innerHTML = "<a href='#'></a>";
+						if(T.firstChild && typeof T.firstChild.getAttribute !== "undefined" && T.firstChild.getAttribute("href") !== "#") {
+							I.attrHandle.href = function(U) {
+								return U.getAttribute("href", 2)
+							}
+						}
+					})();
+				if(document.querySelectorAll) {
+					(function() {
+							var T = F,
+							U = document.createElement("div");
+							U.innerHTML = "<p class='TEST'></p>";
+							if(U.querySelectorAll && U.querySelectorAll(".TEST").length === 0) {
+								return
+							}
+							F = function(Y, X, V, W) {
+								X = X || document;
+								if(!W && X.nodeType === 9 && !Q(X)) {
+									try {
+										return E(X.querySelectorAll(Y), V)
+									} catch(Z) {
+									}
+								}
+								return T(Y, X, V, W)
+							};
+							F.find = T.find;
+							F.filter = T.filter;
+							F.selectors = T.selectors;
+							F.matches = T.matches
+						})()
+				}
+				if(document.getElementsByClassName && document.documentElement.getElementsByClassName) {
+					(function() {
+							var T = document.createElement("div");
+							T.innerHTML = "<div class='test e'></div><div class='test'></div>";
+							if(T.getElementsByClassName("e").length === 0) {
+								return
+							}
+							T.lastChild.className = "e";
+							if(T.getElementsByClassName("e").length === 1) {
+								return
+							}
+							I.order.splice(1, 0, "CLASS");
+							I.find.CLASS = function(U, V, W) {
+								if(typeof V.getElementsByClassName !== "undefined" && !W) {
+									return V.getElementsByClassName(U[1])
+								}
+							}
+						})()
+				}
+				function P(U, Z, Y, ad, aa, ac) {
+					var ab = U == "previousSibling" && !ac;
+					for(var W = 0, V = ad.length; W < V; W++) {
+						var T = ad[W];
+						if(T) {
+							if(ab && T.nodeType === 1) {
+								T.sizcache = Y;
+								T.sizset = W
+							}
+							T = T[U];
+							var X = false;
+							while(T) {
+								if(T.sizcache === Y) {
+									X = ad[T.sizset];
+									break
+								}
+								if(T.nodeType === 1 && !ac) {
+									T.sizcache = Y;
+									T.sizset = W
+								}
+								if(T.nodeName === Z) {
+									X = T;
+									break
+								}
+								T = T[U]
+							}
+							ad[W] = X
+						}
+					}
+				}
+				function S(U, Z, Y, ad, aa, ac) {
+					var ab = U == "previousSibling" && !ac;
+					for(var W = 0, V = ad.length; W < V; W++) {
+						var T = ad[W];
+						if(T) {
+							if(ab && T.nodeType === 1) {
+								T.sizcache = Y;
+								T.sizset = W
+							}
+							T = T[U];
+							var X = false;
+							while(T) {
+								if(T.sizcache === Y) {
+									X = ad[T.sizset];
+									break
+								}
+								if(T.nodeType === 1) {
+									if(!ac) {
+										T.sizcache = Y;
+										T.sizset = W
+									}
+									if(typeof Z !== "string") {
+										if(T === Z) {
+											X = true;
+											break
+										}
+									} else {
+										if(F.filter(Z, [T]).length > 0) {
+											X = T;
+											break
+										}
+									}
+								}
+								T = T[U]
+							}
+							ad[W] = X
+						}
+					}
+				}
+				var K = document.compareDocumentPosition ? function(U, T) {
+					return U.compareDocumentPosition(T) & 16
+				}
+				 : function(U, T) {
+					return U !== T && (U.contains ? U.contains(T) : true)
+				};
+				var Q = function(T) {
+					return T.nodeType === 9 && T.documentElement.nodeName !== "HTML" || !!T.ownerDocument && Q(T.ownerDocument)
+				};
+				var J = function(T, aa) {
+					var W = [],
+					X = "",
+					Y,
+					V = aa.nodeType ? [aa] : aa;
+					while((Y = I.match.PSEUDO.exec(T))) {
+						X += Y[0];
+						T = T.replace(I.match.PSEUDO, "")
+					}
+					T = I.relative[T] ? T + "*" : T;
+					for(var Z = 0, U = V.length; Z < U; Z++) {
+						F(T, V[Z], W)
+					}
+					return F.filter(X, W)
+				};
+				o.find = F;
+				o.filter = F.filter;
+				o.expr = F.selectors;
+				o.expr[":"] = o.expr.filters;
+				F.selectors.filters.hidden = function(T) {
+					return T.offsetWidth === 0 || T.offsetHeight === 0
+				};
+				F.selectors.filters.visible = function(T) {
+					return T.offsetWidth > 0 || T.offsetHeight > 0
+				};
+				F.selectors.filters.animated = function(T) {
+					return o.grep(o.timers, function(U) {
+							return T === U.elem
+						}).length
+				};
+				o.multiFilter = function(V, T, U) {
+					if(U) {
+						V = ":not(" + V + ")"
+					}
+					return F.matches(V, T)
+				};
+				o.dir = function(V, U) {
+					var T = [],
+					W = V[U];
+					while(W && W != document) {
+						if(W.nodeType == 1) {
+							T.push(W)
+						}
+						W = W[U]
+					}
+					return T
+				};
+				o.nth = function(X, T, V, W) {
+					T = T || 1;
+					var U = 0;
+					for(; X; X = X[V]) {
+						if(X.nodeType == 1 && ++U == T) {
+							break
+						}
+					}
+					return X
+				};
+				o.sibling = function(V, U) {
+					var T = [];
+					for(; V; V = V.nextSibling) {
+						if(V.nodeType == 1 && V != U) {
+							T.push(V)
+						}
+					}
+					return T
+				};
+				return;
+				l.Sizzle = F
+			})();
+		o.event = {
+			add : function(I, F, H, K) {
+				if(I.nodeType == 3 || I.nodeType == 8) {
+					return
+				}
+				if(I.setInterval && I != l) {
+					I = l
+				}
+				if(!H.guid) {
+					H.guid = this.guid++
+				}
+				if(K !== g) {
+					var G = H;
+					H = this.proxy(G);
+					H.data = K
+				}
+				var E = o.data(I, "events") || o.data(I, "events", {
+					}),
+				J = o.data(I, "handle") || o.data(I, "handle", function() {
+						return typeof o !== "undefined" && !o.event.triggered ? o.event.handle.apply(arguments.callee.elem, arguments) : g
+					});
+				J.elem = I;
+				o.each(F.split(/\s+/), function(M, N) {
+						var O = N.split(".");
+						N = O.shift();
+						H.type = O.slice().sort().join(".");
+						var L = E[N];
+						if(o.event.specialAll[N]) {
+							o.event.specialAll[N].setup.call(I, K, O)
+						}
+						if(!L) {
+							L = E[N] = {
+							};
+							if(!o.event.special[N] || o.event.special[N].setup.call(I, K, O) === false) {
+								if(I.addEventListener) {
+									I.addEventListener(N, J, false)
+								} else {
+									if(I.attachEvent) {
+										I.attachEvent("on" + N, J)
+									}
+								}
+							}
+						}
+						L[H.guid] = H;
+						o.event.global[N] = true
+					});
+				I = null
+			},
+			guid : 1,
+			global : {
+			},
+			remove : function(K, H, J) {
+				if(K.nodeType == 3 || K.nodeType == 8) {
+					return
+				}
+				var G = o.data(K, "events"),
+				F,
+				E;
+				if(G) {
+					if(H === g || (typeof H === "string" && H.charAt(0) == ".")) {
+						for(var I in G) {
+							this.remove(K, I + (H || ""))
+						}
+					} else {
+						if(H.type) {
+							J = H.handler;
+							H = H.type
+						}
+						o.each(H.split(/\s+/), function(M, O) {
+								var Q = O.split(".");
+								O = Q.shift();
+								var N = RegExp("(^|\\.)" + Q.slice().sort().join(".*\\.") + "(\\.|$)");
+								if(G[O]) {
+									if(J) {
+										delete G[O][J.guid]
+									} else {
+										for(var P in G[O]) {
+											if(N.test(G[O][P].type)) {
+												delete G[O][P]
+											}
+										}
+									}
+									if(o.event.specialAll[O]) {
+										o.event.specialAll[O].teardown.call(K, Q)
+									}
+									for(F in G[O]) {
+										break
+									}
+									if(!F) {
+										if(!o.event.special[O] || o.event.special[O].teardown.call(K, Q) === false) {
+											if(K.removeEventListener) {
+												K.removeEventListener(O, o.data(K, "handle"), false)
+											} else {
+												if(K.detachEvent) {
+													K.detachEvent("on" + O, o.data(K, "handle"))
+												}
+											}
+										}
+										F = null;
+										delete G[O]
+									}
+								}
+							})
+					}
+					for(F in G) {
+						break
+					}
+					if(!F) {
+						var L = o.data(K, "handle");
+						if(L) {
+							L.elem = null
+						}
+						o.removeData(K, "events");
+						o.removeData(K, "handle")
+					}
+				}
+			},
+			trigger : function(I, K, H, E) {
+				var G = I.type || I;
+				if(!E) {
+					I = typeof I === "object" ? I[h] ? I : o.extend(o.Event(G), I) : o.Event(G);
+					if(G.indexOf("!") >= 0) {
+						I.type = G = G.slice(0, -1);
+						I.exclusive = true
+					}
+					if(!H) {
+						I.stopPropagation();
+						if(this.global[G]) {
+							o.each(o.cache, function() {
+									if(this.events && this.events[G]) {
+										o.event.trigger(I, K, this.handle.elem)
+									}
+								})
+						}
+					}
+					if(!H || H.nodeType == 3 || H.nodeType == 8) {
+						return g
+					}
+					I.result = g;
+					I.target = H;
+					K = o.makeArray(K);
+					K.unshift(I)
+				}
+				I.currentTarget = H;
+				var J = o.data(H, "handle");
+				if(J) {
+					J.apply(H, K)
+				}
+				if((!H[G] || (o.nodeName(H, "a") && G == "click")) && H["on" + G] && H["on" + G].apply(H, K) === false) {
+					I.result = false
+				}
+				if(!E && H[G] && !I.isDefaultPrevented() && !(o.nodeName(H, "a") && G == "click")) {
+					this.triggered = true;
+					try {
+						H[G]()
+					} catch(L) {
+					}
+				}
+				this.triggered = false;
+				if(!I.isPropagationStopped()) {
+					var F = H.parentNode || H.ownerDocument;
+					if(F) {
+						o.event.trigger(I, K, F, true)
+					}
+				}
+			},
+			handle : function(K) {
+				var J,
+				E;
+				K = arguments[0] = o.event.fix(K || l.event);
+				K.currentTarget = this;
+				var L = K.type.split(".");
+				K.type = L.shift();
+				J = !L.length && !K.exclusive;
+				var I = RegExp("(^|\\.)" + L.slice().sort().join(".*\\.") + "(\\.|$)");
+				E = (o.data(this, "events") || {
+					})[K.type];
+				for(var G in E) {
+					var H = E[G];
+					if(J || I.test(H.type)) {
+						K.handler = H;
+						K.data = H.data;
+						var F = H.apply(this, arguments);
+						if(F !== g) {
+							K.result = F;
+							if(F === false) {
+								K.preventDefault();
+								K.stopPropagation()
+							}
+						}
+						if(K.isImmediatePropagationStopped()) {
+							break
+						}
+					}
+				}
+			},
+			props : "altKey attrChange attrName bubbles button cancelable charCode clientX clientY ctrlKey currentTarget data detail eventPhase fromElement handler keyCode metaKey newValue originalTarget pageX pageY prevValue relatedNode relatedTarget screenX screenY shiftKey srcElement target toElement view wheelDelta which".split(" "),
+			fix : function(H) {
+				if(H[h]) {
+					return H
+				}
+				var F = H;
+				H = o.Event(F);
+				for(var G = this.props.length, J; G; ) {
+					J = this.props[--G];
+					H[J] = F[J]
+				}
+				if(!H.target) {
+					H.target = H.srcElement || document
+				}
+				if(H.target.nodeType == 3) {
+					H.target = H.target.parentNode
+				}
+				if(!H.relatedTarget && H.fromElement) {
+					H.relatedTarget = H.fromElement == H.target ? H.toElement : H.fromElement
+				}
+				if(H.pageX == null && H.clientX != null) {
+					var I = document.documentElement,
+					E = document.body;
+					H.pageX = H.clientX + (I && I.scrollLeft || E && E.scrollLeft || 0) - (I.clientLeft || 0);
+					H.pageY = H.clientY + (I && I.scrollTop || E && E.scrollTop || 0) - (I.clientTop || 0)
+				}
+				if(!H.which && ((H.charCode || H.charCode === 0) ? H.charCode : H.keyCode)) {
+					H.which = H.charCode || H.keyCode
+				}
+				if(!H.metaKey && H.ctrlKey) {
+					H.metaKey = H.ctrlKey
+				}
+				if(!H.which && H.button) {
+					H.which = (H.button & 1 ? 1 : (H.button & 2 ? 3 : (H.button & 4 ? 2 : 0)))
+				}
+				return H
+			},
+			proxy : function(F, E) {
+				E = E || function() {
+					return F.apply(this, arguments)
+				};
+				E.guid = F.guid = F.guid || E.guid || this.guid++;
+				return E
+			},
+			special : {
+				ready : {
+					setup : B,
+					teardown : function() {
+					}
+				}
+			},
+			specialAll : {
+				live : {
+					setup : function(E, F) {
+						o.event.add(this, F[0], c)
+					},
+					teardown : function(G) {
+						if(G.length) {
+							var E = 0,
+							F = RegExp("(^|\\.)" + G[0] + "(\\.|$)");
+							o.each((o.data(this, "events").live || {
+									}), function() {
+									if(F.test(this.type)) {
+										E++
+									}
+								});
+							if(E < 1) {
+								o.event.remove(this, G[0], c)
+							}
 						}
 					}
 				}
 			}
-		}
-		
-		return null;
-	},
-	
-	resetBreakpoints : function(sourceFile, debuggr) // the sourcefile has just been created after compile
-	{
-		// If the new script is replacing an old script with a breakpoint still
-		var url = sourceFile.href;
-		var urlBreakpoints = fbs.getBreakpoints(url);
-		if(FBTrace.DBG_FBS_BP) {
-			try {
-				var msg = "resetBreakpoints: breakpoints[" + sourceFile.href;
-				msg += "]=" + (urlBreakpoints ? urlBreakpoints.length : "NONE") + "\n";
-				FBTrace.sysout(msg);
-			} catch(exc) {
-				FBTrace.sysout("Failed to give resetBreakpoints trace in url: " + url + " because " + exc + " for urlBreakpoints=", urlBreakpoints);
+		};
+		o.Event = function(E) {
+			if(!this.preventDefault) {
+				return new o.Event(E)
 			}
+			if(E && E.type) {
+				this.originalEvent = E;
+				this.type = E.type
+			} else {
+				this.type = E
+			}
+			this.timeStamp = e();
+			this[h] = true
+		};
+		function k() {
+			return false
 		}
-		
-		if(urlBreakpoints) {
-			if(FBTrace.DBG_FBS_BP) 
-				FBTrace.sysout("resetBreakpoints total bp=" + urlBreakpoints.length + " for url=" + url);
-			
-			fbs.deleteBreakpoints(url);
-			
-			for(var i = 0; i < urlBreakpoints.length; ++i) {
-				var bp = urlBreakpoints[i];
-				fbs.recordBreakpoint(bp.type, url, bp.lineNo, debuggr, bp, sourceFile);
-				if(bp.disabled & BP_NORMAL) {
-					if(FBTrace.DBG_FBS_BP) 
-						FBTrace.sysout("resetBreakpoints:  mark breakpoint disabled: " + bp.lineNo + "@" + sourceFile);
-					fbs.disableBreakpoint(url, bp.lineNo);
+		function u() {
+			return true
+		}
+		o.Event.prototype = {
+			preventDefault : function() {
+				this.isDefaultPrevented = u;
+				var E = this.originalEvent;
+				if(!E) {
+					return
+				}
+				if(E.preventDefault) {
+					E.preventDefault()
+				}
+				E.returnValue = false
+			},
+			stopPropagation : function() {
+				this.isPropagationStopped = u;
+				var E = this.originalEvent;
+				if(!E) {
+					return
+				}
+				if(E.stopPropagation) {
+					E.stopPropagation()
+				}
+				E.cancelBubble = true
+			},
+			stopImmediatePropagation : function() {
+				this.isImmediatePropagationStopped = u;
+				this.stopPropagation()
+			},
+			isDefaultPrevented : k,
+			isPropagationStopped : k,
+			isImmediatePropagationStopped : k
+		};
+		var a = function(F) {
+			var E = F.relatedTarget;
+			while(E && E != this) {
+				try {
+					E = E.parentNode
+				} catch(G) {
+					E = this
+				}
+			}
+			if(E != this) {
+				F.type = F.data;
+				o.event.handle.apply(this, arguments)
+			}
+		};
+		o.each({
+				mouseover : "mouseenter",
+				mouseout : "mouseleave"
+			}, function(F, E) {
+				o.event.special[E] = {
+					setup : function() {
+						o.event.add(this, F, a, E)
+					},
+					teardown : function() {
+						o.event.remove(this, F, a)
+					}
+				}
+			});
+		o.fn.extend({
+				bind : function(F, G, E) {
+					return F == "unload" ? this.one(F, G, E) : this.each(function() {
+							o.event.add(this, F, E || G, E && G)
+						})
+				},
+				one : function(G, H, F) {
+					var E = o.event.proxy(F || H, function(I) {
+							o(this).unbind(I, E);
+							return(F || H).apply(this, arguments)
+						});
+					return this.each(function() {
+							o.event.add(this, G, E, F && H)
+						})
+				},
+				unbind : function(F, E) {
+					return this.each(function() {
+							o.event.remove(this, F, E)
+						})
+				},
+				trigger : function(E, F) {
+					return this.each(function() {
+							o.event.trigger(E, F, this)
+						})
+				},
+				triggerHandler : function(E, G) {
+					if(this[0]) {
+						var F = o.Event(E);
+						F.preventDefault();
+						F.stopPropagation();
+						o.event.trigger(F, G, this[0]);
+						return F.result
+					}
+				},
+				toggle : function(G) {
+					var E = arguments,
+					F = 1;
+					while(F < E.length) {
+						o.event.proxy(G, E[F++])
+					}
+					return this.click(o.event.proxy(G, function(H) {
+								this.lastToggle = (this.lastToggle || 0) % F;
+								H.preventDefault();
+								return E[this.lastToggle++].apply(this, arguments) || false
+							}))
+				},
+				hover : function(E, F) {
+					return this.mouseenter(E).mouseleave(F)
+				},
+				ready : function(E) {
+					B();
+					if(o.isReady) {
+						E.call(document, o)
+					} else {
+						o.readyList.push(E)
+					}
+					return this
+				},
+				live : function(G, F) {
+					var E = o.event.proxy(F);
+					E.guid += this.selector + G;
+					o(document).bind(i(G, this.selector), this.selector, E);
+					return this
+				},
+				die : function(F, E) {
+					o(document).unbind(i(F, this.selector), E ? {
+							guid : E.guid + this.selector + F
+						}
+						 : null);
+					return this
+				}
+			});
+		function c(H) {
+			var E = RegExp("(^|\\.)" + H.type + "(\\.|$)"),
+			G = true,
+			F = [];
+			o.each(o.data(this, "events").live || [], function(I, J) {
+					if(E.test(J.type)) {
+						var K = o(H.target).closest(J.data)[0];
+						if(K) {
+							F.push({
+									elem : K,
+									fn : J
+								})
+						}
+					}
+				});
+			F.sort(function(J, I) {
+					return o.data(J.elem, "closest") - o.data(I.elem, "closest")
+				});
+			o.each(F, function() {
+					if(this.fn.call(this.elem, H, this.fn.data) === false) {
+						return(G = false)
+					}
+				});
+			return G
+		}
+		function i(F, E) {
+			return["live", F, E.replace(/\./g, "`").replace(/ /g, "|")].join(".")
+		}
+		o.extend({
+				isReady : false,
+				readyList : [],
+				ready : function() {
+					if(!o.isReady) {
+						o.isReady = true;
+						if(o.readyList) {
+							o.each(o.readyList, function() {
+									this.call(document, o)
+								});
+							o.readyList = null
+						}
+						o(document).triggerHandler("ready")
+					}
+				}
+			});
+		var x = false;
+		function B() {
+			if(x) {
+				return
+			}
+			x = true;
+			if(document.addEventListener) {
+				document.addEventListener("DOMContentLoaded", function() {
+						document.removeEventListener("DOMContentLoaded", arguments.callee, false);
+						o.ready()
+					}, false)
+			} else {
+				if(document.attachEvent) {
+					document.attachEvent("onreadystatechange", function() {
+							if(document.readyState === "complete") {
+								document.detachEvent("onreadystatechange", arguments.callee);
+								o.ready()
+							}
+						});
+					if(document.documentElement.doScroll && l == l.top) {
+						(function() {
+								if(o.isReady) {
+									return
+								}
+								try {
+									document.documentElement.doScroll("left")
+								} catch(E) {
+									setTimeout(arguments.callee, 0);
+									return
+								}
+								o.ready()
+							})()
+					}
+				}
+			}
+			o.event.add(l, "load", o.ready)
+		}
+		o.each(("blur,focus,load,resize,scroll,unload,click,dblclick,mousedown,mouseup,mousemove,mouseover,mouseout,mouseenter,mouseleave,change,select,submit,keydown,keypress,keyup,error").split(","), function(F, E) {
+				o.fn[E] = function(G) {
+					return G ? this.bind(E, G) : this.trigger(E)
+				}
+			});
+		o(l).bind("unload", function() {
+				for(var E in o.cache) {
+					if(E != 1 && o.cache[E].handle) {
+						o.event.remove(o.cache[E].handle.elem)
+					}
+				}
+			});
+		(function() {
+				o.support = {
+				};
+				var F = document.documentElement,
+				G = document.createElement("script"),
+				K = document.createElement("div"),
+				J = "script" + (new Date).getTime();
+				K.style.display = "none";
+				K.innerHTML = '   <link/><table></table><a href="/a" style="color:red;float:left;opacity:.5;">a</a><select><option>text</option></select><object><param/></object>';
+				var H = K.getElementsByTagName("*"),
+				E = K.getElementsByTagName("a")[0];
+				if(!H || !H.length || !E) {
+					return
+				}
+				o.support = {
+					leadingWhitespace : K.firstChild.nodeType == 3,
+					tbody : !K.getElementsByTagName("tbody").length,
+					objectAll : !!K.getElementsByTagName("object")[0].getElementsByTagName("*").length,
+					htmlSerialize : !!K.getElementsByTagName("link").length,
+					style : /red/.test(E.getAttribute("style")),
+					hrefNormalized : E.getAttribute("href") === "/a",
+					opacity : E.style.opacity === "0.5",
+					cssFloat : !!E.style.cssFloat,
+					scriptEval : false,
+					noCloneEvent : true,
+					boxModel : null
+				};
+				G.type = "text/javascript";
+				try {
+					G.appendChild(document.createTextNode("window." + J + "=1;"))
+				} catch(I) {
+				}
+				F.insertBefore(G, F.firstChild);
+				if(l[J]) {
+					o.support.scriptEval = true;
+					delete l[J]
+				}
+				F.removeChild(G);
+				if(K.attachEvent && K.fireEvent) {
+					K.attachEvent("onclick", function() {
+							o.support.noCloneEvent = false;
+							K.detachEvent("onclick", arguments.callee)
+						});
+					K.cloneNode(true).fireEvent("onclick")
+				}
+				o(function() {
+						var L = document.createElement("div");
+						L.style.width = L.style.paddingLeft = "1px";
+						document.body.appendChild(L);
+						o.boxModel = o.support.boxModel = L.offsetWidth === 2;
+						document.body.removeChild(L).style.display = "none"
+					})
+			})();
+		var w = o.support.cssFloat ? "cssFloat" : "styleFloat";
+		o.props = {
+			"for" : "htmlFor",
+			"class" : "className",
+			"float" : w,
+			cssFloat : w,
+			styleFloat : w,
+			readonly : "readOnly",
+			maxlength : "maxLength",
+			cellspacing : "cellSpacing",
+			rowspan : "rowSpan",
+			tabindex : "tabIndex"
+		};
+		o.fn.extend({
+				_load : o.fn.load,
+				load : function(G, J, K) {
+					if(typeof G !== "string") {
+						return this._load(G)
+					}
+					var I = G.indexOf(" ");
+					if(I >= 0) {
+						var E = G.slice(I, G.length);
+						G = G.slice(0, I)
+					}
+					var H = "GET";
+					if(J) {
+						if(o.isFunction(J)) {
+							K = J;
+							J = null
+						} else {
+							if(typeof J === "object") {
+								J = o.param(J);
+								H = "POST"
+							}
+						}
+					}
+					var F = this;
+					o.ajax({
+							url : G,
+							type : H,
+							dataType : "html",
+							data : J,
+							complete : function(M, L) {
+								if(L == "success" || L == "notmodified") {
+									F.html(E ? o("<div/>").append(M.responseText.replace(/<script(.|\s)*?\/script>/g, "")).find(E) : M.responseText)
+								}
+								if(K) {
+									F.each(K, [M.responseText, L, M])
+								}
+							}
+						});
+					return this
+				},
+				serialize : function() {
+					return o.param(this.serializeArray())
+				},
+				serializeArray : function() {
+					return this.map(function() {
+							return this.elements ? o.makeArray(this.elements) : this
+						}).filter(function() {
+							return this.name && !this.disabled && (this.checked || /select|textarea/i.test(this.nodeName) || /text|hidden|password|search/i.test(this.type))
+						}).map(function(E, F) {
+							var G = o(this).val();
+							return G == null ? null : o.isArray(G) ? o.map(G, function(I, H) {
+									return{
+										name : F.name,
+										value : I
+									}
+								}) : {
+								name : F.name,
+								value : G
+							}
+						}).get()
+				}
+			});
+		o.each("ajaxStart,ajaxStop,ajaxComplete,ajaxError,ajaxSuccess,ajaxSend".split(","), function(E, F) {
+				o.fn[F] = function(G) {
+					return this.bind(F, G)
+				}
+			});
+		var r = e();
+		o.extend({
+				get : function(E, G, H, F) {
+					if(o.isFunction(G)) {
+						H = G;
+						G = null
+					}
+					return o.ajax({
+							type : "GET",
+							url : E,
+							data : G,
+							success : H,
+							dataType : F
+						})
+				},
+				getScript : function(E, F) {
+					return o.get(E, null, F, "script")
+				},
+				getJSON : function(E, F, G) {
+					return o.get(E, F, G, "json")
+				},
+				post : function(E, G, H, F) {
+					if(o.isFunction(G)) {
+						H = G;
+						G = {
+						}
+					}
+					return o.ajax({
+							type : "POST",
+							url : E,
+							data : G,
+							success : H,
+							dataType : F
+						})
+				},
+				ajaxSetup : function(E) {
+					o.extend(o.ajaxSettings, E)
+				},
+				ajaxSettings : {
+					url : location.href,
+					global : true,
+					type : "GET",
+					contentType : "application/x-www-form-urlencoded",
+					processData : true,
+					async : true,
+					xhr : function() {
+						return l.ActiveXObject ? new ActiveXObject("Microsoft.XMLHTTP") : new XMLHttpRequest()
+					},
+					accepts : {
+						xml : "application/xml, text/xml",
+						html : "text/html",
+						script : "text/javascript, application/javascript",
+						json : "application/json, text/javascript",
+						text : "text/plain",
+						_default : "*/*"
+					}
+				},
+				lastModified : {
+				},
+				ajax : function(M) {
+					M = o.extend(true, M, o.extend(true, {
+							}, o.ajaxSettings, M));
+					var W,
+					F = /=\?(&|$)/g,
+					R,
+					V,
+					G = M.type.toUpperCase();
+					if(M.data && M.processData && typeof M.data !== "string") {
+						M.data = o.param(M.data)
+					}
+					if(M.dataType == "jsonp") {
+						if(G == "GET") {
+							if(!M.url.match(F)) {
+								M.url += (M.url.match(/\?/) ? "&" : "?") + (M.jsonp || "callback") + "=?"
+							}
+						} else {
+							if(!M.data || !M.data.match(F)) {
+								M.data = (M.data ? M.data + "&" : "") + (M.jsonp || "callback") + "=?"
+							}
+						}
+						M.dataType = "json"
+					}
+					if(M.dataType == "json" && (M.data && M.data.match(F) || M.url.match(F))) {
+						W = "jsonp" + r++;
+						if(M.data) {
+							M.data = (M.data + "").replace(F, "=" + W + "$1")
+						}
+						M.url = M.url.replace(F, "=" + W + "$1");
+						M.dataType = "script";
+						l[W] = function(X) {
+							V = X;
+							I();
+							L();
+							l[W] = g;
+							try {
+								delete l[W]
+							} catch(Y) {
+							}
+							if(H) {
+								H.removeChild(T)
+							}
+						}
+					}
+					if(M.dataType == "script" && M.cache == null) {
+						M.cache = false
+					}
+					if(M.cache === false && G == "GET") {
+						var E = e();
+						var U = M.url.replace(/(\?|&)_=.*?(&|$)/, "$1_=" + E + "$2");
+						M.url = U + ((U == M.url) ? (M.url.match(/\?/) ? "&" : "?") + "_=" + E : "")
+					}
+					if(M.data && G == "GET") {
+						M.url += (M.url.match(/\?/) ? "&" : "?") + M.data;
+						M.data = null
+					}
+					if(M.global && !o.active++) {
+						o.event.trigger("ajaxStart")
+					}
+					var Q = /^(\w+:)?\/\/([^\/?#]+)/.exec(M.url);
+					if(M.dataType == "script" && G == "GET" && Q && (Q[1] && Q[1] != location.protocol || Q[2] != location.host)) {
+						var H = document.getElementsByTagName("head")[0];
+						var T = document.createElement("script");
+						T.src = M.url;
+						if(M.scriptCharset) {
+							T.charset = M.scriptCharset
+						}
+						if(!W) {
+							var O = false;
+							T.onload = T.onreadystatechange = function() {
+								if(!O && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
+									O = true;
+									I();
+									L();
+									T.onload = T.onreadystatechange = null;
+									H.removeChild(T)
+								}
+							}
+						}
+						H.appendChild(T);
+						return g
+					}
+					var K = false;
+					var J = M.xhr();
+					if(M.username) {
+						J.open(G, M.url, M.async, M.username, M.password)
+					} else {
+						J.open(G, M.url, M.async)
+					}
+					try {
+						if(M.data) {
+							J.setRequestHeader("Content-Type", M.contentType)
+						}
+						if(M.ifModified) {
+							J.setRequestHeader("If-Modified-Since", o.lastModified[M.url] || "Thu, 01 Jan 1970 00:00:00 GMT")
+						}
+						J.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+						J.setRequestHeader("Accept", M.dataType && M.accepts[M.dataType] ? M.accepts[M.dataType] + ", */*" : M.accepts._default)
+					} catch(S) {
+					}
+					if(M.beforeSend && M.beforeSend(J, M) === false) {
+						if(M.global && !--o.active) {
+							o.event.trigger("ajaxStop")
+						}
+						J.abort();
+						return false
+					}
+					if(M.global) {
+						o.event.trigger("ajaxSend", [J, M])
+					}
+					var N = function(X) {
+						if(J.readyState == 0) {
+							if(P) {
+								clearInterval(P);
+								P = null;
+								if(M.global && !--o.active) {
+									o.event.trigger("ajaxStop")
+								}
+							}
+						} else {
+							if(!K && J && (J.readyState == 4 || X == "timeout")) {
+								K = true;
+								if(P) {
+									clearInterval(P);
+									P = null
+								}
+								R = X == "timeout" ? "timeout" : !o.httpSuccess(J) ? "error" : M.ifModified && o.httpNotModified(J, M.url) ? "notmodified" : "success";
+								if(R == "success") {
+									try {
+										V = o.httpData(J, M.dataType, M)
+									} catch(Z) {
+										R = "parsererror"
+									}
+								}
+								if(R == "success") {
+									var Y;
+									try {
+										Y = J.getResponseHeader("Last-Modified")
+									} catch(Z) {
+									}
+									if(M.ifModified && Y) {
+										o.lastModified[M.url] = Y
+									}
+									if(!W) {
+										I()
+									}
+								} else {
+									o.handleError(M, J, R)
+								}
+								L();
+								if(X) {
+									J.abort()
+								}
+								if(M.async) {
+									J = null
+								}
+							}
+						}
+					};
+					if(M.async) {
+						var P = setInterval(N, 13);
+						if(M.timeout > 0) {
+							setTimeout(function() {
+									if(J && !K) {
+										N("timeout")
+									}
+								}, M.timeout)
+						}
+					}
+					try {
+						J.send(M.data)
+					} catch(S) {
+						o.handleError(M, J, null, S)
+					}
+					if(!M.async) {
+						N()
+					}
+					function I() {
+						if(M.success) {
+							M.success(V, R)
+						}
+						if(M.global) {
+							o.event.trigger("ajaxSuccess", [J, M])
+						}
+					}
+					function L() {
+						if(M.complete) {
+							M.complete(J, R)
+						}
+						if(M.global) {
+							o.event.trigger("ajaxComplete", [J, M])
+						}
+						if(M.global && !--o.active) {
+							o.event.trigger("ajaxStop")
+						}
+					}
+					return J
+				},
+				handleError : function(F, H, E, G) {
+					if(F.error) {
+						F.error(H, E, G)
+					}
+					if(F.global) {
+						o.event.trigger("ajaxError", [H, F, G])
+					}
+				},
+				active : 0,
+				httpSuccess : function(F) {
+					try {
+						return!F.status && location.protocol == "file:" || (F.status >= 200 && F.status < 300) || F.status == 304 || F.status == 1223
+					} catch(E) {
+					}
+					return false
+				},
+				httpNotModified : function(G, E) {
+					try {
+						var H = G.getResponseHeader("Last-Modified");
+						return G.status == 304 || H == o.lastModified[E]
+					} catch(F) {
+					}
+					return false
+				},
+				httpData : function(J, H, G) {
+					var F = J.getResponseHeader("content-type"),
+					E = H == "xml" || !H && F && F.indexOf("xml") >= 0,
+					I = E ? J.responseXML : J.responseText;
+					if(E && I.documentElement.tagName == "parsererror") {
+						throw "parsererror"
+					}
+					if(G && G.dataFilter) {
+						I = G.dataFilter(I, H)
+					}
+					if(typeof I === "string") {
+						if(H == "script") {
+							o.globalEval(I)
+						}
+						if(H == "json") {
+							I = l["eval"]("(" + I + ")")
+						}
+					}
+					return I
+				},
+				param : function(E) {
+					var G = [];
+					function H(I, J) {
+						G[G.length] = encodeURIComponent(I) + "=" + encodeURIComponent(J)
+					}
+					if(o.isArray(E) || E.jquery) {
+						o.each(E, function() {
+								H(this.name, this.value)
+							})
+					} else {
+						for(var F in E) {
+							if(o.isArray(E[F])) {
+								o.each(E[F], function() {
+										H(F, this)
+									})
+							} else {
+								H(F, o.isFunction(E[F]) ? E[F]() : E[F])
+							}
+						}
+					}
+					return G.join("&").replace(/%20/g, "+")
+				}
+			});
+		var m = {
+		},
+		n,
+		d = [["height", "marginTop", "marginBottom", "paddingTop", "paddingBottom"], ["width", "marginLeft", "marginRight", "paddingLeft", "paddingRight"], ["opacity"]];
+		function t(F, E) {
+			var G = {
+			};
+			o.each(d.concat.apply([], d.slice(0, E)), function() {
+					G[this] = F
+				});
+			return G
+		}
+		o.fn.extend({
+				show : function(J, L) {
+					if(J) {
+						return this.animate(t("show", 3), J, L)
+					} else {
+						for(var H = 0, F = this.length; H < F; H++) {
+							var E = o.data(this[H], "olddisplay");
+							this[H].style.display = E || "";
+							if(o.css(this[H], "display") === "none") {
+								var G = this[H].tagName,
+								K;
+								if(m[G]) {
+									K = m[G]
+								} else {
+									var I = o("<" + G + " />").appendTo("body");
+									K = I.css("display");
+									if(K === "none") {
+										K = "block"
+									}
+									I.remove();
+									m[G] = K
+								}
+								o.data(this[H], "olddisplay", K)
+							}
+						}
+						for(var H = 0, F = this.length; H < F; H++) {
+							this[H].style.display = o.data(this[H], "olddisplay") || ""
+						}
+						return this
+					}
+				},
+				hide : function(H, I) {
+					if(H) {
+						return this.animate(t("hide", 3), H, I)
+					} else {
+						for(var G = 0, F = this.length; G < F; G++) {
+							var E = o.data(this[G], "olddisplay");
+							if(!E && E !== "none") {
+								o.data(this[G], "olddisplay", o.css(this[G], "display"))
+							}
+						}
+						for(var G = 0, F = this.length; G < F; G++) {
+							this[G].style.display = "none"
+						}
+						return this
+					}
+				},
+				_toggle : o.fn.toggle,
+				toggle : function(G, F) {
+					var E = typeof G === "boolean";
+					return o.isFunction(G) && o.isFunction(F) ? this._toggle.apply(this, arguments) : G == null || E ? this.each(function() {
+							var H = E ? G : o(this).is(":hidden");
+							o(this)[H ? "show" : "hide"]()
+						}) : this.animate(t("toggle", 3), G, F)
+				},
+				fadeTo : function(E, G, F) {
+					return this.animate({
+							opacity : G
+						}, E, F)
+				},
+				animate : function(I, F, H, G) {
+					var E = o.speed(F, H, G);
+					return this[E.queue === false ? "each" : "queue"](function() {
+							var K = o.extend({
+								}, E),
+							M,
+							L = this.nodeType == 1 && o(this).is(":hidden"),
+							J = this;
+							for(M in I) {
+								if(I[M] == "hide" && L || I[M] == "show" && !L) {
+									return K.complete.call(this)
+								}
+								if((M == "height" || M == "width") && this.style) {
+									K.display = o.css(this, "display");
+									K.overflow = this.style.overflow
+								}
+							}
+							if(K.overflow != null) {
+								this.style.overflow = "hidden"
+							}
+							K.curAnim = o.extend({
+								}, I);
+							o.each(I, function(O, S) {
+									var R = new o.fx(J, K, O);
+									if(/toggle|show|hide/.test(S)) {
+										R[S == "toggle" ? L ? "show" : "hide" : S](I)
+									} else {
+										var Q = S.toString().match(/^([+-]=)?([\d+-.]+)(.*)$/),
+										T = R.cur(true) || 0;
+										if(Q) {
+											var N = parseFloat(Q[2]),
+											P = Q[3] || "px";
+											if(P != "px") {
+												J.style[O] = (N || 1) + P;
+												T = ((N || 1) / R.cur(true)) * T;
+												J.style[O] = T + P
+											}
+											if(Q[1]) {
+												N = ((Q[1] == "-=" ? -1 : 1) * N) + T
+											}
+											R.custom(T, N, P)
+										} else {
+											R.custom(T, S, "")
+										}
+									}
+								});
+							return true
+						})
+				},
+				stop : function(F, E) {
+					var G = o.timers;
+					if(F) {
+						this.queue([])
+					}
+					this.each(function() {
+							for(var H = G.length - 1; H >= 0; H--) {
+								if(G[H].elem == this) {
+									if(E) {
+										G[H](true)
+									}
+									G.splice(H, 1)
+								}
+							}
+						});
+					if(!E) {
+						this.dequeue()
+					}
+					return this
+				}
+			});
+		o.each({
+				slideDown : t("show", 1),
+				slideUp : t("hide", 1),
+				slideToggle : t("toggle", 1),
+				fadeIn : {
+					opacity : "show"
+				},
+				fadeOut : {
+					opacity : "hide"
+				}
+			}, function(E, F) {
+				o.fn[E] = function(G, H) {
+					return this.animate(F, G, H)
+				}
+			});
+		o.extend({
+				speed : function(G, H, F) {
+					var E = typeof G === "object" ? G : {
+						complete : F || !F && H || o.isFunction(G) && G,
+						duration : G,
+						easing : F && H || H && !o.isFunction(H) && H
+					};
+					E.duration = o.fx.off ? 0 : typeof E.duration === "number" ? E.duration : o.fx.speeds[E.duration] || o.fx.speeds._default;
+					E.old = E.complete;
+					E.complete = function() {
+						if(E.queue !== false) {
+							o(this).dequeue()
+						}
+						if(o.isFunction(E.old)) {
+							E.old.call(this)
+						}
+					};
+					return E
+				},
+				easing : {
+					linear : function(G, H, E, F) {
+						return E + F * G
+					},
+					swing : function(G, H, E, F) {
+						return((-Math.cos(G * Math.PI) / 2) + 0.5) * F + E
+					}
+				},
+				timers : [],
+				fx : function(F, E, G) {
+					this.options = E;
+					this.elem = F;
+					this.prop = G;
+					if(!E.orig) {
+						E.orig = {
+						}
+					}
+				}
+			});
+		o.fx.prototype = {
+			update : function() {
+				if(this.options.step) {
+					this.options.step.call(this.elem, this.now, this)
+				}
+				(o.fx.step[this.prop] || o.fx.step._default)(this);
+				if((this.prop == "height" || this.prop == "width") && this.elem.style) {
+					this.elem.style.display = "block"
+				}
+			},
+			cur : function(F) {
+				if(this.elem[this.prop] != null && (!this.elem.style || this.elem.style[this.prop] == null)) {
+					return this.elem[this.prop]
+				}
+				var E = parseFloat(o.css(this.elem, this.prop, F));
+				return E && E > -10000 ? E : parseFloat(o.curCSS(this.elem, this.prop)) || 0
+			},
+			custom : function(I, H, G) {
+				this.startTime = e();
+				this.start = I;
+				this.end = H;
+				this.unit = G || this.unit || "px";
+				this.now = this.start;
+				this.pos = this.state = 0;
+				var E = this;
+				function F(J) {
+					return E.step(J)
+				}
+				F.elem = this.elem;
+				if(F() && o.timers.push(F) && !n) {
+					n = setInterval(function() {
+							var K = o.timers;
+							for(var J = 0; J < K.length; J++) {
+								if(!K[J]()) {
+									K.splice(J--, 1)
+								}
+							}
+							if(!K.length) {
+								clearInterval(n);
+								n = g
+							}
+						}, 13)
+				}
+			},
+			show : function() {
+				this.options.orig[this.prop] = o.attr(this.elem.style, this.prop);
+				this.options.show = true;
+				this.custom(this.prop == "width" || this.prop == "height" ? 1 : 0, this.cur());
+				o(this.elem).show()
+			},
+			hide : function() {
+				this.options.orig[this.prop] = o.attr(this.elem.style, this.prop);
+				this.options.hide = true;
+				this.custom(this.cur(), 0)
+			},
+			step : function(H) {
+				var G = e();
+				if(H || G >= this.options.duration + this.startTime) {
+					this.now = this.end;
+					this.pos = this.state = 1;
+					this.update();
+					this.options.curAnim[this.prop] = true;
+					var E = true;
+					for(var F in this.options.curAnim) {
+						if(this.options.curAnim[F] !== true) {
+							E = false
+						}
+					}
+					if(E) {
+						if(this.options.display != null) {
+							this.elem.style.overflow = this.options.overflow;
+							this.elem.style.display = this.options.display;
+							if(o.css(this.elem, "display") == "none") {
+								this.elem.style.display = "block"
+							}
+						}
+						if(this.options.hide) {
+							o(this.elem).hide()
+						}
+						if(this.options.hide || this.options.show) {
+							for(var I in this.options.curAnim) {
+								o.attr(this.elem.style, I, this.options.orig[I])
+							}
+						}
+						this.options.complete.call(this.elem)
+					}
+					return false
 				} else {
-					if(FBTrace.DBG_FBS_BP) 
-						FBTrace.sysout("resetBreakpoints: " + bp.lineNo + "@" + sourceFile);
+					var J = G - this.startTime;
+					this.state = J / this.options.duration;
+					this.pos = o.easing[this.options.easing || (o.easing.swing ? "swing" : "linear")](this.state, J, 0, 1, this.options.duration);
+					this.now = this.start + ((this.end - this.start) * this.pos);
+					this.update()
+				}
+				return true
+			}
+		};
+		o.extend(o.fx, {
+				speeds : {
+					slow : 600,
+					fast : 200,
+					_default : 400
+				},
+				step : {
+					opacity : function(E) {
+						o.attr(E.elem.style, "opacity", E.now)
+					},
+					_default : function(E) {
+						if(E.elem.style && E.elem.style[E.prop] != null) {
+							E.elem.style[E.prop] = E.now + E.unit
+						} else {
+							E.elem[E.prop] = E.now
+						}
+					}
+				}
+			});
+		if(document.documentElement.getBoundingClientRect) {
+			o.fn.offset = function() {
+				if(!this[0]) {
+					return{
+						top : 0,
+						left : 0
+					}
+				}
+				if(this[0] === this[0].ownerDocument.body) {
+					return o.offset.bodyOffset(this[0])
+				}
+				var G = this[0].getBoundingClientRect(),
+				J = this[0].ownerDocument,
+				F = J.body,
+				E = J.documentElement,
+				L = E.clientTop || F.clientTop || 0,
+				K = E.clientLeft || F.clientLeft || 0,
+				I = G.top + (self.pageYOffset || o.boxModel && E.scrollTop || F.scrollTop) - L,
+				H = G.left + (self.pageXOffset || o.boxModel && E.scrollLeft || F.scrollLeft) - K;
+				return{
+					top : I,
+					left : H
 				}
 			}
 		} else {
-			if(FBTrace.DBG_FBS_BP) 
-				FBTrace.sysout("resetBreakpoints no breakpoints for " + url);
-		}
-	},
-	
-	setJSDBreakpoint : function(sourceFile, bp) {
-		var scripts = sourceFile.getScriptsAtLineNumber(bp.lineNo);
-		if(!scripts) {
-			if(FBTrace.DBG_FBS_BP) 
-				FBTrace.sysout("setJSDBreakpoint:  NO inner scripts: " + bp.lineNo + "@" + sourceFile);
-			if(!sourceFile.outerScript || !sourceFile.outerScript.isValid) {
-				if(FBTrace.DBG_FBS_BP) 
-					FBTrace.sysout("setJSDBreakpoint:  NO valid outerScript\n");
-				return;
-			}
-			scripts = [sourceFile.outerScript];
-		}
-		
-		if(!bp.scriptsWithBreakpoint) {
-			bp.scriptsWithBreakpoint = [];
-			bp.pc = [];
-		}
-		
-		for(var i = 0; i < scripts.length; i++) {
-			var script = scripts[i];
-			if(!script.isValid) {
-				if(FBTrace.DBG_FBS_BP) 
-					FBTrace.sysout("setJSDBreakpoint:  tag " + script.tag + ", " + i + "/" + scripts.length + " is invalid\n");
-				continue;
-			}
-			
-			var haveScript = false;
-			for(let j = 0; j < bp.scriptsWithBreakpoint.length; j++) {
-				if(bp.scriptsWithBreakpoint[j].tag === script.tag) {
-					haveScript = true;
-					break;
-				}
-			}
-			if(haveScript) 
-				continue;
-			
-			var pcmap = sourceFile.pcmap_type;
-			if(!pcmap) {
-				if(FBTrace.DBG_FBS_ERRORS) 
-					FBTrace.sysout("fbs.setJSDBreakpoint pcmap undefined " + sourceFile, sourceFile);
-				pcmap = PCMAP_SOURCETEXT;
-			}
-			// we subtraced this offset when we showed the user so lineNo is a user line number; now we need to talk
-			// to jsd its line world
-			var jsdLine = bp.lineNo + sourceFile.getBaseLineOffset();
-			// test script.isLineExecutable(jsdLineNo, pcmap) ??
-			
-			var isExecutable = false;
-			try {
-				isExecutable = script.isLineExecutable(jsdLine, pcmap);
-			} catch(e) {
-				// guess not then...
-			}
-			
-			if(isExecutable) {
-				var pc = script.lineToPc(jsdLine, pcmap);
-				var pcToLine = script.pcToLine(pc, pcmap); // avoid calling this unless we have to...
-				
-				if(pcToLine == jsdLine) {
-					script.setBreakpoint(pc);
-					
-					bp.scriptsWithBreakpoint.push(script);
-					bp.pc.push(pc);
-					bp.pcmap = pcmap;
-					bp.jsdLine = jsdLine;
-					
-					if(pc == 0) // signal the breakpoint handler to break for user
-						sourceFile.breakOnZero = script.tag;
-					
-					if(FBTrace.DBG_FBS_BP) 
-						FBTrace.sysout("setJSDBreakpoint tag: " + script.tag + " line.pc@url=" + bp.lineNo + "." + pc + "@" + sourceFile.href + " using offset:" + sourceFile.getBaseLineOffset() + " jsdLine: " + jsdLine + " pcToLine: " + pcToLine + (isExecutable ? " isExecuable" : " notExecutable"), {
-								sourceFile : sourceFile,
-								script : script
-							});
-				} else {
-					if(FBTrace.DBG_FBS_BP) 
-						FBTrace.sysout("setJSDBreakpoint LINE MISMATCH for tag: " + script.tag + " line.pc@url=" + bp.lineNo + "." + pc + "@" + sourceFile.href + " using offset:" + sourceFile.getBaseLineOffset() + " jsdLine: " + jsdLine + " pcToLine: " + pcToLine + (isExecutable ? " isExecuable" : " notExecutable"), sourceFile);
-				}
-			} else {
-				if(FBTrace.DBG_FBS_BP) 
-					FBTrace.sysout("setJSDBreakpoint NOT isExecutable tag: " + script.tag + " jsdLine@url=" + jsdLine + "@" + sourceFile.href + " pcmap:" + pcmap, script);
-			}
-		}
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	saveBreakpoints : function(url) {
-		// Do not call fbs.setBreakpoints() it calls us.
-		try {
-			var urlBreakpoints = fbs.getBreakpoints(url);
-			
-			if(!urlBreakpoints || !urlBreakpoints.length) {
-				fbs.breakpointStore.removeItem(url);
-				fbs.deleteBreakpoints(url);
-				return;
-			}
-			
-			var cleanBPs = [];
-			for(var i = 0; i < urlBreakpoints.length; i++) {
-				var bp = urlBreakpoints[i];
-				var cleanBP = {
-				};
-				for(var p in bp) 
-					cleanBP[p] = bp[p];
-				delete cleanBP.scriptsWithBreakpoint; // not JSON-able
-				delete cleanBP.pc; // co-indexed with scriptsWithBreakpoint
-				delete cleanBP.debuggerName;
-				cleanBPs.push(cleanBP);
-			}
-			fbs.breakpointStore.setItem(url, cleanBPs);
-		} catch(exc) {
-			FBTrace.sysout("firebug-service.saveBreakpoints FAILS " + exc, exc);
-		}
-	},
-	
-	setBreakpoints : function(url, urlBreakpoints) {
-		fbs.breakpoints[url] = urlBreakpoints;
-		fbs.saveBreakpoints(url);
-	},
-	
-	getBreakpoints : function(url) {
-		return fbs.breakpoints[url];
-	},
-	
-	deleteBreakpoints : function(url) {
-		delete fbs.breakpoints[url];
-	},
-	
-	getBreakpointURLs : function() {
-		var urls = this.getBreakpointStore().getKeys();
-		return urls;
-	},
-	
-	getBreakpointStore : function() {
-		if(this.breakpointStore) 
-			return this.breakpointStore;
-		
-		try {
-			Components.utils.import("resource://firebug/storageService.js");
-			
-			if(typeof(StorageService) != "undefined") {
-				this.breakpointStore = StorageService.getStorage("breakpoints.json");
-			} else {
-				ERROR("firebug-service breakpoint StorageService FAILS");
-				this.breakpointStore = {
-					setItem : function() {
-					},
-					removeItem : function() {
-					},
-					getKeys : function() {
-						return[];
-					},
-				};
-			}
-			return this.breakpointStore;
-		} catch(exc) {
-			ERROR("firebug-service restoreBreakpoints FAILS " + exc);
-		}
-		
-	},
-	
-	restoreBreakpoints : function() {
-		this.breakpoints = {
-		};
-		var breakpointStore = fbs.getBreakpointStore();
-		var urls = fbs.getBreakpointURLs();
-		for(var i = 0; i < urls.length; i++) {
-			var url = urls[i];
-			var bps = breakpointStore.getItem(url);
-			this.breakpoints[url] = bps;
-			for(var j = 0; j < bps.length; j++) {
-				var bp = bps[j];
-				if(bp.condition) 
-					++conditionCount;
-				if(bp.disabled) 
-					++disabledCount;
-				if(bp.type & BP_MONITOR) 
-					++monitorCount;
-				if(bp.type & BP_ERROR) 
-					errorBreakpoints.push({
-							href : url,
-							lineNo : bp.lineNo,
-							type : BP_ERROR
-						});
-			}
-		}
-		if(FBTrace.DBG_FBS_BP) {
-			FBTrace.sysout("restoreBreakpoints " + urls.length + ", disabledCount:" + disabledCount
-				 + " monitorCount:" + monitorCount + " conditionCount:" + conditionCount + ", restored ", this.breakpoints);
-			for(var p in this.breakpoints) 
-				FBTrace.sysout("restoreBreakpoints restored " + p + " condition " + this.breakpoints[p].condition);
-		}
-	},
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	breakIntoDebugger : function(debuggr, frame, type) {
-		if(FBTrace.DBG_FBS_STEP || FBTrace.DBG_FBS_BP) 
-			FBTrace.sysout("fbs.breakIntoDebugger called " + debuggr.debuggerName + " fbs.isChromeBlocked:" + fbs.isChromeBlocked);
-		
-		// Before we break, clear information about previous stepping session
-		this.stopStepping();
-		
-		// Break into the debugger - execution will stop here until the user resumes
-		var returned;
-		try {
-			var debuggr = this.reFindDebugger(frame, debuggr);
-			returned = debuggr.onBreak(frame, type);
-		} catch(exc) {
-			ERROR(exc);
-			returned = RETURN_CONTINUE;
-		}
-		
-		// Execution resumes now. Check if the user requested stepping and if so
-		// install the necessary hooks
-		this.startStepping();
-		if(FBTrace.DBG_FBS_STEP || FBTrace.DBG_FBS_BP) 
-			FBTrace.sysout("fbs.breakIntoDebugger called " + debuggr.debuggerName + " returning " + returned);
-		return returned;
-	},
-	
-	needToBreakForError : function(reportNextError) {
-		return this.breakOnErrors || this.findErrorBreakpoint(this.normalizeURL(reportNextError.fileName), reportNextError.lineNo) != -1;
-	},
-	
-	startStepping : function() {
-		if(!stepMode && !runningUntil) 
-			return;
-		
-		if(FBTrace.DBG_FBS_STEP) {
-			FBTrace.sysout("startStepping stepMode = " + getStepName(stepMode) + " hookFrameCount=" + hookFrameCount + " stepRecursion=" + stepRecursion);
-		}
-		
-		this.hookFunctions();
-		
-		if(stepMode == STEP_OVER || stepMode == STEP_INTO) 
-			this.hookInterrupts();
-	},
-	
-	stopStepping : function() {
-		if(FBTrace.DBG_FBS_STEP) {
-			FBTrace.sysout("stopStepping stepMode = " + getStepName(stepMode) 
-				 + " hookFrameCount=" + hookFrameCount + " stepRecursion=" + stepRecursion);
-		}
-		stepMode = 0;
-		stepRecursion = 0;
-		stepFrameTag = 0;
-		stepFrameLineId = null;
-		
-		if(runningUntil) {
-			this.removeBreakpoint(BP_UNTIL, runningUntil.href, runningUntil.lineNo);
-			runningUntil = null;
-		}
-		
-		jsd.interruptHook = null;
-		jsd.functionHook = null;
-	},
-	
-	/*
-	     * Returns a string describing the step mode or null for not stepping.
-	     */
-	getStepMode : function() {
-		return getStepName(stepMode);
-	},
-	
-	// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-	
-	hookFunctions : function() {
-		function functionHook(frame, type) {
-			switch(type) {
-			case TYPE_TOPLEVEL_START: // fall through
-			case TYPE_FUNCTION_CALL: // the frame will be running the called script
-				{
-					if(stepMode == STEP_OVER || stepMode == STEP_OUT) {
-						if(frame.callingFrame && frame.callingFrame.script.tag === stepFrameTag) // then we are called by the stepping script
-							stepRecursion++;
-						
-						jsd.interruptHook = null; // don't watch execution steps, wait for return
-					} else if(stepMode == STEP_INTO) // normally step into will break in the interrupt handler, but not in event handlers.
-					{
-						fbs.stopStepping();
-						stepMode = STEP_SUSPEND; // break on next
-						fbs.hookInterrupts();
+			o.fn.offset = function() {
+				if(!this[0]) {
+					return{
+						top : 0,
+						left : 0
 					}
-					
-					break;
 				}
-			case TYPE_TOPLEVEL_END: // fall through
-			case TYPE_FUNCTION_RETURN: // the frame will be running the called script
-				{
-					if(!frame.callingFrame) // stack empty
-					{
-						if((stepMode == STEP_INTO) || (stepMode == STEP_OVER)) {
-							fbs.stopStepping();
-							stepMode = STEP_SUSPEND; // break on next
-							fbs.hookInterrupts();
-						} else {
-							fbs.stopStepping();
+				if(this[0] === this[0].ownerDocument.body) {
+					return o.offset.bodyOffset(this[0])
+				}
+				o.offset.initialized || o.offset.initialize();
+				var J = this[0],
+				G = J.offsetParent,
+				F = J,
+				O = J.ownerDocument,
+				M,
+				H = O.documentElement,
+				K = O.body,
+				L = O.defaultView,
+				E = L.getComputedStyle(J, null),
+				N = J.offsetTop,
+				I = J.offsetLeft;
+				while((J = J.parentNode) && J !== K && J !== H) {
+					M = L.getComputedStyle(J, null);
+					N -= J.scrollTop,
+					I -= J.scrollLeft;
+					if(J === G) {
+						N += J.offsetTop,
+						I += J.offsetLeft;
+						if(o.offset.doesNotAddBorder && !(o.offset.doesAddBorderForTableAndCells && /^t(able|d|h)$/i.test(J.tagName))) {
+							N += parseInt(M.borderTopWidth, 10) || 0,
+							I += parseInt(M.borderLeftWidth, 10) || 0
 						}
-					} else if(stepMode == STEP_OVER || stepMode == STEP_OUT) {
-						if(!stepRecursion) // then we never hit FUNCTION_CALL or we rolled back after we hit it
-						{
-							if(frame.script.tag === stepFrameTag) // We are in the stepping frame,
-								fbs.hookInterrupts(); // so halt on the next PC
-						} else if(frame.callingFrame.script.tag === stepFrameTag) //then we could be in the step call
-						{
-							stepRecursion--;
-							
-							if(!stepRecursion) // then we've rolled back to the step-call
-							{
-								if(stepMode == STEP_OVER) // then halt in the next pc of the caller
-									fbs.hookInterrupts();
-							}
+						F = G,
+						G = J.offsetParent
+					}
+					if(o.offset.subtractsBorderForOverflowNotVisible && M.overflow !== "visible") {
+						N += parseInt(M.borderTopWidth, 10) || 0,
+						I += parseInt(M.borderLeftWidth, 10) || 0
+					}
+					E = M
+				}
+				if(E.position === "relative" || E.position === "static") {
+					N += K.offsetTop,
+					I += K.offsetLeft
+				}
+				if(E.position === "fixed") {
+					N += Math.max(H.scrollTop, K.scrollTop),
+					I += Math.max(H.scrollLeft, K.scrollLeft)
+				}
+				return{
+					top : N,
+					left : I
+				}
+			}
+		}
+		o.offset = {
+			initialize : function() {
+				if(this.initialized) {
+					return
+				}
+				var L = document.body,
+				F = document.createElement("div"),
+				H,
+				G,
+				N,
+				I,
+				M,
+				E,
+				J = L.style.marginTop,
+				K = '<div style="position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;"><div></div></div><table style="position:absolute;top:0;left:0;margin:0;border:5px solid #000;padding:0;width:1px;height:1px;" cellpadding="0" cellspacing="0"><tr><td></td></tr></table>';
+				M = {
+					position : "absolute",
+					top : 0,
+					left : 0,
+					margin : 0,
+					border : 0,
+					width : "1px",
+					height : "1px",
+					visibility : "hidden"
+				};
+				for(E in M) {
+					F.style[E] = M[E]
+				}
+				F.innerHTML = K;
+				L.insertBefore(F, L.firstChild);
+				H = F.firstChild,
+				G = H.firstChild,
+				I = H.nextSibling.firstChild.firstChild;
+				this.doesNotAddBorder = (G.offsetTop !== 5);
+				this.doesAddBorderForTableAndCells = (I.offsetTop === 5);
+				H.style.overflow = "hidden",
+				H.style.position = "relative";
+				this.subtractsBorderForOverflowNotVisible = (G.offsetTop === -5);
+				L.style.marginTop = "1px";
+				this.doesNotIncludeMarginInBodyOffset = (L.offsetTop === 0);
+				L.style.marginTop = J;
+				L.removeChild(F);
+				this.initialized = true
+			},
+			bodyOffset : function(E) {
+				o.offset.initialized || o.offset.initialize();
+				var G = E.offsetTop,
+				F = E.offsetLeft;
+				if(o.offset.doesNotIncludeMarginInBodyOffset) {
+					G += parseInt(o.curCSS(E, "marginTop", true), 10) || 0,
+					F += parseInt(o.curCSS(E, "marginLeft", true), 10) || 0
+				}
+				return{
+					top : G,
+					left : F
+				}
+			}
+		};
+		o.fn.extend({
+				position : function() {
+					var I = 0,
+					H = 0,
+					F;
+					if(this[0]) {
+						var G = this.offsetParent(),
+						J = this.offset(),
+						E = /^body|html$/i.test(G[0].tagName) ? {
+							top : 0,
+							left : 0
 						}
-						// else we are not interested in this FUNCTION_RETURN
+						 : G.offset();
+						J.top -= j(this, "marginTop");
+						J.left -= j(this, "marginLeft");
+						E.top += j(G, "borderTopWidth");
+						E.left += j(G, "borderLeftWidth");
+						F = {
+							top : J.top - E.top,
+							left : J.left - E.left
+						}
 					}
-					
-					break;
-				}
-			}
-			if(FBTrace.DBG_FBS_STEP) {
-				var typeName = getCallFromType(type);
-				var actualFrames = countFrames(frame);
-				FBTrace.sysout("functionHook " + typeName + " stepMode = " + getStepName(stepMode) + " for script " + stepFrameTag + 
-					" (actual: " + actualFrames + ") stepRecursion=" + 
-					stepRecursion + " running " + frame.script.tag + " of " + frame.script.fileName + " at " + frame.line + "." + frame.pc);
-			}
-		}
-		
-		if(FBTrace.DBG_FBS_STEP) 
-			FBTrace.sysout("set functionHook");
-		jsd.functionHook = {
-			onCall : functionHook
-		};
-	},
-	
-	hookInterrupts : function() {
-		function interruptHook(frame, type, rv) {
-			/*if ( isFilteredURL(frame.script.fileName) )  // it does not seem feasible to use jsdIFilter-ing TODO try again
-			            {
-			                if (FBTrace.DBG_FBS_STEP)
-			                    FBTrace.sysout("fbs.hookInterrupts filtered "+frame.script.fileName);
-			                return RETURN_CONTINUE;
-			            }
-			             */
-			
-			// Sometimes the same line will have multiple interrupts, so check
-			// a unique id for the line and don't break until it changes
-			var frameLineId = stepRecursion + frame.script.fileName + frame.line;
-			if(FBTrace.DBG_FBS_STEP && (stepMode != STEP_SUSPEND)) 
-				FBTrace.sysout("interruptHook pc:" + frame.pc + " frameLineId: " + frameLineId + " vs " + stepFrameLineId + " running " + frame.script.tag + " of " + frame.script.fileName + " at " + frame.line + "." + frame.pc);
-			if(frameLineId != stepFrameLineId) 
-				return fbs.onBreak(frame, type, rv);
-			else 
-				return RETURN_CONTINUE;
-		}
-		
-		if(FBTrace.DBG_FBS_STEP) 
-			FBTrace.sysout("set InterruptHook with stepFrameLineId: " + stepFrameLineId);
-		jsd.interruptHook = {
-			onExecute : interruptHook
-		};
-	},
-	
-	hookScripts : function() {
-		if(FBTrace.DBG_FBS_STEP || FBTrace.DBG_FBS_TRACKFILES) 
-			FBTrace.sysout("set scriptHook\n");
-		jsd.scriptHook = {
-			onScriptCreated : hook(this.onScriptCreated),
-			onScriptDestroyed : hook(this.onScriptDestroyed) 
-		};
-		if(fbs.filterSystemURLs) 
-			fbs.setChromeBlockingFilters();
-		
-		jsd.debuggerHook = {
-			onExecute : hook(this.onDebugger, RETURN_CONTINUE)
-		};
-		jsd.debugHook = {
-			onExecute : hook(this.onDebug, RETURN_CONTINUE)
-		};
-		jsd.breakpointHook = {
-			onExecute : hook(this.onBreakpoint, RETURN_CONTINUE)
-		};
-		jsd.throwHook = {
-			onExecute : hook(this.onThrow, RETURN_CONTINUE_THROW)
-		};
-		jsd.errorHook = {
-			onError : hook(this.onError, true)
-		};
-		jsd.topLevelHook = {
-			onCall : hook(this.onTopLevel, true)
-		};
-	},
-	
-	unhookScripts : function() {
-		jsd.scriptHook = null;
-		fbs.removeChromeBlockingFilters();
-		
-		if(FBTrace.DBG_FBS_STEP || FBTrace.DBG_FBS_TRACKFILES) 
-			FBTrace.sysout("unset scriptHook\n");
-	},
-	
-	hookCalls : function(callBack, unhookAtBottom) {
-		var contextCached = null;
-		
-		function callHook(frame, type) {
-			switch(type) {
-			case TYPE_FUNCTION_CALL: {
-					++hookFrameCount;
-					
-					if(FBTrace.DBG_FBS_STEP) 
-						FBTrace.sysout("callHook TYPE_FUNCTION_CALL " + frame.script.fileName + "\n");
-					
-					contextCached = callBack(contextCached, frame, hookFrameCount, true);
-					
-					break;
-				}
-			case TYPE_FUNCTION_RETURN: {
-					if(hookFrameCount <= 0) // ignore returns until we have started back in
-						return;
-					
-					--hookFrameCount;
-					if(FBTrace.DBG_FBS_STEP) 
-						FBTrace.sysout("functionHook TYPE_FUNCTION_RETURN " + frame.script.fileName + "\n");
-					
-					if(unhookAtBottom && hookFrameCount == 0) { // stack empty
-						jsd.functionHook = null;
+					return F
+				},
+				offsetParent : function() {
+					var E = this[0].offsetParent || document.body;
+					while(E && (!/^body|html$/i.test(E.tagName) && o.css(E, "position") == "static")) {
+						E = E.offsetParent
 					}
-					
-					contextCached = callBack(contextCached, frame, hookFrameCount, false);
-					
-					break;
+					return o(E)
 				}
-			}
-		}
-		
-		if(jsd.functionHook) {
-			if(FBTrace.DBG_FBS_ERRORS) 
-				FBTrace.sysout("fbs.hookCalls cannot set functionHook, one is already set");
-			return;
-		}
-		
-		if(FBTrace.DBG_FBS_STEP) 
-			FBTrace.sysout("set callHook\n");
-		
-		hookFrameCount = 0;
-		jsd.functionHook = {
-			onCall : callHook
-		};
-	},
-	
-	getJSD : function() {
-		return jsd; // for debugging fbs
-	},
-	
-	dumpFileTrack : function(moreFiles) {
-		if(moreFiles) 
-			trackFiles.merge(moreFiles);
-		trackFiles.dump();
-	},
-	
-};
-
-function getStepName(mode) {
-	if(mode == STEP_OVER) 
-		return "STEP_OVER";
-	if(mode == STEP_INTO) 
-		return "STEP_INTO";
-	if(mode == STEP_OUT) 
-		return "STEP_OUT";
-	if(mode == STEP_SUSPEND) 
-		return "STEP_SUSPEND";
-	else
-		return "(not a step mode)";
-}
-
-// ************************************************************************************************
-// Local Helpers
-
-// called by enumerateScripts, onThrow, onDebug, onScriptCreated/Destroyed.
-function isFilteredURL(rawJSD_script_filename) {
-	if(!rawJSD_script_filename) 
-		return true;
-	if(fbs.filterConsoleInjections) 
-		return true;
-	if(rawJSD_script_filename[0] == 'h') 
-		return false;
-	if(rawJSD_script_filename == "XPCSafeJSObjectWrapper.cpp") 
-		return true;
-	if(fbs.filterSystemURLs) 
-		return systemURLStem(rawJSD_script_filename);
-	for(var i = 0; i < fbs.alwayFilterURLsStarting.length; i++) 
-		if(rawJSD_script_filename.indexOf(fbs.alwayFilterURLsStarting[i]) != -1) 
-			return true;
-	return false;
-}
-
-function systemURLStem(rawJSD_script_filename) {
-	if(this.url_class) // attempt to optimize stream of similar urls
-	{
-		if(rawJSD_script_filename.substr(0, this.url_class.length) == this.url_class) 
-			return this.url_class;
-	}
-	this.url_class = deepSystemURLStem(rawJSD_script_filename);
-	return this.url_class;
-}
-
-function deepSystemURLStem(rawJSD_script_filename) {
-	for(var i = 0; i < urlFilters.length; ++i) {
-		var filter = urlFilters[i];
-		if(rawJSD_script_filename.substr(0, filter.length) == filter) 
-			return filter;
-	}
-	for(var i = 0; i < COMPONENTS_FILTERS.length; ++i) {
-		if(COMPONENTS_FILTERS[i].test(rawJSD_script_filename)) {
-			var match = COMPONENTS_FILTERS[i].exec(rawJSD_script_filename);
-			urlFilters.push(match[1]); // cache this for future calls
-			return match[1];
-		}
-	}
-	return false;
-}
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-function dispatch(listeners, name, args) {
-	var totalListeners = listeners.length;
-	for(var i = 0; i < totalListeners; ++i) {
-		var listener = listeners[i];
-		if(listener.hasOwnProperty(name)) 
-			listener[name].apply(listener, args);
-	}
-	//if (FBTrace.DBG_FBS_ERRORS)
-	//    FBTrace.sysout("fbs.dispatch "+name+" to "+listeners.length+" listeners");
-}
-
-function hook(fn, rv) {
-	return function() {
-		try {
-			return fn.apply(fbs, arguments);
-		} catch(exc) {
-			var msg = "Error in hook: " + exc + " fn=\n" + fn + "\n stack=\n";
-			for(var frame = Components.stack; frame; frame = frame.caller) 
-				msg += frame.filename + "@" + frame.line + ";\n";
-			ERROR(msg);
-			return rv;
-		}
-	}
-}
-var lastWindowScope = null;
-function wrapIfNative(obj) {
-	try {
-		if(obj instanceof Ci.nsISupports) 
-			return XPCNativeWrapper(obj);
-		else 
-			return obj;
-	} catch(exc) {
-		if(FBTrace.DBG_FBS_ERRORS) 
-			FBTrace.sysout("fbs.wrapIfNative FAILED: " + exc, obj);
-	}
-}
-
-function getFrameWindow(frame) {
-	if(debuggers.length < 1) // too early, frame.eval will crash FF2
-		return;
-	try {
-		if(FBTrace.DBG_FBS_SRCUNITS) 
-			FBTrace.sysout("fbs: resort to getFrameWindow");
-		var result = {
-		};
-		frame.eval("window", "", 1, result);
-		var win = unwrapIValue(result.value);
-		if(win instanceof Ci.nsIDOMWindow) 
-			return getRootWindow(win);
-		else 
-			return getFrameScopeRoot(frame);
-	} catch(exc) {
-		if(FBTrace.DBG_FBS_SRCUNITS) 
-			ERROR("firebug-service getFrameWindow fails: " + exc); // FBTrace.DBG_WINDOWS
-		return null;
-	}
-}
-
-function getRootWindow(win) {
-	for(; win; win = win.parent) {
-		if(!win.parent || win == win.parent || !(win.parent instanceof Window)) 
-			return win;
-	}
-	return null;
-}
-
-function countFrames(frame) {
-	var frameCount = 0;
-	try {
-		for(; frame; frame = frame.callingFrame) 
-			++frameCount;
-	} catch(exc) {
-		
-	}
-	
-	return frameCount;
-}
-
-function framesToString(frame) {
-	var str = "";
-	while(frame) {
-		str += frameToString(frame) + "\n";
-		frame = frame.callingFrame;
-	}
-	return str;
-}
-
-function frameToString(frame) {
-	return frame.script.tag + " in " + frame.script.fileName + "@" + frame.line + "(pc=" + frame.pc + ")";
-}
-
-function testBreakpoint(frame, bp) {
-	if(FBTrace.DBG_FBS_BP) 
-		FBTrace.sysout("fbs.testBreakpoint " + bp.condition, bp);
-	if(bp.condition && bp.condition != "") {
-		var result = {
-		};
-		frame.scope.refresh();
-		if(frame.eval(bp.condition, "", 1, result)) {
-			if(bp.onTrue) {
-				if(!result.value.booleanValue) 
-					return false;
-			} else {
-				var value = unwrapIValue(result.value);
-				if(typeof bp.lastValue == "undefined") {
-					bp.lastValue = value;
-					return false;
-				} else {
-					if(bp.lastValue == value) 
-						return false;
-					bp.lastValue = value;
+			});
+		o.each(["Left", "Top"], function(F, E) {
+				var G = "scroll" + E;
+				o.fn[G] = function(H) {
+					if(!this[0]) {
+						return null
+					}
+					return H !== g ? this.each(function() {
+							this == l || this == document ? l.scrollTo(!F ? H : o(l).scrollLeft(), F ? H : o(l).scrollTop()) : this[G] = H
+						}) : this[0] == l || this[0] == document ? self[F ? "pageYOffset" : "pageXOffset"] || o.boxModel && document.documentElement[G] || document.body[G] : this[0][G]
 				}
-			}
-		}
-	}
-	++bp.hit;
-	if(bp.hitCount > 0) {
-		if(bp.hit < bp.hitCount) 
-			return false;
-	}
-	return true;
-}
-
-function remove(list, item) {
-	var index = list.indexOf(item);
-	if(index != -1) 
-		list.splice(index, 1);
-}
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-var FirebugPrefsObserver = {
-	syncFilter : function() {
-		var filter = fbs.scriptsFilter;
-		fbs.showEvents = (filter == "all" || filter == "events");
-		fbs.showEvals = (filter == "all" || filter == "evals");
-		if(FBTrace.DBG_FBS_ERRORS) 
-			FBTrace.sysout("fbs.showEvents " + fbs.showEvents + " fbs.showEvals " + fbs.showEvals);
-	}
-};
-
-var QuitApplicationGrantedObserver = {
-	observe : function(subject, topic, data) {
-		if(FBTrace.DBG_FBS_ERRORS) 
-			FBTrace.sysout("xxxxxxxxxxxx FirebugService QuitApplicationGrantedObserver " + topic + "  start xyyxxxxxxxxxxxxxx\n");
-	}
-};
-var QuitApplicationRequestedObserver = {
-	observe : function(subject, topic, data) {
-		if(FBTrace.DBG_FBS_ERRORS) 
-			FBTrace.sysout("FirebugService QuitApplicationRequestedObserver " + topic);
-	}
-};
-var QuitApplicationObserver = {
-	observe : function(subject, topic, data) {
-		if(FBTrace.DBG_FBS_ERRORS) 
-			FBTrace.sysout("FirebugService QuitApplicationObserver " + topic);
-		fbs.disableDebugger();
-		fbs.shutdown();
-		fbs = null;
-		if(FBTrace.DBG_FBS_ERRORS) 
-			FBTrace.sysout("xxxxxxxxxxxx FirebugService QuitApplicationObserver " + topic + " end xxxxxxxxxxxxxxxxx\n");
-	}
-};
-
-// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-function unwrapIValue(object) {
-	var unwrapped = object.getWrappedValue();
-	try {
-		if(unwrapped) 
-			return XPCSafeJSObjectWrapper(unwrapped);
-	} catch(exc) {
-		if(FBTrace.DBG_ERRORS) 
-			FBTrace.sysout("fbs.unwrapIValue FAILS for " + object, {
-					exc : exc,
-					object : object,
-					unwrapped : unwrapped
-				});
-	}
-}
-
-//* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-
-var consoleService = null;
-
-function ERROR(text) {
-	FBTrace.sysout(text);
-	
-	if(!consoleService) 
-		consoleService = ConsoleService.getService(nsIConsoleService);
-	
-	consoleService.logStringMessage(text + "");
-}
-
-function getExecutionStopNameFromType(type) {
-	switch(type) {
-	case jsdIExecutionHook.TYPE_INTERRUPTED: 
-		return "interrupted";
-	case jsdIExecutionHook.TYPE_BREAKPOINT: 
-		return "breakpoint";
-	case jsdIExecutionHook.TYPE_DEBUG_REQUESTED: 
-		return "debug requested";
-	case jsdIExecutionHook.TYPE_DEBUGGER_KEYWORD: 
-		return "debugger_keyword";
-	case jsdIExecutionHook.TYPE_THROW: 
-		return "interrupted";
-	default : 
-		return "unknown(" + type + ")";
-	}
-}
-
-function getCallFromType(type) {
-	var typeName = type;
-	switch(type) {
-	case TYPE_FUNCTION_RETURN: {
-			typeName = "TYPE_FUNCTION_RETURN";
-			break;
-		}
-	case TYPE_FUNCTION_CALL: {
-			typeName = "TYPE_FUNCTION_CALL";
-			break;
-		}
-	case TYPE_TOPLEVEL_START: {
-			typeName = "TYPE_TOPLEVEL_START";
-			break;
-		}
-	case TYPE_TOPLEVEL_END: {
-			typeName = "TYPE_TOPLEVEL_START";
-			break;
-		}
-	}
-	return typeName;
-}
-
-// For special chromebug tracing
-function getTmpFile() {
-	var file = Components.classes["@mozilla.org/file/directory_service;1"].
-	getService(Components.interfaces.nsIProperties).
-	get("TmpD", Components.interfaces.nsIFile);
-	file.append("fbs.tmp");
-	file.createUnique(Components.interfaces.nsIFile.NORMAL_FILE_TYPE, 0666);
-	FBTrace.sysout("FBS opened tmp file " + file.path);
-	return file;
-}
-
-function getTmpStream(file) {
-	// file is nsIFile, data is a string
-	var foStream = Components.classes["@mozilla.org/network/file-output-stream;1"].
-	createInstance(Components.interfaces.nsIFileOutputStream);
-	
-	// use 0x02 | 0x10 to open file for appending.
-	foStream.init(file, 0x02 | 0x08 | 0x20, 0666, 0);
-	// write, create, truncate
-	// In a c file operation, we have no need to set file mode with or operation,
-	// directly using "r" or "w" usually.
-	
-	return foStream;
-}
-
-var trackFiles = {
-	allFiles : {
-	},
-	add : function(fileName) {
-		var name = new String(fileName);
-		this.allFiles[name] = [];
-	},
-	drop : function(fileName) {
-		var name = new String(fileName);
-		this.allFiles[name].push("dropped");
-	},
-	def : function(frame) {
-		var frameGlobal = fbs.getOutermostScope(frame);
-		var scope = frame.scope;
-		if(scope) {
-			while(scope.jsParent) 
-				scope = scope.jsParent;
-		}
-		var scopeName = fbs.getLocationSafe(frameGlobal);
-		
-		if(!scopeName) 
-			scopeName = frameGlobal + "";
-		
-		scopeName = scope.jsClassName + ": " + scopeName;
-		
-		var name = new String(frame.script.fileName);
-		if(!(name in this.allFiles)) 
-			this.allFiles[name] = ["not added"];
-		this.allFiles[name].push(scopeName);
-	},
-	merge : function(moreFiles) {
-		for(var p in moreFiles) {
-			if(p in this.allFiles) 
-				this.allFiles[p] = this.allFiles[p].concat(moreFiles[p]);
-			else 
-				this.allFiles[p] = moreFiles[p];
-		}
-	},
-	dump : function() {
-		var n = 0;
-		for(var p in this.allFiles) {
-			tmpout((++n) + ") " + p);
-			var where = this.allFiles[p];
-			if(where.length > 0) {
-				for(var i = 0; i < where.length; i++) {
-					tmpout(", " + where[i]);
+			});
+		o.each(["Height", "Width"], function(I, G) {
+				var E = I ? "Left" : "Top",
+				H = I ? "Right" : "Bottom",
+				F = G.toLowerCase();
+				o.fn["inner" + G] = function() {
+					return this[0] ? o.css(this[0], F, false, "padding") : null
+				};
+				o.fn["outer" + G] = function(K) {
+					return this[0] ? o.css(this[0], F, false, K ? "margin" : "border") : null
+				};
+				var J = G.toLowerCase();
+				o.fn[J] = function(K) {
+					return this[0] == l ? document.compatMode == "CSS1Compat" && document.documentElement["client" + G] || document.body["client" + G] : this[0] == document ? Math.max(document.documentElement["client" + G], document.body["scroll" + G], document.documentElement["scroll" + G], document.body["offset" + G], document.documentElement["offset" + G]) : K === g ? (this.length ? o.css(this[0], J) : null) : this.css(J, typeof K === "string" ? K : K + "px")
 				}
-				tmpout("\n");
-			} else 
-				tmpout("     none\n");
-			
-		}
-	},
-}
-
-function tmpout(text) {
-	if(!fbs.foStream) 
-		fbs.foStream = getTmpStream(getTmpFile());
-	
-	fbs.foStream.write(text, text.length);
-	
-}
-
-fbs.initialize();
-
-//consoleService.logStringMessage("fbs module exported "+fbs);
+			})
+	})();
