@@ -416,12 +416,21 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 			topStack == DO || topStack == ELSE || topStack == TRY || topStack == CATCH)
 		{
 			if(topStack == IF || topStack == FOR || topStack == WHILE || topStack == CATCH)
+			{
 				--nIfLikeBlock;
-			else if(topStack == DO || topStack == ELSE || topStack == TRY)
+				blockStack.pop();
+				--nIndents;
+			}
+			else if(topStack == ELSE || topStack == TRY)
+			{
 				--nDoLikeBlock;
-
-			blockStack.pop();
-			--nIndents;
+				blockStack.pop();
+				--nIndents;
+			}
+			else if(topStack == DO)
+			{
+				--nIndents;
+			}
 
 			if((topStack == IF && !tokenB.compare("else")) ||
 				(topStack == DO && !tokenB.compare("while")) ||
@@ -539,7 +548,26 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			else
 				PutToken(tokenA, string(""), string(" "));
 			bBracket = true;
-			++nIndents;
+			if(blockStack.top() == WHILE)
+			{
+				blockStack.pop();
+				if(blockStack.top() == DO)
+				{
+					// 结束 do...while
+					--nIfLikeBlock;
+					--nDoLikeBlock;
+					blockStack.pop();
+
+					PopMultiBlock(WHILE);
+				}
+				else
+				{
+					blockStack.push(WHILE);
+					++nIndents;
+				}
+			}
+			else
+				++nIndents;
 		}
 		else if(!tokenA.compare(")") && (!tokenB.compare("{") || bHaveNewLine))
 			PutToken(tokenA, string(""), string(" ")); // 这里的空格也是留给 { 的
@@ -561,7 +589,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		char topStack = blockStack.top();
 		if(nIfLikeBlock || nDoLikeBlock)
 		{
-			// ; 结束 if, else, do, while, for, try, catch
+			// ; 结束 if, else, while, for, try, catch
 			if(topStack == IF || topStack == FOR || 
 				topStack == WHILE || topStack == CATCH)
 			{
@@ -569,13 +597,17 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				blockStack.pop();
 				--nIndents;
 			}
-			if(topStack == DO || topStack == ELSE || topStack == TRY)
+			if(topStack == ELSE || topStack == TRY)
 			{
 				--nDoLikeBlock;
 				blockStack.pop();
 				--nIndents;
 			}
-				
+			if(topStack == DO)
+				--nIndents;
+			// do 在读取到 while 后才修改计数
+			// 对于 do{} 也一样
+
 			// 下面的 } 有同样的处理
 			PopMultiBlock(topStack);
 		}
@@ -684,11 +716,13 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				--nIfLikeBlock;
 				blockStack.pop();
 				break;
-			case DO:
 			case ELSE:
 			case TRY:
 				--nDoLikeBlock;
 				blockStack.pop();
+				break;
+			case DO:
+				// 缩进已经处理，do 留给 while
 				break;
 			case SWITCH:
 				--nSwitchBlock;
@@ -794,6 +828,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 			//else
 			//	blockStack.push('h');
 			blockStack.push(blockMap[tokenA]);
+
 		}
 
 		if(!tokenA.compare("switch"))
