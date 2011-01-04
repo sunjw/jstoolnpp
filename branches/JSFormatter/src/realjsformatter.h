@@ -66,34 +66,11 @@ class RealJSFormatter
 {
 public:
 	typedef stack<char> CharStack;
+	typedef stack<bool> BoolStack;
 	typedef queue<TokenAndType> TokenQueue;
 	typedef map<string, char> StrCharMap;
 
-	RealJSFormatter():
-		bRegular(false),
-		bPosNeg(false),
-		nIndents(0),
-		bNewLine(false),
-		nIfLikeBlock(0),
-		nDoLikeBlock(0),
-		nSwitchBlock(0),
-		bBracket(false),
-		bCommentPut(false)
-	{
-		blockMap[string("if")] = IF;
-		blockMap[string("else")] = ELSE;
-		blockMap[string("for")] = FOR;
-		blockMap[string("do")] = DO;
-		blockMap[string("while")] = WHILE;
-		blockMap[string("switch")] = SWITCH;
-		blockMap[string("case")] = CASE;
-		blockMap[string("default")] = CASE;
-		blockMap[string("try")] = TRY;
-		blockMap[string("catch")] = CATCH;
-		blockMap[string("{")] = BLOCK;
-		blockMap[string("(")] = BRACKET;
-		blockMap[string("[")] = SQUARE;
-	}
+	RealJSFormatter();
 
 	void Go();
 
@@ -141,7 +118,7 @@ protected:
 	int nIfLikeBlock; // if, for, while, else if
 	int nDoLikeBlock; // do, else
 	int nSwitchBlock; // switch
-	bool bBracket; // if 之类的后面的括号
+	BoolStack brcNeedStack; // if 之类的后面的括号
 
 	bool bCommentPut; // 刚刚输出了注释
 };

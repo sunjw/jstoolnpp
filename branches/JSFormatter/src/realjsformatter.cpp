@@ -29,6 +29,31 @@ SOFTWARE.
 
 using namespace std;
 
+RealJSFormatter::RealJSFormatter():
+	bRegular(false),
+	bPosNeg(false),
+	nIndents(0),
+	bNewLine(false),
+	nIfLikeBlock(0),
+	nDoLikeBlock(0),
+	nSwitchBlock(0),
+	bCommentPut(false)
+{
+	blockMap[string("if")] = IF;
+	blockMap[string("else")] = ELSE;
+	blockMap[string("for")] = FOR;
+	blockMap[string("do")] = DO;
+	blockMap[string("while")] = WHILE;
+	blockMap[string("switch")] = SWITCH;
+	blockMap[string("case")] = CASE;
+	blockMap[string("default")] = CASE;
+	blockMap[string("try")] = TRY;
+	blockMap[string("catch")] = CATCH;
+	blockMap[string("{")] = BLOCK;
+	blockMap[string("(")] = BRACKET;
+	blockMap[string("[")] = SQUARE;
+}
+
 bool RealJSFormatter::IsNormalChar(int ch)
 {
 	// 一般字符
@@ -444,6 +469,7 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 void RealJSFormatter::Go()
 {
 	blockStack.push(' ');
+	brcNeedStack.push(true);
 	GetToken(true);
 
 	bool bHaveNewLine;
@@ -537,17 +563,18 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			--nIndents;
 		}
 
-		if(!tokenA.compare(")") && (nIfLikeBlock || nSwitchBlock) && !bBracket &&
+		if(!tokenA.compare(")") && (nIfLikeBlock || nSwitchBlock) && !brcNeedStack.top() &&
 			(blockStack.top() == IF || blockStack.top() == FOR || blockStack.top() == WHILE ||
 			blockStack.top() == SWITCH || blockStack.top() == CATCH)) 
 		{
-			// 栈顶的 if, switch, catch 正在等待 )，之后换行增加缩进
+			// 栈顶的 if, for, while, switch, catch 正在等待 )，之后换行增加缩进
 			// ) { 之间的空格在输出换行时会处理
 			if(!bHaveNewLine)
 				PutToken(tokenA, string(""), string(" \n")); // 这里的空格和下面的空格是留给 { 的
 			else
 				PutToken(tokenA, string(""), string(" "));
-			bBracket = true;
+			//bBracket = true;
+			brcNeedStack.pop();
 			if(blockStack.top() == WHILE)
 			{
 				blockStack.pop();
@@ -822,7 +849,8 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 			!tokenA.compare("while") || !tokenA.compare("catch"))
 		{
 			++nIfLikeBlock;
-			bBracket = false; // 等待 ()，() 到来后才能加缩进
+			//bBracket = false; // 等待 ()，() 到来后才能加缩进
+			brcNeedStack.push(false);
 			//if(tokenA.compare("catch"))
 			//	blockStack.push(tokenA[0]);
 			//else
@@ -834,7 +862,8 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		if(!tokenA.compare("switch"))
 		{
 			++nSwitchBlock;
-			bBracket = false;
+			//bBracket = false;
+			brcNeedStack.push(false);
 			blockStack.push(blockMap[tokenA]);
 		}
 	}
