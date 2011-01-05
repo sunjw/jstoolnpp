@@ -52,9 +52,11 @@ using namespace std;
 #define CASE 'c'
 #define TRY 'r'
 #define CATCH 'h'
+#define FUNCTION 'n'
 #define BLOCK '{'
 #define BRACKET '('
 #define SQUARE '['
+#define HELPER '\\'
 
 struct TokenAndType
 {
@@ -118,6 +120,8 @@ protected:
 	int nIfLikeBlock; // if, for, while, else if
 	int nDoLikeBlock; // do, else
 	int nSwitchBlock; // switch
+	bool bBlockStmt; // block 真正开始了
+	// 使用栈是为了解决在判断条件中出现循环的问题
 	BoolStack brcNeedStack; // if 之类的后面的括号
 
 	bool bCommentPut; // 刚刚输出了注释
