@@ -29,6 +29,33 @@ SOFTWARE.
 
 using namespace std;
 
+RealJSFormatter::RealJSFormatter():
+	bRegular(false),
+	bPosNeg(false),
+	nIndents(0),
+	bNewLine(false),
+	nIfLikeBlock(0),
+	nDoLikeBlock(0),
+	nSwitchBlock(0),
+	bBlockStmt(true),
+	bCommentPut(false)
+{
+	blockMap[string("if")] = IF;
+	blockMap[string("else")] = ELSE;
+	blockMap[string("for")] = FOR;
+	blockMap[string("do")] = DO;
+	blockMap[string("while")] = WHILE;
+	blockMap[string("switch")] = SWITCH;
+	blockMap[string("case")] = CASE;
+	blockMap[string("default")] = CASE;
+	blockMap[string("try")] = TRY;
+	blockMap[string("catch")] = CATCH;
+	blockMap[string("function")] = FUNCTION;
+	blockMap[string("{")] = BLOCK;
+	blockMap[string("(")] = BRACKET;
+	blockMap[string("[")] = SQUARE;
+}
+
 bool RealJSFormatter::IsNormalChar(int ch)
 {
 	// 一般字符
@@ -416,12 +443,21 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 			topStack == DO || topStack == ELSE || topStack == TRY || topStack == CATCH)
 		{
 			if(topStack == IF || topStack == FOR || topStack == WHILE || topStack == CATCH)
+			{
 				--nIfLikeBlock;
-			else if(topStack == DO || topStack == ELSE || topStack == TRY)
+				blockStack.pop();
+				--nIndents;
+			}
+			else if(topStack == ELSE || topStack == TRY)
+			{
 				--nDoLikeBlock;
-
-			blockStack.pop();
-			--nIndents;
+				blockStack.pop();
+				--nIndents;
+			}
+			else if(topStack == DO)
+			{
+				--nIndents;
+			}
 
 			if((topStack == IF && !tokenB.compare("else")) ||
 				(topStack == DO && !tokenB.compare("while")) ||
@@ -435,6 +471,7 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 void RealJSFormatter::Go()
 {
 	blockStack.push(' ');
+	brcNeedStack.push(true);
 	GetToken(true);
 
 	bool bHaveNewLine;
@@ -471,6 +508,9 @@ void RealJSFormatter::Go()
 			tokenBFirst = '\n';
 		if(tokenBFirst == '\n' || tokenBType == COMMENT_TYPE_1)
 			bHaveNewLine = true;
+
+		if(!bBlockStmt && tokenA.compare("{") && tokenA.compare("\n"))
+			bBlockStmt = true;
 
 		/* 
 		 * 参考 tokenB 来处理 tokenA
@@ -528,18 +568,39 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			--nIndents;
 		}
 
-		if(!tokenA.compare(")") && (nIfLikeBlock || nSwitchBlock) && !bBracket &&
+		if(!tokenA.compare(")") && (nIfLikeBlock || nSwitchBlock) && !brcNeedStack.top() &&
 			(blockStack.top() == IF || blockStack.top() == FOR || blockStack.top() == WHILE ||
 			blockStack.top() == SWITCH || blockStack.top() == CATCH)) 
 		{
-			// 栈顶的 if, switch, catch 正在等待 )，之后换行增加缩进
+			// 栈顶的 if, for, while, switch, catch 正在等待 )，之后换行增加缩进
 			// ) { 之间的空格在输出换行时会处理
 			if(!bHaveNewLine)
 				PutToken(tokenA, string(""), string(" \n")); // 这里的空格和下面的空格是留给 { 的
 			else
 				PutToken(tokenA, string(""), string(" "));
-			bBracket = true;
-			++nIndents;
+			//bBracket = true;
+			brcNeedStack.pop();
+			bBlockStmt = false; // 等待 statment
+			if(blockStack.top() == WHILE)
+			{
+				blockStack.pop();
+				if(blockStack.top() == DO)
+				{
+					// 结束 do...while
+					--nIfLikeBlock;
+					--nDoLikeBlock;
+					blockStack.pop();
+
+					PopMultiBlock(WHILE);
+				}
+				else
+				{
+					blockStack.push(WHILE);
+					++nIndents;
+				}
+			}
+			else
+				++nIndents;
 		}
 		else if(!tokenA.compare(")") && (!tokenB.compare("{") || bHaveNewLine))
 			PutToken(tokenA, string(""), string(" ")); // 这里的空格也是留给 { 的
@@ -561,7 +622,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		char topStack = blockStack.top();
 		if(nIfLikeBlock || nDoLikeBlock)
 		{
-			// ; 结束 if, else, do, while, for, try, catch
+			// ; 结束 if, else, while, for, try, catch
 			if(topStack == IF || topStack == FOR || 
 				topStack == WHILE || topStack == CATCH)
 			{
@@ -569,13 +630,17 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				blockStack.pop();
 				--nIndents;
 			}
-			if(topStack == DO || topStack == ELSE || topStack == TRY)
+			if(topStack == ELSE || topStack == TRY)
 			{
 				--nDoLikeBlock;
 				blockStack.pop();
 				--nIndents;
 			}
-				
+			if(topStack == DO)
+				--nIndents;
+			// do 在读取到 while 后才修改计数
+			// 对于 do{} 也一样
+
 			// 下面的 } 有同样的处理
 			PopMultiBlock(topStack);
 		}
@@ -608,15 +673,24 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			
 	if(!tokenA.compare("{"))
 	{
+		char topStack = blockStack.top();
 		if((nIfLikeBlock || nDoLikeBlock || nSwitchBlock) && 
-			(blockStack.top() == IF || blockStack.top() == FOR || 
-			blockStack.top() == WHILE || blockStack.top() == DO || 
-			blockStack.top() == ELSE || blockStack.top() == SWITCH ||
-			blockStack.top() == TRY || blockStack.top() == CATCH))
+			(topStack == IF || topStack == FOR || 
+			topStack == WHILE || topStack == DO || 
+			topStack == ELSE || topStack == SWITCH ||
+			topStack == TRY || topStack == CATCH))
 		{
-			//blockStack.pop(); // 不把那个弹出来，遇到 } 时一起弹
-			--nIndents;
-		}
+			if(!bBlockStmt)
+			{
+				//blockStack.pop(); // 不把那个弹出来，遇到 } 时一起弹
+				--nIndents;
+				bBlockStmt = true;
+			}
+			else
+			{
+				blockStack.push(HELPER); // 压入一个 HELPER 帮助判断
+			}
+		}	
 
 		blockStack.push(blockMap[tokenA]); // 入栈，增加缩进
 		++nIndents;
@@ -684,14 +758,20 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				--nIfLikeBlock;
 				blockStack.pop();
 				break;
-			case DO:
 			case ELSE:
 			case TRY:
 				--nDoLikeBlock;
 				blockStack.pop();
 				break;
+			case DO:
+				// 缩进已经处理，do 留给 while
+				break;
 			case SWITCH:
 				--nSwitchBlock;
+				blockStack.pop();
+				break;
+			case FUNCTION:
+			case HELPER:
 				blockStack.pop();
 				break;
 			}
@@ -713,7 +793,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			PutToken(tokenA, leftStyle); // }, }; })
 		// 注意 ) 不要在输出时仿照 ,; 取消前面的换行
 
-		PopMultiBlock(topStack);
+		if(tokenB.compare(";")) // 如果 tokenB 是 ;，弹出多个块的任务留给它
+			PopMultiBlock(topStack);
 
 		return;
 	}
@@ -761,6 +842,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		++nDoLikeBlock;
 		blockStack.push(blockMap[tokenA]);
 		++nIndents; // 无需 ()，直接缩进
+		bBlockStmt = false; // 等待 block 内部的 statment
 				
 		if(tokenBType == STRING_TYPE)
 		{
@@ -772,6 +854,9 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		}
 		return;
 	}
+
+	if(!tokenA.compare("function"))
+		blockStack.push(blockMap[tokenA]); // 把 function 也压入栈，遇到 } 弹掉
 
 	if(tokenBType == STRING_TYPE)
 	{
@@ -788,18 +873,21 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 			!tokenA.compare("while") || !tokenA.compare("catch"))
 		{
 			++nIfLikeBlock;
-			bBracket = false; // 等待 ()，() 到来后才能加缩进
+			//bBracket = false; // 等待 ()，() 到来后才能加缩进
+			brcNeedStack.push(false);
 			//if(tokenA.compare("catch"))
 			//	blockStack.push(tokenA[0]);
 			//else
 			//	blockStack.push('h');
 			blockStack.push(blockMap[tokenA]);
+
 		}
 
 		if(!tokenA.compare("switch"))
 		{
 			++nSwitchBlock;
-			bBracket = false;
+			//bBracket = false;
+			brcNeedStack.push(false);
 			blockStack.push(blockMap[tokenA]);
 		}
 	}

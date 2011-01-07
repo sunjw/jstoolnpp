@@ -29,6 +29,7 @@ void jsMinNew();
 void jsMin(bool bNewFile = false);
 void jsFormat();
 
+void projectPage();
 void about();
 
 #endif //NPP_TOOLS_H
