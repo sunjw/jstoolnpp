@@ -25,7 +25,7 @@
 #include "jsformatString.h"
 
 const TCHAR PLUGIN_NAME[] = TEXT("JSMin");
-const int nbFunc = 6;
+const int nbFunc = 7;
 
 HINSTANCE _hInst;
 NppData nppData;
@@ -47,7 +47,8 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[3]._pFunc = jsFormat;
 			funcItem[4]._pFunc = NULL;
 
-			funcItem[5]._pFunc = about;
+			funcItem[5]._pFunc = projectPage;
+			funcItem[6]._pFunc = about;
 
 			lstrcpy(funcItem[0]._itemName, TEXT("JSMin"));
 			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (In new file)"));
@@ -56,7 +57,8 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			lstrcpy(funcItem[3]._itemName, TEXT("JSFormat"));
 			lstrcpy(funcItem[4]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[5]._itemName, TEXT("About..."));
+			lstrcpy(funcItem[5]._itemName, TEXT("Project Page..."));
+			lstrcpy(funcItem[6]._itemName, TEXT("About..."));
 
 			for(int i = 0; i < nbFunc; ++i)
 			{
@@ -117,7 +119,7 @@ extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam
 	return TRUE;
 }
 
-BOOL CALLBACK dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
+BOOL CALLBACK dlgProcAbout(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
 {
 	switch (message) 
 	{
@@ -125,6 +127,7 @@ BOOL CALLBACK dlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			switch (LOWORD(wParam))
             {
                 case IDCLOSE :
+				case IDCANCEL:
 			    {
 					::EndDialog(hwnd, 0);
 					return  TRUE;
@@ -277,24 +280,15 @@ void jsFormat()
 	delete [] pJS;
 }
 
+void projectPage()
+{
+	ShellExecute(NULL, L"open", TEXT("http://sourceforge.net/projects/jsminnpp/"), NULL, NULL, SW_SHOW);
+}
+
 void about()
 {
-	HWND hSelf = ::CreateDialogParam(_hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), nppData._nppHandle, (DLGPROC)dlgProc, (LPARAM)NULL);
-		    
-	// Go to center
-	RECT rc;
-	::GetClientRect(nppData._nppHandle, &rc);
-	POINT center;
-	int w = rc.right - rc.left;
-	int h = rc.bottom - rc.top;
-	center.x = rc.left + w/2;
-	center.y = rc.top + h/2;
-	::ClientToScreen(nppData._nppHandle, &center);
-
-	RECT dlgRect;
-	::GetClientRect(hSelf, &dlgRect);
-	int x = center.x - (dlgRect.right - dlgRect.left)/2;
-	int y = center.y - (dlgRect.bottom - dlgRect.top)/2;
-
-	::SetWindowPos(hSelf, HWND_TOP, x, y, (dlgRect.right - dlgRect.left), (dlgRect.bottom - dlgRect.top), SWP_SHOWWINDOW);
+	INT_PTR nRet = ::DialogBox(_hInst, 
+							MAKEINTRESOURCE(IDD_ABOUTBOX),
+							nppData._nppHandle, 
+							(DLGPROC)dlgProcAbout);
 }
