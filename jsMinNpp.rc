@@ -70,13 +70,14 @@ IDD_ABOUTBOX DIALOGEX 0, 0, 223, 130
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    PUSHBUTTON      "OK",IDCLOSE,86,109,50,14
+    PUSHBUTTON      "OK",IDCLOSE,161,108,50,14
     GROUPBOX        "JSMin for Notepad++",IDC_STATIC,10,9,201,93,BS_CENTER
-    LTEXT           "Author : Sun Junwen",IDC_STATIC,30,26,100,8
-    LTEXT           "Version : ",IDC_STATIC,30,43,31,8
-    LTEXT           "Licence : GPL",IDC_STATIC,30,62,43,8
-    LTEXT           "Special thanks to : Don HO and Douglas Crockford",IDC_STATIC,30,81,175,8
-    LTEXT           VERSION_VALUE,IDC_STATIC,59,43,25,8
+    LTEXT           "Author : Sun Junwen",IDC_STATIC,20,26,100,8
+    LTEXT           "Version : ",IDC_STATIC,20,43,31,8
+    LTEXT           "Licence : GPL",IDC_STATIC,20,62,43,8
+    LTEXT           "Special thanks to : Don HO and Douglas Crockford",IDC_STATIC,20,81,175,8
+    LTEXT           VERSION_VALUE,IDC_STATIC,49,43,25,8
+    PUSHBUTTON      "Project Page...",IDC_PROPAGE,10,108,74,14
 END
 
 
@@ -88,7 +89,7 @@ END
 
 1 TEXTINCLUDE 
 BEGIN
-    "resource.\0"
+    "resource.h\0"
 END
 
 3 TEXTINCLUDE 
@@ -101,6 +102,25 @@ BEGIN
     "#include ""afxres.h""\r\0"
 END
 
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 10
+        RIGHTMARGIN, 211
+        TOPMARGIN, 9
+        BOTTOMMARGIN, 122
+    END
+END
 #endif    // APSTUDIO_INVOKED
 
 #endif    // 中文(中华人民共和国) resources

@@ -1,6 +1,6 @@
 //this file a source file of JSMinNpp
-//Copyright (C)2007 Don HO <donho@altern.org>
-//Copyright (C)2010 Sun Junwen
+//Copyright (C) 2007 Don HO <donho@altern.org>
+//Copyright (C) 2010-2010 Sun Junwen
 //
 //This program is free software; you can redistribute it and/or
 //modify it under the terms of the GNU General Public License
@@ -25,6 +25,8 @@
 #include "jsformatString.h"
 
 const TCHAR PLUGIN_NAME[] = TEXT("JSMin");
+const TCHAR PROJECT_PAGE[] = TEXT("http://sunblog.72pines.com/development-center/jsminnpp/");
+const TCHAR CHECK_UPDATE[] = TEXT("http://sourceforge.net/projects/jsminnpp/");
 const int nbFunc = 7;
 
 HINSTANCE _hInst;
@@ -47,7 +49,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[3]._pFunc = jsFormat;
 			funcItem[4]._pFunc = NULL;
 
-			funcItem[5]._pFunc = projectPage;
+			funcItem[5]._pFunc = checkUpdate;
 			funcItem[6]._pFunc = about;
 
 			lstrcpy(funcItem[0]._itemName, TEXT("JSMin"));
@@ -57,7 +59,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			lstrcpy(funcItem[3]._itemName, TEXT("JSFormat"));
 			lstrcpy(funcItem[4]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[5]._itemName, TEXT("Project Page..."));
+			lstrcpy(funcItem[5]._itemName, TEXT("Check for update..."));
 			lstrcpy(funcItem[6]._itemName, TEXT("About..."));
 
 			for(int i = 0; i < nbFunc; ++i)
@@ -126,12 +128,15 @@ BOOL CALLBACK dlgProcAbout(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
 		case WM_COMMAND:
 			switch (LOWORD(wParam))
             {
-                case IDCLOSE :
+                case IDCLOSE:
 				case IDCANCEL:
 			    {
 					::EndDialog(hwnd, 0);
 					return  TRUE;
 				}
+				case IDC_PROPAGE:
+					projectPage();
+					break;
 			}
 			return FALSE;
 	}
@@ -280,9 +285,14 @@ void jsFormat()
 	delete [] pJS;
 }
 
+void checkUpdate()
+{
+	ShellExecute(NULL, L"open", CHECK_UPDATE, NULL, NULL, SW_SHOW);
+}
+
 void projectPage()
 {
-	ShellExecute(NULL, L"open", TEXT("http://sourceforge.net/projects/jsminnpp/"), NULL, NULL, SW_SHOW);
+	ShellExecute(NULL, L"open", PROJECT_PAGE, NULL, NULL, SW_SHOW);
 }
 
 void about()

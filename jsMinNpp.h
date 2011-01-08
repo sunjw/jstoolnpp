@@ -1,5 +1,5 @@
 //this file a header file of JSMinNpp
-//Copyright (C)2010 Sun Junwen
+//Copyright (C) 2010-2010 Sun Junwen
 //
 //This program is free software; you can redistribute it and/or
 //modify it under the terms of the GNU General Public License
@@ -18,17 +18,20 @@
 #ifndef NPP_TOOLS_H
 #define NPP_TOOLS_H
 
-#define IDD_ABOUTBOX 250
+#include "resource.h"
 
-#ifndef IDC_STATIC 
-#define IDC_STATIC -1
-#endif
+//#define IDD_ABOUTBOX 250
+//
+//#ifndef IDC_STATIC 
+//#define IDC_STATIC -1
+//#endif
 
 void jsMinCurrent();
 void jsMinNew();
 void jsMin(bool bNewFile = false);
 void jsFormat();
 
+void checkUpdate();
 void projectPage();
 void about();
 
