@@ -1,7 +1,7 @@
 /* realjsformatter.cpp
    2010-12-16
 
-Copyright (c) 2010 SUN Junwen
+Copyright (c) 2010-2011 SUN Junwen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
@@ -433,6 +433,9 @@ void RealJSFormatter::PrepareTokenB()
 
 void RealJSFormatter::PopMultiBlock(char previousStackTop)
 {
+	if(!tokenB.compare(";")) // 如果 tokenB 是 ;，弹出多个块的任务留给它
+		return;
+
 	if(!((previousStackTop == IF && !tokenB.compare("else")) || 
 		(previousStackTop == DO && !tokenB.compare("while")) ||
 		(previousStackTop == TRY && !tokenB.compare("catch"))))
@@ -574,10 +577,11 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		{
 			// 栈顶的 if, for, while, switch, catch 正在等待 )，之后换行增加缩进
 			// ) { 之间的空格在输出换行时会处理
+			// 这里的空格和下面的空格是留给 { 的
+			string rightDeco = tokenB.compare(";") ? string(" ") : string();
 			if(!bHaveNewLine)
-				PutToken(tokenA, string(""), string(" \n")); // 这里的空格和下面的空格是留给 { 的
-			else
-				PutToken(tokenA, string(""), string(" "));
+				rightDeco.append("\n"); 
+			PutToken(tokenA, string(""), rightDeco);
 			//bBracket = true;
 			brcNeedStack.pop();
 			bBlockStmt = false; // 等待 statment
@@ -793,8 +797,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			PutToken(tokenA, leftStyle); // }, }; })
 		// 注意 ) 不要在输出时仿照 ,; 取消前面的换行
 
-		if(tokenB.compare(";")) // 如果 tokenB 是 ;，弹出多个块的任务留给它
-			PopMultiBlock(topStack);
+		PopMultiBlock(topStack);
 
 		return;
 	}
@@ -826,7 +829,8 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	{
 		// case, default 往里面缩一格
 		--nIndents;
-		PutToken(tokenA, string(""), string(" "));
+		string rightDeco = tokenA.compare("default") ? string(" ") : string();
+		PutToken(tokenA, string(""), rightDeco);
 		++nIndents;
 		blockStack.push(blockMap[tokenA]);
 		return;

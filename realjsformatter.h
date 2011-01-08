@@ -1,7 +1,7 @@
 /* realjsformatter.h
    2010-12-16
 
-Copyright (c) 2010 SUN Junwen
+Copyright (c) 2010-2011 SUN Junwen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
