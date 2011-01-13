@@ -27,6 +27,7 @@ SOFTWARE.
 #include <stack>
 #include <queue>
 #include <map>
+#include <set>
 
 using namespace std;
 
@@ -71,6 +72,7 @@ public:
 	typedef stack<bool> BoolStack;
 	typedef queue<TokenAndType> TokenQueue;
 	typedef map<string, char> StrCharMap;
+	typedef set<string> StrSet;
 
 	RealJSFormatter();
 
@@ -91,6 +93,7 @@ protected:
 	void PutString(const string& str);
 
 	bool inline IsNormalChar(int ch);
+	bool inline IsNumChar(int ch);
 	bool inline IsBlankChar(int ch);
 	bool inline IsSingleOper(int ch);
 	bool inline IsQuote(int ch);
@@ -112,6 +115,7 @@ protected:
 	string tokenB;
 	TokenQueue tokenBQueue;
 
+	StrSet specKeywordSet; // 后面要跟着括号的关键字集合
 	StrCharMap blockMap;
 	CharStack blockStack; 
 	int nIndents; // 缩进数量，不用计算 blockStack，效果不好

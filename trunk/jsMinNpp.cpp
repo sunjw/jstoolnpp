@@ -18,15 +18,14 @@
 #include <stdexcept>
 #include <string>
 
+#include "comDef.h"
 #include "PluginInterface.h"
 #include "menuCmdID.h"
 #include "jsMinNpp.h"
+#include "aboutDlg.h"
 #include "jsminCharArray.h"
 #include "jsformatString.h"
 
-const TCHAR PLUGIN_NAME[] = TEXT("JSMin");
-const TCHAR PROJECT_PAGE[] = TEXT("http://sunblog.72pines.com/development-center/jsminnpp/");
-const TCHAR CHECK_UPDATE[] = TEXT("http://sourceforge.net/projects/jsminnpp/");
 const int nbFunc = 7;
 
 HINSTANCE _hInst;
@@ -91,7 +90,7 @@ extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
 
 extern "C" __declspec(dllexport) const TCHAR * getName()
 {
-	return PLUGIN_NAME;
+	return TEXT(PLUGIN_NAME);
 }
 
 extern "C" __declspec(dllexport) FuncItem * getFuncsArray(int *nbF)
@@ -119,28 +118,6 @@ extern "C" __declspec(dllexport) BOOL isUnicode()
 extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam, LPARAM lParam)
 {
 	return TRUE;
-}
-
-BOOL CALLBACK dlgProcAbout(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
-{
-	switch (message) 
-	{
-		case WM_COMMAND:
-			switch (LOWORD(wParam))
-            {
-                case IDCLOSE:
-				case IDCANCEL:
-			    {
-					::EndDialog(hwnd, 0);
-					return  TRUE;
-				}
-				case IDC_PROPAGE:
-					projectPage();
-					break;
-			}
-			return FALSE;
-	}
-	return FALSE;
 }
 
 HWND getCurrentScintillaHandle() {
@@ -287,12 +264,7 @@ void jsFormat()
 
 void checkUpdate()
 {
-	ShellExecute(NULL, L"open", CHECK_UPDATE, NULL, NULL, SW_SHOW);
-}
-
-void projectPage()
-{
-	ShellExecute(NULL, L"open", PROJECT_PAGE, NULL, NULL, SW_SHOW);
+	ShellExecute(NULL, L"open", TEXT(CHECK_UPDATE), NULL, NULL, SW_SHOW);
 }
 
 void about()

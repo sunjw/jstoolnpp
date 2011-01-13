@@ -77,7 +77,7 @@ BEGIN
     LTEXT           "Licence : GPL",IDC_STATIC,20,62,43,8
     LTEXT           "Special thanks to : Don HO and Douglas Crockford",IDC_STATIC,20,81,175,8
     LTEXT           VERSION_VALUE,IDC_STATIC,49,43,25,8
-    PUSHBUTTON      "Project Page...",IDC_PROPAGE,10,108,74,14
+    PUSHBUTTON      "Project Site...",IDC_PROPAGE,10,108,74,14
 END
 
 

@@ -54,6 +54,14 @@ RealJSFormatter::RealJSFormatter():
 	blockMap[string("{")] = BLOCK;
 	blockMap[string("(")] = BRACKET;
 	blockMap[string("[")] = SQUARE;
+
+	specKeywordSet.insert("if");
+	specKeywordSet.insert("for");
+	specKeywordSet.insert("while");
+	specKeywordSet.insert("switch");
+	specKeywordSet.insert("catch");
+	specKeywordSet.insert("function");
+	specKeywordSet.insert("with");
 }
 
 bool RealJSFormatter::IsNormalChar(int ch)
@@ -61,6 +69,12 @@ bool RealJSFormatter::IsNormalChar(int ch)
 	// 一般字符
 	return ((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') ||
 		(ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '$' || ch > 126);
+}
+
+bool RealJSFormatter::IsNumChar(int ch)
+{
+	// 数字和.
+	return ((ch >= '0' && ch <= '9') || ch == '.');
 }
 
 bool RealJSFormatter::IsBlankChar(int ch)
@@ -123,6 +137,8 @@ void RealJSFormatter::GetToken(bool init)
 
 	bool bQuote = false;
 	bool bComment = false;
+	bool bFirst = true;
+	bool bNum = false; // 是不是数字
 	char chQuote; // 记录引号类型 ' 或 "
 	char chComment; // 注释类型 / 或 *
 
@@ -210,6 +226,26 @@ void RealJSFormatter::GetToken(bool init)
 		{
 			tokenBType = STRING_TYPE;
 			tokenB.push_back(charA);
+			
+			// 解决类似 82e-2 442e+6 的问题
+			// 因为这是立即数，所以只能符合以下的表达形式
+			bool bNumOld = bNum;
+			if(bFirst || bNumOld) // 只有之前是数字才改变状态
+			{
+				bNum = IsNumChar(charA);
+				bFirst = false;
+			}
+			if(bNumOld && !bNum && charA == 'e' && 
+				(charB == '-' || charB == '+' || IsNumChar(charB)))
+			{
+				bNum = true;
+				if(charB == '-' || charB == '+')
+				{
+					tokenB.push_back(charB);
+					charB = GetChar();
+				}
+			}
+
 			if(!IsNormalChar(charB)) // loop until charB is not normal char
 			{
 				bPosNeg = false;
@@ -871,7 +907,11 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	}
 	else
 	{
-		PutToken(tokenA);
+		if(specKeywordSet.find(tokenA) != specKeywordSet.end() &&
+			!tokenB.compare("("))
+			PutToken(tokenA, string(""), string(" "));
+		else
+			PutToken(tokenA);
 
 		if(!tokenA.compare("if") || !tokenA.compare("for") || 
 			!tokenA.compare("while") || !tokenA.compare("catch"))
