@@ -351,6 +351,14 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\aboutDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\comDef.h"
+				>
+			</File>
+			<File
 				RelativePath=".\jsformatString.h"
 				>
 			</File>
@@ -410,6 +418,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath=".\aboutDlg.cpp"
+				>
+			</File>
 			<File
 				RelativePath=".\jsformatString.cpp"
 				>
