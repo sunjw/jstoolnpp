@@ -129,6 +129,9 @@ protected:
 	BoolStack brcNeedStack; // if 之类的后面的括号
 
 	bool bCommentPut; // 刚刚输出了注释
+
+	const bool bSkipCR;
+	const bool bPutCR;
 };
 
 #endif
