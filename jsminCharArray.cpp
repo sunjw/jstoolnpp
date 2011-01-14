@@ -10,5 +10,7 @@ int JSMinCharArray::getChar()
 
 void JSMinCharArray::put(int _Ch)
 {
+	if(_Ch == '\n')
+		out[putPos++] = '\r';
 	out[putPos++] = _Ch;
 }

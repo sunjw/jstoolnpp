@@ -38,7 +38,9 @@ RealJSFormatter::RealJSFormatter():
 	nDoLikeBlock(0),
 	nSwitchBlock(0),
 	bBlockStmt(true),
-	bCommentPut(false)
+	bCommentPut(false),
+	bSkipCR(true),
+	bPutCR(true)
 {
 	blockMap[string("if")] = IF;
 	blockMap[string("else")] = ELSE;
@@ -147,7 +149,10 @@ void RealJSFormatter::GetToken(bool init)
 		charA = charB;
 		if(charA == EOF)
 			return;
-		charB = GetChar();
+		do
+		{
+			charB = GetChar();
+		} while(bSkipCR && charB == '\r');
 
 		/* 
 		 * 参考 charB 来处理 charA
@@ -355,6 +360,8 @@ void RealJSFormatter::PutString(const string& str)
 			(str[i] != '{' && str[i] != ',' && str[i] != ';')))
 		{
 			// 换行后面不是紧跟着 {,; 才真正换
+			if(bPutCR)
+				PutChar('\r');
 			PutChar('\n');
 			bNewLine = false;
 			int inds = nIndents;
