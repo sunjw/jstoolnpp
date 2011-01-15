@@ -52,7 +52,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[6]._pFunc = about;
 
 			lstrcpy(funcItem[0]._itemName, TEXT("JSMin"));
-			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (In new file)"));
+			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (New file)"));
 			lstrcpy(funcItem[2]._itemName, TEXT("-SEPARATOR-"));
 
 			lstrcpy(funcItem[3]._itemName, TEXT("JSFormat"));

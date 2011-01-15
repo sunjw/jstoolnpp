@@ -11,7 +11,7 @@ class JSFormatString: public RealJSFormatter
 {
 public:
 	JSFormatString(const char* input, string* output)
-		:in(), out(output), getPos(0), putPos(0)
+		:RealJSFormatter(true, true), in(), out(output), getPos(0), putPos(0)
 	{
 		in.append(input);
 	}
