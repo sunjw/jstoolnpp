@@ -75,10 +75,13 @@ public:
 	typedef set<string> StrSet;
 
 	RealJSFormatter();
+	RealJSFormatter(bool bSkipCR, bool bPutCR);
 
 	void Go();
 
 protected:
+	void Init();
+
 	// Should be implemented in derived class
 	virtual inline int GetChar() = 0; // JUST get next char from input
 	virtual inline void PutChar(int ch) = 0; // JUST put a char to output 
@@ -130,8 +133,8 @@ protected:
 
 	bool bCommentPut; // 刚刚输出了注释
 
-	const bool bSkipCR;
-	const bool bPutCR;
+	bool bSkipCR; // 读取时跳过 \r 
+	bool bPutCR; // 使用 \r\n 作为换行
 };
 
 #endif

@@ -39,8 +39,29 @@ RealJSFormatter::RealJSFormatter():
 	nSwitchBlock(0),
 	bBlockStmt(true),
 	bCommentPut(false),
-	bSkipCR(true),
-	bPutCR(true)
+	bSkipCR(false),
+	bPutCR(false)
+{
+	Init();
+}
+
+RealJSFormatter::RealJSFormatter(bool bSkipCR, bool bPutCR):
+	bRegular(false),
+	bPosNeg(false),
+	nIndents(0),
+	bNewLine(false),
+	nIfLikeBlock(0),
+	nDoLikeBlock(0),
+	nSwitchBlock(0),
+	bBlockStmt(true),
+	bCommentPut(false)
+{
+	this->bSkipCR = bSkipCR;
+	this->bPutCR = bPutCR;
+	Init();
+}
+
+void RealJSFormatter::Init()
 {
 	blockMap[string("if")] = IF;
 	blockMap[string("else")] = ELSE;
