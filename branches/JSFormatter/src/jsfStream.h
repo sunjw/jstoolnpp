@@ -9,7 +9,11 @@ class JSFormatterStream: public RealJSFormatter
 {
 public:
 	JSFormatterStream(std::istream& input, std::ostream& output)
-		:in(input), out(output)
+		:RealJSFormatter('\t', 1, false, false), in(input), out(output)
+	{}
+	
+	JSFormatterStream(std::istream& input, std::ostream& output, char chIndent, int nChPerInd)
+		:RealJSFormatter(chIndent, nChPerInd, false, false), in(input), out(output)
 	{}
 
 private:

@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 
 		try
 		{
-			JSFormatterStream jsf(inFileStream, outStrStream);
+			JSFormatterStream jsf(inFileStream, outStrStream, '\t', 1);
 			jsf.Go();
 
 			string output = outStrStream.str();

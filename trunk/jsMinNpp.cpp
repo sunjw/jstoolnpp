@@ -239,7 +239,7 @@ void jsFormat()
 
 	try
 	{
-		JSFormatString jsformat(pJS, &strJSFormat);
+		JSFormatString jsformat(pJS, &strJSFormat, '\t', 1, true);
 		jsformat.Go();
 
 		//trim(pJSMin);

@@ -10,8 +10,13 @@ using namespace std;
 class JSFormatString: public RealJSFormatter
 {
 public:
-	JSFormatString(const char* input, string* output)
-		:RealJSFormatter(true, true), in(), out(output), getPos(0), putPos(0)
+	JSFormatString(const char* input, 
+				string* output,
+				char chIndent,
+				int nChPerInd,
+				bool bPutCR)
+		:RealJSFormatter(chIndent, nChPerInd, true, bPutCR), 
+		in(), out(output), getPos(0), putPos(0)
 	{
 		in.append(input);
 	}

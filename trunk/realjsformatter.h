@@ -75,7 +75,9 @@ public:
 	typedef set<string> StrSet;
 
 	RealJSFormatter();
+	RealJSFormatter(char chIndent, int nChPerInd);
 	RealJSFormatter(bool bSkipCR, bool bPutCR);
+	RealJSFormatter(char chIndent, int nChPerInd, bool bSkipCR, bool bPutCR);
 
 	void Go();
 
@@ -132,6 +134,9 @@ protected:
 	BoolStack brcNeedStack; // if 之类的后面的括号
 
 	bool bCommentPut; // 刚刚输出了注释
+
+	char chIndent; // 作为缩进的字符
+	int nChPerInd; // 每个缩进缩进字符个数
 
 	bool bSkipCR; // 读取时跳过 \r 
 	bool bPutCR; // 使用 \r\n 作为换行

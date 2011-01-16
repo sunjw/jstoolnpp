@@ -39,9 +39,31 @@ RealJSFormatter::RealJSFormatter():
 	nSwitchBlock(0),
 	bBlockStmt(true),
 	bCommentPut(false),
+	chIndent('\t'),
+	nChPerInd(1),
 	bSkipCR(false),
 	bPutCR(false)
 {
+	Init();
+}
+
+RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd):
+	bRegular(false),
+	bPosNeg(false),
+	nIndents(0),
+	bNewLine(false),
+	nIfLikeBlock(0),
+	nDoLikeBlock(0),
+	nSwitchBlock(0),
+	bBlockStmt(true),
+	bCommentPut(false),
+	chIndent('\t'),
+	nChPerInd(1),
+	bSkipCR(false),
+	bPutCR(false)
+{
+	this->chIndent = chIndent;
+	this->nChPerInd = nChPerInd;
 	Init();
 }
 
@@ -54,8 +76,28 @@ RealJSFormatter::RealJSFormatter(bool bSkipCR, bool bPutCR):
 	nDoLikeBlock(0),
 	nSwitchBlock(0),
 	bBlockStmt(true),
+	bCommentPut(false),
+	chIndent('\t'),
+	nChPerInd(1)
+{
+	this->bSkipCR = bSkipCR;
+	this->bPutCR = bPutCR;
+	Init();
+}
+
+RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd, bool bSkipCR, bool bPutCR):
+	bRegular(false),
+	bPosNeg(false),
+	nIndents(0),
+	bNewLine(false),
+	nIfLikeBlock(0),
+	nDoLikeBlock(0),
+	nSwitchBlock(0),
+	bBlockStmt(true),
 	bCommentPut(false)
 {
+	this->chIndent = chIndent;
+	this->nChPerInd = nChPerInd;
 	this->bSkipCR = bSkipCR;
 	this->bPutCR = bPutCR;
 	Init();
@@ -389,7 +431,8 @@ void RealJSFormatter::PutString(const string& str)
 			if(str[i] == '{' || str[i] == ',' || str[i] == ';')
 				--inds;
 			for(int c = 0; c < inds; ++c)
-				PutChar('\t');
+				for(int c2 = 0; c2 < nChPerInd; ++c2)
+					PutChar(chIndent);
 		}
 
 		if(bNewLine && !bCommentPut &&  
