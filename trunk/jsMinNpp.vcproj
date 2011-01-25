@@ -359,6 +359,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IniFileProcessor.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IniValue.h"
+				>
+			</File>
+			<File
 				RelativePath=".\jsformatString.h"
 				>
 			</File>
@@ -399,6 +407,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\utility.h"
+				>
+			</File>
+			<File
 				RelativePath=".\version.h"
 				>
 			</File>
@@ -423,6 +435,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IniFileProcessor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\IniValue.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\jsformatString.cpp"
 				>
 			</File>
@@ -440,6 +460,10 @@
 			</File>
 			<File
 				RelativePath=".\realjsformatter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\utility.cpp"
 				>
 			</File>
 		</Filter>
