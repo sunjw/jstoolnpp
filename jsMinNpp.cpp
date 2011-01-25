@@ -22,15 +22,11 @@
 #include "PluginInterface.h"
 #include "menuCmdID.h"
 #include "jsMinNpp.h"
+#include "utility.h"
+#include "version.h"
 #include "aboutDlg.h"
 #include "jsminCharArray.h"
 #include "jsformatString.h"
-
-const int nbFunc = 7;
-
-HINSTANCE _hInst;
-NppData nppData;
-FuncItem funcItem[nbFunc];
 
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        DWORD  reasonForCall, 
@@ -51,15 +47,15 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[5]._pFunc = checkUpdate;
 			funcItem[6]._pFunc = about;
 
-			lstrcpy(funcItem[0]._itemName, TEXT("JSMin"));
-			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (New file)"));
+			lstrcpy(funcItem[0]._itemName, TEXT("JS&Min"));
+			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (&New file)"));
 			lstrcpy(funcItem[2]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[3]._itemName, TEXT("JSFormat"));
+			lstrcpy(funcItem[3]._itemName, TEXT("JS&Format"));
 			lstrcpy(funcItem[4]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[5]._itemName, TEXT("Check for update..."));
-			lstrcpy(funcItem[6]._itemName, TEXT("About..."));
+			lstrcpy(funcItem[5]._itemName, TEXT("&Check for update..."));
+			lstrcpy(funcItem[6]._itemName, TEXT("&About"));
 
 			for(int i = 0; i < nbFunc; ++i)
 			{
@@ -67,6 +63,8 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 				// If you don't need the shortcut, you have to make it NULL
 				funcItem[i]._pShKey = NULL;
 			}
+
+			bLoadedOption = false;
 
 		}
 		break;
@@ -162,6 +160,12 @@ void jsMin(bool bNewFile)
 {
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
+	if(!bLoadedOption)
+	{
+		loadOption(nppData._nppHandle, bPutCR, chIndent, nChPerInd);
+		bLoadedOption = true;
+	}
+
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
     if (jsLen == 0) 
 		return;
@@ -179,7 +183,7 @@ void jsMin(bool bNewFile)
 
 	try
 	{
-		JSMinCharArray jsmin(pJS, pJSMin);
+		JSMinCharArray jsmin(pJS, pJSMin, bPutCR);
 		jsmin.go();
 
 		trim(pJSMin);
@@ -221,6 +225,12 @@ void jsFormat()
 {
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
+	if(!bLoadedOption)
+	{
+		loadOption(nppData._nppHandle, bPutCR, chIndent, nChPerInd);
+		bLoadedOption = true;
+	}
+
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
     if (jsLen == 0) 
 		return;
@@ -239,7 +249,7 @@ void jsFormat()
 
 	try
 	{
-		JSFormatString jsformat(pJS, &strJSFormat, '\t', 1, true);
+		JSFormatString jsformat(pJS, &strJSFormat, chIndent, nChPerInd, bPutCR);
 		jsformat.Go();
 
 		//trim(pJSMin);
@@ -264,7 +274,12 @@ void jsFormat()
 
 void checkUpdate()
 {
-	ShellExecute(NULL, L"open", TEXT(CHECK_UPDATE), NULL, NULL, SW_SHOW);
+	tstring url(TEXT(CHECK_UPDATE));
+	tstring version(TEXT(VERSION_VALUE));
+	url.append(TEXT("?ver="));
+	url.append(version);
+
+	ShellExecute(NULL, L"open", url.c_str(), NULL, NULL, SW_SHOW);
 }
 
 void about()

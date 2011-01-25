@@ -26,6 +26,18 @@
 //#define IDC_STATIC -1
 //#endif
 
+const int nbFunc = 7;
+
+HINSTANCE _hInst;
+NppData nppData;
+FuncItem funcItem[nbFunc];
+
+bool bLoadedOption;
+
+bool bPutCR; // 是否输出 \r\n
+char chIndent; // 缩进用的字符
+int nChPerInd; // 每个缩进使用几个字符
+
 void jsMinCurrent();
 void jsMinNew();
 void jsMin(bool bNewFile = false);

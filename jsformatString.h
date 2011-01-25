@@ -14,12 +14,7 @@ public:
 				string* output,
 				char chIndent,
 				int nChPerInd,
-				bool bPutCR)
-		:RealJSFormatter(chIndent, nChPerInd, true, bPutCR), 
-		in(), out(output), getPos(0), putPos(0)
-	{
-		in.append(input);
-	}
+				bool bPutCR);
 
 private:
 	string in;
@@ -28,8 +23,8 @@ private:
 	size_t getPos;
 	size_t putPos;
 
-	virtual int GetChar();
-	virtual void PutChar(int ch);
+	virtual inline int GetChar();
+	virtual inline void PutChar(int ch);
 };
 
 #endif
