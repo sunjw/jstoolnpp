@@ -391,6 +391,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\optionsDlg.h"
+				>
+			</File>
+			<File
 				RelativePath=".\PluginInterface.h"
 				>
 			</File>
@@ -456,6 +460,10 @@
 			</File>
 			<File
 				RelativePath=".\jsMinNpp.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\optionsDlg.cpp"
 				>
 			</File>
 			<File

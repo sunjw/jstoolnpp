@@ -24,6 +24,7 @@
 #include "jsMinNpp.h"
 #include "utility.h"
 #include "version.h"
+#include "optionsDlg.h"
 #include "aboutDlg.h"
 #include "jsminCharArray.h"
 #include "jsformatString.h"
@@ -44,8 +45,11 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[3]._pFunc = jsFormat;
 			funcItem[4]._pFunc = NULL;
 
-			funcItem[5]._pFunc = checkUpdate;
-			funcItem[6]._pFunc = about;
+			funcItem[5]._pFunc = options;
+			funcItem[6]._pFunc = NULL;
+
+			funcItem[7]._pFunc = checkUpdate;
+			funcItem[8]._pFunc = about;
 
 			lstrcpy(funcItem[0]._itemName, TEXT("JS&Min"));
 			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (&New file)"));
@@ -54,8 +58,11 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			lstrcpy(funcItem[3]._itemName, TEXT("JS&Format"));
 			lstrcpy(funcItem[4]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[5]._itemName, TEXT("&Check for update..."));
-			lstrcpy(funcItem[6]._itemName, TEXT("&About"));
+			lstrcpy(funcItem[5]._itemName, TEXT("&Options..."));
+			lstrcpy(funcItem[6]._itemName, TEXT("-SEPARATOR-"));
+
+			lstrcpy(funcItem[7]._itemName, TEXT("&Check for update..."));
+			lstrcpy(funcItem[8]._itemName, TEXT("&About"));
 
 			for(int i = 0; i < nbFunc; ++i)
 			{
@@ -63,8 +70,6 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 				// If you don't need the shortcut, you have to make it NULL
 				funcItem[i]._pShKey = NULL;
 			}
-
-			bLoadedOption = false;
 
 		}
 		break;
@@ -84,6 +89,8 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
 {
 	nppData = notpadPlusData;
+	// ÔØÈëÉèÖÃ
+	loadOption(nppData._nppHandle, bPutCR, chIndent, nChPerInd);
 }
 
 extern "C" __declspec(dllexport) const TCHAR * getName()
@@ -160,12 +167,6 @@ void jsMin(bool bNewFile)
 {
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
-	if(!bLoadedOption)
-	{
-		loadOption(nppData._nppHandle, bPutCR, chIndent, nChPerInd);
-		bLoadedOption = true;
-	}
-
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
     if (jsLen == 0) 
 		return;
@@ -225,12 +226,6 @@ void jsFormat()
 {
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
-	if(!bLoadedOption)
-	{
-		loadOption(nppData._nppHandle, bPutCR, chIndent, nChPerInd);
-		bLoadedOption = true;
-	}
-
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
     if (jsLen == 0) 
 		return;
@@ -272,6 +267,14 @@ void jsFormat()
 	delete [] pJS;
 }
 
+void options()
+{
+	INT_PTR nRet = ::DialogBox(_hInst, 
+							MAKEINTRESOURCE(IDD_OPTIONSBOX),
+							nppData._nppHandle, 
+							(DLGPROC)dlgProcOptions);
+}
+
 void checkUpdate()
 {
 	tstring url(TEXT(CHECK_UPDATE));
@@ -279,7 +282,7 @@ void checkUpdate()
 	url.append(TEXT("?ver="));
 	url.append(version);
 
-	ShellExecute(NULL, L"open", url.c_str(), NULL, NULL, SW_SHOW);
+	ShellExecute(NULL, TEXT("open"), url.c_str(), NULL, NULL, SW_SHOW);
 }
 
 void about()
