@@ -2,11 +2,6 @@
 #include "comDef.h"
 #include "aboutDlg.h"
 
-void projectSite()
-{
-	ShellExecute(NULL, L"open", TEXT(PROJECT_SITE), NULL, NULL, SW_SHOW);
-}
-
 BOOL CALLBACK dlgProcAbout(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
 {
 	switch (message) 
@@ -18,7 +13,7 @@ BOOL CALLBACK dlgProcAbout(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
 				case IDCANCEL:
 			    {
 					::EndDialog(hwnd, 0);
-					return  TRUE;
+					return TRUE;
 				}
 				case IDC_PROPAGE:
 					projectSite();
@@ -27,4 +22,9 @@ BOOL CALLBACK dlgProcAbout(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
 			return FALSE;
 	}
 	return FALSE;
+}
+
+void projectSite()
+{
+	ShellExecute(NULL, TEXT("open"), TEXT(PROJECT_SITE), NULL, NULL, SW_SHOW);
 }

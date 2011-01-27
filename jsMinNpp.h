@@ -26,13 +26,11 @@
 //#define IDC_STATIC -1
 //#endif
 
-const int nbFunc = 7;
+const int nbFunc = 9;
 
 HINSTANCE _hInst;
 NppData nppData;
 FuncItem funcItem[nbFunc];
-
-bool bLoadedOption;
 
 bool bPutCR; // 是否输出 \r\n
 char chIndent; // 缩进用的字符
@@ -42,6 +40,8 @@ void jsMinCurrent();
 void jsMinNew();
 void jsMin(bool bNewFile = false);
 void jsFormat();
+
+void options();
 
 void checkUpdate();
 void about();

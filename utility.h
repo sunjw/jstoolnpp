@@ -20,5 +20,6 @@ tstring GetConfigFilePath(HWND nppHandle);
 void loadOption(HWND nppHandle, bool &bPutCR, char &chIndent, int &nChPerInd);
 void loadDefaultOption(bool &bPutCR, char &chIndent, int &nChPerInd);
 
+void saveOption(HWND nppHandle, bool bPutCR, char chIndent, int nChPerInd);
 
 #endif
