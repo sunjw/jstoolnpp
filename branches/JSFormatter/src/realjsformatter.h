@@ -132,6 +132,7 @@ protected:
 	bool bBlockStmt; // block 真正开始了
 	// 使用栈是为了解决在判断条件中出现循环的问题
 	BoolStack brcNeedStack; // if 之类的后面的括号
+	bool bAssign; // 有一个等号
 
 	bool bCommentPut; // 刚刚输出了注释
 

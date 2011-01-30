@@ -47,7 +47,7 @@ void loadOption(HWND nppHandle, bool &bPutCR, char &chIndent, int &nChPerInd)
 			chIndent = ' ';
 	}
 
-	if(chIndent == ' ' && map.find(keyChPerInd) != itrEnd)
+	if(map.find(keyChPerInd) != itrEnd)
 	{
 		nChPerInd = atoi(map[keyChPerInd].GetStrValue().c_str());
 	}
@@ -69,16 +69,9 @@ void saveOption(HWND nppHandle, bool bPutCR, char chIndent, int nChPerInd)
 	
 	map[keyPutCR] = bPutCR ? string("1") : string("0");
 	map[keyChIndent] = chIndent == '\t' ? string("tab") : string("space");
-	if(chIndent == '\t')
-	{
-		map[keyChPerInd] = string("1");
-	}
-	else
-	{
-		char buffer[256];
-		itoa(nChPerInd, buffer, 10);
-		map[keyChPerInd] = string(buffer);
-	}
+	char buffer[256];
+	itoa(nChPerInd, buffer, 10);
+	map[keyChPerInd] = string(buffer);
 
 	processor.SetMap(map);
 

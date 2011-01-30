@@ -56,6 +56,7 @@ RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd):
 	nDoLikeBlock(0),
 	nSwitchBlock(0),
 	bBlockStmt(true),
+	bAssign(false),
 	bCommentPut(false),
 	chIndent('\t'),
 	nChPerInd(1),
@@ -76,6 +77,7 @@ RealJSFormatter::RealJSFormatter(bool bSkipCR, bool bPutCR):
 	nDoLikeBlock(0),
 	nSwitchBlock(0),
 	bBlockStmt(true),
+	bAssign(false),
 	bCommentPut(false),
 	chIndent('\t'),
 	nChPerInd(1)
@@ -94,6 +96,7 @@ RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd, bool bSkipCR, boo
 	nDoLikeBlock(0),
 	nSwitchBlock(0),
 	bBlockStmt(true),
+	bAssign(false),
 	bCommentPut(false)
 {
 	this->chIndent = chIndent;
@@ -430,6 +433,8 @@ void RealJSFormatter::PutString(const string& str)
 			int inds = nIndents;
 			if(str[i] == '{' || str[i] == ',' || str[i] == ';')
 				--inds;
+			if(bAssign)
+				++inds;
 			for(int c = 0; c < inds; ++c)
 				for(int c2 = 0; c2 < nChPerInd; ++c2)
 					PutChar(chIndent);
@@ -673,6 +678,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if((!tokenA.compare(")") && blockStack.top() == BRACKET) ||
 			(!tokenA.compare("]") && blockStack.top() == SQUARE))
 		{
+			bAssign = false;
 			// )] 需要弹栈，减少缩进
 			blockStack.pop();
 			--nIndents;
@@ -730,6 +736,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			
 	if(!tokenA.compare(";"))
 	{
+		bAssign = false;
 		char topStack = blockStack.top();
 		if(nIfLikeBlock || nDoLikeBlock)
 		{
@@ -772,6 +779,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 	if(!tokenA.compare(","))
 	{
+		bAssign = false;
 		if(blockStack.top() == BLOCK && !bHaveNewLine)
 			PutToken(tokenA, string(""), string("\n")); // 如果是 {} 里的
 		else if(bHaveNewLine && tokenBType != COMMENT_TYPE_1)
@@ -784,6 +792,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			
 	if(!tokenA.compare("{"))
 	{
+		bAssign = false;
 		char topStack = blockStack.top();
 		if((nIfLikeBlock || nDoLikeBlock || nSwitchBlock) && 
 			(topStack == IF || topStack == FOR || 
@@ -818,6 +827,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 	if(!tokenA.compare("}"))
 	{
+		bAssign = false;
 		char topStack = blockStack.top();
 
 		// 激进的策略，} 一直弹到 {
@@ -927,6 +937,9 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		return;
 	}
 
+	if(!tokenA.compare("="))
+		bAssign = true;
+
 	PutToken(tokenA, string(" "), string(" ")); // 剩余的操作符都是 空格oper空格
 }
 
@@ -967,7 +980,10 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	}
 
 	if(!tokenA.compare("function"))
+	{
+		bAssign = false;
 		blockStack.push(blockMap[tokenA]); // 把 function 也压入栈，遇到 } 弹掉
+	}
 
 	if(tokenBType == STRING_TYPE)
 	{

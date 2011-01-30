@@ -244,7 +244,11 @@ void jsFormat()
 
 	try
 	{
-		JSFormatString jsformat(pJS, &strJSFormat, chIndent, nChPerInd, bPutCR);
+		int _nChPerInd = nChPerInd;
+		if(chIndent == '\t')
+			_nChPerInd = 1;
+
+		JSFormatString jsformat(pJS, &strJSFormat, chIndent, _nChPerInd, bPutCR);
 		jsformat.Go();
 
 		//trim(pJSMin);
