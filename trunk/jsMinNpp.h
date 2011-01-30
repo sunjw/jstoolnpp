@@ -19,6 +19,7 @@
 #define NPP_TOOLS_H
 
 #include "resource.h"
+#include "utility.h"
 
 //#define IDD_ABOUTBOX 250
 //
@@ -32,9 +33,7 @@ HINSTANCE _hInst;
 NppData nppData;
 FuncItem funcItem[nbFunc];
 
-bool bPutCR; // 是否输出 \r\n
-char chIndent; // 缩进用的字符
-int nChPerInd; // 每个缩进使用几个字符
+StruOptions struOptions;
 
 void jsMinCurrent();
 void jsMinNew();

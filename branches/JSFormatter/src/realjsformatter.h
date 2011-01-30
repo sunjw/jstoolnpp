@@ -77,7 +77,7 @@ public:
 	RealJSFormatter();
 	RealJSFormatter(char chIndent, int nChPerInd);
 	RealJSFormatter(bool bSkipCR, bool bPutCR);
-	RealJSFormatter(char chIndent, int nChPerInd, bool bSkipCR, bool bPutCR);
+	RealJSFormatter(char chIndent, int nChPerInd, bool bSkipCR, bool bPutCR, bool bNLBracket);
 
 	void Go();
 
@@ -141,6 +141,8 @@ protected:
 
 	bool bSkipCR; // 读取时跳过 \r 
 	bool bPutCR; // 使用 \r\n 作为换行
+
+	bool bNLBracket; // { 之前是否换行
 };
 
 #endif

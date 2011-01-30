@@ -90,7 +90,7 @@ extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
 {
 	nppData = notpadPlusData;
 	// ‘ÿ»Î…Ë÷√
-	loadOption(nppData._nppHandle, bPutCR, chIndent, nChPerInd);
+	loadOption(nppData._nppHandle, struOptions);
 }
 
 extern "C" __declspec(dllexport) const TCHAR * getName()
@@ -184,7 +184,7 @@ void jsMin(bool bNewFile)
 
 	try
 	{
-		JSMinCharArray jsmin(pJS, pJSMin, bPutCR);
+		JSMinCharArray jsmin(pJS, pJSMin, struOptions.bPutCR);
 		jsmin.go();
 
 		trim(pJSMin);
@@ -244,11 +244,16 @@ void jsFormat()
 
 	try
 	{
-		int _nChPerInd = nChPerInd;
-		if(chIndent == '\t')
+		int _nChPerInd = struOptions.nChPerInd;
+		if(struOptions.chIndent == '\t')
 			_nChPerInd = 1;
 
-		JSFormatString jsformat(pJS, &strJSFormat, chIndent, _nChPerInd, bPutCR);
+		JSFormatString jsformat(pJS, 
+			&strJSFormat, 
+			struOptions.chIndent, 
+			_nChPerInd, 
+			struOptions.bPutCR, 
+			struOptions.bNLBracket);
 		jsformat.Go();
 
 		//trim(pJSMin);

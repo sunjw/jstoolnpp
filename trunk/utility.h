@@ -11,15 +11,24 @@ typedef wstring tstring;
 typedef string tstring;
 #endif
 
+struct StruOptions
+{
+	bool bPutCR; // 是否输出 \r\n
+	char chIndent; // 缩进用的字符
+	int nChPerInd; // 每个缩进使用几个字符
+	bool bNLBracket; // { 之前是否换行
+};
+
 const string keyPutCR("Put CR");
 const string keyChIndent("Indent char");
 const string keyChPerInd("Chars per indent");
+const string keyNLBracket("New line before {");
 
 tstring GetConfigFilePath(HWND nppHandle);
 
-void loadOption(HWND nppHandle, bool &bPutCR, char &chIndent, int &nChPerInd);
-void loadDefaultOption(bool &bPutCR, char &chIndent, int &nChPerInd);
+void loadOption(HWND nppHandle, StruOptions& struOptions);
+void loadDefaultOption(StruOptions& struOptions);
 
-void saveOption(HWND nppHandle, bool bPutCR, char chIndent, int nChPerInd);
+void saveOption(HWND nppHandle, StruOptions struOptions);
 
 #endif
