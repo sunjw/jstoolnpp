@@ -30,38 +30,19 @@ SOFTWARE.
 using namespace std;
 
 RealJSFormatter::RealJSFormatter():
-	bRegular(false),
-	bPosNeg(false),
-	nIndents(0),
-	bNewLine(false),
-	nIfLikeBlock(0),
-	nDoLikeBlock(0),
-	nSwitchBlock(0),
-	bBlockStmt(true),
-	bCommentPut(false),
 	chIndent('\t'),
 	nChPerInd(1),
 	bSkipCR(false),
-	bPutCR(false)
+	bPutCR(false),
+	bNLBracket(false)
 {
 	Init();
 }
 
 RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd):
-	bRegular(false),
-	bPosNeg(false),
-	nIndents(0),
-	bNewLine(false),
-	nIfLikeBlock(0),
-	nDoLikeBlock(0),
-	nSwitchBlock(0),
-	bBlockStmt(true),
-	bAssign(false),
-	bCommentPut(false),
-	chIndent('\t'),
-	nChPerInd(1),
 	bSkipCR(false),
-	bPutCR(false)
+	bPutCR(false),
+	bNLBracket(false)
 {
 	this->chIndent = chIndent;
 	this->nChPerInd = nChPerInd;
@@ -69,45 +50,38 @@ RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd):
 }
 
 RealJSFormatter::RealJSFormatter(bool bSkipCR, bool bPutCR):
-	bRegular(false),
-	bPosNeg(false),
-	nIndents(0),
-	bNewLine(false),
-	nIfLikeBlock(0),
-	nDoLikeBlock(0),
-	nSwitchBlock(0),
-	bBlockStmt(true),
-	bAssign(false),
-	bCommentPut(false),
 	chIndent('\t'),
-	nChPerInd(1)
+	nChPerInd(1),
+	bNLBracket(false)
 {
 	this->bSkipCR = bSkipCR;
 	this->bPutCR = bPutCR;
 	Init();
 }
 
-RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd, bool bSkipCR, bool bPutCR):
-	bRegular(false),
-	bPosNeg(false),
-	nIndents(0),
-	bNewLine(false),
-	nIfLikeBlock(0),
-	nDoLikeBlock(0),
-	nSwitchBlock(0),
-	bBlockStmt(true),
-	bAssign(false),
-	bCommentPut(false)
+RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd, bool bSkipCR, bool bPutCR, bool bNLBracket)
 {
 	this->chIndent = chIndent;
 	this->nChPerInd = nChPerInd;
 	this->bSkipCR = bSkipCR;
 	this->bPutCR = bPutCR;
+	this->bNLBracket = bNLBracket;
 	Init();
 }
 
 void RealJSFormatter::Init()
 {
+	bRegular = false;
+	bPosNeg = false;
+	nIndents = 0;
+	bNewLine = false;
+	nIfLikeBlock = 0;
+	nDoLikeBlock = 0;
+	nSwitchBlock = 0;
+	bBlockStmt = true;
+	bAssign = false;
+	bCommentPut = false;
+
 	blockMap[string("if")] = IF;
 	blockMap[string("else")] = ELSE;
 	blockMap[string("for")] = FOR;
@@ -423,7 +397,7 @@ void RealJSFormatter::PutString(const string& str)
 	for(size_t i = 0; i < length; ++i)
 	{
 		if(bNewLine && (bCommentPut || 
-			(str[i] != '{' && str[i] != ',' && str[i] != ';')))
+			((bNLBracket || str[i] != '{') && str[i] != ',' && str[i] != ';')))
 		{
 			// 换行后面不是紧跟着 {,; 才真正换
 			if(bPutCR)
@@ -431,7 +405,7 @@ void RealJSFormatter::PutString(const string& str)
 			PutChar('\n');
 			bNewLine = false;
 			int inds = nIndents;
-			if(str[i] == '{' || str[i] == ',' || str[i] == ';')
+			if(str[i] == '{' || str[i] == ',' || str[i] == ';') // 行结尾是注释，使得{,;不得不换行
 				--inds;
 			if(bAssign)
 				++inds;
@@ -441,7 +415,7 @@ void RealJSFormatter::PutString(const string& str)
 		}
 
 		if(bNewLine && !bCommentPut &&  
-			(str[i] == ',' || str[i] == ';' || str[i] == '{'))
+			((!bNLBracket && str[i] == '{') || str[i] == ',' || str[i] == ';'))
 			bNewLine = false;
 		//if(bNewLine && !bCommentPut && str[i] == '{')
 		//{
@@ -510,7 +484,7 @@ void RealJSFormatter::PrepareTokenB()
 		((nIfLikeBlock || nDoLikeBlock) && stackTop == '{' && !tokenA.compare("}")))
 	{*/
 	/*
-	 * 跳过 else, while, catch, { 之前的换行
+	 * 跳过 else, while, catch, ',', ';', ')', { 之前的换行
 	 * 如果最后读到的不是上面那几个，再把去掉的换行补上
 	 */
 	int c = 0;
@@ -521,9 +495,12 @@ void RealJSFormatter::PrepareTokenB()
 	}
 		
 	if(tokenB.compare("else") && tokenB.compare("while") && tokenB.compare("catch") && 
-		tokenB.compare(",") && tokenB.compare(";"))
+		tokenB.compare(",") && tokenB.compare(";") && tokenB.compare(")"))
 	{
 		// 将去掉的换行压入队列，先处理
+		 if(bNLBracket && !tokenB.compare("{"))
+			 return;
+
 		TokenAndType temp;
 		c = c > 2 ? 2 : c;
 		for(; c > 0; --c)
@@ -624,7 +601,8 @@ void RealJSFormatter::Go()
 		if(tokenBFirst == '\n' || tokenBType == COMMENT_TYPE_1)
 			bHaveNewLine = true;
 
-		if(!bBlockStmt && tokenA.compare("{") && tokenA.compare("\n"))
+		if(!bBlockStmt && tokenA.compare("{") && tokenA.compare("\n") 
+			&& tokenAType != COMMENT_TYPE_1 && tokenAType != COMMENT_TYPE_2)
 			bBlockStmt = true;
 
 		/* 
@@ -668,6 +646,8 @@ void RealJSFormatter::Go()
 
 void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char tokenBFirst)
 {
+	string strRight = bNLBracket ? string() : string(" ");
+
 	if(!tokenA.compare("(") || !tokenA.compare(")") || 
 		!tokenA.compare("[") || !tokenA.compare("]") ||
 		!tokenA.compare("!") || !tokenA.compare("!!") ||
@@ -690,8 +670,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		{
 			// 栈顶的 if, for, while, switch, catch 正在等待 )，之后换行增加缩进
 			// ) { 之间的空格在输出换行时会处理
-			// 这里的空格和下面的空格是留给 { 的
-			string rightDeco = tokenB.compare(";") ? string(" ") : string();
+			// 这里的空格和下面的空格是留给 { 的，bNLBracket 为 true 则不需要空格了
+			string rightDeco = tokenB.compare(";") ? strRight : string();
 			if(!bHaveNewLine)
 				rightDeco.append("\n"); 
 			PutToken(tokenA, string(""), rightDeco);
@@ -720,7 +700,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				++nIndents;
 		}
 		else if(!tokenA.compare(")") && (!tokenB.compare("{") || bHaveNewLine))
-			PutToken(tokenA, string(""), string(" ")); // 这里的空格也是留给 { 的
+			PutToken(tokenA, string(""), strRight); // 这里的空格也是留给 { 的
 		else
 			PutToken(tokenA); // 正常输出
 
@@ -782,8 +762,6 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		bAssign = false;
 		if(blockStack.top() == BLOCK && !bHaveNewLine)
 			PutToken(tokenA, string(""), string("\n")); // 如果是 {} 里的
-		else if(bHaveNewLine && tokenBType != COMMENT_TYPE_1)
-			PutToken(tokenA);
 		else
 			PutToken(tokenA, string(""), string(" "));
 
@@ -815,12 +793,13 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		blockStack.push(blockMap[tokenA]); // 入栈，增加缩进
 		++nIndents;
 
+		string strLeft = (bNLBracket && !bNewLine) ? string("\n") : string("");
 		if(!bHaveNewLine) // 需要换行
-			PutToken(tokenA, string(""), string("\n"));
+			PutToken(tokenA, strLeft, string("\n"));
 		else if(tokenBType == COMMENT_TYPE_1)
-			PutToken(tokenA, string(""), string(" "));
+			PutToken(tokenA, strLeft, string(" "));
 		else
-			PutToken(tokenA);
+			PutToken(tokenA, strLeft);
 
 		return;
 	}
@@ -903,13 +882,14 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if(!bNewLine)
 			leftStyle = "\n";
 
-		if((!bHaveNewLine && tokenBFirst != ';' && tokenBFirst != ',' && tokenBFirst != ')')
-			&& !(topStack == DO && !tokenB.compare("while")) && 
-			!(topStack == IF && !tokenB.compare("else")) &&
-			!(topStack == TRY && !tokenB.compare("catch")))
+		if((!bHaveNewLine && tokenBFirst != ';' && tokenBFirst != ',')
+			&& !(!bNLBracket && topStack == DO && !tokenB.compare("while")) && 
+			!(!bNLBracket && topStack == IF && !tokenB.compare("else")) &&
+			!(!bNLBracket && topStack == TRY && !tokenB.compare("catch")) &&
+			!(!bNLBracket && !tokenB.compare(")")))
 			PutToken(tokenA, leftStyle, string("\n")); // 一些情况换行
 		else if(tokenBType == STRING_TYPE || tokenBType == COMMENT_TYPE_1)
-			PutToken(tokenA, leftStyle, string(" ")); // 为 else 准备的空格
+			PutToken(tokenA, leftStyle, strRight); // 为 else 准备的空格
 		else
 			PutToken(tokenA, leftStyle); // }, }; })
 		// 注意 ) 不要在输出时仿照 ,; 取消前面的换行
@@ -968,7 +948,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		++nIndents; // 无需 ()，直接缩进
 		bBlockStmt = false; // 等待 block 内部的 statment
 				
-		if(tokenBType == STRING_TYPE)
+		if(tokenBType == STRING_TYPE || bNLBracket)
 		{
 			PutString(string("\n"));
 		}

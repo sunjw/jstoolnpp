@@ -901,6 +901,10 @@
 #define IDC_UNIXRADIO                   1004
 #define IDC_COUNT_EDIT                  1005
 #define IDC_COUNTEDIT                   1005
+#define IDC_STATIC_USE                  1006
+#define IDC_STATIC_SPACE                1007
+#define IDC_CHECK1                      1008
+#define IDC_NEWLINECHECK                1008
 #define CF_GDIOBJLAST                   0x03FF
 #define WM_USER                         0x0400
 #define WVR_VALIDRECTS                  0x0400
@@ -1213,7 +1217,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        102
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1006
+#define _APS_NEXT_CONTROL_VALUE         1009
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

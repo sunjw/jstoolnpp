@@ -21,9 +21,9 @@ tstring GetConfigFilePath(HWND nppHandle)
 	return strConfigFilePath;
 }
 
-void loadOption(HWND nppHandle, bool &bPutCR, char &chIndent, int &nChPerInd)
+void loadOption(HWND nppHandle, StruOptions& struOptions)
 {
-	loadDefaultOption(bPutCR, chIndent, nChPerInd);
+	loadDefaultOption(struOptions);
 	tstring tsConfigFilePath = GetConfigFilePath(nppHandle);
 
 	IniFileProcessor processor(tsConfigFilePath);
@@ -35,43 +35,51 @@ void loadOption(HWND nppHandle, bool &bPutCR, char &chIndent, int &nChPerInd)
 	if(map.find(keyPutCR) != itrEnd)
 	{
 		if(!map[keyPutCR].GetStrValue().compare("0"))
-			bPutCR = false;
+			struOptions.bPutCR = false;
 	}
 
 	if(map.find(keyChIndent) != itrEnd)
 	{
 		string strIndent = map[keyChIndent].GetStrValue();
 		if(!strIndent.compare("tab"))
-			chIndent = '\t';
+			struOptions.chIndent = '\t';
 		else if(!strIndent.compare("space"))
-			chIndent = ' ';
+			struOptions.chIndent = ' ';
 	}
 
 	if(map.find(keyChPerInd) != itrEnd)
 	{
-		nChPerInd = atoi(map[keyChPerInd].GetStrValue().c_str());
+		struOptions.nChPerInd = atoi(map[keyChPerInd].GetStrValue().c_str());
+	}
+
+	if(map.find(keyNLBracket) != itrEnd)
+	{
+		if(!map[keyNLBracket].GetStrValue().compare("1"))
+			struOptions.bNLBracket = true;
 	}
 }
 
-void loadDefaultOption(bool &bPutCR, char &chIndent, int &nChPerInd)
+void loadDefaultOption(StruOptions& struOptions)
 {
-	bPutCR = true;
-	chIndent = '\t';
-	nChPerInd = 1;
+	struOptions.bPutCR = true;
+	struOptions.chIndent = '\t';
+	struOptions.nChPerInd = 1;
+	struOptions.bNLBracket = false;
 }
 
-void saveOption(HWND nppHandle, bool bPutCR, char chIndent, int nChPerInd)
+void saveOption(HWND nppHandle, StruOptions struOptions)
 {
 	tstring tsConfigFilePath = GetConfigFilePath(nppHandle);
 
 	IniFileProcessor processor(tsConfigFilePath);
 	IniFileProcessor::IniMap map;
 	
-	map[keyPutCR] = bPutCR ? string("1") : string("0");
-	map[keyChIndent] = chIndent == '\t' ? string("tab") : string("space");
+	map[keyPutCR] = struOptions.bPutCR ? string("1") : string("0");
+	map[keyChIndent] = struOptions.chIndent == '\t' ? string("tab") : string("space");
 	char buffer[256];
-	itoa(nChPerInd, buffer, 10);
+	itoa(struOptions.nChPerInd, buffer, 10);
 	map[keyChPerInd] = string(buffer);
+	map[keyNLBracket] = struOptions.bNLBracket ? string("1") : string("0");
 
 	processor.SetMap(map);
 

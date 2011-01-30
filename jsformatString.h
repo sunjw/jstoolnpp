@@ -14,7 +14,8 @@ public:
 				string* output,
 				char chIndent,
 				int nChPerInd,
-				bool bPutCR);
+				bool bPutCR,
+				bool bNLBracket);
 
 private:
 	string in;

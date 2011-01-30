@@ -2,10 +2,9 @@
 #define _OPTIONS_DLG_H_
 #include "PluginInterface.h"
 #include "menuCmdID.h"
+#include "utility.h"
 
-extern bool bPutCR;
-extern char chIndent;
-extern int nChPerInd;
+extern StruOptions struOptions;
 extern NppData nppData;
 
 BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);

@@ -4,8 +4,9 @@ JSFormatString::JSFormatString(const char* input,
 				string* output,
 				char chIndent,
 				int nChPerInd,
-				bool bPutCR)
-		:RealJSFormatter(chIndent, nChPerInd, true, bPutCR), 
+				bool bPutCR,
+				bool bNLBracket)
+		:RealJSFormatter(chIndent, nChPerInd, true, bPutCR, bNLBracket), 
 		in(), out(output), getPos(0), putPos(0)
 {
 	in.append(input);
