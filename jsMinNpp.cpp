@@ -49,7 +49,8 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[6]._pFunc = NULL;
 
 			funcItem[7]._pFunc = checkUpdate;
-			funcItem[8]._pFunc = about;
+			funcItem[8]._pFunc = donate;
+			funcItem[9]._pFunc = about;
 
 			lstrcpy(funcItem[0]._itemName, TEXT("JS&Min"));
 			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (&New file)"));
@@ -62,7 +63,8 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			lstrcpy(funcItem[6]._itemName, TEXT("-SEPARATOR-"));
 
 			lstrcpy(funcItem[7]._itemName, TEXT("&Check for update..."));
-			lstrcpy(funcItem[8]._itemName, TEXT("&About"));
+			lstrcpy(funcItem[8]._itemName, TEXT("&Donate"));
+			lstrcpy(funcItem[9]._itemName, TEXT("&About"));
 
 			for(int i = 0; i < nbFunc; ++i)
 			{
@@ -292,6 +294,11 @@ void checkUpdate()
 	url.append(version);
 
 	ShellExecute(NULL, TEXT("open"), url.c_str(), NULL, NULL, SW_SHOW);
+}
+
+void donate()
+{
+	ShellExecute(NULL, TEXT("open"), TEXT(DONATION), NULL, NULL, SW_SHOW);
 }
 
 void about()

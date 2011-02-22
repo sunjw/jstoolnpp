@@ -475,6 +475,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\ChangeLog"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

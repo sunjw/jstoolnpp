@@ -18,6 +18,8 @@
 #ifndef NPP_TOOLS_H
 #define NPP_TOOLS_H
 
+#pragma warning(disable:4005)
+
 #include "resource.h"
 #include "utility.h"
 
@@ -27,7 +29,7 @@
 //#define IDC_STATIC -1
 //#endif
 
-const int nbFunc = 9;
+const int nbFunc = 10;
 
 HINSTANCE _hInst;
 NppData nppData;
@@ -43,6 +45,7 @@ void jsFormat();
 void options();
 
 void checkUpdate();
+void donate();
 void about();
 
 #endif //NPP_TOOLS_H
