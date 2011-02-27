@@ -948,7 +948,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		++nIndents; // 无需 ()，直接缩进
 		bBlockStmt = false; // 等待 block 内部的 statment
 				
-		if(tokenBType == STRING_TYPE || bNLBracket)
+		if((tokenBType == STRING_TYPE || bNLBracket) && !bHaveNewLine)
 		{
 			PutString(string("\n"));
 		}

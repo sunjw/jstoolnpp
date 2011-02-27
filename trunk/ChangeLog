@@ -1,9 +1,15 @@
+1.7 (since 1.6.1)
+Fixed bugs.
+Formatting algorithm now follows JSLint rules.
+Added a new option dialog.
+Some minor changes.
+
 1.6.11 beta
-Add donation
+Added donation.
 
 1.6.10 beta
 Fixed bugs in formatting algorithm.
-Add an Option dialog.
+Added an Option dialog.
 Some minor changes.
 
 1.6.5 beta
@@ -18,7 +24,7 @@ Formatting javascript code.
 
 1.05
 Fixed some bugs.
-Add a menu item which can put minimized javascript code in a new file.
+Added a menu item which can put minimized javascript code in a new file.
 
 1.01
 Fixed a bug.
