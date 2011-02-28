@@ -80,6 +80,7 @@ void RealJSFormatter::Init()
 	nSwitchBlock = 0;
 	bBlockStmt = true;
 	bAssign = false;
+	bEmptyBracket = false;
 	bCommentPut = false;
 
 	blockMap[string("if")] = IF;
@@ -498,8 +499,11 @@ void RealJSFormatter::PrepareTokenB()
 		tokenB.compare(",") && tokenB.compare(";") && tokenB.compare(")"))
 	{
 		// 将去掉的换行压入队列，先处理
-		 if(bNLBracket && !tokenB.compare("{"))
-			 return;
+		if(bNLBracket && !tokenB.compare("{"))
+			return;
+
+		if(!tokenA.compare("{") && !tokenB.compare("}"))
+			return; // 空 {}
 
 		TokenAndType temp;
 		c = c > 2 ? 2 : c;
@@ -793,13 +797,32 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		blockStack.push(blockMap[tokenA]); // 入栈，增加缩进
 		++nIndents;
 
-		string strLeft = (bNLBracket && !bNewLine) ? string("\n") : string("");
-		if(!bHaveNewLine) // 需要换行
-			PutToken(tokenA, strLeft, string("\n"));
-		else if(tokenBType == COMMENT_TYPE_1)
-			PutToken(tokenA, strLeft, string(" "));
+		if(!tokenB.compare("}"))
+		{
+			// 空 {}
+			bEmptyBracket = true;
+			if(bNewLine == false && bNLBracket && 
+				(topStack == IF || topStack == FOR || 
+				topStack == WHILE || topStack == SWITCH ||
+				topStack == CATCH || topStack == FUNCTION))
+			{
+				PutToken(tokenA, string(" "));
+			}
+			else
+			{
+				PutToken(tokenA);
+			}
+		}
 		else
-			PutToken(tokenA, strLeft);
+		{
+			string strLeft = (bNLBracket && !bNewLine) ? string("\n") : string("");
+			if(!bHaveNewLine) // 需要换行
+				PutToken(tokenA, strLeft, string("\n"));
+			else if(tokenBType == COMMENT_TYPE_1)
+				PutToken(tokenA, strLeft, string(" "));
+			else
+				PutToken(tokenA, strLeft);
+		}
 
 		return;
 	}
@@ -881,6 +904,12 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		string leftStyle("");
 		if(!bNewLine)
 			leftStyle = "\n";
+		if(bEmptyBracket)
+		{
+			leftStyle = "";
+			strRight = "\n";
+			bEmptyBracket = false;
+		}
 
 		if((!bHaveNewLine && tokenBFirst != ';' && tokenBFirst != ',')
 			&& !(!bNLBracket && topStack == DO && !tokenB.compare("while")) && 
