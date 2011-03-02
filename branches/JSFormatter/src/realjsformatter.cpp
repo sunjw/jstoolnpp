@@ -281,7 +281,7 @@ void RealJSFormatter::GetToken(bool init)
 				bNum = IsNumChar(charA);
 				bFirst = false;
 			}
-			if(bNumOld && !bNum && charA == 'e' && 
+			if(bNumOld && !bNum && (charA == 'e' || charA == 'E') && 
 				(charB == '-' || charB == '+' || IsNumChar(charB)))
 			{
 				bNum = true;
@@ -797,6 +797,11 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		blockStack.push(blockMap[tokenA]); // 入栈，增加缩进
 		++nIndents;
 
+		/*
+		 * { 之间的空格都是由之前的符号准备好的
+		 * 这是为了解决 { 在新行时，前面会多一个空格的问题
+		 * 因为算法只能向后，不能向前看
+		 */
 		if(!tokenB.compare("}"))
 		{
 			// 空 {}
@@ -806,7 +811,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				topStack == WHILE || topStack == SWITCH ||
 				topStack == CATCH || topStack == FUNCTION))
 			{
-				PutToken(tokenA, string(" "));
+				PutToken(tokenA, string(" ")); // 这些情况下，前面补一个空格
 			}
 			else
 			{
@@ -1003,8 +1008,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	}
 	else
 	{
-		if(specKeywordSet.find(tokenA) != specKeywordSet.end() &&
-			!tokenB.compare("("))
+		if(specKeywordSet.find(tokenA) != specKeywordSet.end())
 			PutToken(tokenA, string(""), string(" "));
 		else
 			PutToken(tokenA);
