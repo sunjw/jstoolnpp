@@ -110,40 +110,40 @@ protected:
 	void PrepareTokenB();
 	void PopMultiBlock(char previousStackTop);
 
-	bool bRegular; // tokenB 实际是正则 GetToken 用到的两个成员状态
-	bool bPosNeg; // tokenB 实际是正负数
-	int charA;
-	int charB;
-	int tokenAType;
-	int tokenBType;
-	string tokenA;
-	string tokenB;
-	TokenQueue tokenBQueue;
+	bool m_bRegular; // tokenB 实际是正则 GetToken 用到的两个成员状态
+	bool m_bPosNeg; // tokenB 实际是正负数
+	int m_charA;
+	int m_charB;
+	int m_tokenAType;
+	int m_tokenBType;
+	string m_tokenA;
+	string m_tokenB;
+	TokenQueue m_tokenBQueue;
 
-	StrSet specKeywordSet; // 后面要跟着括号的关键字集合
-	StrCharMap blockMap;
-	CharStack blockStack; 
-	int nIndents; // 缩进数量，不用计算 blockStack，效果不好
+	StrSet m_specKeywordSet; // 后面要跟着括号的关键字集合
+	StrCharMap m_blockMap;
+	CharStack m_blockStack; 
+	int m_nIndents; // 缩进数量，不用计算 blockStack，效果不好
 
-	bool bNewLine; // 准备换行的标志
-	int nIfLikeBlock; // if, for, while, else if
-	int nDoLikeBlock; // do, else
-	int nSwitchBlock; // switch
-	bool bBlockStmt; // block 真正开始了
+	bool m_bNewLine; // 准备换行的标志
+	int m_nIfLikeBlock; // if, for, while, else if
+	int m_nDoLikeBlock; // do, else
+	int m_nSwitchBlock; // switch
+	bool m_bBlockStmt; // block 真正开始了
 	// 使用栈是为了解决在判断条件中出现循环的问题
-	BoolStack brcNeedStack; // if 之类的后面的括号
-	bool bAssign; // 有一个等号
-	bool bEmptyBracket; // 空 {}
+	BoolStack m_brcNeedStack; // if 之类的后面的括号
+	bool m_bAssign; // 有一个等号
+	bool m_bEmptyBracket; // 空 {}
 
-	bool bCommentPut; // 刚刚输出了注释
+	bool m_bCommentPut; // 刚刚输出了注释
 
-	char chIndent; // 作为缩进的字符
-	int nChPerInd; // 每个缩进缩进字符个数
+	char m_chIndent; // 作为缩进的字符
+	int m_nChPerInd; // 每个缩进缩进字符个数
 
-	bool bSkipCR; // 读取时跳过 \r 
-	bool bPutCR; // 使用 \r\n 作为换行
+	bool m_bSkipCR; // 读取时跳过 \r 
+	bool m_bPutCR; // 使用 \r\n 作为换行
 
-	bool bNLBracket; // { 之前是否换行
+	bool m_bNLBracket; // { 之前是否换行
 };
 
 #endif
