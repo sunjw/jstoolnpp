@@ -182,7 +182,7 @@ void RealJSFormatter::GetToken(bool init)
 	bool bComment = false;
 	bool bFirst = true;
 	bool bNum = false; // 是不是数字
-	bool bLineBegin = true;
+	bool bLineBegin = false;
 	char chQuote; // 记录引号类型 ' 或 "
 	char chComment; // 注释类型 / 或 *
 
@@ -214,7 +214,7 @@ void RealJSFormatter::GetToken(bool init)
 				m_charB = GetChar();
 			}
 
-			if(m_charA == '/') // 引号结束
+			if(m_charA == '/') // 正则结束
 			{
 				m_bRegular = false;
 				return;
@@ -285,7 +285,7 @@ void RealJSFormatter::GetToken(bool init)
 			m_tokenBType = STRING_TYPE;
 			m_tokenB.push_back(m_charA);
 			
-			// 解决类似 82e-2 442e+6 的问题
+			// 解决类似 82e-2, 442e+6, 555E-6 的问题
 			// 因为这是立即数，所以只能符合以下的表达形式
 			bool bNumOld = bNum;
 			if(bFirst || bNumOld) // 只有之前是数字才改变状态
@@ -417,6 +417,7 @@ void RealJSFormatter::PutString(const string& str)
 				PutChar('\r');
 			PutChar('\n');
 			m_bNewLine = false;
+			m_nIndents = m_nIndents < 0 ? 0 : m_nIndents; // 出错修正
 			int inds = m_nIndents;
 			if(str[i] == '{' || str[i] == ',' || str[i] == ';') // 行结尾是注释，使得{,;不得不换行
 				--inds;
@@ -609,7 +610,7 @@ void RealJSFormatter::Go()
 			m_tokenBType = temp.type;
 		}
 
-		bHaveNewLine = false;
+		bHaveNewLine = false; // bHaveNewLine 表示后面将要换行，m_bNewLine 表示已经换行了
 		tokenAFirst = m_tokenA[0];
 		tokenBFirst = m_tokenB[0];
 		if(tokenBFirst == '\r')
@@ -680,12 +681,14 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			--m_nIndents;
 		}
 
+		if(!m_tokenA.compare("["))
+			m_bAssign = false;
+
 		if(!m_tokenA.compare(")") && (m_nIfLikeBlock || m_nSwitchBlock) && !m_brcNeedStack.top() &&
 			(m_blockStack.top() == IF || m_blockStack.top() == FOR || m_blockStack.top() == WHILE ||
 			m_blockStack.top() == SWITCH || m_blockStack.top() == CATCH)) 
 		{
 			// 栈顶的 if, for, while, switch, catch 正在等待 )，之后换行增加缩进
-			// ) { 之间的空格在输出换行时会处理
 			// 这里的空格和下面的空格是留给 { 的，m_bNLBracket 为 true 则不需要空格了
 			string rightDeco = m_tokenB.compare(";") ? strRight : string();
 			if(!bHaveNewLine)
@@ -802,7 +805,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			}
 			else
 			{
-				m_blockStack.push(HELPER); // 压入一个 HELPER 帮助判断
+				m_blockStack.push(HELPER); // 压入一个 HELPER 统一状态
 			}
 		}	
 
@@ -971,7 +974,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char tokenBFirst)
 {
-	if((!m_tokenA.compare("case") || !m_tokenA.compare("default")) && m_bNewLine)
+	if(!m_tokenA.compare("case") || !m_tokenA.compare("default"))
 	{
 		// case, default 往里面缩一格
 		--m_nIndents;
@@ -1017,35 +1020,34 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 
 		//if(m_blockStack.top() != 't' && IsType(m_tokenA))
 			//m_blockStack.push('t'); // 声明变量
+		return;
 	}
+
+	if(m_specKeywordSet.find(m_tokenA) != m_specKeywordSet.end())
+		PutToken(m_tokenA, string(""), string(" "));
 	else
+		PutToken(m_tokenA);
+
+	if(!m_tokenA.compare("if") || !m_tokenA.compare("for") || 
+		!m_tokenA.compare("while") || !m_tokenA.compare("catch"))
 	{
-		if(m_specKeywordSet.find(m_tokenA) != m_specKeywordSet.end())
-			PutToken(m_tokenA, string(""), string(" "));
-		else
-			PutToken(m_tokenA);
+		++m_nIfLikeBlock;
+		//bBracket = false; // 等待 ()，() 到来后才能加缩进
+		m_brcNeedStack.push(false);
+		//if(m_tokenA.compare("catch"))
+		//	m_blockStack.push(m_tokenA[0]);
+		//else
+		//	m_blockStack.push('h');
+		m_blockStack.push(m_blockMap[m_tokenA]);
 
-		if(!m_tokenA.compare("if") || !m_tokenA.compare("for") || 
-			!m_tokenA.compare("while") || !m_tokenA.compare("catch"))
-		{
-			++m_nIfLikeBlock;
-			//bBracket = false; // 等待 ()，() 到来后才能加缩进
-			m_brcNeedStack.push(false);
-			//if(m_tokenA.compare("catch"))
-			//	m_blockStack.push(m_tokenA[0]);
-			//else
-			//	m_blockStack.push('h');
-			m_blockStack.push(m_blockMap[m_tokenA]);
+	}
 
-		}
-
-		if(!m_tokenA.compare("switch"))
-		{
-			++m_nSwitchBlock;
-			//bBracket = false;
-			m_brcNeedStack.push(false);
-			m_blockStack.push(m_blockMap[m_tokenA]);
-		}
+	if(!m_tokenA.compare("switch"))
+	{
+		++m_nSwitchBlock;
+		//bBracket = false;
+		m_brcNeedStack.push(false);
+		m_blockStack.push(m_blockMap[m_tokenA]);
 	}
 }
 
