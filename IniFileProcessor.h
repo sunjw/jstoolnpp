@@ -1,60 +1,41 @@
 /*
  * IniFileProcessor class header file
  * Author: Sun Junwen
- * Version: 1.2
+ * Version: 1.0
  */
 #ifndef _INI_FILE_PROCESSOR_H_
 #define _INI_FILE_PROCESSOR_H_
 
-#include <cstdlib>
-#include <string>
-#include <map>
-
-#include "IniValue.h"
+#include "strconvert.h"
+#include "IniProcessor.h"
 
 using namespace std;
 
-class IniFileProcessor
+class IniFileProcessor: public IniProcessor
 {
 public:
-	#if defined(UNICODE) || defined(_UNICODE)
-	typedef wstring tstring;
-	#else
-	typedef string tstring;
-	#endif
-	typedef map<string, IniValue> IniMap;
-
 	/*
 	 * Constructor
 	 * Specific the ini file name
 	 */
 	IniFileProcessor(tstring fileName)
-		:strFileName(fileName)
-	{}
+	{
+		#if defined(UNICODE) || defined(_UNICODE)
+		m_strFileName = wstrtostr(fileName);
+		#else
+		m_strFileName = fileName;
+		#endif
+	}
 
-	// Get info from file
+	virtual void Save();
+
 	inline IniMap GetInfo(bool bSection)
 	{ return GetInfo(bSection, true); }
-	IniMap GetInfo(bool bProcSection, bool bRefresh);
 
-	// Set value into map
-	void SetMap(const IniMap& map)
-	{ iniMap = map; }
-
-	// Save value into file
-	void Save();
-
-	// Convert value to string
-	inline string ToString() const
-	{ return ToString(iniMap); }
-	string ToString(IniMap map) const;
+	IniProcessor::IniMap GetInfo(bool bProcSection, bool bRefresh);
 
 private:
-	tstring strFileName;
-	IniMap iniMap;
-
-	// Add a section to map
-	void AddSection(const string& sectionName, const IniValue::StrMap& sectionMap);
+	string m_strFileName;
 };
 
 #endif
