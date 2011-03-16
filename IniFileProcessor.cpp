@@ -26,7 +26,5 @@ void IniFileProcessor::Save()
 IniProcessor::IniMap IniFileProcessor::GetInfo(bool bProcSection, bool bRefresh)
 {
 	ifstream m_in(m_strFileName.c_str());
-	IniProcessor::IniMap mapRet;
-	mapRet = IniProcessor::GetInfo(m_in, bProcSection, bRefresh);
-	return mapRet;
+	return IniProcessor::GetInfo(m_in, bProcSection, bRefresh);
 }
