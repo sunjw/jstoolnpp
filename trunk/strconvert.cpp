@@ -22,10 +22,11 @@ std::wstring strtowstrutf8(const std::string &str)
 std::string wstrtostr(const std::wstring &wstr)
 {
     // Convert a Unicode string to an ASCII string
+	size_t strLen = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), (int)wstr.length(), NULL, 0, NULL, NULL);
     std::string strTo;
-    char *szTo = new char[wstr.length() + 1];
-    szTo[wstr.size()] = '\0';
-    WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, szTo, (int)wstr.length(), NULL, NULL);
+    char *szTo = new char[strLen + 1];
+    szTo[strLen] = '\0';
+    WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), -1, szTo, (int)strLen, NULL, NULL);
     strTo = szTo;
     delete[] szTo;
     return strTo;
