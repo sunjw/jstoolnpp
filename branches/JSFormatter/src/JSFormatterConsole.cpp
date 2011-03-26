@@ -10,12 +10,6 @@
 
 using namespace std;
 
-inline string trim(string& str)
-{
-	std::string ret = str.erase(str.find_last_not_of(" \r\n\t") + 1);
-	return ret.erase(0, ret.find_first_not_of(" \r\n\t"));
-}
-
 int main(int argc, char* argv[])
 {
 	if(argc == 3)
@@ -34,7 +28,6 @@ int main(int argc, char* argv[])
 			jsf.Go();
 
 			string output = outStrStream.str();
-			output = trim(output);
 			
 			// 输出到文件
 			outFileStream << output;
