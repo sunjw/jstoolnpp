@@ -765,7 +765,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				++m_nIndents;
 		}
 		else if(!m_tokenA.compare(")") && (!m_tokenB.compare("{") || bHaveNewLine))
-			PutToken(m_tokenA, string(""), strRight); // 这里的空格也是留给 { 的
+			PutToken(m_tokenA, string(""), strRight); // { 或者换行之前留个空格
 		else
 			PutToken(m_tokenA); // 正常输出
 
@@ -833,7 +833,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		else
 			PutToken(m_tokenA);
 
-		return;
+		return; // ;
 	}
 
 	if(!m_tokenA.compare(","))
@@ -848,7 +848,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		else
 			PutToken(m_tokenA, string(""), strRight);
 
-		return;
+		return; // ,
 	}
 			
 	if(!m_tokenA.compare("{"))
@@ -902,13 +902,11 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			string strLeft = (m_bNLBracket && !m_bNewLine) ? string("\n") : string("");
 			if(!bHaveNewLine) // 需要换行
 				PutToken(m_tokenA, strLeft, strRight.append("\n"));
-			else if(m_tokenBType == COMMENT_TYPE_1)
-				PutToken(m_tokenA, strLeft, strRight);
 			else
-				PutToken(m_tokenA, strLeft);
+				PutToken(m_tokenA, strLeft, strRight);
 		}
 
-		return;
+		return; // {
 	}
 
 	if(!m_tokenA.compare("}"))
@@ -1014,7 +1012,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 		PopMultiBlock(topStack);
 
-		return;
+		return; // }
 	}
 
 	if(!m_tokenA.compare("++") || !m_tokenA.compare("--") || 
@@ -1072,15 +1070,11 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		m_blockStack.push(m_blockMap[m_tokenA]);
 		++m_nIndents; // 无需 ()，直接缩进
 		m_bBlockStmt = false; // 等待 block 内部的 statment
-				
+			
+		PutString(string(" "));
 		if((m_tokenBType == STRING_TYPE || m_bNLBracket) && !bHaveNewLine)
-		{
 			PutString(string("\n"));
-		}
-		else
-		{
-			PutString(string(" "));
-		}
+
 		return;
 	}
 
