@@ -452,7 +452,7 @@ void RealJSFormatter::PutLineBuffer()
 	string line;
 	for(int c = 0; c < m_nLineIndents; ++c)
 		for(int c2 = 0; c2 < m_nChPerInd; ++c2)
-			line += m_chIndent;
+			PutChar(m_chIndent);
 	
 	line.append(TrimRightSpace(m_lineBuffer));
 	if(m_bPutCR)
@@ -489,7 +489,7 @@ void RealJSFormatter::PrepareRegular()
 	 * 而且 m_tokenA 的最后一个字符是下面这些
 	*/
 	size_t last = m_tokenA.size() > 0 ? m_tokenA.size() - 1 : 0;
-	char tokenALast = m_tokenA[last];
+	char tokenALast = m_tokenA.size() > 0 ? m_tokenA[m_tokenA.size() - 1] : 0;
 	char tokenBFirst = m_tokenB[0];
 	if(m_tokenBType != COMMENT_TYPE_1 && m_tokenBType != COMMENT_TYPE_2 && 
 		(m_tokenAType != STRING_TYPE && tokenBFirst == '/' && 
@@ -515,7 +515,7 @@ void RealJSFormatter::PreparePosNeg()
 	 * 那么 m_tokenB 实际上是一个正负数
 	 */
 	if(m_tokenBType == OPER_TYPE && (!m_tokenB.compare("-") || !m_tokenB.compare("+")) && 
-		m_tokenAType != STRING_TYPE && m_tokenAType != REGULAR_TYPE &&
+		(m_tokenAType != STRING_TYPE || m_tokenB.compare("return")) && m_tokenAType != REGULAR_TYPE &&
 		m_tokenA.compare("++") && m_tokenA.compare("--") && 
 		m_tokenA.compare("]") && m_tokenA.compare(")") && 
 		IsNormalChar(m_charB))
@@ -648,7 +648,7 @@ void RealJSFormatter::Go()
 
 		bHaveNewLine = false; // bHaveNewLine 表示后面将要换行，m_bNewLine 表示已经换行了
 		tokenAFirst = m_tokenA[0];
-		tokenBFirst = m_tokenB[0];
+		tokenBFirst = m_tokenB.size() ? m_tokenB[0] : 0;
 		if(tokenBFirst == '\r')
 			tokenBFirst = '\n';
 		if(tokenBFirst == '\n' || m_tokenBType == COMMENT_TYPE_1)
@@ -703,7 +703,7 @@ void RealJSFormatter::Go()
 void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char tokenBFirst)
 {
 	char topStack = m_blockStack.top();
-	string strRight = m_bNLBracket ? string() : string(" ");
+	string strRight(" ");
 
 	if(!m_tokenA.compare("(") || !m_tokenA.compare(")") || 
 		!m_tokenA.compare("[") || !m_tokenA.compare("]") ||
@@ -736,7 +736,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		{
 			// 栈顶的 if, for, while, switch, catch 正在等待 )，之后换行增加缩进
 			// 这里的空格和下面的空格是留给 { 的，m_bNLBracket 为 true 则不需要空格了
-			string rightDeco = m_tokenB.compare(";") ? strRight : string();
+			string rightDeco = strRight;
 			if(!bHaveNewLine)
 				rightDeco.append("\n"); 
 			PutToken(m_tokenA, string(""), rightDeco);
@@ -827,9 +827,9 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 		topStack = m_blockStack.top();
 		if(topStack != BRACKET && !bHaveNewLine)
-			PutToken(m_tokenA, string(""), string("\n")); // 如果不是 () 里的 ; 就换行
+			PutToken(m_tokenA, string(""), strRight.append("\n")); // 如果不是 () 里的 ; 就换行
 		else if(topStack == BRACKET || m_tokenBType == COMMENT_TYPE_1)
-			PutToken(m_tokenA, string(""), string(" ")); // (; ) 空格
+			PutToken(m_tokenA, string(""), strRight); // (; ) 空格
 		else
 			PutToken(m_tokenA);
 
@@ -844,9 +844,9 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			m_blockStack.pop();
 		}
 		if(m_blockStack.top() == BLOCK && !bHaveNewLine)
-			PutToken(m_tokenA, string(""), string("\n")); // 如果是 {} 里的
+			PutToken(m_tokenA, string(""), strRight.append("\n")); // 如果是 {} 里的
 		else
-			PutToken(m_tokenA, string(""), string(" "));
+			PutToken(m_tokenA, string(""), strRight);
 
 		return;
 	}
@@ -901,9 +901,9 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		{
 			string strLeft = (m_bNLBracket && !m_bNewLine) ? string("\n") : string("");
 			if(!bHaveNewLine) // 需要换行
-				PutToken(m_tokenA, strLeft, string("\n"));
+				PutToken(m_tokenA, strLeft, strRight.append("\n"));
 			else if(m_tokenBType == COMMENT_TYPE_1)
-				PutToken(m_tokenA, strLeft, string(" "));
+				PutToken(m_tokenA, strLeft, strRight);
 			else
 				PutToken(m_tokenA, strLeft);
 		}
@@ -996,7 +996,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if(m_bEmptyBracket)
 		{
 			leftStyle = "";
-			strRight = "\n";
+			strRight.append("\n");
 			m_bEmptyBracket = false;
 		}
 
@@ -1005,7 +1005,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			!(!m_bNLBracket && topStack == IF && !m_tokenB.compare("else")) &&
 			!(!m_bNLBracket && topStack == TRY && !m_tokenB.compare("catch")) &&
 			!(!m_bNLBracket && !m_tokenB.compare(")")))
-			PutToken(m_tokenA, leftStyle, string("\n")); // 一些情况换行
+			PutToken(m_tokenA, leftStyle, strRight.append("\n")); // 一些情况换行
 		else if(m_tokenBType == STRING_TYPE || m_tokenBType == COMMENT_TYPE_1)
 			PutToken(m_tokenA, leftStyle, strRight); // 为 else 准备的空格
 		else
@@ -1028,9 +1028,9 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 	{
 		// case, default
 		if(!bHaveNewLine)
-			PutToken(m_tokenA, string(""), string(" \n"));
+			PutToken(m_tokenA, string(""), strRight.append("\n"));
 		else
-			PutToken(m_tokenA, string(""), string(" "));
+			PutToken(m_tokenA, string(""), strRight);
 		m_blockStack.pop();
 		return;
 	}
