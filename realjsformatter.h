@@ -54,6 +54,7 @@ using namespace std;
 #define TRY 'r'
 #define CATCH 'h'
 #define FUNCTION 'n'
+#define ASSIGN '='
 #define BLOCK '{'
 #define BRACKET '('
 #define SQUARE '['
@@ -81,6 +82,10 @@ public:
 
 	void Go();
 
+	static string Trim(string& str);
+	static string TrimSpace(string& str);
+	static string TrimRightSpace(string& str);
+
 protected:
 	void Init();
 
@@ -96,6 +101,7 @@ protected:
 		const string& leftStyle = string(""), 
 		const string& rightStyle = string("")); // Put a token out with style
 	void PutString(const string& str);
+	void PutLineBuffer();
 
 	bool inline IsNormalChar(int ch);
 	bool inline IsNumChar(int ch);
@@ -120,6 +126,9 @@ protected:
 	string m_tokenB;
 	TokenQueue m_tokenBQueue;
 
+	int m_nLineIndents;
+	string m_lineBuffer;
+
 	StrSet m_specKeywordSet; // 后面要跟着括号的关键字集合
 	StrCharMap m_blockMap;
 	CharStack m_blockStack; 
@@ -132,7 +141,7 @@ protected:
 	bool m_bBlockStmt; // block 真正开始了
 	// 使用栈是为了解决在判断条件中出现循环的问题
 	BoolStack m_brcNeedStack; // if 之类的后面的括号
-	bool m_bAssign; // 有一个等号
+	bool m_bAssign;
 	bool m_bEmptyBracket; // 空 {}
 
 	bool m_bCommentPut; // 刚刚输出了注释
