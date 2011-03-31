@@ -363,6 +363,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IniProcessor.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IniValue.h"
 				>
 			</File>
@@ -411,6 +415,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\strconvert.h"
+				>
+			</File>
+			<File
 				RelativePath=".\utility.h"
 				>
 			</File>
@@ -443,6 +451,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IniProcessor.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\IniValue.cpp"
 				>
 			</File>
@@ -468,6 +480,10 @@
 			</File>
 			<File
 				RelativePath=".\realjsformatter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\strconvert.cpp"
 				>
 			</File>
 			<File

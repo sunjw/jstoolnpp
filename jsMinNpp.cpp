@@ -37,6 +37,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 	{
 		case DLL_PROCESS_ATTACH:
 		{
+			ShortcutKey* pShKey;
 			_hInst = (HINSTANCE)hModule;
 			funcItem[0]._pFunc = jsMinCurrent;
 			funcItem[1]._pFunc = jsMinNew;
@@ -57,6 +58,12 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			lstrcpy(funcItem[2]._itemName, TEXT("-SEPARATOR-"));
 
 			lstrcpy(funcItem[3]._itemName, TEXT("JS&Format"));
+			pShKey = new ShortcutKey; // Ctrl+Alt+M
+			pShKey->_isAlt = true;
+			pShKey->_isCtrl = true;
+			pShKey->_isShift = false;
+			pShKey->_key = 'M';
+			funcItem[3]._pShKey = pShKey;
 			lstrcpy(funcItem[4]._itemName, TEXT("-SEPARATOR-"));
 
 			lstrcpy(funcItem[5]._itemName, TEXT("&Options..."));
@@ -70,7 +77,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			{
 				funcItem[i]._init2Check = false;
 				// If you don't need the shortcut, you have to make it NULL
-				funcItem[i]._pShKey = NULL;
+				//funcItem[i]._pShKey = NULL;
 			}
 
 		}
