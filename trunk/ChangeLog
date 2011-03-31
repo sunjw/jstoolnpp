@@ -1,3 +1,7 @@
+1.7.4 beta
+Fixed bugs in formatting algorithm.
+Updated IniProcessor.
+
 1.7.2 beta
 Fixed bugs.
 Leave empty {} block alone.
