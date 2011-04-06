@@ -39,6 +39,14 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 		{
 			ShortcutKey* pShKey;
 			_hInst = (HINSTANCE)hModule;
+			
+			for(int i = 0; i < nbFunc; ++i)
+			{
+				funcItem[i]._init2Check = false;
+				// If you don't need the shortcut, you have to make it NULL
+				funcItem[i]._pShKey = NULL;
+			}
+
 			funcItem[0]._pFunc = jsMinCurrent;
 			funcItem[1]._pFunc = jsMinNew;
 			funcItem[2]._pFunc = NULL;
@@ -72,14 +80,6 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			lstrcpy(funcItem[7]._itemName, TEXT("&Check for update..."));
 			lstrcpy(funcItem[8]._itemName, TEXT("&Donate"));
 			lstrcpy(funcItem[9]._itemName, TEXT("&About"));
-
-			for(int i = 0; i < nbFunc; ++i)
-			{
-				funcItem[i]._init2Check = false;
-				// If you don't need the shortcut, you have to make it NULL
-				//funcItem[i]._pShKey = NULL;
-			}
-
 		}
 		break;
 
