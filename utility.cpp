@@ -57,6 +57,12 @@ void loadOption(HWND nppHandle, StruOptions& struOptions)
 		if(!map[keyNLBracket].GetStrValue().compare("1"))
 			struOptions.bNLBracket = true;
 	}
+
+	if(map.find(keyKeepTopComt) != itrEnd)
+	{
+		if(!map[keyKeepTopComt].GetStrValue().compare("1"))
+			struOptions.bKeepTopComt = true;
+	}
 }
 
 void loadDefaultOption(StruOptions& struOptions)
@@ -65,6 +71,7 @@ void loadDefaultOption(StruOptions& struOptions)
 	struOptions.chIndent = '\t';
 	struOptions.nChPerInd = 1;
 	struOptions.bNLBracket = false;
+	struOptions.bKeepTopComt = false;
 }
 
 void saveOption(HWND nppHandle, StruOptions struOptions)
@@ -80,6 +87,7 @@ void saveOption(HWND nppHandle, StruOptions struOptions)
 	itoa(struOptions.nChPerInd, buffer, 10);
 	map[keyChPerInd] = string(buffer);
 	map[keyNLBracket] = struOptions.bNLBracket ? string("1") : string("0");
+	map[keyKeepTopComt] = struOptions.bKeepTopComt ? string("1") : string("0");
 
 	processor.SetMap(map);
 

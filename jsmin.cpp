@@ -62,7 +62,7 @@ int JSMin::get()
     }
     if (c == '\r') 
 	{
-        return '\n';
+		return keepFirstComt ? '\r' : '\n';
     }
     return ' ';
 }
@@ -98,14 +98,29 @@ int JSMin::next()
                 }
             }
         case '*':
-            get();
+			c = get();
+			
+			if(keepFirstComt)
+			{
+				put('/');
+				put('*');
+			}
+
             for (;;) 
 			{
-                switch (get()) 
+                switch (c = get()) 
 				{
                 case '*':
                     if (peek() == '/') 
 					{
+						if(keepFirstComt)
+						{
+							put('*');
+							put('/');
+							//put('\n');
+							keepFirstComt = false;
+						}
+
                         get();
                         return ' ';
                     }
@@ -115,6 +130,8 @@ int JSMin::next()
                     /*fprintf(stderr, "Error: JSMIN Unterminated comment.\n");
                     exit(1);*/
                 }
+				if(keepFirstComt && c != '\r')
+					put(c);
             }
         default:
             return c;

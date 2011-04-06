@@ -17,12 +17,14 @@ struct StruOptions
 	char chIndent; // 缩进用的字符
 	int nChPerInd; // 每个缩进使用几个字符
 	bool bNLBracket; // { 之前是否换行
+	bool bKeepTopComt; // 是否保留头部的注释
 };
 
 const string keyPutCR("Put CR");
 const string keyChIndent("Indent char");
 const string keyChPerInd("Chars per indent");
 const string keyNLBracket("New line before {");
+const string keyKeepTopComt("Kepp top comment");
 
 tstring GetConfigFilePath(HWND nppHandle);
 
