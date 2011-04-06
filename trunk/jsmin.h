@@ -4,7 +4,8 @@
 class JSMin
 {
 public:
-	JSMin():theLookahead(EOF)
+	JSMin(bool keepFirstComt = false):
+	  theLookahead(EOF), keepFirstComt(keepFirstComt)
 	{}
 	void go();
 
@@ -12,6 +13,7 @@ private:
 	int theA;
 	int theB;
 	int theLookahead;
+	bool keepFirstComt;
 	
 	int isAlphanum(int c);
 	int get();

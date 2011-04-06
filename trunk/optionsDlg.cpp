@@ -23,6 +23,11 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		else
 			CheckDlgButton(hwnd, IDC_NEWLINECHECK, FALSE);
 
+		if(struOptions.bKeepTopComt)
+			CheckDlgButton(hwnd, IDC_KEEPCOMTCHECK, TRUE);
+		else
+			CheckDlgButton(hwnd, IDC_KEEPCOMTCHECK, FALSE);
+
 		setIndent(hwnd, (struOptions.chIndent == ' ' ? TRUE : FALSE));
 
 		return TRUE;
@@ -39,6 +44,7 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			// ±£¥Ê…Ë÷√
 			struOptions.bPutCR = IsDlgButtonChecked(hwnd, IDC_WINRADIO) ? true : false;
 			struOptions.chIndent = IsDlgButtonChecked(hwnd, IDC_SPACECHECK) ? ' ' : '\t';
+			struOptions.bKeepTopComt = IsDlgButtonChecked(hwnd, IDC_KEEPCOMTCHECK) ? true : false;
 			TCHAR buffer[256];
 			GetWindowText(GetDlgItem(hwnd, IDC_COUNTEDIT), buffer, 255);
 			#if defined(UNICODE) || defined(_UNICODE)

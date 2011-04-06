@@ -186,14 +186,14 @@ void jsMin(bool bNewFile)
     
     ::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
 
-	size_t jsMinLen = jsLen + 1; // seem to be something wrong, so add 1
-	unsigned char * pJSMin = new unsigned char[jsMinLen+1];
+	size_t jsMinLen = jsLen + 10; // seem to be something wrong, so add some empty places
+	unsigned char * pJSMin = new unsigned char[jsMinLen];
 
-	fillZero(pJSMin, jsMinLen + 1);
+	fillZero(pJSMin, jsMinLen);
 
 	try
 	{
-		JSMinCharArray jsmin(pJS, pJSMin, struOptions.bPutCR);
+		JSMinCharArray jsmin(pJS, pJSMin, struOptions.bPutCR, struOptions.bKeepTopComt);
 		jsmin.go();
 
 		trim(pJSMin);
