@@ -1,5 +1,6 @@
 1.7.4 beta
 Fixed bugs in formatting algorithm.
+Leave empty {} alone.
 Updated IniProcessor.
 
 1.7.2 beta
