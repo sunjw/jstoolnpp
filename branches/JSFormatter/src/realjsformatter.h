@@ -139,9 +139,6 @@ protected:
 	int m_nIndents; // 缩进数量，不用计算 blockStack，效果不好
 
 	bool m_bNewLine; // 准备换行的标志
-	int m_nIfLikeBlock; // if, for, while, else if
-	int m_nDoLikeBlock; // do, else
-	int m_nSwitchBlock; // switch
 	bool m_bBlockStmt; // block 真正开始了
 	// 使用栈是为了解决在判断条件中出现循环的问题
 	BoolStack m_brcNeedStack; // if 之类的后面的括号

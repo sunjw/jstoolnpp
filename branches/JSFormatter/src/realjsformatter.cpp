@@ -109,9 +109,6 @@ void RealJSFormatter::Init()
 	m_bPosNeg = false;
 	m_nIndents = 0;
 	m_bNewLine = false;
-	m_nIfLikeBlock = 0;
-	m_nDoLikeBlock = 0;
-	m_nSwitchBlock = 0;
 	m_bBlockStmt = true;
 	m_bAssign = false;
 	m_bEmptyBracket = false;
@@ -578,15 +575,10 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 		while(topStack == IF || topStack == FOR || topStack == WHILE || 
 			topStack == DO || topStack == ELSE || topStack == TRY || topStack == CATCH)
 		{
-			if(topStack == IF || topStack == FOR || topStack == WHILE || topStack == CATCH)
+			if(topStack == IF || topStack == FOR || 
+				topStack == WHILE || topStack == CATCH ||
+				topStack == ELSE || topStack == TRY)
 			{
-				--m_nIfLikeBlock;
-				m_blockStack.pop();
-				--m_nIndents;
-			}
-			else if(topStack == ELSE || topStack == TRY)
-			{
-				--m_nDoLikeBlock;
 				m_blockStack.pop();
 				--m_nIndents;
 			}
@@ -731,7 +723,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				m_blockStack.pop();
 		}
 
-		if(m_tokenA == ")" && (m_nIfLikeBlock || m_nSwitchBlock) && !m_brcNeedStack.top() &&
+		if(m_tokenA == ")" && !m_brcNeedStack.top() &&
 			(m_blockStack.top() == IF || m_blockStack.top() == FOR || m_blockStack.top() == WHILE ||
 			m_blockStack.top() == SWITCH || m_blockStack.top() == CATCH)) 
 		{
@@ -750,8 +742,6 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				if(m_blockStack.top() == DO)
 				{
 					// 结束 do...while
-					--m_nIfLikeBlock;
-					--m_nDoLikeBlock;
 					m_blockStack.pop();
 
 					PopMultiBlock(WHILE);
@@ -798,30 +788,29 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 
 		topStack = m_blockStack.top();
-		if(m_nIfLikeBlock || m_nDoLikeBlock)
-		{
-			// ; 结束 if, else, while, for, try, catch
-			if(topStack == IF || topStack == FOR || 
-				topStack == WHILE || topStack == CATCH)
-			{
-				--m_nIfLikeBlock;
-				m_blockStack.pop();
-				--m_nIndents;
-			}
-			if(topStack == ELSE || topStack == TRY)
-			{
-				--m_nDoLikeBlock;
-				m_blockStack.pop();
-				--m_nIndents;
-			}
-			if(topStack == DO)
-				--m_nIndents;
-			// do 在读取到 while 后才修改计数
-			// 对于 do{} 也一样
 
+		// ; 结束 if, else, while, for, try, catch
+		if(topStack == IF || topStack == FOR || 
+			topStack == WHILE || topStack == CATCH)
+		{
+			m_blockStack.pop();
+			--m_nIndents;
 			// 下面的 } 有同样的处理
 			PopMultiBlock(topStack);
 		}
+		if(topStack == ELSE || topStack == TRY)
+		{
+			m_blockStack.pop();
+			--m_nIndents;
+			PopMultiBlock(topStack);
+		}
+		if(topStack == DO)
+		{
+			--m_nIndents;
+			PopMultiBlock(topStack);
+		}
+		// do 在读取到 while 后才修改计数
+		// 对于 do{} 也一样
 
 		//if(m_blockStack.top() == 't')
 			//m_blockStack.pop(); // ; 也结束变量声明，暂时不压入 t
@@ -855,11 +844,10 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 	if(m_tokenA == "{")
 	{
 		topStack = m_blockStack.top();
-		if((m_nIfLikeBlock || m_nDoLikeBlock || m_nSwitchBlock) && 
-			(topStack == IF || topStack == FOR || 
+		if(topStack == IF || topStack == FOR || 
 			topStack == WHILE || topStack == DO || 
 			topStack == ELSE || topStack == SWITCH ||
-			topStack == TRY || topStack == CATCH) || 
+			topStack == TRY || topStack == CATCH || 
 			topStack == ASSIGN)
 		{
 			if(!m_bBlockStmt || (topStack == ASSIGN && !m_bAssign))
@@ -929,19 +917,10 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			case FOR:
 			case WHILE:
 			case CATCH:
-				--m_nIfLikeBlock;
-				--m_nIndents;
-				break;
 			case DO:
 			case ELSE:
 			case TRY:
-				--m_nDoLikeBlock;
-				--m_nIndents;
-				break;
 			case SWITCH:
-				--m_nSwitchBlock;
-				--m_nIndents;
-				break;
 			case ASSIGN:
 			case FUNCTION:
 			case HELPER:
@@ -965,25 +944,16 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			case FOR:
 			case WHILE:
 			case CATCH:
-				--m_nIfLikeBlock;
-				m_blockStack.pop();
-				break;
 			case ELSE:
 			case TRY:
-				--m_nDoLikeBlock;
-				m_blockStack.pop();
-				break;
-			case DO:
-				// 缩进已经处理，do 留给 while
-				break;
 			case SWITCH:
-				--m_nSwitchBlock;
-				m_blockStack.pop();
-				break;
 			case ASSIGN:
 			case FUNCTION:
 			case HELPER:
 				m_blockStack.pop();
+				break;
+			case DO:
+				// 缩进已经处理，do 留给 while
 				break;
 			}
 			//topStack = m_blockStack.top();
@@ -1067,7 +1037,6 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		// do, else (NOT else if), try
 		PutToken(m_tokenA);
 
-		++m_nDoLikeBlock;
 		m_blockStack.push(m_blockMap[m_tokenA]);
 		++m_nIndents; // 无需 ()，直接缩进
 		m_bBlockStmt = false; // 等待 block 内部的 statment
@@ -1110,7 +1079,6 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	if(m_tokenA == "if" || m_tokenA == "for" || 
 		m_tokenA == "while" || m_tokenA == "catch")
 	{
-		++m_nIfLikeBlock;
 		// 等待 ()，() 到来后才能加缩进
 		m_brcNeedStack.push(false);
 		m_blockStack.push(m_blockMap[m_tokenA]);
@@ -1119,7 +1087,6 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 
 	if(m_tokenA == "switch")
 	{
-		++m_nSwitchBlock;
 		//bBracket = false;
 		m_brcNeedStack.push(false);
 		m_blockStack.push(m_blockMap[m_tokenA]);
