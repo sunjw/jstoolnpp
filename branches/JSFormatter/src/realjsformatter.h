@@ -85,6 +85,9 @@ public:
 	static string Trim(string& str);
 	static string TrimSpace(string& str);
 	static string TrimRightSpace(string& str);
+	void StringReplace(string &strBase, string strSrc, string strDes);
+
+	bool m_debugOutput;
 
 protected:
 	void Init();
@@ -109,12 +112,17 @@ protected:
 	bool inline IsSingleOper(int ch);
 	bool inline IsQuote(int ch);
 	bool inline IsComment(); // 要联合判断 charA, charB
-	bool inline IsType(const string& str);
 
 	void PrepareRegular(); // 通过词法判断 tokenB 正则
 	void PreparePosNeg(); // 通过词法判断 tokenB 正负数
 	void PrepareTokenB();
 	void PopMultiBlock(char previousStackTop);
+
+	int m_tokenCount;
+	time_t m_startTime;
+	time_t m_endTime;
+
+	string m_strBeforeReg; // 判断正则时，正则前面可以出现的字符
 
 	bool m_bRegular; // tokenB 实际是正则 GetToken 用到的两个成员状态
 	bool m_bPosNeg; // tokenB 实际是正负数
