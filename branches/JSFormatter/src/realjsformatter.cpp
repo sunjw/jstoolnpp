@@ -507,7 +507,7 @@ void RealJSFormatter::PreparePosNeg()
 	 * 那么 m_tokenB 实际上是一个正负数
 	 */
 	if(m_tokenBType == OPER_TYPE && (m_tokenB == "-" || m_tokenB == "+") && 
-		(m_tokenAType != STRING_TYPE || m_tokenB != "return") && m_tokenAType != REGULAR_TYPE &&
+		(m_tokenAType != STRING_TYPE || m_tokenA == "return") && m_tokenAType != REGULAR_TYPE &&
 		m_tokenA != "++" && m_tokenA != "--" && 
 		m_tokenA != "]" && m_tokenA != ")" && 
 		IsNormalChar(m_charB))
