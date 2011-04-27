@@ -84,7 +84,7 @@ int JSMin::peek()
 int JSMin::next()
 {
     int c = get();
-	if(isAlphanum(c))
+	if(c != '/')
 		keepFirstComt = false;
     if (c == '/') 
 	{
