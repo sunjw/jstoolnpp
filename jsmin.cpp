@@ -42,6 +42,13 @@ int JSMin::isAlphanum(int c)
         c > 126);
 }
 
+/* isBlank -- return true if the character is ' ', '\t', '\r' or '\n'.
+*/
+int JSMin::isBlank(int c)
+{
+	return (c == ' ' || c == '\t' || c == '\r' || c == '\n');
+}
+
 
 /* get -- return the next character from stdin. Watch out for lookahead. If
         the character is a control character, translate it to a space or
@@ -84,7 +91,7 @@ int JSMin::peek()
 int JSMin::next()
 {
     int c = get();
-	if(c != '/')
+	if(keepFirstComt && c != '/' && !isBlank(c))
 		keepFirstComt = false;
     if (c == '/') 
 	{
