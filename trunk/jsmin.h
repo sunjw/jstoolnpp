@@ -16,6 +16,8 @@ private:
 	bool keepFirstComt;
 	
 	int isAlphanum(int c);
+	int isBlank(int c);
+
 	int get();
 	virtual int getChar() = 0;
 	virtual void put(int _Ch) = 0;
