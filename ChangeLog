@@ -1,3 +1,10 @@
+1.8 (since 1.7.1)
+Leave empty {} alone.
+Added a shortcut for formatting (Ctrl+Alt+M).
+Added an option to keep comments at top of codes.
+Fixed bugs.
+Updated IniProcessor.
+
 1.7.4 beta
 Fixed bugs in formatting algorithm.
 Leave empty {} alone.
