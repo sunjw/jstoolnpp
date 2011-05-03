@@ -108,6 +108,7 @@ void RealJSFormatter::Init()
 	m_bRegular = false;
 	m_bPosNeg = false;
 	m_nIndents = 0;
+	m_nLineIndents = 0;
 	m_bNewLine = false;
 	m_bBlockStmt = true;
 	m_bAssign = false;
