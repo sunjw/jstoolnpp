@@ -683,6 +683,7 @@ void RealJSFormatter::Go()
 		}
 	}
 
+	m_lineBuffer = Trim(m_lineBuffer);
 	if(m_lineBuffer.length())
 		PutLineBuffer();
 
