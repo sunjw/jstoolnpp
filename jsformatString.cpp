@@ -17,7 +17,7 @@ int JSFormatString::GetChar()
 	if(getPos <= in.length())
 		return in[getPos++];
 	else
-		return EOF;
+		return 0;
 }
 
 void JSFormatString::PutChar(int ch)

@@ -215,7 +215,7 @@ void RealJSFormatter::GetToken(bool init)
 	while(1)
 	{
 		m_charA = m_charB;
-		if(m_charA == EOF)
+		if(m_charA == 0)
 			return;
 		do
 		{
@@ -408,7 +408,7 @@ void RealJSFormatter::GetToken(bool init)
 			}
 
 			// What? How could we come here?
-			m_charA = EOF;
+			m_charA = 0;
 			return;
 		}
 	}
@@ -609,7 +609,7 @@ void RealJSFormatter::Go()
 
 	time(&m_startTime);
 
-	while(m_charA != EOF)
+	while(m_charA != 0)
 	{
 		PrepareRegular(); // 判断正则
 		PreparePosNeg(); // 判断正负数
