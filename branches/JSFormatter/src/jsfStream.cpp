@@ -10,7 +10,10 @@ using namespace std;
 
 int JSFormatterStream::GetChar()
 {
-	return in.get();
+	int ret = in.get();
+	if(ret == EOF)
+		return 0;
+	return ret;
 }
 
 void JSFormatterStream::PutChar(int ch)
