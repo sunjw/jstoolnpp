@@ -1,7 +1,7 @@
 /*
  * IniProcessor class header file
  * Author: Sun Junwen
- * Version: 1.2.5
+ * Version: 1.2.6
  */
 #ifndef _INI_PROCESSOR_H_
 #define _INI_PROCESSOR_H_
@@ -55,10 +55,6 @@ protected:
 
 private:
 	IniMap m_iniMap;
-
-	// ×èÖ¹¿½±´
-	IniProcessor(const IniProcessor&);
-	IniProcessor& operator=(const IniProcessor&);
 
 	inline string strtrim_right(const string& s, const string& spaces = SPACES)
 	{ 
