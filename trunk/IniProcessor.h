@@ -34,6 +34,9 @@ public:
 	IniProcessor()
 	{}
 
+	virtual ~IniProcessor()
+	{}
+
 	// Set value into map
 	void SetMap(const IniMap& map)
 	{ m_iniMap = map; }
@@ -52,6 +55,10 @@ protected:
 
 private:
 	IniMap m_iniMap;
+
+	// ×èÖ¹¿½±´
+	IniProcessor(const IniProcessor&);
+	IniProcessor& operator=(const IniProcessor&);
 
 	inline string strtrim_right(const string& s, const string& spaces = SPACES)
 	{ 

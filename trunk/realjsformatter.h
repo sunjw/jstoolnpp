@@ -76,6 +76,9 @@ public:
 	RealJSFormatter(bool bSkipCR, bool bPutCR);
 	RealJSFormatter(char chIndent, int nChPerInd, bool bSkipCR, bool bPutCR, bool bNLBracket);
 
+	virtual ~RealJSFormatter()
+	{}
+
 	void Go();
 
 	static string Trim(string& str);
@@ -154,6 +157,11 @@ protected:
 	bool m_bPutCR; // 使用 \r\n 作为换行
 
 	bool m_bNLBracket; // { 之前是否换行
+
+private:
+	// 阻止拷贝
+	RealJSFormatter(const RealJSFormatter&);
+	RealJSFormatter& operator=(const RealJSFormatter&);
 };
 
 #endif
