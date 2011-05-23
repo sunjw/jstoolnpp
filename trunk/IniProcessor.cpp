@@ -1,7 +1,7 @@
 /*
  * IniProcessor class implementation file
  * Author: Sun Junwen
- * Version: 1.2.6
+ * Version: 1.2.7
  */
 #include <cstdlib>
 #include <string>
@@ -10,8 +10,10 @@
 #include <stack>
 
 #include "IniProcessor.h"
+#include "strhelper.h"
 
 using namespace std;
+using namespace sunjwbase;
 
 IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool bRefresh)
 {
@@ -83,7 +85,7 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 	return m_iniMap;
 }
 
-string IniProcessor::ToString(IniProcessor::IniMap map) const
+string IniProcessor::ToString(const IniProcessor::IniMap& map) const
 {
 	typedef pair<const string, IniValue> MapEntry;
 	string ret("");
