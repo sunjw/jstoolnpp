@@ -81,10 +81,10 @@ public:
 
 	void Go();
 
-	static string Trim(string& str);
-	static string TrimSpace(string& str);
-	static string TrimRightSpace(string& str);
-	void StringReplace(string &strBase, string strSrc, string strDes);
+	static string Trim(const string& str);
+	static string TrimSpace(const string& str);
+	static string TrimRightSpace(const string& str);
+	void StringReplace(string& strBase, const string& strSrc, const string& strDes);
 
 	bool m_debugOutput;
 

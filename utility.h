@@ -2,14 +2,10 @@
 #define _UTILITY_H_
 
 #include <string>
+#include "strhelper.h"
 
 using namespace std;
-
-#if defined(UNICODE) || defined(_UNICODE)
-typedef wstring tstring;
-#else
-typedef string tstring;
-#endif
+using namespace sunjwbase;
 
 struct StruOptions
 {

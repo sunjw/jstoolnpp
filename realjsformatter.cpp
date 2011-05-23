@@ -67,24 +67,27 @@ RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd, bool bSkipCR, boo
 	Init();
 }
 
-string RealJSFormatter::Trim(string& str)
+string RealJSFormatter::Trim(const string& str)
 {
-	std::string ret = str.erase(str.find_last_not_of(" \r\n\t") + 1);
+	std::string ret(str);
+	ret = ret.erase(ret.find_last_not_of(" \r\n\t") + 1);
 	return ret.erase(0, ret.find_first_not_of(" \r\n\t"));
 }
 
-string RealJSFormatter::TrimSpace(string& str)
+string RealJSFormatter::TrimSpace(const string& str)
 {
-	std::string ret = str.erase(str.find_last_not_of(" \t") + 1);
+	std::string ret(str);
+	ret = ret.erase(ret.find_last_not_of(" \t") + 1);
 	return ret.erase(0, ret.find_first_not_of(" \t"));
 }
 
-string RealJSFormatter::TrimRightSpace(string& str)
+string RealJSFormatter::TrimRightSpace(const string& str)
 {
-	return str.erase(str.find_last_not_of(" \t") + 1);
+	std::string ret(str);
+	return ret.erase(ret.find_last_not_of(" \t") + 1);
 }
 
-void RealJSFormatter::StringReplace(string &strBase, string strSrc, string strDes)
+void RealJSFormatter::StringReplace(string& strBase, const string& strSrc, const string& strDes)
 {
 	string::size_type pos = 0;
 	string::size_type srcLen = strSrc.size();
