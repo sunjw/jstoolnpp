@@ -148,7 +148,8 @@ bool RealJSFormatter::IsNormalChar(int ch)
 {
 	// Ò»°ã×Ö·û
 	return ((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') ||
-		(ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '$' || ch > 126);
+		(ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '$' ||
+		ch > 126 || ch < 0);
 }
 
 bool RealJSFormatter::IsNumChar(int ch)
