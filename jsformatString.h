@@ -24,8 +24,8 @@ private:
 	size_t getPos;
 	size_t putPos;
 
-	virtual inline int GetChar();
-	virtual inline void PutChar(int ch);
+	virtual int GetChar();
+	virtual void PutChar(int ch);
 };
 
 #endif
