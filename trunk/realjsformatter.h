@@ -92,8 +92,8 @@ protected:
 	void Init();
 
 	// Should be implemented in derived class
-	virtual inline int GetChar() = 0; // JUST get next char from input
-	virtual inline void PutChar(int ch) = 0; // JUST put a char to output 
+	virtual int GetChar() = 0; // JUST get next char from input
+	virtual void PutChar(int ch) = 0; // JUST put a char to output 
 
 	void ProcessOper(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
 	void ProcessString(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
