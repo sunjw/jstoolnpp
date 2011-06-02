@@ -200,10 +200,6 @@
 				RelativePath=".\src\realjsformatter.h"
 				>
 			</File>
-			<File
-				RelativePath=".\src\stdafx.h"
-				>
-			</File>
 		</Filter>
 		<Filter
 			Name="资源文件"

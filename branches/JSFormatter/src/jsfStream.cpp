@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include <cstdlib>
 #include <cstdio>
 #include <iostream>

@@ -19,6 +19,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #ifndef _REAL_JSFORMATTER_H_
 #define _REAL_JSFORMATTER_H_
+#include <ctime>
 #include <string>
 #include <stack>
 #include <queue>
@@ -34,12 +35,12 @@ using namespace std;
 #define COMMENT_TYPE_2 10 // 多行注释
 
 /*
- * if-i, else-e, else if-i, 
- * for-f, do-d, while-w, 
+ * if-i, else-e, else if-i,
+ * for-f, do-d, while-w,
  * switch-s, case-c, default-c
  * try-r, catch-h
  * {-BLOCK, (-BRACKET
- */ 
+ */
 #define IF 'i'
 #define ELSE 'e'
 #define FOR 'f'
@@ -93,14 +94,14 @@ protected:
 
 	// Should be implemented in derived class
 	virtual int GetChar() = 0; // JUST get next char from input
-	virtual void PutChar(int ch) = 0; // JUST put a char to output 
+	virtual void PutChar(int ch) = 0; // JUST put a char to output
 
 	void ProcessOper(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
 	void ProcessString(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
 
 	void GetToken(bool init = false);
-	void PutToken(const string& token, 
-		const string& leftStyle = string(""), 
+	void PutToken(const string& token,
+		const string& leftStyle = string(""),
 		const string& rightStyle = string("")); // Put a token out with style
 	void PutString(const string& str);
 	void PutLineBuffer();
@@ -118,8 +119,9 @@ protected:
 	void PopMultiBlock(char previousStackTop);
 
 	int m_tokenCount;
-	time_t m_startTime;
-	time_t m_endTime;
+	clock_t m_startClock;
+	clock_t m_endClock;
+	double m_duration;
 
 	string m_strBeforeReg; // 判断正则时，正则前面可以出现的字符
 
@@ -138,7 +140,7 @@ protected:
 
 	StrSet m_specKeywordSet; // 后面要跟着括号的关键字集合
 	StrCharMap m_blockMap;
-	CharStack m_blockStack; 
+	CharStack m_blockStack;
 	int m_nIndents; // 缩进数量，不用计算 blockStack，效果不好
 
 	bool m_bNewLine; // 准备换行的标志
@@ -153,7 +155,7 @@ protected:
 	char m_chIndent; // 作为缩进的字符
 	int m_nChPerInd; // 每个缩进缩进字符个数
 
-	bool m_bSkipCR; // 读取时跳过 \r 
+	bool m_bSkipCR; // 读取时跳过 \r
 	bool m_bPutCR; // 使用 \r\n 作为换行
 
 	bool m_bNLBracket; // { 之前是否换行
