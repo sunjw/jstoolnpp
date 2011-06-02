@@ -1,7 +1,7 @@
 /*
  * strhelpe header file
  * Author: Sun Junwen
- * Version: 1.1
+ * Version: 1.1.1
  * Provides converting from tstring, string and wstring to each other
  * And provides string's utf8 converting.
  * Provides triming function to string and wstring.
@@ -44,7 +44,7 @@ namespace sunjwbase
 #if defined(UNICODE) || defined(_UNICODE)
 		return tstr;
 #else
-		return wstrtostr(tstr);
+		return strtowstr(tstr);
 #endif
 	}
 
