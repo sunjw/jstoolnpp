@@ -57,6 +57,9 @@ using namespace std;
 #define SQUARE '['
 #define HELPER '\\'
 
+template<class T>
+bool GetStackTop(stack<T> stk, T& ret);
+
 struct TokenAndType
 {
 	string token;

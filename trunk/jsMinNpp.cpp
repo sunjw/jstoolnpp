@@ -272,7 +272,7 @@ void jsFormat()
 
 		::SendMessage(hCurrScintilla, SCI_GOTOLINE, line, 0);
 	}
-	catch(std::runtime_error ex)
+	catch(std::exception ex)
 	{
 		::MessageBox(nppData._nppHandle, TEXT("ERROR"), TEXT("JSFormat"), MB_OK);
 		//cout << "Error: " << ex.what() << endl;

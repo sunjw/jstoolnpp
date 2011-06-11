@@ -27,6 +27,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 using namespace std;
 
+template<class T>
+bool GetStackTop(stack<T> stk, T& ret)
+{
+	if(stk.size() == 0)
+		return false;
+	ret = stk.top();
+	return true;
+}
+
 RealJSFormatter::RealJSFormatter():
 	m_chIndent('\t'),
 	m_nChPerInd(1),
@@ -575,7 +584,9 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 		(previousStackTop == DO && m_tokenB == "while") ||
 		(previousStackTop == TRY && m_tokenB == "catch")))
 	{
-		char topStack = m_blockStack.top();
+		char topStack;// = m_blockStack.top();
+		if(!GetStackTop(m_blockStack, topStack))
+			return;
 		// ; 还可能可能结束多个 if, do, while, for, try, catch
 		while(topStack == IF || topStack == FOR || topStack == WHILE ||
 			topStack == DO || topStack == ELSE || topStack == TRY || topStack == CATCH)
@@ -596,7 +607,9 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 				(topStack == DO && m_tokenB == "while") ||
 				(topStack == TRY && m_tokenB == "catch"))
 				break; // 直到刚刚结束一个 if...else, do...while, try...catch
-			topStack = m_blockStack.top();
+			//topStack = m_blockStack.top();
+			if(!GetStackTop(m_blockStack, topStack))
+				break;
 		}
 	}
 }
@@ -703,7 +716,8 @@ void RealJSFormatter::Go()
 
 void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char tokenBFirst)
 {
-	char topStack = m_blockStack.top();
+	char topStack;// = m_blockStack.top();
+	GetStackTop(m_blockStack, topStack);
 	string strRight(" ");
 
 	if(m_tokenA == "(" || m_tokenA == ")" ||
@@ -720,20 +734,23 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				--m_nIndents;
 			m_blockStack.pop();
 		}
-		if((m_tokenA == ")" && m_blockStack.top() == BRACKET) ||
-			(m_tokenA == "]" && m_blockStack.top() == SQUARE))
+		GetStackTop(m_blockStack, topStack);
+		if((m_tokenA == ")" && topStack == BRACKET) ||
+			(m_tokenA == "]" && topStack == SQUARE))
 		{
 			// )] 需要弹栈，减少缩进
 			m_blockStack.pop();
 			--m_nIndents;
-			topStack = m_blockStack.top();
+			GetStackTop(m_blockStack, topStack);
+			//topStack = m_blockStack.top();
 			if(topStack == ASSIGN || topStack == HELPER)
 				m_blockStack.pop();
 		}
 
+		GetStackTop(m_blockStack, topStack);
 		if(m_tokenA == ")" && !m_brcNeedStack.top() &&
-			(m_blockStack.top() == IF || m_blockStack.top() == FOR || m_blockStack.top() == WHILE ||
-			m_blockStack.top() == SWITCH || m_blockStack.top() == CATCH))
+			(topStack == IF || topStack == FOR || topStack == WHILE ||
+			topStack == SWITCH || topStack == CATCH))
 		{
 			// 栈顶的 if, for, while, switch, catch 正在等待 )，之后换行增加缩进
 			// 这里的空格和下面的空格是留给 { 的，m_bNLBracket 为 true 则不需要空格了
@@ -771,7 +788,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if(m_tokenA == "(" || m_tokenA == "[")
 		{
 			// ([ 入栈，增加缩进
-			topStack = m_blockStack.top();
+			GetStackTop(m_blockStack, topStack);
+			//topStack = m_blockStack.top();
 			if(topStack == ASSIGN)
 			{
 				if(!m_bAssign)
@@ -788,14 +806,16 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 	if(m_tokenA == ";")
 	{
-		topStack = m_blockStack.top();
+		GetStackTop(m_blockStack, topStack);
+		//topStack = m_blockStack.top();
 		if(topStack == ASSIGN)
 		{
 			--m_nIndents;
 			m_blockStack.pop();
 		}
 
-		topStack = m_blockStack.top();
+		GetStackTop(m_blockStack, topStack);
+		//topStack = m_blockStack.top();
 
 		// ; 结束 if, else, while, for, try, catch
 		if(topStack == IF || topStack == FOR ||
@@ -823,7 +843,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		//if(m_blockStack.top() == 't')
 			//m_blockStack.pop(); // ; 也结束变量声明，暂时不压入 t
 
-		topStack = m_blockStack.top();
+		GetStackTop(m_blockStack, topStack);
+		//topStack = m_blockStack.top();
 		if(topStack != BRACKET && !bHaveNewLine)
 			PutToken(m_tokenA, string(""), strRight.append("\n")); // 如果不是 () 里的 ; 就换行
 		else if(topStack == BRACKET || m_tokenBType == COMMENT_TYPE_1)
@@ -908,11 +929,11 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 	if(m_tokenA == "}")
 	{
-		topStack = m_blockStack.top();
+		//topStack = m_blockStack.top();
 
 		// 激进的策略，} 一直弹到 {
 		// 这样做至少可以使得 {} 之后是正确的
-		while(1)
+		while(GetStackTop(m_blockStack, topStack))
 		{
 			if(topStack == BLOCK)
 				break;
@@ -936,7 +957,9 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				break;
 			}
 
-			topStack = m_blockStack.top();
+			/*if(!GetStackTop(m_blockStack, topStack))
+				break;*/
+			//topStack = m_blockStack.top();
 		}
 
 		if(topStack == BLOCK)
@@ -944,25 +967,28 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			// 弹栈，减小缩进
 			m_blockStack.pop();
 			--m_nIndents;
-			topStack = m_blockStack.top();
+			bool bGetTop = GetStackTop(m_blockStack, topStack);// = m_blockStack.top();
 
-			switch(topStack)
+			if(bGetTop)
 			{
-			case IF:
-			case FOR:
-			case WHILE:
-			case CATCH:
-			case ELSE:
-			case TRY:
-			case SWITCH:
-			case ASSIGN:
-			case FUNCTION:
-			case HELPER:
-				m_blockStack.pop();
-				break;
-			case DO:
-				// 缩进已经处理，do 留给 while
-				break;
+				switch(topStack)
+				{
+				case IF:
+				case FOR:
+				case WHILE:
+				case CATCH:
+				case ELSE:
+				case TRY:
+				case SWITCH:
+				case ASSIGN:
+				case FUNCTION:
+				case HELPER:
+					m_blockStack.pop();
+					break;
+				case DO:
+					// 缩进已经处理，do 留给 while
+					break;
+				}
 			}
 			//topStack = m_blockStack.top();
 		}
