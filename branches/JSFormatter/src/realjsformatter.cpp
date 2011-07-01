@@ -178,7 +178,7 @@ bool RealJSFormatter::IsSingleOper(int ch)
 	// µ¥×Ö·û·ûºÅ
 	return (ch == '.' || ch == '(' || ch == ')' ||
 		ch == '[' || ch == ']' || ch == '{' || ch == '}' ||
-		ch == ':' || ch == ',' || ch == ';' || ch == '~' ||
+		ch == ',' || ch == ';' || ch == '~' ||
 		ch == '\n');
 }
 
@@ -385,7 +385,8 @@ void RealJSFormatter::GetToken(bool init)
 			}
 
 			// ¶à×Ö·û·ûºÅ
-			if(m_charB == '=' || m_charB == m_charA)
+			if((m_charB == '=' || m_charB == m_charA) || 
+				(m_charA == '-' && m_charB == '>'))
 			{
 				// µÄÈ·ÊÇ¶à×Ö·û·ûºÅ
 				m_tokenBType = OPER_TYPE;
@@ -675,7 +676,7 @@ void RealJSFormatter::Go()
 			break;
 		case COMMENT_TYPE_1:
 		case COMMENT_TYPE_2:
-			if(m_tokenA[2] == '*')
+			if(m_tokenA[1] == '*')
 			{
 				// ¶àÐÐ×¢ÊÍ
 				if(!bHaveNewLine)
@@ -1035,6 +1036,12 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		else
 			PutToken(m_tokenA, string(""), strRight);
 		m_blockStack.pop();
+		return;
+	}
+
+	if(m_tokenA == "::" || m_tokenA == "->")
+	{
+		PutToken(m_tokenA);
 		return;
 	}
 
