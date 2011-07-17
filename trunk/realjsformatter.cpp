@@ -178,7 +178,7 @@ bool RealJSFormatter::IsSingleOper(int ch)
 	// 单字符符号
 	return (ch == '.' || ch == '(' || ch == ')' ||
 		ch == '[' || ch == ']' || ch == '{' || ch == '}' ||
-		ch == ':' || ch == ',' || ch == ';' || ch == '~' ||
+		ch == ',' || ch == ';' || ch == '~' ||
 		ch == '\n');
 }
 
@@ -385,7 +385,8 @@ void RealJSFormatter::GetToken(bool init)
 			}
 
 			// 多字符符号
-			if(m_charB == '=' || m_charB == m_charA)
+			if((m_charB == '=' || m_charB == m_charA) || 
+				(m_charA == '-' && m_charB == '>'))
 			{
 				// 的确是多字符符号
 				m_tokenBType = OPER_TYPE;
@@ -675,7 +676,7 @@ void RealJSFormatter::Go()
 			break;
 		case COMMENT_TYPE_1:
 		case COMMENT_TYPE_2:
-			if(m_tokenA[2] == '*')
+			if(m_tokenA[1] == '*')
 			{
 				// 多行注释
 				if(!bHaveNewLine)
@@ -917,7 +918,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 		else
 		{
-			string strLeft = (m_bNLBracket && !m_bNewLine) ? string("\n") : string("");
+			string strLeft = (m_bNLBracket && !m_bNewLine) ? string("\n") : string("");	
 			if(!bHaveNewLine) // 需要换行
 				PutToken(m_tokenA, strLeft, strRight.append("\n"));
 			else
@@ -1038,6 +1039,12 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		return;
 	}
 
+	if(m_tokenA == "::" || m_tokenA == "->")
+	{
+		PutToken(m_tokenA);
+		return;
+	}
+
 	if(m_blockStack.top() == ASSIGN)
 		m_bAssign = true;
 
@@ -1095,7 +1102,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	if(m_blockStack.top() == ASSIGN)
 		m_bAssign = true;
 
-	if(m_tokenBType == STRING_TYPE)
+	if(m_tokenBType == STRING_TYPE || m_tokenB == "{")
 	{
 		PutToken(m_tokenA, string(""), string(" "));
 

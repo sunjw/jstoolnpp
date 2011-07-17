@@ -918,7 +918,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 		else
 		{
-			string strLeft = (m_bNLBracket && !m_bNewLine) ? string("\n") : string("");
+			string strLeft = (m_bNLBracket && !m_bNewLine) ? string("\n") : string("");	
 			if(!bHaveNewLine) // ÐèÒª»»ÐÐ
 				PutToken(m_tokenA, strLeft, strRight.append("\n"));
 			else
@@ -1102,7 +1102,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	if(m_blockStack.top() == ASSIGN)
 		m_bAssign = true;
 
-	if(m_tokenBType == STRING_TYPE)
+	if(m_tokenBType == STRING_TYPE || m_tokenB == "{")
 	{
 		PutToken(m_tokenA, string(""), string(" "));
 
