@@ -81,13 +81,13 @@ void saveOption(HWND nppHandle, StruOptions struOptions)
 	IniFileProcessor processor(tsConfigFilePath);
 	IniFileProcessor::IniMap map;
 	
-	map[keyPutCR] = struOptions.bPutCR ? string("1") : string("0");
-	map[keyChIndent] = struOptions.chIndent == '\t' ? string("tab") : string("space");
+	map[keyPutCR] = IniValue(struOptions.bPutCR ? string("1") : string("0"));
+	map[keyChIndent] = IniValue(struOptions.chIndent == '\t' ? string("tab") : string("space"));
 	char buffer[256];
 	itoa(struOptions.nChPerInd, buffer, 10);
-	map[keyChPerInd] = string(buffer);
-	map[keyNLBracket] = struOptions.bNLBracket ? string("1") : string("0");
-	map[keyKeepTopComt] = struOptions.bKeepTopComt ? string("1") : string("0");
+	map[keyChPerInd] = IniValue(string(buffer));
+	map[keyNLBracket] = IniValue(struOptions.bNLBracket ? string("1") : string("0"));
+	map[keyKeepTopComt] = IniValue(struOptions.bKeepTopComt ? string("1") : string("0"));
 
 	processor.SetMap(map);
 
