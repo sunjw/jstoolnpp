@@ -1,7 +1,7 @@
 /*
  * IniProcessor class implementation file
  * Author: Sun Junwen
- * Version: 1.2.7
+ * Version: 1.2.8
  */
 #include <cstdlib>
 #include <string>
@@ -24,9 +24,13 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 
 	string line;
 	bool bSection = false;
+	bool bMultiLine = false;
 	string sectionName;
 	//IniValue sectionMap;
 	IniValue::StrMap sectionMap;
+
+	string key;
+	string value;
 
 	while(true)
 	{
@@ -39,7 +43,33 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 			break;
 		}
 
+		line = strtrim_right(line);
+		if(bMultiLine)
+		{
+			value.append(line);
+			if(value.length() > 0 && value[value.length() - 1] == '\\')
+			{
+				// value 结尾是 \ 表示多行
+				value[value.length() - 1] = '\n';
+				bMultiLine = true;
+			}
+			else
+			{
+				bMultiLine = false;
+				if(bProcSection && bSection)
+				{
+					sectionMap[key] = value;
+				}
+				else
+				{
+					m_iniMap[key] = IniValue(value);
+				}
+			}
+
+			continue;
+		}
 		line = strtrim(line);
+
 		if(line.length() <= 1 || 
 			line[0] == ';' ||
 			line[0] == '#')
@@ -64,12 +94,21 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 		size_t eqPos = line.find("=");
 		if(eqPos != string::npos)
 		{
-			string key = line.substr(0, eqPos);
+			key = line.substr(0, eqPos);
 			key = strtrim(key);
 				
-			string value = eqPos + 1 >= line.length() ?
+			value = eqPos + 1 >= line.length() ?
 				"" : line.substr(eqPos + 1);
 			value = strtrim(value);
+			if(value.length() > 0 && value[value.length() - 1] == '\\')
+			{
+				// value 结尾是 \ 表示多行
+				value[value.length() - 1] = '\n';
+				bMultiLine = true;
+				continue;
+			}
+			else
+				bMultiLine = false;
 
 			if(bProcSection && bSection)
 			{
@@ -105,8 +144,7 @@ string IniProcessor::ToString(const IniProcessor::IniMap& map) const
 		{
 			line = key;
 			line.append("=");
-			line.append(value.GetStrValue());
-			line.append("\n");
+			line.append(value.ToString());
 			ret.append(line);
 		}
 		else

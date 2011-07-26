@@ -1,15 +1,17 @@
 /*
  * IniValue class implementation file
  * Author: Sun Junwen
- * Version: 1.0
+ * Version: 1.1
  */
 #include <cstdlib>
 #include <string>
 #include <map>
 
+#include "strhelper.h"
 #include "IniValue.h"
 
 using namespace std;
+using namespace sunjwbase;
 
 IniValue::StrMap IniValue::GetMapValue() const
 {
@@ -42,7 +44,7 @@ string IniValue::ToString() const
 
 	if(bStr)
 	{
-		ret.append(strValue);
+		ret.append(PreMultiLine(strValue));
 		ret.append("\n");
 	}
 	else
@@ -53,11 +55,21 @@ string IniValue::ToString() const
 			string line("");
 			line.append((*itr).first);
 			line.append("=");
-			line.append((*itr).second);
+			line.append(PreMultiLine((*itr).second));
 			line.append("\n");
 			ret.append(line);
 		}
 	}
+
+	return ret;
+}
+
+string IniValue::PreMultiLine(const string& value) const
+{
+	string ret(value);
+	ret = strreplace(ret, "\r\n", "\n");
+	ret = strreplace(ret, "\\\n", "\\ \n");
+	ret = strreplace(ret, "\n", "\\\n");
 
 	return ret;
 }

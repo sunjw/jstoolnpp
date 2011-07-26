@@ -1,7 +1,7 @@
 /*
  * IniValue class header file
  * Author: Sun Junwen
- * Version: 1.0
+ * Version: 1.1
  */
 #ifndef _INI_VALUE_H_
 #define _INI_VALUE_H_
@@ -21,10 +21,10 @@ public:
 	 * Constructors
 	 * Default is string value
 	 */
-	IniValue(bool bStr = true)
+	explicit IniValue(bool bStr = true)
 		:bStr(bStr)
 	{};
-	IniValue(const string& strValue)
+	explicit IniValue(const string& strValue)
 		:bStr(true), strValue(strValue)
 	{};
 
@@ -54,6 +54,8 @@ private:
 	bool bStr;
 	string strValue;
 	IniValue::StrMap mapValue;
+
+	string PreMultiLine(const string& value) const;
 
 };
 
