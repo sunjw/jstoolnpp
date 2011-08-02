@@ -651,6 +651,8 @@ void RealJSFormatter::Go()
 			m_tokenBType = temp.type;
 		}
 
+		// 至此，读取完成 m_tokenA 和 m_tokenB
+
 		bHaveNewLine = false; // bHaveNewLine 表示后面将要换行，m_bNewLine 表示已经换行了
 		tokenAFirst = m_tokenA[0];
 		tokenBFirst = m_tokenB.size() ? m_tokenB[0] : 0;
@@ -880,7 +882,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			topStack == TRY || topStack == CATCH ||
 			topStack == ASSIGN)
 		{
-			if(!m_bBlockStmt || (topStack == ASSIGN && !m_bAssign))
+			if(!m_bBlockStmt || topStack == ASSIGN)//(topStack == ASSIGN && !m_bAssign))
 			{
 				//m_blockStack.pop(); // 不把那个弹出来，遇到 } 时一起弹
 				--m_nIndents;
@@ -890,6 +892,25 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			{
 				m_blockStack.push(HELPER); // 压入一个 HELPER 统一状态
 			}
+		}
+
+		// 修正({...}) 中多一次缩进
+		bool bPrevFunc = (topStack == FUNCTION);
+		char fixTopStack = topStack;
+		if(bPrevFunc)
+		{
+			m_blockStack.pop(); // 弹掉 FUNCTION
+			GetStackTop(m_blockStack, fixTopStack);
+		}
+
+		if(fixTopStack == BRACKET)
+		{
+			--m_nIndents; // ({ 减掉一个缩进
+		}
+
+		if(bPrevFunc)
+		{
+			m_blockStack.push(FUNCTION); // 压回 FUNCTION
 		}
 
 		m_blockStack.push(m_blockMap[m_tokenA]); // 入栈，增加缩进
@@ -1015,6 +1036,11 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		else
 			PutToken(m_tokenA, leftStyle); // }, }; })
 		// 注意 ) 不要在输出时仿照 ,; 取消前面的换行
+
+		char tmpTopStack;
+		GetStackTop(m_blockStack, tmpTopStack);
+		if(topStack != ASSIGN && tmpTopStack == BRACKET)
+			++m_nIndents;
 
 		PopMultiBlock(topStack);
 

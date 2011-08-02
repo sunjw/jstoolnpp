@@ -1,3 +1,6 @@
+1.8.6 beta
+Fixed "one more indent in ({...})".
+
 1.8.4 beta
 Fixed "A space at the end of file".
 Fixed other bugs in formatting algorithm.
