@@ -1128,7 +1128,10 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	if(m_blockStack.top() == ASSIGN)
 		m_bAssign = true;
 
-	if(m_tokenBType == STRING_TYPE || m_tokenB == "{")
+	if(m_tokenBType == STRING_TYPE || 
+		m_tokenBType == COMMENT_TYPE_1 ||
+		m_tokenBType == COMMENT_TYPE_2 ||
+		m_tokenB == "{")
 	{
 		PutToken(m_tokenA, string(""), string(" "));
 
