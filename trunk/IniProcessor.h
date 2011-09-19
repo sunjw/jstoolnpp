@@ -41,7 +41,7 @@ public:
 	std::string ToString(const IniMap& map) const;
 
 protected:
-	// Get info from file
+	// Get info from istream
 	IniMap GetInfo(std::istream& in, bool bProcSection, bool bRefresh);
 
 private:

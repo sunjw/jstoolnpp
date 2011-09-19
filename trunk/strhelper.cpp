@@ -32,7 +32,7 @@ std::string sunjwbase::wstrtostrutf8(const std::wstring& wstr)
 /*
  * 将 utf8 编码的 string 转换为 wstring
  * 如果需要把 utf8 编码的 string 转换为本地编码的 string
- * 在调用一次 wstrtostr
+ * 再调用一次 wstrtostr
  */
 std::wstring sunjwbase::strtowstrutf8(const std::string& str)
 {
