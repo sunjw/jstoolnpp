@@ -1,3 +1,9 @@
+1.9 (since 1.8)
+Fixed "one more indent in ({...})".
+Fixed "A space at the end of file".
+Fixed other bugs in formatting algorithm.
+Some minor changes.
+
 1.8.6 beta
 Fixed "one more indent in ({...})".
 
@@ -6,7 +12,7 @@ Fixed "A space at the end of file".
 Fixed other bugs in formatting algorithm.
 
 1.8 (since 1.7.1)
-Leave empty {} alone.
+Left empty {} alone.
 Added a shortcut for formatting (Ctrl+Alt+M).
 Added an option to keep comments at top of codes.
 Fixed bugs.
@@ -14,12 +20,12 @@ Updated IniProcessor.
 
 1.7.4 beta
 Fixed bugs in formatting algorithm.
-Leave empty {} alone.
+Left empty {} alone.
 Updated IniProcessor.
 
 1.7.2 beta
 Fixed bugs.
-Leave empty {} block alone.
+Left empty {} block alone.
 
 1.7 (since 1.6.1)
 Fixed bugs.
