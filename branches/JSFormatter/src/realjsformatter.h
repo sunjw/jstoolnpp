@@ -59,6 +59,8 @@ using namespace std;
 
 template<class T>
 bool GetStackTop(stack<T> stk, T& ret);
+template<class T>
+bool StackTopEq(stack<T> stk, T eq);
 
 struct TokenAndType
 {
@@ -82,6 +84,9 @@ public:
 
 	virtual ~RealJSFormatter()
 	{}
+
+	inline void SetInitIndent(const string& initIndent)
+	{ m_initIndent = initIndent; }
 
 	void Go();
 
@@ -155,6 +160,7 @@ protected:
 
 	bool m_bCommentPut; // 刚刚输出了注释
 
+	string m_initIndent; // 起始缩进
 	char m_chIndent; // 作为缩进的字符
 	int m_nChPerInd; // 每个缩进缩进字符个数
 

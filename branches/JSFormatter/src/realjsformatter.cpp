@@ -36,6 +36,14 @@ bool GetStackTop(stack<T> stk, T& ret)
 	return true;
 }
 
+template<class T>
+bool StackTopEq(stack<T> stk, T eq)
+{
+	if(stk.size() == 0)
+		return false;
+	return (eq == stk.top());
+}
+
 RealJSFormatter::RealJSFormatter():
 	m_chIndent('\t'),
 	m_nChPerInd(1),
@@ -111,6 +119,8 @@ void RealJSFormatter::StringReplace(string& strBase, const string& strSrc, const
 
 void RealJSFormatter::Init()
 {
+	m_initIndent = "";
+
 	m_debugOutput = false;
 	m_tokenCount = 0;
 
@@ -477,11 +487,14 @@ void RealJSFormatter::PutString(const string& str)
 
 void RealJSFormatter::PutLineBuffer()
 {
-	string line;
+	for(size_t i = 0; i < m_initIndent.length(); ++i)
+		PutChar(m_initIndent[i]); // 先输出预缩进
+
 	for(int c = 0; c < m_nLineIndents; ++c)
 		for(int c2 = 0; c2 < m_nChPerInd; ++c2)
 			PutChar(m_chIndent);
 
+	string line;
 	line.append(TrimRightSpace(m_lineBuffer));
 	if(m_bPutCR)
 		line.append("\r"); //PutChar('\r');
@@ -764,10 +777,10 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			//bBracket = true;
 			m_brcNeedStack.pop();
 			m_bBlockStmt = false; // 等待 statment
-			if(m_blockStack.top() == WHILE)
+			if(StackTopEq(m_blockStack, WHILE)) //m_blockStack.top() == WHILE
 			{
 				m_blockStack.pop();
-				if(m_blockStack.top() == DO)
+				if(StackTopEq(m_blockStack, DO)) // m_blockStack.top() == DO
 				{
 					// 结束 do...while
 					m_blockStack.pop();
@@ -860,12 +873,12 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 	if(m_tokenA == ",")
 	{
-		if(m_blockStack.top() == ASSIGN)
+		if(StackTopEq(m_blockStack, ASSIGN)) // m_blockStack.top() == ASSIGN
 		{
 			--m_nIndents;
 			m_blockStack.pop();
 		}
-		if(m_blockStack.top() == BLOCK && !bHaveNewLine)
+		if(StackTopEq(m_blockStack, BLOCK) && !bHaveNewLine)
 			PutToken(m_tokenA, string(""), strRight.append("\n")); // 如果是 {} 里的
 		else
 			PutToken(m_tokenA, string(""), strRight);
@@ -875,7 +888,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 	if(m_tokenA == "{")
 	{
-		topStack = m_blockStack.top();
+		GetStackTop(m_blockStack, topStack);
 		if(topStack == IF || topStack == FOR ||
 			topStack == WHILE || topStack == DO ||
 			topStack == ELSE || topStack == SWITCH ||
@@ -1037,9 +1050,9 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			PutToken(m_tokenA, leftStyle); // }, }; })
 		// 注意 ) 不要在输出时仿照 ,; 取消前面的换行
 
-		char tmpTopStack;
-		GetStackTop(m_blockStack, tmpTopStack);
-		if(topStack != ASSIGN && tmpTopStack == BRACKET)
+		//char tmpTopStack;
+		//GetStackTop(m_blockStack, tmpTopStack);
+		if(topStack != ASSIGN && StackTopEq(m_blockStack, BRACKET))
 			++m_nIndents;
 
 		PopMultiBlock(topStack);
@@ -1054,7 +1067,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		return;
 	}
 
-	if(m_tokenA == ":" && m_blockStack.top() == CASE)
+	if(m_tokenA == ":" && StackTopEq(m_blockStack, CASE)) //m_blockStack.top() == CASE
 	{
 		// case, default
 		if(!bHaveNewLine)
@@ -1071,10 +1084,10 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		return;
 	}
 
-	if(m_blockStack.top() == ASSIGN)
+	if(StackTopEq(m_blockStack, ASSIGN)) // m_blockStack.top() == ASSIGN
 		m_bAssign = true;
 
-	if(m_tokenA == "=" && m_blockStack.top() != ASSIGN)
+	if(m_tokenA == "=" && !StackTopEq(m_blockStack, ASSIGN)) // m_blockStack.top() != ASSIGN)
 	{
 		m_blockStack.push(m_blockMap[m_tokenA]);
 		++m_nIndents;
@@ -1117,7 +1130,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 
 	if(m_tokenA == "function")
 	{
-		if(m_blockStack.top() == ASSIGN)
+		if(StackTopEq(m_blockStack, ASSIGN)) // m_blockStack.top() == ASSIGN)
 		{
 			--m_nIndents;
 			m_blockStack.pop();
@@ -1125,10 +1138,13 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		m_blockStack.push(m_blockMap[m_tokenA]); // 把 function 也压入栈，遇到 } 弹掉
 	}
 
-	if(m_blockStack.top() == ASSIGN)
+	if(StackTopEq(m_blockStack, ASSIGN)) //m_blockStack.top() == ASSIGN
 		m_bAssign = true;
 
-	if(m_tokenBType == STRING_TYPE || m_tokenB == "{")
+	if(m_tokenBType == STRING_TYPE || 
+		m_tokenBType == COMMENT_TYPE_1 ||
+		m_tokenBType == COMMENT_TYPE_2 ||
+		m_tokenB == "{")
 	{
 		PutToken(m_tokenA, string(""), string(" "));
 
