@@ -52,15 +52,14 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[2]._pFunc = NULL;
 
 			funcItem[3]._pFunc = jsFormat;
-			funcItem[4]._pFunc = jsFormatSel;
-			funcItem[5]._pFunc = NULL;
+			funcItem[4]._pFunc = NULL;
 
-			funcItem[6]._pFunc = options;
-			funcItem[7]._pFunc = NULL;
+			funcItem[5]._pFunc = options;
+			funcItem[6]._pFunc = NULL;
 
-			funcItem[8]._pFunc = checkUpdate;
-			funcItem[9]._pFunc = donate;
-			funcItem[10]._pFunc = about;
+			funcItem[7]._pFunc = checkUpdate;
+			funcItem[8]._pFunc = donate;
+			funcItem[9]._pFunc = about;
 
 			lstrcpy(funcItem[0]._itemName, TEXT("JS&Min"));
 			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (&New file)"));
@@ -73,15 +72,14 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			pShKey->_isShift = false;
 			pShKey->_key = 'M';
 			funcItem[3]._pShKey = pShKey;
-			lstrcpy(funcItem[4]._itemName, TEXT("JSFormat &Selected"));
-			lstrcpy(funcItem[5]._itemName, TEXT("-SEPARATOR-"));
+			lstrcpy(funcItem[4]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[6]._itemName, TEXT("&Options..."));
-			lstrcpy(funcItem[7]._itemName, TEXT("-SEPARATOR-"));
+			lstrcpy(funcItem[5]._itemName, TEXT("&Options..."));
+			lstrcpy(funcItem[6]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[8]._itemName, TEXT("&Check for update..."));
-			lstrcpy(funcItem[9]._itemName, TEXT("&Donate"));
-			lstrcpy(funcItem[10]._itemName, TEXT("&About"));
+			lstrcpy(funcItem[7]._itemName, TEXT("&Check for update..."));
+			lstrcpy(funcItem[8]._itemName, TEXT("&Donate"));
+			lstrcpy(funcItem[9]._itemName, TEXT("&About"));
 		}
 		break;
 
@@ -241,102 +239,69 @@ void jsFormat()
     if (jsLen == 0) 
 		return;
 
-    char* pJS = new char[jsLen+1];
-    
-    ::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
-
-	size_t jsMinLen = jsLen + 1; // seem to be something wrong, so add 1
-	std::string strJSFormat;
-
-	size_t currentPos = ::SendMessage(hCurrScintilla, SCI_GETCURRENTPOS, 0, 0);
-	size_t line = ::SendMessage(hCurrScintilla, SCI_LINEFROMPOSITION, currentPos, 0);
-
-	//fillZero(pJSMin, jsMinLen + 1);
-
-	try
-	{
-		int _nChPerInd = struOptions.nChPerInd;
-		if(struOptions.chIndent == '\t')
-			_nChPerInd = 1;
-
-		JSFormatString jsformat(pJS, 
-			&strJSFormat, 
-			struOptions.chIndent, 
-			_nChPerInd, 
-			struOptions.bPutCR, 
-			struOptions.bNLBracket);
-		jsformat.Go();
-
-		//trim(pJSMin);
-
-		::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)(strJSFormat.c_str()));
-		::SendMessage(nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
-
-		::SendMessage(hCurrScintilla, SCI_GOTOLINE, line + 10, 0);
-	}
-	catch(std::exception ex)
-	{
-		::MessageBox(nppData._nppHandle, TEXT("ERROR"), TEXT("JSFormat"), MB_OK);
-		//cout << "Error: " << ex.what() << endl;
-	}
-
-	/*strcpy(pJSMin, pJS);
-	::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)pJSMin);
-	::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+strlen(pJSMin));*/
-
-	delete[] pJS;
-}
-
-void jsFormatSel()
-{
-	HWND hCurrScintilla = getCurrentScintillaHandle();
-
-	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
 	size_t selStart = ::SendMessage(hCurrScintilla, SCI_GETSELECTIONSTART, 0, 0);
 	size_t selEnd = ::SendMessage(hCurrScintilla, SCI_GETSELECTIONEND, 0, 0);
-	if(selStart == selEnd)
-		return; // 没有选择
+	bool bFormatSel = !(selStart == selEnd);
 
-	char testChar;
-	// 找行头
-	while(selStart > 0)
-	{
-		testChar = ::SendMessage(hCurrScintilla, SCI_GETCHARAT, selStart - 1, 0);
-		if(testChar == '\r' || testChar == '\n')
-			break;
-
-		--selStart;
-	}
-	// 找行尾
-	while(selEnd < jsLen)
-	{
-		testChar = ::SendMessage(hCurrScintilla, SCI_GETCHARAT, selEnd, 0);
-		if(testChar == '\r' || testChar == '\n')
-			break;
-
-		++selEnd;
-	}
-
-	// 重新选择整行
-	::SendMessage(hCurrScintilla, SCI_SETSELECTIONSTART, selStart, 0);
-	::SendMessage(hCurrScintilla, SCI_SETSELECTIONEND, selEnd, 0);
-
-	// 获得 Sel
-	size_t jsLenSel = ::SendMessage(hCurrScintilla, SCI_GETSELTEXT, 0, 0);
-	char* pJS = new char[jsLenSel];
-    ::SendMessage(hCurrScintilla, SCI_GETSELTEXT, jsLen, (LPARAM)pJS);
-
-	// 得到 Initial Indent
+	size_t jsLenSel;
+	char* pJS;
 	std::string initIndent("");
-	for(size_t i = 0; i < jsLenSel; ++i)
+	std::string strJSFormat;
+	
+	size_t currentPos;
+	size_t line;
+
+	if(!bFormatSel)
 	{
-		testChar = pJS[i];
-		if(testChar != ' ' && testChar != '\t')
-			break;
-		initIndent += testChar;
+		// 格式化全部
+		pJS = new char[jsLen+1];
+		::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
+
+		currentPos = ::SendMessage(hCurrScintilla, SCI_GETCURRENTPOS, 0, 0);
+		line = ::SendMessage(hCurrScintilla, SCI_LINEFROMPOSITION, currentPos, 0);
+	}
+	else
+	{
+		// 格式化选中部分
+		char testChar;
+		// 找行头
+		while(selStart > 0)
+		{
+			testChar = ::SendMessage(hCurrScintilla, SCI_GETCHARAT, selStart - 1, 0);
+			if(testChar == '\r' || testChar == '\n')
+				break;
+
+			--selStart;
+		}
+		// 找行尾
+		while(selEnd < jsLen)
+		{
+			testChar = ::SendMessage(hCurrScintilla, SCI_GETCHARAT, selEnd, 0);
+			if(testChar == '\r' || testChar == '\n')
+				break;
+
+			++selEnd;
+		}
+
+		// 重新选择整行
+		::SendMessage(hCurrScintilla, SCI_SETSELECTIONSTART, selStart, 0);
+		::SendMessage(hCurrScintilla, SCI_SETSELECTIONEND, selEnd, 0);
+
+		// 获得 Sel
+		jsLenSel = ::SendMessage(hCurrScintilla, SCI_GETSELTEXT, 0, 0);
+		pJS = new char[jsLenSel];
+		::SendMessage(hCurrScintilla, SCI_GETSELTEXT, jsLen, (LPARAM)pJS);
+
+		// 得到 Initial Indent
+		for(size_t i = 0; i < jsLenSel; ++i)
+		{
+			testChar = pJS[i];
+			if(testChar != ' ' && testChar != '\t')
+				break;
+			initIndent += testChar;
+		}
 	}
 
-	std::string strJSFormat;
 	try
 	{
 		int _nChPerInd = struOptions.nChPerInd;
@@ -349,17 +314,28 @@ void jsFormatSel()
 			_nChPerInd, 
 			struOptions.bPutCR, 
 			struOptions.bNLBracket);
-		jsformat.SetInitIndent(initIndent);
+		if(bFormatSel)
+			jsformat.SetInitIndent(initIndent);
 		jsformat.Go();
 
-		// 清理多出来的换行
-		if(strJSFormat[strJSFormat.length() - 2] == '\r')
-			strJSFormat = strJSFormat.substr(0, strJSFormat.length() - 2);
+		if(!bFormatSel)
+		{
+			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)(strJSFormat.c_str()));
+			::SendMessage(nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
+
+			::SendMessage(hCurrScintilla, SCI_GOTOLINE, line + 10, 0);
+		}
 		else
-			strJSFormat = strJSFormat.substr(0, strJSFormat.length() - 1);
-		
-		::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)strJSFormat.c_str());
-		::SendMessage(hCurrScintilla, SCI_SETCURRENTPOS, selStart, 0);
+		{
+			// 清理多出来的换行
+			if(strJSFormat[strJSFormat.length() - 2] == '\r')
+				strJSFormat = strJSFormat.substr(0, strJSFormat.length() - 2);
+			else
+				strJSFormat = strJSFormat.substr(0, strJSFormat.length() - 1);
+			
+			::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)strJSFormat.c_str());
+			::SendMessage(hCurrScintilla, SCI_SETCURRENTPOS, selStart, 0);
+		}
 	}
 	catch(std::exception ex)
 	{
