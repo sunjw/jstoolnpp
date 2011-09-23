@@ -1,2 +1,2 @@
-#define VERSION_VALUE "1.9.1.0"
-#define VERSION_DIGITALVALUE 1, 9, 1, 0
+#define VERSION_VALUE "1.9.2.0"
+#define VERSION_DIGITALVALUE 1, 9, 2, 0

@@ -719,6 +719,15 @@ void RealJSFormatter::Go()
 	m_lineBuffer = Trim(m_lineBuffer);
 	if(m_lineBuffer.length())
 		PutLineBuffer();
+	while(!m_tokenBQueue.empty())
+	{
+		// ¥¶¿Ì £”‡ tokenBQueue
+		m_lineBuffer = m_tokenBQueue.front().token;
+		m_lineBuffer = Trim(m_lineBuffer);
+		if(m_lineBuffer.length())
+			PutLineBuffer();
+		m_tokenBQueue.pop();
+	}
 
 	m_endClock = clock();
 	m_duration = (double)(m_endClock - m_startClock) / CLOCKS_PER_SEC;

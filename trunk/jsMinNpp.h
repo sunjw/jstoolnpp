@@ -29,7 +29,7 @@
 //#define IDC_STATIC -1
 //#endif
 
-const int nbFunc = 11;
+const int nbFunc = 10;
 
 HINSTANCE _hInst;
 NppData nppData;
@@ -41,7 +41,6 @@ void jsMinCurrent();
 void jsMinNew();
 void jsMin(bool bNewFile = false);
 void jsFormat();
-void jsFormatSel();
 
 void options();
 
