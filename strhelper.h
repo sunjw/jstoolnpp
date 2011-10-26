@@ -1,7 +1,7 @@
 /*
  * strhelpe header file
  * Author: Sun Junwen
- * Version: 1.1.1
+ * Version: 1.2
  * Provides converting from tstring, string and wstring to each other
  * And provides string's utf8 converting.
  * Provides triming function to string and wstring.
@@ -92,6 +92,10 @@ namespace sunjwbase
 	// fixing
 	std::string fixnewline(const std::string& str);
 	// fixing
+
+	// upper and lower
+	std::string str_upper(const std::string& str);
+	std::string str_lower(const std::string& str);
 }
 
 

@@ -1,7 +1,7 @@
 /*
  * strhelpe implementation file
  * Author: Sun Junwen
- * Version: 1.1.1
+ * Version: 1.2
  * Provides converting from tstring, string and wstring to each other
  * And provides string's utf8 converting.
  * Provides triming function to string and wstring.
@@ -9,6 +9,8 @@
  * Provides newline fixing to string.
  */
 #include <string>
+#include <algorithm>
+
 #include "Windows.h"
 
 #include "strhelper.h"
@@ -159,6 +161,20 @@ std::string sunjwbase::fixnewline(const std::string& str)
 	strRepairSrc += (char)10;
 	strRepairSrc += (char)10;
 	ret = strreplace(ret, strRepairSrc, strRepairDst);
+	return ret;
+}
+
+std::string sunjwbase::str_upper(const std::string& str)
+{
+	std::string ret(str);
+	transform(ret.begin(), ret.end(), ret.begin(), ::toupper);
+	return ret;
+}
+
+std::string sunjwbase::str_lower(const std::string& str)
+{
+	std::string ret(str);
+	transform(ret.begin(), ret.end(), ret.begin(), ::tolower);
 	return ret;
 }
 
