@@ -1,3 +1,6 @@
+1.9.2 beta
+Add formatting selected source code.
+
 1.9 (since 1.8)
 Fixed "one more indent in ({...})".
 Fixed "A space at the end of file".
