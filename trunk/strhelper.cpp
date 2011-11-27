@@ -1,7 +1,7 @@
 /*
  * strhelpe implementation file
  * Author: Sun Junwen
- * Version: 1.2
+ * Version: 1.2.1
  * Provides converting from tstring, string and wstring to each other
  * And provides string's utf8 converting.
  * Provides triming function to string and wstring.
@@ -167,14 +167,14 @@ std::string sunjwbase::fixnewline(const std::string& str)
 std::string sunjwbase::str_upper(const std::string& str)
 {
 	std::string ret(str);
-	transform(ret.begin(), ret.end(), ret.begin(), ::toupper);
+	std::transform(ret.begin(), ret.end(), ret.begin(), ::toupper);
 	return ret;
 }
 
 std::string sunjwbase::str_lower(const std::string& str)
 {
 	std::string ret(str);
-	transform(ret.begin(), ret.end(), ret.begin(), ::tolower);
+	std::transform(ret.begin(), ret.end(), ret.begin(), ::tolower);
 	return ret;
 }
 

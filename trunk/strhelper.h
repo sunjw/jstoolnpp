@@ -1,7 +1,7 @@
 /*
  * strhelpe header file
  * Author: Sun Junwen
- * Version: 1.2
+ * Version: 1.2.1
  * Provides converting from tstring, string and wstring to each other
  * And provides string's utf8 converting.
  * Provides triming function to string and wstring.
