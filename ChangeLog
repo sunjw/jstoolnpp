@@ -1,3 +1,7 @@
+1.9 (since 1.9)
+Add formatting selected source code.
+If you selected some lines of source code, JSMinNpp will just format these code.
+
 1.9.2 beta
 Add formatting selected source code.
 
