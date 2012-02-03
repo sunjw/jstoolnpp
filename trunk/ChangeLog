@@ -1,3 +1,11 @@
+1.10.1
+Change donation link.
+
+1.10 (since 1.9)
+Add formatting selected source code.
+If you selected some lines of source code, JSMinNpp will just format these code.
+Some minor changes.
+
 1.9 (since 1.9)
 Add formatting selected source code.
 If you selected some lines of source code, JSMinNpp will just format these code.
