@@ -1,7 +1,7 @@
 /* realjsformatter.h
    2010-12-16
 
-Copyright (c) 2010-2011 SUN Junwen
+Copyright (c) 2010-2012 SUN Junwen
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
