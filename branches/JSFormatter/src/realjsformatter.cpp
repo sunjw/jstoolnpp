@@ -229,6 +229,7 @@ void RealJSFormatter::GetToken(bool init)
 
 	bool bQuote = false;
 	bool bComment = false;
+	bool bRegularFlags = false;
 	bool bFirst = true;
 	bool bNum = false; // 是不是数字
 	bool bLineBegin = false;
@@ -263,8 +264,25 @@ void RealJSFormatter::GetToken(bool init)
 				m_charB = GetChar();
 			}
 
-			if(m_charA == '/') // 正则结束
+			if(m_charA == '/') // 正则可能结束
 			{
+				if(!bRegularFlags && IsNormalChar(m_charB))
+				{
+					// 正则的 flags 部分
+					bRegularFlags = true;
+				}
+				else
+				{
+					// 正则结束
+					m_bRegular = false;
+					return;
+				}
+			}
+
+			if(bRegularFlags && !IsNormalChar(m_charB))
+			{
+				// 正则结束
+				bRegularFlags = false;
 				m_bRegular = false;
 				return;
 			}
