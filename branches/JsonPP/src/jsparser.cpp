@@ -532,7 +532,7 @@ void JSParser::PrepareTokenB()
 	}
 }
 
-void JSParser::RecursiveProc(JsonValue::JsonMap& jsonMap)
+void JSParser::RecursiveProc(JsonMap& jsonMap)
 {
 	if(m_nRecuLevel == 0)
 	{
@@ -570,7 +570,7 @@ void JSParser::RecursiveProc(JsonValue::JsonMap& jsonMap)
 			bGetSplitor = false;
 			bGetValue = false;
 
-			JsonValue::JsonMap innerMap;
+			JsonMap innerMap;
 			RecursiveProc(innerMap);
 
 			if(m_nRecuLevel == 1)
@@ -610,11 +610,16 @@ void JSParser::RecursiveProc(JsonValue::JsonMap& jsonMap)
 		{
 			strValue = m_tokenA;
 			bGetValue = true;
-			continue;
 		}
 
+		// ´æÈë×Ö·û´®¶Ô
 		if(bGetKey && bGetSplitor && bGetValue)
 		{
+			if(strValue[0] == '\'')
+				strValue = strtrim(strValue, string("'"));
+			else if(strValue[0] == '"')
+				strValue = strtrim(strValue, string("\""));
+
 			jsonMap[key] = JsonValue(strValue);
 
 			bGetKey = false;

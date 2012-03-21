@@ -11,11 +11,13 @@
 
 using namespace std;
 
+class JsonValue;
+typedef map<string, JsonValue> JsonMap;
+
 class JsonValue
 {
 public:
 	typedef map<string, string> StrMap;
-	typedef map<string, JsonValue> JsonMap;
 
 	/*
 	 * Constructors
@@ -53,7 +55,7 @@ public:
 private:
 	bool bStr;
 	string strValue;
-	JsonValue::JsonMap mapValue;
+	JsonMap mapValue;
 };
 
 #endif

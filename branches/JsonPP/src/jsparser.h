@@ -84,7 +84,7 @@ public:
 	virtual ~JSParser()
 	{}
 
-	inline void Go(JsonValue::JsonMap& jsonMap)
+	inline void Go(JsonMap& jsonMap)
 	{ RecursiveProc(jsonMap); }
 
 	bool m_debugOutput;
@@ -114,7 +114,7 @@ private:
 	void PreparePosNeg(); // 通过词法判断 tokenB 正负数
 	void PrepareTokenB();
 
-	void RecursiveProc(JsonValue::JsonMap& jsonMap);
+	void RecursiveProc(JsonMap& jsonMap);
 
 	int m_tokenCount;
 	clock_t m_startClock;

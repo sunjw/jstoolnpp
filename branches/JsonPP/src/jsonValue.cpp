@@ -12,12 +12,12 @@
 using namespace std;
 using namespace sunjwbase;
 
-JsonValue::JsonMap JsonValue::GetMapValue() const
+JsonMap JsonValue::GetMapValue() const
 {
 	return mapValue;
 }
 
-void JsonValue::SetMapValue(const JsonValue::JsonMap& map)
+void JsonValue::SetMapValue(const JsonMap& map)
 {
 	mapValue = map;
 }
