@@ -88,11 +88,14 @@ void JSParser::Init()
 	m_tokenCount = 0;
 
 	m_strBeforeReg = "(,=:[!&|?+{};\n";
-	m_lineBuffer = "";
 
 	m_bRegular = false;
 	m_bPosNeg = false;
+
 	m_bNewLine = false;
+	m_lineBuffer = "";
+
+	m_nRecuLevel = 0;
 
 	m_blockMap[string("if")] = IF;
 	m_blockMap[string("else")] = ELSE;
@@ -423,9 +426,6 @@ void JSParser::PutString(const string& str)
 		{
 			// 换行后面不是紧跟着 {,; 才真正换
 			PutLineBuffer(); // 输出行缓冲
-
-			m_lineBuffer = "";
-			m_bNewLine = false;
 		}
 
 		if(str[i] == '\n')
@@ -443,6 +443,9 @@ void JSParser::PutLineBuffer()
 
 	for(size_t i = 0; i < line.length(); ++i)
 		PutChar(line[i]);
+
+	m_lineBuffer = "";
+	m_bNewLine = false;
 }
 
 void JSParser::FlushLineBuffer()
@@ -534,11 +537,20 @@ void JSParser::PrepareTokenB()
 	}
 }
 
-void JSParser::Go()
+void JSParser::RecursiveProc()
 {
-	GetToken(true);
+	if(m_nRecuLevel == 0)
+	{
+		GetToken(true);
+		m_startClock = clock();
+	}
 
-	m_startClock = clock();
+	++m_nRecuLevel;
+
+	string field("");
+	bool bGetKey = false;
+	bool bGetSplitor = false;
+	bool bGetValue = false;
 
 	while(m_charA != 0)
 	{
@@ -564,28 +576,108 @@ void JSParser::Go()
 			m_tokenBType = temp.type;
 		}
 
+		// JsonParser 忽略换行, 其它的解析器可能不要忽略
+		if(m_tokenA == "\r\n" || m_tokenA == "\n")
+		{
+			continue;
+		}
+
 		/*
 		 * 至此，读取完成 m_tokenA 和 m_tokenB
 		 * 已经合并多个换行
 		 * 已经识别负数
 		 * 已经识别正则表达式
 		 */
-		if(m_tokenA != "\r\n" && m_tokenA != "\n")
+		if(m_tokenA == "{")
 		{
+			for(int r = 0; r < m_nRecuLevel - 1; ++r)
+				PutString("\t");
+			PutString(field);
+			PutString("\n");
+			field = string("");
+
+			bGetKey = false;
+			bGetSplitor = false;
+			bGetValue = false;
+
+			for(int r = 0; r < m_nRecuLevel - 1; ++r)
+				PutString("\t");
 			PutString(m_tokenA);
 			PutString("\n");
+
+			RecursiveProc();
+
+			continue;
 		}
-		
+
+		if(m_tokenA == "}")
+		{
+			for(int r = 0; r < m_nRecuLevel - 1; ++r)
+				PutString("\t");
+			PutString(field);
+			PutString("\n");
+			field = string("");
+
+			bGetKey = false;
+			bGetSplitor = false;
+			bGetValue = false;
+
+			--m_nRecuLevel;
+
+			for(int r = 0; r < m_nRecuLevel - 1; ++r)
+				PutString("\t");
+			PutString(m_tokenA);
+			PutString("\n");
+
+			return;
+		}
+
+		if(!bGetKey && m_tokenA != ",")
+		{
+			field.append(m_tokenA);
+			bGetKey = true;
+			continue;
+		}
+
+		if(bGetKey && !bGetSplitor && m_tokenA == ":")
+		{
+			field.append("=");
+			bGetSplitor = true;
+			continue;
+		}
+
+		if(bGetKey && bGetSplitor && !bGetValue)
+		{
+			field.append(m_tokenA);
+			bGetValue = true;
+			continue;
+		}
+
+		if(bGetKey && bGetSplitor && bGetValue)
+		{
+			for(int r = 0; r < m_nRecuLevel - 1; ++r)
+				PutString("\t");
+			PutString(field);
+			PutString("\n");
+			field = string("");
+
+			bGetKey = false;
+			bGetSplitor = false;
+			bGetValue = false;
+		}
 	}
 
-	FlushLineBuffer();
-
-	m_endClock = clock();
-	m_duration = (double)(m_endClock - m_startClock) / CLOCKS_PER_SEC;
-	if(m_debugOutput)
+	if(m_nRecuLevel == 1)
 	{
-		cout << "Processed tokens: " << m_tokenCount << endl;
-		cout << "Time used: " << m_duration << "s" << endl;
-		cout << m_tokenCount/ m_duration << " tokens/second" << endl;
+		FlushLineBuffer();
+
+		m_endClock = clock();
+		m_duration = (double)(m_endClock - m_startClock) / CLOCKS_PER_SEC;
+		if(m_debugOutput)
+		{
+			cout << "Processed tokens: " << m_tokenCount << endl;
+			cout << "Time used: " << m_duration << "s" << endl;
+			cout << m_tokenCount/ m_duration << " tokens/second" << endl;
+		}
 	}
 }

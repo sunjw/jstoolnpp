@@ -82,7 +82,8 @@ public:
 	virtual ~JSParser()
 	{}
 
-	void Go();
+	inline void Go()
+	{ RecursiveProc(); }
 
 	static string Trim(const string& str);
 	static string TrimSpace(const string& str);
@@ -91,7 +92,7 @@ public:
 
 	bool m_debugOutput;
 
-protected:
+private:
 	void Init();
 
 	// Should be implemented in derived class
@@ -115,7 +116,7 @@ protected:
 	void PreparePosNeg(); // 通过词法判断 tokenB 正负数
 	void PrepareTokenB();
 
-	void PopMultiBlock(char previousStackTop);
+	void RecursiveProc();
 
 	int m_tokenCount;
 	clock_t m_startClock;
@@ -134,12 +135,13 @@ protected:
 	string m_tokenB;
 	TokenQueue m_tokenBQueue;
 
+	bool m_bNewLine; // 准备换行的标志
 	string m_lineBuffer;
 
 	StrSet m_specKeywordSet; // 后面要跟着括号的关键字集合
 	StrCharMap m_blockMap;
 
-	bool m_bNewLine; // 准备换行的标志
+	int m_nRecuLevel; // 块递归层次
 
 private:
 	// 阻止拷贝
