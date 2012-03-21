@@ -532,20 +532,22 @@ void JSParser::PrepareTokenB()
 	}
 }
 
-void JSParser::RecursiveProc(JsonMap& jsonMap)
+void JSParser::RecursiveProc(JsonValue& jsonValue)
 {
 	if(m_nRecuLevel == 0)
 	{
 		GetTokenRaw(true);
 		m_startClock = clock();
+		m_blockStack.push(EMPTY);
 	}
 
 	++m_nRecuLevel;
 
+	char stackTop = m_blockStack.top();
+
 	string key, strValue;
 	bool bGetKey = false;
 	bool bGetSplitor = false;
-	bool bGetValue = false;
 
 	while(m_charA != 0)
 	{
@@ -553,7 +555,8 @@ void JSParser::RecursiveProc(JsonMap& jsonMap)
 		GetToken();
 
 		// JsonParser 忽略换行, 其它的解析器可能不要忽略
-		if(m_tokenA == "\r\n" || m_tokenA == "\n")
+		if(m_tokenA == "\r\n" || m_tokenA == "\n" ||
+			m_tokenAType == COMMENT_TYPE_1 || m_tokenAType == COMMENT_TYPE_2)
 		{
 			continue;
 		}
@@ -568,16 +571,30 @@ void JSParser::RecursiveProc(JsonMap& jsonMap)
 		{
 			bGetKey = false;
 			bGetSplitor = false;
-			bGetValue = false;
 
-			JsonMap innerMap;
-			RecursiveProc(innerMap);
+			m_blockStack.push(BLOCK);
 
-			if(m_nRecuLevel == 1)
-				key = "root";
+			if(stackTop == EMPTY)
+			{
+				jsonValue.SetValueType(JsonValue::MAP_VALUE);
+				RecursiveProc(jsonValue);
+			}
+			else
+			{
+				JsonValue innerValue;
+				innerValue.SetValueType(JsonValue::MAP_VALUE);
 
-			jsonMap[key] = JsonValue(false);
-			jsonMap[key].SetMapValue(innerMap);
+				RecursiveProc(innerValue);
+
+				if(stackTop == SQUARE)
+				{
+					jsonValue.ArrayPut(innerValue);
+				}
+				else if(stackTop == BLOCK)
+				{
+					jsonValue.MapPut(key, innerValue);
+				}
+			}
 
 			continue;
 		}
@@ -586,45 +603,94 @@ void JSParser::RecursiveProc(JsonMap& jsonMap)
 		{
 			bGetKey = false;
 			bGetSplitor = false;
-			bGetValue = false;
 
+			m_blockStack.pop();
 			--m_nRecuLevel;
 
 			return;
 		}
 
-		if(!bGetKey && m_tokenA != ",")
+		if(m_tokenA == "[")
 		{
-			key = m_tokenA;
-			bGetKey = true;
+			m_blockStack.push(SQUARE);
+
+			if(stackTop == EMPTY)
+			{
+				jsonValue.SetValueType(JsonValue::ARRAY_VALUE);
+				RecursiveProc(jsonValue);
+			}
+			else
+			{
+				JsonValue innerValue;
+				innerValue.SetValueType(JsonValue::ARRAY_VALUE);
+
+				RecursiveProc(innerValue);
+
+				if(stackTop == SQUARE)
+				{
+					jsonValue.ArrayPut(innerValue);
+				}
+				else if(stackTop == BLOCK)
+				{
+					jsonValue.MapPut(key, innerValue);
+				}
+			}
+
 			continue;
 		}
 
-		if(bGetKey && !bGetSplitor && m_tokenA == ":")
+		if(m_tokenA == "]")
 		{
-			bGetSplitor = true;
-			continue;
+			m_blockStack.pop();
+			--m_nRecuLevel;
+
+			return;
 		}
 
-		if(bGetKey && bGetSplitor && !bGetValue)
+		if(stackTop == BLOCK)
 		{
-			strValue = m_tokenA;
-			bGetValue = true;
+			if(!bGetKey && m_tokenA != ",")
+			{
+				key = m_tokenA;
+				bGetKey = true;
+				continue;
+			}
+
+			if(bGetKey && !bGetSplitor && m_tokenA == ":")
+			{
+				bGetSplitor = true;
+				continue;
+			}
+
+			if(bGetKey && bGetSplitor)
+			{
+				strValue = m_tokenA;
+
+				if(strValue[0] == '\'')
+					strValue = strtrim(strValue, string("'"));
+				else if(strValue[0] == '"')
+					strValue = strtrim(strValue, string("\""));
+
+				jsonValue.MapPut(key, JsonValue(strValue));
+
+				bGetKey = false;
+				bGetSplitor = false;
+			}
 		}
 
-		// 存入字符串对
-		if(bGetKey && bGetSplitor && bGetValue)
+		if(stackTop == SQUARE)
 		{
-			if(strValue[0] == '\'')
-				strValue = strtrim(strValue, string("'"));
-			else if(strValue[0] == '"')
-				strValue = strtrim(strValue, string("\""));
+			if(m_tokenA != ",")
+			{
+				strValue = m_tokenA;
 
-			jsonMap[key] = JsonValue(strValue);
+				if(strValue[0] == '\'')
+					strValue = strtrim(strValue, string("'"));
+				else if(strValue[0] == '"')
+					strValue = strtrim(strValue, string("\""));
 
-			bGetKey = false;
-			bGetSplitor = false;
-			bGetValue = false;
+				jsonValue.ArrayPut(JsonValue(strValue));
+			}
 		}
 	}
 

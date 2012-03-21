@@ -58,6 +58,7 @@ using namespace std;
 #define BRACKET '('
 #define SQUARE '['
 #define HELPER '\\'
+#define EMPTY ' '
 
 template<class T>
 bool GetStackTop(stack<T> stk, T& ret);
@@ -84,8 +85,8 @@ public:
 	virtual ~JSParser()
 	{}
 
-	inline void Go(JsonMap& jsonMap)
-	{ RecursiveProc(jsonMap); }
+	inline void Go(JsonValue& jsonValue)
+	{ RecursiveProc(jsonValue); }
 
 	bool m_debugOutput;
 
@@ -114,7 +115,7 @@ private:
 	void PreparePosNeg(); // 通过词法判断 tokenB 正负数
 	void PrepareTokenB();
 
-	void RecursiveProc(JsonMap& jsonMap);
+	void RecursiveProc(JsonValue& jsonValue);
 
 	int m_tokenCount;
 	clock_t m_startClock;
@@ -132,6 +133,8 @@ private:
 	string m_tokenA;
 	string m_tokenB;
 	TokenQueue m_tokenBQueue;
+
+	CharStack m_blockStack;
 
 	bool m_bNewLine; // 准备换行的标志
 	string m_lineBuffer;

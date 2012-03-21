@@ -45,8 +45,8 @@ int main(int argc, char* argv[])
 			JSParserStream jsp(inFileStream2, outStrStream);
 			jsp.m_debugOutput = true;
 
-			JsonMap jsonMap;
-			jsp.Go(jsonMap);
+			JsonValue jsonValue;
+			jsp.Go(jsonValue);
 
 			string output = outStrStream.str();
 
