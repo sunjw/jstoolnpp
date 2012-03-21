@@ -7,6 +7,7 @@
 #include <string>
 #include <stdexcept>
 
+#include "jsonValue.h"
 #include "jspStream.h"
 
 using namespace std;
@@ -43,7 +44,9 @@ int main(int argc, char* argv[])
 		{
 			JSParserStream jsp(inFileStream2, outStrStream);
 			jsp.m_debugOutput = true;
-			jsp.Go();
+
+			JsonValue::JsonMap jsonMap;
+			jsp.Go(jsonMap);
 
 			string output = outStrStream.str();
 

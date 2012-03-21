@@ -15,6 +15,7 @@ class JsonValue
 {
 public:
 	typedef map<string, string> StrMap;
+	typedef map<string, JsonValue> JsonMap;
 
 	/*
 	 * Constructors
@@ -28,9 +29,9 @@ public:
 	{};
 
 	// Get map value
-	StrMap GetMapValue() const;
+	JsonMap GetMapValue() const;
 	// Set map value
-	void SetMapValue(const StrMap& map);
+	void SetMapValue(const JsonMap& map);
 	// Get string value
 	string GetStrValue() const;
 	// Set string value
@@ -52,7 +53,7 @@ public:
 private:
 	bool bStr;
 	string strValue;
-	JsonValue::StrMap mapValue;
+	JsonValue::JsonMap mapValue;
 };
 
 #endif

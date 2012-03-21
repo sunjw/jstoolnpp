@@ -26,6 +26,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <map>
 #include <set>
 
+#include "jsonValue.h"
+
 using namespace std;
 
 #define STRING_TYPE 0
@@ -82,8 +84,8 @@ public:
 	virtual ~JSParser()
 	{}
 
-	inline void Go()
-	{ RecursiveProc(); }
+	inline void Go(JsonValue::JsonMap& jsonMap)
+	{ RecursiveProc(jsonMap); }
 
 	bool m_debugOutput;
 
@@ -105,13 +107,14 @@ private:
 	bool inline IsQuote(int ch);
 	bool inline IsComment(); // 要联合判断 charA, charB
 
-	void GetToken(bool init = false);
+	void GetTokenRaw(bool init = false);
+	void GetToken(); // 处理过负数, 正则等等的 GetToken 函数
 
 	void PrepareRegular(); // 通过词法判断 tokenB 正则
 	void PreparePosNeg(); // 通过词法判断 tokenB 正负数
 	void PrepareTokenB();
 
-	void RecursiveProc();
+	void RecursiveProc(JsonValue::JsonMap& jsonMap);
 
 	int m_tokenCount;
 	clock_t m_startClock;

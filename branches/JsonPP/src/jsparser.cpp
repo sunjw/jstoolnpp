@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "strhelper.h"
 #include "jsparser.h"
+#include "jsonValue.h"
 
 using namespace std;
 using namespace sunjwbase;
@@ -133,7 +134,7 @@ bool JSParser::IsComment()
 	return (m_charA == '/' && (m_charB == '/' || m_charB == '*'));
 }
 
-void JSParser::GetToken(bool init)
+void JSParser::GetTokenRaw(bool init)
 {
 	if(init)
 	{
@@ -385,6 +386,31 @@ void JSParser::GetToken(bool init)
 	}
 }
 
+void JSParser::GetToken()
+{
+	PrepareRegular(); // 判断正则
+	PreparePosNeg(); // 判断正负数
+
+	++m_tokenCount;
+	m_tokenA = m_tokenB;
+	m_tokenAType = m_tokenBType;
+
+	if(m_tokenBQueue.size() == 0)
+	{
+		GetTokenRaw();
+		PrepareTokenB(); // 看看是不是要跳过换行
+	}
+	else
+	{
+		// 有排队的换行
+		TokenAndType temp;
+		temp = m_tokenBQueue.front();
+		m_tokenBQueue.pop();
+		m_tokenB = temp.token;
+		m_tokenBType = temp.type;
+	}
+}
+
 void JSParser::PutString(const string& str)
 {
 	size_t length = str.size();
@@ -441,7 +467,7 @@ void JSParser::PrepareRegular()
 			m_tokenA == "return"))
 	{
 		m_bRegular = true;
-		GetToken(); // 把正则内容加到 m_tokenB
+		GetTokenRaw(); // 把正则内容加到 m_tokenB
 	}
 }
 
@@ -462,7 +488,7 @@ void JSParser::PreparePosNeg()
 	{
 		// m_tokenB 实际上是正负数
 		m_bPosNeg = true;
-		GetToken();
+		GetTokenRaw();
 	}
 }
 
@@ -478,7 +504,7 @@ void JSParser::PrepareTokenB()
 	while(m_tokenB == "\n" || m_tokenB == "\r\n")
 	{
 		++c;
-		GetToken();
+		GetTokenRaw();
 	}
 
 	if(m_tokenB != "else" && m_tokenB != "while" && m_tokenB != "catch" &&
@@ -506,44 +532,25 @@ void JSParser::PrepareTokenB()
 	}
 }
 
-void JSParser::RecursiveProc()
+void JSParser::RecursiveProc(JsonValue::JsonMap& jsonMap)
 {
 	if(m_nRecuLevel == 0)
 	{
-		GetToken(true);
+		GetTokenRaw(true);
 		m_startClock = clock();
 	}
 
 	++m_nRecuLevel;
 
-	string field("");
+	string key, strValue;
 	bool bGetKey = false;
 	bool bGetSplitor = false;
 	bool bGetValue = false;
 
 	while(m_charA != 0)
 	{
-		PrepareRegular(); // 判断正则
-		PreparePosNeg(); // 判断正负数
-
-		++m_tokenCount;
-		m_tokenA = m_tokenB;
-		m_tokenAType = m_tokenBType;
-
-		if(m_tokenBQueue.size() == 0)
-		{
-			GetToken();
-			PrepareTokenB(); // 看看是不是要跳过换行
-		}
-		else
-		{
-			// 有排队的换行
-			TokenAndType temp;
-			temp = m_tokenBQueue.front();
-			m_tokenBQueue.pop();
-			m_tokenB = temp.token;
-			m_tokenBType = temp.type;
-		}
+		// 获得下一个 m_tokenA 和 m_tokenB
+		GetToken();
 
 		// JsonParser 忽略换行, 其它的解析器可能不要忽略
 		if(m_tokenA == "\r\n" || m_tokenA == "\n")
@@ -559,76 +566,56 @@ void JSParser::RecursiveProc()
 		 */
 		if(m_tokenA == "{")
 		{
-			for(int r = 0; r < m_nRecuLevel - 1; ++r)
-				PutString("\t");
-			PutString(field);
-			PutString("\n");
-			field = string("");
-
 			bGetKey = false;
 			bGetSplitor = false;
 			bGetValue = false;
 
-			for(int r = 0; r < m_nRecuLevel - 1; ++r)
-				PutString("\t");
-			PutString(m_tokenA);
-			PutString("\n");
+			JsonValue::JsonMap innerMap;
+			RecursiveProc(innerMap);
 
-			RecursiveProc();
+			if(m_nRecuLevel == 1)
+				key = "root";
+
+			jsonMap[key] = JsonValue(false);
+			jsonMap[key].SetMapValue(innerMap);
 
 			continue;
 		}
 
 		if(m_tokenA == "}")
 		{
-			for(int r = 0; r < m_nRecuLevel - 1; ++r)
-				PutString("\t");
-			PutString(field);
-			PutString("\n");
-			field = string("");
-
 			bGetKey = false;
 			bGetSplitor = false;
 			bGetValue = false;
 
 			--m_nRecuLevel;
 
-			for(int r = 0; r < m_nRecuLevel - 1; ++r)
-				PutString("\t");
-			PutString(m_tokenA);
-			PutString("\n");
-
 			return;
 		}
 
 		if(!bGetKey && m_tokenA != ",")
 		{
-			field.append(m_tokenA);
+			key = m_tokenA;
 			bGetKey = true;
 			continue;
 		}
 
 		if(bGetKey && !bGetSplitor && m_tokenA == ":")
 		{
-			field.append("=");
 			bGetSplitor = true;
 			continue;
 		}
 
 		if(bGetKey && bGetSplitor && !bGetValue)
 		{
-			field.append(m_tokenA);
+			strValue = m_tokenA;
 			bGetValue = true;
 			continue;
 		}
 
 		if(bGetKey && bGetSplitor && bGetValue)
 		{
-			for(int r = 0; r < m_nRecuLevel - 1; ++r)
-				PutString("\t");
-			PutString(field);
-			PutString("\n");
-			field = string("");
+			jsonMap[key] = JsonValue(strValue);
 
 			bGetKey = false;
 			bGetSplitor = false;
@@ -638,7 +625,7 @@ void JSParser::RecursiveProc()
 
 	if(m_nRecuLevel == 1)
 	{
-		FlushLineBuffer();
+		//FlushLineBuffer();
 
 		m_endClock = clock();
 		m_duration = (double)(m_endClock - m_startClock) / CLOCKS_PER_SEC;
