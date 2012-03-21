@@ -8,9 +8,10 @@
 #include <stdexcept>
 
 #include "jsonpp.h"
-#include "jspStream.h"
+#include "jsonFileProc.h"
 
 using namespace std;
+using namespace sunjwbase;
 
 int main(int argc, char* argv[])
 {
@@ -19,42 +20,16 @@ int main(int argc, char* argv[])
 		char* inputFile = argv[1];
 		char* outputFile = argv[2];
 
-		ifstream inFileStream1(inputFile);
-		ofstream outFileStream1(outputFile);
-
-		clock_t startClock = clock();
-
-		string line;
-		while(getline(inFileStream1, line))
-		{
-		    outFileStream1 << line;
-		}
-
-		outFileStream1.close();
-		inFileStream1.close();
-
-		clock_t endClock = clock();
-		double duration = (double)(endClock - startClock) / CLOCKS_PER_SEC;
-		cout << "Time used: " << duration << "s" << endl;
-
-		ifstream inFileStream2(inputFile);
-		ofstream outFileStream2(outputFile);
-	    ostringstream outStrStream;
 		try
 		{
-			JSParserStream jsp(inFileStream2);
-			jsp.m_debugOutput = true;
+			tstring fileName = strtotstr(string(inputFile));
+			JsonFileProc jfp(fileName);
+			jfp.m_debugOutput = true;
 
 			JsonValue jsonValue;
-			jsp.Go(jsonValue);
-
-			string output = jsonValue.ToString();
-
-			// 输出到文件
-			outFileStream2 << output;
-
-			outFileStream2.close();
-			inFileStream2.close();
+			jfp.GetJsonValue(jsonValue);
+			jfp.Save(jsonValue);
+			jfp.Save(jsonValue);
 
 			cout << "Done" << endl;
 		}

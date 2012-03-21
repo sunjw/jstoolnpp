@@ -175,6 +175,10 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\src\jsonFileProc.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\jsonUnsortedMap.cpp"
 				>
 			</File>
@@ -184,10 +188,6 @@
 			</File>
 			<File
 				RelativePath=".\src\jsparser.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\jspStream.cpp"
 				>
 			</File>
 			<File
@@ -205,15 +205,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\src\jsonFileProc.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\jsonpp.h"
 				>
 			</File>
 			<File
 				RelativePath=".\src\jsparser.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\jspStream.h"
 				>
 			</File>
 			<File
