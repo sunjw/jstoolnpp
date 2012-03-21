@@ -1,5 +1,5 @@
 /* JSParser.h
-   2010-12-16
+   2012-3-11
 
 Copyright (c) 2010-2012 SUN Junwen
 
@@ -77,18 +77,13 @@ public:
 	typedef map<string, char> StrCharMap;
 	typedef set<string> StrSet;
 
-	JSParser();
+	explicit JSParser();
 
 	virtual ~JSParser()
 	{}
 
 	inline void Go()
 	{ RecursiveProc(); }
-
-	static string Trim(const string& str);
-	static string TrimSpace(const string& str);
-	static string TrimRightSpace(const string& str);
-	void StringReplace(string& strBase, const string& strSrc, const string& strDes);
 
 	bool m_debugOutput;
 

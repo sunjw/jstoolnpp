@@ -1,5 +1,5 @@
 /* JSParser.cpp
-   2010-12-16
+   2012-3-11
 
 Copyright (c) 2010-2012 SUN Junwen
 
@@ -23,9 +23,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <iostream>
 #include <ctime>
 
+#include "strhelper.h"
 #include "jsparser.h"
 
 using namespace std;
+using namespace sunjwbase;
 
 template<class T>
 bool GetStackTop(stack<T> stk, T& ret)
@@ -47,39 +49,6 @@ bool StackTopEq(stack<T> stk, T eq)
 JSParser::JSParser()
 {
 	Init();
-}
-
-string JSParser::Trim(const string& str)
-{
-	std::string ret(str);
-	ret = ret.erase(ret.find_last_not_of(" \r\n\t") + 1);
-	return ret.erase(0, ret.find_first_not_of(" \r\n\t"));
-}
-
-string JSParser::TrimSpace(const string& str)
-{
-	std::string ret(str);
-	ret = ret.erase(ret.find_last_not_of(" \t") + 1);
-	return ret.erase(0, ret.find_first_not_of(" \t"));
-}
-
-string JSParser::TrimRightSpace(const string& str)
-{
-	std::string ret(str);
-	return ret.erase(ret.find_last_not_of(" \t") + 1);
-}
-
-void JSParser::StringReplace(string& strBase, const string& strSrc, const string& strDes)
-{
-	string::size_type pos = 0;
-	string::size_type srcLen = strSrc.size();
-	string::size_type desLen = strDes.size();
-	pos = strBase.find(strSrc, pos);
-	while((pos != string::npos))
-	{
-		strBase.replace(pos, srcLen, strDes);
-		pos = strBase.find(strSrc, pos + desLen);
-	}
 }
 
 void JSParser::Init()
@@ -438,7 +407,7 @@ void JSParser::PutString(const string& str)
 void JSParser::PutLineBuffer()
 {
 	string line;
-	line.append(TrimRightSpace(m_lineBuffer));
+	line.append(strtrim_right(m_lineBuffer, string(" \t")));
 	line.append("\n"); //PutChar('\n');
 
 	for(size_t i = 0; i < line.length(); ++i)
@@ -450,7 +419,7 @@ void JSParser::PutLineBuffer()
 
 void JSParser::FlushLineBuffer()
 {
-	m_lineBuffer = Trim(m_lineBuffer);
+	m_lineBuffer = strtrim(m_lineBuffer);
 	if(m_lineBuffer.length())
 		PutLineBuffer();
 }
