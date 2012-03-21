@@ -13,8 +13,3 @@ int JSParserStream::GetChar()
 		return 0;
 	return ret;
 }
-
-void JSParserStream::PutChar(int ch)
-{
-	out << static_cast<char>(ch);
-}

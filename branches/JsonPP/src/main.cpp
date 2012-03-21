@@ -7,7 +7,7 @@
 #include <string>
 #include <stdexcept>
 
-#include "jsonValue.h"
+#include "jsonpp.h"
 #include "jspStream.h"
 
 using namespace std;
@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
 	    ostringstream outStrStream;
 		try
 		{
-			JSParserStream jsp(inFileStream2, outStrStream);
+			JSParserStream jsp(inFileStream2);
 			jsp.m_debugOutput = true;
 
 			JsonValue jsonValue;

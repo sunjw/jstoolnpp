@@ -18,12 +18,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-#include <cstdlib>
-#include <string>
-#include <map>
-
-#include "strhelper.h"
-#include "jsonValue.h"
+#include "jsonpp.h"
 
 using namespace std;
 using namespace sunjwbase;
@@ -48,12 +43,12 @@ void JsonValue::SetArrayValue(const JsonVec& jArray)
 	arrayValue = jArray;
 }
 
-JsonMap JsonValue::GetMapValue() const
+JsonUnsortedMap JsonValue::GetMapValue() const
 {
 	return mapValue;
 }
 
-void JsonValue::SetMapValue(const JsonMap& jMap)
+void JsonValue::SetMapValue(const JsonUnsortedMap& jMap)
 {
 	mapValue = jMap;
 }
@@ -68,7 +63,7 @@ void JsonValue::MapPut(const string& key, const JsonValue& value)
 	mapValue[key] = value;
 }
 
-string JsonValue::ToString() const
+string JsonValue::ToString(int nRecuLevel) const
 {
 	string ret("");
 
@@ -88,28 +83,35 @@ string JsonValue::ToString() const
 		break;
 	case JsonValue::MAP_VALUE:
 		{
+			++nRecuLevel;
+			
 			ret.append("{");
 			ret.append("\n");
 			
-			JsonMap::const_iterator itr = mapValue.begin();
+			JsonUnsortedMap::const_iterator itr = mapValue.begin();
 			for(; itr != mapValue.end(); ++itr)
 			{
 				const string& key = itr->first;
 				const JsonValue& value = itr->second;
 
+				for(int r = 0; r < nRecuLevel; ++ r)
+					ret.append("\t");
 				ret.append("\"");
 				ret.append(key);
 				ret.append("\"");
-				ret.append(":");
-				ret.append(value.ToString());
-				JsonMap::const_iterator temp = itr;
+				ret.append(" : ");
+				ret.append(value.ToString(nRecuLevel));
+				JsonUnsortedMap::const_iterator temp = itr;
 				++temp;
 				if(temp != mapValue.end())
 				{
-					ret.append(",\n");
+					ret.append(",");
 				}
+				ret.append("\n");
 			}
 
+			for(int r = 0; r < nRecuLevel - 1; ++ r)
+				ret.append("\t");
 			ret.append("}");
 		}
 		break;
@@ -122,7 +124,7 @@ string JsonValue::ToString() const
 			{
 				const JsonValue& value = *itr;
 
-				ret.append(value.ToString());
+				ret.append(value.ToString(nRecuLevel));
 				JsonVec::const_iterator temp = itr;
 				++temp;
 				if(temp != arrayValue.end())

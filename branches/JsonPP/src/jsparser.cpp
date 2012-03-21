@@ -18,15 +18,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-#include <cstdlib>
-#include <string>
-#include <cstring>
-#include <iostream>
-#include <ctime>
-
-#include "strhelper.h"
+#include "jsonpp.h"
 #include "jsparser.h"
-#include "jsonValue.h"
 
 using namespace std;
 using namespace sunjwbase;
@@ -570,9 +563,6 @@ void JSParser::RecursiveProc(JsonValue& jsonValue)
 		 */
 		if(m_tokenA == "{")
 		{
-			bGetKey = false;
-			bGetSplitor = false;
-
 			m_blockStack.push(BLOCK);
 
 			if(stackTop == EMPTY)
@@ -593,6 +583,8 @@ void JSParser::RecursiveProc(JsonValue& jsonValue)
 				}
 				else if(stackTop == BLOCK)
 				{
+					bGetKey = false;
+					bGetSplitor = false;
 					jsonValue.MapPut(key, innerValue);
 				}
 			}
@@ -633,6 +625,8 @@ void JSParser::RecursiveProc(JsonValue& jsonValue)
 				}
 				else if(stackTop == BLOCK)
 				{
+					bGetKey = false;
+					bGetSplitor = false;
 					jsonValue.MapPut(key, innerValue);
 				}
 			}
@@ -653,6 +647,12 @@ void JSParser::RecursiveProc(JsonValue& jsonValue)
 			if(!bGetKey && m_tokenA != ",")
 			{
 				key = m_tokenA;
+
+				if(key[0] == '\'')
+					key = strtrim(key, string("'"));
+				else if(key[0] == '"')
+					key = strtrim(key, string("\""));
+
 				bGetKey = true;
 				continue;
 			}
@@ -666,11 +666,6 @@ void JSParser::RecursiveProc(JsonValue& jsonValue)
 			if(bGetKey && bGetSplitor)
 			{
 				strValue = m_tokenA;
-
-				if(key[0] == '\'')
-					key = strtrim(key, string("'"));
-				else if(key[0] == '"')
-					key = strtrim(key, string("\""));
 
 				JsonValue jValue;
 				GenStrJsonValue(jValue, strValue);

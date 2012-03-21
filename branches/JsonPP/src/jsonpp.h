@@ -1,4 +1,4 @@
-/* JsonValue.h
+/* jsonpp.h
    2012-3-11
    Version: 0.9
 
@@ -18,25 +18,60 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-#ifndef _JSON_VALUE_H_
-#define _JSON_VALUE_H_
+#ifndef _JSONPP_H_
+#define _JSONPP_H_
 
 #include <cstdlib>
+#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
 
-using namespace std;
+#include "strhelper.h"
 
 class JsonValue;
-typedef map<string, JsonValue> JsonMap;
-typedef vector<JsonValue> JsonVec;
+class JsonUnsortedMap;
+
+typedef std::map<std::string, std::string> StrMap;
+typedef std::map<std::string, JsonValue> JsonMap;
+typedef std::pair<std::string, JsonValue> JsonMapPair;
+typedef std::vector<JsonValue> JsonVec;
+
+/**
+ * 对 std::vector<JsonMapPair> 的简化版封装
+ * 不具有完整的 std::map 特性
+ */
+class JsonUnsortedMap
+{
+public:
+	typedef std::vector<JsonMapPair> JsonMapPairVec;
+	typedef JsonMapPairVec::iterator iterator;
+	typedef JsonMapPairVec::const_iterator const_iterator;
+
+	inline void push_back(const JsonMapPair& pair)
+	{ m_vec.push_back(pair); }
+
+	inline const_iterator begin() const
+	{ return m_vec.begin(); }
+	inline iterator begin()
+	{ return m_vec.begin(); }
+
+	inline const_iterator end() const
+	{ return m_vec.end(); }
+	inline iterator end()
+	{ return m_vec.end(); }
+
+	// 只能提供 O(n) 的性能
+	JsonValue& operator[](const std::string& key);
+
+private:
+	JsonMapPairVec m_vec;
+};
+
 
 class JsonValue
 {
 public:
-	typedef map<string, string> StrMap;
-
 	enum VALUE_TYPE
 	{
 		STRING_VALUE = 0x00,
@@ -54,22 +89,22 @@ public:
 	explicit JsonValue(VALUE_TYPE type = STRING_VALUE)
 		:valType(type)
 	{};
-	explicit JsonValue(const string& strValue)
+	explicit JsonValue(const std::string& strValue)
 		:valType(STRING_VALUE), strValue(strValue)
 	{};
 
 	// Get string value
-	string GetStrValue() const;
+	std::string GetStrValue() const;
 	// Set string value
-	void SetStrValue(const string& str);
+	void SetStrValue(const std::string& str);
 	// Get array value
 	JsonVec GetArrayValue() const;
 	// Set array value
 	void SetArrayValue(const JsonVec& jArray);
 	// Get map value
-	JsonMap GetMapValue() const;
+	JsonUnsortedMap GetMapValue() const;
 	// Set map value
-	void SetMapValue(const JsonMap& jMap);
+	void SetMapValue(const JsonUnsortedMap& jMap);
 	
 	// Is string value or not
 	inline VALUE_TYPE GetValueType() const
@@ -81,15 +116,15 @@ public:
 	// Put key-value pair into array value
 	void ArrayPut(const JsonValue& value);
 	// Put key-value pair into map value
-	void MapPut(const string& key, const JsonValue& value);
+	void MapPut(const std::string& key, const JsonValue& value);
 
 	// Convert string value or map value to string
-	string ToString() const;
+	std::string ToString(int nRecuLevel = 0) const;
 
 private:
 	VALUE_TYPE valType;
-	string strValue;
-	JsonMap mapValue;
+	std::string strValue;
+	JsonUnsortedMap mapValue;
 	JsonVec arrayValue;
 };
 
