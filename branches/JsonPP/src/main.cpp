@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 			JsonValue jsonValue;
 			jsp.Go(jsonValue);
 
-			string output = outStrStream.str();
+			string output = jsonValue.ToString();
 
 			// 输出到文件
 			outFileStream2 << output;

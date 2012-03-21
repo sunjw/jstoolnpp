@@ -666,6 +666,11 @@ void JSParser::RecursiveProc(JsonValue& jsonValue)
 			{
 				strValue = m_tokenA;
 
+				if(key[0] == '\'')
+					key = strtrim(key, string("'"));
+				else if(key[0] == '"')
+					key = strtrim(key, string("\""));
+
 				if(strValue[0] == '\'')
 					strValue = strtrim(strValue, string("'"));
 				else if(strValue[0] == '"')
