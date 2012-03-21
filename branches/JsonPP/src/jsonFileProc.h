@@ -19,8 +19,6 @@ private:
 	std::ofstream m_ofile;
 
 	virtual int GetChar();
-	virtual void PutChar(int ch)
-	{}
 };
 
 #endif

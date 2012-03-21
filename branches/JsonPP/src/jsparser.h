@@ -96,11 +96,6 @@ private:
 
 	// Should be implemented in derived class
 	virtual int GetChar() = 0; // JUST get next char from input
-	virtual void PutChar(int ch) = 0; // JUST put a char to output
-
-	void PutString(const string& str);
-	void PutLineBuffer();
-	void FlushLineBuffer();
 
 	bool inline IsNormalChar(int ch);
 	bool inline IsNumChar(int ch);
@@ -137,9 +132,6 @@ private:
 	TokenQueue m_tokenBQueue;
 
 	CharStack m_blockStack;
-
-	bool m_bNewLine; // 准备换行的标志
-	string m_lineBuffer;
 
 	StrSet m_specKeywordSet; // 后面要跟着括号的关键字集合
 	StrCharMap m_blockMap;

@@ -56,9 +56,6 @@ void JSParser::Init()
 	m_bRegular = false;
 	m_bPosNeg = false;
 
-	m_bNewLine = false;
-	m_lineBuffer = "";
-
 	m_nRecuLevel = 0;
 
 	m_blockMap[string("if")] = IF;
@@ -403,45 +400,6 @@ void JSParser::GetToken()
 		m_tokenB = temp.token;
 		m_tokenBType = temp.type;
 	}
-}
-
-void JSParser::PutString(const string& str)
-{
-	size_t length = str.size();
-	//char topStack = m_blockStack.top();
-	for(size_t i = 0; i < length; ++i)
-	{
-		if(m_bNewLine)
-		{
-			// 换行后面不是紧跟着 {,; 才真正换
-			PutLineBuffer(); // 输出行缓冲
-		}
-
-		if(str[i] == '\n')
-			m_bNewLine = true;
-		else
-			m_lineBuffer += str[i];
-	}
-}
-
-void JSParser::PutLineBuffer()
-{
-	string line;
-	line.append(strtrim_right(m_lineBuffer, string(" \t")));
-	line.append("\n"); //PutChar('\n');
-
-	for(size_t i = 0; i < line.length(); ++i)
-		PutChar(line[i]);
-
-	m_lineBuffer = "";
-	m_bNewLine = false;
-}
-
-void JSParser::FlushLineBuffer()
-{
-	m_lineBuffer = strtrim(m_lineBuffer);
-	if(m_lineBuffer.length())
-		PutLineBuffer();
 }
 
 void JSParser::PrepareRegular()
