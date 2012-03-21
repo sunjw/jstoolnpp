@@ -671,12 +671,10 @@ void JSParser::RecursiveProc(JsonValue& jsonValue)
 				else if(key[0] == '"')
 					key = strtrim(key, string("\""));
 
-				if(strValue[0] == '\'')
-					strValue = strtrim(strValue, string("'"));
-				else if(strValue[0] == '"')
-					strValue = strtrim(strValue, string("\""));
+				JsonValue jValue;
+				GenStrJsonValue(jValue, strValue);
 
-				jsonValue.MapPut(key, JsonValue(strValue));
+				jsonValue.MapPut(key, jValue);
 
 				bGetKey = false;
 				bGetSplitor = false;
@@ -689,12 +687,10 @@ void JSParser::RecursiveProc(JsonValue& jsonValue)
 			{
 				strValue = m_tokenA;
 
-				if(strValue[0] == '\'')
-					strValue = strtrim(strValue, string("'"));
-				else if(strValue[0] == '"')
-					strValue = strtrim(strValue, string("\""));
+				JsonValue jValue;
+				GenStrJsonValue(jValue, strValue);
 
-				jsonValue.ArrayPut(JsonValue(strValue));
+				jsonValue.ArrayPut(jValue);
 			}
 		}
 	}
@@ -712,4 +708,31 @@ void JSParser::RecursiveProc(JsonValue& jsonValue)
 			cout << m_tokenCount/ m_duration << " tokens/second" << endl;
 		}
 	}
+}
+
+void JSParser::GenStrJsonValue(JsonValue& jsonValue, string value)
+{
+	if(value[0] == '\'' || value[0] == '"')
+	{
+		if(value[0] == '\'')
+			value = strtrim(value, string("'"));
+		else if(value[0] == '"')
+			value = strtrim(value, string("\""));
+
+		jsonValue.SetValueType(JsonValue::STRING_VALUE);
+	}
+	else if(IsNumChar(value[0]) || value[0] == '-' || value[0] == '+')
+	{
+		jsonValue.SetValueType(JsonValue::NUMBER_VALUE);
+	}
+	else if(value == "true" || value == "false")
+	{
+		jsonValue.SetValueType(JsonValue::BOOL_VALUE);
+	}
+	else if(value[0] == '/')
+	{
+		jsonValue.SetValueType(JsonValue::REGULAR_VALUE);
+	}
+
+	jsonValue.SetStrValue(value);
 }

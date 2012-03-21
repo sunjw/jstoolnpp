@@ -116,6 +116,7 @@ private:
 	void PrepareTokenB();
 
 	void RecursiveProc(JsonValue& jsonValue);
+	void GenStrJsonValue(JsonValue& jsonValue, string value);
 
 	int m_tokenCount;
 	clock_t m_startClock;

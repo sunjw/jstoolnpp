@@ -56,15 +56,19 @@ string JsonValue::ToString() const
 {
 	string ret("");
 
-	switch(eType)
+	switch(valType)
 	{
 	case JsonValue::STRING_VALUE:
 		{
 			ret.append("\"");
 			ret.append(strValue);
 			ret.append("\"");
-			ret.append("\n");
 		}
+		break;
+	case JsonValue::NUMBER_VALUE:
+	case JsonValue::BOOL_VALUE:
+	case JsonValue::REGULAR_VALUE:
+		ret.append(strValue);
 		break;
 	case JsonValue::MAP_VALUE:
 		{
