@@ -22,18 +22,27 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 using namespace std;
 
-JsonValue& JsonUnsortedMap::operator[](const std::string& key)
+JsonUnsortedMap::iterator JsonUnsortedMap::find(const std::string& key)
 {
-	JsonMapPairVec::iterator itr = m_vec.begin();
-	for(; itr != m_vec.end(); ++itr)
+	JsonMapPairList::iterator itr = m_list.begin();
+	for(; itr != m_list.end(); ++itr)
 	{
 		if(key == itr->first)
-			return (*itr).second;
+			return itr;
 	}
 
-	// 没有, 插入一个
-	m_vec.push_back(JsonMapPair(key, JsonValue()));
-	itr = m_vec.end();
-	--itr;
+	return m_list.end();
+}
+
+JsonValue& JsonUnsortedMap::operator[](const std::string& key)
+{
+	JsonMapPairList::iterator itr = find(key);
+	if(itr == m_list.end())
+	{
+		// 没有, 插入一个
+		m_list.push_back(JsonMapPair(key, JsonValue()));
+		itr = m_list.end();
+		--itr;
+	}
 	return (*itr).second;
 }

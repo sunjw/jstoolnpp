@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <fstream>
 #include <string>
 #include <vector>
+#include <list>
 #include <map>
 
 #include "strhelper.h"
@@ -39,34 +40,50 @@ typedef std::pair<std::string, JsonValue> JsonMapPair;
 typedef std::vector<JsonValue> JsonVec;
 
 /**
- * 对 std::vector<JsonMapPair> 的简化版封装
- * 不具有完整的 std::map 特性
+ * 对 std::list<JsonMapPair> 的简化版封装
+ * 不具有完整的 std::list 和 std::map 特性
  */
 class JsonUnsortedMap
 {
 public:
-	typedef std::vector<JsonMapPair> JsonMapPairVec;
-	typedef JsonMapPairVec::iterator iterator;
-	typedef JsonMapPairVec::const_iterator const_iterator;
+	typedef std::list<JsonMapPair> JsonMapPairList;
+	typedef JsonMapPairList::iterator iterator;
+	typedef JsonMapPairList::const_iterator const_iterator;
+	typedef JsonMapPairList::size_type size_type;
 
+	// 操作接口都是对 std::list 的封装
+	inline size_type size()
+	{ return m_list.size(); }
+
+	inline void push_front(const JsonMapPair& pair)
+	{ m_list.push_front(pair); }
 	inline void push_back(const JsonMapPair& pair)
-	{ m_vec.push_back(pair); }
+	{ m_list.push_back(pair); }
+
+	inline iterator insert(iterator itr, const JsonMapPair& pair)
+	{ return m_list.insert(itr, pair); }
+	inline iterator erase(iterator itr)
+	{ return m_list.erase(itr); }
+
+	inline void clear()
+	{ m_list.clear(); }
 
 	inline const_iterator begin() const
-	{ return m_vec.begin(); }
+	{ return m_list.begin(); }
 	inline iterator begin()
-	{ return m_vec.begin(); }
+	{ return m_list.begin(); }
 
 	inline const_iterator end() const
-	{ return m_vec.end(); }
+	{ return m_list.end(); }
 	inline iterator end()
-	{ return m_vec.end(); }
+	{ return m_list.end(); }
 
+	iterator find(const std::string& key);
 	// 只能提供 O(n) 的性能
 	JsonValue& operator[](const std::string& key);
 
 private:
-	JsonMapPairVec m_vec;
+	JsonMapPairList m_list;
 };
 
 
@@ -99,11 +116,11 @@ public:
 	// Set string value
 	void SetStrValue(const std::string& str);
 	// Get array value
-	JsonVec GetArrayValue() const;
+	JsonVec& GetArrayValue();
 	// Set array value
 	void SetArrayValue(const JsonVec& jArray);
 	// Get map value
-	JsonUnsortedMap GetMapValue() const;
+	JsonUnsortedMap& GetMapValue();
 	// Set map value
 	void SetMapValue(const JsonUnsortedMap& jMap);
 	

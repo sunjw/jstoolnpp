@@ -33,7 +33,7 @@ void JsonValue::SetStrValue(const string& str)
 	strValue = str;
 }
 
-JsonVec JsonValue::GetArrayValue() const
+JsonVec& JsonValue::GetArrayValue()
 {
 	return arrayValue;
 }
@@ -43,7 +43,7 @@ void JsonValue::SetArrayValue(const JsonVec& jArray)
 	arrayValue = jArray;
 }
 
-JsonUnsortedMap JsonValue::GetMapValue() const
+JsonUnsortedMap& JsonValue::GetMapValue()
 {
 	return mapValue;
 }
