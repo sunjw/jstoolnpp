@@ -673,6 +673,15 @@ void JSParser::GenStrJsonValue(JsonValue& jsonValue, string value)
 		else if(value[0] == '"')
 			value = strtrim(value, string("\""));
 
+		/*
+		 * STRING_VALUE 存入的时候会把周围的引号去掉
+		 * 输出的时候统一成 "..."
+		 * 所以要把里面的引号转义
+		 */
+		value = strreplace(value, "\\'", "'");
+		value = strreplace(value, "\\\"", "\"");
+		value = strreplace(value, "\"", "\\\"");
+
 		jsonValue.SetValueType(JsonValue::STRING_VALUE);
 	}
 	else if(IsNumChar(value[0]) || value[0] == '-' || value[0] == '+')
@@ -686,6 +695,10 @@ void JSParser::GenStrJsonValue(JsonValue& jsonValue, string value)
 	else if(value[0] == '/')
 	{
 		jsonValue.SetValueType(JsonValue::REGULAR_VALUE);
+	}
+	else
+	{
+		jsonValue.SetValueType(JsonValue::UNKNOWN_VALUE);
 	}
 
 	jsonValue.SetStrValue(value);

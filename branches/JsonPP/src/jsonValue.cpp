@@ -79,6 +79,7 @@ string JsonValue::ToString(int nRecuLevel) const
 	case JsonValue::NUMBER_VALUE:
 	case JsonValue::BOOL_VALUE:
 	case JsonValue::REGULAR_VALUE:
+	case JsonValue::UNKNOWN_VALUE:
 		ret.append(strValue);
 		break;
 	case JsonValue::MAP_VALUE:

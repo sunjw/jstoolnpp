@@ -29,11 +29,11 @@ int main(int argc, char* argv[])
 			JsonValue jsonValue;
 			jfp.GetJsonValue(jsonValue);
 
-			JsonUnsortedMap& jmap = jsonValue.GetMapValue()["web-app"].GetMapValue();
-			JsonValue& jval = jmap["xxx"];
-			JsonValue jvalNew("true");
-			jvalNew.SetValueType(JsonValue::BOOL_VALUE);
-			jval.MapPut("xxx2", jvalNew);
+			//JsonUnsortedMap& jmap = jsonValue.GetMapValue()["web-app"].GetMapValue();
+			//JsonValue& jval = jmap["xxx"];
+			//JsonValue jvalNew("true");
+			//jvalNew.SetValueType(JsonValue::BOOL_VALUE);
+			//jval.MapPut("xxx2", jvalNew);
 
 			jfp.Save(jsonValue);
 
