@@ -131,12 +131,9 @@ private:
 	string m_tokenB;
 	TokenQueue m_tokenBQueue;
 
-	CharStack m_blockStack;
-
-	StrSet m_specKeywordSet; // 后面要跟着括号的关键字集合
-	StrCharMap m_blockMap;
-
 	int m_nRecuLevel; // 块递归层次
+
+	CharStack m_blockStack;
 
 private:
 	// 阻止拷贝

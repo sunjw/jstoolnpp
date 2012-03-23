@@ -57,31 +57,6 @@ void JSParser::Init()
 	m_bPosNeg = false;
 
 	m_nRecuLevel = 0;
-
-	m_blockMap[string("if")] = IF;
-	m_blockMap[string("else")] = ELSE;
-	m_blockMap[string("for")] = FOR;
-	m_blockMap[string("do")] = DO;
-	m_blockMap[string("while")] = WHILE;
-	m_blockMap[string("switch")] = SWITCH;
-	m_blockMap[string("case")] = CASE;
-	m_blockMap[string("default")] = CASE;
-	m_blockMap[string("try")] = TRY;
-	m_blockMap[string("catch")] = CATCH;
-	m_blockMap[string("=")] = ASSIGN;
-	m_blockMap[string("function")] = FUNCTION;
-	m_blockMap[string("{")] = BLOCK;
-	m_blockMap[string("(")] = BRACKET;
-	m_blockMap[string("[")] = SQUARE;
-
-	m_specKeywordSet.insert("if");
-	m_specKeywordSet.insert("for");
-	m_specKeywordSet.insert("while");
-	m_specKeywordSet.insert("switch");
-	m_specKeywordSet.insert("catch");
-	m_specKeywordSet.insert("function");
-	m_specKeywordSet.insert("with");
-	m_specKeywordSet.insert("return");
 }
 
 bool JSParser::IsNormalChar(int ch)
