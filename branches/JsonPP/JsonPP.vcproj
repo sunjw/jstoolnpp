@@ -179,6 +179,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\jsonparser.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\jsonUnsortedMap.cpp"
 				>
 			</File>
@@ -206,6 +210,10 @@
 			>
 			<File
 				RelativePath=".\src\jsonFileProc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jsonparser.h"
 				>
 			</File>
 			<File

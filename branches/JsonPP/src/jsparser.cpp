@@ -1,6 +1,6 @@
 /* JSParser.cpp
    2012-3-11
-   Version: 0.9
+   Version: 0.9.5
 
 Copyright (c) 2012 SUN Junwen
 
@@ -18,28 +18,9 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
-#include "jsonpp.h"
 #include "jsparser.h"
 
 using namespace std;
-using namespace sunjwbase;
-
-template<class T>
-bool GetStackTop(stack<T> stk, T& ret)
-{
-	if(stk.size() == 0)
-		return false;
-	ret = stk.top();
-	return true;
-}
-
-template<class T>
-bool StackTopEq(stack<T> stk, T eq)
-{
-	if(stk.size() == 0)
-		return false;
-	return (eq == stk.top());
-}
 
 JSParser::JSParser()
 {
@@ -48,7 +29,6 @@ JSParser::JSParser()
 
 void JSParser::Init()
 {
-	m_debugOutput = false;
 	m_tokenCount = 0;
 
 	m_strBeforeReg = "(,=:[!&|?+{};\n";
@@ -56,7 +36,7 @@ void JSParser::Init()
 	m_bRegular = false;
 	m_bPosNeg = false;
 
-	m_nRecuLevel = 0;
+	m_bGetTokenInit = false;
 }
 
 bool JSParser::IsNormalChar(int ch)
@@ -100,9 +80,9 @@ bool JSParser::IsComment()
 	return (m_charA == '/' && (m_charB == '/' || m_charB == '*'));
 }
 
-void JSParser::GetTokenRaw(bool init)
+void JSParser::GetTokenRaw()
 {
-	if(init)
+	if(!m_bGetTokenInit)
 	{
 		m_charB = GetChar();
 	}
@@ -354,6 +334,13 @@ void JSParser::GetTokenRaw(bool init)
 
 void JSParser::GetToken()
 {
+	if(!m_bGetTokenInit)
+	{
+		// 第一次多调用一次 GetTokenRaw
+		GetTokenRaw();
+		m_bGetTokenInit = true;
+	}
+
 	PrepareRegular(); // 判断正则
 	PreparePosNeg(); // 判断正负数
 
@@ -457,224 +444,4 @@ void JSParser::PrepareTokenB()
 		m_tokenB = temp.token;
 		m_tokenBType = temp.type;
 	}
-}
-
-void JSParser::RecursiveProc(JsonValue& jsonValue)
-{
-	if(m_nRecuLevel == 0)
-	{
-		GetTokenRaw(true);
-		m_startClock = clock();
-		m_blockStack.push(EMPTY);
-	}
-
-	++m_nRecuLevel;
-
-	char stackTop = m_blockStack.top();
-
-	string key, strValue;
-	bool bGetKey = false;
-	bool bGetSplitor = false;
-
-	while(m_charA != 0)
-	{
-		// 获得下一个 m_tokenA 和 m_tokenB
-		GetToken();
-
-		// JsonParser 忽略换行, 其它的解析器可能不要忽略
-		if(m_tokenA == "\r\n" || m_tokenA == "\n" ||
-			m_tokenAType == COMMENT_TYPE_1 || m_tokenAType == COMMENT_TYPE_2)
-		{
-			continue;
-		}
-
-		/*
-		 * 至此，读取完成 m_tokenA 和 m_tokenB
-		 * 已经合并多个换行
-		 * 已经识别负数
-		 * 已经识别正则表达式
-		 */
-		if(m_tokenA == "{")
-		{
-			m_blockStack.push(BLOCK);
-
-			if(stackTop == EMPTY)
-			{
-				jsonValue.SetValueType(JsonValue::MAP_VALUE);
-				RecursiveProc(jsonValue);
-			}
-			else
-			{
-				JsonValue innerValue;
-				innerValue.SetValueType(JsonValue::MAP_VALUE);
-
-				RecursiveProc(innerValue);
-
-				if(stackTop == SQUARE)
-				{
-					jsonValue.ArrayPut(innerValue);
-				}
-				else if(stackTop == BLOCK)
-				{
-					bGetKey = false;
-					bGetSplitor = false;
-					jsonValue.MapPut(key, innerValue);
-				}
-			}
-
-			continue;
-		}
-
-		if(m_tokenA == "}")
-		{
-			bGetKey = false;
-			bGetSplitor = false;
-
-			m_blockStack.pop();
-			--m_nRecuLevel;
-
-			return;
-		}
-
-		if(m_tokenA == "[")
-		{
-			m_blockStack.push(SQUARE);
-
-			if(stackTop == EMPTY)
-			{
-				jsonValue.SetValueType(JsonValue::ARRAY_VALUE);
-				RecursiveProc(jsonValue);
-			}
-			else
-			{
-				JsonValue innerValue;
-				innerValue.SetValueType(JsonValue::ARRAY_VALUE);
-
-				RecursiveProc(innerValue);
-
-				if(stackTop == SQUARE)
-				{
-					jsonValue.ArrayPut(innerValue);
-				}
-				else if(stackTop == BLOCK)
-				{
-					bGetKey = false;
-					bGetSplitor = false;
-					jsonValue.MapPut(key, innerValue);
-				}
-			}
-
-			continue;
-		}
-
-		if(m_tokenA == "]")
-		{
-			m_blockStack.pop();
-			--m_nRecuLevel;
-
-			return;
-		}
-
-		if(stackTop == BLOCK)
-		{
-			if(!bGetKey && m_tokenA != ",")
-			{
-				key = m_tokenA;
-
-				if(key[0] == '\'')
-					key = strtrim(key, string("'"));
-				else if(key[0] == '"')
-					key = strtrim(key, string("\""));
-
-				bGetKey = true;
-				continue;
-			}
-
-			if(bGetKey && !bGetSplitor && m_tokenA == ":")
-			{
-				bGetSplitor = true;
-				continue;
-			}
-
-			if(bGetKey && bGetSplitor)
-			{
-				strValue = m_tokenA;
-
-				JsonValue jValue;
-				GenStrJsonValue(jValue, strValue);
-
-				jsonValue.MapPut(key, jValue);
-
-				bGetKey = false;
-				bGetSplitor = false;
-			}
-		}
-
-		if(stackTop == SQUARE)
-		{
-			if(m_tokenA != ",")
-			{
-				strValue = m_tokenA;
-
-				JsonValue jValue;
-				GenStrJsonValue(jValue, strValue);
-
-				jsonValue.ArrayPut(jValue);
-			}
-		}
-	}
-
-	if(m_nRecuLevel == 1)
-	{
-		//FlushLineBuffer();
-
-		m_endClock = clock();
-		m_duration = (double)(m_endClock - m_startClock) / CLOCKS_PER_SEC;
-		if(m_debugOutput)
-		{
-			cout << "Processed tokens: " << m_tokenCount << endl;
-			cout << "Time used: " << m_duration << "s" << endl;
-			cout << m_tokenCount/ m_duration << " tokens/second" << endl;
-		}
-	}
-}
-
-void JSParser::GenStrJsonValue(JsonValue& jsonValue, string value)
-{
-	if(value[0] == '\'' || value[0] == '"')
-	{
-		if(value[0] == '\'')
-			value = strtrim(value, string("'"));
-		else if(value[0] == '"')
-			value = strtrim(value, string("\""));
-
-		/*
-		 * STRING_VALUE 存入的时候会把周围的引号去掉
-		 * 输出的时候统一成 "..."
-		 * 所以要把里面的引号转义
-		 */
-		value = strreplace(value, "\\'", "'");
-		value = strreplace(value, "\\\"", "\"");
-		value = strreplace(value, "\"", "\\\"");
-
-		jsonValue.SetValueType(JsonValue::STRING_VALUE);
-	}
-	else if(IsNumChar(value[0]) || value[0] == '-' || value[0] == '+')
-	{
-		jsonValue.SetValueType(JsonValue::NUMBER_VALUE);
-	}
-	else if(value == "true" || value == "false")
-	{
-		jsonValue.SetValueType(JsonValue::BOOL_VALUE);
-	}
-	else if(value[0] == '/')
-	{
-		jsonValue.SetValueType(JsonValue::REGULAR_VALUE);
-	}
-	else
-	{
-		jsonValue.SetValueType(JsonValue::UNKNOWN_VALUE);
-	}
-
-	jsonValue.SetStrValue(value);
 }

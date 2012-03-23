@@ -1,6 +1,6 @@
 /* JSParser.h
    2012-3-11
-   Version: 0.9
+   Version: 0.9.5
 
 Copyright (c) 2012 SUN Junwen
 
@@ -27,8 +27,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <map>
 #include <set>
 
-#include "jsonpp.h"
-
 using namespace std;
 
 #define STRING_TYPE 0
@@ -36,35 +34,6 @@ using namespace std;
 #define REGULAR_TYPE 2
 #define COMMENT_TYPE_1 9 // 单行注释
 #define COMMENT_TYPE_2 10 // 多行注释
-
-/*
- * if-i, else-e, else if-i,
- * for-f, do-d, while-w,
- * switch-s, case-c, default-c
- * try-r, catch-h
- * {-BLOCK, (-BRACKET
- */
-#define IF 'i'
-#define ELSE 'e'
-#define FOR 'f'
-#define DO 'd'
-#define WHILE 'w'
-#define SWITCH 's'
-#define CASE 'c'
-#define TRY 'r'
-#define CATCH 'h'
-#define FUNCTION 'n'
-#define ASSIGN '='
-#define BLOCK '{'
-#define BRACKET '('
-#define SQUARE '['
-#define HELPER '\\'
-#define EMPTY ' '
-
-template<class T>
-bool GetStackTop(stack<T> stk, T& ret);
-template<class T>
-bool StackTopEq(stack<T> stk, T eq);
 
 struct TokenAndType
 {
@@ -86,10 +55,22 @@ public:
 	virtual ~JSParser()
 	{}
 
-	inline void Go(JsonValue& jsonValue)
-	{ RecursiveProc(jsonValue); }
+protected:
+	int m_charA;
+	int m_charB;
+	int m_tokenAType;
+	int m_tokenBType;
+	string m_tokenA;
+	string m_tokenB;
+	int m_tokenCount;
 
-	bool m_debugOutput;
+	bool inline IsNormalChar(int ch);
+	bool inline IsNumChar(int ch);
+	bool inline IsBlankChar(int ch);
+	bool inline IsSingleOper(int ch);
+	bool inline IsQuote(int ch);
+
+	void GetToken(); // 处理过负数, 正则等等的 GetToken 函数
 
 private:
 	void Init();
@@ -97,43 +78,21 @@ private:
 	// Should be implemented in derived class
 	virtual int GetChar() = 0; // JUST get next char from input
 
-	bool inline IsNormalChar(int ch);
-	bool inline IsNumChar(int ch);
-	bool inline IsBlankChar(int ch);
-	bool inline IsSingleOper(int ch);
-	bool inline IsQuote(int ch);
 	bool inline IsComment(); // 要联合判断 charA, charB
 
-	void GetTokenRaw(bool init = false);
-	void GetToken(); // 处理过负数, 正则等等的 GetToken 函数
+	void GetTokenRaw();
 
 	void PrepareRegular(); // 通过词法判断 tokenB 正则
 	void PreparePosNeg(); // 通过词法判断 tokenB 正负数
 	void PrepareTokenB();
 
-	void RecursiveProc(JsonValue& jsonValue);
-	void GenStrJsonValue(JsonValue& jsonValue, string value);
-
-	int m_tokenCount;
-	clock_t m_startClock;
-	clock_t m_endClock;
-	double m_duration;
-
 	string m_strBeforeReg; // 判断正则时，正则前面可以出现的字符
 
 	bool m_bRegular; // tokenB 实际是正则 GetToken 用到的两个成员状态
 	bool m_bPosNeg; // tokenB 实际是正负数
-	int m_charA;
-	int m_charB;
-	int m_tokenAType;
-	int m_tokenBType;
-	string m_tokenA;
-	string m_tokenB;
 	TokenQueue m_tokenBQueue;
 
-	int m_nRecuLevel; // 块递归层次
-
-	CharStack m_blockStack;
+	bool m_bGetTokenInit; // 是否是第一次执行 GetToken
 
 private:
 	// 阻止拷贝

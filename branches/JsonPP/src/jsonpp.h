@@ -1,6 +1,6 @@
 /* jsonpp.h
    2012-3-11
-   Version: 0.9
+   Version: 0.9.5
 
 Copyright (c) 2012 SUN Junwen
 

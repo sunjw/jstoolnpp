@@ -2,10 +2,9 @@
 #define _JSON_FILE_PROC_H_
 
 #include "jsonpp.h"
-#include "jsparser.h"
-#include "strhelper.h"
+#include "jsonparser.h"
 
-class JsonFileProc: public JSParser
+class JsonFileProc: public JsonParser
 {
 public:
 	explicit JsonFileProc(const sunjwbase::tstring& fileName);
