@@ -70,7 +70,7 @@ protected:
 	bool inline IsSingleOper(int ch);
 	bool inline IsQuote(int ch);
 
-	void GetToken(); // 处理过负数, 正则等等的 GetToken 函数
+	bool GetToken(); // 处理过负数, 正则等等的 GetToken 函数
 
 private:
 	void Init();

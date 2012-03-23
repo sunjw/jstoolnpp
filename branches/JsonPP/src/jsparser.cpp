@@ -332,7 +332,7 @@ void JSParser::GetTokenRaw()
 	}
 }
 
-void JSParser::GetToken()
+bool JSParser::GetToken()
 {
 	if(!m_bGetTokenInit)
 	{
@@ -362,6 +362,8 @@ void JSParser::GetToken()
 		m_tokenB = temp.token;
 		m_tokenBType = temp.type;
 	}
+
+	return (m_charA != 0);
 }
 
 void JSParser::PrepareRegular()

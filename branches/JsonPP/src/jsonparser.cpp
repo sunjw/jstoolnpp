@@ -47,7 +47,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 	if(m_nRecuLevel == 0)
 	{
 		m_startClock = clock();
-		//m_blockStack.push(EMPTY);
+		jsonValue.SetValueType(JsonValue::UNKNOWN_VALUE);
 	}
 
 	++m_nRecuLevel;
@@ -60,11 +60,8 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 	bool bGetKey = false;
 	bool bGetSplitor = false;
 
-	while(m_charA != 0)
+	while(GetToken()) // 获得下一个 m_tokenA 和 m_tokenB
 	{
-		// 获得下一个 m_tokenA 和 m_tokenB
-		GetToken();
-
 		// JsonParser 忽略换行, 其它的解析器可能不要忽略
 		if(m_tokenA == "\r\n" || 
 			m_tokenA == "\n" ||

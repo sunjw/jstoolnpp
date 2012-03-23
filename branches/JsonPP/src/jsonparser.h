@@ -58,6 +58,9 @@ class JsonParser: public JSParser
 public:
 	bool m_debugOutput;
 
+	JsonParser():m_nRecuLevel(0)
+	{}
+
 	inline void Go(JsonValue& jsonValue)
 	{ RecursiveProc(jsonValue); }
 
