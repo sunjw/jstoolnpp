@@ -37,6 +37,9 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 	{
 		case DLL_PROCESS_ATTACH:
 		{
+			g_hMod = hModule;
+			jsonDialog.init((HINSTANCE)g_hMod, nppData._nppHandle);
+
 			ShortcutKey* pShKey;
 			_hInst = (HINSTANCE)hModule;
 			
@@ -54,12 +57,15 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[3]._pFunc = jsFormat;
 			funcItem[4]._pFunc = NULL;
 
-			funcItem[5]._pFunc = options;
+			funcItem[5]._pFunc = jsonTree;
 			funcItem[6]._pFunc = NULL;
 
-			funcItem[7]._pFunc = checkUpdate;
-			funcItem[8]._pFunc = donate;
-			funcItem[9]._pFunc = about;
+			funcItem[7]._pFunc = options;
+			funcItem[8]._pFunc = NULL;
+
+			funcItem[9]._pFunc = checkUpdate;
+			funcItem[10]._pFunc = donate;
+			funcItem[11]._pFunc = about;
 
 			lstrcpy(funcItem[0]._itemName, TEXT("JS&Min"));
 			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (&New file)"));
@@ -74,12 +80,15 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[3]._pShKey = pShKey;
 			lstrcpy(funcItem[4]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[5]._itemName, TEXT("&Options..."));
+			lstrcpy(funcItem[5]._itemName, TEXT("&JsonTree"));
 			lstrcpy(funcItem[6]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[7]._itemName, TEXT("&Check for update..."));
-			lstrcpy(funcItem[8]._itemName, TEXT("&Donate"));
-			lstrcpy(funcItem[9]._itemName, TEXT("&About"));
+			lstrcpy(funcItem[7]._itemName, TEXT("&Options..."));
+			lstrcpy(funcItem[8]._itemName, TEXT("-SEPARATOR-"));
+
+			lstrcpy(funcItem[9]._itemName, TEXT("&Check for update..."));
+			lstrcpy(funcItem[10]._itemName, TEXT("&Donate"));
+			lstrcpy(funcItem[11]._itemName, TEXT("&About"));
 		}
 		break;
 
@@ -344,6 +353,30 @@ void jsFormat()
 	}
 
 	delete[] pJS;
+}
+
+void jsonTree()
+{
+	//::MessageBox(nppData._nppHandle, TEXT("SUNViewer"), TEXT("JsonTree!!!"), MB_OK);
+	jsonDialog.setParent(nppData._nppHandle);
+	tTbData	data = {0};
+
+	if (!jsonDialog.isCreated())
+	{
+		jsonDialog.create(&data);
+
+		// define the default docking behaviour
+		data.uMask = DWS_DF_CONT_LEFT;
+
+		data.pszModuleName = jsonDialog.getPluginFileName();
+		data.pszName=TEXT("JSMinNpp JSON Viewer");
+
+		// the dlgDlg should be the index of funcItem where the current function pointer is
+		data.dlgID = 0;
+		::SendMessage(nppData._nppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&data);
+	}
+	jsonDialog.display();
+	jsonDialog.drawTree();
 }
 
 void options()
