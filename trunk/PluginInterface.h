@@ -19,6 +19,8 @@
 #define PLUGININTERFACE_H
 
 #include <windows.h>
+#include "commctrl.h"
+
 #include "Scintilla.h"
 #include "Notepad_plus_msgs.h"
 

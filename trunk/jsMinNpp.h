@@ -21,6 +21,8 @@
 #pragma warning(disable:4005)
 
 #include "resource.h"
+#include "PluginInterface.h"
+#include "JSONDialog.h"
 #include "utility.h"
 
 //#define IDD_ABOUTBOX 250
@@ -29,18 +31,22 @@
 //#define IDC_STATIC -1
 //#endif
 
-const int nbFunc = 10;
+const int nbFunc = 12;
 
 HINSTANCE _hInst;
 NppData nppData;
 FuncItem funcItem[nbFunc];
 
+HANDLE g_hMod;
+JSONDialog jsonDialog;
 StruOptions struOptions;
 
 void jsMinCurrent();
 void jsMinNew();
 void jsMin(bool bNewFile = false);
 void jsFormat();
+
+void jsonTree();
 
 void options();
 

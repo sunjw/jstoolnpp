@@ -359,6 +359,18 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Docking.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DockingDlgInterface.h"
+				>
+			</File>
+			<File
+				RelativePath=".\dockingResource.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IniFileProcessor.h"
 				>
 			</File>
@@ -384,6 +396,10 @@
 			</File>
 			<File
 				RelativePath=".\jsMinNpp.h"
+				>
+			</File>
+			<File
+				RelativePath=".\JSONDialog.h"
 				>
 			</File>
 			<File
@@ -415,6 +431,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\StaticDialog.h"
+				>
+			</File>
+			<File
 				RelativePath=".\strhelper.h"
 				>
 			</File>
@@ -424,6 +444,10 @@
 			</File>
 			<File
 				RelativePath=".\version.h"
+				>
+			</File>
+			<File
+				RelativePath=".\Window.h"
 				>
 			</File>
 		</Filter>
@@ -475,11 +499,19 @@
 				>
 			</File>
 			<File
+				RelativePath=".\JSONDialog.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\optionsDlg.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\realjsformatter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\StaticDialog.cpp"
 				>
 			</File>
 			<File
