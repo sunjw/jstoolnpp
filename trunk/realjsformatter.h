@@ -28,12 +28,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 using namespace std;
 
+#ifndef _JS_PARSER_TYPE_
+#define _JS_PARSER_TYPE_
+
 #define STRING_TYPE 0
 #define OPER_TYPE 1
 #define REGULAR_TYPE 2
 #define COMMENT_TYPE_1 9 // 单行注释
 #define COMMENT_TYPE_2 10 // 多行注释
 
+struct TokenAndType
+{
+	string token;
+	int type;
+};
+
+#endif
 /*
  * if-i, else-e, else if-i,
  * for-f, do-d, while-w,
@@ -61,12 +71,6 @@ template<class T>
 bool GetStackTop(stack<T> stk, T& ret);
 template<class T>
 bool StackTopEq(stack<T> stk, T eq);
-
-struct TokenAndType
-{
-	string token;
-	int type;
-};
 
 class RealJSFormatter
 {

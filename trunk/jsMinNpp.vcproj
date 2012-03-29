@@ -403,6 +403,22 @@
 				>
 			</File>
 			<File
+				RelativePath=".\jsonparser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\jsonpp.h"
+				>
+			</File>
+			<File
+				RelativePath=".\jsonStringProc.h"
+				>
+			</File>
+			<File
+				RelativePath=".\jsparser.h"
+				>
+			</File>
+			<File
 				RelativePath=".\menuCmdID.h"
 				>
 			</File>
@@ -500,6 +516,26 @@
 			</File>
 			<File
 				RelativePath=".\JSONDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\jsonparser.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\jsonStringProc.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\jsonUnsortedMap.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\jsonValue.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\jsparser.cpp"
 				>
 			</File>
 			<File
