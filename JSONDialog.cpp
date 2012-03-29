@@ -18,14 +18,55 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "JSONDialog.h"
 
+#include "jsonpp.h"
+#include "jsonStringProc.h"
+
+using namespace std;
+using namespace sunjwbase;
+
 extern NppData nppData;
+
+
+BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
+{
+	HWND hWnd = getHSelf();
+	switch (message) 
+	{
+	case WM_INITDIALOG:
+		{
+			hTree=GetDlgItem(hWnd, IDC_TREE_JSON);// tree control
+		}
+		return FALSE;
+	case WM_SIZE:
+		{
+			int width,height;
+			width = LOWORD(lParam);
+			height = HIWORD(lParam) - 30;
+			SetWindowPos(GetDlgItem(hWnd, IDC_TREE_JSON), 
+				HWND_TOP, 0, 30, width, height, 
+				SWP_SHOWWINDOW);
+		}
+		return FALSE;
+	case WM_COMMAND:
+			switch (LOWORD(wParam))
+            {
+				case IDC_BTN_REFRESH:
+					refreshTree(hCurrScintilla);
+					break;
+			}
+			return FALSE;
+	default:
+		return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
+	}
+
+	return FALSE;
+}
 
 /*
 Delete all items from the tree and creates the root node
 */
 HTREEITEM JSONDialog::initTree(HWND hWndDlg)
 {
-
 	int TreeCount=TreeView_GetCount(GetDlgItem(this->getHSelf(),IDC_TREE_JSON));
 	if(TreeCount>0)
 		TreeView_DeleteAllItems(GetDlgItem(this->getHSelf(),IDC_TREE_JSON));
@@ -35,7 +76,7 @@ HTREEITEM JSONDialog::initTree(HWND hWndDlg)
 	return root;		
 }
 
-HTREEITEM JSONDialog::insertTree(LPTSTR text, HTREEITEM parentNode)
+HTREEITEM JSONDialog::insertTree(LPCTSTR text, HTREEITEM parentNode)
 {
 	HWND hWnd = getHSelf();
 
@@ -53,47 +94,121 @@ HTREEITEM JSONDialog::insertTree(LPTSTR text, HTREEITEM parentNode)
 	}
 	tvinsert.item.mask = TVIF_TEXT;
 
-	tvinsert.item.pszText = text;
+	tvinsert.item.pszText = (LPWSTR)text;
 	HTREEITEM item = (HTREEITEM)SendDlgItemMessage(
 		hWnd, IDC_TREE_JSON, TVM_INSERTITEM, 0, (LPARAM)&tvinsert);
 
 	return item;
 }
 
-/*
-parses curJSON and draws the tree.
-marks the error location in case of a parsing error
-*/
-void JSONDialog::drawTree()
+void JSONDialog::refreshTree(HWND hCurrScintilla)
 {
-	HWND hWnd = getHSelf();
-	HTREEITEM tree_root;
+	this->hCurrScintilla = hCurrScintilla;
 
-	tree_root = initTree(hWnd);
+	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
+    if (jsLen == 0) 
+		return;
 
-	/*HTREEITEM node1 = insertTree(TEXT("JSON2"), tree_root);
-	HTREEITEM node2 = insertTree(TEXT("JSON3"), node1);*/
+	char* pJS;
+	pJS = new char[jsLen+1];
+	::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
 
-	TreeView_Expand(GetDlgItem(hWnd, IDC_TREE_JSON), tree_root, TVE_EXPAND);
+	std::string strJSCode(pJS);
+
+	JsonStringProc jsonProc(strJSCode);
+
+	JsonValue jsonVal;
+	jsonProc.Go(jsonVal);
+
+	drawTree(jsonVal);
+
+	delete[] pJS;
 }
 
-BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
+void JSONDialog::drawTree(const JsonValue& jsonValue)
 {
-	int width,height;
-	switch (message) 
+	HWND hWnd = getHSelf();
+	HTREEITEM rootNode;
+
+	rootNode = initTree(hWnd);
+
+	const JsonValue::VALUE_TYPE& valType = jsonValue.GetValueType();
+	if(valType == JsonValue::UNKNOWN_VALUE)
 	{
-	case WM_INITDIALOG:
-		hTree=GetDlgItem(this->getHSelf(),IDC_TREE_JSON);// tree control
-		return TRUE;
+		::MessageBox(nppData._nppHandle, TEXT("Cannot parse json..."), TEXT("JsonViewer"), MB_OK);
+		return;
+	}
 
-	case WM_SIZE:
-		width=LOWORD(lParam);
-		height=HIWORD(lParam) - 30;
-		SetWindowPos(GetDlgItem(this->getHSelf(),IDC_TREE_JSON),HWND_TOP,0,30,width,height,SWP_SHOWWINDOW);
-		return TRUE;
+	insertJsonValue(jsonValue, rootNode);
 
-	default :
-		return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
+	TreeView_Expand(GetDlgItem(hWnd, IDC_TREE_JSON), rootNode, TVE_EXPAND);
+}
+
+void JSONDialog::insertJsonValue(const JsonValue& jsonValue, HTREEITEM node)
+{
+	JsonValue::VALUE_TYPE valType = jsonValue.GetValueType();
+	
+	if(valType == JsonValue::MAP_VALUE)
+	{
+		const JsonUnsortedMap& mapValue = jsonValue.GetMapValue();
+
+		JsonUnsortedMap::const_iterator itr = mapValue.begin();
+		for(; itr != mapValue.end(); ++itr)
+		{
+			const string& key = itr->first;
+			const JsonValue& value = itr->second;
+
+			insertJsonValue(key, value, node);
+		}
+	}
+	else if(valType == JsonValue::ARRAY_VALUE)
+	{
+		const JsonVec& arrayValue = jsonValue.GetArrayValue();
+
+		char buffer[1024];
+
+		JsonVec::const_iterator itr = arrayValue.begin();
+		JsonVec::size_type count = 0;
+		for(; itr != arrayValue.end(); ++itr, ++count)
+		{
+			const JsonValue& value = *itr;
+			
+			itoa(count, buffer, 10);
+			string key(buffer);
+			key = "[" + key + "]";
+
+			insertJsonValue(key, value, node);
+		}
+	}
+}
+
+void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, HTREEITEM node)
+{
+	tstring tstr(strtotstr(key));
+	JsonValue::VALUE_TYPE valType = jsonValue.GetValueType();
+
+	if(valType == JsonValue::UNKNOWN_VALUE ||
+		valType == JsonValue::NUMBER_VALUE ||
+		valType == JsonValue::BOOL_VALUE ||
+		valType == JsonValue::REGULAR_VALUE)
+	{
+		tstr.append(TEXT(" : "));
+		tstr.append(strtotstr(jsonValue.GetStrValue()));
+		insertTree(tstr.c_str(), node);
+	}
+	else if(valType == JsonValue::STRING_VALUE)
+	{
+		tstr.append(TEXT(" : "));
+		tstr.append(TEXT("\""));
+		tstr.append(strtotstr(jsonValue.GetStrValue()));
+		tstr.append(TEXT("\""));
+		insertTree(tstr.c_str(), node);
+	}
+	if(valType == JsonValue::MAP_VALUE ||
+		valType == JsonValue::ARRAY_VALUE)
+	{
+		HTREEITEM newNode = insertTree(tstr.c_str(), node);
+		insertJsonValue(jsonValue, newNode);
 	}
 }
 

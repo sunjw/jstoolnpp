@@ -24,10 +24,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "DockingDlgInterface.h"
 #include "PluginInterface.h"
 
-class JSONDialog : public DockingDlgInterface
+#include "jsonpp.h"
+
+class JSONDialog: public DockingDlgInterface
 {
 public :
-	JSONDialog() : DockingDlgInterface(IDD_TREE){};
+	JSONDialog(): 
+	   DockingDlgInterface(IDD_TREE), hCurrScintilla(NULL)
+	{};
 
     virtual void display(bool toShow = true) const {
         DockingDlgInterface::display(toShow);
@@ -37,16 +41,22 @@ public :
 		_hParent = parent2set;
 	};
 
-	void drawTree();
+	void refreshTree(HWND hCurrScintilla);
+	void drawTree(const JsonValue& jsonValue);
 
 protected :
 	virtual BOOL CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
-	char *curJSON;
+	HWND hCurrScintilla;
 	HANDLE hTree;
+
+
 	HTREEITEM initTree(HWND hWndDlg);
-	HTREEITEM insertTree(LPTSTR text, HTREEITEM parentNode);
+	HTREEITEM insertTree(LPCTSTR text, HTREEITEM parentNode);
+
+	void insertJsonValue(const JsonValue& jsonValue, HTREEITEM node);
+	void insertJsonValue(const std::string& key, const JsonValue& jsonValue, HTREEITEM node);
 };
 
 #endif //JSONDIALOG_H

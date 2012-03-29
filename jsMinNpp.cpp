@@ -26,6 +26,7 @@
 #include "version.h"
 #include "optionsDlg.h"
 #include "aboutDlg.h"
+
 #include "jsminCharArray.h"
 #include "jsformatString.h"
 
@@ -80,7 +81,13 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[3]._pShKey = pShKey;
 			lstrcpy(funcItem[4]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[5]._itemName, TEXT("&JsonTree"));
+			lstrcpy(funcItem[5]._itemName, TEXT("Json &Viewer"));
+			pShKey = new ShortcutKey; // Ctrl+Alt+M
+			pShKey->_isAlt = true;
+			pShKey->_isCtrl = true;
+			pShKey->_isShift = false;
+			pShKey->_key = 'J';
+			funcItem[5]._pShKey = pShKey;
 			lstrcpy(funcItem[6]._itemName, TEXT("-SEPARATOR-"));
 
 			lstrcpy(funcItem[7]._itemName, TEXT("&Options..."));
@@ -348,8 +355,7 @@ void jsFormat()
 	}
 	catch(std::exception ex)
 	{
-		::MessageBox(nppData._nppHandle, TEXT("ERROR"), TEXT("JSFormat"), MB_OK);
-		//cout << "Error: " << ex.what() << endl;
+		::MessageBox(nppData._nppHandle, TEXT("ERROR"), TEXT("JsonViewer"), MB_OK);
 	}
 
 	delete[] pJS;
@@ -369,14 +375,17 @@ void jsonTree()
 		data.uMask = DWS_DF_CONT_LEFT;
 
 		data.pszModuleName = jsonDialog.getPluginFileName();
-		data.pszName=TEXT("JSMinNpp JSON Viewer");
+		data.pszName = TEXT("JSMinNpp JSON Viewer");
 
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		data.dlgID = 0;
 		::SendMessage(nppData._nppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&data);
 	}
 	jsonDialog.display();
-	jsonDialog.drawTree();
+
+	HWND hCurrScintilla = getCurrentScintillaHandle();
+
+	jsonDialog.refreshTree(hCurrScintilla);
 }
 
 void options()
