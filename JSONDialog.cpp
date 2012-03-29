@@ -2,6 +2,9 @@
 This file is part of JSONViewer Plugin for Notepad++
 Copyright (C)2011 Kapil Ratnani <kapil.ratnani@iiitb.net>
 
+This file is also part of JSMinNpp Plugin for Notepad++ now :)
+Copyright (C)2012 SUN Junwen <sunjw8888@gmail.com>
+
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -27,7 +30,7 @@ using namespace sunjwbase;
 extern NppData nppData;
 
 
-BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
+BOOL CALLBACK JSONDialog::jsonDlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	HWND hWnd = getHSelf();
 	switch (message) 

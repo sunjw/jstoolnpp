@@ -2,6 +2,9 @@
 This file is part of JSONViewer Plugin for Notepad++
 Copyright (C)2011 Kapil Ratnani <kapil.ratnani@iiitb.net>
 
+This file is also part of JSMinNpp Plugin for Notepad++ now :)
+Copyright (C)2012 SUN Junwen <sunjw8888@gmail.com>
+
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
@@ -17,8 +20,8 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
-#ifndef JSONDIALOG_H
-#define JSONDIALOG_H
+#ifndef _JSON_DIALOG_H_
+#define _JSON_DIALOG_H_
 
 #include "resource.h"
 #include "DockingDlgInterface.h"
@@ -45,7 +48,7 @@ public :
 	void drawTree(const JsonValue& jsonValue);
 
 protected :
-	virtual BOOL CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
+	virtual BOOL CALLBACK jsonDlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
 	HWND hCurrScintilla;

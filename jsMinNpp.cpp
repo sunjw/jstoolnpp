@@ -82,7 +82,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			lstrcpy(funcItem[4]._itemName, TEXT("-SEPARATOR-"));
 
 			lstrcpy(funcItem[5]._itemName, TEXT("Json &Viewer"));
-			pShKey = new ShortcutKey; // Ctrl+Alt+M
+			pShKey = new ShortcutKey; // Ctrl+Alt+J
 			pShKey->_isAlt = true;
 			pShKey->_isCtrl = true;
 			pShKey->_isShift = false;
