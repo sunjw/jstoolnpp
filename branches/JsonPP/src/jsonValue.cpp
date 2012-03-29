@@ -38,12 +38,22 @@ JsonVec& JsonValue::GetArrayValue()
 	return arrayValue;
 }
 
+const JsonVec& JsonValue::GetArrayValue() const 
+{
+	return arrayValue;
+}
+
 void JsonValue::SetArrayValue(const JsonVec& jArray)
 {
 	arrayValue = jArray;
 }
 
 JsonUnsortedMap& JsonValue::GetMapValue()
+{
+	return mapValue;
+}
+
+const JsonUnsortedMap& JsonValue::GetMapValue() const
 {
 	return mapValue;
 }

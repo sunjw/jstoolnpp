@@ -118,10 +118,12 @@ public:
 	void SetStrValue(const std::string& str);
 	// Get array value
 	JsonVec& GetArrayValue();
+	const JsonVec& GetArrayValue() const;
 	// Set array value
 	void SetArrayValue(const JsonVec& jArray);
 	// Get map value
 	JsonUnsortedMap& GetMapValue();
+	const JsonUnsortedMap& GetMapValue() const;
 	// Set map value
 	void SetMapValue(const JsonUnsortedMap& jMap);
 	
