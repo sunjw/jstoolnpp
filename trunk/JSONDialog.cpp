@@ -30,7 +30,7 @@ using namespace sunjwbase;
 extern NppData nppData;
 
 
-BOOL CALLBACK JSONDialog::jsonDlgProc(UINT message, WPARAM wParam, LPARAM lParam)
+BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
 	HWND hWnd = getHSelf();
 	switch (message) 
