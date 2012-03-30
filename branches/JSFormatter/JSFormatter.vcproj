@@ -183,6 +183,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\jsparser.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\realjsformatter.cpp"
 				>
 			</File>
@@ -194,6 +198,10 @@
 			>
 			<File
 				RelativePath=".\src\jsfStream.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\jsparser.h"
 				>
 			</File>
 			<File
