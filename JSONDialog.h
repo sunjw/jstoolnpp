@@ -48,7 +48,7 @@ public :
 	void drawTree(const JsonValue& jsonValue);
 
 protected :
-	virtual BOOL CALLBACK jsonDlgProc(UINT message, WPARAM wParam, LPARAM lParam);
+	virtual BOOL CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
 	HWND hCurrScintilla;

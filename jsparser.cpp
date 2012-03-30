@@ -363,7 +363,7 @@ bool JSParser::GetToken()
 		m_tokenBType = temp.type;
 	}
 
-	return (m_charA != 0);
+	return (m_charA != 0 || m_tokenA != "");
 }
 
 void JSParser::PrepareRegular()
