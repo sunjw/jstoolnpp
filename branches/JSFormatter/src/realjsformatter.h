@@ -41,36 +41,37 @@ using namespace std;
  * try-r, catch-h
  * {-BLOCK, (-BRACKET
  */
-#define IF 'i'
-#define ELSE 'e'
-#define FOR 'f'
-#define DO 'd'
-#define WHILE 'w'
-#define SWITCH 's'
-#define CASE 'c'
-#define TRY 'r'
-#define CATCH 'h'
-#define FUNCTION 'n'
-#define ASSIGN '='
-#define BLOCK '{'
-#define BRACKET '('
-#define SQUARE '['
-#define HELPER '\\'
-
-template<class T>
-bool GetStackTop(stack<T> stk, T& ret);
-template<class T>
-bool StackTopEq(stack<T> stk, T eq);
-
-struct TokenAndType
-{
-	string token;
-	int type;
-};
+#define JS_IF 'i'
+#define JS_ELSE 'e'
+#define JS_FOR 'f'
+#define JS_DO 'd'
+#define JS_WHILE 'w'
+#define JS_SWITCH 's'
+#define JS_CASE 'c'
+#define JS_TRY 'r'
+#define JS_CATCH 'h'
+#define JS_FUNCTION 'n'
+#define JS_ASSIGN '='
+#define JS_BLOCK '{'
+#define JS_BRACKET '('
+#define JS_SQUARE '['
+#define JS_HELPER '\\'
 
 class RealJSFormatter
 {
+private:
+	struct TokenAndType
+	{
+		string token;
+		int type;
+	};
+
 public:
+	template<class T>
+	bool GetStackTop(stack<T> stk, T& ret);
+	template<class T>
+	bool StackTopEq(stack<T> stk, T eq);
+
 	typedef stack<char> CharStack;
 	typedef stack<bool> BoolStack;
 	typedef queue<TokenAndType> TokenQueue;

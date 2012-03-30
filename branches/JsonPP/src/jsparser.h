@@ -35,14 +35,15 @@ using namespace std;
 #define COMMENT_TYPE_1 9 // 单行注释
 #define COMMENT_TYPE_2 10 // 多行注释
 
-struct TokenAndType
-{
-	string token;
-	int type;
-};
-
 class JSParser
 {
+private:
+	struct TokenAndType
+	{
+		string token;
+		int type;
+	};
+
 public:
 	typedef stack<char> CharStack;
 	typedef stack<bool> BoolStack;
