@@ -66,16 +66,16 @@ END
 // Dialog
 //
 
-IDD_ABOUTBOX DIALOGEX 0, 0, 223, 130
+IDD_ABOUTBOX DIALOGEX 0, 0, 280, 130
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    PUSHBUTTON      "OK",IDCLOSE,161,108,50,14
-    GROUPBOX        "JSMin for Notepad++",IDC_STATIC,10,9,201,93,BS_CENTER
+    PUSHBUTTON      "OK",IDCLOSE,219,108,50,14
+    GROUPBOX        "JSMin for Notepad++",IDC_STATIC,10,9,258,93,BS_CENTER
     LTEXT           "Author : Sun Junwen",IDC_STATIC,20,26,100,8
     LTEXT           "Version : ",IDC_STATIC,20,43,31,8
     LTEXT           "Licence : GPL",IDC_STATIC,20,62,43,8
-    LTEXT           "Special thanks to : Don HO and Douglas Crockford",IDC_STATIC,20,81,175,8
+    LTEXT           "Special thanks to : Don HO, Douglas Crockford and Kapil Ratnani",IDC_STATIC,20,81,230,8
     LTEXT           VERSION_VALUE,IDC_STATIC,49,43,30,8
     PUSHBUTTON      "Project Home",IDC_PROPAGE,10,108,50,14
 END
@@ -149,7 +149,7 @@ BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
         LEFTMARGIN, 10
-        RIGHTMARGIN, 211
+        RIGHTMARGIN, 268
         TOPMARGIN, 9
         BOTTOMMARGIN, 122
     END
