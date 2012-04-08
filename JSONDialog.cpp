@@ -108,13 +108,28 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 {
 	this->hCurrScintilla = hCurrScintilla;
 
-	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
+	size_t jsLen, jsLenSel;
+	jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
     if (jsLen == 0) 
 		return;
 
+	size_t selStart = ::SendMessage(hCurrScintilla, SCI_GETSELECTIONSTART, 0, 0);
+	size_t selEnd = ::SendMessage(hCurrScintilla, SCI_GETSELECTIONEND, 0, 0);
+	bool bFormatSel = !(selStart == selEnd);
+
 	char* pJS;
-	pJS = new char[jsLen+1];
-	::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
+
+	if(!bFormatSel)
+	{
+		pJS = new char[jsLen+1];
+		::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
+	}
+	else
+	{
+		jsLenSel = ::SendMessage(hCurrScintilla, SCI_GETSELTEXT, 0, 0);
+		pJS = new char[jsLenSel];
+		::SendMessage(hCurrScintilla, SCI_GETSELTEXT, jsLen, (LPARAM)pJS);
+	}
 
 	std::string strJSCode(pJS);
 
