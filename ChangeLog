@@ -2,7 +2,7 @@
 Release a Beta.
 
 1.10.4
-Change class inheritance hierarchy to make a smaller binary file.
+Change classes inheritance hierarchy to build a smaller binary file.
 
 1.10.2
 Add a Json Viewer.
