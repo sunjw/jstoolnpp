@@ -20,7 +20,7 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops;.\no_ms_shit.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops;.\src\no_ms_shit.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\DockingFeature;.\"
+				AdditionalIncludeDirectories=".\src\DockingFeature;.\src\"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;NppTools_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -101,7 +101,7 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops;.\no_ms_shit.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops;.\src\no_ms_shit.vsprops"
 			CharacterSet="2"
 			>
 			<Tool
@@ -123,7 +123,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="1"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".\DockingFeature;.\"
+				AdditionalIncludeDirectories=".\src\DockingFeature;.\src\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;NppTools_EXPORTS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -183,7 +183,7 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops;.\no_ms_shit.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops;.\src\no_ms_shit.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -205,7 +205,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="1"
 				FavorSizeOrSpeed="2"
-				AdditionalIncludeDirectories=".\DockingFeature;.\"
+				AdditionalIncludeDirectories=".\src\DockingFeature;.\src\"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;NppTools_EXPORTS"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
@@ -265,7 +265,7 @@
 			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops;.\no_ms_shit.vsprops"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC70.vsprops;.\src\no_ms_shit.vsprops"
 			CharacterSet="1"
 			>
 			<Tool
@@ -286,7 +286,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".\DockingFeature;.\"
+				AdditionalIncludeDirectories=".\src\DockingFeature;.\src\"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;NppTools_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -351,119 +351,119 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\aboutDlg.h"
+				RelativePath=".\src\aboutDlg.h"
 				>
 			</File>
 			<File
-				RelativePath=".\comDef.h"
+				RelativePath=".\src\comDef.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Docking.h"
+				RelativePath=".\src\Docking.h"
 				>
 			</File>
 			<File
-				RelativePath=".\DockingDlgInterface.h"
+				RelativePath=".\src\DockingDlgInterface.h"
 				>
 			</File>
 			<File
-				RelativePath=".\dockingResource.h"
+				RelativePath=".\src\dockingResource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IniFileProcessor.h"
+				RelativePath=".\src\IniFileProcessor.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IniProcessor.h"
+				RelativePath=".\src\IniProcessor.h"
 				>
 			</File>
 			<File
-				RelativePath=".\IniValue.h"
+				RelativePath=".\src\IniValue.h"
 				>
 			</File>
 			<File
-				RelativePath=".\jsformatString.h"
+				RelativePath=".\src\jsformatString.h"
 				>
 			</File>
 			<File
-				RelativePath=".\jsmin.h"
+				RelativePath=".\src\jsmin.h"
 				>
 			</File>
 			<File
-				RelativePath=".\jsminCharArray.h"
+				RelativePath=".\src\jsminCharArray.h"
 				>
 			</File>
 			<File
-				RelativePath=".\jsMinNpp.h"
+				RelativePath=".\src\jsMinNpp.h"
 				>
 			</File>
 			<File
-				RelativePath=".\JSONDialog.h"
+				RelativePath=".\src\JSONDialog.h"
 				>
 			</File>
 			<File
-				RelativePath=".\jsonparser.h"
+				RelativePath=".\src\jsonparser.h"
 				>
 			</File>
 			<File
-				RelativePath=".\jsonpp.h"
+				RelativePath=".\src\jsonpp.h"
 				>
 			</File>
 			<File
-				RelativePath=".\jsonStringProc.h"
+				RelativePath=".\src\jsonStringProc.h"
 				>
 			</File>
 			<File
-				RelativePath=".\jsparser.h"
+				RelativePath=".\src\jsparser.h"
 				>
 			</File>
 			<File
-				RelativePath=".\menuCmdID.h"
+				RelativePath=".\src\menuCmdID.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Notepad_plus_msgs.h"
+				RelativePath=".\src\Notepad_plus_msgs.h"
 				>
 			</File>
 			<File
-				RelativePath=".\optionsDlg.h"
+				RelativePath=".\src\optionsDlg.h"
 				>
 			</File>
 			<File
-				RelativePath=".\PluginInterface.h"
+				RelativePath=".\src\PluginInterface.h"
 				>
 			</File>
 			<File
-				RelativePath=".\realjsformatter.h"
+				RelativePath=".\src\realjsformatter.h"
 				>
 			</File>
 			<File
-				RelativePath=".\resource.h"
+				RelativePath=".\src\resource.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Scintilla.h"
+				RelativePath=".\src\Scintilla.h"
 				>
 			</File>
 			<File
-				RelativePath=".\StaticDialog.h"
+				RelativePath=".\src\StaticDialog.h"
 				>
 			</File>
 			<File
-				RelativePath=".\strhelper.h"
+				RelativePath=".\src\strhelper.h"
 				>
 			</File>
 			<File
-				RelativePath=".\utility.h"
+				RelativePath=".\src\utility.h"
 				>
 			</File>
 			<File
-				RelativePath=".\version.h"
+				RelativePath=".\src\version.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Window.h"
+				RelativePath=".\src\Window.h"
 				>
 			</File>
 		</Filter>
@@ -473,7 +473,7 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\jsMinNpp.rc"
+				RelativePath=".\src\jsMinNpp.rc"
 				>
 			</File>
 		</Filter>
@@ -483,84 +483,84 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\aboutDlg.cpp"
+				RelativePath=".\src\aboutDlg.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\IniFileProcessor.cpp"
+				RelativePath=".\src\IniFileProcessor.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\IniProcessor.cpp"
+				RelativePath=".\src\IniProcessor.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\IniValue.cpp"
+				RelativePath=".\src\IniValue.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\jsformatString.cpp"
+				RelativePath=".\src\jsformatString.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\jsmin.cpp"
+				RelativePath=".\src\jsmin.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\jsminCharArray.cpp"
+				RelativePath=".\src\jsminCharArray.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\jsMinNpp.cpp"
+				RelativePath=".\src\jsMinNpp.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\JSONDialog.cpp"
+				RelativePath=".\src\JSONDialog.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\jsonparser.cpp"
+				RelativePath=".\src\jsonparser.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\jsonStringProc.cpp"
+				RelativePath=".\src\jsonStringProc.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\jsonUnsortedMap.cpp"
+				RelativePath=".\src\jsonUnsortedMap.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\jsonValue.cpp"
+				RelativePath=".\src\jsonValue.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\jsparser.cpp"
+				RelativePath=".\src\jsparser.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\optionsDlg.cpp"
+				RelativePath=".\src\optionsDlg.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\realjsformatter.cpp"
+				RelativePath=".\src\realjsformatter.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\StaticDialog.cpp"
+				RelativePath=".\src\StaticDialog.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\strhelper.cpp"
+				RelativePath=".\src\strhelper.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\utility.cpp"
+				RelativePath=".\src\utility.cpp"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\ChangeLog"
+			RelativePath=".\src\ChangeLog"
 			>
 		</File>
 	</Files>
