@@ -97,7 +97,7 @@ HTREEITEM JSONDialog::insertTree(LPCTSTR text, HTREEITEM parentNode)
 	}
 	tvinsert.item.mask = TVIF_TEXT;
 
-	tvinsert.item.pszText = (LPWSTR)text;
+	tvinsert.item.pszText = (LPTSTR)text;
 	HTREEITEM item = (HTREEITEM)SendDlgItemMessage(
 		hWnd, IDC_TREE_JSON, TVM_INSERTITEM, 0, (LPARAM)&tvinsert);
 
