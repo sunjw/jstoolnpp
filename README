@@ -1,6 +1,11 @@
-A javascript plugin for Notepad++. 
-Use Douglas Crockford's JSMin to minimize javascript code and use my own algorithm to format javascript code. 
+A javascript plugin for Notepad++ formerly JSMinNpp.
+ * Douglas Crockford's JSMin algorithm to minimize javascript code.
+ * My own algorithm to format javascript code.
+ * A JSON data viewer. 
+
 Really helpful to javascript coder on Notepad++ and really easy to use it.
+Made in China.
+Project Site http://jsminnpp.sourceforge.net/ 
 
 INSTALL
 Download it from http://sourceforge.net/projects/jsminnpp/ and copy JSMinNpp.dll to plugin directory of Notepad++.

@@ -1,4 +1,9 @@
-1.10.4
+1.11 (since 1.10)
+Move to Google Code.
+Add a Json Viewer.
+Change classes inheritance hierarchy to build a smaller binary file.
+
+1.10.6
 Release a Beta.
 
 1.10.4
