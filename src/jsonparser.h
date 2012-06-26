@@ -31,38 +31,38 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  * try-r, catch-h
  * {-BLOCK, (-BRACKET
  */
-#define IF 'i'
-#define ELSE 'e'
-#define FOR 'f'
-#define DO 'd'
-#define WHILE 'w'
-#define SWITCH 's'
-#define CASE 'c'
-#define TRY_ 'r'
-#define CATCH_ 'h'
-#define FUNCTION 'n'
-#define ASSIGN '='
-#define BLOCK '{'
-#define BRACKET '('
-#define SQUARE '['
-#define HELPER '\\'
-#define EMPTY 0
-
-template<class T>
-bool GetStackTop(stack<T> stk, T& ret);
-template<class T>
-bool StackTopEq(stack<T> stk, T eq);
+#define JS_IF 'i'
+#define JS_ELSE 'e'
+#define JS_FOR 'f'
+#define JS_DO 'd'
+#define JS_WHILE 'w'
+#define JS_SWITCH 's'
+#define JS_CASE 'c'
+#define JS_TRY 'r'
+#define JS_CATCH 'h'
+#define JS_FUNCTION 'n'
+#define JS_ASSIGN '='
+#define JS_BLOCK '{'
+#define JS_BRACKET '('
+#define JS_SQUARE '['
+#define JS_HELPER '\\'
+#define JS_EMPTY 0
 
 class JsonParser: public JSParser
 {
 public:
-	bool m_debugOutput;
+	template<class T>
+	bool GetStackTop(stack<T> stk, T& ret);
+	template<class T>
+	bool StackTopEq(stack<T> stk, T eq);
 
 	JsonParser():m_nRecuLevel(0)
 	{}
 
 	inline void Go(JsonValue& jsonValue)
 	{ RecursiveProc(jsonValue); }
+
+	bool m_debugOutput;
 
 private:
 	int m_nRecuLevel; // ¿éµÝ¹é²ã´Î
@@ -75,6 +75,7 @@ private:
 
 	void RecursiveProc(JsonValue& jsonValue);
 	void GenStrJsonValue(JsonValue& jsonValue, std::string value);
+	std::string ReadStrValue();
 };
 
 #endif
