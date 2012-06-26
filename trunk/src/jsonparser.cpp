@@ -25,7 +25,7 @@ using namespace std;
 using namespace sunjwbase;
 
 template<class T>
-bool GetStackTop(stack<T> stk, T& ret)
+bool JsonParser::GetStackTop(stack<T> stk, T& ret)
 {
 	if(stk.size() == 0)
 		return false;
@@ -34,7 +34,7 @@ bool GetStackTop(stack<T> stk, T& ret)
 }
 
 template<class T>
-bool StackTopEq(stack<T> stk, T eq)
+bool JsonParser::StackTopEq(stack<T> stk, T eq)
 {
 	if(stk.size() == 0)
 		return false;
@@ -53,7 +53,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 	++m_nRecuLevel;
 	// initial job
 
-	char stackTop = EMPTY;
+	char stackTop = JS_EMPTY;
 	GetStackTop(m_blockStack, stackTop);
 
 	string key, strValue;
@@ -79,9 +79,9 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		 */
 		if(m_tokenA == "{")
 		{
-			m_blockStack.push(BLOCK);
+			m_blockStack.push(JS_BLOCK);
 
-			if(stackTop == EMPTY)
+			if(stackTop == JS_EMPTY)
 			{
 				jsonValue.SetValueType(JsonValue::MAP_VALUE);
 				RecursiveProc(jsonValue);
@@ -93,11 +93,11 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 				RecursiveProc(innerValue);
 
-				if(stackTop == SQUARE)
+				if(stackTop == JS_SQUARE)
 				{
 					jsonValue.ArrayPut(innerValue);
 				}
-				else if(stackTop == BLOCK)
+				else if(stackTop == JS_BLOCK)
 				{
 					bGetKey = false;
 					bGetSplitor = false;
@@ -121,9 +121,9 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 		if(m_tokenA == "[")
 		{
-			m_blockStack.push(SQUARE);
+			m_blockStack.push(JS_SQUARE);
 
-			if(stackTop == EMPTY)
+			if(stackTop == JS_EMPTY)
 			{
 				jsonValue.SetValueType(JsonValue::ARRAY_VALUE);
 				RecursiveProc(jsonValue);
@@ -135,11 +135,11 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 				RecursiveProc(innerValue);
 
-				if(stackTop == SQUARE)
+				if(stackTop == JS_SQUARE)
 				{
 					jsonValue.ArrayPut(innerValue);
 				}
-				else if(stackTop == BLOCK)
+				else if(stackTop == JS_BLOCK)
 				{
 					bGetKey = false;
 					bGetSplitor = false;
@@ -158,7 +158,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			return;
 		}
 
-		if(stackTop == BLOCK)
+		if(stackTop == JS_BLOCK)
 		{
 			if(!bGetKey && m_tokenA != ",")
 			{
@@ -181,7 +181,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 			if(bGetKey && bGetSplitor)
 			{
-				strValue = m_tokenA;
+				strValue = ReadStrValue();
 
 				JsonValue jValue;
 				GenStrJsonValue(jValue, strValue);
@@ -193,11 +193,11 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			}
 		}
 
-		if(stackTop == SQUARE)
+		if(stackTop == JS_SQUARE)
 		{
 			if(m_tokenA != ",")
 			{
-				strValue = m_tokenA;
+				strValue = ReadStrValue();
 
 				JsonValue jValue;
 				GenStrJsonValue(jValue, strValue);
@@ -221,6 +221,24 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		}
 	}
 	// finished job
+}
+
+string JsonParser::ReadStrValue()
+{
+	string ret(m_tokenA);
+	// fix decimal number value bug
+	if(m_tokenB == ".")
+	{
+		// maybe it's a decimal
+		string strDec(m_tokenA);
+		GetToken();
+		strDec.append(".");
+		strDec.append(m_tokenB);
+		ret = strDec;
+		GetToken();
+	}
+
+	return ret;
 }
 
 void JsonParser::GenStrJsonValue(JsonValue& jsonValue, string value)
