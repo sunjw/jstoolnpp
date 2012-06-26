@@ -75,6 +75,7 @@ private:
 
 	void RecursiveProc(JsonValue& jsonValue);
 	void GenStrJsonValue(JsonValue& jsonValue, std::string value);
+	std::string ReadStrValue();
 };
 
 #endif

@@ -181,7 +181,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 			if(bGetKey && bGetSplitor)
 			{
-				strValue = m_tokenA;
+				strValue = ReadStrValue();
 
 				JsonValue jValue;
 				GenStrJsonValue(jValue, strValue);
@@ -197,7 +197,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		{
 			if(m_tokenA != ",")
 			{
-				strValue = m_tokenA;
+				strValue = ReadStrValue();
 
 				JsonValue jValue;
 				GenStrJsonValue(jValue, strValue);
@@ -221,6 +221,24 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		}
 	}
 	// finished job
+}
+
+string JsonParser::ReadStrValue()
+{
+	string ret(m_tokenA);
+	// fix decimal number value bug
+	if(m_tokenB == ".")
+	{
+		// maybe it's a decimal
+		string strDec(m_tokenA);
+		GetToken();
+		strDec.append(".");
+		strDec.append(m_tokenB);
+		ret = strDec;
+		GetToken();
+	}
+
+	return ret;
 }
 
 void JsonParser::GenStrJsonValue(JsonValue& jsonValue, string value)
