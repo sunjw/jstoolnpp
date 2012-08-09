@@ -209,19 +209,25 @@ void RealJSFormatter::PutString(const string& str)
 
 void RealJSFormatter::PutLineBuffer()
 {
-	for(size_t i = 0; i < m_initIndent.length(); ++i)
-		PutChar(m_initIndent[i]); // 先输出预缩进
-
-	for(int c = 0; c < m_nLineIndents; ++c)
-		for(int c2 = 0; c2 < m_nChPerInd; ++c2)
-			PutChar(m_chIndent);
-
 	string line;
 	line.append(TrimRightSpace(m_lineBuffer));
+	
+	if(line != "") // Fix "JSLint unexpect space" bug
+	{
+		for(size_t i = 0; i < m_initIndent.length(); ++i)
+			PutChar(m_initIndent[i]); // 先输出预缩进
+
+		for(int c = 0; c < m_nLineIndents; ++c)
+			for(int c2 = 0; c2 < m_nChPerInd; ++c2)
+				PutChar(m_chIndent); // 输出缩进
+	}
+	
+	// 加上换行
 	if(m_bPutCR)
 		line.append("\r"); //PutChar('\r');
 	line.append("\n"); //PutChar('\n');
 
+	// 输出 line
 	for(size_t i = 0; i < line.length(); ++i)
 		PutChar(line[i]);
 }
