@@ -23,6 +23,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 using namespace std;
 using namespace sunjwbase;
 
+JsonValue& JsonValue::operator=(const JsonValue& rhs)
+{
+	if(this == &rhs)
+		return *this;
+
+	valType = rhs.valType;
+	strValue = rhs.strValue;
+	arrayValue = rhs.arrayValue;
+	mapValue = rhs.mapValue;
+
+	return *this;
+}
+
 string JsonValue::GetStrValue() const
 {
 	return strValue;
@@ -150,4 +163,38 @@ string JsonValue::ToString(int nRecuLevel) const
 	}
 
 	return ret;
+}
+
+// for ArrayValue
+JsonValue& JsonValue::operator[](JsonVec::size_type idx)
+{
+	if(valType != JsonValue::ARRAY_VALUE)
+	{
+		// Change to ARRAY_VALUE
+		strValue = "";
+		mapValue.clear();
+		valType = JsonValue::ARRAY_VALUE;
+	}
+
+	while(arrayValue.size() <= idx)
+	{
+		// need to expand
+		arrayValue.push_back(JsonValue());
+	}
+
+	return arrayValue[idx];
+}
+
+// for MapValue
+JsonValue& JsonValue::operator[](const std::string& key)
+{
+	if(valType != JsonValue::MAP_VALUE)
+	{
+		// Change to MAP_VALUE
+		strValue = "";
+		arrayValue.clear();
+		valType = JsonValue::MAP_VALUE;
+	}
+
+	return mapValue[key];
 }

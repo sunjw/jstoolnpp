@@ -29,14 +29,15 @@ int main(int argc, char* argv[])
 			JsonValue jsonValue;
 			jfp.GetJsonValue(jsonValue);
 
-			/*JsonUnsortedMap& jmap = jsonValue.GetMapValue()["web-app"].GetMapValue();
-			JsonValue& jval = jmap["taglib"];
-			JsonValue jvalNew;
-			jvalNew.SetValueType(JsonValue::ARRAY_VALUE);
+			JsonValue& jval = jsonValue["web-app"]["taglib"];
+			JsonValue jvalNew("operator");
+			/*jvalNew.SetValueType(JsonValue::ARRAY_VALUE);
 			jvalNew.ArrayPut(JsonValue("test1"));
-			jvalNew.ArrayPut(JsonValue("test2"));
-			jvalNew.ArrayPut(JsonValue("test3"));
-			jval.GetMapValue().push_front(JsonMapPair("xxx2", jvalNew));*/
+			jvalNew.ArrayPut(JsonValue("test4"));
+			jvalNew.ArrayPut(JsonValue("test3"));*/
+
+			jval["xxx2"]["3"] = jvalNew;
+			jval["xxx2"] = jvalNew;
 
 			jfp.Save(jsonValue);
 

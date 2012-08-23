@@ -112,6 +112,8 @@ public:
 		:valType(STRING_VALUE), strValue(strValue)
 	{};
 
+	JsonValue& operator=(const JsonValue& rhs);
+
 	// Get string value
 	std::string GetStrValue() const;
 	// Set string value
@@ -141,6 +143,11 @@ public:
 
 	// Convert string value or map value to string
 	std::string ToString(int nRecuLevel = 0) const;
+
+	// for ArrayValue
+	JsonValue& operator[](JsonVec::size_type idx);
+	// for MapValue
+	JsonValue& operator[](const std::string& key);
 
 private:
 	VALUE_TYPE valType;
