@@ -1,6 +1,6 @@
 #include "jsminCharArray.h"
 
-JSMinCharArray::JSMinCharArray(const unsigned char* input, unsigned char* output, bool bPutCR, bool bKeepTopComt)
+JSMinCharArray::JSMinCharArray(const unsigned char *input, unsigned char *output, bool bPutCR, bool bKeepTopComt)
 		:JSMin(bKeepTopComt), in(input), out(output), getPos(0), putPos(0), bPutCR(bPutCR)
 {}
 

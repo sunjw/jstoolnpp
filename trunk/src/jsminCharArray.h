@@ -8,11 +8,11 @@
 class JSMinCharArray: public JSMin
 {
 public:
-	JSMinCharArray(const unsigned char* input, unsigned char* output, bool bPutCR, bool bKeepTopComt);
+	JSMinCharArray(const unsigned char *input, unsigned char *output, bool bPutCR, bool bKeepTopComt);
 
 private:
-	const unsigned char* in;
-	unsigned char* out;
+	const unsigned char *in;
+	unsigned char *out;
 
 	bool bPutCR;
 

@@ -13,12 +13,12 @@
 using namespace std;
 using namespace sunjwbase;
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	if(argc == 3)
 	{
-		char* inputFile = argv[1];
-		char* outputFile = argv[2];
+		char *inputFile = argv[1];
+		char *outputFile = argv[2];
 
 		try
 		{
