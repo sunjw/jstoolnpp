@@ -41,7 +41,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			g_hMod = hModule;
 			jsonDialog.init((HINSTANCE)g_hMod, nppData._nppHandle);
 
-			ShortcutKey* pShKey;
+			ShortcutKey *pShKey;
 			_hInst = (HINSTANCE)hModule;
 			
 			for(int i = 0; i < nbFunc; ++i)
@@ -118,12 +118,12 @@ extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
 	loadOption(nppData._nppHandle, struOptions);
 }
 
-extern "C" __declspec(dllexport) const TCHAR * getName()
+extern "C" __declspec(dllexport) const TCHAR *getName()
 {
 	return TEXT(PLUGIN_NAME);
 }
 
-extern "C" __declspec(dllexport) FuncItem * getFuncsArray(int *nbF)
+extern "C" __declspec(dllexport) FuncItem *getFuncsArray(int *nbF)
 {
 	*nbF = nbFunc;
 	return funcItem;
@@ -156,13 +156,13 @@ HWND getCurrentScintillaHandle() {
 	return (currentEdit == 0)?nppData._scintillaMainHandle:nppData._scintillaSecondHandle;
 };
 
-void fillZero(unsigned char* buffer, size_t length)
+void fillZero(unsigned char *buffer, size_t length)
 {
 	for(size_t i = 0; i < length; ++i)
 		buffer[i] = '\0';
 }
 
-void trim(unsigned char* source)
+void trim(unsigned char *source)
 {
 	size_t realStart = 0;
 	size_t len = strlen(reinterpret_cast<char*>(source));
@@ -198,12 +198,12 @@ void jsMin(bool bNewFile)
 
 	//::SendMessage(hCurrScintilla, SCI_SETSEL, 0, jsLen);
 
-    unsigned char * pJS = new unsigned char[jsLen+1];
+    unsigned char *pJS = new unsigned char[jsLen+1];
     
     ::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
 
 	size_t jsMinLen = jsLen + 10; // seem to be something wrong, so add some empty places
-	unsigned char * pJSMin = new unsigned char[jsMinLen];
+	unsigned char *pJSMin = new unsigned char[jsMinLen];
 
 	fillZero(pJSMin, jsMinLen);
 
@@ -260,7 +260,7 @@ void jsFormat()
 	bool bFormatSel = !(selStart == selEnd);
 
 	size_t jsLenSel;
-	char* pJS;
+	char *pJS;
 	std::string initIndent("");
 	std::string strJSFormat;
 	

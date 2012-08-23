@@ -10,8 +10,8 @@ using namespace std;
 class JSFormatString: public RealJSFormatter
 {
 public:
-	JSFormatString(const char* input, 
-				string* output,
+	JSFormatString(const char *input, 
+				string *output,
 				char chIndent,
 				int nChPerInd,
 				bool bPutCR,
@@ -19,7 +19,7 @@ public:
 
 private:
 	string in;
-	string* out;
+	string *out;
 
 	size_t getPos;
 	size_t putPos;

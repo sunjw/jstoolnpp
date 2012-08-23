@@ -1,7 +1,7 @@
 #include "jsformatString.h"
 
-JSFormatString::JSFormatString(const char* input, 
-				string* output,
+JSFormatString::JSFormatString(const char *input, 
+				string *output,
 				char chIndent,
 				int nChPerInd,
 				bool bPutCR,

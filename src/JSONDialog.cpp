@@ -117,7 +117,7 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 	size_t selEnd = ::SendMessage(hCurrScintilla, SCI_GETSELECTIONEND, 0, 0);
 	bool bFormatSel = !(selStart == selEnd);
 
-	char* pJS;
+	char *pJS;
 
 	if(!bFormatSel)
 	{
