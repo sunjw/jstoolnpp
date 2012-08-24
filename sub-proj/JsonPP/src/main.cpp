@@ -36,8 +36,7 @@ int main(int argc, char *argv[])
 			jvalNew.ArrayPut(JsonValue("test4"));
 			jvalNew.ArrayPut(JsonValue("test3"));*/
 
-			jval["xxx2"]["3"] = jvalNew;
-			jval["xxx2"] = jvalNew;
+			jval["xxx2"][3] = jvalNew;
 
 			jfp.Save(jsonValue);
 

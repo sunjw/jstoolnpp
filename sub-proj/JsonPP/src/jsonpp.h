@@ -134,7 +134,7 @@ public:
 	{ return valType; }
 	// Set value mode, true is string, false is not string
 	inline void SetValueType(VALUE_TYPE valType)
-	{ this->valType = valType; }
+	{ ChangeType(valType); }
 
 	// Put key-value pair into array value
 	void ArrayPut(const JsonValue& value);
@@ -154,6 +154,8 @@ private:
 	std::string strValue;
 	JsonUnsortedMap mapValue;
 	JsonVec arrayValue;
+
+	void ChangeType(VALUE_TYPE newType);
 };
 
 #endif

@@ -44,6 +44,12 @@ string JsonValue::GetStrValue() const
 void JsonValue::SetStrValue(const string& str)
 {
 	strValue = str;
+	if(valType != JsonValue::STRING_VALUE && 
+		valType != JsonValue::NUMBER_VALUE && 
+		valType != JsonValue::BOOL_VALUE && 
+		valType != JsonValue::REGULAR_VALUE && 
+		valType != JsonValue::UNKNOWN_VALUE)
+	ChangeType(JsonValue::STRING_VALUE);
 }
 
 JsonVec& JsonValue::GetArrayValue()
@@ -59,6 +65,7 @@ const JsonVec& JsonValue::GetArrayValue() const
 void JsonValue::SetArrayValue(const JsonVec& jArray)
 {
 	arrayValue = jArray;
+	ChangeType(JsonValue::ARRAY_VALUE);
 }
 
 JsonUnsortedMap& JsonValue::GetMapValue()
@@ -74,6 +81,7 @@ const JsonUnsortedMap& JsonValue::GetMapValue() const
 void JsonValue::SetMapValue(const JsonUnsortedMap& jMap)
 {
 	mapValue = jMap;
+	ChangeType(JsonValue::MAP_VALUE);
 }
 
 void JsonValue::ArrayPut(const JsonValue& value)
@@ -168,13 +176,8 @@ string JsonValue::ToString(int nRecuLevel) const
 // for ArrayValue
 JsonValue& JsonValue::operator[](JsonVec::size_type idx)
 {
-	if(valType != JsonValue::ARRAY_VALUE)
-	{
-		// Change to ARRAY_VALUE
-		strValue = "";
-		mapValue.clear();
-		valType = JsonValue::ARRAY_VALUE;
-	}
+	// Change to ARRAY_VALUE
+	ChangeType(JsonValue::ARRAY_VALUE);
 
 	while(arrayValue.size() <= idx)
 	{
@@ -188,13 +191,33 @@ JsonValue& JsonValue::operator[](JsonVec::size_type idx)
 // for MapValue
 JsonValue& JsonValue::operator[](const std::string& key)
 {
-	if(valType != JsonValue::MAP_VALUE)
-	{
-		// Change to MAP_VALUE
-		strValue = "";
-		arrayValue.clear();
-		valType = JsonValue::MAP_VALUE;
-	}
+	// Change to MAP_VALUE
+	ChangeType(JsonValue::MAP_VALUE);
 
 	return mapValue[key];
+}
+
+void JsonValue::ChangeType(VALUE_TYPE newType)
+{
+	switch(newType)
+	{
+	case JsonValue::STRING_VALUE:
+	case JsonValue::NUMBER_VALUE:
+	case JsonValue::BOOL_VALUE:
+	case JsonValue::REGULAR_VALUE:
+	case JsonValue::UNKNOWN_VALUE:
+		arrayValue.clear();
+		mapValue.clear();
+		break;
+	case JsonValue::MAP_VALUE:
+		strValue.clear();
+		arrayValue.clear();
+		break;
+	case JsonValue::ARRAY_VALUE:
+		strValue.clear();
+		mapValue.clear();
+		break;
+	}
+
+	valType = newType;
 }
