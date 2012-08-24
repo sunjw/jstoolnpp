@@ -1,6 +1,6 @@
 /* jsonpp.h
    2012-3-11
-   Version: 0.9.5
+   Version: 0.9.6
 
 Copyright (c) 2012 SUN Junwen
 
@@ -112,6 +112,8 @@ public:
 		:valType(STRING_VALUE), strValue(strValue)
 	{};
 
+	JsonValue& operator=(const JsonValue& rhs);
+
 	// Get string value
 	std::string GetStrValue() const;
 	// Set string value
@@ -132,7 +134,7 @@ public:
 	{ return valType; }
 	// Set value mode, true is string, false is not string
 	inline void SetValueType(VALUE_TYPE valType)
-	{ this->valType = valType; }
+	{ ChangeType(valType); }
 
 	// Put key-value pair into array value
 	void ArrayPut(const JsonValue& value);
@@ -142,11 +144,18 @@ public:
 	// Convert string value or map value to string
 	std::string ToString(int nRecuLevel = 0) const;
 
+	// for ArrayValue
+	JsonValue& operator[](JsonVec::size_type idx);
+	// for MapValue
+	JsonValue& operator[](const std::string& key);
+
 private:
 	VALUE_TYPE valType;
 	std::string strValue;
 	JsonUnsortedMap mapValue;
 	JsonVec arrayValue;
+
+	void ChangeType(VALUE_TYPE newType);
 };
 
 #endif

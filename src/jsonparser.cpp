@@ -1,6 +1,6 @@
 /* JsonParser.cpp
    2012-3-23
-   Version: 0.9.5
+   Version: 0.9.6
 
 Copyright (c) 2012 SUN Junwen
 

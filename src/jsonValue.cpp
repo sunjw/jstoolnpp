@@ -23,6 +23,19 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 using namespace std;
 using namespace sunjwbase;
 
+JsonValue& JsonValue::operator=(const JsonValue& rhs)
+{
+	if(this == &rhs)
+		return *this;
+
+	valType = rhs.valType;
+	strValue = rhs.strValue;
+	arrayValue = rhs.arrayValue;
+	mapValue = rhs.mapValue;
+
+	return *this;
+}
+
 string JsonValue::GetStrValue() const
 {
 	return strValue;
@@ -31,6 +44,12 @@ string JsonValue::GetStrValue() const
 void JsonValue::SetStrValue(const string& str)
 {
 	strValue = str;
+	if(valType != JsonValue::STRING_VALUE && 
+		valType != JsonValue::NUMBER_VALUE && 
+		valType != JsonValue::BOOL_VALUE && 
+		valType != JsonValue::REGULAR_VALUE && 
+		valType != JsonValue::UNKNOWN_VALUE)
+	ChangeType(JsonValue::STRING_VALUE);
 }
 
 JsonVec& JsonValue::GetArrayValue()
@@ -46,6 +65,7 @@ const JsonVec& JsonValue::GetArrayValue() const
 void JsonValue::SetArrayValue(const JsonVec& jArray)
 {
 	arrayValue = jArray;
+	ChangeType(JsonValue::ARRAY_VALUE);
 }
 
 JsonUnsortedMap& JsonValue::GetMapValue()
@@ -61,6 +81,7 @@ const JsonUnsortedMap& JsonValue::GetMapValue() const
 void JsonValue::SetMapValue(const JsonUnsortedMap& jMap)
 {
 	mapValue = jMap;
+	ChangeType(JsonValue::MAP_VALUE);
 }
 
 void JsonValue::ArrayPut(const JsonValue& value)
@@ -150,4 +171,53 @@ string JsonValue::ToString(int nRecuLevel) const
 	}
 
 	return ret;
+}
+
+// for ArrayValue
+JsonValue& JsonValue::operator[](JsonVec::size_type idx)
+{
+	// Change to ARRAY_VALUE
+	ChangeType(JsonValue::ARRAY_VALUE);
+
+	while(arrayValue.size() <= idx)
+	{
+		// need to expand
+		arrayValue.push_back(JsonValue());
+	}
+
+	return arrayValue[idx];
+}
+
+// for MapValue
+JsonValue& JsonValue::operator[](const std::string& key)
+{
+	// Change to MAP_VALUE
+	ChangeType(JsonValue::MAP_VALUE);
+
+	return mapValue[key];
+}
+
+void JsonValue::ChangeType(VALUE_TYPE newType)
+{
+	switch(newType)
+	{
+	case JsonValue::STRING_VALUE:
+	case JsonValue::NUMBER_VALUE:
+	case JsonValue::BOOL_VALUE:
+	case JsonValue::REGULAR_VALUE:
+	case JsonValue::UNKNOWN_VALUE:
+		arrayValue.clear();
+		mapValue.clear();
+		break;
+	case JsonValue::MAP_VALUE:
+		strValue.clear();
+		arrayValue.clear();
+		break;
+	case JsonValue::ARRAY_VALUE:
+		strValue.clear();
+		mapValue.clear();
+		break;
+	}
+
+	valType = newType;
 }
