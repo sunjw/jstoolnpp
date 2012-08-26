@@ -1,6 +1,6 @@
 /* JsonUnsortedMap.cpp
    2012-3-11
-   Version: 0.9
+   Version: 0.9.7
 
 Copyright (c) 2012 SUN Junwen
 
@@ -21,6 +21,33 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "jsonpp.h"
 
 using namespace std;
+
+void JsonUnsortedMap::push_front(const JsonMapPair& pair)
+{ 
+	erase(pair.first);
+	m_list.push_front(pair); 
+}
+	
+void JsonUnsortedMap::push_back(const JsonMapPair& pair)
+{ 
+	erase(pair.first);
+	m_list.push_back(pair); 
+}
+	
+JsonUnsortedMap::iterator JsonUnsortedMap::insert(iterator itr, const JsonMapPair& pair)
+{ 
+	erase(pair.first);
+	return m_list.insert(itr, pair); 
+}
+
+JsonUnsortedMap::iterator JsonUnsortedMap::erase(const string& key)
+{
+	JsonUnsortedMap::iterator itr = find(key);
+	if(itr != end())
+		itr = erase(itr);
+
+	return itr;
+}
 
 JsonUnsortedMap::iterator JsonUnsortedMap::find(const std::string& key)
 {

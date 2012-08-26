@@ -1,6 +1,6 @@
 /* jsonpp.h
    2012-3-11
-   Version: 0.9.6
+   Version: 0.9.7
 
 Copyright (c) 2012 SUN Junwen
 
@@ -55,16 +55,13 @@ public:
 	inline size_type size()
 	{ return m_list.size(); }
 
-	inline void push_front(const JsonMapPair& pair)
-	{ m_list.push_front(pair); }
-	inline void push_back(const JsonMapPair& pair)
-	{ m_list.push_back(pair); }
+	void push_front(const JsonMapPair& pair);
+	void push_back(const JsonMapPair& pair);
+	iterator insert(iterator itr, const JsonMapPair& pair);
 
-	inline iterator insert(iterator itr, const JsonMapPair& pair)
-	{ return m_list.insert(itr, pair); }
+	iterator erase(const std::string& key);
 	inline iterator erase(iterator itr)
 	{ return m_list.erase(itr); }
-
 	inline void clear()
 	{ m_list.clear(); }
 
