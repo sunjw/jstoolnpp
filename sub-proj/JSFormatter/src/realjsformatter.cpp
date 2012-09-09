@@ -657,7 +657,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			m_bEmptyBracket = false;
 		}
 
-		if((!bHaveNewLine && tokenBFirst != ';' && tokenBFirst != ',')
+		if((!bHaveNewLine && m_tokenB != ";" && m_tokenB != ",")
 			&& (m_bNLBracket || !((topStack == JS_DO && m_tokenB == "while") ||
 			(topStack == JS_IF && m_tokenB == "else") ||
 			(topStack == JS_TRY && m_tokenB == "catch") ||
