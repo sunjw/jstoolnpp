@@ -173,7 +173,8 @@ void RealJSFormatter::PutToken(const string& token,
 	PutString(leftStyle);
 	PutString(token);
 	PutString(rightStyle);
-	m_bCommentPut = false; // 这个一定会发生在注释之后的任何输出后面
+	if(!(m_bCommentPut && m_bNewLine))
+		m_bCommentPut = false; // 这个一定会发生在注释之后的任何输出后面
 }
 
 void RealJSFormatter::PutString(const string& str)
@@ -656,7 +657,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			m_bEmptyBracket = false;
 		}
 
-		if((!bHaveNewLine && tokenBFirst != ';' && tokenBFirst != ',')
+		if((!bHaveNewLine && m_tokenB != ";" && m_tokenB != ",")
 			&& (m_bNLBracket || !((topStack == JS_DO && m_tokenB == "while") ||
 			(topStack == JS_IF && m_tokenB == "else") ||
 			(topStack == JS_TRY && m_tokenB == "catch") ||
