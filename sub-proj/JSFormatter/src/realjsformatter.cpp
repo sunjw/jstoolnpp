@@ -143,6 +143,7 @@ void RealJSFormatter::Init()
 	m_blockMap[string("case")] = JS_CASE;
 	m_blockMap[string("default")] = JS_CASE;
 	m_blockMap[string("try")] = JS_TRY;
+	m_blockMap[string("finally")] = JS_TRY; // µÈÍ¬ÓÚ try
 	m_blockMap[string("catch")] = JS_CATCH;
 	m_blockMap[string("=")] = JS_ASSIGN;
 	m_blockMap[string("function")] = JS_FUNCTION;
@@ -731,7 +732,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 
 	if(m_tokenA == "do" ||
 		(m_tokenA == "else" && m_tokenB != "if") ||
-		m_tokenA == "try")
+		m_tokenA == "try" || m_tokenA == "finally")
 	{
 		// do, else (NOT else if), try
 		PutToken(m_tokenA);
