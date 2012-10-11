@@ -1,3 +1,8 @@
+1.11.4
+Update JsonPP
+Fix "unexpect space" of JSLint
+Fix "finally" bug.
+
 1.11.2
 Fix a bug in JSON Viewer.
 
