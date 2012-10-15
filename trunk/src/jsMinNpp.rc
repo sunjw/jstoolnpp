@@ -8,8 +8,7 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
-
+#include "afxres.h"
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -89,19 +88,21 @@ BEGIN
     LTEXT           "End of line:",IDC_STATIC,13,19,37,8
     CONTROL         " &Windows style (CRLF \\r\\n)",IDC_WINRADIO,"Button",BS_AUTORADIOBUTTON,13,32,104,10
     CONTROL         " Uni&x style (LF \\n)",IDC_UNIXRADIO,"Button",BS_AUTORADIOBUTTON,129,32,75,10
-    GROUPBOX        "Format",IDC_STATIC,7,101,227,43
+    GROUPBOX        "Format",IDC_STATIC,7,101,227,56
     LTEXT           "Indent:",IDC_STATIC,13,113,25,8
     CONTROL         "",IDC_SPACECHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,113,12,10
     LTEXT           "Use",IDC_STATIC_USE,55,113,13,8,SS_NOTIFY
     EDITTEXT        IDC_COUNTEDIT,71,111,17,12,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "spaces instead of tab (\\t).",IDC_STATIC_SPACE,93,113,88,8,SS_NOTIFY
-    LTEXT           "{ ... } :",IDC_STATIC,13,128,24,8
-    CONTROL         " &New line before '{'.",IDC_NEWLINECHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,127,79,10
+    LTEXT           "{ ... } :",IDC_STATIC,13,140,24,8
+    CONTROL         " &New line before '{'.",IDC_NEWLINECHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,140,79,10
     DEFPUSHBUTTON   "OK",IDOK,125,162,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,184,162,50,14
     GROUPBOX        "Min",IDC_STATIC,7,54,227,44
     CONTROL         "Keep comments (/*...*/ ) at the top of codes.",IDC_KEEPCOMTCHECK,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,66,163,10
+    CONTROL         " &Keep indent in empty line. (NOT recommended)",IDC_EMPTYINDENT,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,127,172,10
 END
 
 IDD_TREE DIALOGEX 0, 0, 230, 165
@@ -109,7 +110,7 @@ STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CENTER | WS_CHILD | WS_VISIBLE |
 CAPTION "Dialog"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_TREE_JSON,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_DISABLEDRAGDROP | TVS_SHOWSELALWAYS | TVS_SINGLEEXPAND | WS_TABSTOP | 0x400,0,26,218,128
+    CONTROL         "",IDC_TREE_JSON,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_DISABLEDRAGDROP | TVS_SHOWSELALWAYS | WS_TABSTOP | 0x400,0,26,218,128
     PUSHBUTTON      "Refresh",IDC_BTN_REFRESH,0,0,50,14
 END
 
@@ -180,8 +181,7 @@ END
 //
 // Generated from the TEXTINCLUDE 3 resource.
 //
-
-
+
 /////////////////////////////////////////////////////////////////////////////
 #endif    // not APSTUDIO_INVOKED
 

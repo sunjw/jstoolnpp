@@ -908,6 +908,7 @@
 #define IDC_CHECK1                      1008
 #define IDC_NEWLINECHECK                1008
 #define IDC_STATIC_VERSION              1009
+#define IDC_EMPTYINDENT                 1009
 #define IDC_CHECK2                      1010
 #define IDC_KEEPCOMTCHECK               1010
 #define IDC_TREE_JSON                   1011

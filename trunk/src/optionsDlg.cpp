@@ -30,6 +30,11 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 
 		setIndent(hwnd, (struOptions.chIndent == ' ' ? TRUE : FALSE));
 
+		if(struOptions.bIndentInEmpty)
+			CheckDlgButton(hwnd, IDC_EMPTYINDENT, TRUE);
+		else
+			CheckDlgButton(hwnd, IDC_EMPTYINDENT, FALSE);
+
 		return TRUE;
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
@@ -45,6 +50,7 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			struOptions.bPutCR = IsDlgButtonChecked(hwnd, IDC_WINRADIO) ? true : false;
 			struOptions.chIndent = IsDlgButtonChecked(hwnd, IDC_SPACECHECK) ? ' ' : '\t';
 			struOptions.bKeepTopComt = IsDlgButtonChecked(hwnd, IDC_KEEPCOMTCHECK) ? true : false;
+			struOptions.bIndentInEmpty = IsDlgButtonChecked(hwnd, IDC_EMPTYINDENT) ? true : false;
 			TCHAR buffer[256];
 			GetWindowText(GetDlgItem(hwnd, IDC_COUNTEDIT), buffer, 255);
 			#if defined(UNICODE) || defined(_UNICODE)

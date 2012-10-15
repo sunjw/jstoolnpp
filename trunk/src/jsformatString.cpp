@@ -5,8 +5,9 @@ JSFormatString::JSFormatString(const char *input,
 				char chIndent,
 				int nChPerInd,
 				bool bPutCR,
-				bool bNLBracket)
-		:RealJSFormatter(chIndent, nChPerInd, true, bPutCR, bNLBracket), 
+				bool bNLBracket,
+				bool bIndentInEmpty)
+		:RealJSFormatter(chIndent, nChPerInd, true, bPutCR, bNLBracket, bIndentInEmpty), 
 		in(), out(output), getPos(0), putPos(0)
 {
 	in.append(input);

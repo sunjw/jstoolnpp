@@ -329,7 +329,8 @@ void jsFormat()
 			struOptions.chIndent, 
 			_nChPerInd, 
 			struOptions.bPutCR, 
-			struOptions.bNLBracket);
+			struOptions.bNLBracket,
+			struOptions.bIndentInEmpty);
 		if(bFormatSel)
 			jsformat.SetInitIndent(initIndent);
 		jsformat.Go();
