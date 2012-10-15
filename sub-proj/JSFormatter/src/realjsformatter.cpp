@@ -50,7 +50,7 @@ RealJSFormatter::RealJSFormatter():
 	m_bSkipCR(false),
 	m_bPutCR(false),
 	m_bNLBracket(false),
-	m_bIntentInEmpty(false)
+	m_bIndentInEmpty(false)
 {
 	Init();
 }
@@ -61,7 +61,7 @@ RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd):
 	m_bSkipCR(false),
 	m_bPutCR(false),
 	m_bNLBracket(false),
-	m_bIntentInEmpty(false)
+	m_bIndentInEmpty(false)
 {
 	Init();
 }
@@ -72,20 +72,20 @@ RealJSFormatter::RealJSFormatter(bool bSkipCR, bool bPutCR):
 	m_bSkipCR(bSkipCR),
 	m_bPutCR(bPutCR),
 	m_bNLBracket(false),
-	m_bIntentInEmpty(false)
+	m_bIndentInEmpty(false)
 {
 	Init();
 }
 
 RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd, 
 								 bool bSkipCR, bool bPutCR, 
-								 bool bNLBracket, bool bIntentInEmpty):
+								 bool bNLBracket, bool bIndentInEmpty):
 	m_chIndent(chIndent),
 	m_nChPerInd(nChPerInd),
 	m_bSkipCR(bSkipCR),
 	m_bPutCR(bPutCR),
 	m_bNLBracket(bNLBracket),
-	m_bIntentInEmpty(bIntentInEmpty)
+	m_bIndentInEmpty(bIndentInEmpty)
 {
 	Init();
 }
@@ -220,7 +220,7 @@ void RealJSFormatter::PutLineBuffer()
 	string line;
 	line.append(TrimRightSpace(m_lineBuffer));
 	
-	if(line != "" || m_bIntentInEmpty) // Fix "JSLint unexpect space" bug
+	if(line != "" || m_bIndentInEmpty) // Fix "JSLint unexpect space" bug
 	{
 		for(size_t i = 0; i < m_initIndent.length(); ++i)
 			PutChar(m_initIndent[i]); // ÏÈÊä³öÔ¤Ëõ½ø

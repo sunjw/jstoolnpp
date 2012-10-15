@@ -14,10 +14,10 @@ public:
 	
 	JSFormatterStream(std::istream& input, std::ostream& output, 
 		char chIndent, int nChPerInd, 
-		bool bNLBracket, bool bIntentInEmpty)
+		bool bNLBracket, bool bIndentInEmpty)
 		:RealJSFormatter(chIndent, nChPerInd, 
 		false, false, 
-		bNLBracket, bIntentInEmpty), in(input), out(output)
+		bNLBracket, bIndentInEmpty), in(input), out(output)
 	{}
 
 private:
