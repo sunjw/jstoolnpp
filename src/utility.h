@@ -14,6 +14,7 @@ struct StruOptions
 	int nChPerInd; // 每个缩进使用几个字符
 	bool bNLBracket; // { 之前是否换行
 	bool bKeepTopComt; // 是否保留头部的注释
+	bool bIndentInEmpty; // 是否保留空行中的缩进
 };
 
 const string keyPutCR("Put CR");
@@ -21,6 +22,7 @@ const string keyChIndent("Indent char");
 const string keyChPerInd("Chars per indent");
 const string keyNLBracket("New line before {");
 const string keyKeepTopComt("Kepp top comment");
+const string keyIndentInEmpty("Indent in empty");
 
 tstring GetConfigFilePath(HWND nppHandle);
 

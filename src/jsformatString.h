@@ -15,7 +15,8 @@ public:
 				char chIndent,
 				int nChPerInd,
 				bool bPutCR,
-				bool bNLBracket);
+				bool bNLBracket,
+				bool bIndentInEmpty);
 
 private:
 	string in;

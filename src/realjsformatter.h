@@ -70,7 +70,9 @@ public:
 	RealJSFormatter();
 	RealJSFormatter(char chIndent, int nChPerInd);
 	RealJSFormatter(bool bSkipCR, bool bPutCR);
-	RealJSFormatter(char chIndent, int nChPerInd, bool bSkipCR, bool bPutCR, bool bNLBracket);
+	RealJSFormatter(char chIndent, int nChPerInd, 
+		bool bSkipCR, bool bPutCR, 
+		bool bNLBracket, bool bIndentInEmpty);
 
 	virtual ~RealJSFormatter()
 	{}
@@ -132,6 +134,7 @@ private:
 	bool m_bPutCR; // 使用 \r\n 作为换行
 
 	bool m_bNLBracket; // { 之前是否换行
+	bool m_bIndentInEmpty; // 是否保持空行的缩进, JSLint 不推荐
 
 private:
 	// 阻止拷贝
