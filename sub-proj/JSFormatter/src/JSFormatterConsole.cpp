@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
 	    ostringstream outStrStream;
 		try
 		{
-			JSFormatterStream jsf(inFileStream2, outStrStream, '\t', 1, false);
+			JSFormatterStream jsf(inFileStream2, outStrStream, '\t', 1, false, false);
 			jsf.m_debugOutput = true;
 			jsf.Go();
 
