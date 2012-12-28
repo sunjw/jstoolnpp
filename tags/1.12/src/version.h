@@ -1,0 +1,2 @@
+#define VERSION_VALUE "1.12.0.0"
+#define VERSION_DIGITALVALUE 1, 12, 0, 0
