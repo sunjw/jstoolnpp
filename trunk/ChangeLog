@@ -1,6 +1,14 @@
+1.12 (since 1.11)
+Fix a bug in JSON Viewer.
+Update JsonPP.
+Fix "unexpect space" of JSLint.
+Add an option to keep indent in empty line.
+Fix "finally" bug.
+Change project site to http://sunjw.us/jsminnpp/
+
 1.11.4
-Update JsonPP
-Fix "unexpect space" of JSLint
+Update JsonPP.
+Fix "unexpect space" of JSLint.
 Fix "finally" bug.
 
 1.11.2
