@@ -1,48 +1,48 @@
 1.12 (since 1.11)
-Fix a bug in JSON Viewer.
-Update JsonPP.
-Fix "unexpect space" of JSLint.
-Add an option to keep indent in empty line.
-Fix "finally" bug.
-Change project site to http://sunjw.us/jsminnpp/
+Fixed a bug in JSON Viewer.
+Updated JsonPP.
+Fixed "unexpect space" of JSLint.
+Added an option to keep indent in empty line.
+Fixed "finally" bug.
+Changed project site to http://sunjw.us/jsminnpp/
 
 1.11.4
-Update JsonPP.
-Fix "unexpect space" of JSLint.
-Fix "finally" bug.
+Updated JsonPP.
+Fixed "unexpect space" of JSLint.
+Fixed "finally" bug.
 
 1.11.2
-Fix a bug in JSON Viewer.
+Fixed a bug in JSON Viewer.
 
 1.11 (since 1.10)
-Move to Google Code.
-Add a Json Viewer.
-Change classes inheritance hierarchy to build a smaller binary file.
+Moved to Google Code.
+Added a Json Viewer.
+Changed classes inheritance hierarchy to build a smaller binary file.
 
 1.10.6
-Release a Beta.
+Beta released.
 
 1.10.4
-Change classes inheritance hierarchy to build a smaller binary file.
+Changed classes inheritance hierarchy to build a smaller binary file.
 
 1.10.2
-Add a Json Viewer.
+Added a Json Viewer.
 
 1.10.1
-Change donation link.
+Changed donation link.
 
 1.10 (since 1.9)
-Add formatting selected source code.
+Added formatting selected source code.
 If you selected some lines of source code, JSMinNpp will just format these code.
 Some minor changes.
 
 1.9 (since 1.9)
-Add formatting selected source code.
+Added formatting selected source code.
 If you selected some lines of source code, JSMinNpp will just format these code.
 Some minor changes.
 
 1.9.2 beta
-Add formatting selected source code.
+Added formatting selected source code.
 
 1.9 (since 1.8)
 Fixed "one more indent in ({...})".
@@ -105,5 +105,5 @@ Added a menu item which can put minimized javascript code in a new file.
 Fixed a bug.
 
 1.00
-First time release.
+First time Released.
 Minimizing javascript code in current file.
