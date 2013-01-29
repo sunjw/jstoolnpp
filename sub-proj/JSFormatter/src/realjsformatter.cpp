@@ -27,23 +27,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 using namespace std;
 
-template<class T>
-bool RealJSFormatter::GetStackTop(stack<T> stk, T& ret)
-{
-	if(stk.size() == 0)
-		return false;
-	ret = stk.top();
-	return true;
-}
-
-template<class T>
-bool RealJSFormatter::StackTopEq(stack<T> stk, T eq)
-{
-	if(stk.size() == 0)
-		return false;
-	return (eq == stk.top());
-}
-
 RealJSFormatter::RealJSFormatter():
 	m_chIndent('\t'),
 	m_nChPerInd(1),

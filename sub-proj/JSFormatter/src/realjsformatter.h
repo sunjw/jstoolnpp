@@ -56,11 +56,6 @@ using namespace std;
 class RealJSFormatter: public JSParser
 {
 public:
-	template<class T>
-	bool GetStackTop(stack<T> stk, T& ret);
-	template<class T>
-	bool StackTopEq(stack<T> stk, T eq);
-
 	typedef stack<char> CharStack;
 	typedef stack<bool> BoolStack;
 	typedef queue<JSParser::TokenAndType> TokenQueue;

@@ -1,8 +1,8 @@
-/* JSParser.h
+/* jsparser.h
    2012-3-11
-   Version: 0.9.5
+   Version: 0.9.6
 
-Copyright (c) 2012 SUN Junwen
+Copyright (c) 2012- SUN Junwen
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -28,6 +28,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <set>
 
 using namespace std;
+
+template<class T>
+bool GetStackTop(stack<T> stk, T& ret)
+{
+	if(stk.size() == 0)
+		return false;
+	ret = stk.top();
+	return true;
+}
+
+template<class T>
+bool StackTopEq(stack<T> stk, T eq)
+{
+	if(stk.size() == 0)
+		return false;
+	return (eq == stk.top());
+}
 
 #define STRING_TYPE 0
 #define OPER_TYPE 1

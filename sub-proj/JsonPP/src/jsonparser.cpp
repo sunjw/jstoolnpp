@@ -24,23 +24,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 using namespace std;
 using namespace sunjwbase;
 
-template<class T>
-bool JsonParser::GetStackTop(stack<T> stk, T& ret)
-{
-	if(stk.size() == 0)
-		return false;
-	ret = stk.top();
-	return true;
-}
-
-template<class T>
-bool JsonParser::StackTopEq(stack<T> stk, T eq)
-{
-	if(stk.size() == 0)
-		return false;
-	return (eq == stk.top());
-}
-
 void JsonParser::RecursiveProc(JsonValue& jsonValue)
 {
 	// initial job

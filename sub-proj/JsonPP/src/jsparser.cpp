@@ -1,4 +1,4 @@
-/* JSParser.cpp
+/* jsparser.cpp
    2012-3-11
    Version: 0.9.6
 

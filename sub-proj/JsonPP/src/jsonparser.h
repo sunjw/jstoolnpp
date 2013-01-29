@@ -51,11 +51,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class JsonParser: public JSParser
 {
 public:
-	template<class T>
-	bool GetStackTop(stack<T> stk, T& ret);
-	template<class T>
-	bool StackTopEq(stack<T> stk, T eq);
-
 	JsonParser():m_nRecuLevel(0)
 	{}
 
