@@ -2,7 +2,7 @@
    2012-3-11
    Version: 0.9.7
 
-Copyright (c) 2012 SUN Junwen
+Copyright (c) 2012- SUN Junwen
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,9 +39,13 @@ typedef std::map<std::string, JsonValue> JsonMap;
 typedef std::pair<std::string, JsonValue> JsonMapPair;
 typedef std::vector<JsonValue> JsonVec;
 
-/**
- * 对 std::list<JsonMapPair> 的简化版封装
- * 不具有完整的 std::list 和 std::map 特性
+/*
+ * 对 std::list<JsonMapPair> 的封装
+ * 努力实现 std::map 的特性，并提供 FIFO 迭代器
+ * 对于元素的搜索 插入 删除 操作都是 O(n) 的
+ * 时间复杂度
+ * 性能基本是一个 std::list 
+ * 操作特性类似 std::map
  */
 class JsonUnsortedMap
 {
