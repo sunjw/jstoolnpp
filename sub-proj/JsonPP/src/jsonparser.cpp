@@ -46,10 +46,10 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 	while(GetToken()) // 获得下一个 m_tokenA 和 m_tokenB
 	{
 		// JsonParser 忽略换行, 其它的解析器可能不要忽略
-		if(m_tokenA == "\r\n" || 
-			m_tokenA == "\n" ||
-			m_tokenAType == COMMENT_TYPE_1 || 
-			m_tokenAType == COMMENT_TYPE_2)
+		if(m_tokenA.code == "\r\n" || 
+			m_tokenA.code == "\n" ||
+			m_tokenA.type == COMMENT_TYPE_1 || 
+			m_tokenA.type == COMMENT_TYPE_2)
 		{
 			continue;
 		}
@@ -60,7 +60,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		 * 已经识别负数
 		 * 已经识别正则表达式
 		 */
-		if(m_tokenA == "{")
+		if(m_tokenA.code == "{")
 		{
 			m_blockStack.push(JS_BLOCK);
 
@@ -91,7 +91,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			continue;
 		}
 
-		if(m_tokenA == "}")
+		if(m_tokenA.code == "}")
 		{
 			bGetKey = false;
 			bGetSplitor = false;
@@ -102,7 +102,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			return;
 		}
 
-		if(m_tokenA == "[")
+		if(m_tokenA.code == "[")
 		{
 			m_blockStack.push(JS_SQUARE);
 
@@ -133,7 +133,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			continue;
 		}
 
-		if(m_tokenA == "]")
+		if(m_tokenA.code == "]")
 		{
 			m_blockStack.pop();
 			--m_nRecuLevel;
@@ -143,9 +143,9 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 		if(stackTop == JS_BLOCK)
 		{
-			if(!bGetKey && m_tokenA != ",")
+			if(!bGetKey && m_tokenA.code != ",")
 			{
-				key = m_tokenA;
+				key = m_tokenA.code;
 
 				if(key[0] == '\'')
 					key = strtrim(key, string("'"));
@@ -156,7 +156,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 				continue;
 			}
 
-			if(bGetKey && !bGetSplitor && m_tokenA == ":")
+			if(bGetKey && !bGetSplitor && m_tokenA.code == ":")
 			{
 				bGetSplitor = true;
 				continue;
@@ -178,7 +178,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 		if(stackTop == JS_SQUARE)
 		{
-			if(m_tokenA != ",")
+			if(m_tokenA.code != ",")
 			{
 				strValue = ReadStrValue();
 
@@ -200,7 +200,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		{
 			cout << "Processed tokens: " << m_tokenCount << endl;
 			cout << "Time used: " << m_duration << "s" << endl;
-			cout << m_tokenCount/ m_duration << " tokens/second" << endl;
+			cout << m_tokenCount / m_duration << " tokens/second" << endl;
 		}
 	}
 	// finished job
@@ -208,15 +208,15 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 string JsonParser::ReadStrValue()
 {
-	string ret(m_tokenA);
+	string ret(m_tokenA.code);
 	// fix decimal number value bug
-	if(m_tokenB == ".")
+	if(m_tokenB.code == ".")
 	{
 		// maybe it's a decimal
-		string strDec(m_tokenA);
+		string strDec(m_tokenA.code);
 		GetToken();
 		strDec.append(".");
-		strDec.append(m_tokenB);
+		strDec.append(m_tokenB.code);
 		ret = strDec;
 		GetToken();
 	}
