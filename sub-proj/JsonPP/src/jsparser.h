@@ -1,6 +1,6 @@
 /* jsparser.h
    2012-3-11
-   Version: 0.9.6
+   Version: 0.9.7
 
 Copyright (c) 2012- SUN Junwen
 

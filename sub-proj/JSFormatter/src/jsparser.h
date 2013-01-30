@@ -1,6 +1,6 @@
 /* jsparser.h
    2012-3-11
-   Version: 0.9.6
+   Version: 0.9.7
 
 Copyright (c) 2012- SUN Junwen
 
@@ -55,16 +55,17 @@ bool StackTopEq(stack<T> stk, T eq)
 class JSParser
 {
 protected:
-	struct TokenAndType
+	struct Token
 	{
-		string token;
-		int type;
+		string code; // 代码内容
+		int type; // Token 类型
+		int line; // 行号
 	};
 
 public:
 	typedef stack<char> CharStack;
 	typedef stack<bool> BoolStack;
-	typedef queue<TokenAndType> TokenQueue;
+	typedef queue<Token> TokenQueue;
 	typedef map<string, char> StrCharMap;
 	typedef set<string> StrSet;
 
@@ -76,10 +77,12 @@ public:
 protected:
 	int m_charA;
 	int m_charB;
-	int m_tokenAType;
-	int m_tokenBType;
-	string m_tokenA;
-	string m_tokenB;
+	//int m_tokenAType;
+	//int m_tokenBType;
+	//string m_tokenA;
+	Token m_tokenA;
+	//string m_tokenB;
+	Token m_tokenB;
 	int m_tokenCount;
 
 	bool inline IsNormalChar(int ch);
