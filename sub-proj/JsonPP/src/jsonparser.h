@@ -1,6 +1,6 @@
 /* JsonParser.h
    2012-3-23
-   Version: 0.9.7
+   Version: 0.9.8
 
 Copyright (c) 2012- SUN Junwen
 

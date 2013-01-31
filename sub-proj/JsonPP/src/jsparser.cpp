@@ -1,6 +1,6 @@
 /* jsparser.cpp
    2012-3-11
-   Version: 0.9.7
+   Version: 0.9.8
 
 Copyright (c) 2012- SUN Junwen
 
@@ -29,6 +29,7 @@ JSParser::JSParser()
 
 void JSParser::Init()
 {
+	m_lineCount = 1; // 行号从 1 开始
 	m_tokenCount = 0;
 
 	m_strBeforeReg = "(,=:[!&|?+{};\n";
@@ -92,6 +93,7 @@ void JSParser::GetTokenRaw()
 	{
 		m_tokenB.code = "";
 		m_tokenB.type = STRING_TYPE;
+		m_tokenB.line = m_lineCount;
 	}
 	else if(m_bRegular)
 	{
@@ -117,6 +119,10 @@ void JSParser::GetTokenRaw()
 		m_charA = m_charB;
 		if(m_charA == 0)
 			return;
+	
+		if(m_charA == '\n')
+			++m_lineCount;
+
 		do
 		{
 			m_charB = GetChar();
@@ -346,7 +352,6 @@ bool JSParser::GetToken()
 
 	++m_tokenCount;
 	m_tokenA = m_tokenB;
-	//m_tokenA.type = m_tokenB.type;
 
 	if(m_tokenBQueue.size() == 0)
 	{

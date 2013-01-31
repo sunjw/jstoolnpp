@@ -1,6 +1,6 @@
 /* JsonParser.cpp
    2012-3-23
-   Version: 0.9.7
+   Version: 0.9.8
 
 Copyright (c) 2012- SUN Junwen
 
@@ -40,6 +40,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 	GetStackTop(m_blockStack, stackTop);
 
 	string key, strValue;
+	long keyLine, valLine;
 	bool bGetKey = false;
 	bool bGetSplitor = false;
 
@@ -63,6 +64,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		if(m_tokenA.code == "{")
 		{
 			m_blockStack.push(JS_BLOCK);
+			long blockLine = m_tokenA.line;
 
 			if(stackTop == JS_EMPTY)
 			{
@@ -78,12 +80,14 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 				if(stackTop == JS_SQUARE)
 				{
+					innerValue.line = blockLine;
 					jsonValue.ArrayPut(innerValue);
 				}
 				else if(stackTop == JS_BLOCK)
 				{
 					bGetKey = false;
 					bGetSplitor = false;
+					innerValue.line = keyLine;
 					jsonValue.MapPut(key, innerValue);
 				}
 			}
@@ -105,6 +109,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		if(m_tokenA.code == "[")
 		{
 			m_blockStack.push(JS_SQUARE);
+			long squareLine = m_tokenA.line;
 
 			if(stackTop == JS_EMPTY)
 			{
@@ -120,12 +125,14 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 				if(stackTop == JS_SQUARE)
 				{
+					innerValue.line = squareLine;
 					jsonValue.ArrayPut(innerValue);
 				}
 				else if(stackTop == JS_BLOCK)
 				{
 					bGetKey = false;
 					bGetSplitor = false;
+					innerValue.line = keyLine;
 					jsonValue.MapPut(key, innerValue);
 				}
 			}
@@ -146,6 +153,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			if(!bGetKey && m_tokenA.code != ",")
 			{
 				key = m_tokenA.code;
+				keyLine = m_tokenA.line;
 
 				if(key[0] == '\'')
 					key = strtrim(key, string("'"));
@@ -165,10 +173,12 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			if(bGetKey && bGetSplitor)
 			{
 				strValue = ReadStrValue();
+				valLine = m_tokenA.line;
 
 				JsonValue jValue;
 				GenStrJsonValue(jValue, strValue);
 
+				jValue.line = keyLine;
 				jsonValue.MapPut(key, jValue);
 
 				bGetKey = false;
@@ -181,9 +191,11 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			if(m_tokenA.code != ",")
 			{
 				strValue = ReadStrValue();
+				valLine = m_tokenA.line;
 
 				JsonValue jValue;
 				GenStrJsonValue(jValue, strValue);
+				jValue.line = valLine;
 
 				jsonValue.ArrayPut(jValue);
 			}

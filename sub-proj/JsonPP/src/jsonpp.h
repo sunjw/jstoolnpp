@@ -1,6 +1,6 @@
 /* jsonpp.h
    2012-3-11
-   Version: 0.9.7
+   Version: 0.9.8
 
 Copyright (c) 2012- SUN Junwen
 
@@ -102,17 +102,20 @@ public:
 		MAP_VALUE = 0x20
 	};
 
+	long line; // line number
+
 	/*
 	 * Constructors
 	 * Default is string value
 	 */
 	explicit JsonValue(VALUE_TYPE type = STRING_VALUE)
-		:valType(type)
+		:valType(type), line(-1)
 	{};
 	explicit JsonValue(const std::string& strValue)
-		:valType(STRING_VALUE), strValue(strValue)
+		:valType(STRING_VALUE), strValue(strValue), line(-1)
 	{};
 
+	JsonValue(const JsonValue& rhs);
 	JsonValue& operator=(const JsonValue& rhs);
 
 	// Get string value

@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 			JsonUnsortedMap::iterator itr = jmap.find("txxx");
 			jmap.insert(itr, JsonMapPair("taglib", JsonValue("xxxxx")));*/
 
-			jfp.Save(jsonValue);
+			//jfp.Save(jsonValue);
 
 			cout << "Done" << endl;
 		}

@@ -1,6 +1,6 @@
 /* jsparser.h
    2012-3-11
-   Version: 0.9.7
+   Version: 0.9.8
 
 Copyright (c) 2012- SUN Junwen
 
@@ -77,13 +77,10 @@ public:
 protected:
 	int m_charA;
 	int m_charB;
-	//int m_tokenAType;
-	//int m_tokenBType;
-	//string m_tokenA;
 	Token m_tokenA;
-	//string m_tokenB;
 	Token m_tokenB;
-	int m_tokenCount;
+	long m_lineCount;
+	long m_tokenCount;
 
 	bool inline IsNormalChar(int ch);
 	bool inline IsNumChar(int ch);
