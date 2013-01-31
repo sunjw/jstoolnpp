@@ -1,8 +1,8 @@
 /* jsonpp.h
    2012-3-11
-   Version: 0.9.6
+   Version: 0.9.8
 
-Copyright (c) 2012 SUN Junwen
+Copyright (c) 2012- SUN Junwen
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -39,9 +39,13 @@ typedef std::map<std::string, JsonValue> JsonMap;
 typedef std::pair<std::string, JsonValue> JsonMapPair;
 typedef std::vector<JsonValue> JsonVec;
 
-/**
- * 对 std::list<JsonMapPair> 的简化版封装
- * 不具有完整的 std::list 和 std::map 特性
+/*
+ * 对 std::list<JsonMapPair> 的封装
+ * 努力实现 std::map 的特性，并提供 FIFO 迭代器
+ * 对于元素的搜索 插入 删除 操作都是 O(n) 的
+ * 时间复杂度
+ * 性能基本是一个 std::list 
+ * 操作特性类似 std::map
  */
 class JsonUnsortedMap
 {
@@ -55,16 +59,13 @@ public:
 	inline size_type size()
 	{ return m_list.size(); }
 
-	inline void push_front(const JsonMapPair& pair)
-	{ m_list.push_front(pair); }
-	inline void push_back(const JsonMapPair& pair)
-	{ m_list.push_back(pair); }
+	void push_front(const JsonMapPair& pair);
+	void push_back(const JsonMapPair& pair);
+	iterator insert(iterator itr, const JsonMapPair& pair);
 
-	inline iterator insert(iterator itr, const JsonMapPair& pair)
-	{ return m_list.insert(itr, pair); }
+	iterator erase(const std::string& key);
 	inline iterator erase(iterator itr)
 	{ return m_list.erase(itr); }
-
 	inline void clear()
 	{ m_list.clear(); }
 
@@ -101,17 +102,20 @@ public:
 		MAP_VALUE = 0x20
 	};
 
+	long line; // line number
+
 	/*
 	 * Constructors
 	 * Default is string value
 	 */
 	explicit JsonValue(VALUE_TYPE type = STRING_VALUE)
-		:valType(type)
+		:valType(type), line(-1)
 	{};
 	explicit JsonValue(const std::string& strValue)
-		:valType(STRING_VALUE), strValue(strValue)
+		:valType(STRING_VALUE), strValue(strValue), line(-1)
 	{};
 
+	JsonValue(const JsonValue& rhs);
 	JsonValue& operator=(const JsonValue& rhs);
 
 	// Get string value

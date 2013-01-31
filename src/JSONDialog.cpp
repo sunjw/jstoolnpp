@@ -39,7 +39,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 		{
 			hTree=GetDlgItem(hWnd, IDC_TREE_JSON);// tree control
 		}
-		return FALSE;
+		break;
 	case WM_SIZE:
 		{
 			int width,height;
@@ -49,15 +49,52 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 				HWND_TOP, 0, 30, width, height, 
 				SWP_SHOWWINDOW);
 		}
-		return FALSE;
+		break;
 	case WM_COMMAND:
+		{
 			switch (LOWORD(wParam))
             {
 				case IDC_BTN_REFRESH:
 					refreshTree(hCurrScintilla);
 					break;
 			}
-			return FALSE;
+		}
+		break;
+	case WM_NOTIFY:
+		{
+			LPNMHDR lpnmh = (LPNMHDR)lParam;
+            if(lpnmh->code == NM_CLICK && lpnmh-> idFrom == IDC_TREE_JSON)  
+            {  
+				HWND hWnd = getHSelf();
+                DWORD dwPos = GetMessagePos();
+                POINT pt;
+                pt.x = LOWORD(dwPos);
+                pt.y = HIWORD(dwPos);
+                ScreenToClient(lpnmh->hwndFrom, &pt);
+                TVHITTESTINFO ht = {0};
+                ht.pt = pt;
+                //ht.flags = TVHT_ONITEMLABEL;
+                HTREEITEM hItem = TreeView_HitTest(lpnmh->hwndFrom, &ht);
+				if(ht.flags & TVHT_ONITEMLABEL)
+				{
+					TVITEM ti = {0};
+					ti.mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM;
+					TCHAR buf[1024] = {0};
+					ti.cchTextMax = 1024;
+					ti.pszText = buf;
+					ti.hItem = hItem;
+					ti.lParam = -1;
+					
+					TreeView_GetItem(lpnmh->hwndFrom, &ti);
+					long line = ti.lParam;
+					if(line >= 0)
+					{
+						::SendMessage(hCurrScintilla, SCI_GOTOLINE, line - 1, 0);
+					}
+				}
+            }  
+		}
+		break;
 	default:
 		return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 	}
@@ -70,16 +107,16 @@ Delete all items from the tree and creates the root node
 */
 HTREEITEM JSONDialog::initTree(HWND hWndDlg)
 {
-	int TreeCount=TreeView_GetCount(GetDlgItem(this->getHSelf(),IDC_TREE_JSON));
+	int TreeCount = TreeView_GetCount(GetDlgItem(this->getHSelf(), IDC_TREE_JSON));
 	if(TreeCount>0)
-		TreeView_DeleteAllItems(GetDlgItem(this->getHSelf(),IDC_TREE_JSON));
+		TreeView_DeleteAllItems(GetDlgItem(this->getHSelf(), IDC_TREE_JSON));
 
-	HTREEITEM root = insertTree(TEXT("ROOT"), TVI_ROOT);
+	HTREEITEM root = insertTree(TEXT("ROOT"), -1, TVI_ROOT);
 	
 	return root;		
 }
 
-HTREEITEM JSONDialog::insertTree(LPCTSTR text, HTREEITEM parentNode)
+HTREEITEM JSONDialog::insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNode)
 {
 	HWND hWnd = getHSelf();
 
@@ -87,17 +124,18 @@ HTREEITEM JSONDialog::insertTree(LPCTSTR text, HTREEITEM parentNode)
 
 	if(parentNode == TVI_ROOT)
 	{
-		tvinsert.hParent = NULL;     
+		tvinsert.hParent = NULL;   
 		tvinsert.hInsertAfter = TVI_ROOT;
 	}
 	else
 	{
-		tvinsert.hParent = parentNode;     
+		tvinsert.hParent = parentNode;   
 		tvinsert.hInsertAfter = TVI_LAST;
 	}
-	tvinsert.item.mask = TVIF_TEXT;
-
+	tvinsert.item.mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM;
 	tvinsert.item.pszText = (LPTSTR)text;
+	tvinsert.item.lParam = lparam;
+
 	HTREEITEM item = (HTREEITEM)SendDlgItemMessage(
 		hWnd, IDC_TREE_JSON, TVM_INSERTITEM, 0, (LPARAM)&tvinsert);
 
@@ -212,7 +250,7 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 	{
 		tstr.append(TEXT(" : "));
 		tstr.append(strtotstr(jsonValue.GetStrValue()));
-		insertTree(tstr.c_str(), node);
+		insertTree(tstr.c_str(), jsonValue.line, node);
 	}
 	else if(valType == JsonValue::STRING_VALUE)
 	{
@@ -220,7 +258,7 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 		tstr.append(TEXT("\""));
 		tstr.append(strtotstr(jsonValue.GetStrValue()));
 		tstr.append(TEXT("\""));
-		insertTree(tstr.c_str(), node);
+		insertTree(tstr.c_str(), jsonValue.line, node);
 	}
 	if(valType == JsonValue::MAP_VALUE ||
 		valType == JsonValue::ARRAY_VALUE)
@@ -230,7 +268,7 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 		if(valType == JsonValue::ARRAY_VALUE)
 			tstr.append(TEXT(" : [Array]"));
 
-		HTREEITEM newNode = insertTree(tstr.c_str(), node);
+		HTREEITEM newNode = insertTree(tstr.c_str(), jsonValue.line, node);
 		insertJsonValue(jsonValue, newNode);
 	}
 }

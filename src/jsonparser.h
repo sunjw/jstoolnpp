@@ -1,8 +1,8 @@
 /* JsonParser.h
    2012-3-23
-   Version: 0.9.6
+   Version: 0.9.8
 
-Copyright (c) 2012 SUN Junwen
+Copyright (c) 2012- SUN Junwen
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -51,11 +51,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class JsonParser: public JSParser
 {
 public:
-	template<class T>
-	bool GetStackTop(stack<T> stk, T& ret);
-	template<class T>
-	bool StackTopEq(stack<T> stk, T eq);
-
 	JsonParser():m_nRecuLevel(0)
 	{}
 

@@ -56,7 +56,7 @@ private:
 
 
 	HTREEITEM initTree(HWND hWndDlg);
-	HTREEITEM insertTree(LPCTSTR text, HTREEITEM parentNode);
+	HTREEITEM insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNode);
 
 	void insertJsonValue(const JsonValue& jsonValue, HTREEITEM node);
 	void insertJsonValue(const std::string& key, const JsonValue& jsonValue, HTREEITEM node);
