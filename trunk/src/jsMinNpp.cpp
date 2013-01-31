@@ -356,7 +356,7 @@ void jsFormat()
 	}
 	catch(std::exception ex)
 	{
-		::MessageBox(nppData._nppHandle, TEXT("ERROR"), TEXT("JsonViewer"), MB_OK);
+		::MessageBox(nppData._nppHandle, TEXT("ERROR"), TEXT("JSFormat"), MB_OK);
 	}
 
 	delete[] pJS;

@@ -1,7 +1,7 @@
 /* realjsformatter.h
    2010-12-16
 
-Copyright (c) 2010-2012 SUN Junwen
+Copyright (c) 2010-2013 SUN Junwen
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -56,14 +56,9 @@ using namespace std;
 class RealJSFormatter: public JSParser
 {
 public:
-	template<class T>
-	bool GetStackTop(stack<T> stk, T& ret);
-	template<class T>
-	bool StackTopEq(stack<T> stk, T eq);
-
 	typedef stack<char> CharStack;
 	typedef stack<bool> BoolStack;
-	typedef queue<JSParser::TokenAndType> TokenQueue;
+	typedef queue<JSParser::Token> TokenQueue;
 	typedef map<string, char> StrCharMap;
 	typedef set<string> StrSet;
 

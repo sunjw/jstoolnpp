@@ -1,8 +1,8 @@
-/* JSParser.h
+/* jsparser.h
    2012-3-11
-   Version: 0.9.6
+   Version: 0.9.8
 
-Copyright (c) 2012 SUN Junwen
+Copyright (c) 2012- SUN Junwen
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -29,6 +29,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 using namespace std;
 
+template<class T>
+bool GetStackTop(stack<T> stk, T& ret)
+{
+	if(stk.size() == 0)
+		return false;
+	ret = stk.top();
+	return true;
+}
+
+template<class T>
+bool StackTopEq(stack<T> stk, T eq)
+{
+	if(stk.size() == 0)
+		return false;
+	return (eq == stk.top());
+}
+
 #define STRING_TYPE 0
 #define OPER_TYPE 1
 #define REGULAR_TYPE 2
@@ -38,16 +55,17 @@ using namespace std;
 class JSParser
 {
 protected:
-	struct TokenAndType
+	struct Token
 	{
-		string token;
-		int type;
+		string code; // 代码内容
+		int type; // Token 类型
+		int line; // 行号
 	};
 
 public:
 	typedef stack<char> CharStack;
 	typedef stack<bool> BoolStack;
-	typedef queue<TokenAndType> TokenQueue;
+	typedef queue<Token> TokenQueue;
 	typedef map<string, char> StrCharMap;
 	typedef set<string> StrSet;
 
@@ -59,11 +77,10 @@ public:
 protected:
 	int m_charA;
 	int m_charB;
-	int m_tokenAType;
-	int m_tokenBType;
-	string m_tokenA;
-	string m_tokenB;
-	int m_tokenCount;
+	Token m_tokenA;
+	Token m_tokenB;
+	long m_lineCount;
+	long m_tokenCount;
 
 	bool inline IsNormalChar(int ch);
 	bool inline IsNumChar(int ch);

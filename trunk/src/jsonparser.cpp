@@ -1,8 +1,8 @@
 /* JsonParser.cpp
    2012-3-23
-   Version: 0.9.6
+   Version: 0.9.8
 
-Copyright (c) 2012 SUN Junwen
+Copyright (c) 2012- SUN Junwen
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -24,23 +24,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 using namespace std;
 using namespace sunjwbase;
 
-template<class T>
-bool JsonParser::GetStackTop(stack<T> stk, T& ret)
-{
-	if(stk.size() == 0)
-		return false;
-	ret = stk.top();
-	return true;
-}
-
-template<class T>
-bool JsonParser::StackTopEq(stack<T> stk, T eq)
-{
-	if(stk.size() == 0)
-		return false;
-	return (eq == stk.top());
-}
-
 void JsonParser::RecursiveProc(JsonValue& jsonValue)
 {
 	// initial job
@@ -57,16 +40,17 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 	GetStackTop(m_blockStack, stackTop);
 
 	string key, strValue;
+	long keyLine, valLine;
 	bool bGetKey = false;
 	bool bGetSplitor = false;
 
 	while(GetToken()) // 获得下一个 m_tokenA 和 m_tokenB
 	{
 		// JsonParser 忽略换行, 其它的解析器可能不要忽略
-		if(m_tokenA == "\r\n" || 
-			m_tokenA == "\n" ||
-			m_tokenAType == COMMENT_TYPE_1 || 
-			m_tokenAType == COMMENT_TYPE_2)
+		if(m_tokenA.code == "\r\n" || 
+			m_tokenA.code == "\n" ||
+			m_tokenA.type == COMMENT_TYPE_1 || 
+			m_tokenA.type == COMMENT_TYPE_2)
 		{
 			continue;
 		}
@@ -77,9 +61,10 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		 * 已经识别负数
 		 * 已经识别正则表达式
 		 */
-		if(m_tokenA == "{")
+		if(m_tokenA.code == "{")
 		{
 			m_blockStack.push(JS_BLOCK);
+			long blockLine = m_tokenA.line;
 
 			if(stackTop == JS_EMPTY)
 			{
@@ -95,12 +80,14 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 				if(stackTop == JS_SQUARE)
 				{
+					innerValue.line = blockLine;
 					jsonValue.ArrayPut(innerValue);
 				}
 				else if(stackTop == JS_BLOCK)
 				{
 					bGetKey = false;
 					bGetSplitor = false;
+					innerValue.line = keyLine;
 					jsonValue.MapPut(key, innerValue);
 				}
 			}
@@ -108,7 +95,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			continue;
 		}
 
-		if(m_tokenA == "}")
+		if(m_tokenA.code == "}")
 		{
 			bGetKey = false;
 			bGetSplitor = false;
@@ -119,9 +106,10 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			return;
 		}
 
-		if(m_tokenA == "[")
+		if(m_tokenA.code == "[")
 		{
 			m_blockStack.push(JS_SQUARE);
+			long squareLine = m_tokenA.line;
 
 			if(stackTop == JS_EMPTY)
 			{
@@ -137,12 +125,14 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 				if(stackTop == JS_SQUARE)
 				{
+					innerValue.line = squareLine;
 					jsonValue.ArrayPut(innerValue);
 				}
 				else if(stackTop == JS_BLOCK)
 				{
 					bGetKey = false;
 					bGetSplitor = false;
+					innerValue.line = keyLine;
 					jsonValue.MapPut(key, innerValue);
 				}
 			}
@@ -150,7 +140,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			continue;
 		}
 
-		if(m_tokenA == "]")
+		if(m_tokenA.code == "]")
 		{
 			m_blockStack.pop();
 			--m_nRecuLevel;
@@ -160,9 +150,10 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 		if(stackTop == JS_BLOCK)
 		{
-			if(!bGetKey && m_tokenA != ",")
+			if(!bGetKey && m_tokenA.code != ",")
 			{
-				key = m_tokenA;
+				key = m_tokenA.code;
+				keyLine = m_tokenA.line;
 
 				if(key[0] == '\'')
 					key = strtrim(key, string("'"));
@@ -173,7 +164,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 				continue;
 			}
 
-			if(bGetKey && !bGetSplitor && m_tokenA == ":")
+			if(bGetKey && !bGetSplitor && m_tokenA.code == ":")
 			{
 				bGetSplitor = true;
 				continue;
@@ -182,10 +173,12 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			if(bGetKey && bGetSplitor)
 			{
 				strValue = ReadStrValue();
+				valLine = m_tokenA.line;
 
 				JsonValue jValue;
 				GenStrJsonValue(jValue, strValue);
 
+				jValue.line = keyLine;
 				jsonValue.MapPut(key, jValue);
 
 				bGetKey = false;
@@ -195,12 +188,14 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 		if(stackTop == JS_SQUARE)
 		{
-			if(m_tokenA != ",")
+			if(m_tokenA.code != ",")
 			{
 				strValue = ReadStrValue();
+				valLine = m_tokenA.line;
 
 				JsonValue jValue;
 				GenStrJsonValue(jValue, strValue);
+				jValue.line = valLine;
 
 				jsonValue.ArrayPut(jValue);
 			}
@@ -217,7 +212,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		{
 			cout << "Processed tokens: " << m_tokenCount << endl;
 			cout << "Time used: " << m_duration << "s" << endl;
-			cout << m_tokenCount/ m_duration << " tokens/second" << endl;
+			cout << m_tokenCount / m_duration << " tokens/second" << endl;
 		}
 	}
 	// finished job
@@ -225,15 +220,15 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 string JsonParser::ReadStrValue()
 {
-	string ret(m_tokenA);
+	string ret(m_tokenA.code);
 	// fix decimal number value bug
-	if(m_tokenB == ".")
+	if(m_tokenB.code == ".")
 	{
 		// maybe it's a decimal
-		string strDec(m_tokenA);
+		string strDec(m_tokenA.code);
 		GetToken();
 		strDec.append(".");
-		strDec.append(m_tokenB);
+		strDec.append(m_tokenB.code);
 		ret = strDec;
 		GetToken();
 	}

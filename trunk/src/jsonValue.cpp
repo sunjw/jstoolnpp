@@ -1,8 +1,8 @@
 /* JsonValue.cpp
    2012-3-11
-   Version: 0.9
+   Version: 0.9.1
 
-Copyright (c) 2012 SUN Junwen
+Copyright (c) 2012- SUN Junwen
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -23,6 +23,15 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 using namespace std;
 using namespace sunjwbase;
 
+JsonValue::JsonValue(const JsonValue& rhs)
+{
+	valType = rhs.valType;
+	strValue = rhs.strValue;
+	arrayValue = rhs.arrayValue;
+	mapValue = rhs.mapValue;
+	line = rhs.line;
+}
+
 JsonValue& JsonValue::operator=(const JsonValue& rhs)
 {
 	if(this == &rhs)
@@ -32,6 +41,7 @@ JsonValue& JsonValue::operator=(const JsonValue& rhs)
 	strValue = rhs.strValue;
 	arrayValue = rhs.arrayValue;
 	mapValue = rhs.mapValue;
+	line = rhs.line;
 
 	return *this;
 }
