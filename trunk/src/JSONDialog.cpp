@@ -39,7 +39,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 		{
 			hTree=GetDlgItem(hWnd, IDC_TREE_JSON);// tree control
 		}
-		break;
+		return FALSE;
 	case WM_SIZE:
 		{
 			int width,height;
@@ -49,7 +49,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 				HWND_TOP, 0, 30, width, height, 
 				SWP_SHOWWINDOW);
 		}
-		break;
+		return FALSE;
 	case WM_COMMAND:
 		{
 			switch (LOWORD(wParam))
@@ -59,7 +59,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 					break;
 			}
 		}
-		break;
+		return FALSE;
 	case WM_NOTIFY:
 		{
 			LPNMHDR lpnmh = (LPNMHDR)lParam;
@@ -94,7 +94,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 				}
             }  
 		}
-		break;
+		return FALSE;
 	default:
 		return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 	}

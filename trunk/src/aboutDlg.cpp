@@ -12,7 +12,7 @@ BOOL CALLBACK dlgProcAbout(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
 			{
 				HICON hIcon = (HICON)::LoadImage(_hInst, 
 					MAKEINTRESOURCE(IDI_JS_ICON), IMAGE_ICON, 
-					64, 64, LR_DEFAULTSIZE);
+					48, 48, LR_DEFAULTSIZE);
 				DRAWITEMSTRUCT *pdis = (DRAWITEMSTRUCT *)lParam;
 				::DrawIconEx(pdis->hDC, 0, 0, hIcon, 48, 48, 0, NULL, DI_NORMAL);
 				return TRUE;
