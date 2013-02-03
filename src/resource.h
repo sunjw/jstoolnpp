@@ -2,6 +2,8 @@
 // Microsoft Visual C++ generated include file.
 // Used by jsMinNpp.rc
 //
+#define	IDI_JS_ICON						101
+
 #define SW_HIDE                         0
 #define HIDE_WINDOW                     0
 #define WM_NULL                         0x0000

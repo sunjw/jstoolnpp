@@ -62,6 +62,15 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_JS_ICON             ICON                    "js_icon_048.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Dialog
 //
 
@@ -71,6 +80,7 @@ FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     PUSHBUTTON      "OK",IDCLOSE,219,108,50,14
     GROUPBOX        "JSMin for Notepad++",IDC_STATIC,10,9,258,93,BS_CENTER
+    CONTROL         "",IDI_JS_ICON,"Static",SS_OWNERDRAW,212,24,48,48
     LTEXT           "Author : Sun Junwen",IDC_STATIC,20,26,100,8
     LTEXT           "Version : ",IDC_STATIC,20,43,31,8
     LTEXT           "Licence : GPL",IDC_STATIC,20,62,43,8
