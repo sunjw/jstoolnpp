@@ -59,7 +59,7 @@ protected:
 	{
 		string code; // 代码内容
 		int type; // Token 类型
-		int line; // 行号
+		long line; // 行号
 	};
 
 public:
