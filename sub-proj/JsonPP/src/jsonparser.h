@@ -24,30 +24,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "jsonpp.h"
 #include "jsparser.h"
 
-/*
- * if-i, else-e, else if-i,
- * for-f, do-d, while-w,
- * switch-s, case-c, default-c
- * try-r, catch-h
- * {-BLOCK, (-BRACKET
- */
-#define JS_IF 'i'
-#define JS_ELSE 'e'
-#define JS_FOR 'f'
-#define JS_DO 'd'
-#define JS_WHILE 'w'
-#define JS_SWITCH 's'
-#define JS_CASE 'c'
-#define JS_TRY 'r'
-#define JS_CATCH 'h'
-#define JS_FUNCTION 'n'
-#define JS_ASSIGN '='
-#define JS_BLOCK '{'
-#define JS_BRACKET '('
-#define JS_SQUARE '['
-#define JS_HELPER '\\'
-#define JS_EMPTY 0
-
 class JsonParser: public JSParser
 {
 public:
