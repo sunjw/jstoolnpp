@@ -1,6 +1,6 @@
 /* jsparser.h
    2012-3-11
-   Version: 0.9.8
+   Version: 0.9.9
 
 Copyright (c) 2012- SUN Junwen
 
@@ -51,6 +51,31 @@ bool StackTopEq(stack<T> stk, T eq)
 #define REGULAR_TYPE 2
 #define COMMENT_TYPE_1 9 // 单行注释
 #define COMMENT_TYPE_2 10 // 多行注释
+
+/*
+ * if-i, else-e, else if-i,
+ * for-f, do-d, while-w,
+ * switch-s, case-c, default-c
+ * try-r, catch-h
+ * {-BLOCK, (-BRACKET
+ * 0-empty
+ */
+#define JS_IF 'i'
+#define JS_ELSE 'e'
+#define JS_FOR 'f'
+#define JS_DO 'd'
+#define JS_WHILE 'w'
+#define JS_SWITCH 's'
+#define JS_CASE 'c'
+#define JS_TRY 'r'
+#define JS_CATCH 'h'
+#define JS_FUNCTION 'n'
+#define JS_ASSIGN '='
+#define JS_BLOCK '{'
+#define JS_BRACKET '('
+#define JS_SQUARE '['
+#define JS_HELPER '\\'
+#define JS_EMPTY 0
 
 class JSParser
 {
