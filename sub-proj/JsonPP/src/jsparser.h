@@ -22,27 +22,28 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define _JS_PARSER_H_
 #include <ctime>
 #include <string>
-#include <vector>
+#include <stack>
+#include <queue>
 #include <map>
 #include <set>
 
 using namespace std;
 
 template<class T>
-bool GetStackTop(vector<T> stk, T& ret)
+bool GetStackTop(const stack<T>& stk, T& ret)
 {
 	if(stk.size() == 0)
 		return false;
-	ret = stk.back();
+	ret = stk.top();
 	return true;
 }
 
 template<class T>
-bool StackTopEq(vector<T> stk, T eq)
+bool StackTopEq(const stack<T>& stk, T eq)
 {
 	if(stk.size() == 0)
 		return false;
-	return (eq == stk.back());
+	return (eq == stk.top());
 }
 
 #define STRING_TYPE 0
@@ -87,9 +88,9 @@ protected:
 	};
 
 public:
-	typedef vector<char> CharStack; // 提高性能, 将 stack, queue 换成 vector
-	typedef vector<bool> BoolStack;
-	typedef vector<Token> TokenQueue;
+	typedef stack<char> CharStack;
+	typedef stack<bool> BoolStack;
+	typedef queue<Token> TokenQueue;
 	typedef map<string, char> StrCharMap;
 	typedef set<string> StrSet;
 
