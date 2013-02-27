@@ -243,7 +243,7 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 				topStack == JS_WHILE || topStack == JS_CATCH ||
 				topStack == JS_ELSE || topStack == JS_TRY)
 			{
-				m_blockStack.pop_back();
+				m_blockStack.pop();
 				--m_nIndents;
 			}
 			else if(topStack == JS_DO)
@@ -264,8 +264,8 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 
 void RealJSFormatter::Go()
 {
-	m_blockStack.push_back(' ');
-	m_brcNeedStack.push_back(true);
+	m_blockStack.push(' ');
+	m_brcNeedStack.push(true);
 
 	bool bHaveNewLine;
 	char tokenAFirst;
@@ -357,23 +357,23 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		{
 			if(topStack == JS_ASSIGN)
 				--m_nIndents;
-			m_blockStack.pop_back();
+			m_blockStack.pop();
 		}
 		GetStackTop(m_blockStack, topStack);
 		if((m_tokenA.code == ")" && topStack == JS_BRACKET) ||
 			(m_tokenA.code == "]" && topStack == JS_SQUARE))
 		{
 			// )] 需要弹栈，减少缩进
-			m_blockStack.pop_back();
+			m_blockStack.pop();
 			--m_nIndents;
 			GetStackTop(m_blockStack, topStack);
 			//topStack = m_blockStack.top();
 			if(topStack == JS_ASSIGN || topStack == JS_HELPER)
-				m_blockStack.pop_back();
+				m_blockStack.pop();
 		}
 
 		GetStackTop(m_blockStack, topStack);
-		if(m_tokenA.code == ")" && !m_brcNeedStack.back() &&
+		if(m_tokenA.code == ")" && !m_brcNeedStack.top() &&
 			(topStack == JS_IF || topStack == JS_FOR || topStack == JS_WHILE ||
 			topStack == JS_SWITCH || topStack == JS_CATCH))
 		{
@@ -384,21 +384,21 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				rightDeco.append("\n");
 			PutToken(m_tokenA.code, string(""), rightDeco);
 			//bBracket = true;
-			m_brcNeedStack.pop_back();
+			m_brcNeedStack.pop();
 			m_bBlockStmt = false; // 等待 statment
 			if(StackTopEq(m_blockStack, JS_WHILE)) //m_blockStack.top() == JS_WHILE
 			{
-				m_blockStack.pop_back();
+				m_blockStack.pop();
 				if(StackTopEq(m_blockStack, JS_DO)) // m_blockStack.top() == JS_DO
 				{
 					// 结束 do...while
-					m_blockStack.pop_back();
+					m_blockStack.pop();
 
 					PopMultiBlock(JS_WHILE);
 				}
 				else
 				{
-					m_blockStack.push_back(JS_WHILE);
+					m_blockStack.push(JS_WHILE);
 					++m_nIndents;
 				}
 			}
@@ -420,9 +420,9 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				if(!m_bAssign)
 					--m_nIndents;
 				else
-					m_blockStack.push_back(JS_HELPER);
+					m_blockStack.push(JS_HELPER);
 			}
-			m_blockStack.push_back(m_blockMap[m_tokenA.code]);
+			m_blockStack.push(m_blockMap[m_tokenA.code]);
 			++m_nIndents;
 		}
 
@@ -436,7 +436,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if(topStack == JS_ASSIGN)
 		{
 			--m_nIndents;
-			m_blockStack.pop_back();
+			m_blockStack.pop();
 		}
 
 		GetStackTop(m_blockStack, topStack);
@@ -446,14 +446,14 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if(topStack == JS_IF || topStack == JS_FOR ||
 			topStack == JS_WHILE || topStack == JS_CATCH)
 		{
-			m_blockStack.pop_back();
+			m_blockStack.pop();
 			--m_nIndents;
 			// 下面的 } 有同样的处理
 			PopMultiBlock(topStack);
 		}
 		if(topStack == JS_ELSE || topStack == JS_TRY)
 		{
-			m_blockStack.pop_back();
+			m_blockStack.pop();
 			--m_nIndents;
 			PopMultiBlock(topStack);
 		}
@@ -485,7 +485,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if(StackTopEq(m_blockStack, JS_ASSIGN)) // m_blockStack.top() == JS_ASSIGN
 		{
 			--m_nIndents;
-			m_blockStack.pop_back();
+			m_blockStack.pop();
 		}
 		if(StackTopEq(m_blockStack, JS_BLOCK) && !bHaveNewLine)
 			PutToken(m_tokenA.code, string(""), strRight.append("\n")); // 如果是 {} 里的
@@ -512,7 +512,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			}
 			else
 			{
-				m_blockStack.push_back(JS_HELPER); // 压入一个 JS_HELPER 统一状态
+				m_blockStack.push(JS_HELPER); // 压入一个 JS_HELPER 统一状态
 			}
 		}
 
@@ -521,7 +521,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		char fixTopStack = topStack;
 		if(bPrevFunc)
 		{
-			m_blockStack.pop_back(); // 弹掉 JS_FUNCTION
+			m_blockStack.pop(); // 弹掉 JS_FUNCTION
 			GetStackTop(m_blockStack, fixTopStack);
 		}
 
@@ -532,10 +532,10 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 		if(bPrevFunc)
 		{
-			m_blockStack.push_back(JS_FUNCTION); // 压回 JS_FUNCTION
+			m_blockStack.push(JS_FUNCTION); // 压回 JS_FUNCTION
 		}
 
-		m_blockStack.push_back(m_blockMap[m_tokenA.code]); // 入栈，增加缩进
+		m_blockStack.push(m_blockMap[m_tokenA.code]); // 入栈，增加缩进
 		++m_nIndents;
 
 		/*
@@ -582,7 +582,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			if(topStack == JS_BLOCK)
 				break;
 
-			m_blockStack.pop_back();
+			m_blockStack.pop();
 
 			switch(topStack)
 			{
@@ -609,7 +609,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if(topStack == JS_BLOCK)
 		{
 			// 弹栈，减小缩进
-			m_blockStack.pop_back();
+			m_blockStack.pop();
 			--m_nIndents;
 			bool bGetTop = GetStackTop(m_blockStack, topStack);// = m_blockStack.top();
 
@@ -627,7 +627,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				case JS_ASSIGN:
 				case JS_FUNCTION:
 				case JS_HELPER:
-					m_blockStack.pop_back();
+					m_blockStack.pop();
 					break;
 				case JS_DO:
 					// 缩进已经处理，do 留给 while
@@ -683,7 +683,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			PutToken(m_tokenA.code, string(""), strRight.append("\n"));
 		else
 			PutToken(m_tokenA.code, string(""), strRight);
-		m_blockStack.pop_back();
+		m_blockStack.pop();
 		return;
 	}
 
@@ -698,7 +698,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 	if(m_tokenA.code == "=" && !StackTopEq(m_blockStack, JS_ASSIGN)) // m_blockStack.top() != JS_ASSIGN)
 	{
-		m_blockStack.push_back(m_blockMap[m_tokenA.code]);
+		m_blockStack.push(m_blockMap[m_tokenA.code]);
 		++m_nIndents;
 		m_bAssign = false;
 	}
@@ -715,7 +715,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		string rightDeco = m_tokenA.code != "default" ? string(" ") : string();
 		PutToken(m_tokenA.code, string(""), rightDeco);
 		++m_nIndents;
-		m_blockStack.push_back(m_blockMap[m_tokenA.code]);
+		m_blockStack.push(m_blockMap[m_tokenA.code]);
 		return;
 	}
 
@@ -726,7 +726,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		// do, else (NOT else if), try
 		PutToken(m_tokenA.code);
 
-		m_blockStack.push_back(m_blockMap[m_tokenA.code]);
+		m_blockStack.push(m_blockMap[m_tokenA.code]);
 		++m_nIndents; // 无需 ()，直接缩进
 		m_bBlockStmt = false; // 等待 block 内部的 statment
 
@@ -742,9 +742,9 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		if(StackTopEq(m_blockStack, JS_ASSIGN)) // m_blockStack.top() == JS_ASSIGN)
 		{
 			--m_nIndents;
-			m_blockStack.pop_back();
+			m_blockStack.pop();
 		}
-		m_blockStack.push_back(m_blockMap[m_tokenA.code]); // 把 function 也压入栈，遇到 } 弹掉
+		m_blockStack.push(m_blockMap[m_tokenA.code]); // 把 function 也压入栈，遇到 } 弹掉
 	}
 
 	if(StackTopEq(m_blockStack, JS_ASSIGN)) //m_blockStack.top() == JS_ASSIGN
@@ -772,16 +772,16 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		m_tokenA.code == "while" || m_tokenA.code == "catch")
 	{
 		// 等待 ()，() 到来后才能加缩进
-		m_brcNeedStack.push_back(false);
-		m_blockStack.push_back(m_blockMap[m_tokenA.code]);
+		m_brcNeedStack.push(false);
+		m_blockStack.push(m_blockMap[m_tokenA.code]);
 
 	}
 
 	if(m_tokenA.code == "switch")
 	{
 		//bBracket = false;
-		m_brcNeedStack.push_back(false);
-		m_blockStack.push_back(m_blockMap[m_tokenA.code]);
+		m_brcNeedStack.push(false);
+		m_blockStack.push(m_blockMap[m_tokenA.code]);
 	}
 }
 

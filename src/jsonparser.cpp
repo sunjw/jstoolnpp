@@ -63,7 +63,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		 */
 		if(m_tokenA.code == "{")
 		{
-			m_blockStack.push_back(JS_BLOCK);
+			m_blockStack.push(JS_BLOCK);
 			long blockLine = m_tokenA.line;
 
 			if(stackTop == JS_EMPTY)
@@ -100,7 +100,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			bGetKey = false;
 			bGetSplitor = false;
 
-			m_blockStack.pop_back();
+			m_blockStack.pop();
 			--m_nRecuLevel;
 
 			return;
@@ -108,7 +108,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 		if(m_tokenA.code == "[")
 		{
-			m_blockStack.push_back(JS_SQUARE);
+			m_blockStack.push(JS_SQUARE);
 			long squareLine = m_tokenA.line;
 
 			if(stackTop == JS_EMPTY)
@@ -142,7 +142,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 		if(m_tokenA.code == "]")
 		{
-			m_blockStack.pop_back();
+			m_blockStack.pop();
 			--m_nRecuLevel;
 
 			return;
