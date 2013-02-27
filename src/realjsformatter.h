@@ -21,8 +21,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define _REAL_JSFORMATTER_H_
 #include <ctime>
 #include <string>
-#include <stack>
-#include <queue>
 #include <map>
 #include <set>
 
@@ -33,9 +31,6 @@ using namespace std;
 class RealJSFormatter: public JSParser
 {
 public:
-	typedef stack<char> CharStack;
-	typedef stack<bool> BoolStack;
-	typedef queue<JSParser::Token> TokenQueue;
 	typedef map<string, char> StrCharMap;
 	typedef set<string> StrSet;
 
