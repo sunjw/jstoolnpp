@@ -362,7 +362,7 @@ bool JSParser::GetToken()
 	{
 		// 有排队的换行
 		m_tokenB = m_tokenBQueue.front();
-		m_tokenBQueue.pop();
+		m_tokenBQueue.erase(m_tokenBQueue.begin());
 	}
 
 	return (m_charA != 0 || m_tokenA.code != "");
@@ -438,12 +438,12 @@ void JSParser::PrepareTokenB()
 		{
 			temp.code = string("\n");
 			temp.type = OPER_TYPE;
-			m_tokenBQueue.push(temp);
+			m_tokenBQueue.push_back(temp);
 		}
 		temp = m_tokenB;
-		m_tokenBQueue.push(temp);
+		m_tokenBQueue.push_back(temp);
 		temp = m_tokenBQueue.front();
-		m_tokenBQueue.pop();
+		m_tokenBQueue.erase(m_tokenBQueue.begin());
 		m_tokenB = temp;
 	}
 }
