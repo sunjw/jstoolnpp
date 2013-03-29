@@ -1,14 +1,14 @@
 A javascript plugin for Notepad++ formerly JSMinNpp.
  * Douglas Crockford's JSMin algorithm to minimize javascript code.
  * My own algorithm to format javascript code.
- * A JSON data viewer. 
+ * A JSON data viewer. This JSON data viewer can handle >10MB JSON file easily.
 
 Really helpful to javascript coder on Notepad++ and really easy to use it.
 Made in China.
 Project Site http://www.sunjw.us/jsminnpp 
 
 INSTALL
-Download it from http://sourceforge.net/projects/jsminnpp/ and copy JSMinNpp.dll to plugin directory of Notepad++.
+Download it from https://code.google.com/p/jstoolnpp/ and copy JSMinNpp.dll to plugin directory of Notepad++.
 Or you can just install it from Plugin Manager in Notepad++.
 
 LICENSE

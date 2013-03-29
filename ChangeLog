@@ -1,3 +1,8 @@
+1.13 (since 1.12)
+Performance improved (JSFormat will be about 2X faster).
+Linked editor with Json Viewer: Clicking a data node in Viewer, editor will navigate to corresponding line.
+Added a logo.
+
 1.12 (since 1.11)
 Fixed a bug in JSON Viewer.
 Updated JsonPP.
