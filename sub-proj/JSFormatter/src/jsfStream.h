@@ -8,16 +8,24 @@
 class JSFormatterStream: public RealJSFormatter
 {
 public:
-	JSFormatterStream(std::istream& input, std::ostream& output)
-		:RealJSFormatter('\t', 1, false, false, false, false), in(input), out(output)
+	JSFormatterStream(std::istream& input, std::ostream& output):
+		RealJSFormatter(RealJSFormatter::FormatterOption(
+						'\t', 1, 
+						RealJSFormatter::SKIP_READ_CR, 
+						RealJSFormatter::NOT_PUT_CR, 
+						RealJSFormatter::NO_NEWLINE_BRAC, 
+						RealJSFormatter::NO_INDENT_IN_EMPTYLINE)), 
+		in(input), out(output)
 	{}
 	
-	JSFormatterStream(std::istream& input, std::ostream& output, 
-		char chIndent, int nChPerInd, 
-		bool bNLBracket, bool bIndentInEmpty)
-		:RealJSFormatter(chIndent, nChPerInd, 
-		false, false, 
-		bNLBracket, bIndentInEmpty), in(input), out(output)
+	JSFormatterStream(std::istream& input, std::ostream& output,
+						RealJSFormatter::FormatterOption option):
+		RealJSFormatter(RealJSFormatter::FormatterOption(
+						option.chIndent, option.nChPerInd, 
+						RealJSFormatter::SKIP_READ_CR, 
+						RealJSFormatter::NOT_PUT_CR, 
+						option.eBracNL, option.eEmpytIndent)), 
+		in(input), out(output)
 	{}
 
 private:
