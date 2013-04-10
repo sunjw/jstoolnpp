@@ -324,13 +324,17 @@ void jsFormat()
 		if(struOptions.chIndent == '\t')
 			_nChPerInd = 1;
 
-		JSFormatString jsformat(pJS, 
-			&strJSFormat, 
-			struOptions.chIndent, 
-			_nChPerInd, 
-			struOptions.bPutCR, 
-			struOptions.bNLBracket,
-			struOptions.bIndentInEmpty);
+		JSFormatString::FormatterOption formatterOption;
+		formatterOption.chIndent = struOptions.chIndent;
+		formatterOption.nChPerInd = _nChPerInd;
+		formatterOption.eCRPut = struOptions.bPutCR ? 
+			JSFormatString::PUT_CR : JSFormatString::NOT_PUT_CR;
+		formatterOption.eBracNL = struOptions.bNLBracket ?
+			JSFormatString::NEWLINE_BRAC : JSFormatString::NO_NEWLINE_BRAC;
+		formatterOption.eEmpytIndent = struOptions.bIndentInEmpty ?
+			JSFormatString::INDENT_IN_EMPTYLINE : JSFormatString::NO_INDENT_IN_EMPTYLINE;
+
+		JSFormatString jsformat(pJS, &strJSFormat, formatterOption);
 		if(bFormatSel)
 			jsformat.SetInitIndent(initIndent);
 		jsformat.Go();
