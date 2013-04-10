@@ -12,11 +12,7 @@ class JSFormatString: public RealJSFormatter
 public:
 	JSFormatString(const char *input, 
 				string *output,
-				char chIndent,
-				int nChPerInd,
-				bool bPutCR,
-				bool bNLBracket,
-				bool bIndentInEmpty);
+				RealJSFormatter::FormatterOption option);
 
 private:
 	string in;

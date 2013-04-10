@@ -1,14 +1,10 @@
 #include "jsformatString.h"
 
 JSFormatString::JSFormatString(const char *input, 
-				string *output,
-				char chIndent,
-				int nChPerInd,
-				bool bPutCR,
-				bool bNLBracket,
-				bool bIndentInEmpty)
-		:RealJSFormatter(chIndent, nChPerInd, true, bPutCR, bNLBracket, bIndentInEmpty), 
-		in(), out(output), getPos(0), putPos(0)
+								string *output,
+								RealJSFormatter::FormatterOption option):
+				RealJSFormatter(option), 
+				in(), out(output), getPos(0), putPos(0)
 {
 	in.append(input);
 }

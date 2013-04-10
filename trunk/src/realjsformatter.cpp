@@ -27,48 +27,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 using namespace std;
 
-RealJSFormatter::RealJSFormatter():
-	m_chIndent('\t'),
-	m_nChPerInd(1),
-	m_bSkipCR(false),
-	m_bPutCR(false),
-	m_bNLBracket(false),
-	m_bIndentInEmpty(false)
-{
-	Init();
-}
-
-RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd):
-	m_chIndent(chIndent),
-	m_nChPerInd(nChPerInd),
-	m_bSkipCR(false),
-	m_bPutCR(false),
-	m_bNLBracket(false),
-	m_bIndentInEmpty(false)
-{
-	Init();
-}
-
-RealJSFormatter::RealJSFormatter(bool bSkipCR, bool bPutCR):
-	m_chIndent('\t'),
-	m_nChPerInd(1),
-	m_bSkipCR(bSkipCR),
-	m_bPutCR(bPutCR),
-	m_bNLBracket(false),
-	m_bIndentInEmpty(false)
-{
-	Init();
-}
-
-RealJSFormatter::RealJSFormatter(char chIndent, int nChPerInd, 
-								 bool bSkipCR, bool bPutCR, 
-								 bool bNLBracket, bool bIndentInEmpty):
-	m_chIndent(chIndent),
-	m_nChPerInd(nChPerInd),
-	m_bSkipCR(bSkipCR),
-	m_bPutCR(bPutCR),
-	m_bNLBracket(bNLBracket),
-	m_bIndentInEmpty(bIndentInEmpty)
+RealJSFormatter::RealJSFormatter(RealJSFormatter::FormatterOption option):
+	m_struOption(option)
 {
 	Init();
 }
@@ -174,7 +134,8 @@ void RealJSFormatter::PutString(const string& str)
 	for(size_t i = 0; i < length; ++i)
 	{
 		if(m_bNewLine && (m_bCommentPut ||
-			((m_bNLBracket || str[i] != '{') && str[i] != ',' && str[i] != ';')))
+			((m_struOption.eBracNL == NEWLINE_BRAC || str[i] != '{') && 
+				str[i] != ',' && str[i] != ';')))
 		{
 			// 换行后面不是紧跟着 {,; 才真正换
 			PutLineBuffer(); // 输出行缓冲
@@ -188,7 +149,7 @@ void RealJSFormatter::PutString(const string& str)
 		}
 
 		if(m_bNewLine && !m_bCommentPut &&
-			((!m_bNLBracket && str[i] == '{') || str[i] == ',' || str[i] == ';'))
+			((m_struOption.eBracNL == NO_NEWLINE_BRAC && str[i] == '{') || str[i] == ',' || str[i] == ';'))
 			m_bNewLine = false;
 
 		if(str[i] == '\n')
@@ -203,18 +164,18 @@ void RealJSFormatter::PutLineBuffer()
 	string line;
 	line.append(TrimRightSpace(m_lineBuffer));
 	
-	if(line != "" || m_bIndentInEmpty) // Fix "JSLint unexpect space" bug
+	if(line != "" || m_struOption.eEmpytIndent == INDENT_IN_EMPTYLINE) // Fix "JSLint unexpect space" bug
 	{
 		for(size_t i = 0; i < m_initIndent.length(); ++i)
 			PutChar(m_initIndent[i]); // 先输出预缩进
 
 		for(int c = 0; c < m_nLineIndents; ++c)
-			for(int c2 = 0; c2 < m_nChPerInd; ++c2)
-				PutChar(m_chIndent); // 输出缩进
+			for(int c2 = 0; c2 < m_struOption.nChPerInd; ++c2)
+				PutChar(m_struOption.chIndent); // 输出缩进
 	}
 	
 	// 加上换行
-	if(m_bPutCR)
+	if(m_struOption.eCRPut == PUT_CR)
 		line.append("\r"); //PutChar('\r');
 	line.append("\n"); //PutChar('\n');
 
@@ -547,7 +508,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		{
 			// 空 {}
 			m_bEmptyBracket = true;
-			if(m_bNewLine == false && m_bNLBracket &&
+			if(m_bNewLine == false && m_struOption.eBracNL == NEWLINE_BRAC &&
 				(topStack == JS_IF || topStack == JS_FOR ||
 				topStack == JS_WHILE || topStack == JS_SWITCH ||
 				topStack == JS_CATCH || topStack == JS_FUNCTION))
@@ -561,7 +522,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 		else
 		{
-			string strLeft = (m_bNLBracket && !m_bNewLine) ? string("\n") : string("");	
+			string strLeft = (m_struOption.eBracNL == NEWLINE_BRAC && !m_bNewLine) ? string("\n") : string("");	
 			if(!bHaveNewLine) // 需要换行
 				PutToken(m_tokenA.code, strLeft, strRight.append("\n"));
 			else
@@ -648,7 +609,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 
 		if((!bHaveNewLine && m_tokenB.code != ";" && m_tokenB.code != ",")
-			&& (m_bNLBracket || !((topStack == JS_DO && m_tokenB.code == "while") ||
+			&& (m_struOption.eBracNL == NEWLINE_BRAC || 
+			!((topStack == JS_DO && m_tokenB.code == "while") ||
 			(topStack == JS_IF && m_tokenB.code == "else") ||
 			(topStack == JS_TRY && m_tokenB.code == "catch") ||
 			m_tokenB.code == ")")))
@@ -731,7 +693,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		m_bBlockStmt = false; // 等待 block 内部的 statment
 
 		PutString(string(" "));
-		if((m_tokenB.type == STRING_TYPE || m_bNLBracket) && !bHaveNewLine)
+		if((m_tokenB.type == STRING_TYPE || m_struOption.eBracNL == NEWLINE_BRAC) && !bHaveNewLine)
 			PutString(string("\n"));
 
 		return;
