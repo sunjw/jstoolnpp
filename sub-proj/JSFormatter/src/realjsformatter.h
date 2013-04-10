@@ -147,14 +147,9 @@ private:
 	bool m_bCommentPut; // 刚刚输出了注释
 
 	string m_initIndent; // 起始缩进
-	char m_chIndent; // 作为缩进的字符
-	int m_nChPerInd; // 每个缩进缩进字符个数
 
-	CR_READ m_eCRRead; // 读取时跳过 \r
-	CR_PUT m_eCRPut; // 使用 \r\n 作为换行
-
-	BRAC_NEWLINE m_eBracNL; // 括号之前是否换行
-	EMPTYLINE_INDENT m_eEmpytIndent; // 是否保持空行的缩进, JSLint 不推荐
+	// 以下为配置项
+	FormatterOption m_struOption;
 
 private:
 	// 阻止拷贝
