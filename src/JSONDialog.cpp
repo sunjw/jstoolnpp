@@ -57,42 +57,15 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 				case IDC_BTN_REFRESH:
 					refreshTree(hCurrScintilla);
 					break;
+				case IDC_BTN_SEARCH:
+					search();
+					break;
 			}
 		}
 		return FALSE;
 	case WM_NOTIFY:
 		{
-			LPNMHDR lpnmh = (LPNMHDR)lParam;
-            if(lpnmh->code == NM_CLICK && lpnmh->idFrom == IDC_TREE_JSON)  
-            {  
-				HWND hWnd = getHSelf();
-                DWORD dwPos = GetMessagePos();
-                POINT pt;
-                pt.x = LOWORD(dwPos);
-                pt.y = HIWORD(dwPos);
-                ScreenToClient(lpnmh->hwndFrom, &pt);
-                TVHITTESTINFO ht = {0};
-                ht.pt = pt;
-                //ht.flags = TVHT_ONITEMLABEL;
-                HTREEITEM hItem = TreeView_HitTest(lpnmh->hwndFrom, &ht);
-				if(ht.flags & TVHT_ONITEMLABEL)
-				{
-					TVITEM ti = {0};
-					ti.mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM;
-					TCHAR buf[1024] = {0};
-					ti.cchTextMax = 1024;
-					ti.pszText = buf;
-					ti.hItem = hItem;
-					ti.lParam = -1;
-					
-					TreeView_GetItem(lpnmh->hwndFrom, &ti);
-					long line = ti.lParam;
-					if(line >= 0)
-					{
-						::SendMessage(hCurrScintilla, SCI_GOTOLINE, line - 1, 0);
-					}
-				}
-            }  
+			clickJsonTree(lParam);
 		}
 		return FALSE;
 	default:
@@ -140,6 +113,31 @@ HTREEITEM JSONDialog::insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNo
 		hWnd, IDC_TREE_JSON, TVM_INSERTITEM, 0, (LPARAM)&tvinsert);
 
 	return item;
+}
+
+bool JSONDialog::getTreeItem(HWND hWndTree, HTREEITEM hItem, TCHAR *buf, int bufSize, TVITEM *ti)
+{
+	ti->mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM;
+	ti->cchTextMax = bufSize;
+	ti->pszText = buf;
+	ti->hItem = hItem;
+	ti->lParam = -1;
+					
+	return TreeView_GetItem(hWndTree, ti);
+}
+
+void JSONDialog::jumpToLine(HWND hWndTree, HTREEITEM hItem)
+{
+	TCHAR buf[1024] = {0};
+	TVITEM ti = {0};
+	if(getTreeItem(hWndTree, hItem, buf, 1024, &ti))
+	{
+		long line = ti.lParam;
+		if(line >= 0)
+		{
+			::SendMessage(hCurrScintilla, SCI_GOTOLINE, line - 1, 0);
+		}
+	}
 }
 
 void JSONDialog::refreshTree(HWND hCurrScintilla)
@@ -271,5 +269,197 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 		HTREEITEM newNode = insertTree(tstr.c_str(), jsonValue.line, node);
 		insertJsonValue(jsonValue, newNode);
 	}
+}
+
+void JSONDialog::clickJsonTree(LPARAM lParam)
+{
+	HWND hWnd = getHSelf();
+	LPNMHDR lpnmh = (LPNMHDR)lParam;
+    if(lpnmh->code == NM_CLICK && lpnmh->idFrom == IDC_TREE_JSON)  
+    {
+		DWORD dwPos = GetMessagePos();
+		POINT pt;
+		pt.x = LOWORD(dwPos);
+		pt.y = HIWORD(dwPos);
+		ScreenToClient(lpnmh->hwndFrom, &pt);
+		TVHITTESTINFO ht = {0};
+		ht.pt = pt;
+		//ht.flags = TVHT_ONITEMLABEL;
+		HTREEITEM hItem = TreeView_HitTest(lpnmh->hwndFrom, &ht);
+		if(ht.flags & TVHT_ONITEMLABEL)
+		{
+			jumpToLine(lpnmh->hwndFrom, hItem);
+		}
+	}  
+}
+
+void JSONDialog::search()
+{
+	HWND hWnd = getHSelf();
+
+	TCHAR buffer[256];
+	GetWindowText(GetDlgItem(hWnd, IDC_SEARCHEDIT), buffer, 255);
+	
+	tstring tstrSearchKey(buffer);
+
+	HWND hWndTree = GetDlgItem(hWnd, IDC_TREE_JSON);
+
+	HTREEITEM selectedItem = TreeView_GetSelection(hWndTree);
+	if(selectedItem == NULL)
+	{
+		// Nothing, so we do search from ROOT
+		selectedItem = TreeView_GetRoot(hWndTree);
+	}
+	if(selectedItem == NULL)
+		return; // Still NULL, return.
+
+	/*
+	 * Now, we have a valid "selectedItem".
+	 * We do a down search.
+	 */
+	HTREEITEM hItemCur = selectedItem;
+	HTREEITEM hItemFound = NULL;
+	bool bSkipCur = true;
+	
+	while(1)
+	{
+		hItemFound = downSearch(hWndTree, hItemCur, tstrSearchKey, bSkipCur);
+		if(hItemCur != NULL && hItemFound == NULL)
+		{
+			// Go to parent node and do down search search.
+			HTREEITEM hItemParent = hItemCur;
+			bSkipCur = false;
+			while(1)
+			{
+				hItemParent = TreeView_GetParent(hWndTree, hItemParent);
+				if(hItemParent == NULL)
+				{
+					hItemCur = NULL;
+					break;
+				}
+				hItemCur = TreeView_GetNextSibling(hWndTree, hItemParent);
+				if(hItemCur != NULL)
+					break;
+				// No sibling, go to parent's parent
+			}
+		}
+		else
+			break;
+	}
+
+	if(hItemFound != NULL)
+	{
+		// We found in search.
+		TreeView_SelectItem(hWndTree, hItemFound);
+		
+		jumpToLine(hWndTree, hItemFound);
+	}
+}
+
+void JSONDialog::splitText(string& strText, 
+				string& strKey, 
+				string& strValue)
+{
+	string::size_type beginPos = 0;
+	string::size_type splitPos = 0;
+	while(1)
+	{
+		string::size_type pos = strText.find(string(" : "), beginPos);
+		if(pos == string::npos)
+			return; // NOT found
+
+		char cTest = strText[pos + 3];
+		if(cTest == '\"' || cTest == '[')
+		{
+			splitPos = pos + 1;
+			break;
+		}
+
+		beginPos = pos + 1;
+	}
+
+	strKey = strText.substr(0, splitPos);
+	strKey = strtrim(strKey);
+	strValue = strText.substr(splitPos + 1, strText.size() - splitPos);
+	strValue = strtrim(strValue);
+}
+
+HTREEITEM JSONDialog::downSearch(HWND hWndTree, HTREEITEM hItemCur, tstring& tstrSearchKey, bool bSkipCur)
+{
+	while(hItemCur != NULL)
+	{
+		TCHAR buf[1024] = {0};
+		TVITEM ti = {0};
+
+		if(bSkipCur)
+		{
+			// Go to first child.
+			HTREEITEM hItemChild = TreeView_GetChild(hWndTree, hItemCur);
+			if(hItemChild != NULL)
+			{
+				// Has a child.
+				HTREEITEM hItemChildFound = downSearch(hWndTree, hItemChild, tstrSearchKey, false);
+				if(hItemChildFound != NULL)
+				{
+					return hItemChildFound; // Found in child.
+				}
+			}
+
+			// Go to next sibling.
+			hItemCur = TreeView_GetNextSibling(hWndTree, hItemCur);
+			if(hItemCur == NULL)
+				return NULL; // End
+		}
+
+		if(getTreeItem(hWndTree, hItemCur, buf, 1024, &ti))
+		{
+			string strTreeText = tstrtostr(ti.pszText);
+			string strSearchKey = tstrtostr(tstrSearchKey);
+
+			string strKey, strValue;
+			splitText(strTreeText, strKey, strValue);
+
+			if(strValue == "[Object]" || strValue == "[Array]")
+			{
+				// Just search key
+				if(ci_strfind(strKey, strSearchKey) >= 0)
+				{
+					return hItemCur; // found
+				}
+			}
+			else
+			{
+				if(ci_strfind(strTreeText, strSearchKey) >= 0)
+				{
+					return hItemCur; // found
+				}
+			}
+
+			// Not found.
+			bSkipCur = false;
+			// Go to first child.
+			HTREEITEM hItemChild = TreeView_GetChild(hWndTree, hItemCur);
+			if(hItemChild != NULL)
+			{
+				// Has a child.
+				HTREEITEM hItemChildFound = downSearch(hWndTree, hItemChild, tstrSearchKey, false);
+				if(hItemChildFound != NULL)
+				{
+					return hItemChildFound; // Found in child.
+				}
+			}
+
+			// Go to next sibling.
+			hItemCur = TreeView_GetNextSibling(hWndTree, hItemCur);
+			if(hItemCur == NULL)
+				return NULL; // End
+		}
+		else
+		{
+			return NULL; // error
+		}
+	}
+
+	return hItemCur;
 }
 

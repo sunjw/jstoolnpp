@@ -2,8 +2,6 @@
 // Microsoft Visual C++ generated include file.
 // Used by jsMinNpp.rc
 //
-#define	IDI_JS_ICON						101
-
 #define SW_HIDE                         0
 #define HIDE_WINDOW                     0
 #define WM_NULL                         0x0000
@@ -554,6 +552,7 @@
 #define VK_NUMPAD3                      0x63
 #define VK_NUMPAD4                      0x64
 #define VS_USER_DEFINED                 100
+#define IDI_JS_ICON                     101
 #define VK_NUMPAD5                      0x65
 #define LANG_DIVEHI                     0x65
 #define IDD_OPTIONSBOX                  101
@@ -914,6 +913,8 @@
 #define IDC_CHECK2                      1010
 #define IDC_KEEPCOMTCHECK               1010
 #define IDC_TREE_JSON                   1011
+#define IDC_SEARCHEDIT                  1012
+#define IDC_BTN_SEARCH                  1013
 #define CF_GDIOBJLAST                   0x03FF
 #define WM_USER                         0x0400
 #define WVR_VALIDRECTS                  0x0400
@@ -1226,7 +1227,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        103
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1012
+#define _APS_NEXT_CONTROL_VALUE         1014
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
