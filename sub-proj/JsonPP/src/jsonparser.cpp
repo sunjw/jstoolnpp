@@ -196,7 +196,6 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 				JsonValue jValue;
 				GenStrJsonValue(jValue, strValue);
 				jValue.line = valLine;
-
 				jsonValue.ArrayPut(jValue);
 			}
 		}

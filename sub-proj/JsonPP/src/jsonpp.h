@@ -109,10 +109,10 @@ public:
 	 * Default is string value
 	 */
 	explicit JsonValue(VALUE_TYPE type = STRING_VALUE)
-		:valType(type), line(-1)
+		:m_valType(type), line(-1)
 	{};
 	explicit JsonValue(const std::string& strValue)
-		:valType(STRING_VALUE), strValue(strValue), line(-1)
+		:m_valType(STRING_VALUE), m_strValue(strValue), line(-1)
 	{};
 
 	JsonValue(const JsonValue& rhs);
@@ -135,7 +135,7 @@ public:
 	
 	// Is string value or not
 	inline VALUE_TYPE GetValueType() const
-	{ return valType; }
+	{ return m_valType; }
 	// Set value mode, true is string, false is not string
 	inline void SetValueType(VALUE_TYPE valType)
 	{ ChangeType(valType); }
@@ -154,10 +154,10 @@ public:
 	JsonValue& operator[](const std::string& key);
 
 private:
-	VALUE_TYPE valType;
-	std::string strValue;
-	JsonUnsortedMap mapValue;
-	JsonVec arrayValue;
+	VALUE_TYPE m_valType;
+	std::string m_strValue;
+	JsonUnsortedMap m_mapValue;
+	JsonVec m_arrayValue;
 
 	void ChangeType(VALUE_TYPE newType);
 };

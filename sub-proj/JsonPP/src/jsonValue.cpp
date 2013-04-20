@@ -25,10 +25,10 @@ using namespace sunjwbase;
 
 JsonValue::JsonValue(const JsonValue& rhs)
 {
-	valType = rhs.valType;
-	strValue = rhs.strValue;
-	arrayValue = rhs.arrayValue;
-	mapValue = rhs.mapValue;
+	m_valType = rhs.m_valType;
+	m_strValue = rhs.m_strValue;
+	m_mapValue = rhs.m_mapValue;
+	m_arrayValue = rhs.m_arrayValue;
 	line = rhs.line;
 }
 
@@ -37,10 +37,10 @@ JsonValue& JsonValue::operator=(const JsonValue& rhs)
 	if(this == &rhs)
 		return *this;
 
-	valType = rhs.valType;
-	strValue = rhs.strValue;
-	arrayValue = rhs.arrayValue;
-	mapValue = rhs.mapValue;
+	m_valType = rhs.m_valType;
+	m_strValue = rhs.m_strValue;
+	m_mapValue = rhs.m_mapValue;
+	m_arrayValue = rhs.m_arrayValue;
 	line = rhs.line;
 
 	return *this;
@@ -48,72 +48,72 @@ JsonValue& JsonValue::operator=(const JsonValue& rhs)
 
 string JsonValue::GetStrValue() const
 {
-	return strValue;
+	return m_strValue;
 }
 
 void JsonValue::SetStrValue(const string& str)
 {
-	strValue = str;
-	if(valType != JsonValue::STRING_VALUE && 
-		valType != JsonValue::NUMBER_VALUE && 
-		valType != JsonValue::BOOL_VALUE && 
-		valType != JsonValue::REGULAR_VALUE && 
-		valType != JsonValue::UNKNOWN_VALUE)
+	m_strValue = str;
+	if(m_valType != JsonValue::STRING_VALUE && 
+		m_valType != JsonValue::NUMBER_VALUE && 
+		m_valType != JsonValue::BOOL_VALUE && 
+		m_valType != JsonValue::REGULAR_VALUE && 
+		m_valType != JsonValue::UNKNOWN_VALUE)
 	ChangeType(JsonValue::STRING_VALUE);
 }
 
 JsonVec& JsonValue::GetArrayValue()
 {
-	return arrayValue;
+	return m_arrayValue;
 }
 
 const JsonVec& JsonValue::GetArrayValue() const 
 {
-	return arrayValue;
+	return m_arrayValue;
 }
 
 void JsonValue::SetArrayValue(const JsonVec& jArray)
 {
-	arrayValue = jArray;
+	m_arrayValue = jArray;
 	ChangeType(JsonValue::ARRAY_VALUE);
 }
 
 JsonUnsortedMap& JsonValue::GetMapValue()
 {
-	return mapValue;
+	return m_mapValue;
 }
 
 const JsonUnsortedMap& JsonValue::GetMapValue() const
 {
-	return mapValue;
+	return m_mapValue;
 }
 
 void JsonValue::SetMapValue(const JsonUnsortedMap& jMap)
 {
-	mapValue = jMap;
+	m_mapValue = jMap;
 	ChangeType(JsonValue::MAP_VALUE);
 }
 
 void JsonValue::ArrayPut(const JsonValue& value)
 {
-	arrayValue.push_back(value);
+	m_arrayValue.push_back(value);
 }
 
 void JsonValue::MapPut(const string& key, const JsonValue& value)
 {
-	mapValue[key] = value;
+	m_mapValue[key] = value;
 }
 
 string JsonValue::ToString(int nRecuLevel) const
 {
 	string ret("");
 
-	switch(valType)
+	switch(m_valType)
 	{
 	case JsonValue::STRING_VALUE:
 		{
 			ret.append("\"");
-			ret.append(strValue);
+			ret.append(m_strValue);
 			ret.append("\"");
 		}
 		break;
@@ -121,7 +121,7 @@ string JsonValue::ToString(int nRecuLevel) const
 	case JsonValue::BOOL_VALUE:
 	case JsonValue::REGULAR_VALUE:
 	case JsonValue::UNKNOWN_VALUE:
-		ret.append(strValue);
+		ret.append(m_strValue);
 		break;
 	case JsonValue::MAP_VALUE:
 		{
@@ -130,8 +130,8 @@ string JsonValue::ToString(int nRecuLevel) const
 			ret.append("{");
 			ret.append("\n");
 			
-			JsonUnsortedMap::const_iterator itr = mapValue.begin();
-			for(; itr != mapValue.end(); ++itr)
+			JsonUnsortedMap::const_iterator itr = m_mapValue.begin();
+			for(; itr != m_mapValue.end(); ++itr)
 			{
 				const string& key = itr->first;
 				const JsonValue& value = itr->second;
@@ -145,7 +145,7 @@ string JsonValue::ToString(int nRecuLevel) const
 				ret.append(value.ToString(nRecuLevel));
 				JsonUnsortedMap::const_iterator temp = itr;
 				++temp;
-				if(temp != mapValue.end())
+				if(temp != m_mapValue.end())
 				{
 					ret.append(",");
 				}
@@ -161,15 +161,15 @@ string JsonValue::ToString(int nRecuLevel) const
 		{
 			ret.append("[");
 			
-			JsonVec::const_iterator itr = arrayValue.begin();
-			for(; itr != arrayValue.end(); ++itr)
+			JsonVec::const_iterator itr = m_arrayValue.begin();
+			for(; itr != m_arrayValue.end(); ++itr)
 			{
 				const JsonValue& value = *itr;
 
 				ret.append(value.ToString(nRecuLevel));
 				JsonVec::const_iterator temp = itr;
 				++temp;
-				if(temp != arrayValue.end())
+				if(temp != m_arrayValue.end())
 				{
 					ret.append(",");
 				}
@@ -189,13 +189,13 @@ JsonValue& JsonValue::operator[](JsonVec::size_type idx)
 	// Change to ARRAY_VALUE
 	ChangeType(JsonValue::ARRAY_VALUE);
 
-	while(arrayValue.size() <= idx)
+	while(m_arrayValue.size() <= idx)
 	{
 		// need to expand
-		arrayValue.push_back(JsonValue());
+		m_arrayValue.push_back(JsonValue());
 	}
 
-	return arrayValue[idx];
+	return m_arrayValue[idx];
 }
 
 // for MapValue
@@ -204,7 +204,7 @@ JsonValue& JsonValue::operator[](const std::string& key)
 	// Change to MAP_VALUE
 	ChangeType(JsonValue::MAP_VALUE);
 
-	return mapValue[key];
+	return m_mapValue[key];
 }
 
 void JsonValue::ChangeType(VALUE_TYPE newType)
@@ -216,18 +216,18 @@ void JsonValue::ChangeType(VALUE_TYPE newType)
 	case JsonValue::BOOL_VALUE:
 	case JsonValue::REGULAR_VALUE:
 	case JsonValue::UNKNOWN_VALUE:
-		arrayValue.clear();
-		mapValue.clear();
+		m_arrayValue.clear();
+		m_mapValue.clear();
 		break;
 	case JsonValue::MAP_VALUE:
-		strValue.clear();
-		arrayValue.clear();
+		m_strValue.clear();
+		m_arrayValue.clear();
 		break;
 	case JsonValue::ARRAY_VALUE:
-		strValue.clear();
-		mapValue.clear();
+		m_strValue.clear();
+		m_mapValue.clear();
 		break;
 	}
 
-	valType = newType;
+	m_valType = newType;
 }
