@@ -37,7 +37,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	{
 	case WM_INITDIALOG:
 		{
-			hTree=GetDlgItem(hWnd, IDC_TREE_JSON);// tree control
+			hTree = GetDlgItem(hWnd, IDC_TREE_JSON); // tree control
 		}
 		return FALSE;
 	case WM_SIZE:
@@ -63,7 +63,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	case WM_NOTIFY:
 		{
 			LPNMHDR lpnmh = (LPNMHDR)lParam;
-            if(lpnmh->code == NM_CLICK && lpnmh-> idFrom == IDC_TREE_JSON)  
+            if(lpnmh->code == NM_CLICK && lpnmh->idFrom == IDC_TREE_JSON)  
             {  
 				HWND hWnd = getHSelf();
                 DWORD dwPos = GetMessagePos();
