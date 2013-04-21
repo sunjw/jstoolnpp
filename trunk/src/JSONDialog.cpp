@@ -144,6 +144,12 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 	}
 
 	std::string strJSCode(pJS);
+	int codePage = ::SendMessage(hCurrScintilla, SCI_GETCODEPAGE, 0, 0);
+	if(codePage == 65001)
+	{
+		// UTF-8
+		strJSCode = asciiconv(strJSCode);
+	}
 
 	JsonStringProc jsonProc(strJSCode);
 
