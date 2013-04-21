@@ -1,7 +1,7 @@
 /*
  * strhelpe implementation file
  * Author: Sun Junwen
- * Version: 1.2.2
+ * Version: 1.2.3
  * Provides converting from tstring, string and wstring to each other
  * And provides string's utf8 converting.
  * Provides triming function to string and wstring.
@@ -9,7 +9,6 @@
  * Provides newline fixing to string.
  */
 #include <string>
-#include <algorithm>
 
 #include "Windows.h"
 

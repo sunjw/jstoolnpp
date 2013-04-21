@@ -415,6 +415,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\JsonTree.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\jsparser.h"
 				>
 			</File>
@@ -452,6 +456,10 @@
 			</File>
 			<File
 				RelativePath=".\src\strhelper.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\TreeViewController.h"
 				>
 			</File>
 			<File
@@ -531,6 +539,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\JsonTree.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\jsonUnsortedMap.cpp"
 				>
 			</File>
@@ -556,6 +568,10 @@
 			</File>
 			<File
 				RelativePath=".\src\strhelper.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\TreeViewController.cpp"
 				>
 			</File>
 			<File
