@@ -1,5 +1,5 @@
 /*
- * strhelpe implementation file
+ * strhelper implementation file
  * Author: Sun Junwen
  * Version: 1.2.3
  * Provides converting from tstring, string and wstring to each other

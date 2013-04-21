@@ -1,5 +1,5 @@
 /*
- * strhelpe header file
+ * strhelper header file
  * Author: Sun Junwen
  * Version: 1.2.3
  * Provides converting from tstring, string and wstring to each other
