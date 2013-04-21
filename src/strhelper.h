@@ -1,7 +1,7 @@
 /*
  * strhelpe header file
  * Author: Sun Junwen
- * Version: 1.2.2
+ * Version: 1.2.3
  * Provides converting from tstring, string and wstring to each other
  * And provides string's utf8 converting.
  * Provides triming function to string and wstring.
@@ -11,6 +11,7 @@
 #ifndef _STR_HELPER_H_
 #define _STR_HELPER_H_
 #include <string>
+#include <algorithm>
 #include <locale>
 
 namespace sunjwbase
@@ -127,7 +128,7 @@ namespace sunjwbase
 		const std::locale& loc_;
 	};
 
-	// find substring (case insensitive)
+	// case insensitive search
 	template<typename T>
 	__int64 ci_strfind(const T& str, const T& substr, const std::locale& loc = std::locale())
 	{

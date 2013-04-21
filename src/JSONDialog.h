@@ -54,11 +54,8 @@ private:
 	HWND hCurrScintilla;
 	HANDLE hTree;
 
-
 	HTREEITEM initTree(HWND hWndDlg);
 	HTREEITEM insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNode);
-	bool getTreeItem(HWND hWndTree, HTREEITEM hItem, TCHAR *buf, int bufSize, TVITEM *ti);
-	void jumpToLine(HWND hWndTree, HTREEITEM hItem);
 
 	void insertJsonValue(const JsonValue& jsonValue, HTREEITEM node);
 	void insertJsonValue(const std::string& key, const JsonValue& jsonValue, HTREEITEM node);
@@ -66,11 +63,6 @@ private:
 	void clickJsonTree(LPARAM lParam);
 
 	void search();
-	void splitText(std::string& strText, 
-					std::string& strKey, 
-					std::string& strValue);
-	HTREEITEM downSearch(HWND hWndTree, HTREEITEM hItemCur, 
-						sunjwbase::tstring& tstrSearchKey, bool bSkipCur);
 };
 
 #endif //JSONDIALOG_H
