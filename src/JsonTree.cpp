@@ -39,7 +39,7 @@ BOOL JsonTree::getTVItem(HTREEITEM hti, TCHAR *buf, int bufSize, TVITEM *tvi)
 /*
  * Jump to the line linked with specified HTREEITEM.
  */
-void JsonTree::jumpToSciLine(HTREEITEM hti)
+void JsonTree::jumpToSciLine(HTREEITEM hti, int iLineBase)
 {
 	TCHAR buf[1024] = {0};
 	TVITEM tvi = {0};
@@ -48,7 +48,7 @@ void JsonTree::jumpToSciLine(HTREEITEM hti)
 		long line = (long)tvi.lParam;
 		if(line >= 0)
 		{
-			::SendMessage(m_hScintilla, SCI_GOTOLINE, line - 1, 0);
+			::SendMessage(m_hScintilla, SCI_GOTOLINE, line - 1 + iLineBase, 0);
 		}
 	}
 }

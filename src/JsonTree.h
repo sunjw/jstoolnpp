@@ -31,7 +31,7 @@ public:
 	JsonTree(HWND hScintilla, HWND hWndWindow, HWND hWndTree);
 
 	BOOL getTVItem(HTREEITEM hti, TCHAR *buf, int bufSize, TVITEM *tvi);
-	void jumpToSciLine(HTREEITEM hti);
+	void jumpToSciLine(HTREEITEM hti, int iLineBase);
 	HTREEITEM search(std::string& strSearchKey, HTREEITEM htiCurrent);
 
 private:

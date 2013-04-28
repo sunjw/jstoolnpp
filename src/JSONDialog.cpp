@@ -38,7 +38,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	{
 	case WM_INITDIALOG:
 		{
-			hTree = GetDlgItem(hWnd, IDC_TREE_JSON); // tree control
+			m_hTree = GetDlgItem(hWnd, IDC_TREE_JSON); // tree control
 		}
 		return FALSE;
 	case WM_SIZE:
@@ -56,7 +56,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 			switch (LOWORD(wParam))
             {
 				case IDC_BTN_REFRESH:
-					refreshTree(hCurrScintilla);
+					refreshTree(m_hCurrScintilla);
 					break;
 				case IDC_BTN_SEARCH:
 					search();
@@ -118,15 +118,15 @@ HTREEITEM JSONDialog::insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNo
 
 void JSONDialog::refreshTree(HWND hCurrScintilla)
 {
-	this->hCurrScintilla = hCurrScintilla;
+	m_hCurrScintilla = hCurrScintilla;
 
 	size_t jsLen, jsLenSel;
-	jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
+	jsLen = ::SendMessage(m_hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
     if (jsLen == 0) 
 		return;
 
-	size_t selStart = ::SendMessage(hCurrScintilla, SCI_GETSELECTIONSTART, 0, 0);
-	size_t selEnd = ::SendMessage(hCurrScintilla, SCI_GETSELECTIONEND, 0, 0);
+	size_t selStart = ::SendMessage(m_hCurrScintilla, SCI_GETSELECTIONSTART, 0, 0);
+	size_t selEnd = ::SendMessage(m_hCurrScintilla, SCI_GETSELECTIONEND, 0, 0);
 	bool bFormatSel = !(selStart == selEnd);
 
 	char *pJS;
@@ -134,17 +134,20 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 	if(!bFormatSel)
 	{
 		pJS = new char[jsLen+1];
-		::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
+		::SendMessage(m_hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
+		m_iSelStartLine = 0;
 	}
 	else
 	{
-		jsLenSel = ::SendMessage(hCurrScintilla, SCI_GETSELTEXT, 0, 0);
+		jsLenSel = ::SendMessage(m_hCurrScintilla, SCI_GETSELTEXT, 0, 0);
 		pJS = new char[jsLenSel];
-		::SendMessage(hCurrScintilla, SCI_GETSELTEXT, jsLen, (LPARAM)pJS);
+		::SendMessage(m_hCurrScintilla, SCI_GETSELTEXT, jsLen, (LPARAM)pJS);
+
+		m_iSelStartLine = ::SendMessage(m_hCurrScintilla, SCI_LINEFROMPOSITION, selStart, 0);
 	}
 
 	std::string strJSCode(pJS);
-	int codePage = ::SendMessage(hCurrScintilla, SCI_GETCODEPAGE, 0, 0);
+	int codePage = ::SendMessage(m_hCurrScintilla, SCI_GETCODEPAGE, 0, 0);
 	if(codePage == 65001)
 	{
 		// UTF-8
@@ -270,8 +273,8 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 		HTREEITEM hItem = TreeView_HitTest(lpnmh->hwndFrom, &ht);
 		if(ht.flags & TVHT_ONITEMLABEL)
 		{
-			JsonTree jsonTree(hCurrScintilla, hWnd, lpnmh->hwndFrom);
-			jsonTree.jumpToSciLine(hItem);
+			JsonTree jsonTree(m_hCurrScintilla, hWnd, lpnmh->hwndFrom);
+			jsonTree.jumpToSciLine(hItem, m_iSelStartLine);
 		}
 	}  
 }
@@ -303,7 +306,7 @@ void JSONDialog::search()
 	 */
 	HTREEITEM htiFound = NULL;
 
-	JsonTree jsonTree(hCurrScintilla, hWnd, hWndTree);
+	JsonTree jsonTree(m_hCurrScintilla, hWnd, hWndTree);
 	
 	htiFound = jsonTree.search(strSearchKey, htiSelected);
 
@@ -311,7 +314,7 @@ void JSONDialog::search()
 	{
 		// We found in search.
 		TreeView_SelectItem(hWndTree, htiFound);
-		jsonTree.jumpToSciLine(htiFound);
+		jsonTree.jumpToSciLine(htiFound, m_iSelStartLine);
 	}
 	else
 	{

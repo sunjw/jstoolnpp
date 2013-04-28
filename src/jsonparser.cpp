@@ -100,8 +100,11 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			bGetKey = false;
 			bGetSplitor = false;
 
-			m_blockStack.pop();
-			--m_nRecuLevel;
+			if(m_blockStack.size() > 0)
+			{
+				m_blockStack.pop();
+				--m_nRecuLevel;
+			}
 
 			return;
 		}
@@ -142,8 +145,11 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 		if(m_tokenA.code == "]")
 		{
-			m_blockStack.pop();
-			--m_nRecuLevel;
+			if(m_blockStack.size() > 0)
+			{
+				m_blockStack.pop();
+				--m_nRecuLevel;
+			}
 
 			return;
 		}

@@ -33,7 +33,9 @@ class JSONDialog: public DockingDlgInterface
 {
 public :
 	JSONDialog(): 
-	   DockingDlgInterface(IDD_TREE), hCurrScintilla(NULL)
+	   DockingDlgInterface(IDD_TREE), 
+		   m_hCurrScintilla(NULL),
+		   m_iSelStartLine(0)
 	{};
 
     virtual void display(bool toShow = true) const {
@@ -51,8 +53,9 @@ protected :
 	virtual BOOL CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
-	HWND hCurrScintilla;
-	HANDLE hTree;
+	HWND m_hCurrScintilla;
+	HANDLE m_hTree;
+	int m_iSelStartLine;
 
 	HTREEITEM initTree(HWND hWndDlg);
 	HTREEITEM insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNode);
