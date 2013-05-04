@@ -39,15 +39,32 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	case WM_INITDIALOG:
 		{
 			m_hTree = GetDlgItem(hWnd, IDC_TREE_JSON); // tree control
+			::SendMessage(hWnd, DM_SETDEFID, 
+                        (WPARAM) IDC_BTN_SEARCH, 
+                        (LPARAM) 0); 
 		}
 		return FALSE;
 	case WM_SIZE:
 		{
-			int width,height;
-			width = LOWORD(lParam);
-			height = HIWORD(lParam) - 30;
+			int iDlgWidth,iDlgHeight;
+			iDlgWidth = LOWORD(lParam);
+			iDlgHeight = HIWORD(lParam);
+
+			int iJsonTreeWidth = iDlgWidth, iJsonTreeHeight = iDlgHeight - 30;
 			SetWindowPos(GetDlgItem(hWnd, IDC_TREE_JSON), 
-				HWND_TOP, 0, 30, width, height, 
+				HWND_TOP, 0, 30, iJsonTreeWidth, iJsonTreeHeight, 
+				SWP_SHOWWINDOW);
+
+			if(iDlgWidth < 215) // 170 + 45
+				iDlgWidth = 215;
+
+			int iSearchEditWidth = iDlgWidth - 170;
+			SetWindowPos(GetDlgItem(hWnd, IDC_BTN_SEARCH), 
+				HWND_TOP, 92 + iSearchEditWidth, 0, 74, 22, 
+				SWP_SHOWWINDOW);
+
+			SetWindowPos(GetDlgItem(hWnd, IDC_SEARCHEDIT), 
+				HWND_TOP, 88, 2, iSearchEditWidth, 18, 
 				SWP_SHOWWINDOW);
 		}
 		return FALSE;
