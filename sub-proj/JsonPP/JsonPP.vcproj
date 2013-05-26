@@ -183,10 +183,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\jsonUnsortedMap.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\jsonValue.cpp"
 				>
 			</File>
@@ -226,6 +222,10 @@
 			</File>
 			<File
 				RelativePath=".\src\strhelper.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\unsortedmap.h"
 				>
 			</File>
 		</Filter>
