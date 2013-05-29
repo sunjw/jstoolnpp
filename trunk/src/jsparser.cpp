@@ -119,22 +119,14 @@ void JSParser::GetTokenRaw()
 		m_charA = m_charB;
 		if(m_charA == 0)
 			return;
-
-		m_charB = GetChar();
-		// \r\n -> \n(next char)
-		if(m_charA == '\r' && m_charB == '\n')
-		{
-			m_charA = '\n';
-			m_charB = GetChar();
-		}
-		// \r -> \n
-		if(m_charA == '\r' && m_charB != '\n')
-		{
-			m_charA = '\n';
-		}
 	
 		if(m_charA == '\n')
 			++m_lineCount;
+
+		do
+		{
+			m_charB = GetChar();
+		} while(m_charB == '\r');
 
 		/*
 		 * 参考 m_charB 来处理 m_charA
