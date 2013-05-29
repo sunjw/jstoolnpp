@@ -29,64 +29,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <list>
 #include <map>
 
+#include "unsortedmap.h"
 #include "strhelper.h"
 
 class JsonValue;
-class JsonUnsortedMap;
 
 typedef std::map<std::string, std::string> StrMap;
 typedef std::map<std::string, JsonValue> JsonMap;
 typedef std::pair<std::string, JsonValue> JsonMapPair;
+typedef UnsortedMap<std::string, JsonValue> JsonUnsortedMap;
 typedef std::vector<JsonValue> JsonVec;
-
-/*
- * 对 std::list<JsonMapPair> 的封装
- * 努力实现 std::map 的特性，并提供 FIFO 迭代器
- * 对于元素的搜索 插入 删除 操作都是 O(n) 的
- * 时间复杂度
- * 性能基本是一个 std::list 
- * 操作特性类似 std::map
- */
-class JsonUnsortedMap
-{
-public:
-	typedef std::list<JsonMapPair> JsonMapPairList;
-	typedef JsonMapPairList::iterator iterator;
-	typedef JsonMapPairList::const_iterator const_iterator;
-	typedef JsonMapPairList::size_type size_type;
-
-	// 操作接口都是对 std::list 的封装
-	inline size_type size()
-	{ return m_list.size(); }
-
-	void push_front(const JsonMapPair& pair);
-	void push_back(const JsonMapPair& pair);
-	iterator insert(iterator itr, const JsonMapPair& pair);
-
-	iterator erase(const std::string& key);
-	inline iterator erase(iterator itr)
-	{ return m_list.erase(itr); }
-	inline void clear()
-	{ m_list.clear(); }
-
-	inline const_iterator begin() const
-	{ return m_list.begin(); }
-	inline iterator begin()
-	{ return m_list.begin(); }
-
-	inline const_iterator end() const
-	{ return m_list.end(); }
-	inline iterator end()
-	{ return m_list.end(); }
-
-	iterator find(const std::string& key);
-	// 只能提供 O(n) 的性能
-	JsonValue& operator[](const std::string& key);
-
-private:
-	JsonMapPairList m_list;
-};
-
 
 class JsonValue
 {
@@ -109,10 +61,10 @@ public:
 	 * Default is string value
 	 */
 	explicit JsonValue(VALUE_TYPE type = STRING_VALUE)
-		:valType(type), line(-1)
+		:m_valType(type), line(-1)
 	{};
 	explicit JsonValue(const std::string& strValue)
-		:valType(STRING_VALUE), strValue(strValue), line(-1)
+		:m_valType(STRING_VALUE), m_strValue(strValue), line(-1)
 	{};
 
 	JsonValue(const JsonValue& rhs);
@@ -135,7 +87,7 @@ public:
 	
 	// Is string value or not
 	inline VALUE_TYPE GetValueType() const
-	{ return valType; }
+	{ return m_valType; }
 	// Set value mode, true is string, false is not string
 	inline void SetValueType(VALUE_TYPE valType)
 	{ ChangeType(valType); }
@@ -154,10 +106,10 @@ public:
 	JsonValue& operator[](const std::string& key);
 
 private:
-	VALUE_TYPE valType;
-	std::string strValue;
-	JsonUnsortedMap mapValue;
-	JsonVec arrayValue;
+	VALUE_TYPE m_valType;
+	std::string m_strValue;
+	JsonUnsortedMap m_mapValue;
+	JsonVec m_arrayValue;
 
 	void ChangeType(VALUE_TYPE newType);
 };

@@ -9,14 +9,14 @@
 #include <cstdlib>
 #include <string>
 #include <istream>
-#include <map>
 
 #include "IniValue.h"
+#include "unsortedmap.h"
 
 class IniProcessor
 {
 public:
-	typedef std::map<std::string, IniValue> IniMap;
+	typedef UnsortedMap<std::string, IniValue> IniMap;
 
 	/*
 	 * Constructor

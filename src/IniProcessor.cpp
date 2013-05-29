@@ -7,7 +7,7 @@
 #include <string>
 #include <istream>
 #include <map>
-#include <stack>
+#include <list>
 
 #include "IniProcessor.h"
 #include "strhelper.h"
@@ -124,12 +124,30 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 	return m_iniMap;
 }
 
+void IniProcessor::AddSection(const string& sectionName, const IniValue::StrMap& sectionMap)
+{
+	IniValue iniValue = m_iniMap[sectionName];// = sectionMap;
+	if(iniValue.IsStrValue())
+	{
+		iniValue.SetMode(false);
+		iniValue.SetMapValue(sectionMap);
+	}
+	else
+	{
+		IniValue::StrMap::const_iterator itr = sectionMap.begin();
+		for(; itr != sectionMap.end(); ++itr)
+		{
+			iniValue.Put((*itr).first, (*itr).second);
+		}
+	}
+	m_iniMap[sectionName] = iniValue;
+}
+
 string IniProcessor::ToString(const IniProcessor::IniMap& map) const
 {
-	typedef pair<const string, IniValue> MapEntry;
 	string ret("");
 
-	stack<MapEntry> sectionStack;
+	list<IniMap::pair_type> sectionList;
 
 	IniMap::const_iterator iniItr = map.begin();
 	string line;
@@ -149,14 +167,14 @@ string IniProcessor::ToString(const IniProcessor::IniMap& map) const
 		}
 		else
 		{
-			sectionStack.push(*iniItr);
+			sectionList.push_back(*iniItr);
 		}
 	}
 
-	while(!sectionStack.empty())
+	while(!sectionList.empty())
 	{
-		key = sectionStack.top().first;
-		value = sectionStack.top().second;
+		key = sectionList.front().first;
+		value = sectionList.front().second;
 
 		line = "\n[";
 		line.append(key);
@@ -166,27 +184,8 @@ string IniProcessor::ToString(const IniProcessor::IniMap& map) const
 		line = value.ToString();
 		ret.append(line);
 
-		sectionStack.pop();
+		sectionList.pop_front();
 	}
 
 	return ret;
-}
-
-void IniProcessor::AddSection(const string& sectionName, const IniValue::StrMap& sectionMap)
-{
-	IniValue iniValue = m_iniMap[sectionName];// = sectionMap;
-	if(iniValue.IsStrValue())
-	{
-		iniValue.SetMode(false);
-		iniValue.SetMapValue(sectionMap);
-	}
-	else
-	{
-		IniValue::StrMap::const_iterator itr = sectionMap.begin();
-		for(; itr != sectionMap.end(); ++itr)
-		{
-			iniValue.Put((*itr).first, (*itr).second);
-		}
-	}
-	m_iniMap[sectionName] = iniValue;
 }
