@@ -543,10 +543,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\jsonUnsortedMap.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\jsonValue.cpp"
 				>
 			</File>
