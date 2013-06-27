@@ -1,0 +1,121 @@
+1.15 (since 1.13)
+Change name to JSTool.
+Added simple search in Json Viewer.
+Fixed Json Viewer and editor linkin bug.
+Fixed Json Viewer utf-8 bug.
+Other tweaks.
+
+1.13 (since 1.12)
+Performance improved (JSFormat will be about 2X faster).
+Linked editor with Json Viewer: Clicking a data node in Viewer, editor will navigate to corresponding line.
+Added a logo.
+
+1.12 (since 1.11)
+Fixed a bug in JSON Viewer.
+Updated JsonPP.
+Fixed "unexpect space" of JSLint.
+Added an option to keep indent in empty line.
+Fixed "finally" bug.
+Changed project site to http://sunjw.us/jsminnpp/
+
+1.11.4
+Updated JsonPP.
+Fixed "unexpect space" of JSLint.
+Fixed "finally" bug.
+
+1.11.2
+Fixed a bug in JSON Viewer.
+
+1.11 (since 1.10)
+Moved to Google Code.
+Added a Json Viewer.
+Changed classes inheritance hierarchy to build a smaller binary file.
+
+1.10.6
+Beta released.
+
+1.10.4
+Changed classes inheritance hierarchy to build a smaller binary file.
+
+1.10.2
+Added a Json Viewer.
+
+1.10.1
+Changed donation link.
+
+1.10 (since 1.9)
+Added formatting selected source code.
+If you selected some lines of source code, JSMinNpp will just format these code.
+Some minor changes.
+
+1.9 (since 1.9)
+Added formatting selected source code.
+If you selected some lines of source code, JSMinNpp will just format these code.
+Some minor changes.
+
+1.9.2 beta
+Added formatting selected source code.
+
+1.9 (since 1.8)
+Fixed "one more indent in ({...})".
+Fixed "A space at the end of file".
+Fixed other bugs in formatting algorithm.
+Some minor changes.
+
+1.8.6 beta
+Fixed "one more indent in ({...})".
+
+1.8.4 beta
+Fixed "A space at the end of file".
+Fixed other bugs in formatting algorithm.
+
+1.8 (since 1.7.1)
+Left empty {} alone.
+Added a shortcut for formatting (Ctrl+Alt+M).
+Added an option to keep comments at top of codes.
+Fixed bugs.
+Updated IniProcessor.
+
+1.7.4 beta
+Fixed bugs in formatting algorithm.
+Left empty {} alone.
+Updated IniProcessor.
+
+1.7.2 beta
+Fixed bugs.
+Left empty {} block alone.
+
+1.7 (since 1.6.1)
+Fixed bugs.
+Formatting algorithm now follows JSLint rules.
+Added a new option dialog.
+Some minor changes.
+
+1.6.11 beta
+Added donation.
+
+1.6.10 beta
+Fixed bugs in formatting algorithm.
+Added an Option dialog.
+Some minor changes.
+
+1.6.5 beta
+Fixed lots of bugs in formatting algorithm.
+Changed About dialog style.
+
+1.6.1
+Fixed some bugs.
+
+1.6
+Formatting javascript code.
+
+1.05
+Fixed some bugs.
+Added a menu item which can put minimized javascript code in a new file.
+
+1.01
+Fixed a bug.
+
+1.00
+First time Released.
+Minimizing javascript code in current file.
