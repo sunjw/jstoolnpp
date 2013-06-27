@@ -1,3 +1,10 @@
+1.15 (since 1.13)
+Change name to JSTool.
+Added simple search in Json Viewer.
+Fixed Json Viewer and editor linkin bug.
+Fixed Json Viewer utf-8 bug.
+Other tweaks.
+
 1.13 (since 1.12)
 Performance improved (JSFormat will be about 2X faster).
 Linked editor with Json Viewer: Clicking a data node in Viewer, editor will navigate to corresponding line.
