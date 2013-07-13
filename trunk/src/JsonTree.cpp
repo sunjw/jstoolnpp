@@ -76,14 +76,14 @@ HTREEITEM JsonTree::doSearch(string& strSearchKey, HTREEITEM htiCurrent, bool bS
 			if(strValue == "[Object]" || strValue == "[Array]")
 			{
 				// Just search key
-				if(ci_strfind(strKey, strSearchKey) >= 0)
+				if(strfind_ci(strKey, strSearchKey) >= 0)
 				{
 					return htiCurrent; // found
 				}
 			}
 			else
 			{
-				if(ci_strfind(strTreeText, strSearchKey) >= 0)
+				if(strfind_ci(strTreeText, strSearchKey) >= 0)
 				{
 					return htiCurrent; // found
 				}
