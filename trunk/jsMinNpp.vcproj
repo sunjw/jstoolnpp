@@ -463,6 +463,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\unsortedmap.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\utility.h"
 				>
 			</File>

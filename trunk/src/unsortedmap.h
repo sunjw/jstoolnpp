@@ -58,7 +58,7 @@ public:
 
 	iterator erase(const key_type& key)
 	{
-		unsorted_map::iterator itr = find(key);
+		typename unsorted_map::iterator itr = find(key);
 		if(itr != end())
 			itr = erase(itr);
 
@@ -82,22 +82,20 @@ public:
 
 	iterator find(const key_type& key)
 	{
-		{
-			unsorted_map::iterator itr = m_list.begin();
-			for(; itr != m_list.end(); ++itr)
-			{
-				if(key == itr->first)
-					return itr;
-			}
-
-			return m_list.end();
-		}
+        typename unsorted_map::iterator itr = m_list.begin();
+        for(; itr != m_list.end(); ++itr)
+        {
+            if(key == itr->first)
+                return itr;
+        }
+        
+        return m_list.end();
 	}
 
 	// 只能提供 O(n) 的性能
 	mapped_type& operator[](const key_type& key)
 	{
-		unsorted_map::iterator itr = find(key);
+		typename unsorted_map::iterator itr = find(key);
 		if(itr == m_list.end())
 		{
 			// 没有, 插入一个
