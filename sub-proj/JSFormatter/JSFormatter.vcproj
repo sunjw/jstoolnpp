@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\..\trunk\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -115,6 +116,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..\..\..\trunk\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -183,11 +185,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\jsparser.cpp"
+				RelativePath="..\..\trunk\src\jsparser.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\src\realjsformatter.cpp"
+				RelativePath="..\..\trunk\src\realjsformatter.cpp"
 				>
 			</File>
 		</Filter>
@@ -201,11 +203,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\jsparser.h"
+				RelativePath="..\..\trunk\src\jsparser.h"
 				>
 			</File>
 			<File
-				RelativePath=".\src\realjsformatter.h"
+				RelativePath="..\..\trunk\src\realjsformatter.h"
 				>
 			</File>
 		</Filter>

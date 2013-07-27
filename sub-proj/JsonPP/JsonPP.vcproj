@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\..\trunk\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -115,6 +116,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..\..\trunk\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -179,15 +181,15 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\jsonparser.cpp"
+				RelativePath="..\..\trunk\src\jsonparser.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\src\jsonValue.cpp"
+				RelativePath="..\..\trunk\src\jsonValue.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\src\jsparser.cpp"
+				RelativePath="..\..\trunk\src\jsparser.cpp"
 				>
 			</File>
 			<File
@@ -195,7 +197,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\strhelper.cpp"
+				RelativePath="..\..\trunk\src\strhelper.cpp"
 				>
 			</File>
 		</Filter>
@@ -209,23 +211,23 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\jsonparser.h"
+				RelativePath="..\..\trunk\src\jsonparser.h"
 				>
 			</File>
 			<File
-				RelativePath=".\src\jsonpp.h"
+				RelativePath="..\..\trunk\src\jsonpp.h"
 				>
 			</File>
 			<File
-				RelativePath=".\src\jsparser.h"
+				RelativePath="..\..\trunk\src\jsparser.h"
 				>
 			</File>
 			<File
-				RelativePath=".\src\strhelper.h"
+				RelativePath="..\..\trunk\src\strhelper.h"
 				>
 			</File>
 			<File
-				RelativePath=".\src\unsortedmap.h"
+				RelativePath="..\..\trunk\src\unsortedmap.h"
 				>
 			</File>
 		</Filter>
