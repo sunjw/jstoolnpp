@@ -104,6 +104,74 @@ void JsonValue::MapPut(const string& key, const JsonValue& value)
 	m_mapValue[key] = value;
 }
 
+// Has specified string key for map value
+bool JsonValue::HasKey(const string& key) const
+{
+	if(m_valType != MAP_VALUE)
+		return false;
+
+	
+	return (m_mapValue.find(key) != m_mapValue.end());
+}
+
+// Has specified index for array value
+bool JsonValue::HasKey(const JsonVec::size_type idx) const
+{
+	if(m_valType != ARRAY_VALUE)
+		return false;
+
+	return (m_arrayValue.size() > idx);
+}
+
+// for ArrayValue
+JsonValue& JsonValue::operator[](JsonVec::size_type idx)
+{
+	// Change to ARRAY_VALUE
+	ChangeType(JsonValue::ARRAY_VALUE);
+
+	while(m_arrayValue.size() <= idx)
+	{
+		// need to expand
+		m_arrayValue.push_back(JsonValue());
+	}
+
+	return m_arrayValue[idx];
+}
+
+// for MapValue
+JsonValue& JsonValue::operator[](const std::string& key)
+{
+	// Change to MAP_VALUE
+	ChangeType(JsonValue::MAP_VALUE);
+
+	return m_mapValue[key];
+}
+
+void JsonValue::ChangeType(VALUE_TYPE newType)
+{
+	switch(newType)
+	{
+	case JsonValue::STRING_VALUE:
+	case JsonValue::NUMBER_VALUE:
+	case JsonValue::BOOL_VALUE:
+	case JsonValue::REGULAR_VALUE:
+	case JsonValue::UNKNOWN_VALUE:
+		m_arrayValue.clear();
+		m_mapValue.clear();
+		break;
+	case JsonValue::MAP_VALUE:
+		m_strValue.clear();
+		m_arrayValue.clear();
+		break;
+	case JsonValue::ARRAY_VALUE:
+		m_strValue.clear();
+		m_mapValue.clear();
+		break;
+	}
+
+	m_valType = newType;
+}
+
 string JsonValue::ToString(int nRecuLevel) const
 {
 	string ret("");
@@ -181,53 +249,4 @@ string JsonValue::ToString(int nRecuLevel) const
 	}
 
 	return ret;
-}
-
-// for ArrayValue
-JsonValue& JsonValue::operator[](JsonVec::size_type idx)
-{
-	// Change to ARRAY_VALUE
-	ChangeType(JsonValue::ARRAY_VALUE);
-
-	while(m_arrayValue.size() <= idx)
-	{
-		// need to expand
-		m_arrayValue.push_back(JsonValue());
-	}
-
-	return m_arrayValue[idx];
-}
-
-// for MapValue
-JsonValue& JsonValue::operator[](const std::string& key)
-{
-	// Change to MAP_VALUE
-	ChangeType(JsonValue::MAP_VALUE);
-
-	return m_mapValue[key];
-}
-
-void JsonValue::ChangeType(VALUE_TYPE newType)
-{
-	switch(newType)
-	{
-	case JsonValue::STRING_VALUE:
-	case JsonValue::NUMBER_VALUE:
-	case JsonValue::BOOL_VALUE:
-	case JsonValue::REGULAR_VALUE:
-	case JsonValue::UNKNOWN_VALUE:
-		m_arrayValue.clear();
-		m_mapValue.clear();
-		break;
-	case JsonValue::MAP_VALUE:
-		m_strValue.clear();
-		m_arrayValue.clear();
-		break;
-	case JsonValue::ARRAY_VALUE:
-		m_strValue.clear();
-		m_mapValue.clear();
-		break;
-	}
-
-	m_valType = newType;
 }

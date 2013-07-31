@@ -85,10 +85,10 @@ public:
 	// Set map value
 	void SetMapValue(const JsonUnsortedMap& jMap);
 	
-	// Is string value or not
+	// Type of value this stored
 	inline VALUE_TYPE GetValueType() const
 	{ return m_valType; }
-	// Set value mode, true is string, false is not string
+	// Set value mode
 	inline void SetValueType(VALUE_TYPE valType)
 	{ ChangeType(valType); }
 
@@ -97,13 +97,18 @@ public:
 	// Put key-value pair into map value
 	void MapPut(const std::string& key, const JsonValue& value);
 
-	// Convert string value or map value to string
-	std::string ToString(int nRecuLevel = 0) const;
+	// Has specified string key for map value
+	bool HasKey(const std::string& key) const;
+	// Has specified index for array value
+	bool HasKey(const JsonVec::size_type idx) const;
 
 	// for ArrayValue
-	JsonValue& operator[](JsonVec::size_type idx);
+	JsonValue& operator[](const JsonVec::size_type idx);
 	// for MapValue
 	JsonValue& operator[](const std::string& key);
+
+	// Convert string value or map value to string
+	std::string ToString(int nRecuLevel = 0) const;
 
 private:
 	VALUE_TYPE m_valType;

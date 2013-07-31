@@ -29,6 +29,9 @@ int main(int argc, char *argv[])
 			JsonValue jsonValue;
 			jfp.GetJsonValue(jsonValue);
 
+			bool hasKey = jsonValue["web-app"].HasKey("xxx");
+			hasKey = jsonValue["web-app"]["servlet"][0].HasKey("servlet-class");
+
 			//JsonValue& jval = jsonValue["web-app"]["taglib"];
 			//JsonValue jvalNew("operator");
 			///*jvalNew.SetValueType(JsonValue::ARRAY_VALUE);
