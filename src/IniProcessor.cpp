@@ -72,7 +72,8 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 
 		if(line.length() <= 1 || 
 			line[0] == ';' ||
-			line[0] == '#')
+			line[0] == '#' ||
+			(line[0] == '/' && line[1] == '/'))
 			continue; // ×¢ÊÍÐÐ
 
 		if(bProcSection && 
