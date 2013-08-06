@@ -118,7 +118,10 @@ void JSParser::GetTokenRaw()
 	{
 		m_charA = m_charB;
 		if(m_charA == 0)
+		{
+			m_bRegular = false; // js content error
 			return;
+		}
 
 		m_charB = GetChar();
 		// \r\n -> \n(next char)
