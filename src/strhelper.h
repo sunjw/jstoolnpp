@@ -16,8 +16,9 @@
 
 namespace sunjwbase
 {
-	// define the tstring
-#if defined(UNICODE) || defined(_UNICODE)
+	// define the tstring only for WIN32 platform
+#if defined(WIN32) && (defined(UNICODE) || defined(_UNICODE))
+#define _UNICODE_HELPER // use _UNICODE_HELPER internally
 	typedef std::wstring tstring;
 #else
 	typedef std::string tstring;
@@ -76,7 +77,7 @@ namespace sunjwbase
     
 	inline std::string tstrtostr(const tstring& tstr)
 	{
-#if defined(UNICODE) || defined(_UNICODE)
+#if defined(_UNICODE_HELPER)
 		return wstrtostr(tstr);
 #else
 		return tstr;
@@ -85,7 +86,7 @@ namespace sunjwbase
     
 	inline std::wstring tstrtowstr(const tstring& tstr)
 	{
-#if defined(UNICODE) || defined(_UNICODE)
+#if defined(_UNICODE_HELPER)
 		return tstr;
 #else
 		return strtowstr(tstr);
@@ -94,7 +95,7 @@ namespace sunjwbase
     
 	inline sunjwbase::tstring strtotstr(const std::string& str)
 	{
-#if defined(UNICODE) || defined(_UNICODE)
+#if defined(_UNICODE_HELPER)
 		return strtowstr(str);
 #else
 		return str;
@@ -103,7 +104,7 @@ namespace sunjwbase
     
 	inline sunjwbase::tstring wstrtotstr(const std::wstring& wstr)
 	{
-#if defined(UNICODE) || defined(_UNICODE)
+#if defined(_UNICODE_HELPER)
 		return wstr;
 #else
 		return wstrtostr(wstr);
@@ -147,15 +148,15 @@ namespace sunjwbase
 	template<typename charT>
 	struct strequal_ci
 	{
-		strequal_ci( const std::locale& loc ):loc_(loc)
+		strequal_ci( const std::locale& loc ):m_loc(loc)
 		{}
         
 		bool operator()(charT ch1, charT ch2)
 		{
-			return std::toupper(ch1, loc_) == std::toupper(ch2, loc_);
+			return std::toupper(ch1, m_loc) == std::toupper(ch2, m_loc);
 		}
 	private:
-		const std::locale& loc_;
+		const std::locale& m_loc;
 	};
     
 	// case insensitive search
