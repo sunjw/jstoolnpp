@@ -380,7 +380,7 @@ void jsonTree()
 		data.uMask = DWS_DF_CONT_LEFT;
 
 		data.pszModuleName = jsonDialog.getPluginFileName();
-		data.pszName = TEXT("JSMinNpp JSON Viewer");
+		data.pszName = TEXT("JSToolNpp JSON Viewer");
 
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		data.dlgID = 0;
