@@ -1,7 +1,7 @@
 /*
  * strhelper header file
  * Author: Sun Junwen
- * Version: 1.3
+ * Version: 2.0
  * Provides converting from tstring, string and wstring to each other
  * And provides string's utf8 converting.
  * Provides triming function to string and wstring.
@@ -33,13 +33,13 @@ namespace sunjwbase
 
 	// converting part
 	/*
-	 * 将 ascii 编码的 wstring 转换为 utf8 编码的 string
+	 * convert ascii encoded wstring to utf8 encoded string
 	 */
 	std::string wstrtostrutf8(const std::wstring& wstr);
 	/*
-	 * 将 utf8 编码的 string 转换为 wstring
-	 * 如果需要把 utf8 编码的 string 转换为本地编码的 string
-	 * 再调用一次 wstrtostr
+	 * convert utf8 encoded string to wstring
+	 * 1st, convert utf8 encoded string to native string
+	 * 2nd, call strtowstr
 	 */
 	std::wstring strtowstrutf8(const std::string& str);
     
@@ -52,7 +52,7 @@ namespace sunjwbase
                          const std::string& from_code);
 #endif
     
-	// 将本地编码的 string 转换成 utf8 编码的 string
+	// convert native encoded string to utf8 encoded string
 	inline std::string utf8conv(std::string& strAscii)
 	{
 #if defined (WIN32)
@@ -63,7 +63,7 @@ namespace sunjwbase
         return striconv(strAscii, "UTF-8", "GBK");
 #endif
     }
-	// 将 utf8 编码的 string 转换成本地编码的 string
+	// convert utf8 encoded string to native encoded string
 	inline std::string asciiconv(std::string& strUtf8)
 	{
 #if defined (WIN32)
@@ -174,8 +174,14 @@ namespace sunjwbase
     
     // itostr
     std::string itostr(int num, int idx = 10);
+
     // format append for std::string
     std::string strappendformat(std::string& str, const char *format, ...);
+
+	// start with & end with
+	bool str_startwith(const std::string& str, const std::string& target);
+	bool str_endwith(const std::string& str, const std::string& target);
+
 }
 
 
