@@ -73,22 +73,29 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			}
 			else
 			{
-				JsonValue innerValue;
-				innerValue.SetValueType(JsonValue::MAP_VALUE);
-
-				RecursiveProc(innerValue);
-
 				if(stackTop == JS_SQUARE)
 				{
+					jsonValue.ArrayPut(JsonValue());
+
+					JsonValue& innerValue = jsonValue.GetArrayValue().back();
+					innerValue.SetValueType(JsonValue::MAP_VALUE);
+
+					RecursiveProc(innerValue);
+
 					innerValue.line = blockLine;
-					jsonValue.ArrayPut(innerValue);
 				}
 				else if(stackTop == JS_BLOCK)
 				{
+					jsonValue.MapPut(key, JsonValue());
+
+					JsonValue& innerValue = jsonValue[key];
+					innerValue.SetValueType(JsonValue::MAP_VALUE);
+
+					RecursiveProc(innerValue);
+
 					bGetKey = false;
 					bGetSplitor = false;
 					innerValue.line = keyLine;
-					jsonValue.MapPut(key, innerValue);
 				}
 			}
 
@@ -121,22 +128,29 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			}
 			else
 			{
-				JsonValue innerValue;
-				innerValue.SetValueType(JsonValue::ARRAY_VALUE);
-
-				RecursiveProc(innerValue);
-
 				if(stackTop == JS_SQUARE)
 				{
+					jsonValue.ArrayPut(JsonValue());
+
+					JsonValue& innerValue = jsonValue.GetArrayValue().back();
+					innerValue.SetValueType(JsonValue::ARRAY_VALUE);
+
+					RecursiveProc(innerValue);
+
 					innerValue.line = squareLine;
-					jsonValue.ArrayPut(innerValue);
 				}
 				else if(stackTop == JS_BLOCK)
 				{
+					jsonValue.MapPut(key, JsonValue());
+
+					JsonValue& innerValue = jsonValue[key];
+					innerValue.SetValueType(JsonValue::ARRAY_VALUE);
+
+					RecursiveProc(innerValue);
+
 					bGetKey = false;
 					bGetSplitor = false;
 					innerValue.line = keyLine;
-					jsonValue.MapPut(key, innerValue);
 				}
 			}
 
