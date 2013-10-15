@@ -195,11 +195,11 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 				strValue = ReadStrValue();
 				valLine = m_tokenA.line;
 
-				JsonValue jValue;
+				jsonValue.MapPut(key, JsonValue());
+				JsonValue& jValue = jsonValue[key];
 				GenStrJsonValue(jValue, strValue);
 
 				jValue.line = keyLine;
-				jsonValue.MapPut(key, jValue);
 
 				bGetKey = false;
 				bGetSplitor = false;
