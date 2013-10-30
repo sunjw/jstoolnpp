@@ -349,7 +349,7 @@ void jsFormat()
 		else
 		{
 			// 清理多出来的换行
-			if(strJSFormat[strJSFormat.length() - 2] == '\r')
+			if((strJSFormat.length() >= 2) && strJSFormat[strJSFormat.length() - 2] == '\r')
 				strJSFormat = strJSFormat.substr(0, strJSFormat.length() - 2);
 			else
 				strJSFormat = strJSFormat.substr(0, strJSFormat.length() - 1);
