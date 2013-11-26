@@ -157,7 +157,8 @@ void JSParser::GetTokenRaw()
 				m_charB = GetChar();
 			}
 
-			if(m_charA == '/') // 正则可能结束
+			if(m_charA == '/' && 
+				(m_charB != '*' && m_charB != '|')) // 正则可能结束
 			{
 				if(!bRegularFlags && IsNormalChar(m_charB))
 				{
