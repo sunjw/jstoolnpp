@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 		{
 			tstring fileName = strtotstr(string(inputFile));
 			JsonFileProc jfp(fileName);
-			jfp.m_debugOutput = true;
+			jfp.m_debug = true;
 
 			JsonValue jsonValue;
 			jfp.GetJsonValue(jsonValue);

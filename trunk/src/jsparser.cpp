@@ -19,6 +19,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "jsparser.h"
+#include <cstring>
 
 using namespace std;
 
@@ -29,6 +30,8 @@ JSParser::JSParser()
 
 void JSParser::Init()
 {
+	m_debug = false;
+
 	m_lineCount = 1; // 行号从 1 开始
 	m_tokenCount = 0;
 
@@ -38,6 +41,20 @@ void JSParser::Init()
 	m_bPosNeg = false;
 
 	m_bGetTokenInit = false;
+}
+
+void JSParser::PrintDebug()
+{
+	if(m_debug)
+	{
+		char buf[500] = {0};
+		sprintf(m_debugOutput, "Processed tokens: %ld\n", m_tokenCount);
+		sprintf(buf, "Time used: %.3fs\n", m_duration);
+		strcat(m_debugOutput, buf);
+		sprintf(buf, "%.3f tokens/second\n", m_tokenCount / m_duration);
+		strcat(m_debugOutput, buf);
+		printf("%s", m_debugOutput);
+	}
 }
 
 bool JSParser::IsNormalChar(int ch)

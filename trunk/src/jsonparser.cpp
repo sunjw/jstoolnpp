@@ -29,7 +29,8 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 	// initial job
 	if(m_nRecuLevel == 0)
 	{
-		m_startClock = clock();
+		StartParse();
+
 		jsonValue.SetValueType(JsonValue::UNKNOWN_VALUE);
 	}
 
@@ -226,14 +227,8 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 	if(m_nRecuLevel == 1)
 	{
 		//FlushLineBuffer();
-		m_endClock = clock();
-		m_duration = (double)(m_endClock - m_startClock) / CLOCKS_PER_SEC;
-		if(m_debugOutput)
-		{
-			cout << "Processed tokens: " << m_tokenCount << endl;
-			cout << "Time used: " << m_duration << "s" << endl;
-			cout << m_tokenCount / m_duration << " tokens/second" << endl;
-		}
+
+		EndParse();
 	}
 	// finished job
 }

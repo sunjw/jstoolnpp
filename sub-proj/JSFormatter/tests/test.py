@@ -5,8 +5,11 @@
 #
 import hashlib
 import os
+import sys
 
 JSFORMATTER_PATH = "..\\..\\..\\trunk\\debug\\JSFormatter.exe"
+JSFORMATTER_REL_PATH = "..\\..\\..\\trunk\\release\\JSFormatter.exe"
+JSFORMATTER_PATH_SEL = ""
 
 class TestCase:
     source = ""
@@ -44,10 +47,15 @@ def make_test_case(files):
 	
 	return test_cases
 
-def run_case(test_case):
+def run_case(test_case, release):
+	global JSFORMATTER_PATH_SEL
+	JSFORMATTER_PATH_SEL = JSFORMATTER_PATH
+	if release:
+		JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH
+	
 	result = "ERROR"
-
-	os.system(JSFORMATTER_PATH + " " + test_case.source + " out.js")
+	
+	os.system(JSFORMATTER_PATH_SEL + " " + test_case.source + " out.js")
 	out_md5 = hashlib.md5(open("out.js").read()).hexdigest()
 	result_md5 = hashlib.md5(open(test_case.result).read()).hexdigest()
 	if out_md5 == result_md5:
@@ -59,6 +67,10 @@ def run_case(test_case):
 def main():
 	files = list_file()
 	test_cases = make_test_case(files)
+	release = False
+	
+	if len(sys.argv) == 2 and sys.argv[1] == "release":
+		release = True
 	
 	# run cases
 	for name, case in test_cases.items():
@@ -67,12 +79,13 @@ def main():
 		print "result: " + case.result
 		print "running..."
 		
-		result = run_case(case)
+		result = run_case(case, release)
 		if result == "ERROR":
 			return;
 		
 		print ""
 	
+	print "Using " + JSFORMATTER_PATH_SEL
 	print "%d cases" % len(test_cases)
 	print "ALL PASS"
 

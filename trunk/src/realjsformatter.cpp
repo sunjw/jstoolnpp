@@ -70,7 +70,6 @@ void RealJSFormatter::Init()
 {
 	m_initIndent = "";
 
-	m_debugOutput = false;
 	m_tokenCount = 0;
 
 	m_lineBuffer = "";
@@ -232,7 +231,7 @@ void RealJSFormatter::Go()
 	char tokenAFirst;
 	char tokenBFirst;
 
-	m_startClock = clock();
+	StartParse();
 
 	while(GetToken())
 	{
@@ -290,14 +289,7 @@ void RealJSFormatter::Go()
 	if(m_lineBuffer.length())
 		PutLineBuffer();
 
-	m_endClock = clock();
-	m_duration = (double)(m_endClock - m_startClock) / CLOCKS_PER_SEC;
-	if(m_debugOutput)
-	{
-		cout << "Processed tokens: " << m_tokenCount << endl;
-		cout << "Time used: " << m_duration << "s" << endl;
-		cout << m_tokenCount / m_duration << " tokens/second" << endl;
-	}
+	EndParse();
 }
 
 void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char tokenBFirst)

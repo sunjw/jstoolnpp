@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
 
 		clock_t endClock = clock();
 		double duration = (double)(endClock - startClock) / CLOCKS_PER_SEC;
-		cout << "Time used: " << duration << "s" << endl;
+		cout << "Read file time used: " << duration << "s" << endl;
 
 		ifstream inFileStream2(inputFile);
 		ofstream outFileStream2(outputFile);
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 			option.eEmpytIndent = JSFormatterStream::NO_INDENT_IN_EMPTYLINE;
 
 			JSFormatterStream jsf(inFileStream2, outStrStream, option);
-			jsf.m_debugOutput = true;
+			jsf.m_debug = true;
 			jsf.Go();
 
 			string output = outStrStream.str();
