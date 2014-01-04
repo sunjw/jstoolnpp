@@ -33,8 +33,6 @@ public:
 	inline void Go(JsonValue& jsonValue)
 	{ RecursiveProc(jsonValue); }
 
-	bool m_debugOutput;
-
 private:
 	int m_nRecuLevel; // ¿éµÝ¹é²ã´Î
 	JSParser::CharStack m_blockStack;
