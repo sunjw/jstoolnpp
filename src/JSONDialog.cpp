@@ -93,6 +93,24 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	return FALSE;
 }
 
+void JSONDialog::disableControls()
+{
+	HWND hWnd = getHSelf();
+	EnableWindow(GetDlgItem(hWnd, IDC_BTN_REFRESH), FALSE);
+	EnableWindow(GetDlgItem(hWnd, IDC_SEARCHEDIT), FALSE);
+	EnableWindow(GetDlgItem(hWnd, IDC_BTN_SEARCH), FALSE);
+	EnableWindow(GetDlgItem(hWnd, IDC_TREE_JSON), FALSE);
+}
+
+void JSONDialog::enableControls()
+{
+	HWND hWnd = getHSelf();
+	EnableWindow(GetDlgItem(hWnd, IDC_BTN_REFRESH), TRUE);
+	EnableWindow(GetDlgItem(hWnd, IDC_SEARCHEDIT), TRUE);
+	EnableWindow(GetDlgItem(hWnd, IDC_BTN_SEARCH), TRUE);
+	EnableWindow(GetDlgItem(hWnd, IDC_TREE_JSON), TRUE);
+}
+
 /*
 Delete all items from the tree and creates the root node
 */
@@ -135,6 +153,8 @@ HTREEITEM JSONDialog::insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNo
 
 void JSONDialog::refreshTree(HWND hCurrScintilla)
 {
+	disableControls();
+
 	m_hCurrScintilla = hCurrScintilla;
 
 	size_t jsLen, jsLenSel;
@@ -179,6 +199,8 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 	drawTree(jsonVal);
 
 	delete[] pJS;
+
+	enableControls();
 }
 
 void JSONDialog::drawTree(const JsonValue& jsonValue)
@@ -298,6 +320,8 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 
 void JSONDialog::search()
 {
+	disableControls();
+
 	HWND hWnd = getHSelf();
 
 	TCHAR buffer[256];
@@ -337,5 +361,7 @@ void JSONDialog::search()
 	{
 		MessageBox(hWnd, TEXT("No results found."), TEXT("Search in Json"), MB_ICONINFORMATION | MB_OK);
 	}
+
+	enableControls();
 }
 
