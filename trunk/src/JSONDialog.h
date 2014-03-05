@@ -57,6 +57,9 @@ private:
 	HANDLE m_hTree;
 	int m_iSelStartLine;
 
+	void disableControls();
+	void enableControls();
+
 	HTREEITEM initTree(HWND hWndDlg);
 	HTREEITEM insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNode);
 
