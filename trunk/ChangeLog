@@ -1,3 +1,7 @@
+1.16.5
+Fix regex detection.
+Fix some crash bugs.
+
 1.16 (since 1.15)
 Performance improvement.
 Move download back to SourceForge.net.
