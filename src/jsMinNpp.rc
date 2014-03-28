@@ -52,7 +52,7 @@ BEGIN
             VALUE "FileDescription", "JSTool plugin for Notepad++"
             VALUE "FileVersion", VERSION_VALUE
             VALUE "InternalName", "JSMinNPP.dll"
-            VALUE "LegalCopyright", "Copyright 2010-2013 by Sun Junwen"
+            VALUE "LegalCopyright", "Copyright 2010-2014 by Sun Junwen"
             VALUE "OriginalFilename", "JSMinNPP.dll"
             VALUE "ProductName", "JSToolNPP"
             VALUE "ProductVersion", VERSION_VALUE
