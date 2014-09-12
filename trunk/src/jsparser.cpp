@@ -428,7 +428,10 @@ void JSParser::PreparePosNeg()
 	 * 那么 m_tokenB 实际上是一个正负数
 	 */
 	if(m_tokenB.type == OPER_TYPE && (m_tokenB.code == "-" || m_tokenB.code == "+") &&
-		(m_tokenA.type != STRING_TYPE || m_tokenA.code == "return") && m_tokenA.type != REGULAR_TYPE &&
+		(m_tokenA.type != STRING_TYPE || 
+		m_tokenA.code == "return" || m_tokenA.code == "case" ||
+		m_tokenA.code == "delete" || m_tokenA.code == "throw") && 
+		m_tokenA.type != REGULAR_TYPE &&
 		m_tokenA.code != "++" && m_tokenA.code != "--" &&
 		m_tokenA.code != "]" && m_tokenA.code != ")" &&
 		IsNormalChar(m_charB))

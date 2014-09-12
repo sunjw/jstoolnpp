@@ -555,7 +555,7 @@ var YUI = function () {
 				u = w.config.errorFn.apply(w, arguments);
 			}
 			if (w.config.throwFail && !u) {
-				throw(v || new Error(x));
+				throw (v || new Error(x));
 			} else {
 				w.message(x, "error");
 			}

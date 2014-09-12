@@ -841,7 +841,7 @@ var YUI = function () {
 			}
 
 			if (Y.config.throwFail && !ret) {
-				throw(e || new Error(msg));
+				throw (e || new Error(msg));
 			} else {
 				Y.message(msg, "error"); // don't scrub this one
 			}

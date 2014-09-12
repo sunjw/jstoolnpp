@@ -107,6 +107,8 @@ void RealJSFormatter::Init()
 	m_specKeywordSet.insert("function");
 	m_specKeywordSet.insert("with");
 	m_specKeywordSet.insert("return");
+	m_specKeywordSet.insert("throw");
+	m_specKeywordSet.insert("delete");
 }
 
 void RealJSFormatter::PutToken(const string& token,
