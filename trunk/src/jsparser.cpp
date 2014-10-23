@@ -38,6 +38,8 @@ void JSParser::Init()
 	m_strBeforeReg = "(,=:[!&|?+{};\n";
 
 	m_bRegular = false;
+	m_iRegBracket = 0;
+
 	m_bPosNeg = false;
 
 	m_bGetTokenInit = false;
@@ -168,19 +170,36 @@ void JSParser::GetTokenRaw()
 			// 正则状态全部输出，直到 /
 			m_tokenB.code.push_back(m_charA);
 
-			if(m_charA == '\\' && (m_charB == '/' || m_charB == '\\')) // 转义字符
+			if(m_charA == '\\' && 
+				(m_charB == '/' || m_charB == '\\' ||
+				m_charB == '[' || m_charB == ']')) // 转义字符
 			{
 				m_tokenB.code.push_back(m_charB);
 				m_charB = GetChar();
 			}
 
+			if(m_charA == '[' && m_iRegBracket == 0)
+			{
+				++m_iRegBracket;
+			}
+
+			if(m_charA == ']' && m_iRegBracket > 0)
+			{
+				--m_iRegBracket;
+				if(bRegularFlags)
+					bRegularFlags = false;
+			}
+
 			if(m_charA == '/' && 
 				(m_charB != '*' && m_charB != '|')) // 正则可能结束
 			{
-				if(!bRegularFlags && IsNormalChar(m_charB))
+				if(!bRegularFlags && 
+					(IsNormalChar(m_charB) || m_iRegBracket > 0))
 				{
 					// 正则的 flags 部分
+					// /g /i /ig...
 					bRegularFlags = true;
+					continue;
 				}
 				else
 				{

@@ -34,7 +34,7 @@ try {
 		const reNotWhitespace = /[^\s]/;
 		const reSplitFile = /:\/{1,3}(.*?)\/([^\/]*?)\/?($|\?.*)/;
 		const reURL = /(([^:]+:)\/{1,2}[^\/]*)(.*?)$/; // This RE and the previous one should changed to be consistent
-		const reChromeCase = /chrome:\/\/([^/] * ) \  / (. *  ? )$ / ;
+		const reChromeCase = /chrome:\/\/([^/]*)\/(.*?)$/;
 		// Globals
 		this.reDataURL = /data:text\/javascript;fileName=([^;]*);baseLineNumber=(\d*?),((?:.*?%0A)|(?:.*))/g;
 		this.reJavascript = /\s*javascript:\s*(.*)/;
@@ -3662,12 +3662,12 @@ try {
 			if (url.length < 255) // guard against monsters.
 			{
 				// Replace one or more characters that are not forward-slash followed by /.., by space.
-				url = url.replace(/[^/] +  \  /  \ . \ . \ //, "", "g");
-						// Issue 1496, avoid #
-						url = url.replace(/#.*/, "");
-						// For some reason, JSDS reports file URLs like "file:/" instead of "file:///", so they
-						// don't match up with the URLs we get back from the DOM
-						url = url.replace(/file:\/([^/]) / g, "file:///$1");
+				url = url.replace(/[^/]+\/\.\.\//, "", "g");
+				// Issue 1496, avoid #
+				url = url.replace(/#.*/, "");
+				// For some reason, JSDS reports file URLs like "file:/" instead of "file:///", so they
+				// don't match up with the URLs we get back from the DOM
+				url = url.replace(/file:\/([^/])/g, "file:///$1");
 				if (url.indexOf('chrome:') == 0) {
 					var m = reChromeCase.exec(url); // 1 is package name, 2 is path
 					if (m) {
