@@ -147,9 +147,12 @@ private:
 
 	string m_strBeforeReg; // 判断正则时，正则前面可以出现的字符
 
-	bool m_bRegular; // tokenB 实际是正则 GetToken 用到的两个成员状态
-	bool m_bPosNeg; // tokenB 实际是正负数
 	TokenQueue m_tokenBQueue;
+
+	bool m_bRegular; // tokenB 实际是正则 GetToken 用到的两个成员状态
+	int m_iRegBracket; // 正则表达式中出现的 [] 深度
+
+	bool m_bPosNeg; // tokenB 实际是正负数
 
 	bool m_bGetTokenInit; // 是否是第一次执行 GetToken
 
