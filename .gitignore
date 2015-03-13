@@ -1,5 +1,7 @@
-sub-proj/fHashShlExt/Debug/*
-sub-proj/fHashShlExt/Release/*
+sub-proj/JSFormatter/Debug/*
+sub-proj/JSFormatter/Release/*
+sub-proj/JsonPP/Debug/*
+sub-proj/JsonPP/Release/*
 trunk/_UpgradeReport_Files/*
 trunk/Debug/*
 trunk/Release/*
