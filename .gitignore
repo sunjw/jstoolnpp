@@ -1,0 +1,11 @@
+sub-proj/fHashShlExt/Debug/*
+sub-proj/fHashShlExt/Release/*
+trunk/_UpgradeReport_Files/*
+trunk/Debug/*
+trunk/Release/*
+*.aps
+*.ncb
+*.old
+*.suo
+*.user
+UpgradeLog*
