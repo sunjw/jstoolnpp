@@ -4,7 +4,9 @@ sub-proj/JsonPP/Debug/*
 sub-proj/JsonPP/Release/*
 trunk/_UpgradeReport_Files/*
 trunk/Debug/*
+trunk/Unicode Debug/*
 trunk/Release/*
+trunk/Unicode Release/*
 *.aps
 *.ncb
 *.old
