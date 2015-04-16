@@ -111,11 +111,40 @@ protected:
 	long m_lineCount;
 	long m_tokenCount;
 
-	bool inline IsNormalChar(int ch);
-	bool inline IsNumChar(int ch);
-	bool inline IsBlankChar(int ch);
-	bool inline IsSingleOper(int ch);
-	bool inline IsQuote(int ch);
+	bool inline IsNormalChar(int ch)
+    {
+        // 一般字符
+        return ((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') ||
+                (ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '$' ||
+                ch > 126 || ch < 0);
+    }
+
+	bool inline IsNumChar(int ch)
+    {
+        // 数字和.
+        return ((ch >= '0' && ch <= '9') || ch == '.');
+    }
+    
+	bool inline IsBlankChar(int ch)
+    {
+        // 空白字符
+        return (ch == ' ' || ch == '\t' || ch == '\r');
+    }
+    
+	bool inline IsSingleOper(int ch)
+    {
+        // 单字符符号
+        return (ch == '.' || ch == '(' || ch == ')' ||
+                ch == '[' || ch == ']' || ch == '{' || ch == '}' ||
+                ch == ',' || ch == ';' || ch == '~' ||
+                ch == '\n');
+    }
+    
+	bool inline IsQuote(int ch)
+    {
+        // 引号
+        return (ch == '\'' || ch == '\"');
+    }
 
 	bool GetToken(); // 处理过负数, 正则等等的 GetToken 函数
 

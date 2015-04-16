@@ -59,41 +59,6 @@ void JSParser::PrintDebug()
 	}
 }
 
-bool JSParser::IsNormalChar(int ch)
-{
-	// Ò»°ã×Ö·û
-	return ((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') ||
-		(ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '$' ||
-		ch > 126 || ch < 0);
-}
-
-bool JSParser::IsNumChar(int ch)
-{
-	// Êý×ÖºÍ.
-	return ((ch >= '0' && ch <= '9') || ch == '.');
-}
-
-bool JSParser::IsBlankChar(int ch)
-{
-	// ¿Õ°××Ö·û
-	return (ch == ' ' || ch == '\t' || ch == '\r');
-}
-
-bool JSParser::IsSingleOper(int ch)
-{
-	// µ¥×Ö·û·ûºÅ
-	return (ch == '.' || ch == '(' || ch == ')' ||
-		ch == '[' || ch == ']' || ch == '{' || ch == '}' ||
-		ch == ',' || ch == ';' || ch == '~' ||
-		ch == '\n');
-}
-
-bool JSParser::IsQuote(int ch)
-{
-	// ÒýºÅ
-	return (ch == '\'' || ch == '\"');
-}
-
 bool JSParser::IsComment()
 {
 	// ×¢ÊÍ
