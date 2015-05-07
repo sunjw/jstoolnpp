@@ -13,7 +13,7 @@ using namespace std;
 
 void IniFileProcessor::Save()
 {
-	ofstream out(m_strFileName.c_str());
+	ofstream out(m_tstrFileName.c_str());
 
 	if(out)
 	{
@@ -25,6 +25,6 @@ void IniFileProcessor::Save()
 	
 IniProcessor::IniMap IniFileProcessor::GetInfo(bool bProcSection, bool bRefresh)
 {
-	ifstream m_in(m_strFileName.c_str());
+	ifstream m_in(m_tstrFileName.c_str());
 	return IniProcessor::GetInfo(m_in, bProcSection, bRefresh);
 }
