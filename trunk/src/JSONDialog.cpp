@@ -133,7 +133,7 @@ HTREEITEM JSONDialog::insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNo
 
 	if(parentNode == TVI_ROOT)
 	{
-		tvinsert.hParent = NULL;   
+		tvinsert.hParent = NULL;
 		tvinsert.hInsertAfter = TVI_ROOT;
 	}
 	else
