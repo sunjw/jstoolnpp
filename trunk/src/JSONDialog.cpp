@@ -42,6 +42,9 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 			::SendMessage(hWnd, DM_SETDEFID, 
                         (WPARAM) IDC_BTN_SEARCH, 
                         (LPARAM) 0); 
+			::PostMessage(hWnd, WM_NEXTDLGCTL, 
+						(WPARAM) GetDlgItem(hWnd, IDC_SEARCHEDIT), 
+						TRUE);
 		}
 		return FALSE;
 	case WM_SIZE:
@@ -50,7 +53,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 			iDlgWidth = LOWORD(lParam);
 			iDlgHeight = HIWORD(lParam);
 
-			int iJsonTreeWidth = iDlgWidth, iJsonTreeHeight = iDlgHeight - 30;
+			int iJsonTreeWidth = iDlgWidth, iJsonTreeHeight = iDlgHeight - 55;
 			SetWindowPos(GetDlgItem(hWnd, IDC_TREE_JSON), 
 				HWND_TOP, 0, 30, iJsonTreeWidth, iJsonTreeHeight, 
 				SWP_SHOWWINDOW);
@@ -65,6 +68,11 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 
 			SetWindowPos(GetDlgItem(hWnd, IDC_SEARCHEDIT), 
 				HWND_TOP, 88, 2, iSearchEditWidth, 18, 
+				SWP_SHOWWINDOW);
+
+			int iJsonPathEditWidth = iDlgWidth - 4;
+			SetWindowPos(GetDlgItem(hWnd, IDC_JSONPATH), 
+				HWND_TOP, 1, iJsonTreeHeight + 32, iJsonPathEditWidth, 18, 
 				SWP_SHOWWINDOW);
 		}
 		return FALSE;
@@ -313,9 +321,16 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 		if(ht.flags & TVHT_ONITEMLABEL)
 		{
 			JsonTree jsonTree(m_hCurrScintilla, hWnd, lpnmh->hwndFrom);
-			jsonTree.jumpToSciLine(hItem, m_iSelStartLine);
+			clickJsonTreeItem(hWnd, jsonTree, hItem);
 		}
 	}  
+}
+
+void JSONDialog::clickJsonTreeItem(HWND hWnd, JsonTree& jsonTree, HTREEITEM htiNode)
+{
+	string strJsonPath = jsonTree.getJsonNodePath(htiNode);
+	SetDlgItemText(hWnd, IDC_JSONPATH, strtotstr(strJsonPath).c_str());
+	jsonTree.jumpToSciLine(htiNode, m_iSelStartLine);
 }
 
 void JSONDialog::search()
@@ -355,7 +370,7 @@ void JSONDialog::search()
 	{
 		// We found in search.
 		TreeView_SelectItem(hWndTree, htiFound);
-		jsonTree.jumpToSciLine(htiFound, m_iSelStartLine);
+		clickJsonTreeItem(hWnd, jsonTree, htiFound);
 	}
 	else
 	{

@@ -915,6 +915,7 @@
 #define IDC_TREE_JSON                   1011
 #define IDC_SEARCHEDIT                  1012
 #define IDC_BTN_SEARCH                  1013
+#define IDC_JSONPATH					1014
 #define CF_GDIOBJLAST                   0x03FF
 #define WM_USER                         0x0400
 #define WVR_VALIDRECTS                  0x0400

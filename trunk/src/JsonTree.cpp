@@ -37,20 +37,11 @@ BOOL JsonTree::getTVItem(HTREEITEM hti, TCHAR *buf, int bufSize, TVITEM *tvi)
 }
 
 /*
- * Jump to the line linked with specified HTREEITEM.
+ * Get HTREEITEM's parent HTREEITEM on TreeView.
  */
-void JsonTree::jumpToSciLine(HTREEITEM hti, int iLineBase)
-{
-	TCHAR buf[1024] = {0};
-	TVITEM tvi = {0};
-	if(getTVItem(hti, buf, 1024, &tvi))
-	{
-		long line = (long)tvi.lParam;
-		if(line >= 0)
-		{
-			::SendMessage(m_hScintilla, SCI_GOTOLINE, line - 1 + iLineBase, 0);
-		}
-	}
+HTREEITEM JsonTree::getParentItem(HTREEITEM hti)
+{		
+	return TreeView_GetParent(getHWndTree(), hti);
 }
 
 HTREEITEM JsonTree::search(string& strSearchKey, HTREEITEM htiCurrent)
@@ -94,6 +85,64 @@ HTREEITEM JsonTree::doSearch(string& strSearchKey, HTREEITEM htiCurrent, bool bS
 	}
 
 	return NULL;
+}
+
+/*
+ * Get JSON node path.
+ */
+string JsonTree::getJsonNodePath(HTREEITEM hti)
+{
+	string strJsonPath;
+	HTREEITEM hitTravel = hti;
+
+	while(hitTravel != NULL)
+	{
+		TCHAR buf[1024] = {0};
+		TVITEM tvi = {0};
+		if(getTVItem(hitTravel, buf, 1024, &tvi))
+		{
+			string strTreeText = tstrtostr(tvi.pszText);
+			string strKey, strValue;
+			splitText(strTreeText, strKey, strValue);
+
+			if(strJsonPath == "")
+			{
+				strJsonPath = strKey;
+			}
+			else
+			{
+				if(strTreeText == "ROOT")
+					strKey = "ROOT";
+
+				if(str_startwith(strJsonPath, "["))
+					strJsonPath = strKey + strJsonPath;
+				else
+					strJsonPath = strKey + "." + strJsonPath;
+			}
+		}
+
+		HTREEITEM htiParent = getParentItem(hitTravel);
+		hitTravel = htiParent;
+	}
+
+	return strJsonPath;
+}
+
+/*
+ * Jump to the line linked with specified HTREEITEM.
+ */
+void JsonTree::jumpToSciLine(HTREEITEM hti, int iLineBase)
+{
+	TCHAR buf[1024] = {0};
+	TVITEM tvi = {0};
+	if(getTVItem(hti, buf, 1024, &tvi))
+	{
+		long line = (long)tvi.lParam;
+		if(line >= 0)
+		{
+			::SendMessage(m_hScintilla, SCI_GOTOLINE, line - 1 + iLineBase, 0);
+		}
+	}
 }
 
 void JsonTree::splitText(string& strText, 

@@ -28,6 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "PluginInterface.h"
 
 #include "jsonpp.h"
+#include "JsonTree.h"
 
 class JSONDialog: public DockingDlgInterface
 {
@@ -67,6 +68,7 @@ private:
 	void insertJsonValue(const std::string& key, const JsonValue& jsonValue, HTREEITEM node);
 
 	void clickJsonTree(LPARAM lParam);
+	void clickJsonTreeItem(HWND hWnd, JsonTree& jsonTree, HTREEITEM htiNode);
 
 	void search();
 };
