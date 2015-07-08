@@ -29,6 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include "jsonpp.h"
 #include "JsonTree.h"
+#include "EditControlEx.h"
 
 class JSONDialog: public DockingDlgInterface
 {
@@ -36,6 +37,7 @@ public :
 	JSONDialog(): 
 	   DockingDlgInterface(IDD_TREE), 
 		   m_hDlg(NULL), m_hCurrScintilla(NULL), m_hTree(NULL),
+		   m_editExJsonPath(NULL), m_jsonTree(NULL),
 		   m_iSelStartLine(0)
 	{};
 
@@ -57,7 +59,10 @@ private:
 	HWND m_hDlg;
 	HWND m_hCurrScintilla;
 	HWND m_hTree;
-	JsonTree m_jsonTree;
+
+	EditControlEx *m_editExJsonPath;
+	JsonTree *m_jsonTree;
+
 	int m_iSelStartLine;
 
 	void disableControls();

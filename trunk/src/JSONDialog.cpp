@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "jsonpp.h"
 #include "jsonStringProc.h"
 #include "JsonTree.h"
+#include "EditControlEx.h"
 
 using namespace std;
 using namespace sunjwbase;
@@ -39,12 +40,32 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	case WM_INITDIALOG:
 		{
 			m_hDlg = hWnd;
+
+			// Save ourself in GWL_USERDATA.
+			::SetWindowLongPtr(m_hDlg, GWL_USERDATA, (LONG_PTR)this);
+
 			m_hTree = GetDlgItem(hWnd, IDC_TREE_JSON); // tree control
 			::SendMessage(hWnd, DM_SETDEFID, 
                         (WPARAM) IDC_BTN_SEARCH, 
                         (LPARAM) 0);
+
+			HWND hJsonPathEdit = GetDlgItem(hWnd, IDC_JSONPATH);
+			
+			m_editExJsonPath = new EditControlEx(hWnd, IDC_JSONPATH);
+			
+			//m_oldJsonPathEditControlProc = ::GetWindowLongPtr(hJsonPathEdit, GWLP_WNDPROC);
+			//::SetWindowLongPtr(hJsonPathEdit, GWLP_WNDPROC,
+			//	(LONG_PTR)JSONDialog::JsonPathEditControlProc);
 		}
-		return FALSE;
+		return TRUE;
+	case WM_CLOSE:
+		{
+			if (m_editExJsonPath != NULL)
+				delete m_editExJsonPath;
+			if (m_jsonTree != NULL)
+				delete m_jsonTree;
+		}
+		return TRUE;
 	case WM_SIZE:
 		{
 			int iDlgWidth,iDlgHeight;
@@ -73,7 +94,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 				HWND_TOP, 1, iJsonTreeHeight + 33, iJsonPathEditWidth, 18, 
 				SWP_SHOWWINDOW);
 		}
-		return FALSE;
+		return TRUE;
 	case WM_COMMAND:
 		{
 			switch (LOWORD(wParam))
@@ -86,18 +107,28 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 					break;
 			}
 		}
-		return FALSE;
+		return TRUE;
 	case WM_NOTIFY:
 		{
 			clickJsonTree(lParam);
 		}
-		return FALSE;
+		return TRUE;
 	default:
 		return DockingDlgInterface::run_dlgProc(message, wParam, lParam);
 	}
 
 	return FALSE;
 }
+
+/*LRESULT CALLBACK JSONDialog::JsonPathEditControlProc(HWND hDlg, 
+													 UINT message, 
+													 UINT wParam, 
+													 LONG lParam)
+{
+	//JSONDialog *pJsonDlg = (JSONDialog *)(::GetWindowLongPtr(hDlg, GWL_USERDATA));
+	//return CallWindowProc((WNDPROC)pJsonDlg->m_oldJsonPathEditControlProc, 
+	//	hDlg, message, wParam, lParam);
+}*/
 
 void JSONDialog::disableControls()
 {
@@ -168,7 +199,9 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 	// Scintilla handle will change.
 	m_hCurrScintilla = hCurrScintilla;
 	// Rebuild JsonTree.
-	m_jsonTree = JsonTree(m_hCurrScintilla, m_hDlg, m_hTree);
+	if (m_jsonTree != NULL)
+		delete m_jsonTree;
+	m_jsonTree = new JsonTree(m_hCurrScintilla, m_hDlg, m_hTree);
 
 	size_t jsLen, jsLenSel;
 	jsLen = ::SendMessage(m_hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
@@ -332,9 +365,9 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 
 void JSONDialog::clickJsonTreeItem(HTREEITEM htiNode)
 {
-	string strJsonPath = m_jsonTree.getJsonNodePath(htiNode);
+	string strJsonPath = m_jsonTree->getJsonNodePath(htiNode);
 	SetDlgItemText(m_hDlg, IDC_JSONPATH, strtotstr(strJsonPath).c_str());
-	m_jsonTree.jumpToSciLine(htiNode, m_iSelStartLine);
+	m_jsonTree->jumpToSciLine(htiNode, m_iSelStartLine);
 }
 
 void JSONDialog::search()
@@ -362,7 +395,7 @@ void JSONDialog::search()
 	 */
 	HTREEITEM htiFound = NULL;
 	
-	htiFound = m_jsonTree.search(strSearchKey, htiSelected);
+	htiFound = m_jsonTree->search(strSearchKey, htiSelected);
 
 	if(htiFound != NULL)
 	{

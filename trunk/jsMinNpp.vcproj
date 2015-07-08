@@ -371,6 +371,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\EditControlEx.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\IniFileProcessor.h"
 				>
 			</File>
@@ -500,6 +504,10 @@
 			>
 			<File
 				RelativePath=".\src\aboutDlg.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\EditControlEx.cpp"
 				>
 			</File>
 			<File
