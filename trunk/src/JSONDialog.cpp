@@ -347,7 +347,7 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 void JSONDialog::clickJsonTree(LPARAM lParam)
 {
 	LPNMHDR lpnmh = (LPNMHDR)lParam;
-    if(lpnmh->code == NM_CLICK && lpnmh->idFrom == IDC_TREE_JSON)  
+    if (lpnmh->code == NM_CLICK && lpnmh->idFrom == IDC_TREE_JSON)  
     {
 		DWORD dwPos = GetMessagePos();
 		POINT pt;
@@ -362,7 +362,16 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 		{
 			clickJsonTreeItem(hItem);
 		}
-	}  
+	}
+	else if (lpnmh->code == TVN_SELCHANGED && lpnmh->idFrom == IDC_TREE_JSON)
+	{
+		NMTREEVIEW* pnmtv = (LPNMTREEVIEW)lParam;
+		HTREEITEM hItem = pnmtv->itemNew.hItem;
+		if(hItem && pnmtv->action == TVC_BYKEYBOARD)
+		{
+			clickJsonTreeItem(hItem);
+		}
+	}
 }
 
 void JSONDialog::clickJsonTreeItem(HTREEITEM htiNode)
