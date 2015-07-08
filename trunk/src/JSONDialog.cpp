@@ -246,6 +246,8 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 
 	delete[] pJS;
 
+	SetDlgItemText(m_hDlg, IDC_JSONPATH, TEXT(""));
+
 	enableControls();
 
 	focusOnControl(IDC_SEARCHEDIT);

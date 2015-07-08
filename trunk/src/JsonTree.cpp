@@ -158,7 +158,9 @@ void JsonTree::splitText(string& strText,
 			return; // NOT found
 
 		char cTest = strText[pos + 3];
-		if(cTest == '\"' || cTest == '[')
+		if(cTest == '\"' || cTest == '[' || cTest == '/' ||
+			cTest == '-' || (cTest >= '0' && cTest <= '9') ||
+			cTest == 't' || cTest == 'f')
 		{
 			splitPos = pos + 1;
 			break;
