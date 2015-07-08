@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 class JsonTree: public TreeViewController
 {
 public:
-	JsonTree(HWND hScintilla, HWND hWndWindow, HWND hWndTree);
+	JsonTree(HWND hScintilla = NULL, HWND hWndWindow = NULL, HWND hWndTree = NULL);
 
 	BOOL getTVItem(HTREEITEM hti, TCHAR *buf, int bufSize, TVITEM *tvi);
 	HTREEITEM getParentItem(HTREEITEM hti);

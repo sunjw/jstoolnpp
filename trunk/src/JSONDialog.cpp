@@ -38,13 +38,11 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	{
 	case WM_INITDIALOG:
 		{
+			m_hDlg = getHSelf();
 			m_hTree = GetDlgItem(hWnd, IDC_TREE_JSON); // tree control
 			::SendMessage(hWnd, DM_SETDEFID, 
                         (WPARAM) IDC_BTN_SEARCH, 
-                        (LPARAM) 0); 
-			::PostMessage(hWnd, WM_NEXTDLGCTL, 
-						(WPARAM) GetDlgItem(hWnd, IDC_SEARCHEDIT), 
-						TRUE);
+                        (LPARAM) 0);
 		}
 		return FALSE;
 	case WM_SIZE:
@@ -72,7 +70,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 
 			int iJsonPathEditWidth = iDlgWidth - 4;
 			SetWindowPos(GetDlgItem(hWnd, IDC_JSONPATH), 
-				HWND_TOP, 1, iJsonTreeHeight + 32, iJsonPathEditWidth, 18, 
+				HWND_TOP, 1, iJsonTreeHeight + 33, iJsonPathEditWidth, 18, 
 				SWP_SHOWWINDOW);
 		}
 		return FALSE;
@@ -103,30 +101,36 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 
 void JSONDialog::disableControls()
 {
-	HWND hWnd = getHSelf();
-	EnableWindow(GetDlgItem(hWnd, IDC_BTN_REFRESH), FALSE);
-	EnableWindow(GetDlgItem(hWnd, IDC_SEARCHEDIT), FALSE);
-	EnableWindow(GetDlgItem(hWnd, IDC_BTN_SEARCH), FALSE);
-	EnableWindow(GetDlgItem(hWnd, IDC_TREE_JSON), FALSE);
+	EnableWindow(GetDlgItem(m_hDlg, IDC_BTN_REFRESH), FALSE);
+	EnableWindow(GetDlgItem(m_hDlg, IDC_SEARCHEDIT), FALSE);
+	EnableWindow(GetDlgItem(m_hDlg, IDC_BTN_SEARCH), FALSE);
+	EnableWindow(GetDlgItem(m_hDlg, IDC_TREE_JSON), FALSE);
 }
 
 void JSONDialog::enableControls()
 {
-	HWND hWnd = getHSelf();
-	EnableWindow(GetDlgItem(hWnd, IDC_BTN_REFRESH), TRUE);
-	EnableWindow(GetDlgItem(hWnd, IDC_SEARCHEDIT), TRUE);
-	EnableWindow(GetDlgItem(hWnd, IDC_BTN_SEARCH), TRUE);
-	EnableWindow(GetDlgItem(hWnd, IDC_TREE_JSON), TRUE);
+	EnableWindow(GetDlgItem(m_hDlg, IDC_BTN_REFRESH), TRUE);
+	EnableWindow(GetDlgItem(m_hDlg, IDC_SEARCHEDIT), TRUE);
+	EnableWindow(GetDlgItem(m_hDlg, IDC_BTN_SEARCH), TRUE);
+	EnableWindow(GetDlgItem(m_hDlg, IDC_TREE_JSON), TRUE);
+}
+
+void JSONDialog::focusOnControl(int nId)
+{
+	::PostMessage(m_hDlg, 
+		WM_NEXTDLGCTL, 
+		(WPARAM) GetDlgItem(m_hDlg, nId), 
+		TRUE);
 }
 
 /*
 Delete all items from the tree and creates the root node
 */
-HTREEITEM JSONDialog::initTree(HWND hWndDlg)
+HTREEITEM JSONDialog::initTree()
 {
-	int TreeCount = TreeView_GetCount(GetDlgItem(this->getHSelf(), IDC_TREE_JSON));
+	int TreeCount = TreeView_GetCount(GetDlgItem(m_hDlg, IDC_TREE_JSON));
 	if(TreeCount>0)
-		TreeView_DeleteAllItems(GetDlgItem(this->getHSelf(), IDC_TREE_JSON));
+		TreeView_DeleteAllItems(GetDlgItem(m_hDlg, IDC_TREE_JSON));
 
 	HTREEITEM root = insertTree(TEXT("ROOT"), -1, TVI_ROOT);
 	
@@ -135,8 +139,6 @@ HTREEITEM JSONDialog::initTree(HWND hWndDlg)
 
 HTREEITEM JSONDialog::insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNode)
 {
-	HWND hWnd = getHSelf();
-
 	TV_INSERTSTRUCT tvinsert;
 
 	if(parentNode == TVI_ROOT)
@@ -154,7 +156,7 @@ HTREEITEM JSONDialog::insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNo
 	tvinsert.item.lParam = lparam;
 
 	HTREEITEM item = (HTREEITEM)SendDlgItemMessage(
-		hWnd, IDC_TREE_JSON, TVM_INSERTITEM, 0, (LPARAM)&tvinsert);
+		m_hDlg, IDC_TREE_JSON, TVM_INSERTITEM, 0, (LPARAM)&tvinsert);
 
 	return item;
 }
@@ -163,7 +165,10 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 {
 	disableControls();
 
+	// Scintilla handle will change.
 	m_hCurrScintilla = hCurrScintilla;
+	// Rebuild JsonTree.
+	m_jsonTree = JsonTree(m_hCurrScintilla, m_hDlg, m_hTree);
 
 	size_t jsLen, jsLenSel;
 	jsLen = ::SendMessage(m_hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
@@ -209,14 +214,15 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 	delete[] pJS;
 
 	enableControls();
+
+	focusOnControl(IDC_SEARCHEDIT);
 }
 
 void JSONDialog::drawTree(const JsonValue& jsonValue)
 {
-	HWND hWnd = getHSelf();
 	HTREEITEM rootNode;
 
-	rootNode = initTree(hWnd);
+	rootNode = initTree();
 
 	const JsonValue::VALUE_TYPE& valType = jsonValue.GetValueType();
 	if(valType == JsonValue::UNKNOWN_VALUE)
@@ -227,7 +233,7 @@ void JSONDialog::drawTree(const JsonValue& jsonValue)
 
 	insertJsonValue(jsonValue, rootNode);
 
-	TreeView_Expand(GetDlgItem(hWnd, IDC_TREE_JSON), rootNode, TVE_EXPAND);
+	TreeView_Expand(GetDlgItem(m_hDlg, IDC_TREE_JSON), rootNode, TVE_EXPAND);
 }
 
 void JSONDialog::insertJsonValue(const JsonValue& jsonValue, HTREEITEM node)
@@ -305,7 +311,6 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 
 void JSONDialog::clickJsonTree(LPARAM lParam)
 {
-	HWND hWnd = getHSelf();
 	LPNMHDR lpnmh = (LPNMHDR)lParam;
     if(lpnmh->code == NM_CLICK && lpnmh->idFrom == IDC_TREE_JSON)  
     {
@@ -313,45 +318,40 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 		POINT pt;
 		pt.x = LOWORD(dwPos);
 		pt.y = HIWORD(dwPos);
-		ScreenToClient(lpnmh->hwndFrom, &pt);
+		ScreenToClient(m_hTree, &pt);
 		TVHITTESTINFO ht = {0};
 		ht.pt = pt;
 		//ht.flags = TVHT_ONITEMLABEL;
-		HTREEITEM hItem = TreeView_HitTest(lpnmh->hwndFrom, &ht);
-		if(ht.flags & TVHT_ONITEMLABEL)
+		HTREEITEM hItem = TreeView_HitTest(m_hTree, &ht);
+		if(hItem && (ht.flags & TVHT_ONITEMLABEL))
 		{
-			JsonTree jsonTree(m_hCurrScintilla, hWnd, lpnmh->hwndFrom);
-			clickJsonTreeItem(hWnd, jsonTree, hItem);
+			clickJsonTreeItem(hItem);
 		}
 	}  
 }
 
-void JSONDialog::clickJsonTreeItem(HWND hWnd, JsonTree& jsonTree, HTREEITEM htiNode)
+void JSONDialog::clickJsonTreeItem(HTREEITEM htiNode)
 {
-	string strJsonPath = jsonTree.getJsonNodePath(htiNode);
-	SetDlgItemText(hWnd, IDC_JSONPATH, strtotstr(strJsonPath).c_str());
-	jsonTree.jumpToSciLine(htiNode, m_iSelStartLine);
+	string strJsonPath = m_jsonTree.getJsonNodePath(htiNode);
+	SetDlgItemText(m_hDlg, IDC_JSONPATH, strtotstr(strJsonPath).c_str());
+	m_jsonTree.jumpToSciLine(htiNode, m_iSelStartLine);
 }
 
 void JSONDialog::search()
 {
 	disableControls();
 
-	HWND hWnd = getHSelf();
-
 	TCHAR buffer[256];
-	GetWindowText(GetDlgItem(hWnd, IDC_SEARCHEDIT), buffer, 255);
+	GetWindowText(GetDlgItem(m_hDlg, IDC_SEARCHEDIT), buffer, 255);
 	
 	tstring tstrSearchKey(buffer);
 	string strSearchKey = tstrtostr(tstrSearchKey);
 
-	HWND hWndTree = GetDlgItem(hWnd, IDC_TREE_JSON);
-
-	HTREEITEM htiSelected = TreeView_GetSelection(hWndTree);
+	HTREEITEM htiSelected = TreeView_GetSelection(m_hTree);
 	if(htiSelected == NULL)
 	{
 		// Nothing, so we do search from ROOT
-		htiSelected = TreeView_GetRoot(hWndTree);
+		htiSelected = TreeView_GetRoot(m_hTree);
 	}
 	if(htiSelected == NULL)
 		return; // Still NULL, return.
@@ -361,20 +361,18 @@ void JSONDialog::search()
 	 * We do search.
 	 */
 	HTREEITEM htiFound = NULL;
-
-	JsonTree jsonTree(m_hCurrScintilla, hWnd, hWndTree);
 	
-	htiFound = jsonTree.search(strSearchKey, htiSelected);
+	htiFound = m_jsonTree.search(strSearchKey, htiSelected);
 
 	if(htiFound != NULL)
 	{
 		// We found in search.
-		TreeView_SelectItem(hWndTree, htiFound);
-		clickJsonTreeItem(hWnd, jsonTree, htiFound);
+		TreeView_SelectItem(m_hTree, htiFound);
+		clickJsonTreeItem(htiFound);
 	}
 	else
 	{
-		MessageBox(hWnd, TEXT("No results found."), TEXT("Search in Json"), MB_ICONINFORMATION | MB_OK);
+		MessageBox(m_hDlg, TEXT("No results found."), TEXT("Search in Json"), MB_ICONINFORMATION | MB_OK);
 	}
 
 	enableControls();

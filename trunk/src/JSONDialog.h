@@ -35,7 +35,7 @@ class JSONDialog: public DockingDlgInterface
 public :
 	JSONDialog(): 
 	   DockingDlgInterface(IDD_TREE), 
-		   m_hCurrScintilla(NULL),
+		   m_hDlg(NULL), m_hCurrScintilla(NULL), m_hTree(NULL),
 		   m_iSelStartLine(0)
 	{};
 
@@ -54,21 +54,24 @@ protected :
 	virtual BOOL CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
+	HWND m_hDlg;
 	HWND m_hCurrScintilla;
-	HANDLE m_hTree;
+	HWND m_hTree;
+	JsonTree m_jsonTree;
 	int m_iSelStartLine;
 
 	void disableControls();
 	void enableControls();
+	void focusOnControl(int nId);
 
-	HTREEITEM initTree(HWND hWndDlg);
+	HTREEITEM initTree();
 	HTREEITEM insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNode);
 
 	void insertJsonValue(const JsonValue& jsonValue, HTREEITEM node);
 	void insertJsonValue(const std::string& key, const JsonValue& jsonValue, HTREEITEM node);
 
 	void clickJsonTree(LPARAM lParam);
-	void clickJsonTreeItem(HWND hWnd, JsonTree& jsonTree, HTREEITEM htiNode);
+	void clickJsonTreeItem(HTREEITEM htiNode);
 
 	void search();
 };
