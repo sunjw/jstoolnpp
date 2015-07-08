@@ -38,7 +38,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	{
 	case WM_INITDIALOG:
 		{
-			m_hDlg = getHSelf();
+			m_hDlg = hWnd;
 			m_hTree = GetDlgItem(hWnd, IDC_TREE_JSON); // tree control
 			::SendMessage(hWnd, DM_SETDEFID, 
                         (WPARAM) IDC_BTN_SEARCH, 
