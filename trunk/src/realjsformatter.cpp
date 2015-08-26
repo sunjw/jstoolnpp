@@ -249,6 +249,8 @@ void RealJSFormatter::Go()
 			&& m_tokenA.type != COMMENT_TYPE_1 && m_tokenA.type != COMMENT_TYPE_2)
 			m_bBlockStmt = true;
 
+		bool bCommentInline = false;
+
 		/*
 		 * 参考 m_tokenB 来处理 m_tokenA
 		 * 输出或不输出 m_tokenA
@@ -267,7 +269,6 @@ void RealJSFormatter::Go()
 				// 多行注释
 				if(!bHaveNewLine)
 				{
-					bool bCommentInline = false;
 					if(m_tokenA.code[m_tokenA.code.length() - 2] == '*' &&
 						m_tokenA.code[m_tokenA.code.length() - 1] == '/')
 						bCommentInline = true;
@@ -295,7 +296,11 @@ void RealJSFormatter::Go()
 				// 单行注释
 				PutToken(m_tokenA.code); // 肯定会换行的
 			}
-			m_bCommentPut = true;
+
+			// 内联注释就当作没有注释, 透明的
+			if(!bCommentInline)
+				m_bCommentPut = true;
+
 			break;
 		case OPER_TYPE:
 			ProcessOper(bHaveNewLine, tokenAFirst, tokenBFirst);

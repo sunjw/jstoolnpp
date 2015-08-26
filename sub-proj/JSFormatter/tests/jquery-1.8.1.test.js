@@ -8541,8 +8541,7 @@
 										xml = xhr.responseXML;
 
 										// Construct response list
-										if (xml && xml.documentElement /* #4958 */)
-										{
+										if (xml && xml.documentElement /* #4958 */) {
 											responses.xml = xml;
 										}
 

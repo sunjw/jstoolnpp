@@ -1,3 +1,9 @@
+function test5() {
+	if (sadfsadf /** dsfdsf */) {
+		skjfdladkfs;
+	}
+}
+
 function test4() {
 	return 10000 /*test*/ + 100;
 }
