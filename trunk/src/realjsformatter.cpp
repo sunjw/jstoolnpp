@@ -266,9 +266,29 @@ void RealJSFormatter::Go()
 			{
 				// 多行注释
 				if(!bHaveNewLine)
-					PutToken(m_tokenA.code, string(""), string("\n")); // 需要换行
+				{
+					bool bCommentInline = false;
+					if(m_tokenA.code[m_tokenA.code.length() - 2] == '*' &&
+						m_tokenA.code[m_tokenA.code.length() - 1] == '/')
+						bCommentInline = true;
+
+					if(!bCommentInline)
+					{
+						PutToken(m_tokenA.code, string(""), string("\n")); // 需要换行
+					}
+					else if(m_tokenB.type != OPER_TYPE)
+					{
+						PutToken(m_tokenA.code, string(""), string(" ")); // 不需要换行
+					}
+					else
+					{
+						PutToken(m_tokenA.code); // 不需要换行, 也不要空格
+					}
+				}
 				else
+				{
 					PutToken(m_tokenA.code);
+				}
 			}
 			else
 			{

@@ -1182,8 +1182,7 @@ FBL.ns(function () {
 					// Total request time doesn't include the time spent in queue.
 					// xxxHonza: since all phases are now graphically distinguished it's easy to
 					// see blocking requests. It's make sense to display the real total time now.
-					this.elapsed = elapsed /* - (file.sendingTime - file.connectedTime)*/
-				;
+					this.elapsed = elapsed /* - (file.sendingTime - file.connectedTime)*/;
 
 					// The nspr timer doesn't have 1ms precision, so it can happen that entire
 					// request is executed in l ms (so the total is zero). Let's display at least
@@ -2430,8 +2429,7 @@ FBL.ns(function () {
 
 				hideCache : function (file) {
 					//xxxHonza: I don't see any reason why not to display the cache also info for images.
-					return !file.cacheEntry /* || file.category=="image"*/
-				;
+					return !file.cacheEntry /* || file.category=="image"*/;
 				},
 
 				hideHtml : function (file) {

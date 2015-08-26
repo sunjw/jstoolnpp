@@ -2121,8 +2121,7 @@
 		},
 
 		// bubbling is internal
-		trigger : function (event, data, elem /*, bubbling */
-		) {
+		trigger : function (event, data, elem /*, bubbling */) {
 			// Event object or event type
 			var type = event.type || event,
 			bubbling = arguments[3];
@@ -2843,8 +2842,7 @@
 	};
 
 	jQuery.each(["live", "die"], function (i, name) {
-		jQuery.fn[name] = function (types, data, fn, origSelector /* Internal Use Only */
-		) {
+		jQuery.fn[name] = function (types, data, fn, origSelector /* Internal Use Only */) {
 			var type,
 			i = 0,
 			match,

@@ -228,6 +228,9 @@ void JSParser::GetTokenRaw()
 				{
 					m_tokenB.code.push_back(m_charB);
 					m_charB = GetChar();
+
+					m_tokenABeforeComment = m_tokenA;
+
 					return;
 				}
 			}
@@ -411,13 +414,17 @@ void JSParser::PreparePosNeg()
 	 * 而且 m_charB 是一个 NormalChar
 	 * 那么 m_tokenB 实际上是一个正负数
 	 */
+	Token tokenRealPre = m_tokenA;
+	if(m_tokenA.type == COMMENT_TYPE_2)
+		tokenRealPre = m_tokenABeforeComment;
+
 	if(m_tokenB.type == OPER_TYPE && (m_tokenB.code == "-" || m_tokenB.code == "+") &&
-		(m_tokenA.type != STRING_TYPE || 
-		m_tokenA.code == "return" || m_tokenA.code == "case" ||
-		m_tokenA.code == "delete" || m_tokenA.code == "throw") && 
-		m_tokenA.type != REGULAR_TYPE &&
-		m_tokenA.code != "++" && m_tokenA.code != "--" &&
-		m_tokenA.code != "]" && m_tokenA.code != ")" &&
+		(tokenRealPre.type != STRING_TYPE || 
+		tokenRealPre.code == "return" || tokenRealPre.code == "case" ||
+		tokenRealPre.code == "delete" || tokenRealPre.code == "throw") && 
+		tokenRealPre.type != REGULAR_TYPE &&
+		tokenRealPre.code != "++" && tokenRealPre.code != "--" &&
+		tokenRealPre.code != "]" && tokenRealPre.code != ")" &&
 		IsNormalChar(m_charB))
 	{
 		// m_tokenB 实际上是正负数

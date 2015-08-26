@@ -1144,8 +1144,7 @@
 				var contentBox = Firebug.chrome.$("fbContentBox");
 				var contentSplitter = Firebug.chrome.$("fbContentSplitter");
 
-				var shouldShow = show /* && !Firebug.isDetached()*/
-			;
+				var shouldShow = show /* && !Firebug.isDetached()*/;
 				contentBox.setAttribute("collapsed", !shouldShow);
 
 				if (!show)

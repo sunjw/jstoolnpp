@@ -103,6 +103,9 @@ public:
 	inline const char *GetDebugOutput()
 	{ return m_debugOutput; }
 
+private:
+	Token m_tokenABeforeComment;
+
 protected:
 	int m_charA;
 	int m_charB;

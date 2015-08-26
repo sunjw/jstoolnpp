@@ -2698,8 +2698,7 @@
 			superMatcher;
 		}
 
-		compile = Sizzle.compile = function (selector, group /* Internal Use Only */
-		) {
+		compile = Sizzle.compile = function (selector, group /* Internal Use Only */) {
 			var i,
 			setMatchers = [],
 			elementMatchers = [],
@@ -3072,8 +3071,7 @@
 					deferred.done(arguments).fail(arguments);
 					return this;
 				},
-				then : function (/* fnDone, fnFail, fnProgress */
-				) {
+				then : function (/* fnDone, fnFail, fnProgress */) {
 					var fns = arguments;
 					return jQuery.Deferred(function (newDefer) {
 						jQuery.each(tuples, function (i, tuple) {
@@ -3145,8 +3143,7 @@
 		},
 
 		// Deferred helper
-		when : function (subordinate /* , ..., subordinateN */
-		) {
+		when : function (subordinate /* , ..., subordinateN */) {
 			var i = 0,
 			resolveValues = core_slice.call(arguments),
 			length = resolveValues.length,
@@ -5090,8 +5087,7 @@
 
 	jQuery.fn.extend({
 
-		on : function (types, selector, data, fn, /*INTERNAL*/
-			one) {
+		on : function (types, selector, data, fn, /*INTERNAL*/ one) {
 			var origFn,
 			type;
 

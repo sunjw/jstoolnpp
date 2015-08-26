@@ -1128,8 +1128,7 @@
 					deferred.done(arguments).fail(arguments);
 					return this;
 				},
-				then : function (/* fnDone, fnFail, fnProgress */
-				) {
+				then : function (/* fnDone, fnFail, fnProgress */) {
 					var fns = arguments;
 					return jQuery.Deferred(function (newDefer) {
 						jQuery.each(tuples, function (i, tuple) {
@@ -1201,8 +1200,7 @@
 		},
 
 		// Deferred helper
-		when : function (subordinate /* , ..., subordinateN */
-		) {
+		when : function (subordinate /* , ..., subordinateN */) {
 			var i = 0,
 			resolveValues = core_slice.call(arguments),
 			length = resolveValues.length,
@@ -1556,8 +1554,7 @@
 			return !!elem && !isEmptyDataObject(elem);
 		},
 
-		data : function (elem, name, data, pvt /* Internal Use Only */
-		) {
+		data : function (elem, name, data, pvt /* Internal Use Only */) {
 			if (!jQuery.acceptData(elem)) {
 				return;
 			}
@@ -1652,8 +1649,7 @@
 			return ret;
 		},
 
-		removeData : function (elem, name, pvt /* Internal Use Only */
-		) {
+		removeData : function (elem, name, pvt /* Internal Use Only */) {
 			if (!jQuery.acceptData(elem)) {
 				return;
 			}
@@ -3584,8 +3580,7 @@
 
 	jQuery.fn.extend({
 
-		on : function (types, selector, data, fn, /*INTERNAL*/
-			one) {
+		on : function (types, selector, data, fn, /*INTERNAL*/ one) {
 			var origFn,
 			type;
 
@@ -5312,8 +5307,7 @@
 					});
 
 					// rbuggyMatches always contains :active, so no need for a length check
-					rbuggyMatches = /* rbuggyMatches.length && */
-						new RegExp(rbuggyMatches.join("|"));
+					rbuggyMatches = /* rbuggyMatches.length && */ new RegExp(rbuggyMatches.join("|"));
 
 					Sizzle.matchesSelector = function (elem, expr) {
 						// Make sure that attribute selectors are quoted
@@ -6446,8 +6440,7 @@
 			return ret;
 		},
 
-		cleanData : function (elems, /* internal */
-			acceptData) {
+		cleanData : function (elems, /* internal */ acceptData) {
 			var data,
 			id,
 			elem,
@@ -7415,9 +7408,7 @@
 
 	// Base inspection function for prefilters and transports
 	function inspectPrefiltersOrTransports(structure, options, originalOptions, jqXHR,
-		dataType /* internal */
-	, inspected /* internal */
-	) {
+		dataType /* internal */, inspected /* internal */) {
 
 		dataType = dataType || options.dataTypes[0];
 		inspected = inspected || {};
@@ -8550,8 +8541,7 @@
 										xml = xhr.responseXML;
 
 										// Construct response list
-										if (xml && xml.documentElement /* #4958 */
-										)
+										if (xml && xml.documentElement /* #4958 */)
 										{
 											responses.xml = xml;
 										}
