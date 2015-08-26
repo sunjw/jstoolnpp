@@ -269,8 +269,7 @@ void RealJSFormatter::Go()
 				// ¶àÐÐ×¢ÊÍ
 				if(!bHaveNewLine)
 				{
-					if(m_tokenA.code[m_tokenA.code.length() - 2] == '*' &&
-						m_tokenA.code[m_tokenA.code.length() - 1] == '/')
+					if(m_tokenA.code.find("\n") == string::npos)
 						bCommentInline = true;
 
 					if(!bCommentInline)
