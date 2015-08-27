@@ -145,8 +145,7 @@ void RealJSFormatter::PutString(const Token& token)
 			m_bNewLine = false;
 			m_nIndents = m_nIndents < 0 ? 0 : m_nIndents; // 出错修正
 			m_nLineIndents = m_nIndents;
-			if(token.code[i] == '{' || token.code[i] == ',' || 
-				token.code[i] == ';' || IsInlineComment(token)) // 行结尾是注释，使得{,;不得不换行
+			if(token.code[i] == '{' || token.code[i] == ',' || token.code[i] == ';') // 行结尾是注释，使得{,;不得不换行
 				--m_nLineIndents;
 		}
 
