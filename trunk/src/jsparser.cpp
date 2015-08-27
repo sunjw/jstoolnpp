@@ -70,11 +70,7 @@ bool JSParser::IsInlineComment(const Token& token)
 	if(token.type != COMMENT_TYPE_2)
 		return false;
 
-	if(token.code.find("\r") == string::npos &&
-		token.code.find("\n") == string::npos)
-		return true;
-
-	return false;
+	return token.inlineComment;
 }
 
 void JSParser::GetTokenRaw()
@@ -236,6 +232,7 @@ void JSParser::GetTokenRaw()
 			{
 				// 直到 */
 				m_tokenB.type = COMMENT_TYPE_2;
+				m_tokenB.inlineComment = false;
 				if(m_charA == '*' && m_charB == '/')
 				{
 					m_tokenB.code.push_back(m_charB);
@@ -250,6 +247,7 @@ void JSParser::GetTokenRaw()
 			{
 				// 直到换行
 				m_tokenB.type = COMMENT_TYPE_1;
+				m_tokenB.inlineComment = false;
 				if(m_charA == '\n')
 					return;
 			}
@@ -458,6 +456,15 @@ void JSParser::PrepareTokenB()
 	{
 		++c;
 		GetTokenRaw();
+	}
+
+	if(c == 0 && 
+		m_tokenB.type == COMMENT_TYPE_2 && 
+		m_tokenB.code.find("\r") == string::npos &&
+		m_tokenB.code.find("\n") == string::npos)
+	{
+		// COMMENT_TYPE_2 之前没有换行, 自己也没有换行
+		m_tokenB.inlineComment = true;
 	}
 
 	if(m_tokenB.code != "else" && m_tokenB.code != "while" && m_tokenB.code != "catch" &&

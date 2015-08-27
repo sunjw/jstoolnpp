@@ -84,6 +84,7 @@ protected:
 	{
 		string code; // 代码内容
 		int type; // Token 类型
+		bool inlineComment; // COMMENT_TYPE_2 的 inline 模式
 		long line; // 行号
 	};
 
