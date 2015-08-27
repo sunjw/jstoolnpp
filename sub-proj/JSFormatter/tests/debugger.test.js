@@ -1114,8 +1114,7 @@ FBL.ns(function () {
 					if (hookReturn)
 						return hookReturn;
 
-					return -2;
-					/* let firebug service decide to break or not */
+					return -2; /* let firebug service decide to break or not */
 				},
 
 				onUncaughtException : function (errorInfo) {
@@ -3445,8 +3444,7 @@ FBL.ns(function () {
 			onResume : function (context) {},
 
 			onThrow : function (context, frame, rv) {
-				return false;
-				/* continue throw */
+				return false; /* continue throw */
 			},
 
 			onError : function (context, frame, error) {},

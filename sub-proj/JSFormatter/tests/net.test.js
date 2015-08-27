@@ -1166,8 +1166,7 @@ FBL.ns(function () {
 						this.phaseElapsed = this.phaseEndTime - phase.startTime;
 					}
 
-					var elapsed = file.loaded ? file.endTime - file.startTime : 0;
-					/*this.phaseEndTime - file.startTime*/
+					var elapsed = file.loaded ? file.endTime - file.startTime : 0; /*this.phaseEndTime - file.startTime*/
 					this.barOffset = Math.floor(((file.startTime - this.phaseStartTime) / this.phaseElapsed) * 100);
 
 					var blockingEnd = (file.sendingTime != file.startTime) ? file.sendingTime : file.waitingForTime;

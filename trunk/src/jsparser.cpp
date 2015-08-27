@@ -65,6 +65,18 @@ bool JSParser::IsComment()
 	return (m_charA == '/' && (m_charB == '/' || m_charB == '*'));
 }
 
+bool JSParser::IsInlineComment(const Token& token)
+{
+	if(token.type != COMMENT_TYPE_2)
+		return false;
+
+	if(token.code.find("\r") == string::npos &&
+		token.code.find("\n") == string::npos)
+		return true;
+
+	return false;
+}
+
 void JSParser::GetTokenRaw()
 {
 	if(!m_bGetTokenInit)

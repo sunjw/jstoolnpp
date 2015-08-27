@@ -269,7 +269,7 @@ void RealJSFormatter::Go()
 				// 多行注释
 				if(!bHaveNewLine)
 				{
-					if(m_tokenA.code.find("\n") == string::npos)
+					if(IsInlineComment(m_tokenA))
 						bCommentInline = true;
 
 					if(!bCommentInline)
@@ -449,9 +449,10 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 		GetStackTop(m_blockStack, topStack);
 		//topStack = m_blockStack.top();
-		if(topStack != JS_BRACKET && !bHaveNewLine)
+		if(topStack != JS_BRACKET && !bHaveNewLine && !IsInlineComment(m_tokenB))
 			PutToken(m_tokenA.code, string(""), strRight.append("\n")); // 如果不是 () 里的 ; 就换行
-		else if(topStack == JS_BRACKET || m_tokenB.type == COMMENT_TYPE_1)
+		else if(topStack == JS_BRACKET || m_tokenB.type == COMMENT_TYPE_1 ||
+			IsInlineComment(m_tokenB))
 			PutToken(m_tokenA.code, string(""), strRight); // (; ) 空格
 		else
 			PutToken(m_tokenA.code);

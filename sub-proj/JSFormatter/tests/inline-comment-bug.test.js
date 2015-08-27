@@ -1,6 +1,7 @@
 function test5() {
 	if (sadfsadf /** dsfdsf */) {
 		skjfdladkfs;
+		skjfdladkfs; /* dsfdsf */
 	}
 }
 

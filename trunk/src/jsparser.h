@@ -149,6 +149,8 @@ protected:
 		return (ch == '\'' || ch == '\"');
 	}
 
+	bool IsInlineComment(const Token& token);
+
 	bool GetToken(); // 处理过负数, 正则等等的 GetToken 函数
 
 	void inline StartParse()
