@@ -130,14 +130,13 @@ void RealJSFormatter::PutToken(const Token& token,
 
 void RealJSFormatter::PutString(const Token& token)
 {
-	string str = token.code;
-	size_t length = str.size();
+	size_t length = token.code.size();
 	//char topStack = m_blockStack.top();
 	for(size_t i = 0; i < length; ++i)
 	{
 		if(m_bNewLine && (m_bCommentPut ||
-			((m_struOption.eBracNL == NEWLINE_BRAC || str[i] != '{') && 
-				str[i] != ',' && str[i] != ';')))
+			((m_struOption.eBracNL == NEWLINE_BRAC || token.code[i] != '{') && 
+				token.code[i] != ',' && token.code[i] != ';')))
 		{
 			// 换行后面不是紧跟着 {,; 才真正换
 			PutLineBuffer(); // 输出行缓冲
@@ -146,18 +145,19 @@ void RealJSFormatter::PutString(const Token& token)
 			m_bNewLine = false;
 			m_nIndents = m_nIndents < 0 ? 0 : m_nIndents; // 出错修正
 			m_nLineIndents = m_nIndents;
-			if(str[i] == '{' || str[i] == ',' || str[i] == ';') // 行结尾是注释，使得{,;不得不换行
+			if(token.code[i] == '{' || token.code[i] == ',' || token.code[i] == ';') // 行结尾是注释，使得{,;不得不换行
 				--m_nLineIndents;
 		}
 
 		if(m_bNewLine && !m_bCommentPut &&
-			((m_struOption.eBracNL == NO_NEWLINE_BRAC && str[i] == '{') || str[i] == ',' || str[i] == ';'))
+			((m_struOption.eBracNL == NO_NEWLINE_BRAC && 
+			token.code[i] == '{') || token.code[i] == ',' || token.code[i] == ';'))
 			m_bNewLine = false;
 
-		if(str[i] == '\n')
+		if(token.code[i] == '\n')
 			m_bNewLine = true;
 		else
-			m_lineBuffer += str[i];
+			m_lineBuffer += token.code[i];
 	}
 }
 
