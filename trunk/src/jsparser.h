@@ -46,6 +46,7 @@ bool StackTopEq(const stack<T>& stk, T eq)
 	return (eq == stk.top());
 }
 
+#define NOT_TOKEN -1
 #define STRING_TYPE 0
 #define OPER_TYPE 1
 #define REGULAR_TYPE 2

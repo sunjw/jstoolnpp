@@ -115,9 +115,10 @@ private:
 	void ProcessOper(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
 	void ProcessString(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
 
-	void PutToken(const string& token,
+	void PutToken(const Token& token,
 		const string& leftStyle = string(""),
 		const string& rightStyle = string("")); // Put a token out with style
+	void PutString(const Token& str);
 	void PutString(const string& str);
 	void PutLineBuffer();
 
