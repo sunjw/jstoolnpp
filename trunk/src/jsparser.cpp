@@ -459,6 +459,7 @@ void JSParser::PrepareTokenB()
 	}
 
 	if(c == 0 && 
+		m_tokenA.type != COMMENT_TYPE_1 &&
 		m_tokenB.type == COMMENT_TYPE_2 && 
 		m_tokenB.code.find("\r") == string::npos &&
 		m_tokenB.code.find("\n") == string::npos)
