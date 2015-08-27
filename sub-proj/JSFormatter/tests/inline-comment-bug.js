@@ -5,9 +5,16 @@ function test5() {
         this.traceToString = function (trace)/*@explore*/
         {}
     }
+    
+    try {
+		sdfsadf;
+	} catch (e) /*@explore*/
+	{ /*@explore*/
+		dump("FBL Fails " + e + "\n"); /*@explore*/
+	}/*@explore*/
 }
 /*@explore*/
-function test4() {
+function test4() {/*esssxplore*/
     return 10000/*test*/+100;
 }
 
@@ -22,7 +29,6 @@ function test2() {
 function test3() {
     return /*test*/10000+100;
 }
-
 
 
 

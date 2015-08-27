@@ -4531,8 +4531,7 @@ try { /*@explore*/
 		};
 
 		this.traceToString = function (trace) /*@explore*/
-		{
-		/*@explore*/
+		{ /*@explore*/
 			var str = "<top>"; /*@explore*/
 			for (var i = 0; i < trace.frames.length; i++) /*@explore*/
 				str += "\n" + trace.frames[i]; /*@explore*/
@@ -7154,10 +7153,8 @@ try { /*@explore*/
 		// ************************************************************************************************
 	}).apply(FBL);
 } catch (e) /*@explore*/
-{
-/*@explore*/
+{ /*@explore*/
 	dump("FBL Fails " + e + "\n"); /*@explore*/
 	dump("If the service @joehewitt.com/firebug;1 fails, try deleting compreg.dat, xpti.dat\n"); /*@explore*/
 	dump("Another cause can be mangled install.rdf.\n"); /*@explore*/
-}
-/*@explore*/
+} /*@explore*/

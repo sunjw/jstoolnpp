@@ -556,7 +556,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		else
 		{
 			string strLeft = (m_struOption.eBracNL == NEWLINE_BRAC && !m_bNewLine) ? string("\n") : string("");	
-			if(!bHaveNewLine) // 需要换行
+			if(!bHaveNewLine && !IsInlineComment(m_tokenB)) // 需要换行
 				PutToken(m_tokenA, strLeft, strRight.append("\n"));
 			else
 				PutToken(m_tokenA, strLeft, strRight);
@@ -641,14 +641,15 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			m_bEmptyBracket = false;
 		}
 
-		if((!bHaveNewLine && m_tokenB.code != ";" && m_tokenB.code != ",")
-			&& (m_struOption.eBracNL == NEWLINE_BRAC || 
+		if((!bHaveNewLine && 
+			m_tokenB.code != ";" && m_tokenB.code != "," && !IsInlineComment(m_tokenB)) && 
+			(m_struOption.eBracNL == NEWLINE_BRAC || 
 			!((topStack == JS_DO && m_tokenB.code == "while") ||
 			(topStack == JS_IF && m_tokenB.code == "else") ||
 			(topStack == JS_TRY && m_tokenB.code == "catch") ||
 			m_tokenB.code == ")")))
 			PutToken(m_tokenA, leftStyle, strRight.append("\n")); // 一些情况换行
-		else if(m_tokenB.type == STRING_TYPE || m_tokenB.type == COMMENT_TYPE_1)
+		else if(m_tokenB.type == STRING_TYPE || m_tokenB.type == COMMENT_TYPE_1 || IsInlineComment(m_tokenB))
 			PutToken(m_tokenA, leftStyle, strRight); // 为 else 准备的空格
 		else
 			PutToken(m_tokenA, leftStyle); // }, }; })
