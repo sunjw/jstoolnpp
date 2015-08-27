@@ -1,5 +1,5 @@
 function test5() {
-	if (sadfsadf /** dsfdsf */) /* dsfdsf */{
+	if (sadfsadf /** dsfdsf */) /* dsfdsf */ {
 		skjfdladkfs;
 		skjfdladkfs; /* dsfdsf */
 		this.traceToString = function (trace) /*@explore*/

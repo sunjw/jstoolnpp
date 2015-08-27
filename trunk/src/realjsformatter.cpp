@@ -288,7 +288,7 @@ void RealJSFormatter::Go()
 					{
 						PutToken(m_tokenA, string(""), string("\n")); // 需要换行
 					}
-					else if(m_tokenB.type != OPER_TYPE)
+					else if(m_tokenB.type != OPER_TYPE || m_tokenB.code == "{") // { 依靠前一个 token 提供空格
 					{
 						PutToken(m_tokenA, string(""), string(" ")); // 不需要换行
 					}
@@ -555,7 +555,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 		else
 		{
-			string strLeft = (m_struOption.eBracNL == NEWLINE_BRAC && !m_bNewLine) ? string("\n") : string("");	
+			string strLeft = (m_struOption.eBracNL == NEWLINE_BRAC && !m_bNewLine) ? string("\n") : string("");
 			if(!bHaveNewLine && !IsInlineComment(m_tokenB)) // 需要换行
 				PutToken(m_tokenA, strLeft, strRight.append("\n"));
 			else
