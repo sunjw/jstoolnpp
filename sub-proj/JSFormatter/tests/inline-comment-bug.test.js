@@ -1,10 +1,14 @@
 function test5() {
-	if (sadfsadf /** dsfdsf */) {
+	if (sadfsadf /** dsfdsf */)
+		/* dsfdsf */
+	{
 		skjfdladkfs;
 		skjfdladkfs; /* dsfdsf */
+		this.traceToString = function (trace) /*@explore*/
+		{}
 	}
 }
-
+/*@explore*/
 function test4() {
 	return 10000 /*test*/ + 100;
 }

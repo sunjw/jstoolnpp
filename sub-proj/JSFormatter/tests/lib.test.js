@@ -4531,7 +4531,7 @@ try {
 			}
 		};
 
-		this.traceToString = function (trace)/*@explore*/
+		this.traceToString = function (trace) /*@explore*/
 		{
 			/*@explore*/
 			var str = "<top>"; /*@explore*/

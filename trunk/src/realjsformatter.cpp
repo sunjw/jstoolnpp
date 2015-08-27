@@ -384,8 +384,9 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			else
 				++m_nIndents;
 		}
-		else if(m_tokenA.code == ")" && (m_tokenB.code == "{" || bHaveNewLine))
-			PutToken(m_tokenA.code, string(""), strRight); // { 或者换行之前留个空格
+		else if(m_tokenA.code == ")" && 
+			(m_tokenB.code == "{" || IsInlineComment(m_tokenB) || bHaveNewLine))
+			PutToken(m_tokenA.code, string(""), strRight); // { 或者/**/或者换行之前留个空格
 		else
 			PutToken(m_tokenA.code); // 正常输出
 
