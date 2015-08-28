@@ -31,7 +31,7 @@
 //#define IDC_STATIC -1
 //#endif
 
-const int nbFunc = 12;
+const int nbFunc = 13;
 
 HINSTANCE _hInst;
 NppData nppData;
@@ -52,6 +52,8 @@ void options();
 
 void checkUpdate();
 void donate();
+void openProjectSite();
+void openGitHub();
 void about();
 
 #endif //NPP_TOOLS_H

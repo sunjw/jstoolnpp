@@ -64,9 +64,10 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[7]._pFunc = options;
 			funcItem[8]._pFunc = NULL;
 
-			funcItem[9]._pFunc = checkUpdate;
-			funcItem[10]._pFunc = donate;
-			funcItem[11]._pFunc = about;
+			funcItem[9]._pFunc = openProjectSite;
+			funcItem[10]._pFunc = openGitHub;
+			funcItem[11]._pFunc = checkUpdate;
+			funcItem[12]._pFunc = about;
 
 			lstrcpy(funcItem[0]._itemName, TEXT("JS&Min"));
 			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (&New file)"));
@@ -93,9 +94,10 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			lstrcpy(funcItem[7]._itemName, TEXT("&Options..."));
 			lstrcpy(funcItem[8]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[9]._itemName, TEXT("&Check for update..."));
-			lstrcpy(funcItem[10]._itemName, TEXT("&Donate"));
-			lstrcpy(funcItem[11]._itemName, TEXT("&About"));
+			lstrcpy(funcItem[9]._itemName, TEXT("&Project site"));
+			lstrcpy(funcItem[10]._itemName, TEXT("&Source code on GitHub"));
+			lstrcpy(funcItem[11]._itemName, TEXT("&Check for update"));
+			lstrcpy(funcItem[12]._itemName, TEXT("&About"));
 		}
 		break;
 
@@ -414,6 +416,16 @@ void checkUpdate()
 void donate()
 {
 	ShellExecute(NULL, TEXT("open"), TEXT(DONATION), NULL, NULL, SW_SHOW);
+}
+
+void openProjectSite()
+{
+	ShellExecute(NULL, TEXT("open"), TEXT(PROJECT_SITE), NULL, NULL, SW_SHOW);
+}
+
+void openGitHub()
+{
+	ShellExecute(NULL, TEXT("open"), TEXT(GITHUB_PAGE), NULL, NULL, SW_SHOW);
 }
 
 void about()
