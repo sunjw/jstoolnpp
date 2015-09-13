@@ -5,15 +5,22 @@
 #
 import hashlib
 import os
+import platform
 import sys
 
-JSFORMATTER_PATH = "..\\..\\..\\trunk\\debug\\JSFormatter.exe"
-JSFORMATTER_REL_PATH = "..\\..\\..\\trunk\\release\\JSFormatter.exe"
+JSFORMATTER_PATH_WIN = "..\\..\\..\\trunk\\debug\\JSFormatter.exe"
+JSFORMATTER_REL_PATH_WIN = "..\\..\\..\\trunk\\release\\JSFormatter.exe"
+JSFORMATTER_PATH_MAC = "../DerivedData/JSFormatter/Build/Products/Debug/JSFormatter"
+JSFORMATTER_REL_PATH_MAC = "../DerivedData/JSFormatter/Build/Products/Release/JSFormatter"
+
 JSFORMATTER_PATH_SEL = ""
 
 class TestCase:
-    source = ""
-    result = ""
+	source = ""
+	result = ""
+	
+def is_windows_sys():
+	return (platform.system() == "Windows")
 
 def list_file():
 	files = [f for f in os.listdir('.') if os.path.isfile(f)]
@@ -49,9 +56,15 @@ def make_test_case(files):
 
 def run_case(test_case, release):
 	global JSFORMATTER_PATH_SEL
-	JSFORMATTER_PATH_SEL = JSFORMATTER_PATH
-	if release:
-		JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH
+	
+	if is_windows_sys():
+		JSFORMATTER_PATH_SEL = JSFORMATTER_PATH_WIN
+		if release:
+			JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH_WIN
+	else:
+		JSFORMATTER_PATH_SEL = JSFORMATTER_PATH_MAC
+		if release:
+			JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH_MAC
 	
 	result = "ERROR"
 	
