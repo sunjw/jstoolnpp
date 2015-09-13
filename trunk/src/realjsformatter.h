@@ -91,7 +91,7 @@ public:
 		{}
 	};
 
-	RealJSFormatter(FormatterOption option);
+	RealJSFormatter(const FormatterOption& option);
 
 	virtual ~RealJSFormatter()
 	{}
