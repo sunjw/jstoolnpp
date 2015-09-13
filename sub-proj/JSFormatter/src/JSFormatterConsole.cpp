@@ -44,6 +44,9 @@ int main(int argc, char *argv[])
 			JSFormatterStream::FormatterOption option;
 			option.chIndent = '\t';
 			option.nChPerInd = 1;
+#ifndef WIN32
+			option.eCRPut = JSFormatterStream::PUT_CR;
+#endif
 			option.eBracNL = JSFormatterStream::NO_NEWLINE_BRAC;
 			option.eEmpytIndent = JSFormatterStream::NO_INDENT_IN_EMPTYLINE;
 

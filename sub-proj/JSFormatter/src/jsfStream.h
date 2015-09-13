@@ -19,12 +19,14 @@ public:
 	{}
 	
 	JSFormatterStream(std::istream& input, std::ostream& output,
-						RealJSFormatter::FormatterOption option):
+						const RealJSFormatter::FormatterOption& option):
 		RealJSFormatter(RealJSFormatter::FormatterOption(
-						option.chIndent, option.nChPerInd, 
+						option.chIndent, 
+						option.nChPerInd, 
 						RealJSFormatter::SKIP_READ_CR, 
-						RealJSFormatter::NOT_PUT_CR, 
-						option.eBracNL, option.eEmpytIndent)), 
+						option.eCRPut, 
+						option.eBracNL, 
+						option.eEmpytIndent)), 
 		in(input), out(output)
 	{}
 
