@@ -326,15 +326,15 @@ void jsFormat()
 		if(struOptions.chIndent == '\t')
 			_nChPerInd = 1;
 
-		JSFormatString::FormatterOption formatterOption;
+		FormatterOption formatterOption;
 		formatterOption.chIndent = struOptions.chIndent;
 		formatterOption.nChPerInd = _nChPerInd;
 		formatterOption.eCRPut = struOptions.bPutCR ? 
-			JSFormatString::PUT_CR : JSFormatString::NOT_PUT_CR;
-		formatterOption.eBracNL = struOptions.bNLBracket ?
-			JSFormatString::NEWLINE_BRAC : JSFormatString::NO_NEWLINE_BRAC;
-		formatterOption.eEmpytIndent = struOptions.bIndentInEmpty ?
-			JSFormatString::INDENT_IN_EMPTYLINE : JSFormatString::NO_INDENT_IN_EMPTYLINE;
+									PUT_CR : NOT_PUT_CR;
+		formatterOption.eBracNL = struOptions.bNLBracket ? 
+									NEWLINE_BRAC : NO_NEWLINE_BRAC;
+		formatterOption.eEmpytIndent = struOptions.bIndentInEmpty ? 
+										INDENT_IN_EMPTYLINE : NO_INDENT_IN_EMPTYLINE;
 
 		JSFormatString jsformat(pJS, &strJSFormat, formatterOption);
 		if(bFormatSel)

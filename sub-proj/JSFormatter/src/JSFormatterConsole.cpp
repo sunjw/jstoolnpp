@@ -41,14 +41,14 @@ int main(int argc, char *argv[])
 	    ostringstream outStrStream;
 		try
 		{
-			JSFormatterStream::FormatterOption option;
+			FormatterOption option;
 			option.chIndent = '\t';
 			option.nChPerInd = 1;
 #ifndef WIN32
-			option.eCRPut = JSFormatterStream::PUT_CR;
+			option.eCRPut = PUT_CR;
 #endif
-			option.eBracNL = JSFormatterStream::NO_NEWLINE_BRAC;
-			option.eEmpytIndent = JSFormatterStream::NO_INDENT_IN_EMPTYLINE;
+			option.eBracNL = NO_NEWLINE_BRAC;
+			option.eEmpytIndent = NO_INDENT_IN_EMPTYLINE;
 
 			JSFormatterStream jsf(inFileStream2, outStrStream, option);
 			jsf.m_debug = true;

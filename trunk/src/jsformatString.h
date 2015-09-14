@@ -12,7 +12,7 @@ class JSFormatString: public RealJSFormatter
 public:
 	JSFormatString(const char *input, 
 				string *output,
-				const RealJSFormatter::FormatterOption& option);
+				const FormatterOption& option);
 
 private:
 	string in;

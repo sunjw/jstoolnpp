@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <set>
 
 #include "jsparser.h"
+#include "jsformatter.h"
 
 using namespace std;
 
@@ -32,64 +33,6 @@ class RealJSFormatter: public JSParser
 public:
 	typedef map<string, char> StrCharMap;
 	typedef set<string> StrSet;
-
-	/*
-	 * CR_READ
-	 *   READ_CR 读取 \r
-	 *   SKIP_READ_CR 读取时跳过 \r
-	 */
-	enum CR_READ { SKIP_READ_CR, READ_CR };
-	/*
-	 * CR_PUT
-	 *   PUT_CR 换行使用 \r\n
-	 *   NOT_PUT_CR 换行使用 \n
-	 */
-	enum CR_PUT { NOT_PUT_CR, PUT_CR };
-	/*
-	 * BRAC_NEWLINE
-	 *   NEWLINE_BRAC 括号前换行
-	 *   NO_NEWLINE_BRAC 括号前不换行
-	 */
-	enum BRAC_NEWLINE { NO_NEWLINE_BRAC, NEWLINE_BRAC };
-	/*
-	 * INDENT_IN_EMPTYLINE
-	 *   INDENT_IN_EMPTYLINE 空行输出缩进字符
-	 *   NO_INDENT_IN_EMPTYLINE 空行不输出缩进字符
-	 */
-	enum EMPTYLINE_INDENT { NO_INDENT_IN_EMPTYLINE, INDENT_IN_EMPTYLINE };
-
-	struct FormatterOption 
-	{
-		char chIndent;
-		int nChPerInd;
-		CR_READ eCRRead;
-		CR_PUT eCRPut;
-		BRAC_NEWLINE eBracNL;
-		EMPTYLINE_INDENT eEmpytIndent;
-
-		FormatterOption():
-			chIndent('\t'),
-			nChPerInd(1),
-			eCRRead(SKIP_READ_CR),
-			eCRPut(NOT_PUT_CR),
-			eBracNL(NO_NEWLINE_BRAC),
-			eEmpytIndent(NO_INDENT_IN_EMPTYLINE)
-		{}
-
-		FormatterOption(char op_chIndent,
-						int op_nChPerInd,
-						CR_READ op_eCRRead,
-						CR_PUT op_eCRPut,
-						BRAC_NEWLINE op_eBracNL,
-						EMPTYLINE_INDENT op_eEmpytIndent):
-			chIndent(op_chIndent),
-			nChPerInd(op_nChPerInd),
-			eCRRead(op_eCRRead),
-			eCRPut(op_eCRPut),
-			eBracNL(op_eBracNL),
-			eEmpytIndent(op_eEmpytIndent)
-		{}
-	};
 
 	RealJSFormatter(const FormatterOption& option);
 

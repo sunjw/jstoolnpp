@@ -9,21 +9,22 @@ class JSFormatterStream: public RealJSFormatter
 {
 public:
 	JSFormatterStream(std::istream& input, std::ostream& output):
-		RealJSFormatter(RealJSFormatter::FormatterOption(
-						'\t', 1, 
-						RealJSFormatter::SKIP_READ_CR, 
-						RealJSFormatter::NOT_PUT_CR, 
-						RealJSFormatter::NO_NEWLINE_BRAC, 
-						RealJSFormatter::NO_INDENT_IN_EMPTYLINE)), 
+		RealJSFormatter(FormatterOption(
+						'\t', 
+						1, 
+						SKIP_READ_CR, 
+						NOT_PUT_CR, 
+						NO_NEWLINE_BRAC, 
+						NO_INDENT_IN_EMPTYLINE)), 
 		in(input), out(output)
 	{}
 	
 	JSFormatterStream(std::istream& input, std::ostream& output,
-						const RealJSFormatter::FormatterOption& option):
-		RealJSFormatter(RealJSFormatter::FormatterOption(
+						const FormatterOption& option):
+		RealJSFormatter(FormatterOption(
 						option.chIndent, 
 						option.nChPerInd, 
-						RealJSFormatter::SKIP_READ_CR, 
+						SKIP_READ_CR, 
 						option.eCRPut, 
 						option.eBracNL, 
 						option.eEmpytIndent)), 

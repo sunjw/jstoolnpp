@@ -391,6 +391,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\jsformatter.h"
+				>
+			</File>
+			<File
 				RelativePath=".\src\jsmin.h"
 				>
 			</File>
