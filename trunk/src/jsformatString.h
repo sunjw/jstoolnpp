@@ -2,7 +2,7 @@
 #define _JSFORMATSTRING_H_
 
 #include <string>
-
+#include "jsformatter.h"
 #include "realjsformatter.h"
 
 using namespace std;

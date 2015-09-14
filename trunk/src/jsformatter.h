@@ -81,8 +81,23 @@ struct _FormatterOption
 #endif
 };
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _FormatterOption FormatterOption;
 
+#ifdef LIBJSFORMATTER
+typedef char (*ReadCharFunc)(void *ioContext);
+typedef void (*WriteCharFunc)(void *ioContext, const char ch);
 
+__declspec(dllexport) void FormatJavaScript(ReadCharFunc readCharFunc, 
+											WriteCharFunc writeCharFunc,
+											const FormatterOption *option);
+#endif
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

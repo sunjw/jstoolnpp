@@ -2,7 +2,7 @@
 #define _JSMINSTREAM_H_
 
 #include <iostream>
-
+#include "jsformatter.h"
 #include "realjsformatter.h"
 
 class JSFormatterStream: public RealJSFormatter
