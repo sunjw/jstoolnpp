@@ -21,7 +21,7 @@ struct StreamIOContext
 	ostream *out;
 };
 
-char ReadCharFromStream(void *ioContext)
+static char ReadCharFromStream(void *ioContext)
 {
 	StreamIOContext *streamIOCtx = (StreamIOContext *)ioContext;
 	int ret = streamIOCtx->in->get();
@@ -30,7 +30,7 @@ char ReadCharFromStream(void *ioContext)
 	return ret;
 }
 
-void WriteCharFromStream(void *ioContext, const char ch)
+static void WriteCharFromStream(void *ioContext, const char ch)
 {
 	StreamIOContext *streamIOCtx = (StreamIOContext *)ioContext;
 	*(streamIOCtx->out) << static_cast<char>(ch);
