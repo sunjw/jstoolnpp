@@ -1,9 +1,9 @@
 sub-proj/JSFormatter/Debug/*
 sub-proj/JSFormatter/Release/*
+sub-proj/JSFormatter/JSFormatter.xcodeproj/xcuserdata/*
+sub-proj/JSFormatter/JSFormatter.xcodeproj/xcshareddata/*
 sub-proj/JSFormatterTest/Debug/*
 sub-proj/JSFormatterTest/Release/*
-sub-proj/JSFormatter/JSFormatter/JSFormatter.xcodeproj/xcuserdata/*
-sub-proj/JSFormatter/JSFormatter/JSFormatter.xcodeproj/xcshareddata/*
 sub-proj/JsonPP/Debug/*
 sub-proj/JsonPP/Release/*
 trunk/_UpgradeReport_Files/*
