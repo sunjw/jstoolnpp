@@ -6,6 +6,11 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		416F586B1BA84D8C0086D6D5 /* JSFormatterConsole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 416F586A1BA84D8C0086D6D5 /* JSFormatterConsole.cpp */; };
+		416F58701BA84E9E0086D6D5 /* libJSFormatter.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 416F586F1BA84E9E0086D6D5 /* libJSFormatter.dylib */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		416F585B1BA84C6F0086D6D5 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -20,6 +25,9 @@
 
 /* Begin PBXFileReference section */
 		416F585D1BA84C6F0086D6D5 /* JSFormatterTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = JSFormatterTest; sourceTree = BUILT_PRODUCTS_DIR; };
+		416F58691BA84D860086D6D5 /* jsformatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsformatter.h; path = ../../trunk/src/jsformatter.h; sourceTree = "<group>"; };
+		416F586A1BA84D8C0086D6D5 /* JSFormatterConsole.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = JSFormatterConsole.cpp; path = src/JSFormatterConsole.cpp; sourceTree = "<group>"; };
+		416F586F1BA84E9E0086D6D5 /* libJSFormatter.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libJSFormatter.dylib; path = ../../trunk/DerivedData/JSTool/Build/Products/Release/libJSFormatter.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				416F58701BA84E9E0086D6D5 /* libJSFormatter.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -36,7 +45,9 @@
 		416F58541BA84C6F0086D6D5 = {
 			isa = PBXGroup;
 			children = (
-				416F585F1BA84C6F0086D6D5 /* JSFormatterTest */,
+				416F58671BA84D690086D6D5 /* include */,
+				416F58681BA84D6E0086D6D5 /* src */,
+				416F58711BA84EAE0086D6D5 /* lib */,
 				416F585E1BA84C6F0086D6D5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -49,11 +60,28 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		416F585F1BA84C6F0086D6D5 /* JSFormatterTest */ = {
+		416F58671BA84D690086D6D5 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				416F58691BA84D860086D6D5 /* jsformatter.h */,
 			);
-			path = JSFormatterTest;
+			name = include;
+			sourceTree = "<group>";
+		};
+		416F58681BA84D6E0086D6D5 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				416F586A1BA84D8C0086D6D5 /* JSFormatterConsole.cpp */,
+			);
+			name = src;
+			sourceTree = "<group>";
+		};
+		416F58711BA84EAE0086D6D5 /* lib */ = {
+			isa = PBXGroup;
+			children = (
+				416F586F1BA84E9E0086D6D5 /* libJSFormatter.dylib */,
+			);
+			name = lib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -112,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				416F586B1BA84D8C0086D6D5 /* JSFormatterConsole.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -199,6 +228,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/sunjw/xcode_workspace/jstoolnpp/trunk/DerivedData/JSTool/Build/Products/Debug,
+					/Users/sunjw/xcode_workspace/jstoolnpp/trunk/DerivedData/JSTool/Build/Products/Release,
+				);
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx10.9;
@@ -209,6 +243,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/sunjw/xcode_workspace/jstoolnpp/trunk/DerivedData/JSTool/Build/Products/Debug,
+					/Users/sunjw/xcode_workspace/jstoolnpp/trunk/DerivedData/JSTool/Build/Products/Release,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx10.9;
 			};
