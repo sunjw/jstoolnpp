@@ -93,7 +93,7 @@ extern "C" {
 
 typedef struct _FormatterOption FormatterOption;
 
-#ifdef LIBJSFORMATTER
+#ifndef NOLIBJSFORMATTER
 typedef char (*ReadCharFunc)(void *ioContext);
 typedef void (*WriteCharFunc)(void *ioContext, const char ch);
 

@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\trunk\src"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;LIBJSFORMATTER"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -61,7 +61,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="JSFormatter.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="$(OutDir)\"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -117,7 +119,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\..\trunk\src"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;LIBJSFORMATTER"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -135,7 +137,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="JSFormatter.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="$(OutDir)\"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -177,23 +181,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\trunk\src\jsfGenericIO.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\trunk\src\jsformatter.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\JSFormatterConsole.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\trunk\src\jsparser.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\trunk\src\realjsformatter.cpp"
 				>
 			</File>
 		</Filter>
@@ -203,19 +191,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath="..\..\trunk\src\jsfGenericIO.h"
-				>
-			</File>
-			<File
 				RelativePath="..\..\trunk\src\jsformatter.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\trunk\src\jsparser.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\trunk\src\realjsformatter.h"
 				>
 			</File>
 		</Filter>
@@ -224,14 +200,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-		</Filter>
-		<Filter
-			Name="ÎÄµµ"
-			>
-			<File
-				RelativePath=".\doc\JSFormatterÎÄµµ.odt"
-				>
-			</File>
 		</Filter>
 	</Files>
 	<Globals>
