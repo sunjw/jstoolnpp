@@ -6,8 +6,27 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		416F58481BA849AA0086D6D5 /* jsfGenericIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 416F58441BA849AA0086D6D5 /* jsfGenericIO.h */; };
+		416F58491BA849AA0086D6D5 /* jsformatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 416F58451BA849AA0086D6D5 /* jsformatter.h */; };
+		416F584A1BA849AA0086D6D5 /* jsparser.h in Headers */ = {isa = PBXBuildFile; fileRef = 416F58461BA849AA0086D6D5 /* jsparser.h */; };
+		416F584B1BA849AA0086D6D5 /* realjsformatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 416F58471BA849AA0086D6D5 /* realjsformatter.h */; };
+		416F58501BA849CE0086D6D5 /* jsfGenericIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 416F584C1BA849CE0086D6D5 /* jsfGenericIO.cpp */; };
+		416F58511BA849CE0086D6D5 /* jsformatter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 416F584D1BA849CE0086D6D5 /* jsformatter.cpp */; };
+		416F58521BA849CE0086D6D5 /* jsparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 416F584E1BA849CE0086D6D5 /* jsparser.cpp */; };
+		416F58531BA849CE0086D6D5 /* realjsformatter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 416F584F1BA849CE0086D6D5 /* realjsformatter.cpp */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		416F583B1BA8477D0086D6D5 /* libJSFormatter.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libJSFormatter.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
+		416F58441BA849AA0086D6D5 /* jsfGenericIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsfGenericIO.h; path = ../../trunk/src/jsfGenericIO.h; sourceTree = "<group>"; };
+		416F58451BA849AA0086D6D5 /* jsformatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsformatter.h; path = ../../trunk/src/jsformatter.h; sourceTree = "<group>"; };
+		416F58461BA849AA0086D6D5 /* jsparser.h */ = {isa = PBXFileReference; fileEncoding = 2147486000; lastKnownFileType = sourcecode.c.h; name = jsparser.h; path = ../../trunk/src/jsparser.h; sourceTree = "<group>"; };
+		416F58471BA849AA0086D6D5 /* realjsformatter.h */ = {isa = PBXFileReference; fileEncoding = 2147486000; lastKnownFileType = sourcecode.c.h; name = realjsformatter.h; path = ../../trunk/src/realjsformatter.h; sourceTree = "<group>"; };
+		416F584C1BA849CE0086D6D5 /* jsfGenericIO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsfGenericIO.cpp; path = ../../trunk/src/jsfGenericIO.cpp; sourceTree = "<group>"; };
+		416F584D1BA849CE0086D6D5 /* jsformatter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsformatter.cpp; path = ../../trunk/src/jsformatter.cpp; sourceTree = "<group>"; };
+		416F584E1BA849CE0086D6D5 /* jsparser.cpp */ = {isa = PBXFileReference; fileEncoding = 2147486000; lastKnownFileType = sourcecode.cpp.cpp; name = jsparser.cpp; path = ../../trunk/src/jsparser.cpp; sourceTree = "<group>"; };
+		416F584F1BA849CE0086D6D5 /* realjsformatter.cpp */ = {isa = PBXFileReference; fileEncoding = 2147486000; lastKnownFileType = sourcecode.cpp.cpp; name = realjsformatter.cpp; path = ../../trunk/src/realjsformatter.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,6 +60,10 @@
 		416F58421BA8480B0086D6D5 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				416F58441BA849AA0086D6D5 /* jsfGenericIO.h */,
+				416F58471BA849AA0086D6D5 /* realjsformatter.h */,
+				416F58461BA849AA0086D6D5 /* jsparser.h */,
+				416F58451BA849AA0086D6D5 /* jsformatter.h */,
 			);
 			name = include;
 			sourceTree = "<group>";
@@ -48,6 +71,10 @@
 		416F58431BA848100086D6D5 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				416F584C1BA849CE0086D6D5 /* jsfGenericIO.cpp */,
+				416F584F1BA849CE0086D6D5 /* realjsformatter.cpp */,
+				416F584E1BA849CE0086D6D5 /* jsparser.cpp */,
+				416F584D1BA849CE0086D6D5 /* jsformatter.cpp */,
 			);
 			name = src;
 			sourceTree = "<group>";
@@ -59,6 +86,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				416F584B1BA849AA0086D6D5 /* realjsformatter.h in Headers */,
+				416F58491BA849AA0086D6D5 /* jsformatter.h in Headers */,
+				416F58481BA849AA0086D6D5 /* jsfGenericIO.h in Headers */,
+				416F584A1BA849AA0086D6D5 /* jsparser.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -118,6 +149,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				416F58501BA849CE0086D6D5 /* jsfGenericIO.cpp in Sources */,
+				416F58531BA849CE0086D6D5 /* realjsformatter.cpp in Sources */,
+				416F58511BA849CE0086D6D5 /* jsformatter.cpp in Sources */,
+				416F58521BA849CE0086D6D5 /* jsparser.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -240,6 +275,7 @@
 				416F58411BA8477D0086D6D5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
