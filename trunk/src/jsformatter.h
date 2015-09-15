@@ -21,6 +21,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #define _JSFORMATTER_H_
 // This is JSFormatter library include file.
 
+#ifdef WIN32
+#define DLLAPI __declspec(dllexport)
+#else
+#define DLLAPI
+#endif
+
 /*
  * CR_READ
  *   READ_CR, Read \r.
@@ -91,9 +97,9 @@ typedef struct _FormatterOption FormatterOption;
 typedef char (*ReadCharFunc)(void *ioContext);
 typedef void (*WriteCharFunc)(void *ioContext, const char ch);
 
-__declspec(dllexport) void FormatJavaScript(ReadCharFunc readCharFunc, 
-											WriteCharFunc writeCharFunc,
-											const FormatterOption *option);
+DLLAPI void FormatJavaScript(ReadCharFunc readCharFunc, 
+							 WriteCharFunc writeCharFunc,
+							 const FormatterOption *option);
 #endif
 
 #ifdef __cplusplus
