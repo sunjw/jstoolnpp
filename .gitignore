@@ -9,6 +9,9 @@ trunk/Debug/*
 trunk/Unicode Debug/*
 trunk/Release/*
 trunk/Unicode Release/*
+trunk/DerivedData/*
+trunk/JSTool.xcworkspace/xcuserdata/*
+trunk/JSTool.xcworkspace/xcshareddata/*
 *.aps
 *.ncb
 *.old
