@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8.00"
-	Name="JSFormatter"
+	Name="JSFormatterTest"
 	ProjectGUID="{82AD0251-9EF8-4D70-80D4-D1B1AC608224}"
 	RootNamespace="JSFormatter"
 	Keyword="Win32Proj"

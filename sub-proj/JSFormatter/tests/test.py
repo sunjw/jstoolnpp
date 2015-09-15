@@ -8,8 +8,8 @@ import os
 import platform
 import sys
 
-JSFORMATTER_PATH_WIN = "..\\..\\..\\trunk\\debug\\JSFormatter.exe"
-JSFORMATTER_REL_PATH_WIN = "..\\..\\..\\trunk\\release\\JSFormatter.exe"
+JSFORMATTER_PATH_WIN = "..\\..\\..\\trunk\\debug\\JSFormatterTest.exe"
+JSFORMATTER_REL_PATH_WIN = "..\\..\\..\\trunk\\release\\JSFormatterTest.exe"
 JSFORMATTER_PATH_MAC = "../DerivedData/JSFormatter/Build/Products/Debug/JSFormatter"
 JSFORMATTER_REL_PATH_MAC = "../DerivedData/JSFormatter/Build/Products/Release/JSFormatter"
 
