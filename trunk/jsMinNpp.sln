@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JsonPP", "..\sub-proj\JsonP
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSFormatterTest", "..\sub-proj\JSFormatterTest\JSFormatterTest.vcproj", "{82AD0251-9EF8-4D70-80D4-D1B1AC608224}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSFormatter", "..\sub-proj\JSFormatter\JSFormatter.vcproj", "{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -39,6 +41,14 @@ Global
 		{82AD0251-9EF8-4D70-80D4-D1B1AC608224}.Unicode Debug|Win32.Build.0 = Debug|Win32
 		{82AD0251-9EF8-4D70-80D4-D1B1AC608224}.Unicode Release|Win32.ActiveCfg = Release|Win32
 		{82AD0251-9EF8-4D70-80D4-D1B1AC608224}.Unicode Release|Win32.Build.0 = Release|Win32
+		{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}.Debug|Win32.Build.0 = Debug|Win32
+		{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}.Release|Win32.ActiveCfg = Release|Win32
+		{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}.Release|Win32.Build.0 = Release|Win32
+		{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}.Unicode Debug|Win32.ActiveCfg = Debug|Win32
+		{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}.Unicode Debug|Win32.Build.0 = Debug|Win32
+		{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}.Unicode Release|Win32.ActiveCfg = Release|Win32
+		{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}.Unicode Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
