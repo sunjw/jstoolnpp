@@ -97,7 +97,8 @@ typedef struct _FormatterOption FormatterOption;
 typedef char (*ReadCharFunc)(void *ioContext);
 typedef void (*WriteCharFunc)(void *ioContext, const char ch);
 
-DLLAPI void FormatJavaScript(ReadCharFunc readCharFunc, 
+DLLAPI void FormatJavaScript(void *ioContext,
+							 ReadCharFunc readCharFunc, 
 							 WriteCharFunc writeCharFunc,
 							 const FormatterOption *option);
 #endif

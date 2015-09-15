@@ -7,9 +7,34 @@
 #include <string>
 #include <stdexcept>
 
-#include "jsfStream.h"
+#include "jsformatter.h"
 
 using namespace std;
+
+struct StreamIOContext
+{
+	StreamIOContext(istream *i, ostream *o):
+	in(i), out(o)
+	{}
+
+	istream *in;
+	ostream *out;
+};
+
+char ReadCharFromStream(void *ioContext)
+{
+	StreamIOContext *streamIOCtx = (StreamIOContext *)ioContext;
+	int ret = streamIOCtx->in->get();
+	if(ret == EOF)
+		return 0;
+	return ret;
+}
+
+void WriteCharFromStream(void *ioContext, const char ch)
+{
+	StreamIOContext *streamIOCtx = (StreamIOContext *)ioContext;
+	*(streamIOCtx->out) << static_cast<char>(ch);
+}
 
 int main(int argc, char *argv[])
 {
@@ -50,9 +75,12 @@ int main(int argc, char *argv[])
 			option.eBracNL = NO_NEWLINE_BRAC;
 			option.eEmpytIndent = NO_INDENT_IN_EMPTYLINE;
 
-			JSFormatterStream jsf(inFileStream2, outStrStream, option);
-			jsf.m_debug = true;
-			jsf.Go();
+			StreamIOContext streamIOCtx(&inFileStream2, &outStrStream);
+
+			FormatJavaScript((void *)&(streamIOCtx), 
+							ReadCharFromStream,
+							WriteCharFromStream,
+							&option);
 
 			string output = outStrStream.str();
 

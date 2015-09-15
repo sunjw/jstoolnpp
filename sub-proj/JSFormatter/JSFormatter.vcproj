@@ -189,10 +189,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\jsfStream.cpp"
-				>
-			</File>
-			<File
 				RelativePath="..\..\trunk\src\jsparser.cpp"
 				>
 			</File>
@@ -212,10 +208,6 @@
 			</File>
 			<File
 				RelativePath="..\..\trunk\src\jsformatter.h"
-				>
-			</File>
-			<File
-				RelativePath=".\src\jsfStream.h"
 				>
 			</File>
 			<File
