@@ -10,8 +10,10 @@ import sys
 
 JSFORMATTER_PATH_WIN = "..\\..\\..\\trunk\\debug\\JSFormatterTest.exe"
 JSFORMATTER_REL_PATH_WIN = "..\\..\\..\\trunk\\release\\JSFormatterTest.exe"
-JSFORMATTER_PATH_MAC = "../DerivedData/JSFormatter/Build/Products/Debug/JSFormatter"
-JSFORMATTER_REL_PATH_MAC = "../DerivedData/JSFormatter/Build/Products/Release/JSFormatter"
+JSFORMATTER_LIB_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Debug"
+JSFORMATTER_LIB_REL_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release"
+JSFORMATTER_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Debug/JSFormatterTest"
+JSFORMATTER_REL_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release/JSFormatterTest"
 
 JSFORMATTER_PATH_SEL = ""
 
@@ -21,6 +23,9 @@ class TestCase:
 	
 def is_windows_sys():
 	return (platform.system() == "Windows")
+
+def is_osx_sys():
+	return (platform.system() == "Darwin")
 
 def list_file():
 	files = [f for f in os.listdir('.') if os.path.isfile(f)]
@@ -85,6 +90,14 @@ def main():
 	if len(sys.argv) == 2 and sys.argv[1] == "release":
 		release = True
 	
+	JSFORMATTER_LIB_PATH_SEL = ""
+	if is_osx_sys():
+		JSFORMATTER_LIB_PATH_SEL = JSFORMATTER_LIB_PATH_MAC
+		if release:
+			JSFORMATTER_LIB_PATH_SEL = JSFORMATTER_LIB_REL_PATH_MAC
+
+		os.environ["DYLD_LIBRARY_PATH"] = JSFORMATTER_LIB_PATH_SEL
+	
 	# run cases
 	for name, case in test_cases.items():
 		print "name: " + name
@@ -97,7 +110,9 @@ def main():
 			return;
 		
 		print ""
-	
+
+	if is_osx_sys():
+		print "DYLD_LIBRARY_PATH=" + os.environ["DYLD_LIBRARY_PATH"]
 	print "Using " + JSFORMATTER_PATH_SEL
 	print "%d cases" % len(test_cases)
 	print "ALL PASS"

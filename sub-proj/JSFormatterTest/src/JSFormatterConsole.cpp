@@ -85,7 +85,8 @@ int main(int argc, char *argv[])
 			FormatJavaScript((void *)&(streamIOCtx), 
 							StreamIOContext::ReadCharFromStream,
 							StreamIOContext::WriteCharFromStream,
-							&option);
+							&option,
+							true);
 
 			string output = outStrStream.str();
 

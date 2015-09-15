@@ -100,7 +100,8 @@ typedef void (*WriteCharFunc)(void *ioContext, const char ch);
 DLLAPI void FormatJavaScript(void *ioContext,
 							 ReadCharFunc readCharFunc, 
 							 WriteCharFunc writeCharFunc,
-							 const FormatterOption *option);
+							 const FormatterOption *option,
+							 bool debug = false);
 #endif
 
 #ifdef __cplusplus

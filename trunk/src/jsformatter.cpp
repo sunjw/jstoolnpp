@@ -5,7 +5,8 @@
 DLLAPI void FormatJavaScript(void *ioContext,
 							 ReadCharFunc readCharFunc, 
 							 WriteCharFunc writeCharFunc,
-							 const FormatterOption *option)
+							 const FormatterOption *option,
+							 bool debug)
 {
 	JSFormatGenericIO jsf(ioContext, readCharFunc, writeCharFunc, 
 							FormatterOption(option->chIndent,
@@ -14,5 +15,7 @@ DLLAPI void FormatJavaScript(void *ioContext,
 											option->eCRPut,
 											option->eBracNL,
 											option->eEmpytIndent));
+
+	jsf.m_debug = debug;
 	jsf.Go();
 }
