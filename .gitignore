@@ -1,5 +1,7 @@
 sub-proj/JSFormatter/Debug/*
 sub-proj/JSFormatter/Release/*
+sub-proj/JSFormatterTest/Debug/*
+sub-proj/JSFormatterTest/Release/*
 sub-proj/JsonPP/Debug/*
 sub-proj/JsonPP/Release/*
 trunk/_UpgradeReport_Files/*
