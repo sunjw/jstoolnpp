@@ -24,6 +24,8 @@
 		416F58321BA8477D0086D6D5 = {
 			isa = PBXGroup;
 			children = (
+				416F58421BA8480B0086D6D5 /* include */,
+				416F58431BA848100086D6D5 /* src */,
 				416F583C1BA8477D0086D6D5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -34,6 +36,20 @@
 				416F583B1BA8477D0086D6D5 /* libJSFormatter.dylib */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		416F58421BA8480B0086D6D5 /* include */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = include;
+			sourceTree = "<group>";
+		};
+		416F58431BA848100086D6D5 /* src */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
