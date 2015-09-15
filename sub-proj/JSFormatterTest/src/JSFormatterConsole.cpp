@@ -11,29 +11,34 @@
 
 using namespace std;
 
-struct StreamIOContext
+class StreamIOContext
 {
-	StreamIOContext(istream *i, ostream *o):
+public:
+	StreamIOContext(istream& i, ostream& o):
 	in(i), out(o)
 	{}
 
-	istream *in;
-	ostream *out;
+	static char ReadCharFromStream(void *ioContext);
+	static void WriteCharFromStream(void *ioContext, const char ch);
+
+private:
+	istream& in;
+	ostream& out;
 };
 
-static char ReadCharFromStream(void *ioContext)
+char StreamIOContext::ReadCharFromStream(void *ioContext)
 {
 	StreamIOContext *streamIOCtx = (StreamIOContext *)ioContext;
-	int ret = streamIOCtx->in->get();
+	int ret = streamIOCtx->in.get();
 	if(ret == EOF)
 		return 0;
 	return ret;
 }
 
-static void WriteCharFromStream(void *ioContext, const char ch)
+void StreamIOContext::WriteCharFromStream(void *ioContext, const char ch)
 {
 	StreamIOContext *streamIOCtx = (StreamIOContext *)ioContext;
-	*(streamIOCtx->out) << static_cast<char>(ch);
+	(streamIOCtx->out) << static_cast<char>(ch);
 }
 
 int main(int argc, char *argv[])
@@ -75,11 +80,11 @@ int main(int argc, char *argv[])
 			option.eBracNL = NO_NEWLINE_BRAC;
 			option.eEmpytIndent = NO_INDENT_IN_EMPTYLINE;
 
-			StreamIOContext streamIOCtx(&inFileStream2, &outStrStream);
+			StreamIOContext streamIOCtx(inFileStream2, outStrStream);
 
 			FormatJavaScript((void *)&(streamIOCtx), 
-							ReadCharFromStream,
-							WriteCharFromStream,
+							StreamIOContext::ReadCharFromStream,
+							StreamIOContext::WriteCharFromStream,
 							&option);
 
 			string output = outStrStream.str();
