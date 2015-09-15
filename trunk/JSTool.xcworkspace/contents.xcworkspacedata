@@ -4,4 +4,7 @@
    <FileRef
       location = "group:../sub-proj/JSFormatter/JSFormatter.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:../sub-proj/JSFormatterTest/JSFormatterTest.xcodeproj">
+   </FileRef>
 </Workspace>
