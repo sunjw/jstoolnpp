@@ -7,6 +7,7 @@ import hashlib
 import os
 import platform
 import sys
+from subprocess import call
 
 JSFORMATTER_PATH_WIN = "..\\..\\..\\trunk\\debug\\JSFormatterTest.exe"
 JSFORMATTER_REL_PATH_WIN = "..\\..\\..\\trunk\\release\\JSFormatterTest.exe"
@@ -73,7 +74,8 @@ def run_case(test_case, release):
 	
 	result = "ERROR"
 	
-	os.system(JSFORMATTER_PATH_SEL + " " + test_case.source + " out.js")
+	# os.system(JSFORMATTER_PATH_SEL + " " + test_case.source + " out.js")
+	call([JSFORMATTER_PATH_SEL, test_case.source, "out.js"])
 	out_md5 = hashlib.md5(open("out.js").read()).hexdigest()
 	result_md5 = hashlib.md5(open(test_case.result).read()).hexdigest()
 	if out_md5 == result_md5:
