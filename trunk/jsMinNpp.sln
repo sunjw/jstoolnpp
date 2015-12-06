@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual Studio 2005
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSMinNPP", "JSMinNPP.vcproj", "{1590D7CD-7D3A-4AB7-A355-EE02F7FB987D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JsonPP", "..\sub-proj\JsonPP\JsonPP.vcproj", "{46AA0176-C11F-4539-A521-8FF0D57CC087}"
