@@ -69,8 +69,8 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/NppTools.pdb"
 				SubSystem="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
+				RandomizedBaseAddress="2"
+				DataExecutionPrevention="2"
 				ImportLibrary="$(OutDir)/NppTools.lib"
 				TargetMachine="1"
 			/>
@@ -150,8 +150,8 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
+				RandomizedBaseAddress="2"
+				DataExecutionPrevention="2"
 				ImportLibrary="$(OutDir)/NppTools.lib"
 				TargetMachine="1"
 			/>
@@ -231,8 +231,8 @@
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
+				RandomizedBaseAddress="2"
+				DataExecutionPrevention="2"
 				ImportLibrary="$(OutDir)/NppTools.lib"
 				TargetMachine="1"
 			/>
@@ -311,8 +311,8 @@
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/NppTools.pdb"
 				SubSystem="2"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
+				RandomizedBaseAddress="2"
+				DataExecutionPrevention="2"
 				ImportLibrary="$(OutDir)/NppTools.lib"
 				TargetMachine="1"
 			/>
