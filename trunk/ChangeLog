@@ -1,3 +1,9 @@
+1.17.2
+Fix inline comment format.
+Switch to VS2008.
+Enable DEP and ASLR.
+Other tweak.
+
 1.16.10
 Fix configuration saving bug.
 
