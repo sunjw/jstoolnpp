@@ -648,11 +648,21 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			(topStack == JS_IF && m_tokenB.code == "else") ||
 			(topStack == JS_TRY && m_tokenB.code == "catch") ||
 			m_tokenB.code == ")")))
-			PutToken(m_tokenA, leftStyle, strRight.append("\n")); // 一些情况换行
-		else if(m_tokenB.type == STRING_TYPE || m_tokenB.type == COMMENT_TYPE_1 || IsInlineComment(m_tokenB))
+		{
+			if(strRight.length() == 0 || strRight[strRight.length() - 1] != '\n')
+				strRight.append("\n"); // 一些情况换行, 不要重复换行
+
+			PutToken(m_tokenA, leftStyle, strRight);
+		}
+		else if(m_tokenB.type == STRING_TYPE || m_tokenB.type == COMMENT_TYPE_1 || 
+			IsInlineComment(m_tokenB))
+		{
 			PutToken(m_tokenA, leftStyle, strRight); // 为 else 准备的空格
+		}
 		else
+		{
 			PutToken(m_tokenA, leftStyle); // }, }; })
+		}
 		// 注意 ) 不要在输出时仿照 ,; 取消前面的换行
 
 		//char tmpTopStack;
