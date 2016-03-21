@@ -642,7 +642,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 
 		if((!bHaveNewLine && 
-			m_tokenB.code != ";" && m_tokenB.code != "," && !IsInlineComment(m_tokenB)) && 
+			m_tokenB.code != ";" && m_tokenB.code != "," && m_tokenB.code != "=" &&
+			!IsInlineComment(m_tokenB)) && 
 			(m_struOption.eBracNL == NEWLINE_BRAC || 
 			!((topStack == JS_DO && m_tokenB.code == "while") ||
 			(topStack == JS_IF && m_tokenB.code == "else") ||
@@ -654,7 +655,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 			PutToken(m_tokenA, leftStyle, strRight);
 		}
-		else if(m_tokenB.type == STRING_TYPE || m_tokenB.type == COMMENT_TYPE_1 || 
+		else if(m_tokenB.type == STRING_TYPE || 
+			m_tokenB.type == COMMENT_TYPE_1 ||
 			IsInlineComment(m_tokenB))
 		{
 			PutToken(m_tokenA, leftStyle, strRight); // 为 else 准备的空格
