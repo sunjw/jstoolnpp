@@ -148,7 +148,7 @@ protected:
 	bool inline IsQuote(int ch)
 	{
 		// ÒýºÅ
-		return (ch == '\'' || ch == '\"');
+		return (ch == '\'' || ch == '\"' || ch == '`');
 	}
 
 	bool IsInlineComment(const Token& token);
