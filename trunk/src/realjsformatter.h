@@ -66,6 +66,7 @@ private:
 	void PutLineBuffer();
 
 	int m_nLineIndents;
+	int m_bLineTemplate;
 	string m_lineBuffer;
 
 	StrSet m_specKeywordSet; // 后面要跟着括号的关键字集合
@@ -82,6 +83,7 @@ private:
 	bool m_bEmptyBracket; // 空 {}
 
 	bool m_bCommentPut; // 刚刚输出了注释
+	bool m_bTemplatePut; // Template String
 
 	string m_initIndent; // 起始缩进
 

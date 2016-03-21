@@ -76,11 +76,14 @@ void RealJSFormatter::Init()
 
 	m_nIndents = 0;
 	m_nLineIndents = 0;
+	m_bLineTemplate = false;
 	m_bNewLine = false;
+
 	m_bBlockStmt = true;
 	m_bAssign = false;
 	m_bEmptyBracket = false;
 	m_bCommentPut = false;
+	m_bTemplatePut = false;
 
 	m_blockMap[string("if")] = JS_IF;
 	m_blockMap[string("else")] = JS_ELSE;
@@ -134,14 +137,15 @@ void RealJSFormatter::PutString(const Token& token)
 	//char topStack = m_blockStack.top();
 	for(size_t i = 0; i < length; ++i)
 	{
-		if(m_bNewLine && (m_bCommentPut ||
+		if(m_bNewLine && (m_bCommentPut || 
 			((m_struOption.eBracNL == NEWLINE_BRAC || token.code[i] != '{') && 
-				token.code[i] != ',' && token.code[i] != ';' && !IsInlineComment(token))))
+			token.code[i] != ',' && token.code[i] != ';' && !IsInlineComment(token))))
 		{
 			// 换行后面不是紧跟着 {,; 才真正换
 			PutLineBuffer(); // 输出行缓冲
 
 			m_lineBuffer = "";
+			m_bLineTemplate = false;
 			m_bNewLine = false;
 			m_nIndents = m_nIndents < 0 ? 0 : m_nIndents; // 出错修正
 			m_nLineIndents = m_nIndents;
@@ -153,6 +157,9 @@ void RealJSFormatter::PutString(const Token& token)
 			((m_struOption.eBracNL == NO_NEWLINE_BRAC && token.code[i] == '{') || 
 			token.code[i] == ',' || token.code[i] == ';' || IsInlineComment(token)))
 			m_bNewLine = false;
+
+		if(m_lineBuffer.length() == 0 && m_bTemplatePut)
+			m_bLineTemplate = true;
 
 		if(token.code[i] == '\n')
 			m_bNewLine = true;
@@ -175,9 +182,13 @@ void RealJSFormatter::PutString(const string& str)
 void RealJSFormatter::PutLineBuffer()
 {
 	string line;
-	line.append(TrimRightSpace(m_lineBuffer));
+	if(!m_bLineTemplate)
+		line.append(TrimRightSpace(m_lineBuffer));
+	else
+		line.append(m_lineBuffer); // 原样输出 Template String
 	
-	if(line != "" || m_struOption.eEmpytIndent == INDENT_IN_EMPTYLINE) // Fix "JSLint unexpect space" bug
+	if(!m_bLineTemplate && 
+		(line != "" || m_struOption.eEmpytIndent == INDENT_IN_EMPTYLINE)) // Fix "JSLint unexpect space" bug
 	{
 		for(size_t i = 0; i < m_initIndent.length(); ++i)
 			PutChar(m_initIndent[i]); // 先输出预缩进
@@ -323,7 +334,8 @@ void RealJSFormatter::Go()
 		}
 	}
 
-	m_lineBuffer = Trim(m_lineBuffer);
+	if(!m_bLineTemplate)
+		m_lineBuffer = Trim(m_lineBuffer);
 	if(m_lineBuffer.length())
 		PutLineBuffer();
 
@@ -774,9 +786,19 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 
 	if(m_specKeywordSet.find(m_tokenA.code) != m_specKeywordSet.end() &&
 		m_tokenB.code != ";")
+	{
 		PutToken(m_tokenA, string(""), string(" "));
-	else
+	}
+	else if(m_tokenA.code[0] == '`' && m_tokenA.code[m_tokenA.code.length()-1] == '`')
+	{
+		m_bTemplatePut = true;
 		PutToken(m_tokenA);
+		m_bTemplatePut = false;
+	}
+	else
+	{
+		PutToken(m_tokenA);
+	}
 
 	if(m_tokenA.code == "if" || m_tokenA.code == "for" ||
 		m_tokenA.code == "while" || m_tokenA.code == "catch")
