@@ -1208,7 +1208,6 @@
 								newContext.querySelectorAll(newSelector));
 							return results;
 						} catch (qsaError) {}
-
 						finally {
 							if (!old) {
 								context.removeAttribute("id");
@@ -8078,7 +8077,6 @@
 				props : jQuery.extend({}, properties),
 				opts : jQuery.extend(true, {
 					specialEasing : {}
-
 				}, options),
 				originalProperties : properties,
 				originalOptions : options,

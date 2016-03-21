@@ -232,7 +232,6 @@ function ha(a) {
 		try {
 			d = eval("_" + a)
 		} catch (c) {}
-
 	z(d, "Cannot call unknown function " + a + " (perhaps LLVM optimizations or closure removed it?)");
 	return d
 }
@@ -552,7 +551,6 @@ function wa(a) {
 			if (0 === sa(f, "i32") && g)
 				return D(g)
 		} catch (h) {}
-
 	finally {
 		e && xa(e),
 		f && xa(f),
@@ -12721,7 +12719,6 @@ var $ = (function (global, env, buffer) {
 																case 0:
 																	break h;
 																default: {}
-
 																}
 																c[K >> 2] = 0
 															}
@@ -18313,7 +18310,6 @@ var $ = (function (global, env, buffer) {
 		return h | 0
 	}
 	function ke() {}
-
 	function le(a, b, c) {
 		a = a | 0;
 		b = b | 0;
@@ -19156,7 +19152,6 @@ n.callMain = n.la = function (a) {
 						typeof h && h.stack) && n.e("exception thrown: " + [h, h.stack]), b(h)))
 	}
 	finally {}
-
 };
 function nb(a) {
 	function d() {

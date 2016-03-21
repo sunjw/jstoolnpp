@@ -67,7 +67,6 @@ var YUI = function () {
 			try {
 				y.removeEventListener(x, w, u);
 			} catch (v) {}
-
 		} else {
 			if (y && y.detachEvent) {
 				y.detachEvent("on" + x, w);
@@ -726,7 +725,6 @@ YUI.add("yui-base", function (b) {
 							x = 2;
 						}
 					} catch (y) {}
-
 				}
 			}
 			return x;

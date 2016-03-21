@@ -4181,7 +4181,6 @@
 								return makeArray(context.querySelectorAll("#" + nid + " " + query), extra);
 
 							} catch (pseudoError) {}
-
 							finally {
 								if (!old) {
 									context.removeAttribute("id");

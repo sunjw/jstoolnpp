@@ -21,7 +21,6 @@
 				try {
 					d = d === "true" ? true : d === "false" ? false : d === "null" ? null : !c.isNaN(d) ? parseFloat(d) : Ja.test(d) ? c.parseJSON(d) : d
 				} catch (e) {}
-
 				c.data(a, b, d)
 			} else
 				d = B
@@ -454,7 +453,6 @@
 						try {
 							j = E.frameElement == null
 						} catch (s) {}
-
 						t.documentElement.doScroll && j && a()
 					}
 				}
@@ -645,7 +643,6 @@
 				}
 			},
 			browser : {}
-
 		});
 		b.each("Boolean Number String Function Array Date RegExp Object".split(" "), function (j, s) {
 			R["[object " + s + "]"] = s.toLowerCase()
@@ -721,7 +718,6 @@
 			try {
 				b.appendChild(t.createTextNode("window." + e + "=1;"))
 			} catch (o) {}
-
 			a.insertBefore(b, a.firstChild);
 			if (E[e]) {
 				c.support.scriptEval = true;
@@ -1211,7 +1207,6 @@
 					} else if (!k) {
 						a.nodeType || (h[l] = h = function () {});
 						h.events = k = {}
-
 					}
 					if (!o)
 						h.handle = o = function () {
@@ -1375,7 +1370,6 @@
 						a.preventDefault()
 					}
 			} catch (h) {}
-
 			if (!a.isPropagationStopped() && e)
 				c.event.trigger(a, b, e, true);
 			else if (!a.isDefaultPrevented()) {
@@ -1394,7 +1388,6 @@
 							e[k]()
 						}
 					} catch (r) {}
-
 					if (l)
 						e["on" + k] = l;
 					c.event.triggered = false
@@ -1563,7 +1556,6 @@
 				c.event.handle.apply(this, arguments)
 			}
 		} catch (d) {}
-
 	},
 	wa = function (a) {
 		a.type = a.data;
@@ -1847,7 +1839,6 @@
 				try {
 					c.event.remove(c.cache[a].handle.elem)
 				} catch (b) {}
-
 	});
 	(function () {
 		function a(g, i, n, m, p, q) {
@@ -2576,7 +2567,6 @@
 							try {
 								return C(p.querySelectorAll(m), q)
 							} catch (y) {}
-
 						else if (p.nodeType === 1 && p.nodeName.toLowerCase() !== "object") {
 							var F = p.getAttribute("id"),
 							M = F || "__sizzle__";
@@ -2584,7 +2574,6 @@
 							try {
 								return C(p.querySelectorAll("#" + M + " " + m), q)
 							} catch (N) {}
-
 							finally {
 								F ||
 								p.removeAttribute("id")
@@ -2615,7 +2604,6 @@
 							if (n || !o.match.PSEUDO.test(q) && !/!=/.test(q))
 								return i.call(p, q)
 						} catch (u) {}
-
 					return k(q, null, null, [p]).length > 0
 				}
 		})();
@@ -3242,7 +3230,6 @@
 							try {
 								l[b] = d
 							} catch (o) {}
-
 					}
 				} else {
 					if (k && "get" in k && (f = k.get(a, false, e)) !== B)
@@ -3468,7 +3455,6 @@
 				e = e || d;
 				d = b;
 				b = {}
-
 			}
 			return c.ajax({
 				type : "POST",
@@ -3534,7 +3520,6 @@
 						try {
 							delete E[d]
 						} catch (p) {}
-
 					}
 					f = m;
 					c.handleSuccess(b, w, e, f);
@@ -3590,7 +3575,6 @@
 					o || w.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 					w.setRequestHeader("Accept", b.dataType && b.accepts[b.dataType] ? b.accepts[b.dataType] + ", */*; q=0.01" : b.accepts._default)
 				} catch (I) {}
-
 				if (b.beforeSend && b.beforeSend.call(b.context, w, b) === false) {
 					b.global && c.active-- === 1 && c.event.trigger("ajaxStop");
 					w.abort();
@@ -3634,7 +3618,6 @@
 						L("abort")
 					}
 				} catch (i) {}
-
 				b.async && b.timeout > 0 && setTimeout(function () {
 					w && !J && L("timeout")
 				}, b.timeout);
@@ -3692,7 +3675,6 @@
 			try {
 				return !a.status && location.protocol === "file:" || a.status >= 200 && a.status < 300 || a.status === 304 || a.status === 1223
 			} catch (b) {}
-
 			return false
 		},
 		httpNotModified : function (a, b) {
@@ -3725,11 +3707,9 @@
 				try {
 					return new E.XMLHttpRequest
 				} catch (a) {}
-
 			try {
 				return new E.ActiveXObject("Microsoft.XMLHTTP")
 			} catch (b) {}
-
 		};
 	c.support.ajax = !!c.ajaxSettings.xhr();
 	var ea = {},
@@ -3924,7 +3904,6 @@
 			this.prop = d;
 			if (!b.orig)
 				b.orig = {}
-
 		}
 	});
 	c.fx.prototype = {
@@ -4055,7 +4034,6 @@
 		try {
 			d = b.getBoundingClientRect()
 		} catch (e) {}
-
 		var f = b.ownerDocument,
 		h = f.documentElement;
 		if (!d || !c.contains(h, b))

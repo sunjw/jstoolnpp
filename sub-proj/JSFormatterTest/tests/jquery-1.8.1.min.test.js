@@ -15,7 +15,6 @@
 				try {
 					d = d === "true" ? !0 : d === "false" ? !1 : d === "null" ? null : +d + "" === d ? +d : H.test(d) ? p.parseJSON(d) : d
 				} catch (f) {}
-
 				p.data(a, c, d)
 			} else
 				d = b
@@ -334,13 +333,11 @@
 		try {
 			return new a.XMLHttpRequest
 		} catch (b) {}
-
 	}
 	function cM() {
 		try {
 			return new a.ActiveXObject("Microsoft.XMLHTTP")
 		} catch (b) {}
-
 	}
 	function cU() {
 		return setTimeout(function () {
@@ -382,7 +379,6 @@
 				props : p.extend({}, b),
 				opts : p.extend(!0, {
 					specialEasing : {}
-
 				}, c),
 				originalProperties : b,
 				originalOptions : c,
@@ -889,7 +885,6 @@
 				try {
 					c = a.frameElement == null && e.documentElement
 				} catch (f) {}
-
 				c && c.doScroll && function g() {
 					if (!p.isReady) {
 						try {
@@ -1405,7 +1400,6 @@
 					this[a] = b,
 					delete this[a]
 				} catch (c) {}
-
 			})
 		},
 		addClass : function (a) {
@@ -2006,7 +2000,6 @@
 					type : a,
 					isSimulated : !0,
 					originalEvent : {}
-
 				});
 			d ? p.event.trigger(e, null, b) : p.event.dispatch.call(b, e),
 			e.isDefaultPrevented() && c.preventDefault()
@@ -2681,7 +2674,6 @@
 			match : S,
 			order : new RegExp("ID|TAG" + (Y ? "|NAME" : "") + (X ? "|CLASS" : "")),
 			attrHandle : V ? {}
-
 			 : {
 				href : function (a) {
 					return a.getAttribute("href", 2)
@@ -3076,7 +3068,6 @@
 							return u.apply(f, t.call(d.querySelectorAll(a), 0)),
 							f
 						} catch (i) {}
-
 					else if (d.nodeType === 1 && d.nodeName.toLowerCase() !== "object") {
 						var j,
 						k,
@@ -3093,7 +3084,6 @@
 							return u.apply(f, t.call(p.querySelectorAll(j.join(",")), 0)),
 							f
 						} catch (i) {}
-
 						finally {
 							m || d.removeAttribute("id")
 						}
@@ -3106,7 +3096,6 @@
 						g.call(b, "[test!='']:sizzle"),
 						f.push(S.PSEUDO.source, S.POS.source, "!=")
 					} catch (c) {}
-
 				}), f = new RegExp(f.join("|")), $.matchesSelector = function (b, c) {
 				c = c.replace(d, "='$1']");
 				if (!h(b) && !f.test(c) && (!e || !e.test(c)))
@@ -3115,7 +3104,6 @@
 						if (i || a || b.document && b.document.nodeType !== 11)
 							return i
 					} catch (j) {}
-
 				return $(c, null, null, [b]).length > 0
 			})
 		}
@@ -3432,7 +3420,6 @@
 						c.nodeType === 1 && (p.cleanData(c.getElementsByTagName("*")), c.innerHTML = a);
 						c = 0
 					} catch (f) {}
-
 				}
 				c && this.empty().append(a)
 			}, null, a, arguments.length)
@@ -3768,7 +3755,6 @@
 				try {
 					j[c] = d
 				} catch (k) {}
-
 		},
 		css : function (a, c, d, e) {
 			var f,
@@ -4210,7 +4196,6 @@
 		active : 0,
 		lastModified : {},
 		etag : {}
-
 	});
 	var cE = [],
 	cF = /\?/,
@@ -4326,7 +4311,6 @@
 						for (h in e)
 							i.setRequestHeader(h, e[h])
 					} catch (j) {}
-
 					i.send(c.hasContent && c.data || null),
 					d = function (a, e) {
 						var h,
@@ -4349,7 +4333,6 @@
 									try {
 										l.text = i.responseText
 									} catch (a) {}
-
 									try {
 										j = i.statusText
 									} catch (n) {

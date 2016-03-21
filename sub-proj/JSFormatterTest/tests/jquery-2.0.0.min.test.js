@@ -501,7 +501,6 @@
 							return H.apply(n, x.querySelectorAll(w)),
 							n
 						} catch (T) {}
-
 					finally {
 						d || t.removeAttribute("id")
 					}
@@ -634,7 +633,6 @@
 					if (n || b.disconnectedMatch || e.document && 11 !== e.document.nodeType)
 						return n
 				} catch (r) {}
-
 			return ut(t, c, null, [e]).length > 0
 		},
 		ut.contains = function (e, t) {
@@ -1238,7 +1236,6 @@
 		}
 		r.pseudos.nth = r.pseudos.eq;
 		function Nt() {}
-
 		Nt.prototype = r.filters = r.pseudos,
 		r.setFilters = new Nt,
 		b.sortStable = y.split("").sort(S).join("") === y,
@@ -1460,7 +1457,6 @@
 		Object.defineProperty(this.cache = {}, 0, {
 			get : function () {
 				return {}
-
 			}
 		}),
 		this.expando = x.expando + Math.random()
@@ -1598,7 +1594,6 @@
 				try {
 					n = "true" === n ? !0 : "false" === n ? !1 : "null" === n ? null : +n + "" === n ? +n : H.test(n) ? JSON.parse(n) : n
 				} catch (i) {}
-
 				L.set(e, t, n)
 			} else
 				n = undefined;
@@ -1926,7 +1921,6 @@
 		try {
 			return o.activeElement
 		} catch (e) {}
-
 	}
 	x.event = {
 		global : {},
@@ -2145,7 +2139,6 @@
 					type : e,
 					isSimulated : !0,
 					originalEvent : {}
-
 				});
 			r ? x.event.trigger(i, null, t) : x.event.dispatch.call(t, i),
 			i.isDefaultPrevented() && n.preventDefault()
@@ -2515,7 +2508,6 @@
 						1 === t.nodeType && (x.cleanData(gt(t, !1)), t.innerHTML = e);
 						t = 0
 					} catch (i) {}
-
 				}
 				t && this.empty().append(e)
 			}, null, e, arguments.length)
@@ -3458,7 +3450,6 @@
 		try {
 			return new XMLHttpRequest
 		} catch (e) {}
-
 	};
 	var dn = x.ajaxSettings.xhr(),
 	gn = {
@@ -3581,7 +3572,6 @@
 				props : x.extend({}, t),
 				opts : x.extend(!0, {
 					specialEasing : {}
-
 				}, n),
 				originalProperties : t,
 				originalOptions : n,

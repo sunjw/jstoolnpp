@@ -395,7 +395,6 @@
 		}
 		if (typeof J !== "object" && !o.isFunction(J)) {
 			J = {}
-
 		}
 		if (I == H) {
 			J = this;
@@ -485,7 +484,6 @@
 					}
 				} else {
 					for (var J = G[0]; H < I && K.call(J, H, J) !== false; J = G[++H]) {}
-
 				}
 			}
 			return G
@@ -921,7 +919,6 @@
 			}
 			if (E && !o.cache[H]) {
 				o.cache[H] = {}
-
 			}
 			if (G !== g) {
 				o.cache[H][E] = G
@@ -1271,7 +1268,6 @@
 					for (var W = 0, V = aa.length, U; W < V; W++) {
 						if ((U = aa[W])) {
 							while ((U = U.previousSibling) && U.nodeType !== 1) {}
-
 							aa[W] = Y || U && U.nodeName === T ? U || false : U === T
 						}
 					}
@@ -1370,7 +1366,6 @@
 				},
 				TAG : function (U, T) {
 					for (var V = 0; T[V] === false; V++) {}
-
 					return T[V] && Q(T[V]) ? U[1] : U[1].toUpperCase()
 				},
 				CHILD : function (T) {
@@ -1721,7 +1716,6 @@
 						try {
 							return E(X.querySelectorAll(Y), V)
 						} catch (Z) {}
-
 					}
 					return T(Y, X, V, W)
 				};
@@ -2050,7 +2044,6 @@
 				try {
 					H[G]()
 				} catch (L) {}
-
 			}
 			this.triggered = false;
 			if (!I.isPropagationStopped()) {
@@ -2137,7 +2130,6 @@
 			ready : {
 				setup : B,
 				teardown : function () {}
-
 			}
 		},
 		specialAll : {
@@ -2434,7 +2426,6 @@
 		try {
 			G.appendChild(document.createTextNode("window." + J + "=1;"))
 		} catch (I) {}
-
 		F.insertBefore(G, F.firstChild);
 		if (l[J]) {
 			o.support.scriptEval = true;
@@ -2561,7 +2552,6 @@
 			if (o.isFunction(G)) {
 				H = G;
 				G = {}
-
 			}
 			return o.ajax({
 				type : "POST",
@@ -2631,7 +2621,6 @@
 					try {
 						delete l[W]
 					} catch (Y) {}
-
 					if (H) {
 						H.removeChild(T)
 					}
@@ -2692,7 +2681,6 @@
 				J.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 				J.setRequestHeader("Accept", M.dataType && M.accepts[M.dataType] ? M.accepts[M.dataType] + ", */*" : M.accepts._default)
 			} catch (S) {}
-
 			if (M.beforeSend && M.beforeSend(J, M) === false) {
 				if (M.global && !--o.active) {
 					o.event.trigger("ajaxStop")
@@ -2732,7 +2720,6 @@
 							try {
 								Y = J.getResponseHeader("Last-Modified")
 							} catch (Z) {}
-
 							if (M.ifModified && Y) {
 								o.lastModified[M.url] = Y
 							}
@@ -2804,7 +2791,6 @@
 			try {
 				return !F.status && location.protocol == "file:" || (F.status >= 200 && F.status < 300) || F.status == 304 || F.status == 1223
 			} catch (E) {}
-
 			return false
 		},
 		httpNotModified : function (G, E) {
@@ -2812,7 +2798,6 @@
 				var H = G.getResponseHeader("Last-Modified");
 				return G.status == 304 || H == o.lastModified[E]
 			} catch (F) {}
-
 			return false
 		},
 		httpData : function (J, H, G) {
@@ -3045,7 +3030,6 @@
 			this.prop = G;
 			if (!E.orig) {
 				E.orig = {}
-
 			}
 		}
 	});

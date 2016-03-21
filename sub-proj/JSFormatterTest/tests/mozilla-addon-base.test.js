@@ -343,7 +343,6 @@
 		}
 		if (typeof w !== "object" && !aj.isFunction(w)) {
 			w = {}
-
 		}
 		if (L === c) {
 			w = this;
@@ -410,7 +409,6 @@
 						try {
 							w = aQ.frameElement == null
 						} catch (c) {}
-
 						U.documentElement.doScroll && w && a2()
 					}
 				}
@@ -431,7 +429,6 @@
 			}
 			var c;
 			for (c in w) {}
-
 			return c === S || aX.call(w, c)
 		},
 		isEmptyObject : function (w) {
@@ -500,7 +497,6 @@
 					}
 				} else {
 					for (K = w[0]; J < A && c.call(K, J, K) !== false; K = w[++J]) {}
-
 				}
 			}
 			return w
@@ -589,7 +585,6 @@
 			}
 		},
 		browser : {}
-
 	});
 	az = aj.uaMatch(az);
 	if (az.browser) {
@@ -652,7 +647,6 @@
 			try {
 				L.appendChild(U.createTextNode("window." + G + "=1;"))
 			} catch (F) {}
-
 			N.insertBefore(L, N.firstChild);
 			if (aQ[G]) {
 				aj.support.scriptEval = true;
@@ -737,7 +731,6 @@
 					if (!F[A]) {
 						w[aJ] = A;
 						F[A] = {}
-
 					}
 				}
 				w = F[A];
@@ -1258,7 +1251,6 @@
 					}
 				}
 			} catch (F) {}
-
 			if (!O.isPropagationStopped() && J) {
 				aj.event.trigger(O, N, J, true)
 			} else {
@@ -1277,7 +1269,6 @@
 								J[K]()
 							}
 						} catch (w) {}
-
 						if (G) {
 							J["on" + K] = G
 						}
@@ -1457,7 +1448,6 @@
 				aj.event.handle.apply(this, arguments)
 			}
 		} catch (A) {}
-
 	},
 	y = function (c) {
 		c.type = c.data;
@@ -1738,7 +1728,6 @@
 				try {
 					aj.event.remove(aj.cache[w].handle.elem)
 				} catch (c) {}
-
 			}
 		}
 	});
@@ -2058,7 +2047,6 @@
 					for (var bb = ba.length, bn; Z < bb; Z++) {
 						if (bn = ba[Z]) {
 							for (; (bn = bn.previousSibling) && bn.nodeType !== 1; ) {}
-
 							ba[Z] = aa || bn && bn.nodeName.toLowerCase() === ab ? bn || false : bn === ab
 						}
 					}
@@ -2510,7 +2498,6 @@
 						try {
 							return c(bo.querySelectorAll(ba), bp)
 						} catch (bn) {}
-
 					}
 					return ab(ba, bo, bp, bb)
 				};
@@ -3374,7 +3361,6 @@
 				A = A || F;
 				F = c;
 				c = {}
-
 			}
 			return aj.ajax({
 				type : "POST",
@@ -3401,7 +3387,6 @@
 				try {
 					return new aQ.ActiveXObject("Microsoft.XMLHTTP")
 				} catch (c) {}
-
 			},
 			accepts : {
 				xml : "application/xml, text/xml",
@@ -3461,7 +3446,6 @@
 					try {
 						delete aQ[R]
 					} catch (bn) {}
-
 					c && c.removeChild(G)
 				}
 			}
@@ -3515,7 +3499,6 @@
 					J || w.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 					w.setRequestHeader("Accept", Y.dataType && Y.accepts[Y.dataType] ? Y.accepts[Y.dataType] + ", */*" : Y.accepts._default)
 				} catch (ba) {}
-
 				if (Y.beforeSend && Y.beforeSend.call(Q, w, Y) === false) {
 					Y.global && !--aj.active && aj.event.trigger("ajaxStop");
 					w.abort();
@@ -3563,7 +3546,6 @@
 						W("abort")
 					}
 				} catch (P) {}
-
 				Y.async && Y.timeout > 0 && setTimeout(function () {
 					w && !F && W("timeout")
 				}, Y.timeout);
@@ -3590,7 +3572,6 @@
 			try {
 				return !w.status && location.protocol === "file:" || w.status >= 200 && w.status < 300 || w.status === 304 || w.status === 1223 || w.status === 0
 			} catch (c) {}
-
 			return false
 		},
 		httpNotModified : function (w, c) {
@@ -3847,7 +3828,6 @@
 			this.prop = A;
 			if (!c.orig) {
 				c.orig = {}
-
 			}
 		}
 	});
@@ -7418,7 +7398,6 @@
 				try {
 					return d.datepicker.parseDate(d.datepicker._get(a, "dateFormat"), h, d.datepicker._getFormatConfig(a))
 				} catch (i) {}
-
 				var g = (h.toLowerCase().match(/^c/) ? d.datepicker._getDate(a) : null) || new Date,
 				k = g.getFullYear(),
 				l = g.getMonth();
@@ -9522,7 +9501,6 @@ function slugify() {
 		function d() {
 			if (b(".teaser-items").hasClass("no-autorotate")) {
 				Slideshow.prototype.autoRotate = function () {}
-
 			}
 			Slideshow.call(this)
 		}
@@ -9840,7 +9818,6 @@ $(".hidden").hide();
 			return p
 		},
 		params : {}
-
 	};
 	var q = 0,
 	o = g.jqm.hash,
@@ -9866,7 +9843,6 @@ $(".hidden").hide();
 		try {
 			g(":input:visible", f.w)[0].focus()
 		} catch (e) {}
-
 	},
 	l = function (e) {
 		g()[e]("keypress", c)[e]("keydown", c)[e]("mousedown", c)
@@ -10224,7 +10200,6 @@ $(document).ready(function () {
 				b("#lightbox-image").attr("src", q.imageArray[q.activeImage][0]);
 				k(v.width, v.height);
 				v.onload = function () {}
-
 			};
 			v.src = q.imageArray[q.activeImage][0]
 		}
@@ -10445,7 +10420,6 @@ $(document).ready(function () {
 var GSFN;
 if (GSFN == undefined) {
 	GSFN = {}
-
 }
 if (!GSFN.initialized) {
 	GSFN.gId = function (b) {
@@ -10918,7 +10892,6 @@ function dispatchPersonaEvent(k, c) {
 			c.dispatchEvent(f)
 		}
 	} catch (h) {}
-
 }
 $.fn.previewPersona = function (b) {
 	if (b) {
@@ -10968,7 +10941,6 @@ $.hasPersonas = function () {
 		c.initEvent("CheckPersonas", true, false);
 		b.dispatchEvent(c)
 	} catch (d) {}
-
 	return b.getAttribute("personas") == "true"
 };
 function VerticalCarousel(b) {
