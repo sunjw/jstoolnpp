@@ -322,7 +322,7 @@ void JSParser::GetTokenRaw()
 
 			// 多字符符号
 			if((m_charB == '=' || m_charB == m_charA) || 
-				(m_charA == '-' && m_charB == '>'))
+				((m_charA == '-' || m_charA == '=') && m_charB == '>'))
 			{
 				// 的确是多字符符号
 				m_tokenB.type = OPER_TYPE;
