@@ -644,3 +644,16 @@ POST `http://foo.org/bar?a=${a}&b=${b}
      X-Credentials: ${credentials}
      { "foo": ${foo},
        "bar": ${bar}}`(myOnReadyStateChangeHandler);
+
+xxx = {
+	dddd => {
+		message = `Hello ${customer.name},
+ want to buy ${card.amount} ${card.product} for
+   a total of ${card.amount * card.unitprice} bucks?`
+	}
+};
+vddd = 0;
+
+message = `Hello ${customer.name},
+    want to buy ${card.amount} ${card.product} for
+            a total of ${card.amount * card.unitprice} bucks?`;
