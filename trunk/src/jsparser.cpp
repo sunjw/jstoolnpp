@@ -293,7 +293,7 @@ void JSParser::GetTokenRaw()
 			if(IsQuote(m_charA))
 			{
 				// ÒýºÅ
-				bQuote= true;
+				bQuote = true;
 				chQuote = m_charA;
 
 				m_tokenB.type = STRING_TYPE;
