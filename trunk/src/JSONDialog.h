@@ -67,7 +67,7 @@ private:
 
 	int m_iSelStartLine;
 
-	sunjwbase::tstring convertStrToDialogTstr(const std::string& str);
+	sunjwbase::tstring convertJsonStrToDialogTstr(const std::string& str);
 
 	void disableControls();
 	void enableControls();

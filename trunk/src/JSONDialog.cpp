@@ -130,7 +130,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	//	hDlg, message, wParam, lParam);
 }*/
 
-tstring JSONDialog::convertStrToDialogTstr(const string& str)
+tstring JSONDialog::convertJsonStrToDialogTstr(const string& str)
 {
 	if(m_bUTF8Json)
 		return strtotstrutf8(str);
@@ -321,7 +321,7 @@ void JSONDialog::insertJsonValue(const JsonValue& jsonValue, HTREEITEM node)
 
 void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, HTREEITEM node)
 {
-	tstring tstr(convertStrToDialogTstr(key));
+	tstring tstr(convertJsonStrToDialogTstr(key));
 
 	JsonValue::VALUE_TYPE valType = jsonValue.GetValueType();
 
@@ -331,14 +331,14 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 		valType == JsonValue::REGULAR_VALUE)
 	{
 		tstr.append(TEXT(" : "));
-		tstr.append(convertStrToDialogTstr(jsonValue.GetStrValue()));
+		tstr.append(convertJsonStrToDialogTstr(jsonValue.GetStrValue()));
 		insertTree(tstr.c_str(), jsonValue.line, node);
 	}
 	else if(valType == JsonValue::STRING_VALUE)
 	{
 		tstr.append(TEXT(" : "));
 		tstr.append(TEXT("\""));
-		tstr.append(convertStrToDialogTstr(jsonValue.GetStrValue()));
+		tstr.append(convertJsonStrToDialogTstr(jsonValue.GetStrValue()));
 		tstr.append(TEXT("\""));
 		insertTree(tstr.c_str(), jsonValue.line, node);
 	}
