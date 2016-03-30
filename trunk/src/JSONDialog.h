@@ -60,10 +60,14 @@ private:
 	HWND m_hCurrScintilla;
 	HWND m_hTree;
 
+	bool m_bUTF8Json;
+
 	EditControlEx *m_editExJsonPath;
 	JsonTree *m_jsonTree;
 
 	int m_iSelStartLine;
+
+	sunjwbase::tstring convertStrToDialogTstr(const std::string& str);
 
 	void disableControls();
 	void enableControls();

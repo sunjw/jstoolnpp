@@ -130,6 +130,14 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	//	hDlg, message, wParam, lParam);
 }*/
 
+tstring JSONDialog::convertStrToDialogTstr(const string& str)
+{
+	if(m_bUTF8Json)
+		return strtowstrutf8(str);
+	else
+		return strtowstr(str);
+}
+
 void JSONDialog::disableControls()
 {
 	EnableWindow(GetDlgItem(m_hDlg, IDC_BTN_REFRESH), FALSE);
@@ -230,11 +238,13 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 	}
 
 	std::string strJSCode(pJS);
+	m_bUTF8Json = false;
+
 	int codePage = ::SendMessage(m_hCurrScintilla, SCI_GETCODEPAGE, 0, 0);
 	if(codePage == 65001)
 	{
 		// UTF-8
-		strJSCode = asciiconv(strJSCode);
+		m_bUTF8Json = true;
 	}
 
 	JsonStringProc jsonProc(strJSCode);
@@ -311,7 +321,8 @@ void JSONDialog::insertJsonValue(const JsonValue& jsonValue, HTREEITEM node)
 
 void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, HTREEITEM node)
 {
-	tstring tstr(strtotstr(key));
+	tstring tstr(convertStrToDialogTstr(key));
+
 	JsonValue::VALUE_TYPE valType = jsonValue.GetValueType();
 
 	if(valType == JsonValue::UNKNOWN_VALUE ||
@@ -320,14 +331,14 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 		valType == JsonValue::REGULAR_VALUE)
 	{
 		tstr.append(TEXT(" : "));
-		tstr.append(strtotstr(jsonValue.GetStrValue()));
+		tstr.append(convertStrToDialogTstr(jsonValue.GetStrValue()));
 		insertTree(tstr.c_str(), jsonValue.line, node);
 	}
 	else if(valType == JsonValue::STRING_VALUE)
 	{
 		tstr.append(TEXT(" : "));
 		tstr.append(TEXT("\""));
-		tstr.append(strtotstr(jsonValue.GetStrValue()));
+		tstr.append(convertStrToDialogTstr(jsonValue.GetStrValue()));
 		tstr.append(TEXT("\""));
 		insertTree(tstr.c_str(), jsonValue.line, node);
 	}
@@ -376,8 +387,8 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 
 void JSONDialog::clickJsonTreeItem(HTREEITEM htiNode)
 {
-	string strJsonPath = m_jsonTree->getJsonNodePath(htiNode);
-	SetDlgItemText(m_hDlg, IDC_JSONPATH, strtotstr(strJsonPath).c_str());
+	tstring tstrJsonPath = m_jsonTree->getJsonNodePath(htiNode);
+	SetDlgItemText(m_hDlg, IDC_JSONPATH, tstrJsonPath.c_str());
 	m_jsonTree->jumpToSciLine(htiNode, m_iSelStartLine);
 }
 
@@ -389,7 +400,6 @@ void JSONDialog::search()
 	GetWindowText(GetDlgItem(m_hDlg, IDC_SEARCHEDIT), buffer, 255);
 	
 	tstring tstrSearchKey(buffer);
-	string strSearchKey = tstrtostr(tstrSearchKey);
 
 	HTREEITEM htiSelected = TreeView_GetSelection(m_hTree);
 	if(htiSelected == NULL)
@@ -406,7 +416,7 @@ void JSONDialog::search()
 	 */
 	HTREEITEM htiFound = NULL;
 	
-	htiFound = m_jsonTree->search(strSearchKey, htiSelected);
+	htiFound = m_jsonTree->search(tstrSearchKey, htiSelected);
 
 	if(htiFound != NULL)
 	{

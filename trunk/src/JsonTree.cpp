@@ -15,6 +15,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include "JsonTree.h"
 
+#include <tchar.h>
+
 using namespace std;
 using namespace sunjwbase;
 
@@ -44,12 +46,12 @@ HTREEITEM JsonTree::getParentItem(HTREEITEM hti)
 	return TreeView_GetParent(getHWndTree(), hti);
 }
 
-HTREEITEM JsonTree::search(string& strSearchKey, HTREEITEM htiCurrent)
+HTREEITEM JsonTree::search(tstring& tstrSearchKey, HTREEITEM htiCurrent)
 {
-	return doSearch(strSearchKey, htiCurrent, true);
+	return doSearch(tstrSearchKey, htiCurrent, true);
 }
 
-HTREEITEM JsonTree::doSearch(string& strSearchKey, HTREEITEM htiCurrent, bool bSkipCurrent)
+HTREEITEM JsonTree::doSearch(tstring& tstrSearchKey, HTREEITEM htiCurrent, bool bSkipCurrent)
 {
 	if(bSkipCurrent)
 		htiCurrent = nextItem(htiCurrent);
@@ -60,21 +62,21 @@ HTREEITEM JsonTree::doSearch(string& strSearchKey, HTREEITEM htiCurrent, bool bS
 	{
 		if(getTVItem(htiCurrent, buf, 1024, &tvi))
 		{
-			string strTreeText = tstrtostr(tvi.pszText);
-			string strKey, strValue;
-			splitText(strTreeText, strKey, strValue);
+			tstring tstrTreeText = tvi.pszText;
+			tstring tstrKey, tstrValue;
+			splitText(tstrTreeText, tstrKey, tstrValue);
 
-			if(strValue == "[Object]" || strValue == "[Array]")
+			if(tstrValue == TEXT("[Object]") || tstrValue == TEXT("[Array]"))
 			{
 				// Just search key
-				if(strfind_ci(strKey, strSearchKey) >= 0)
+				if(strfind_ci(tstrKey, tstrSearchKey) >= 0)
 				{
 					return htiCurrent; // found
 				}
 			}
 			else
 			{
-				if(strfind_ci(strTreeText, strSearchKey) >= 0)
+				if(strfind_ci(tstrTreeText, tstrSearchKey) >= 0)
 				{
 					return htiCurrent; // found
 				}
@@ -90,9 +92,9 @@ HTREEITEM JsonTree::doSearch(string& strSearchKey, HTREEITEM htiCurrent, bool bS
 /*
  * Get JSON node path.
  */
-string JsonTree::getJsonNodePath(HTREEITEM hti)
+tstring JsonTree::getJsonNodePath(HTREEITEM hti)
 {
-	string strJsonPath;
+	tstring tstrJsonPath;
 	HTREEITEM hitTravel = hti;
 
 	while(hitTravel != NULL)
@@ -101,23 +103,23 @@ string JsonTree::getJsonNodePath(HTREEITEM hti)
 		TVITEM tvi = {0};
 		if(getTVItem(hitTravel, buf, 1024, &tvi))
 		{
-			string strTreeText = tstrtostr(tvi.pszText);
-			string strKey, strValue;
-			splitText(strTreeText, strKey, strValue);
+			tstring tstrTreeText = tvi.pszText;
+			tstring tstrKey, tstrValue;
+			splitText(tstrTreeText, tstrKey, tstrValue);
 
-			if(strJsonPath == "")
+			if(tstrJsonPath == TEXT(""))
 			{
-				strJsonPath = strKey;
+				tstrJsonPath = tstrKey;
 			}
 			else
 			{
-				if(strTreeText == "ROOT")
-					strKey = "ROOT";
+				if(tstrTreeText == TEXT("ROOT"))
+					tstrKey = TEXT("ROOT");
 
-				if(str_startwith(strJsonPath, "["))
-					strJsonPath = strKey + strJsonPath;
+				if(tstrJsonPath[0] == TEXT('['))
+					tstrJsonPath = tstrKey + tstrJsonPath;
 				else
-					strJsonPath = strKey + "." + strJsonPath;
+					tstrJsonPath = tstrKey + TEXT(".") + tstrJsonPath;
 			}
 		}
 
@@ -125,7 +127,7 @@ string JsonTree::getJsonNodePath(HTREEITEM hti)
 		hitTravel = htiParent;
 	}
 
-	return strJsonPath;
+	return tstrJsonPath;
 }
 
 /*
@@ -145,24 +147,24 @@ void JsonTree::jumpToSciLine(HTREEITEM hti, int iLineBase)
 	}
 }
 
-void JsonTree::splitText(string& strText, 
-				string& strKey, 
-				string& strValue)
+void JsonTree::splitText(tstring& tstrText, 
+				tstring& tstrKey, 
+				tstring& tstrValue)
 {
-	string::size_type beginPos = 0;
-	string::size_type splitPos = 0;
+	tstring::size_type beginPos = 0;
+	tstring::size_type splitPos = 0;
 	while(1)
 	{
-		string::size_type pos = strText.find(string(" : "), beginPos);
-		if(pos == string::npos)
+		tstring::size_type pos = tstrText.find(tstring(TEXT(" : ")), beginPos);
+		if(pos == tstring::npos)
 			return; // NOT found
 
-		char cTest = strText[pos + 3];
-		if(cTest == '\"' || cTest == '[' || 
-			cTest == '/' || // regex
-			cTest == '-' || (cTest >= '0' && cTest <= '9') ||
-			cTest == 't' || cTest == 'f' || // true, false
-			cTest == 'n') // null
+		TCHAR cTest = tstrText[pos + 3];
+		if(cTest == TEXT('\"') || cTest == TEXT('[') || 
+			cTest == TEXT('/') || // regex
+			cTest == TEXT('-') || (cTest >= TEXT('0') && cTest <= TEXT('9')) ||
+			cTest == TEXT('t') || cTest == TEXT('f') || // true, false
+			cTest == TEXT('n')) // null
 		{
 			splitPos = pos + 1;
 			break;
@@ -171,8 +173,8 @@ void JsonTree::splitText(string& strText,
 		beginPos = pos + 1;
 	}
 
-	strKey = strText.substr(0, splitPos);
-	strKey = strtrim(strKey);
-	strValue = strText.substr(splitPos + 1, strText.size() - splitPos);
-	strValue = strtrim(strValue);
+	tstrKey = tstrText.substr(0, splitPos);
+	tstrKey = strtrim(tstrKey);
+	tstrValue = tstrText.substr(splitPos + 1, tstrText.size() - splitPos);
+	tstrValue = strtrim(tstrValue);
 }

@@ -32,15 +32,15 @@ public:
 
 	BOOL getTVItem(HTREEITEM hti, TCHAR *buf, int bufSize, TVITEM *tvi);
 	HTREEITEM getParentItem(HTREEITEM hti);
-	HTREEITEM search(std::string& strSearchKey, HTREEITEM htiCurrent);
-	std::string getJsonNodePath(HTREEITEM hti);
+	HTREEITEM search(sunjwbase::tstring& tstrSearchKey, HTREEITEM htiCurrent);
+	sunjwbase::tstring getJsonNodePath(HTREEITEM hti);
 	void jumpToSciLine(HTREEITEM hti, int iLineBase);
 
 private:
 	HWND m_hScintilla;
 	
-	HTREEITEM doSearch(std::string& strSearchKey, HTREEITEM htiCurrent, bool bSkipCurrent);
-	void splitText(std::string& strText, std::string& strKey, std::string& strValue);
+	HTREEITEM doSearch(sunjwbase::tstring& tstrSearchKey, HTREEITEM htiCurrent, bool bSkipCurrent);
+	void splitText(sunjwbase::tstring& tstrText, sunjwbase::tstring& tstrKey, sunjwbase::tstring& tstrValue);
 };
 
 #endif
