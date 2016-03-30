@@ -133,9 +133,9 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 tstring JSONDialog::convertStrToDialogTstr(const string& str)
 {
 	if(m_bUTF8Json)
-		return strtowstrutf8(str);
+		return strtotstrutf8(str);
 	else
-		return strtowstr(str);
+		return strtotstr(str);
 }
 
 void JSONDialog::disableControls()
