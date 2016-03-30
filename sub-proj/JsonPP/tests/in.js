@@ -9,6 +9,8 @@
 	},
 	"测试" : {
 		xxx : 1,
-		"Sűrű szövésű női pulóver" : "テスト"
+		"Sűrű szövésű női pulóver" : {
+			"テスト" : 0
+		}
 	}
 }
