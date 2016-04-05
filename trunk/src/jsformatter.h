@@ -94,14 +94,28 @@ extern "C" {
 typedef struct _FormatterOption FormatterOption;
 
 #ifndef NOLIBJSFORMATTER
+
 typedef char (*ReadCharFunc)(void *ioContext);
 typedef void (*WriteCharFunc)(void *ioContext, const char ch);
 
-DLLAPI void FormatJavaScript(void *ioContext,
+struct _JSFormatter;
+typedef struct _JSFormatter JSFormatter;
+
+DLLAPI JSFormatter *CreateJSFormatter(void *ioContext,
 							 ReadCharFunc readCharFunc, 
 							 WriteCharFunc writeCharFunc,
-							 const FormatterOption *option,
-							 bool debug = false);
+							 const FormatterOption *option);
+
+DLLAPI void ReleaseJSFormatter(JSFormatter *jsf);
+
+DLLAPI void FormatJavaScript(JSFormatter *jsf);
+
+DLLAPI void EnableJSFormatterDebug(JSFormatter *jsf);
+
+DLLAPI void DisableJSFormatterDebug(JSFormatter *jsf);
+
+DLLAPI int GetFormattedLine(JSFormatter *jsf, int originalLine);
+
 #endif
 
 #ifdef __cplusplus

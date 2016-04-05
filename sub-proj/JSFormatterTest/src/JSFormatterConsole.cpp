@@ -82,11 +82,19 @@ int main(int argc, char *argv[])
 
 			StreamIOContext streamIOCtx(inFileStream2, outStrStream);
 
-			FormatJavaScript((void *)&(streamIOCtx), 
+			JSFormatter *jsf = CreateJSFormatter(
+							(void *)&(streamIOCtx), 
 							StreamIOContext::ReadCharFromStream,
 							StreamIOContext::WriteCharFromStream,
-							&option,
-							true);
+							&option);
+
+			EnableJSFormatterDebug(jsf);
+
+			FormatJavaScript(jsf);
+
+			ReleaseJSFormatter(jsf);
+
+			jsf = NULL;
 
 			string output = outStrStream.str();
 
