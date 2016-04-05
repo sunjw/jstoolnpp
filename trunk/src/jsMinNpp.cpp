@@ -346,7 +346,8 @@ void jsFormat()
 			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)(strJSFormat.c_str()));
 			::SendMessage(nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
 
-			::SendMessage(hCurrScintilla, SCI_GOTOLINE, line + 10, 0);
+			int formattedLine = jsformat.GetFormattedLine(line+1);
+			::SendMessage(hCurrScintilla, SCI_GOTOLINE, formattedLine-1, 0);
 		}
 		else
 		{

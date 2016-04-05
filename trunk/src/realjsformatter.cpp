@@ -78,7 +78,8 @@ void RealJSFormatter::Init()
 	m_bLineTemplate = false;
 	m_lineBuffer = "";
 
-	m_nFormattedLineCount = 0;
+	m_nFormattedLineCount = 1;
+	m_lineFormattedVec.resize(1000, -1);
 
 	m_bNewLine = false;
 
@@ -120,6 +121,21 @@ void RealJSFormatter::Init()
 void RealJSFormatter::PrintAdditionalDebug()
 {
 	printf("Formatted line count: %d\n", m_nFormattedLineCount);
+}
+
+int RealJSFormatter::GetFormattedLine(int originalLine)
+{
+	if(originalLine <= 0 || m_lineFormattedVec.size() <= originalLine)
+		return -1;
+
+	for(int l = originalLine; l > 0; --l)
+	{
+		int formattedLine = m_lineFormattedVec[l];
+		if(formattedLine != -1)
+			return formattedLine;
+	}
+
+	return -1;
 }
 
 void RealJSFormatter::PutToken(const Token& token,
@@ -170,9 +186,16 @@ void RealJSFormatter::PutString(const Token& token)
 			m_bLineTemplate = true;
 
 		if(token.code[i] == '\n')
+		{
 			m_bNewLine = true;
+		}
 		else
+		{
 			m_lineBuffer += token.code[i];
+			int tokenLine = token.line;
+			if(tokenLine != -1)
+				m_lineWaitVec.push_back(token.line);
+		}
 	}
 }
 
@@ -189,6 +212,28 @@ void RealJSFormatter::PutString(const string& str)
 
 void RealJSFormatter::PutLineBuffer()
 {
+	// Map original line count to formatted line count
+	int i = 0;
+	while(1)
+	{
+		if(i >= m_lineWaitVec.size())
+		{
+			m_lineWaitVec.clear();
+			break;
+		}
+
+		int oldLine = m_lineWaitVec[i];
+		if(oldLine >= m_lineFormattedVec.size())
+		{
+			m_lineFormattedVec.resize(m_lineFormattedVec.size()*2, -1);
+			continue;
+		}
+
+		if(m_lineFormattedVec[oldLine] == -1)
+			m_lineFormattedVec[oldLine] = m_nFormattedLineCount;
+		++i;
+	}
+
 	string line;
 	if(!m_bLineTemplate)
 		line.append(TrimRightSpace(m_lineBuffer));

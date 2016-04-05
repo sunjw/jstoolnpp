@@ -20,6 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #ifndef _REAL_JSFORMATTER_H_
 #define _REAL_JSFORMATTER_H_
 #include <string>
+#include <vector>
 #include <map>
 #include <set>
 
@@ -33,21 +34,24 @@ class RealJSFormatter: public JSParser
 public:
 	typedef map<string, char> StrCharMap;
 	typedef set<string> StrSet;
+	typedef vector<int> IntVector;
 
 	RealJSFormatter(const FormatterOption& option);
 
 	virtual ~RealJSFormatter()
 	{}
 
+	static string Trim(const string& str);
+	static string TrimSpace(const string& str);
+	static string TrimRightSpace(const string& str);
+	void StringReplace(string& strBase, const string& strSrc, const string& strDes);
+
 	inline void SetInitIndent(const string& initIndent)
 	{ m_initIndent = initIndent; }
 
 	void Go();
 
-	static string Trim(const string& str);
-	static string TrimSpace(const string& str);
-	static string TrimRightSpace(const string& str);
-	void StringReplace(string& strBase, const string& strSrc, const string& strDes);
+	int GetFormattedLine(int originalLine);
 
 private:
 	void Init();
@@ -72,6 +76,8 @@ private:
 	string m_lineBuffer;
 
 	int m_nFormattedLineCount;
+	IntVector m_lineFormattedVec;
+	IntVector m_lineWaitVec;
 
 	StrSet m_specKeywordSet; // 后面要跟着括号的关键字集合
 	StrCharMap m_blockMap;
