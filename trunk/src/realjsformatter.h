@@ -54,6 +54,8 @@ private:
 
 	virtual void PutChar(int ch) = 0;
 
+	virtual void PrintAdditionalDebug();
+
 	void PopMultiBlock(char previousStackTop);
 	void ProcessOper(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
 	void ProcessString(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
@@ -68,6 +70,8 @@ private:
 	int m_nLineIndents;
 	int m_bLineTemplate;
 	string m_lineBuffer;
+
+	int m_nFormattedLineCount;
 
 	StrSet m_specKeywordSet; // 后面要跟着括号的关键字集合
 	StrCharMap m_blockMap;

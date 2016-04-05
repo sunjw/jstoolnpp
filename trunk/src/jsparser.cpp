@@ -56,6 +56,8 @@ void JSParser::PrintDebug()
 		sprintf(buf, "%.3f tokens/second\n", m_tokenCount / m_duration);
 		strcat(m_debugOutput, buf);
 		printf("%s", m_debugOutput);
+
+		PrintAdditionalDebug();
 	}
 }
 

@@ -18,6 +18,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #include <cstdlib>
+#include <cstdio>
 #include <string>
 #include <cstring>
 #include <iostream>
@@ -68,15 +69,17 @@ void RealJSFormatter::StringReplace(string& strBase, const string& strSrc, const
 
 void RealJSFormatter::Init()
 {
-	m_initIndent = "";
-
 	m_tokenCount = 0;
 
-	m_lineBuffer = "";
-
+	m_initIndent = "";
 	m_nIndents = 0;
+
 	m_nLineIndents = 0;
 	m_bLineTemplate = false;
+	m_lineBuffer = "";
+
+	m_nFormattedLineCount = 0;
+
 	m_bNewLine = false;
 
 	m_bBlockStmt = true;
@@ -112,6 +115,11 @@ void RealJSFormatter::Init()
 	m_specKeywordSet.insert("return");
 	m_specKeywordSet.insert("throw");
 	m_specKeywordSet.insert("delete");
+}
+
+void RealJSFormatter::PrintAdditionalDebug()
+{
+	printf("Formatted line count: %d\n", m_nFormattedLineCount);
 }
 
 void RealJSFormatter::PutToken(const Token& token,
@@ -205,7 +213,12 @@ void RealJSFormatter::PutLineBuffer()
 
 	// Êä³ö line
 	for(size_t i = 0; i < line.length(); ++i)
-		PutChar(line[i]);
+	{
+		int ch = line[i];
+		PutChar(ch);
+		if(ch == '\n')
+			++m_nFormattedLineCount;
+	}
 }
 
 void RealJSFormatter::PopMultiBlock(char previousStackTop)

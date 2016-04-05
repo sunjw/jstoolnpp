@@ -180,6 +180,7 @@ private:
 	void PrepareTokenB();
 
 	void PrintDebug();
+	virtual void PrintAdditionalDebug() {}
 
 	string m_strBeforeReg; // 判断正则时，正则前面可以出现的字符
 
