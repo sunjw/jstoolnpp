@@ -15,6 +15,7 @@
 //You should have received a copy of the GNU General Public License
 //along with this program; if not, write to the Free Software
 //Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#include <math.h>
 #include <stdexcept>
 #include <string>
 
@@ -346,8 +347,15 @@ void jsFormat()
 			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)(strJSFormat.c_str()));
 			::SendMessage(nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
 
-			int formattedLine = jsformat.GetFormattedLine(line+1);
-			::SendMessage(hCurrScintilla, SCI_GOTOLINE, formattedLine-1, 0);
+			// line starts from 0, lineFixed starts from 1
+			size_t lineJSF = line + 1;
+			// formattedLine starts from 0, formattedLineJSF starts from 1
+			size_t formattedLineJSF = jsformat.GetFormattedLine(lineJSF);
+			size_t formattedLine = formattedLineJSF - 1;
+
+			const size_t bigLineJump = 10;
+			::SendMessage(hCurrScintilla, SCI_GOTOLINE, formattedLine + bigLineJump, 0);
+			::SendMessage(hCurrScintilla, SCI_GOTOLINE, formattedLine, 0);
 		}
 		else
 		{
