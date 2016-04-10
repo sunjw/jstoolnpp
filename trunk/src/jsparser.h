@@ -103,7 +103,7 @@ public:
 
 	bool m_debug;
 	inline const char *GetDebugOutput()
-	{ return m_debugOutput; }
+	{ return m_strDebugOutput.c_str(); }
 
 private:
 	Token m_tokenABeforeComment;
@@ -180,7 +180,7 @@ private:
 	void PrepareTokenB();
 
 	void PrintDebug();
-	virtual void PrintAdditionalDebug() {}
+	virtual void PrintAdditionalDebug(string& strDebugOutput) {}
 
 	string m_strBeforeReg; // 判断正则时，正则前面可以出现的字符
 
@@ -196,7 +196,7 @@ private:
 	clock_t m_startClock;
 	clock_t m_endClock;
 	double m_duration;
-	char m_debugOutput[1024];
+	string m_strDebugOutput;
 
 private:
 	// 阻止拷贝

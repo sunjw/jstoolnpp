@@ -49,15 +49,18 @@ void JSParser::PrintDebug()
 {
 	if(m_debug)
 	{
-		char buf[500] = {0};
-		sprintf(m_debugOutput, "Processed tokens: %ld\n", m_tokenCount);
+		m_strDebugOutput = "";
+		char buf[1024] = {0};
+		sprintf(buf, "Processed tokens: %ld\n", m_tokenCount);
+		m_strDebugOutput.append(buf);
 		sprintf(buf, "Time used: %.3fs\n", m_duration);
-		strcat(m_debugOutput, buf);
+		m_strDebugOutput.append(buf);
 		sprintf(buf, "%.3f tokens/second\n", m_tokenCount / m_duration);
-		strcat(m_debugOutput, buf);
-		printf("%s", m_debugOutput);
+		m_strDebugOutput.append(buf);
 
-		PrintAdditionalDebug();
+		PrintAdditionalDebug(m_strDebugOutput);
+
+		printf("%s", m_strDebugOutput.c_str());
 	}
 }
 

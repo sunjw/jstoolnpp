@@ -118,9 +118,11 @@ void RealJSFormatter::Init()
 	m_specKeywordSet.insert("delete");
 }
 
-void RealJSFormatter::PrintAdditionalDebug()
+void RealJSFormatter::PrintAdditionalDebug(string& strDebugOutput)
 {
-	printf("Formatted line count: %d\n", m_nFormattedLineCount);
+	char buf[1024] = {0};
+	sprintf(buf, "Formatted line count: %d\n", m_nFormattedLineCount);
+	strDebugOutput.append(buf);
 }
 
 int RealJSFormatter::GetFormattedLine(int originalLine)

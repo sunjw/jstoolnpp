@@ -58,7 +58,7 @@ private:
 
 	virtual void PutChar(int ch) = 0;
 
-	virtual void PrintAdditionalDebug();
+	virtual void PrintAdditionalDebug(string& strDebugOutput);
 
 	void PopMultiBlock(char previousStackTop);
 	void ProcessOper(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
