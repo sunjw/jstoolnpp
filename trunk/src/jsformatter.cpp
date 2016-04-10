@@ -39,6 +39,11 @@ DLLAPI void DisableJSFormatterDebug(JSFormatter *jsf)
 	((JSFormatGenericIO *)jsf)->m_debug = false;
 }
 
+DLLAPI const char *GetJSFormatterDebugOutput(JSFormatter *jsf)
+{
+	return ((JSFormatGenericIO *)jsf)->GetDebugOutput();
+}
+
 DLLAPI int GetFormattedLine(JSFormatter *jsf, int originalLine)
 {
 	return ((JSFormatGenericIO *)jsf)->GetFormattedLine(originalLine);

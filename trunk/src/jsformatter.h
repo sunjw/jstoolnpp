@@ -114,6 +114,8 @@ DLLAPI void EnableJSFormatterDebug(JSFormatter *jsf);
 
 DLLAPI void DisableJSFormatterDebug(JSFormatter *jsf);
 
+DLLAPI const char *GetJSFormatterDebugOutput(JSFormatter *jsf);
+
 DLLAPI int GetFormattedLine(JSFormatter *jsf, int originalLine);
 
 #endif
