@@ -1,3 +1,9 @@
+1.18.0
+Add some ES6 support.
+Fix UTF-8 characters display in Json Viewer.
+Better cursor position after JSFormat.
+Other tweak.
+
 1.17.2
 Switch to VS2008.
 Enable DEP and ASLR.
