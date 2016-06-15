@@ -88,6 +88,7 @@ void RealJSFormatter::Init()
 	m_bEmptyBracket = false;
 	m_bCommentPut = false;
 	m_bTemplatePut = false;
+	m_bQuestOper = false;
 
 	m_blockMap[string("if")] = JS_IF;
 	m_blockMap[string("else")] = JS_ELSE;
@@ -770,6 +771,24 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		m_blockStack.push(m_blockMap[m_tokenA.code]);
 		++m_nIndents;
 		m_bAssign = false;
+	}
+
+	if(m_tokenA.code == "?")
+	{
+		m_bQuestOper = true;
+	}
+
+	if(m_tokenA.code == ":")
+	{
+		if(m_bQuestOper)
+		{
+			m_bQuestOper = false;
+		}
+		else
+		{
+			PutToken(m_tokenA, string(""), string(" "));
+			return;
+		}
 	}
 
 	PutToken(m_tokenA, string(" "), string(" ")); // 剩余的操作符都是 空格oper空格

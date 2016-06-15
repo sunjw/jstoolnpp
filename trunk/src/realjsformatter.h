@@ -95,6 +95,8 @@ private:
 	bool m_bCommentPut; // 刚刚输出了注释
 	bool m_bTemplatePut; // Template String
 
+	bool m_bQuestOper;
+
 	string m_initIndent; // 起始缩进
 
 	// 以下为配置项
