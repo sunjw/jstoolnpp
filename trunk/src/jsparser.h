@@ -71,10 +71,10 @@ bool StackTopEq(const stack<T>& stk, T eq)
 #define JS_TRY 'r'
 #define JS_CATCH 'h'
 #define JS_FUNCTION 'n'
-#define JS_ASSIGN '='
 #define JS_BLOCK '{'
 #define JS_BRACKET '('
 #define JS_SQUARE '['
+#define JS_ASSIGN '='
 #define JS_HELPER '\\'
 #define JS_STUB ' '
 #define JS_EMPTY 0
