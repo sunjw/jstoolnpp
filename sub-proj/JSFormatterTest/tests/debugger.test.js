@@ -45,17 +45,17 @@ FBL.ns(function () {
 		// ************************************************************************************************
 
 		Firebug.Debugger = extend(Firebug.ActivableModule, {
-				dispatchName: "debugger",
-				fbs: fbs, // access to firebug-service in chromebug under browser.xul.DOM.Firebug.Debugger.fbs /*@explore*/
+				dispatchName : "debugger",
+				fbs : fbs, // access to firebug-service in chromebug under browser.xul.DOM.Firebug.Debugger.fbs /*@explore*/
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// Debugging
 
-				hasValidStack: function (context) {
+				hasValidStack : function (context) {
 					return context.stopped && context.currentFrame.isValid;
 				},
 
-				evaluate: function (js, context, scope) // TODO remote: move to backend, proxy to front
+				evaluate : function (js, context, scope) // TODO remote: move to backend, proxy to front
 				{
 					var frame = context.currentFrame;
 					if (!frame)
@@ -77,7 +77,7 @@ FBL.ns(function () {
 						throw value;
 				},
 
-				evaluateInCallingFrame: function (js, fileName, lineNo) {
+				evaluateInCallingFrame : function (js, fileName, lineNo) {
 					return this.halt(function evalInFrame(frame) {
 						window.dump("evaluateInCallingFrame " + frame.script.fileName + " stack: " + getJSDStackDump(frame) + "\n");
 						var result = {};
@@ -95,7 +95,7 @@ FBL.ns(function () {
 				 * @return array of global property names
 				 */
 
-				getCurrentFrameKeys: function (context) // TODO remote
+				getCurrentFrameKeys : function (context) // TODO remote
 				{
 					var globals = keys(context.getGlobalScope().wrappedJSObject); // return is safe
 
@@ -108,13 +108,13 @@ FBL.ns(function () {
 				/*
 				 * private to Debugger, returns list of strings
 				 */
-				getFrameKeys: function (frame, names) // TODO backend
+				getFrameKeys : function (frame, names) // TODO backend
 				{
 					var listValue = {
-						value: null
+						value : null
 					},
 					lengthValue = {
-						value: 0
+						value : 0
 					};
 					frame.scope.getProperties(listValue, lengthValue);
 
@@ -127,7 +127,7 @@ FBL.ns(function () {
 				},
 
 				/* @Deprecated  see chrome.js */
-				focusWatch: function (context) // TODO moved
+				focusWatch : function (context) // TODO moved
 				{
 					return Firebug.chrome.focusWatch(context);
 				},
@@ -135,16 +135,16 @@ FBL.ns(function () {
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// Private to Debugger
 
-				beginInternalOperation: function () // stop debugger operations like breakOnErrors
+				beginInternalOperation : function () // stop debugger operations like breakOnErrors
 				{
 					var state = {
-						breakOnErrors: Firebug.breakOnErrors
+						breakOnErrors : Firebug.breakOnErrors
 					};
 					Firebug.breakOnErrors = false;
 					return state;
 				},
 
-				endInternalOperation: function (state) // pass back the object given by beginInternalOperation
+				endInternalOperation : function (state) // pass back the object given by beginInternalOperation
 				{
 					Firebug.breakOnErrors = state.breakOnErrors;
 					return true;
@@ -152,14 +152,14 @@ FBL.ns(function () {
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				halt: function (fnOfFrame) {
+				halt : function (fnOfFrame) {
 					if (FBTrace.DBG_BP)
 						FBTrace.sysout('debugger.halt ' + fnOfFrame);
 
 					return fbs.halt(this, fnOfFrame);
 				},
 
-				breakAsIfDebugger: function (frame) {
+				breakAsIfDebugger : function (frame) {
 					var debuggr = fbs.findDebugger(frame); // should return 'this' but also sets this.breakContext
 					fbs.breakIntoDebugger(debuggr, frame, 3);
 				},
@@ -168,9 +168,9 @@ FBL.ns(function () {
 				// are used even in web pages, but only in rare cases so don't worry about it.
 				// Don't be specific like: chrome://firebug/ since frames coming from extensions e.g.
 				// chrome://firecookie/ wouldn't be skipped then.
-				breakNowURLPrefix: "chrome://",
+				breakNowURLPrefix : "chrome://",
 
-				breakNow: function (context) {
+				breakNow : function (context) {
 					Firebug.Debugger.halt(function haltAnalysis(frame) {
 						if (FBTrace.DBG_UI_LOOP)
 							FBTrace.sysout("debugger.breakNow: frame " + frame.script.fileName + " context " + context.getName(), getJSDStackDump(frame));
@@ -197,7 +197,7 @@ FBL.ns(function () {
 					});
 				},
 
-				stop: function (context, frame, type, rv) {
+				stop : function (context, frame, type, rv) {
 					if (context.stopped)
 						return RETURN_CONTINUE;
 
@@ -226,7 +226,7 @@ FBL.ns(function () {
 						this.freeze(context);
 						// We will pause here until resume is called
 						var depth = fbs.enterNestedEventLoop({
-								onNest: bindFixed(this.startDebugging, this, context)
+								onNest : bindFixed(this.startDebugging, this, context)
 							});
 						// For some reason we don't always end up here
 						if (FBTrace.DBG_UI_LOOP)
@@ -253,7 +253,7 @@ FBL.ns(function () {
 						return RETURN_CONTINUE;
 				},
 
-				resume: function (context) {
+				resume : function (context) {
 					if (FBTrace.DBG_UI_LOOP)
 						FBTrace.sysout("debugger.resume, context.stopped:" + context.stopped + "\n");
 
@@ -263,7 +263,7 @@ FBL.ns(function () {
 						FBTrace.sysout("debugger.resume, depth:" + depth + "\n");
 				},
 
-				abort: function (context) {
+				abort : function (context) {
 					if (context.stopped) {
 						context.aborted = true;
 						this.thaw(context);
@@ -272,7 +272,7 @@ FBL.ns(function () {
 					}
 				},
 
-				stepOver: function (context) {
+				stepOver : function (context) {
 					if (!context.stoppedFrame || !context.stoppedFrame.isValid)
 						return;
 
@@ -280,7 +280,7 @@ FBL.ns(function () {
 					this.resume(context);
 				},
 
-				stepInto: function (context) {
+				stepInto : function (context) {
 					if (!context.stoppedFrame || !context.stoppedFrame.isValid)
 						return;
 
@@ -288,7 +288,7 @@ FBL.ns(function () {
 					this.resume(context);
 				},
 
-				stepOut: function (context) {
+				stepOut : function (context) {
 					if (!context.stoppedFrame || !context.stoppedFrame.isValid)
 						return;
 
@@ -296,17 +296,17 @@ FBL.ns(function () {
 					this.resume(context);
 				},
 
-				suspend: function (context) {
+				suspend : function (context) {
 					if (context.stopped)
 						return;
 					fbs.suspend(this, context);
 				},
 
-				unSuspend: function (context) {
+				unSuspend : function (context) {
 					fbs.stopStepping(); // TODO per context
 				},
 
-				runUntil: function (context, sourceFile, lineNo) {
+				runUntil : function (context, sourceFile, lineNo) {
 					if (FBTrace.DBG_UI_LOOP)
 						FBTrace.sysout("runUntil " + lineNo + " @" + sourceFile);
 
@@ -318,7 +318,7 @@ FBL.ns(function () {
 				},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-				freeze: function (context) {
+				freeze : function (context) {
 					var executionContext = context.stoppedFrame.executionContext;
 					try {
 						executionContext.scriptsEnabled = false;
@@ -356,7 +356,7 @@ FBL.ns(function () {
 					}
 				},
 
-				suppressEventHandling: function (context) {
+				suppressEventHandling : function (context) {
 					if (context.window instanceof Ci.nsIInterfaceRequestor) {
 						context.eventSuppressor = context.window.getInterface(Ci.nsIDOMWindowUtils);
 						if (context.eventSuppressor)
@@ -364,7 +364,7 @@ FBL.ns(function () {
 					}
 				},
 
-				thaw: function (context) {
+				thaw : function (context) {
 					try {
 						if (context.isFrozen)
 							delete context.isFrozen;
@@ -400,14 +400,14 @@ FBL.ns(function () {
 					}
 				},
 
-				unsuppressEventHandling: function (context) {
+				unsuppressEventHandling : function (context) {
 					if (context.eventSuppressor) {
 						context.eventSuppressor.suppressEventHandling(false);
 						delete context.eventSuppressor;
 					}
 				},
 
-				toggleFreezeWindow: function (context) {
+				toggleFreezeWindow : function (context) {
 					if (!context.stopped) // then we need to break into debugger to get the executionContext
 					{
 						Firebug.Debugger.halt(function grabContext(frame) {
@@ -423,14 +423,14 @@ FBL.ns(function () {
 					}
 				},
 
-				doToggleFreezeWindow: function (context) {
+				doToggleFreezeWindow : function (context) {
 					if (context.isFrozen)
 						Firebug.Debugger.unsuppressEventHandling(context);
 					else
 						Firebug.Debugger.suppressEventHandling(context);
 				},
 
-				toggleReportTopLevel: function (context) {
+				toggleReportTopLevel : function (context) {
 					if (context.reportTopLevel)
 						fbs.setTopLevelHook(null);
 					else {
@@ -439,16 +439,16 @@ FBL.ns(function () {
 						});
 					}
 				},
-				setBreakOnNextCause: function (context, frame) // TODO this should be in the panel (front end)
+				setBreakOnNextCause : function (context, frame) // TODO this should be in the panel (front end)
 				{
 					var sourceFile = Firebug.SourceFile.getSourceFileByScript(context, frame.script);
 					var analyzer = sourceFile.getScriptAnalyzer(frame.script);
 					var lineNo = analyzer.getSourceLineFromFrame(context, frame);
 
 					context.breakingCause = {
-						title: $STR("Break On Next"),
-						message: $STR("Disable converts pause to disabled breakpoint"), //xxxHonza localization
-						skipAction: function addSkipperAndGo() {
+						title : $STR("Break On Next"),
+						message : $STR("Disable converts pause to disabled breakpoint"), //xxxHonza localization
+						skipAction : function addSkipperAndGo() {
 							// a breakpoint that never hits, but prevents debugger keyword (see fbs.onDebugger as well)
 							var bp = fbs.setBreakpoint(sourceFile, lineNo, null, Firebug.Debugger);
 							fbs.disableBreakpoint(sourceFile.href, lineNo);
@@ -457,7 +457,7 @@ FBL.ns(function () {
 
 							Firebug.Debugger.resume(context);
 						},
-						okAction: function justGo() {
+						okAction : function justGo() {
 							Firebug.Debugger.resume(context);
 						},
 					};
@@ -466,29 +466,29 @@ FBL.ns(function () {
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// Breakpoints
 
-				setBreakpoint: function (sourceFile, lineNo) {
+				setBreakpoint : function (sourceFile, lineNo) {
 					fbs.setBreakpoint(sourceFile, lineNo, null, Firebug.Debugger);
 				},
 
-				clearBreakpoint: function (sourceFile, lineNo) {
+				clearBreakpoint : function (sourceFile, lineNo) {
 					fbs.clearBreakpoint(sourceFile.href, lineNo);
 				},
 
-				setErrorBreakpoint: function (sourceFile, line) {
+				setErrorBreakpoint : function (sourceFile, line) {
 					fbs.setErrorBreakpoint(sourceFile, line, Firebug.Debugger);
 				},
 
-				clearErrorBreakpoint: function (sourceFile, line) {
+				clearErrorBreakpoint : function (sourceFile, line) {
 					fbs.clearErrorBreakpoint(sourceFile.href, line, Firebug.Debugger);
 				},
 
-				clearAllBreakpoints: function (context) {
+				clearAllBreakpoints : function (context) {
 					if (context) {
 						var sourceFiles = sourceFilesAsArray(context.sourceFileMap);
 						fbs.clearAllBreakpoints(sourceFiles, Firebug.Debugger);
 					} else {
 						fbs.enumerateBreakpoints(null, {
-							call: function (url, lineNo, bp) // null means all urls
+							call : function (url, lineNo, bp) // null means all urls
 							{
 								if (bp.debuggerName !== Firebug.Debugger.debuggerName) // skip breakpoints of other debuggers.
 									return;
@@ -504,39 +504,39 @@ FBL.ns(function () {
 					}
 				},
 
-				enableAllBreakpoints: function (context) {
+				enableAllBreakpoints : function (context) {
 					if (FBTrace.DBG_BP)
 						FBTrace.sysout("enableAllBreakpoints sourceFileMap:", context.sourceFileMap);
 					for (var url in context.sourceFileMap) {
 						fbs.enumerateBreakpoints(url, {
-							call: function (url, lineNo) {
+							call : function (url, lineNo) {
 								fbs.enableBreakpoint(url, lineNo);
 							}
 						});
 					}
 				},
 
-				disableAllBreakpoints: function (context) {
+				disableAllBreakpoints : function (context) {
 					for (var url in context.sourceFileMap) {
 						fbs.enumerateBreakpoints(url, {
-							call: function (url, lineNo) {
+							call : function (url, lineNo) {
 								fbs.disableBreakpoint(url, lineNo);
 							}
 						});
 					}
 				},
 
-				getBreakpointCount: function (context) {
+				getBreakpointCount : function (context) {
 					var count = 0;
 					for (var url in context.sourceFileMap) {
 						fbs.enumerateBreakpoints(url, {
-							call: function (url, lineNo) {
+							call : function (url, lineNo) {
 								++count;
 							}
 						});
 
 						fbs.enumerateErrorBreakpoints(url, {
-							call: function (url, lineNo) {
+							call : function (url, lineNo) {
 								++count;
 							}
 						});
@@ -547,15 +547,15 @@ FBL.ns(function () {
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// Debugging and monitoring
 
-				traceAll: function (context) {
+				traceAll : function (context) {
 					fbs.traceAll(sourceURLsAsArray(context), this);
 				},
 
-				untraceAll: function (context) {
+				untraceAll : function (context) {
 					fbs.untraceAll(this);
 				},
 
-				monitorFunction: function (fn, mode) {
+				monitorFunction : function (fn, mode) {
 					if (typeof(fn) == "function" || fn instanceof Function) {
 						var script = findScriptForFunctionInContext(Firebug.currentContext, fn);
 						if (script)
@@ -567,7 +567,7 @@ FBL.ns(function () {
 					}
 				},
 
-				unmonitorFunction: function (fn, mode) {
+				unmonitorFunction : function (fn, mode) {
 					if (typeof(fn) == "function" || fn instanceof Function) {
 						var script = findScriptForFunctionInContext(Firebug.currentContext, fn);
 						if (script)
@@ -575,7 +575,7 @@ FBL.ns(function () {
 					}
 				},
 
-				monitorScript: function (fn, script, mode) {
+				monitorScript : function (fn, script, mode) {
 					var scriptInfo = Firebug.SourceFile.getSourceFileAndLineByScript(Firebug.currentContext, script);
 					if (scriptInfo) {
 						if (mode == "debug")
@@ -585,7 +585,7 @@ FBL.ns(function () {
 					}
 				},
 
-				unmonitorScript: function (fn, script, mode) {
+				unmonitorScript : function (fn, script, mode) {
 					var scriptInfo = Firebug.SourceFile.getSourceFileAndLineByScript(Firebug.currentContext, script);
 					if (scriptInfo) {
 						if (mode == "debug")
@@ -595,7 +595,7 @@ FBL.ns(function () {
 					}
 				},
 
-				traceCalls: function (context, fn) {
+				traceCalls : function (context, fn) {
 					if (typeof(fn) == "function" || fn instanceof Function) {
 						var script = findScriptForFunctionInContext(context, fn);
 						if (script)
@@ -607,7 +607,7 @@ FBL.ns(function () {
 					}
 				},
 
-				untraceCalls: function (context, fn) {
+				untraceCalls : function (context, fn) {
 					if (typeof(fn) == "function" || fn instanceof Function) {
 						var script = findScriptForFunctionInContext(context, fn);
 						if (script)
@@ -615,13 +615,13 @@ FBL.ns(function () {
 					}
 				},
 
-				traceScriptCalls: function (context, script) {
+				traceScriptCalls : function (context, script) {
 					var scriptInfo = Firebug.SourceFile.getSourceFileAndLineByScript(context, script);
 					if (scriptInfo)
 						fbs.traceCalls(scriptInfo.sourceFile, scriptInfo.lineNo, Firebug.Debugger);
 				},
 
-				untraceScriptCalls: function (context, script) {
+				untraceScriptCalls : function (context, script) {
 					var scriptInfo = Firebug.SourceFile.getSourceFileAndLineByScript(context, script);
 					if (scriptInfo)
 						fbs.untraceCalls(scriptInfo.sourceFile, scriptInfo.lineNo, Firebug.Debugger);
@@ -633,7 +633,7 @@ FBL.ns(function () {
 				/*
 				 * Called when a nestedEventLoop begins
 				 */
-				startDebugging: function (context) {
+				startDebugging : function (context) {
 					if (FBTrace.DBG_UI_LOOP)
 						FBTrace.sysout("startDebugging enter context.stopped:" + context.stopped + " for context: " + context.getName() + "\n");
 					try {
@@ -690,7 +690,7 @@ FBL.ns(function () {
 				 * Called in the main event loop, from jsd, after we have exited the nested event loop
 				 */
 
-				stopDebugging: function (context) {
+				stopDebugging : function (context) {
 					if (FBTrace.DBG_UI_LOOP)
 						FBTrace.sysout("stopDebugging enter context: " + context.getName() + "\n");
 					try {
@@ -731,7 +731,7 @@ FBL.ns(function () {
 					}
 				},
 
-				syncCommands: function (context) {
+				syncCommands : function (context) {
 					var chrome = Firebug.chrome;
 					if (!chrome) {
 						if (FBTrace.DBG_ERRORS)
@@ -754,7 +754,7 @@ FBL.ns(function () {
 					}
 				},
 
-				syncListeners: function (context) {
+				syncListeners : function (context) {
 					var chrome = Firebug.chrome;
 
 					if (context.stopped)
@@ -763,7 +763,7 @@ FBL.ns(function () {
 						this.detachListeners(context, chrome);
 				},
 
-				attachListeners: function (context, chrome) {
+				attachListeners : function (context, chrome) {
 					this.keyListeners =
 						[
 						chrome.keyCodeListen("F8", null, bind(this.resume, this, context), true),
@@ -777,7 +777,7 @@ FBL.ns(function () {
 					];
 				},
 
-				detachListeners: function (context, chrome) {
+				detachListeners : function (context, chrome) {
 					if (this.keyListeners) {
 						for (var i = 0; i < this.keyListeners.length; ++i)
 							chrome.keyIgnore(this.keyListeners[i]);
@@ -785,7 +785,7 @@ FBL.ns(function () {
 					}
 				},
 
-				showPanel: function (browser, panel) {
+				showPanel : function (browser, panel) {
 					if (panel && panel.name == "script") // this test on name is a sign that this code belongs in panel.show()
 					{
 						this.syncCommands(panel.context);
@@ -795,17 +795,17 @@ FBL.ns(function () {
 					}
 				},
 
-				suspendFirebug: function () {
+				suspendFirebug : function () {
 					Firebug.suspendFirebug();
 				},
 
-				resumeFirebug: function () {
+				resumeFirebug : function () {
 					Firebug.resumeFirebug();
 				},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				supportsWindow: function (win) {
+				supportsWindow : function (win) {
 					if (!this.isAlwaysEnabled())
 						return false;
 
@@ -815,7 +815,7 @@ FBL.ns(function () {
 					return !!context;
 				},
 
-				supportsGlobal: function (frameWin) // This is call from fbs for almost all fbs operations
+				supportsGlobal : function (frameWin) // This is call from fbs for almost all fbs operations
 				{
 					var context = ((frameWin && TabWatcher) ? TabWatcher.getContextByWindow(frameWin) : null);
 					if (!context)
@@ -836,7 +836,7 @@ FBL.ns(function () {
 					return true;
 				},
 
-				injectConsole: function (context, frameWin) {
+				injectConsole : function (context, frameWin) {
 					if (Firebug.Console.isAlwaysEnabled()) {
 						// This is how the console is injected ahead of JS running on the page
 						fbs.filterConsoleInjections = true;
@@ -857,7 +857,7 @@ FBL.ns(function () {
 					}
 				},
 
-				onLock: function (state) {
+				onLock : function (state) {
 					// XXXjoe For now, trying to see if it's ok to have multiple contexts
 					// debugging simultaneously - otherwise we need this
 					//if (this.context != this.debugContext)
@@ -866,7 +866,7 @@ FBL.ns(function () {
 					}
 				},
 
-				onBreak: function (frame, type) {
+				onBreak : function (frame, type) {
 					try {
 						var context = this.breakContext;
 
@@ -893,7 +893,7 @@ FBL.ns(function () {
 					}
 				},
 
-				debuggerTracer: function (context, frame) {
+				debuggerTracer : function (context, frame) {
 					var trace = FBL.getCorrectedStackTrace(frame, context);
 					if (FBTrace.DBG_ERRORLOG)
 						FBTrace.sysout("debugger.firebugDebuggerTracer corrected trace.frames " + trace.frames.length, trace.frames);
@@ -919,7 +919,7 @@ FBL.ns(function () {
 				/*
 				 * for |debugger;| keyword offer the skip/continue dialog (optionally?)
 				 */
-				setDebuggerKeywordCause: function (context, frame) {
+				setDebuggerKeywordCause : function (context, frame) {
 					var sourceFile = Firebug.SourceFile.getSourceFileByScript(context, frame.script);
 					if (!sourceFile) {
 						if (FBTrace.DBG_ERRORS)
@@ -931,9 +931,9 @@ FBL.ns(function () {
 					var lineNo = analyzer.getSourceLineFromFrame(context, frame);
 
 					context.breakingCause = {
-						title: $STR("debugger keyword"),
-						message: $STR("Disable converts keyword to disabled breakpoint"), //xxxHonza localization
-						skipAction: function addSkipperAndGo() {
+						title : $STR("debugger keyword"),
+						message : $STR("Disable converts keyword to disabled breakpoint"), //xxxHonza localization
+						skipAction : function addSkipperAndGo() {
 							// a breakpoint that never hits, but prevents debugger keyword (see fbs.onDebugger as well)
 							var bp = fbs.setBreakpoint(sourceFile, lineNo, null, Firebug.Debugger);
 							fbs.disableBreakpoint(sourceFile.href, lineNo);
@@ -942,13 +942,13 @@ FBL.ns(function () {
 
 							Firebug.Debugger.resume(context);
 						},
-						okAction: function justGo() {
+						okAction : function justGo() {
 							Firebug.Debugger.resume(context);
 						},
 					};
 				},
 
-				onThrow: function (frame, rv) {
+				onThrow : function (frame, rv) {
 					// onThrow is called for throw and for any catch that does not succeed.
 					var context = this.breakContext;
 					delete this.breakContext;
@@ -984,7 +984,7 @@ FBL.ns(function () {
 					return RETURN_CONTINUE_THROW;
 				},
 
-				isCatchFromPreviousThrow: function (frame, context) {
+				isCatchFromPreviousThrow : function (frame, context) {
 					if (context.thrownStackTrace) {
 						var trace = context.thrownStackTrace.frames;
 						if (trace.length > 1) // top of stack is [0]
@@ -1005,7 +1005,7 @@ FBL.ns(function () {
 					return false;
 				},
 
-				onMonitorScript: function (frame) {
+				onMonitorScript : function (frame) {
 					var context = this.breakContext;
 					delete this.breakContext;
 
@@ -1019,7 +1019,7 @@ FBL.ns(function () {
 					dispatch(this.fbListeners, "onMonitorScript", [context, frame]);
 				},
 
-				onFunctionCall: function (context, frame, depth, calling) {
+				onFunctionCall : function (context, frame, depth, calling) {
 					if (!context)
 						context = this.getContextByFrame(frame);
 					if (!context)
@@ -1032,7 +1032,7 @@ FBL.ns(function () {
 					return context; // returned as first arg on next call from same trace
 				},
 
-				onError: function (frame, error) {
+				onError : function (frame, error) {
 					var context = this.breakContext;
 					delete this.breakContext;
 
@@ -1061,7 +1061,7 @@ FBL.ns(function () {
 
 							var doBreak = true;
 							fbs.enumerateBreakpoints(sourceFile.href, {
-								call: function (url, line, props, scripts) {
+								call : function (url, line, props, scripts) {
 									if (FBTrace.DBG_FBS_BP)
 										FBTrace.sysout("debugger.breakon Errors bp " + url + "@" + line + " scripts " + (scripts ? scripts.length : "none"));
 									if (line === lineNo)
@@ -1074,11 +1074,11 @@ FBL.ns(function () {
 
 							if (doBreak) {
 								context.breakingCause = {
-									title: $STR("Break on Error"),
-									message: error.message,
-									copyAction: bindFixed(FirebugReps.ErrorMessage.copyError,
+									title : $STR("Break on Error"),
+									message : error.message,
+									copyAction : bindFixed(FirebugReps.ErrorMessage.copyError,
 										FirebugReps.ErrorMessage, error),
-									skipAction: function addSkipperAndGo() {
+									skipAction : function addSkipperAndGo() {
 										// a breakpoint that never hits, but prevents BON for errors
 										var bp = fbs.setBreakpoint(sourceFile, lineNo, null, Firebug.Debugger);
 										fbs.disableBreakpoint(sourceFile.href, lineNo);
@@ -1087,7 +1087,7 @@ FBL.ns(function () {
 
 										Firebug.Debugger.resume(context);
 									},
-									okAction: function justGo() {
+									okAction : function justGo() {
 										Firebug.Debugger.resume(context);
 									},
 								};
@@ -1117,7 +1117,7 @@ FBL.ns(function () {
 					return -2; /* let firebug service decide to break or not */
 				},
 
-				onUncaughtException: function (errorInfo) {
+				onUncaughtException : function (errorInfo) {
 					var context = this.breakContext;
 					delete this.breakContext;
 
@@ -1125,7 +1125,7 @@ FBL.ns(function () {
 					return -2;
 				},
 
-				onXULScriptCreated: function (frame, outerScript, innerScriptEnumerator) {
+				onXULScriptCreated : function (frame, outerScript, innerScriptEnumerator) {
 					try {
 						var context = this.breakContext;
 						delete this.breakContext;
@@ -1151,7 +1151,7 @@ FBL.ns(function () {
 					}
 				},
 
-				onEvalScriptCreated: function (frame, outerScript, innerScripts) {
+				onEvalScriptCreated : function (frame, outerScript, innerScripts) {
 					try {
 						if (FBTrace.DBG_EVAL)
 							FBTrace.sysout("debugger.onEvalLevelScript script.fileName=" + outerScript.fileName + "\n");
@@ -1171,7 +1171,7 @@ FBL.ns(function () {
 					}
 				},
 
-				onEventScriptCreated: function (frame, outerScript, innerScripts) {
+				onEventScriptCreated : function (frame, outerScript, innerScripts) {
 					if (FBTrace.DBG_EVENTS)
 						FBTrace.sysout("debugger.onEventScriptCreated script.fileName=" + outerScript.fileName + "\n");
 					var context = this.breakContext;
@@ -1217,7 +1217,7 @@ FBL.ns(function () {
 				},
 
 				// We just compiled a bunch of JS, eg a script tag in HTML.  We are about to run the outerScript.
-				onTopLevelScriptCreated: function (frame, outerScript, innerScripts) {
+				onTopLevelScriptCreated : function (frame, outerScript, innerScripts) {
 					if (FBTrace.DBG_TOPLEVEL)
 						FBTrace.sysout("debugger(" + this.debuggerName + ").onTopLevelScriptCreated script.fileName=" + outerScript.fileName + "\n");
 					var context = this.breakContext;
@@ -1271,7 +1271,7 @@ FBL.ns(function () {
 					return sourceFile;
 				},
 
-				getContextByFrame: function (frame) {
+				getContextByFrame : function (frame) {
 					if (FBTrace.DBG_BP)
 						FBTrace.sysout("debugger.getContextByFrame");
 					var win = fbs.getOutermostScope(frame);
@@ -1280,19 +1280,19 @@ FBL.ns(function () {
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				watchSourceFile: function (context, sourceFile) {
+				watchSourceFile : function (context, sourceFile) {
 					context.addSourceFile(sourceFile); // store in the context and notify listeners
 					//fbs.watchSourceFile(sourceFile);    // tell the service to watch this file
 				},
 
-				unwatchSourceFile: function (context, sourceFile) {
+				unwatchSourceFile : function (context, sourceFile) {
 					//fbs.unwatchSourceFile(sourceFile);
 					context.removeSourceFile(sourceFile);
 				},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				onToggleBreakpoint: function (url, lineNo, isSet, props) {
+				onToggleBreakpoint : function (url, lineNo, isSet, props) {
 					if (props.debuggerName != this.debuggerName) // then not for us
 					{
 						if (FBTrace.DBG_BP)
@@ -1366,7 +1366,7 @@ FBL.ns(function () {
 						FBTrace.sysout("debugger(" + this.debuggerName + ").onToggleBreakpoint no find context");
 				},
 
-				onToggleErrorBreakpoint: function (url, lineNo, isSet) {
+				onToggleErrorBreakpoint : function (url, lineNo, isSet) {
 					for (var i = 0; i < TabWatcher.contexts.length; ++i) {
 						var context = TabWatcher.contexts[i];
 						var panel = context.getPanel("console", true);
@@ -1388,7 +1388,7 @@ FBL.ns(function () {
 					}
 				},
 
-				onToggleMonitor: function (url, lineNo, isSet) {
+				onToggleMonitor : function (url, lineNo, isSet) {
 					for (var i = 0; i < TabWatcher.contexts.length; ++i) {
 						var panel = TabWatcher.contexts[i].getPanel("console", true);
 						if (panel)
@@ -1396,13 +1396,13 @@ FBL.ns(function () {
 					}
 				},
 
-				checkDynamicURLhasBP: function (context) {
+				checkDynamicURLhasBP : function (context) {
 					context.dynamicURLhasBP = false;
 					for (var url in context.sourceFileMap) {
 						var sourceFile = context.sourceFileMap[url];
 						if (sourceFile.isEval() || sourceFile.isEvent()) {
 							fbs.enumerateBreakpoints(url, {
-								call: function setDynamicIfSet(url, lineNo) {
+								call : function setDynamicIfSet(url, lineNo) {
 									context.dynamicURLhasBP = true;
 								}
 							});
@@ -1417,7 +1417,7 @@ FBL.ns(function () {
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// XXXjjb this code is not called, because I found the scheme for detecting Function too complex.
 				// I'm leaving it here to remind us that we need to support new Function().
-				onFunctionConstructor: function (frame, ctor_script) {
+				onFunctionConstructor : function (frame, ctor_script) {
 					try {
 						var context = this.breakContext;
 						delete this.breakContext;
@@ -1440,7 +1440,7 @@ FBL.ns(function () {
 
 				},
 
-				createSourceFileForFunctionConstructor: function (caller_frame, ctor_script, context) {
+				createSourceFileForFunctionConstructor : function (caller_frame, ctor_script, context) {
 					var ctor_expr = null; // this.getConstructorExpression(caller_frame, context);
 					if (FBTrace.DBG_EVAL)
 						FBTrace.sysout("createSourceFileForFunctionConstructor ctor_expr:" + ctor_expr + "\n");
@@ -1463,7 +1463,7 @@ FBL.ns(function () {
 					return sourceFile;
 				},
 
-				getConstructorExpression: function (caller_frame, context) {
+				getConstructorExpression : function (caller_frame, context) {
 					// We believe we are just after the ctor call.
 					var decompiled_lineno = getLineAtPC(caller_frame, context);
 					if (FBTrace.DBG_EVAL)
@@ -1502,7 +1502,7 @@ FBL.ns(function () {
 				// The source that contains the eval() call is the source of our caller.
 				// If our caller is a file, the source of our caller is at frame.script.baseLineNumber
 				// If our caller is an eval, the source of our caller is TODO Check Test Case
-				getEvalLevelSourceFile: function (frame, context, innerScripts) {
+				getEvalLevelSourceFile : function (frame, context, innerScripts) {
 					var eval_expr = this.getEvalExpression(frame, context);
 					if (FBTrace.DBG_EVAL)
 						FBTrace.sysout("getEvalLevelSourceFile eval_expr:" + eval_expr + "\n");
@@ -1534,7 +1534,7 @@ FBL.ns(function () {
 					return sourceFile;
 				},
 
-				getDynamicURL: function (context, callerURL, lines, kind) {
+				getDynamicURL : function (context, callerURL, lines, kind) {
 					var url = this.getURLFromLastLine(context, lines);
 					if (url)
 						return url;
@@ -1554,7 +1554,7 @@ FBL.ns(function () {
 					return url;
 				},
 
-				getURLFromLastLine: function (context, lines) {
+				getURLFromLastLine : function (context, lines) {
 					var url = null;
 					// Ignores any trailing whitespace in |source|
 					const reURIinComment = /\/\/@\ssourceURL=\s*(\S*?)\s*$/m;
@@ -1571,8 +1571,8 @@ FBL.ns(function () {
 						var href = new String(m[1]);
 
 						url = {
-							href: href,
-							kind: "source"
+							href : href,
+							kind : "source"
 						};
 						if (FBTrace.DBG_SOURCEFILES)
 							FBTrace.sysout("debugger.getURLFromLastLine " + url.href, url);
@@ -1583,15 +1583,15 @@ FBL.ns(function () {
 					return url;
 				},
 
-				getSequentialURL: function (context, callerURL, kind) {
+				getSequentialURL : function (context, callerURL, kind) {
 					var url = null;
 					if (!context.dynamicURLhasBP) {
 						// If no breakpoints live in dynamic code then we don't need to compare
 						// the previous and reloaded source. In that case let's use a cheap URL.
 						var href = new String(callerURL + (kind ? "/" + kind + "/" : "/nokind/") + "seq/" + (context.dynamicURLIndex++));
 						url = {
-							href: href,
-							kind: "seq"
+							href : href,
+							kind : "seq"
 						};
 						if (FBTrace.DBG_SOURCEFILES || isNaN(context.dynamicURLIndex))
 							FBTrace.sysout("debugger.getSequentialURL context:" + context.getName() + " url:" + url.href + " index: " + context.dynamicURLIndex, url);
@@ -1599,7 +1599,7 @@ FBL.ns(function () {
 					return url;
 				},
 
-				getURLFromMD5: function (callerURL, lines, kind) {
+				getURLFromMD5 : function (callerURL, lines, kind) {
 					this.hash_service.init(this.nsICryptoHash.MD5);
 					var source = lines.join('\n'); // we could double loop, would that be any faster?
 					byteArray = [];
@@ -1612,15 +1612,15 @@ FBL.ns(function () {
 					// encoding the hash should be ok, it should be information-preserving? Or at least reversable?
 					var href = new String(callerURL + (kind ? "/" + kind + "/" : "/nokind/") + "MD5/" + encodeURIComponent(hash));
 					url = {
-						href: href,
-						kind: "MD5"
+						href : href,
+						kind : "MD5"
 					};
 					if (FBTrace.DBG_SOURCEFILES)
 						FBTrace.sysout("debugger.getURLFromMD5 " + url.href, url);
 					return url;
 				},
 
-				getDataURLForScript: function (callerURL, lines) {
+				getDataURLForScript : function (callerURL, lines) {
 					var url = null;
 					var href = null;
 					if (!source)
@@ -1634,8 +1634,8 @@ FBL.ns(function () {
 						href += "," + encodeURIComponent(source);
 					}
 					url = {
-						href: href,
-						kind: "data"
+						href : href,
+						kind : "data"
 					};
 					if (FBTrace.DBG_SOURCEFILES)
 						FBTrace.sysout("debugger.getDataURLForScript " + url.href, url);
@@ -1644,13 +1644,13 @@ FBL.ns(function () {
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				getEvalExpression: function (frame, context) {
+				getEvalExpression : function (frame, context) {
 					var expr = this.getEvalExpressionFromEval(frame, context); // eval in eval
 
 					return (expr) ? expr : this.getEvalExpressionFromFile(normalizeURL(frame.script.fileName), frame.script.baseLineNumber, context);
 				},
 
-				getEvalExpressionFromFile: function (url, lineNo, context) {
+				getEvalExpressionFromFile : function (url, lineNo, context) {
 					if (context && context.sourceCache) {
 						var in_url = FBL.reJavascript.exec(url);
 						if (in_url) {
@@ -1680,7 +1680,7 @@ FBL.ns(function () {
 					return null;
 				},
 
-				getEvalExpressionFromEval: function (frame, context) {
+				getEvalExpressionFromEval : function (frame, context) {
 					var callingFrame = frame.callingFrame;
 					var sourceFile = Firebug.SourceFile.getSourceFileByScript(context, callingFrame.script);
 					if (sourceFile) {
@@ -1713,7 +1713,7 @@ FBL.ns(function () {
 					return null;
 				},
 
-				getEvalBody: function (frame, asName, asLine, evalExpr) {
+				getEvalBody : function (frame, asName, asLine, evalExpr) {
 					if (evalExpr && !Firebug.decompileEvals) {
 						var result_src = {};
 						var evalThis = "new String(" + evalExpr + ");";
@@ -1738,7 +1738,7 @@ FBL.ns(function () {
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// extends Module
 
-				initialize: function () {
+				initialize : function () {
 					Firebug.clientID = this.registerClient(Firebug);
 					this.nsICryptoHash = Components.interfaces["nsICryptoHash"];
 
@@ -1767,7 +1767,7 @@ FBL.ns(function () {
 					Firebug.ActivableModule.initialize.apply(this, arguments);
 				},
 
-				internationalizeUI: function (doc) {
+				internationalizeUI : function (doc) {
 					var elements = ["fbContinueButton", "fbStepIntoButton", "fbStepOverButton",
 						"fbStepOutButton"];
 
@@ -1785,15 +1785,15 @@ FBL.ns(function () {
 				 * per-XUL window registration; this method just allows us to keep fbs in this file.
 				 * @param clientAPI an object that implements functions called by fbs for clients.
 				 */
-				registerClient: function (clientAPI) {
+				registerClient : function (clientAPI) {
 					return fbs.registerClient(clientAPI);
 				},
 
-				unregisterClient: function (clientAPI) {
+				unregisterClient : function (clientAPI) {
 					fbs.unregisterClient(clientAPI);
 				},
 
-				enable: function () {
+				enable : function () {
 					if (FBTrace.DBG_ACTIVATION)
 						FBTrace.sysout("debugger.Firebug.Debugger.enable; " + this.enabled);
 
@@ -1801,21 +1801,21 @@ FBL.ns(function () {
 					//    this.registerDebugger(); // allow callbacks for jsd
 				},
 
-				disable: function () {
+				disable : function () {
 					if (FBTrace.DBG_ACTIVATION)
 						FBTrace.sysout("debugger.Firebug.Debugger.disable; " + this.enabled);
 
 					//this.unregisterDebugger();
 				},
 
-				initializeUI: function () {
+				initializeUI : function () {
 					Firebug.ActivableModule.initializeUI.apply(this, arguments);
 					this.filterButton = $("fbScriptFilterMenu");
 					this.filterMenuUpdate();
 					Firebug.setIsJSDActive(fbs.isJSDActive()); // jsd may be active before this XUL window was opened
 				},
 
-				initContext: function (context, persistedState) {
+				initContext : function (context, persistedState) {
 					if (persistedState)
 						context.dynamicURLhasBP = persistedState.dynamicURLhasBP;
 
@@ -1826,18 +1826,18 @@ FBL.ns(function () {
 					Firebug.ActivableModule.initContext.apply(this, arguments);
 				},
 
-				reattachContext: function (browser, context) {
+				reattachContext : function (browser, context) {
 					this.filterButton = Firebug.chrome.$("fbScriptFilterMenu"); // connect to the button in the new window, not 'window'
 					this.filterMenuUpdate();
 					Firebug.ActivableModule.reattachContext.apply(this, arguments);
 				},
 
-				loadedContext: function (context) {
+				loadedContext : function (context) {
 					var watchPanel = this.ableWatchSidePanel(context);
 					var needNow = watchPanel && watchPanel.watches;
 					var watchPanelState = Firebug.getPanelState({
-							name: "watches",
-							context: context
+							name : "watches",
+							context : context
 						});
 					var needPersistent = watchPanelState && watchPanelState.watches;
 					if (needNow || needPersistent) {
@@ -1861,7 +1861,7 @@ FBL.ns(function () {
 				 * A DOM Mutation Event handler for script tag additions
 				 * FAILS see http://code.google.com/p/fbug/issues/detail?id=2912
 				 */
-				watchScriptAdditions: function (event, context) {
+				watchScriptAdditions : function (event, context) {
 					if (event.type !== "DOMNodeInserted")
 						return;
 					if (event.target.tagName.toLowerCase() !== "script")
@@ -1870,7 +1870,7 @@ FBL.ns(function () {
 					var location = safeGetWindowLocation(context.window);
 
 					FBL.jsd.enumerateScripts({
-						enumerateScript: function (script) {
+						enumerateScript : function (script) {
 							if (normalizeURL(script.fileName) === location) {
 								var sourceFile = Firebug.SourceFile.getSourceFileByScript(context, script);
 								FBTrace.sysout('debugger.watchScriptAdditions ' + script.tag + " in " + (sourceFile ? sourceFile.href : "NONE") + " " + script.functionSource, script.functionSource);
@@ -1894,7 +1894,7 @@ FBL.ns(function () {
 					}
 				},
 
-				unwatchWindow: function (context, win) // clean up the source file map in case the frame is being reloaded.
+				unwatchWindow : function (context, win) // clean up the source file map in case the frame is being reloaded.
 				{
 					var scriptTags = win.document.getElementsByTagName("script");
 					for (var i = 0; i < scriptTags.length; i++) {
@@ -1914,7 +1914,7 @@ FBL.ns(function () {
 						context.invalidatePanels('script');
 				},
 
-				destroyContext: function (context, persistedState) {
+				destroyContext : function (context, persistedState) {
 					Firebug.ActivableModule.destroyContext.apply(this, arguments);
 
 					context.window.document.removeEventListener("DOMNodeInserted", context.watchScriptAdditions, false);
@@ -1932,25 +1932,25 @@ FBL.ns(function () {
 					}
 				},
 
-				updateOption: function (name, value) {
+				updateOption : function (name, value) {
 					if (name == "breakOnErrors")
 						$("cmd_breakOnErrors").setAttribute("checked", value);
 					else if (name == "decompileEvals")
 						$("cmd_decompileEvals").setAttribute("checked", value);
 				},
 
-				getObjectByURL: function (context, url) {
+				getObjectByURL : function (context, url) {
 					var sourceFile = getSourceFileByHref(url, context);
 					if (sourceFile)
 						return new SourceLink(sourceFile.href, 0, "js");
 				},
 
-				shutdown: function () {
+				shutdown : function () {
 					this.unregisterClient(Firebug);
 					fbs.unregisterDebugger(this);
 				},
 
-				registerDebugger: function () // 1.3.1 safe for multiple calls
+				registerDebugger : function () // 1.3.1 safe for multiple calls
 				{
 					if (FBTrace.DBG_INITIALIZE)
 						FBTrace.sysout("registerDebugger this.registered: " + this.registered);
@@ -1966,7 +1966,7 @@ FBL.ns(function () {
 						FBTrace.sysout("debugger.registerDebugger " + check + " debuggers");
 				},
 
-				unregisterDebugger: function () // 1.3.1 safe for multiple calls
+				unregisterDebugger : function () // 1.3.1 safe for multiple calls
 				{
 					if (FBTrace.DBG_INITIALIZE)
 						FBTrace.sysout("debugger.unregisterDebugger this.registered: " + this.registered);
@@ -1986,7 +1986,7 @@ FBL.ns(function () {
 						FBTrace.sysout("debugger.unregisterDebugger: " + check + " debuggers");
 				},
 
-				onSourceFileCreated: function (context, sourceFile) {
+				onSourceFileCreated : function (context, sourceFile) {
 					// This event can come at any time, eg by frame reloads or ajax,
 					// so we need to update the display.
 					context.invalidatePanels("script", "breakpoints");
@@ -1995,13 +1995,13 @@ FBL.ns(function () {
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// extends ActivableModule
 
-				onObserverChange: function (observer) {
+				onObserverChange : function (observer) {
 					if (this.hasObservers())
 						this.activateDebugger()else
 							this.deactivateDebugger();
 				},
 
-				activateDebugger: function () {
+				activateDebugger : function () {
 					this.registerDebugger();
 
 					if (Firebug.currentContext && !fbs.isJSDActive())
@@ -2011,7 +2011,7 @@ FBL.ns(function () {
 						FBTrace.sysout("debugger.activate;");
 				},
 
-				deactivateDebugger: function () {
+				deactivateDebugger : function () {
 					if (this.dependents && this.dependents.length > 0) {
 						for (var i = 0; i < this.dependents.length; i++) {
 							if (this.dependents[i].isAlwaysEnabled()) {
@@ -2040,7 +2040,7 @@ FBL.ns(function () {
 					// this.clearAllBreakpoints();  //XXXjjb I don't think we want to clear breakpoints here, just turn off jsd if no registered debuggers
 				},
 
-				onDependentModuleChange: function (dependentAddedOrRemoved) {
+				onDependentModuleChange : function (dependentAddedOrRemoved) {
 					if (this.dependents.length > 0) // then we have dependents now
 					{
 						if (!this.isAlwaysEnabled()) // then we need to enable
@@ -2055,7 +2055,7 @@ FBL.ns(function () {
 					// disable again...
 				},
 
-				onSuspendingFirebug: function () {
+				onSuspendingFirebug : function () {
 					var anyStopped = TabWatcher.iterateContexts(function isAnyStopped(context) {
 							return context.stopped;
 						});
@@ -2063,7 +2063,7 @@ FBL.ns(function () {
 					return anyStopped;
 				},
 
-				onSuspendFirebug: function () {
+				onSuspendFirebug : function () {
 					if (!Firebug.Debugger.isAlwaysEnabled())
 						return;
 
@@ -2079,7 +2079,7 @@ FBL.ns(function () {
 					return false;
 				},
 
-				onResumeFirebug: function () {
+				onResumeFirebug : function () {
 					if (!Firebug.Debugger.isAlwaysEnabled())
 						return;
 
@@ -2094,7 +2094,7 @@ FBL.ns(function () {
 							Firebug.Debugger.debuggerName + " not registered! *** ");
 				},
 
-				ableWatchSidePanel: function (context) {
+				ableWatchSidePanel : function (context) {
 					if (Firebug.Console.isAlwaysEnabled()) {
 						var watchPanel = context.getPanel("watches", true);
 						if (watchPanel)
@@ -2107,32 +2107,32 @@ FBL.ns(function () {
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// Menu in toolbar.
 
-				onScriptFilterMenuTooltipShowing: function (tooltip, context) {
+				onScriptFilterMenuTooltipShowing : function (tooltip, context) {
 					if (FBTrace.DBG_OPTIONS)
 						FBTrace.sysout("onScriptFilterMenuTooltipShowing not implemented");
 				},
 
-				onScriptFilterMenuCommand: function (event, context) {
+				onScriptFilterMenuCommand : function (event, context) {
 					var menu = event.target;
 					Firebug.setPref(Firebug.servicePrefDomain, "scriptsFilter", menu.value);
 					Firebug.Debugger.filterMenuUpdate();
 				},
 
-				menuFullLabel: {
-					static: $STR("ScriptsFilterStatic"),
-					evals: $STR("ScriptsFilterEval"),
-					events: $STR("ScriptsFilterEvent"),
-					all: $STR("ScriptsFilterAll"),
+				menuFullLabel : {
+					static : $STR("ScriptsFilterStatic"),
+					evals : $STR("ScriptsFilterEval"),
+					events : $STR("ScriptsFilterEvent"),
+					all : $STR("ScriptsFilterAll"),
 				},
 
-				menuShortLabel: {
-					static: $STR("ScriptsFilterStaticShort"),
-					evals: $STR("ScriptsFilterEvalShort"),
-					events: $STR("ScriptsFilterEventShort"),
-					all: $STR("ScriptsFilterAllShort"),
+				menuShortLabel : {
+					static : $STR("ScriptsFilterStaticShort"),
+					evals : $STR("ScriptsFilterEvalShort"),
+					events : $STR("ScriptsFilterEventShort"),
+					all : $STR("ScriptsFilterAllShort"),
 				},
 
-				onScriptFilterMenuPopupShowing: function (menu, context) {
+				onScriptFilterMenuPopupShowing : function (menu, context) {
 					if (this.menuTooltip)
 						this.menuTooltip.fbEnabled = false;
 
@@ -2153,14 +2153,14 @@ FBL.ns(function () {
 					return true;
 				},
 
-				onScriptFilterMenuPopupHiding: function (tooltip, context) {
+				onScriptFilterMenuPopupHiding : function (tooltip, context) {
 					if (this.menuTooltip)
 						this.menuTooltip.fbEnabled = true;
 
 					return true;
 				},
 
-				filterMenuUpdate: function () {
+				filterMenuUpdate : function () {
 					var value = Firebug.getPref(Firebug.servicePrefDomain, "scriptsFilter");
 					this.filterButton.value = value;
 					this.filterButton.label = this.menuShortLabel[value];
@@ -2180,12 +2180,12 @@ FBL.ns(function () {
 		 * In the namespace Firebug.ScriptPanel.
 		 */
 		Firebug.ScriptPanel.decorator = extend(new Firebug.SourceBoxDecorator, {
-				decorate: function (sourceBox, sourceFile) {
+				decorate : function (sourceBox, sourceFile) {
 					this.markExecutableLines(sourceBox);
 					this.setLineBreakpoints(sourceBox.repObject, sourceBox)
 				},
 
-				markExecutableLines: function (sourceBox) {
+				markExecutableLines : function (sourceBox) {
 					var sourceFile = sourceBox.repObject;
 					if (FBTrace.DBG_BP || FBTrace.DBG_LINETABLE)
 						FBTrace.sysout("debugger.markExecutableLines START: " + sourceFile.toString(), sourceFile.getLineRanges());
@@ -2218,9 +2218,9 @@ FBL.ns(function () {
 						FBTrace.sysout("debugger.markExecutableLines DONE: " + sourceFile.toString() + "\n");
 				},
 
-				setLineBreakpoints: function (sourceFile, sourceBox) {
+				setLineBreakpoints : function (sourceFile, sourceBox) {
 					fbs.enumerateBreakpoints(sourceFile.href, {
-						call: function (url, line, props, scripts) {
+						call : function (url, line, props, scripts) {
 							var scriptRow = sourceBox.getLineNode(line);
 							if (scriptRow) {
 								scriptRow.setAttribute("breakpoint", "true");
@@ -2242,7 +2242,7 @@ FBL.ns(function () {
 				/*
 				 * Framework connection
 				 */
-				updateSourceBox: function (sourceBox) {
+				updateSourceBox : function (sourceBox) {
 					if (this.scrollInfo && (this.scrollInfo.location == this.location))
 						this.scrollToLine(this.location, this.scrollInfo.previousCenterLine);
 					delete this.scrollInfo;
@@ -2251,25 +2251,25 @@ FBL.ns(function () {
 				/*
 				 * Framework connection
 				 */
-				getSourceType: function () {
+				getSourceType : function () {
 					return "js";
 				},
 
 				/*
 				 * Framework connection
 				 */
-				getDecorator: function (sourceBox) {
+				getDecorator : function (sourceBox) {
 					return Firebug.ScriptPanel.decorator;
 				},
 
-				initialize: function (context, doc) {
+				initialize : function (context, doc) {
 					this.location = null;
 					Firebug.SourceBoxPanel.initialize.apply(this, arguments);
 				},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				showFunction: function (fn) {
+				showFunction : function (fn) {
 					var sourceLink = findSourceForFunction(fn, this.context);
 					if (sourceLink) {
 						this.showSourceLink(sourceLink);
@@ -2279,7 +2279,7 @@ FBL.ns(function () {
 					}
 				},
 
-				showSourceLink: function (sourceLink) {
+				showSourceLink : function (sourceLink) {
 					var sourceFile = getSourceFileByHref(sourceLink.href, this.context);
 					if (sourceFile) {
 						this.navigate(sourceFile);
@@ -2292,7 +2292,7 @@ FBL.ns(function () {
 					}
 				},
 
-				highlightExecutionLine: function () {
+				highlightExecutionLine : function () {
 					var highlightingAttribute = "exe_line";
 					if (this.executionLine) // could point to any node in any sourcebox, private to this function
 						this.executionLine.removeAttribute(highlightingAttribute);
@@ -2325,7 +2325,7 @@ FBL.ns(function () {
 					return (this.executionLineNo > 0); // sticky if we have a valid line
 				},
 
-				showStackFrameXB: function (frameXB) {
+				showStackFrameXB : function (frameXB) {
 					if (this.context.stopped) {
 						this.setCurrentStackFrame(frameXB);
 						this.showExecutingSourceFile(frameXB.sourceFile, frameXB);
@@ -2333,7 +2333,7 @@ FBL.ns(function () {
 						this.showNoStackFrame();
 				},
 
-				showStackFrame: function (frame) {
+				showStackFrame : function (frame) {
 					if (!frame || (frame && !frame.isValid)) {
 						if (FBTrace.DBG_STACK)
 							FBTrace.sysout("showStackFrame no valid frame\n");
@@ -2354,7 +2354,7 @@ FBL.ns(function () {
 					this.showExecutingSourceFile(sourceFile, frame);
 				},
 
-				showExecutingSourceFile: function (sourceFile, frame) {
+				showExecutingSourceFile : function (sourceFile, frame) {
 					this.context.executingSourceFile = sourceFile;
 					this.executionFile = sourceFile;
 					if (this.executionFile) {
@@ -2378,7 +2378,7 @@ FBL.ns(function () {
 					}
 				},
 
-				showNoStackFrame: function () {
+				showNoStackFrame : function () {
 					this.executionFile = null;
 					this.executionLineNo = -1;
 
@@ -2399,14 +2399,14 @@ FBL.ns(function () {
 				 * @param frame: native or XB frame
 				 */
 
-				setCurrentStackFrame: function (frame) {
+				setCurrentStackFrame : function (frame) {
 					if (frame instanceof Ci.jsdIStackFrame)
 						this.context.currentFrame = frame; // TODO XB reverse this so the XB frame is current
 					else if (frame instanceof StackFrame)
 						this.context.currentFrame = frame.getNativeFrame();
 				},
 
-				toggleBreakpoint: function (lineNo) {
+				toggleBreakpoint : function (lineNo) {
 					var sourceFile = this.getSourceFileBySourceBox(this.selectedSourceBox);
 					var lineNode = this.selectedSourceBox.getLineNode(lineNo);
 
@@ -2421,7 +2421,7 @@ FBL.ns(function () {
 						fbs.setBreakpoint(sourceFile, lineNo, null, Firebug.Debugger);
 				},
 
-				toggleDisableBreakpoint: function (lineNo) {
+				toggleDisableBreakpoint : function (lineNo) {
 					var sourceFile = this.getSourceFileBySourceBox(this.selectedSourceBox);
 					var lineNode = this.selectedSourceBox.getLineNode(lineNo);
 					if (lineNode.getAttribute("disabledBreakpoint") == "true")
@@ -2430,7 +2430,7 @@ FBL.ns(function () {
 						fbs.disableBreakpoint(sourceFile.href, lineNo);
 				},
 
-				editBreakpointCondition: function (lineNo) {
+				editBreakpointCondition : function (lineNo) {
 					var sourceRow = this.selectedSourceBox.getLineNode(lineNo);
 					var sourceLine = getChildByClass(sourceRow, "sourceLine");
 					var condition = fbs.getBreakpointCondition(this.location.href, lineNo);
@@ -2446,7 +2446,7 @@ FBL.ns(function () {
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				addSelectionWatch: function () {
+				addSelectionWatch : function () {
 					var watchPanel = this.context.getPanel("watches", true);
 					if (watchPanel) {
 						var selection = this.document.defaultView.getSelection();
@@ -2455,7 +2455,7 @@ FBL.ns(function () {
 					}
 				},
 
-				copySource: function () {
+				copySource : function () {
 					var selection = this.document.defaultView.getSelection();
 					var source = this.getSourceLinesFrom(selection);
 					copyToClipboard(source);
@@ -2463,13 +2463,13 @@ FBL.ns(function () {
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				updateInfoTip: function () {
+				updateInfoTip : function () {
 					var infoTip = this.panelBrowser.infoTip;
 					if (infoTip && this.infoTipExpr)
 						this.populateInfoTip(infoTip, this.infoTipExpr);
 				},
 
-				populateInfoTip: function (infoTip, expr) {
+				populateInfoTip : function (infoTip, expr) {
 					if (!expr || isJavaScriptKeyword(expr))
 						return false;
 
@@ -2484,7 +2484,7 @@ FBL.ns(function () {
 							FBTrace.sysout("populateInfoTip result is " + result, result);
 
 						tag.replace({
-							object: result
+							object : result
 						}, infoTip);
 
 						Firebug.chrome.contextMenuObject = result; // for context menu select()
@@ -2500,7 +2500,7 @@ FBL.ns(function () {
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// UI event listeners
 
-				onMouseDown: function (event) {
+				onMouseDown : function (event) {
 					// Don't interfere with clicks made into a notification editor.
 					if (getAncestorByClass(event.target, "breakNotification"))
 						return;
@@ -2523,7 +2523,7 @@ FBL.ns(function () {
 					}
 				},
 
-				onContextMenu: function (event) {
+				onContextMenu : function (event) {
 					var sourceLine = getAncestorByClass(event.target, "sourceLine");
 					if (!sourceLine)
 						return;
@@ -2533,7 +2533,7 @@ FBL.ns(function () {
 					cancelEvent(event);
 				},
 
-				onMouseOver: function (event) {
+				onMouseOver : function (event) {
 					var sourceLine = getAncestorByClass(event.target, "sourceLine");
 					if (sourceLine) {
 						if (this.hoveredLine)
@@ -2546,7 +2546,7 @@ FBL.ns(function () {
 					}
 				},
 
-				onMouseOut: function (event) {
+				onMouseOut : function (event) {
 					var sourceLine = getAncestorByClass(event.relatedTarget, "sourceLine");
 					if (!sourceLine) {
 						if (this.hoveredLine)
@@ -2556,7 +2556,7 @@ FBL.ns(function () {
 					}
 				},
 
-				onScroll: function (event) {
+				onScroll : function (event) {
 					var scrollingElement = event.target;
 					this.reView(scrollingElement);
 				},
@@ -2564,13 +2564,13 @@ FBL.ns(function () {
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// extends Panel
 
-				name: "script",
-				searchable: true,
-				breakable: true,
-				enableA11y: true,
-				order: 40,
+				name : "script",
+				searchable : true,
+				breakable : true,
+				enableA11y : true,
+				order : 40,
 
-				initialize: function (context, doc) {
+				initialize : function (context, doc) {
 					this.onMouseDown = bind(this.onMouseDown, this);
 					this.onContextMenu = bind(this.onContextMenu, this);
 					this.onMouseOver = bind(this.onMouseOver, this);
@@ -2583,7 +2583,7 @@ FBL.ns(function () {
 					Firebug.SourceBoxPanel.initialize.apply(this, arguments);
 				},
 
-				destroy: function (state) {
+				destroy : function (state) {
 					delete this.selection; // We want the location (sourcefile) to persist, not the selection (eg stackFrame).
 					persistObjects(this, state);
 
@@ -2598,7 +2598,7 @@ FBL.ns(function () {
 					Firebug.SourceBoxPanel.destroy.apply(this, arguments);
 				},
 
-				detach: function (oldChrome, newChrome) {
+				detach : function (oldChrome, newChrome) {
 					if (this.selectedSourceBox)
 						this.lastSourceScrollTop = this.selectedSourceBox.scrollTop;
 
@@ -2612,7 +2612,7 @@ FBL.ns(function () {
 					Firebug.SourceBoxPanel.detach.apply(this, arguments);
 				},
 
-				reattach: function (doc) {
+				reattach : function (doc) {
 					Firebug.SourceBoxPanel.reattach.apply(this, arguments);
 
 					setTimeout(bind(function delayScrollToLastTop() {
@@ -2623,7 +2623,7 @@ FBL.ns(function () {
 						}, this));
 				},
 
-				initializeNode: function (oldPanelNode) {
+				initializeNode : function (oldPanelNode) {
 					this.tooltip = this.document.createElement("div");
 					setClass(this.tooltip, "scriptTooltip");
 					this.tooltip.setAttribute('aria-live', 'polite')
@@ -2639,7 +2639,7 @@ FBL.ns(function () {
 					Firebug.SourceBoxPanel.initializeNode.apply(this, arguments);
 				},
 
-				destroyNode: function () {
+				destroyNode : function () {
 					if (this.tooltipTimeout)
 						clearTimeout(this.tooltipTimeout);
 
@@ -2652,11 +2652,11 @@ FBL.ns(function () {
 					Firebug.SourceBoxPanel.destroyNode.apply(this, arguments);
 				},
 
-				clear: function () {
+				clear : function () {
 					clearNode(this.panelNode);
 				},
 
-				showWarning: function () {
+				showWarning : function () {
 					// Fill the panel node with a warning if needed
 					var aLocation = this.getDefaultLocation();
 					var jsEnabled = Firebug.getPref("javascript", "enabled");
@@ -2679,7 +2679,7 @@ FBL.ns(function () {
 					return true;
 				},
 
-				show: function (state) {
+				show : function (state) {
 					var enabled = Firebug.Debugger.isAlwaysEnabled();
 
 					if (!enabled)
@@ -2705,8 +2705,8 @@ FBL.ns(function () {
 
 							if (state && this.location) // then we are restoring and we have a location, so scroll when we can
 								this.scrollInfo = {
-									location: this.location,
-									previousCenterLine: state.previousCenterLine
+									location : this.location,
+									previousCenterLine : state.previousCenterLine
 								};
 						} else // show default
 						{
@@ -2735,7 +2735,7 @@ FBL.ns(function () {
 					this.sidePanelDeck.collapsed = !active;
 				},
 
-				hide: function (state) {
+				hide : function (state) {
 					this.highlight(this.context.stopped);
 
 					var panelStatus = Firebug.chrome.getPanelStatusElements();
@@ -2744,7 +2744,7 @@ FBL.ns(function () {
 					delete this.infoTipExpr;
 				},
 
-				search: function (text, reverse) {
+				search : function (text, reverse) {
 					var sourceBox = this.selectedSourceBox;
 					if (!text || !sourceBox) {
 						delete this.currentSearch;
@@ -2771,7 +2771,7 @@ FBL.ns(function () {
 					return curDoc;
 				},
 
-				searchOtherDocs: function (text, reverse) {
+				searchOtherDocs : function (text, reverse) {
 					var scanRE = Firebug.Search.getTestingRegex(text);
 
 					var self = this;
@@ -2794,7 +2794,7 @@ FBL.ns(function () {
 					}
 				},
 
-				searchCurrentDoc: function (wrapSearch, text, reverse) {
+				searchCurrentDoc : function (wrapSearch, text, reverse) {
 					var sourceBox = this.selectedSourceBox;
 
 					var lineNo = null;
@@ -2817,7 +2817,7 @@ FBL.ns(function () {
 					}
 				},
 
-				getSearchOptionsMenuItems: function () {
+				getSearchOptionsMenuItems : function () {
 					return [
 						Firebug.Search.searchOptionMenu("search.Case Sensitive", "searchCaseSensitive"),
 						Firebug.Search.searchOptionMenu("search.Multiple Files", "searchGlobal"),
@@ -2825,7 +2825,7 @@ FBL.ns(function () {
 					];
 				},
 
-				supportsObject: function (object, type) {
+				supportsObject : function (object, type) {
 					if (object instanceof jsdIStackFrame
 						 || object instanceof Firebug.SourceFile
 						 || (object instanceof SourceLink && object.type == "js")
@@ -2836,7 +2836,7 @@ FBL.ns(function () {
 						return 0;
 				},
 
-				hasObject: function (object) {
+				hasObject : function (object) {
 					FBTrace.sysout("debugger.hasObject in " + this.context.getName() + " SourceLink: " + (object instanceof SourceLink), object);
 					if (object instanceof Firebug.SourceFile)
 						return (object.href in this.context.sourceFileMap);
@@ -2848,7 +2848,7 @@ FBL.ns(function () {
 						return false; //TODO
 				},
 
-				refresh: function () // delete any sourceBox-es that are not in sync with sourceFiles
+				refresh : function () // delete any sourceBox-es that are not in sync with sourceFiles
 				{
 					for (var url in this.sourceBoxes) {
 						if (this.sourceBoxes.hasOwnProperty(url)) {
@@ -2873,7 +2873,7 @@ FBL.ns(function () {
 						this.navigate();
 				},
 
-				updateLocation: function (sourceFile) {
+				updateLocation : function (sourceFile) {
 					if (!sourceFile)
 						return; // XXXjjb do we need to show a blank?
 
@@ -2898,7 +2898,7 @@ FBL.ns(function () {
 					dispatch(this.fbListeners, "onUpdateScriptLocation", [this, updatedSourceFile]);
 				},
 
-				updateSelection: function (object) {
+				updateSelection : function (object) {
 					if (FBTrace.DBG_PANELS) {
 						FBTrace.sysout("debugger updateSelection object:" + object + " of type " + typeof(object) + "\n");
 						if (object instanceof jsdIStackFrame)
@@ -2929,7 +2929,7 @@ FBL.ns(function () {
 						this.showStackFrame(null);
 				},
 
-				showThisSourceFile: function (sourceFile) {
+				showThisSourceFile : function (sourceFile) {
 					//-----------------------------------123456789
 					if (sourceFile.href.substr(0, 9) == "chrome://")
 						return false;
@@ -2943,7 +2943,7 @@ FBL.ns(function () {
 					return true;
 				},
 
-				getLocationList: function () {
+				getLocationList : function () {
 					var context = this.context;
 
 					if (!context.onLoadWindowContent) // then context was not active during load
@@ -2980,7 +2980,7 @@ FBL.ns(function () {
 					return list;
 				},
 
-				updateScriptFiles: function (context, eraseSourceFileMap) // scan windows for 'script' tags (only if debugger is not enabled)
+				updateScriptFiles : function (context, eraseSourceFileMap) // scan windows for 'script' tags (only if debugger is not enabled)
 				{
 					var oldMap = eraseSourceFileMap ? null : context.sourceFileMap;
 
@@ -3040,7 +3040,7 @@ FBL.ns(function () {
 					}
 				},
 
-				getDefaultLocation: function () {
+				getDefaultLocation : function () {
 					var sourceFiles = this.getLocationList();
 					if (!sourceFiles.length)
 						return null;
@@ -3056,11 +3056,11 @@ FBL.ns(function () {
 						return sourceFiles[0];
 				},
 
-				getDefaultSelection: function () {
+				getDefaultSelection : function () {
 					return this.getDefaultLocation();
 				},
 
-				getTooltipObject: function (target) {
+				getTooltipObject : function (target) {
 					// Target should be A element with class = sourceLine
 					if (hasClass(target, 'sourceLine')) {
 						var lineNo = parseInt(target.innerHTML);
@@ -3079,7 +3079,7 @@ FBL.ns(function () {
 					return null;
 				},
 
-				getPopupObject: function (target) {
+				getPopupObject : function (target) {
 					// Don't show popup over the line numbers, we show the conditional breakpoint
 					// editor there instead
 					var sourceLine = getAncestorByClass(target, "sourceLine");
@@ -3095,7 +3095,7 @@ FBL.ns(function () {
 					return scripts; // gee I wonder what will happen?
 				},
 
-				showInfoTip: function (infoTip, target, x, y, rangeParent, rangeOffset) {
+				showInfoTip : function (infoTip, target, x, y, rangeParent, rangeOffset) {
 					var frame = this.context.currentFrame;
 					if (!frame)
 						return;
@@ -3119,7 +3119,7 @@ FBL.ns(function () {
 						return this.populateInfoTip(infoTip, expr.expr);
 				},
 
-				getObjectPath: function (frame) {
+				getObjectPath : function (frame) {
 					frame = this.context.currentFrame;
 
 					if (FBTrace.DBG_STACK)
@@ -3132,16 +3132,16 @@ FBL.ns(function () {
 					return frames;
 				},
 
-				getObjectLocation: function (sourceFile) {
+				getObjectLocation : function (sourceFile) {
 					return sourceFile.href;
 				},
 
 				// return.path: group/category label, return.name: item label
-				getObjectDescription: function (sourceFile) {
+				getObjectDescription : function (sourceFile) {
 					return sourceFile.getObjectDescription();
 				},
 
-				getOptionsMenuItems: function () {
+				getOptionsMenuItems : function () {
 					var context = this.context;
 
 					return [
@@ -3155,17 +3155,17 @@ FBL.ns(function () {
 					];
 				},
 
-				optionMenu: function (label, option) {
+				optionMenu : function (label, option) {
 					var checked = Firebug.getPref(prefDomain, option);
 					return {
-						label: label,
-						type: "checkbox",
-						checked: checked,
-						command: bindFixed(Firebug.setPref, Firebug, prefDomain, option, !checked)
+						label : label,
+						type : "checkbox",
+						checked : checked,
+						command : bindFixed(Firebug.setPref, Firebug, prefDomain, option, !checked)
 					};
 				},
 
-				getContextMenuItems: function (fn, target) {
+				getContextMenuItems : function (fn, target) {
 					if (getAncestorByClass(target, "sourceLine"))
 						return;
 
@@ -3181,12 +3181,12 @@ FBL.ns(function () {
 					var selection = this.document.defaultView.getSelection();
 					if (selection.toString()) {
 						items.push({
-							label: "CopySourceCode",
-							command: bind(this.copySource, this)
+							label : "CopySourceCode",
+							command : bind(this.copySource, this)
 						},
 							"-", {
-							label: "AddWatch",
-							command: bind(this.addSelectionWatch, this)
+							label : "AddWatch",
+							command : bind(this.addSelectionWatch, this)
 						});
 					}
 
@@ -3194,23 +3194,23 @@ FBL.ns(function () {
 
 					items.push(
 						"-", {
-						label: "SetBreakpoint",
-						type: "checkbox",
-						checked: hasBreakpoint,
-						command: bindFixed(this.toggleBreakpoint, this, lineNo)
+						label : "SetBreakpoint",
+						type : "checkbox",
+						checked : hasBreakpoint,
+						command : bindFixed(this.toggleBreakpoint, this, lineNo)
 					});
 					if (hasBreakpoint) {
 						var isDisabled = fbs.isBreakpointDisabled(this.location.href, lineNo);
 						items.push({
-							label: "DisableBreakpoint",
-							type: "checkbox",
-							checked: isDisabled,
-							command: bindFixed(this.toggleDisableBreakpoint, this, lineNo)
+							label : "DisableBreakpoint",
+							type : "checkbox",
+							checked : isDisabled,
+							command : bindFixed(this.toggleDisableBreakpoint, this, lineNo)
 						});
 					}
 					items.push({
-						label: "EditBreakpointCondition",
-						command: bindFixed(this.editBreakpointCondition, this, lineNo)
+						label : "EditBreakpointCondition",
+						command : bindFixed(this.editBreakpointCondition, this, lineNo)
 					});
 
 					if (this.context.stopped) {
@@ -3222,20 +3222,20 @@ FBL.ns(function () {
 							var debuggr = Firebug.Debugger;
 							items.push(
 								"-", {
-								label: "Continue",
-								command: bindFixed(debuggr.resume, debuggr, this.context)
+								label : "Continue",
+								command : bindFixed(debuggr.resume, debuggr, this.context)
 							}, {
-								label: "StepOver",
-								command: bindFixed(debuggr.stepOver, debuggr, this.context)
+								label : "StepOver",
+								command : bindFixed(debuggr.stepOver, debuggr, this.context)
 							}, {
-								label: "StepInto",
-								command: bindFixed(debuggr.stepInto, debuggr, this.context)
+								label : "StepInto",
+								command : bindFixed(debuggr.stepInto, debuggr, this.context)
 							}, {
-								label: "StepOut",
-								command: bindFixed(debuggr.stepOut, debuggr, this.context)
+								label : "StepOut",
+								command : bindFixed(debuggr.stepOut, debuggr, this.context)
 							}, {
-								label: "RunUntil",
-								command: bindFixed(debuggr.runUntil, debuggr, this.context,
+								label : "RunUntil",
+								command : bindFixed(debuggr.runUntil, debuggr, this.context,
 									sourceFile, lineNo)
 							});
 						}
@@ -3244,25 +3244,25 @@ FBL.ns(function () {
 					return items;
 				},
 
-				getEditor: function (target, value) {
+				getEditor : function (target, value) {
 					if (!this.conditionEditor)
 						this.conditionEditor = new Firebug.Breakpoint.ConditionEditor(this.document);
 
 					return this.conditionEditor;
 				},
 
-				breakOnNext: function (enabled) {
+				breakOnNext : function (enabled) {
 					if (enabled)
 						Firebug.Debugger.suspend(this.context);
 					else
 						Firebug.Debugger.unSuspend(this.context);
 				},
 
-				getBreakOnNextTooltip: function (armed) {
+				getBreakOnNextTooltip : function (armed) {
 					return (armed ? $STR("script.Disable Break On Next") : $STR("script.Break On Next"));
 				},
 
-				shouldBreakOnNext: function () {
+				shouldBreakOnNext : function () {
 					var stepMode = fbs.getStepMode();
 					return stepMode && (stepMode == "STEP_SUSPEND");
 				},
@@ -3273,7 +3273,7 @@ FBL.ns(function () {
 				/**
 				 * Support for panel activation.
 				 */
-				onActivationChanged: function (enable) {
+				onActivationChanged : function (enable) {
 					if (FBTrace.DBG_CONSOLE || FBTrace.DBG_ACTIVATION)
 						FBTrace.sysout("console.ScriptPanel.onActivationChanged; " + enable);
 
@@ -3290,52 +3290,52 @@ FBL.ns(function () {
 		 * @domplate Displays various warning messages within the Script panel.
 		 */
 		Firebug.ScriptPanel.WarningRep = domplate(Firebug.Rep, {
-				tag:
+				tag :
 				DIV({
-					"class": "disabledPanelBox"
+					"class" : "disabledPanelBox"
 				},
 					H1({
-						"class": "disabledPanelHead"
+						"class" : "disabledPanelHead"
 					},
 						SPAN("$pageTitle")),
 					P({
-						"class": "disabledPanelDescription",
-						style: "margin-top: 15px;"
+						"class" : "disabledPanelDescription",
+						style : "margin-top: 15px;"
 					},
 						SPAN("$suggestion"))),
 
-				enableScriptTag:
+				enableScriptTag :
 				SPAN({
-					"class": "objectLink",
-					onclick: "$onEnableScript",
-					style: "color: blue"
+					"class" : "objectLink",
+					onclick : "$onEnableScript",
+					style : "color: blue"
 				},
 					$STR("script.button.enable_javascript")),
 
-				focusDebuggerTag:
+				focusDebuggerTag :
 				SPAN({
-					"class": "objectLink",
-					onclick: "$onFocusDebugger",
-					style: "color: blue"
+					"class" : "objectLink",
+					onclick : "$onFocusDebugger",
+					style : "color: blue"
 				},
 					$STR("script.button.Go to that page")),
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				onEnableScript: function (event) {
+				onEnableScript : function (event) {
 					Firebug.setPref("javascript", "enabled", true);
 
 					this.reloadPageFromMemory(event.target);
 				},
 
-				reloadPageFromMemory: function (event) {
+				reloadPageFromMemory : function (event) {
 					var context = Firebug.getElementPanel(event.target).context;
 					if (context.browser)
 						context.browser.reloadWithFlags(Ci.nsIWebNavigation.LOAD_FLAGS_CHARSET_CHANGE)else
 							context.window.location.reload();
 				},
 
-				onFocusDebugger: function (event) {
+				onFocusDebugger : function (event) {
 					iterateBrowserWindows("navigator:browser", function (win) {
 						return win.TabWatcher.iterateContexts(function (context) {
 							if (context.stopped) {
@@ -3348,10 +3348,10 @@ FBL.ns(function () {
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				showInactive: function (parentNode) {
+				showInactive : function (parentNode) {
 					var args = {
-						pageTitle: $STR("script.warning.inactive_during_page_load"),
-						suggestion: $STR("script.suggestion.inactive_during_page_load2")
+						pageTitle : $STR("script.warning.inactive_during_page_load"),
+						suggestion : $STR("script.suggestion.inactive_during_page_load2")
 					};
 
 					var box = this.tag.replace(args, parentNode, this);
@@ -3362,10 +3362,10 @@ FBL.ns(function () {
 					return box;
 				},
 
-				showNotEnabled: function (parentNode) {
+				showNotEnabled : function (parentNode) {
 					var args = {
-						pageTitle: $STR("script.warning.javascript_not_enabled"),
-						suggestion: $STR("script.suggestion.javascript_not_enabled")
+						pageTitle : $STR("script.warning.javascript_not_enabled"),
+						suggestion : $STR("script.suggestion.javascript_not_enabled")
 					}
 
 					var box = this.tag.replace(args, parentNode, this);
@@ -3374,26 +3374,26 @@ FBL.ns(function () {
 					return box;
 				},
 
-				showFiltered: function (parentNode) {
+				showFiltered : function (parentNode) {
 					var args = {
-						pageTitle: $STR("script.warning.all_scripts_filtered"),
-						suggestion: $STR("script.suggestion.all_scripts_filtered")
+						pageTitle : $STR("script.warning.all_scripts_filtered"),
+						suggestion : $STR("script.suggestion.all_scripts_filtered")
 					};
 					return this.tag.replace(args, parentNode, this);
 				},
 
-				showNoScript: function (parentNode) {
+				showNoScript : function (parentNode) {
 					var args = {
-						pageTitle: $STR("script.warning.no_javascript"),
-						suggestion: $STR("script.suggestion.no_javascript")
+						pageTitle : $STR("script.warning.no_javascript"),
+						suggestion : $STR("script.suggestion.no_javascript")
 					}
 					return this.tag.replace(args, parentNode, this);
 				},
 
-				showActivitySuspended: function (parentNode) {
+				showActivitySuspended : function (parentNode) {
 					var args = {
-						pageTitle: $STR("script.warning.debugger_active"),
-						suggestion: $STR("script.suggestion.debugger_active")
+						pageTitle : $STR("script.warning.debugger_active"),
+						suggestion : $STR("script.suggestion.debugger_active")
 					}
 
 					var box = this.tag.replace(args, parentNode, this);
@@ -3423,39 +3423,39 @@ FBL.ns(function () {
 			 * Called before pausing JSD to allow listeners to prevent the pause
 			 * @param rejection an array, push boolean true to cause rejection.
 			 */
-			onPauseJSDRequested: function (rejection) {},
+			onPauseJSDRequested : function (rejection) {},
 
 			/*
 			 * @param active the current value of  (jsd && jsd.isOn && (jsd.pauseDepth == 0) )
 			 * @param why a string explaining the change
 			 */
-			onJSDActivate: function (active, why) // start or unPause
+			onJSDActivate : function (active, why) // start or unPause
 			{},
 
 			/*
 			 * @param active the current value of  (jsd && jsd.isOn && (jsd.pauseDepth == 0) )
 			 * @param why a string explaining the change
 			 */
-			onJSDDeactivate: function (active, why) // stop or pause
+			onJSDDeactivate : function (active, why) // stop or pause
 			{},
 
-			onStop: function (context, frame, type, rv) {},
+			onStop : function (context, frame, type, rv) {},
 
-			onResume: function (context) {},
+			onResume : function (context) {},
 
-			onThrow: function (context, frame, rv) {
+			onThrow : function (context, frame, rv) {
 				return false; /* continue throw */
 			},
 
-			onError: function (context, frame, error) {},
+			onError : function (context, frame, error) {},
 
-			onEventScriptCreated: function (context, frame, url, sourceFile) {},
+			onEventScriptCreated : function (context, frame, url, sourceFile) {},
 
-			onTopLevelScriptCreated: function (context, frame, url, sourceFile) {},
+			onTopLevelScriptCreated : function (context, frame, url, sourceFile) {},
 
-			onEvalScriptCreated: function (context, frame, url, sourceFile) {},
+			onEvalScriptCreated : function (context, frame, url, sourceFile) {},
 
-			onFunctionConstructor: function (context, frame, ctor_script, url, sourceFile) {},
+			onFunctionConstructor : function (context, frame, ctor_script, url, sourceFile) {},
 		};
 
 		// ************************************************************************************************

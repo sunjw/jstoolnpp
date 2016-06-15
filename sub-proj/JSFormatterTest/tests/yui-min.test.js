@@ -42,9 +42,9 @@ var YUI = function () {
 	j = function () {},
 	g = Array.prototype.slice,
 	p = {
-		"io.xdrReady": 1,
-		"io.xdrResponse": 1,
-		"SWF.eventHandler": 1
+		"io.xdrReady" : 1,
+		"io.xdrResponse" : 1,
+		"SWF.eventHandler" : 1
 	},
 	f = (typeof window != "undefined"),
 	e = (f) ? window : null,
@@ -112,7 +112,7 @@ var YUI = function () {
 		o = "3.2.0pr1";
 	}
 	n = {
-		applyConfig: function (B) {
+		applyConfig : function (B) {
 			B = B || j;
 			var w,
 			y,
@@ -151,10 +151,10 @@ var YUI = function () {
 				u._config(B);
 			}
 		},
-		_config: function (u) {
+		_config : function (u) {
 			this.applyConfig(u);
 		},
-		_init: function () {
+		_init : function () {
 			var x,
 			y = this,
 			u = YUI.Env,
@@ -164,18 +164,18 @@ var YUI = function () {
 			y.version = o;
 			if (!v) {
 				y.Env = {
-					mods: {},
-					versions: {},
-					base: l,
-					cdn: l + o + "/build/",
-					_idx: 0,
-					_used: {},
-					_attached: {},
-					_yidx: 0,
-					_uidx: 0,
-					_guidp: "y",
-					_loaded: {},
-					getBase: u && u.getBase || function (F, E) {
+					mods : {},
+					versions : {},
+					base : l,
+					cdn : l + o + "/build/",
+					_idx : 0,
+					_used : {},
+					_attached : {},
+					_yidx : 0,
+					_uidx : 0,
+					_guidp : "y",
+					_loaded : {},
+					getBase : u && u.getBase || function (F, E) {
 						var A,
 						B,
 						D,
@@ -228,19 +228,19 @@ var YUI = function () {
 			}
 			y.constructor = YUI;
 			y.config = y.config || {
-				win: e,
-				doc: t,
-				debug: true,
-				useBrowserConsole: true,
-				throwFail: true,
-				bootstrap: true,
-				fetchCSS: true
+				win : e,
+				doc : t,
+				debug : true,
+				useBrowserConsole : true,
+				throwFail : true,
+				bootstrap : true,
+				fetchCSS : true
 			};
 			w = y.config;
 			w.base = YUI.config.base || y.Env.getBase(/^(.*)yui\/yui([\.\-].*)js(\?.*)?$/, /^(.*\?)(.*\&)(.*)yui\/yui[\.\-].*js(\?.*)?$/);
 			w.loaderPath = YUI.config.loaderPath || "loader/loader" + (x || "-min.") + "js";
 		},
-		_setup: function (z) {
+		_setup : function (z) {
 			var v,
 			y = this,
 			u = [],
@@ -254,7 +254,7 @@ var YUI = function () {
 			y._attach(["yui-base"]);
 			y._attach(u);
 		},
-		applyTo: function (A, z, w) {
+		applyTo : function (A, z, w) {
 			if (!(z in p)) {
 				this.log(z + ": applyTo not allowed", "warn", "yui");
 				return null;
@@ -276,14 +276,14 @@ var YUI = function () {
 			}
 			return null;
 		},
-		add: function (w, B, v, z) {
+		add : function (w, B, v, z) {
 			z = z || {};
 			var A = YUI.Env,
 			y = {
-				name: w,
-				fn: B,
-				version: v,
-				details: z
+				name : w,
+				fn : B,
+				version : v,
+				details : z
 			},
 			u,
 			x;
@@ -302,7 +302,7 @@ var YUI = function () {
 			}
 			return this;
 		},
-		_attach: function (u, z) {
+		_attach : function (u, z) {
 			var B,
 			x,
 			F,
@@ -343,7 +343,7 @@ var YUI = function () {
 			}
 			return true;
 		},
-		use: function () {
+		use : function () {
 			if (!this.Array) {
 				this._attach(["yui-base"]);
 			}
@@ -411,8 +411,8 @@ var YUI = function () {
 			},
 			E = function (W) {
 				var T = W || {
-					success: true,
-					msg: "not dynamic"
+					success : true,
+					msg : "not dynamic"
 				},
 				V,
 				S,
@@ -491,10 +491,10 @@ var YUI = function () {
 			} else {
 				if (K && v.config.use_rls) {
 					v.Get.script(v._rls(w), {
-						onEnd: function (R) {
+						onEnd : function (R) {
 							E(R);
 						},
-						data: w
+						data : w
 					});
 				} else {
 					if (B && K && v.Get && !u.bootstrapped) {
@@ -513,7 +513,7 @@ var YUI = function () {
 						} else {
 							M._bootstrapping = true;
 							v.Get.script(O.base + O.loaderPath, {
-								onEnd: L
+								onEnd : L
 							});
 						}
 					} else {
@@ -529,7 +529,7 @@ var YUI = function () {
 			}
 			return v;
 		},
-		namespace: function () {
+		namespace : function () {
 			var u = arguments,
 			y = null,
 			w,
@@ -545,9 +545,9 @@ var YUI = function () {
 			}
 			return y;
 		},
-		log: j,
-		message: j,
-		error: function (x, v) {
+		log : j,
+		message : j,
+		error : function (x, v) {
 			var w = this,
 			u;
 			if (w.config.errorFn) {
@@ -560,11 +560,11 @@ var YUI = function () {
 			}
 			return w;
 		},
-		guid: function (u) {
+		guid : function (u) {
 			var v = this.Env._guidp + (++this.Env._uidx);
 			return (u) ? (u + v) : v;
 		},
-		stamp: function (w, x) {
+		stamp : function (w, x) {
 			var u;
 			if (!w) {
 				return w;
@@ -621,15 +621,15 @@ YUI.add("yui-base", function (b) {
 	h = Object.prototype.toString,
 	s = "undefined",
 	a = {
-		"undefined": s,
-		"number": l,
-		"boolean": j,
-		"string": k,
-		"[object Function]": f,
-		"[object RegExp]": n,
-		"[object Array]": q,
-		"[object Date]": d,
-		"[object Error]": e
+		"undefined" : s,
+		"number" : l,
+		"boolean" : j,
+		"string" : k,
+		"[object Function]" : f,
+		"[object RegExp]" : n,
+		"[object Array]" : q,
+		"[object Date]" : d,
+		"[object Error]" : e
 	},
 	m = /^\s+|\s+$/g,
 	o = "",
@@ -784,22 +784,22 @@ YUI.add("yui-base", function (b) {
 		this.add.apply(this, arguments);
 	}
 	r.prototype = {
-		_init: function () {
+		_init : function () {
 			this._q = [];
 		},
-		next: function () {
+		next : function () {
 			return this._q.shift();
 		},
-		last: function () {
+		last : function () {
 			return this._q.pop();
 		},
-		add: function () {
+		add : function () {
 			b.Array.each(b.Array(arguments, 0, true), function (t) {
 				this._q.push(t);
 			}, this);
 			return this;
 		},
-		size: function () {
+		size : function () {
 			return this._q.length;
 		}
 	};
@@ -999,21 +999,21 @@ YUI.add("yui-base", function (b) {
 		x = b.config.win,
 		A = x && x.navigator,
 		z = {
-			ie: 0,
-			opera: 0,
-			gecko: 0,
-			webkit: 0,
-			chrome: 0,
-			mobile: null,
-			air: 0,
-			ipad: 0,
-			iphone: 0,
-			ipod: 0,
-			ios: null,
-			android: 0,
-			caja: A && A.cajaVersion,
-			secure: false,
-			os: null
+			ie : 0,
+			opera : 0,
+			gecko : 0,
+			webkit : 0,
+			chrome : 0,
+			mobile : null,
+			air : 0,
+			ipad : 0,
+			iphone : 0,
+			ipod : 0,
+			ios : null,
+			android : 0,
+			caja : A && A.cajaVersion,
+			secure : false,
+			os : null
 		},
 		v = A && A.userAgent,
 		y = x && x.location,
@@ -1129,10 +1129,10 @@ YUI.add("get", function (a) {
 			},
 			t = function (y, z, x) {
 				var A = {
-					id: a.guid(),
-					type: f,
-					rel: d,
-					href: y
+					id : a.guid(),
+					type : f,
+					rel : d,
+					href : y
 				};
 				if (x) {
 					a.mix(A, x);
@@ -1141,8 +1141,8 @@ YUI.add("get", function (a) {
 			},
 			s = function (y, z, x) {
 				var A = {
-					id: a.guid(),
-					type: e
+					id : a.guid(),
+					type : e
 				};
 				if (x) {
 					a.mix(A, x);
@@ -1152,13 +1152,13 @@ YUI.add("get", function (a) {
 			},
 			p = function (y, z, x) {
 				return {
-					tId: y.tId,
-					win: y.win,
-					data: y.data,
-					nodes: y.nodes,
-					msg: z,
-					statusText: x,
-					purge: function () {
+					tId : y.tId,
+					win : y.win,
+					data : y.data,
+					nodes : y.nodes,
+					msg : z,
+					statusText : x,
+					purge : function () {
 						n(this.tId);
 					}
 				};
@@ -1304,11 +1304,11 @@ YUI.add("get", function (a) {
 					g();
 				}
 				l[C] = a.merge(z, {
-						tId: C,
-						type: y,
-						url: x,
-						finished: false,
-						nodes: []
+						tId : C,
+						type : y,
+						url : x,
+						finished : false,
+						nodes : []
 					});
 				A = l[C];
 				A.win = A.win || a.config.win;
@@ -1318,7 +1318,7 @@ YUI.add("get", function (a) {
 				A.attributes.charset = z.charset || A.attributes.charset || "utf-8";
 				h(C);
 				return {
-					tId: C
+					tId : C
 				};
 			};
 			j = function (z, E, D, y, C, B, x) {
@@ -1396,23 +1396,23 @@ YUI.add("get", function (a) {
 				x.nodes = [];
 			};
 			return {
-				PURGE_THRESH: 20,
-				_finalize: function (x) {
+				PURGE_THRESH : 20,
+				_finalize : function (x) {
 					setTimeout(function () {
 						i(x);
 					}, 0);
 				},
-				abort: function (y) {
+				abort : function (y) {
 					var z = (b.isString(y)) ? y : y.tId,
 					x = l[z];
 					if (x) {
 						x.aborted = true;
 					}
 				},
-				script: function (x, y) {
+				script : function (x, y) {
 					return r("script", x, y);
 				},
-				css: function (x, y) {
+				css : function (x, y) {
 					return r("css", x, y);
 				}
 			};
@@ -1423,12 +1423,12 @@ YUI.add("get", function (a) {
 YUI.add("features", function (c) {
 	var a = {};
 	c.mix(c.namespace("Features"), {
-		tests: a,
-		add: function (d, e, f) {
+		tests : a,
+		add : function (d, e, f) {
 			a[d] = a[d] || {};
 			a[d][e] = f;
 		},
-		all: function (e, f) {
+		all : function (e, f) {
 			var g = a[e],
 			d = "";
 			if (g) {
@@ -1438,7 +1438,7 @@ YUI.add("features", function (c) {
 			}
 			return d;
 		},
-		test: function (e, g, f) {
+		test : function (e, g, f) {
 			var d,
 			i,
 			k,
@@ -1464,39 +1464,39 @@ YUI.add("features", function (c) {
 	});
 	var b = c.Features.add;
 	b("load", "0", {
-		"trigger": "dom-style",
-		"ua": "ie"
+		"trigger" : "dom-style",
+		"ua" : "ie"
 	});
 	b("load", "1", {
-		"test": function (e) {
+		"test" : function (e) {
 			var d = e.config.doc.documentMode;
 			return e.UA.ie && (!("onhashchange" in e.config.win) || !d || d < 8);
 		},
-		"trigger": "history-hash"
+		"trigger" : "history-hash"
 	});
 	b("load", "2", {
-		"test": function (d) {
+		"test" : function (d) {
 			return (d.config.win && ("ontouchstart" in d.config.win && !d.UA.chrome));
 		},
-		"trigger": "dd-drag"
+		"trigger" : "dd-drag"
 	});
 }, "3.2.0", {
-	requires: ["yui-base"]
+	requires : ["yui-base"]
 });
 YUI.add("rls", function (a) {
 	a._rls = function (g) {
 		var d = a.config,
 		f = d.rls || {
-			m: 1,
-			v: a.version,
-			gv: d.gallery,
-			env: 1,
-			lang: d.lang,
-			"2in3v": d["2in3"],
-			"2v": d.yui2,
-			filt: d.filter,
-			filts: d.filters,
-			tests: 1
+			m : 1,
+			v : a.version,
+			gv : d.gallery,
+			env : 1,
+			lang : d.lang,
+			"2in3v" : d["2in3"],
+			"2v" : d.yui2,
+			filt : d.filter,
+			filts : d.filters,
+			tests : 1
 		},
 		b = d.rls_base || "load?",
 		e = d.rls_tmpl || function () {
@@ -1520,12 +1520,12 @@ YUI.add("rls", function (a) {
 		return c;
 	};
 }, "3.2.0", {
-	requires: ["yui-base", "get", "features"]
+	requires : ["yui-base", "get", "features"]
 });
 YUI.add("intl-base", function (b) {
 	var a = /[, ]/;
 	b.mix(b.namespace("Intl"), {
-		lookupBestLang: function (g, h) {
+		lookupBestLang : function (g, h) {
 			var f,
 			j,
 			c,
@@ -1567,7 +1567,7 @@ YUI.add("intl-base", function (b) {
 		}
 	});
 }, "3.2.0", {
-	requires: ["yui-base"]
+	requires : ["yui-base"]
 });
 YUI.add("yui-log", function (a) {
 	(function () {
@@ -1575,10 +1575,10 @@ YUI.add("yui-log", function (a) {
 		e = "yui:log",
 		b = "undefined",
 		c = {
-			debug: 1,
-			info: 1,
-			warn: 1,
-			error: 1
+			debug : 1,
+			info : 1,
+			warn : 1,
+			error : 1
 		};
 		d.log = function (j, s, g, q) {
 			var l,
@@ -1620,13 +1620,13 @@ YUI.add("yui-log", function (a) {
 					if (h && !q) {
 						if (h == i && (!h.getEvent(e))) {
 							h.publish(e, {
-								broadcast: 2
+								broadcast : 2
 							});
 						}
 						h.fire(e, {
-							msg: j,
-							cat: s,
-							src: g
+							msg : j,
+							cat : s,
+							src : g
 						});
 					}
 				}
@@ -1638,7 +1638,7 @@ YUI.add("yui-log", function (a) {
 		};
 	})();
 }, "3.2.0", {
-	requires: ["yui-base"]
+	requires : ["yui-base"]
 });
 YUI.add("yui-later", function (a) {
 	(function () {
@@ -1659,9 +1659,9 @@ YUI.add("yui-later", function (a) {
 			};
 			l = (i) ? setInterval(h, e) : setTimeout(h, e);
 			return {
-				id: l,
-				interval: i,
-				cancel: function () {
+				id : l,
+				interval : i,
+				cancel : function () {
 					if (this.interval) {
 						clearInterval(l);
 					} else {
@@ -1674,7 +1674,7 @@ YUI.add("yui-later", function (a) {
 		b.later = c;
 	})();
 }, "3.2.0", {
-	requires: ["yui-base"]
+	requires : ["yui-base"]
 });
 YUI.add("yui-throttle", function (b) {
 	/*! Based on work by Simon Willison: http://gist.github.com/292562 */
@@ -1696,8 +1696,8 @@ YUI.add("yui-throttle", function (b) {
 	};
 	b.throttle = a;
 }, "3.2.0", {
-	requires: ["yui-base"]
+	requires : ["yui-base"]
 });
 YUI.add("yui", function (a) {}, "3.2.0", {
-	use: ["yui-base", "get", "features", "rls", "intl-base", "yui-log", "yui-later", "yui-throttle"]
+	use : ["yui-base", "get", "features", "rls", "intl-base", "yui-log", "yui-later", "yui-throttle"]
 });
