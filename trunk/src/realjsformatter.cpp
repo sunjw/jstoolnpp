@@ -777,13 +777,17 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 	if(m_tokenA.code == "?")
 	{
 		++m_nQuestOperCount;
+		m_QuestOperStackCount.push(m_blockStack.size());
 	}
 
 	if(m_tokenA.code == ":")
 	{
-		if(m_nQuestOperCount > 0)
+		if(m_nQuestOperCount > 0 && 
+			(m_QuestOperStackCount.top() >= m_blockStack.size() ||
+			StackTopEq(m_blockStack, JS_ASSIGN)))
 		{
 			--m_nQuestOperCount;
+			m_QuestOperStackCount.pop();
 		}
 		else
 		{

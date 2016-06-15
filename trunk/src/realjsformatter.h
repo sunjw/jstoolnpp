@@ -96,6 +96,7 @@ private:
 	bool m_bTemplatePut; // Template String
 
 	int m_nQuestOperCount;
+	IntStack m_QuestOperStackCount;
 
 	string m_initIndent; // ÆğÊ¼Ëõ½ø
 

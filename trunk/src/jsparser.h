@@ -94,6 +94,7 @@ protected:
 public:
 	typedef stack<char> CharStack;
 	typedef stack<bool> BoolStack;
+	typedef stack<int> IntStack;
 	typedef queue<Token> TokenQueue;
 	typedef map<string, char> StrCharMap;
 	typedef set<string> StrSet;
