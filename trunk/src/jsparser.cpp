@@ -169,7 +169,7 @@ void JSParser::GetTokenRaw()
 			}
 
 			if(m_charA == '/' && 
-				(m_charB != '*' && m_charB != '|')) // 正则可能结束
+				(m_charB != '*' && m_charB != '|' && m_charB != '?')) // 正则可能结束
 			{
 				if(!bRegularFlags && 
 					(IsNormalChar(m_charB) || m_iRegBracket > 0))
