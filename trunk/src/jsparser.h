@@ -76,6 +76,7 @@ bool StackTopEq(const stack<T>& stk, T eq)
 #define JS_BRACKET '('
 #define JS_SQUARE '['
 #define JS_HELPER '\\'
+#define JS_STUB ' '
 #define JS_EMPTY 0
 
 class JSParser
