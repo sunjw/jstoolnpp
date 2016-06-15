@@ -88,7 +88,8 @@ void RealJSFormatter::Init()
 	m_bEmptyBracket = false;
 	m_bCommentPut = false;
 	m_bTemplatePut = false;
-	m_bQuestOper = false;
+
+	m_nQuestOperCount = 0;
 
 	m_blockMap[string("if")] = JS_IF;
 	m_blockMap[string("else")] = JS_ELSE;
@@ -775,14 +776,14 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 	if(m_tokenA.code == "?")
 	{
-		m_bQuestOper = true;
+		++m_nQuestOperCount;
 	}
 
 	if(m_tokenA.code == ":")
 	{
-		if(m_bQuestOper)
+		if(m_nQuestOperCount > 0)
 		{
-			m_bQuestOper = false;
+			--m_nQuestOperCount;
 		}
 		else
 		{

@@ -95,7 +95,7 @@ private:
 	bool m_bCommentPut; // 刚刚输出了注释
 	bool m_bTemplatePut; // Template String
 
-	bool m_bQuestOper;
+	int m_nQuestOperCount;
 
 	string m_initIndent; // 起始缩进
 
