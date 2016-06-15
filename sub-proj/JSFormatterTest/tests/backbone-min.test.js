@@ -99,9 +99,9 @@
 	};
 	var d = function (t, e, i, r, n) {
 		t._events = f(v, t._events || {}, e, i, {
-				context : r,
-				ctx : t,
-				listening : n
+				context: r,
+				ctx: t,
+				listening: n
 			});
 		if (n) {
 			var s = t._listeners || (t._listeners = {});
@@ -118,11 +118,11 @@
 		if (!a) {
 			var h = this._listenId || (this._listenId = i.uniqueId("l"));
 			a = s[n] = {
-				obj : t,
-				objId : n,
-				id : h,
-				listeningTo : s,
-				count : 0
+				obj: t,
+				objId: n,
+				id: h,
+				listeningTo: s,
+				count: 0
 			}
 		}
 		d(t, e, r, this, a);
@@ -137,10 +137,10 @@
 			if (h)
 				h.count++;
 			n.push({
-				callback : i,
-				context : s,
-				ctx : s || a,
-				listening : h
+				callback: i,
+				context: s,
+				ctx: s || a,
+				listening: h
 			})
 		}
 		return t
@@ -149,8 +149,8 @@
 		if (!this._events)
 			return this;
 		this._events = f(g, this._events, t, e, {
-				context : i,
-				listeners : this._listeners
+				context: i,
+				listeners: this._listeners
 			});
 		return this
 	};
@@ -302,30 +302,30 @@
 		this.initialize.apply(this, arguments)
 	};
 	i.extend(y.prototype, u, {
-		changed : null,
-		validationError : null,
-		idAttribute : "id",
-		cidPrefix : "c",
-		initialize : function () {},
-		toJSON : function (t) {
+		changed: null,
+		validationError: null,
+		idAttribute: "id",
+		cidPrefix: "c",
+		initialize: function () {},
+		toJSON: function (t) {
 			return i.clone(this.attributes)
 		},
-		sync : function () {
+		sync: function () {
 			return e.sync.apply(this, arguments)
 		},
-		get : function (t) {
+		get: function (t) {
 			return this.attributes[t]
 		},
-		escape : function (t) {
+		escape: function (t) {
 			return i.escape(this.get(t))
 		},
-		has : function (t) {
+		has: function (t) {
 			return this.get(t) != null
 		},
-		matches : function (t) {
+		matches: function (t) {
 			return !!i.iteratee(t, this)(this.attributes)
 		},
-		set : function (t, e, r) {
+		set: function (t, e, r) {
 			if (t == null)
 				return this;
 			var n;
@@ -383,25 +383,25 @@
 			this._changing = false;
 			return this
 		},
-		unset : function (t, e) {
+		unset: function (t, e) {
 			return this.set(t, void 0, i.extend({}, e, {
-					unset : true
+					unset: true
 				}))
 		},
-		clear : function (t) {
+		clear: function (t) {
 			var e = {};
 			for (var r in this.attributes)
 				e[r] = void 0;
 			return this.set(e, i.extend({}, t, {
-					unset : true
+					unset: true
 				}))
 		},
-		hasChanged : function (t) {
+		hasChanged: function (t) {
 			if (t == null)
 				return !i.isEmpty(this.changed);
 			return i.has(this.changed, t)
 		},
-		changedAttributes : function (t) {
+		changedAttributes: function (t) {
 			if (!t)
 				return this.hasChanged() ? i.clone(this.changed) : false;
 			var e = this._changing ? this._previousAttributes : this.attributes;
@@ -414,17 +414,17 @@
 			}
 			return i.size(r) ? r : false
 		},
-		previous : function (t) {
+		previous: function (t) {
 			if (t == null || !this._previousAttributes)
 				return null;
 			return this._previousAttributes[t]
 		},
-		previousAttributes : function () {
+		previousAttributes: function () {
 			return i.clone(this._previousAttributes)
 		},
-		fetch : function (t) {
+		fetch: function (t) {
 			t = i.extend({
-					parse : true
+					parse: true
 				}, t);
 			var e = this;
 			var r = t.success;
@@ -439,7 +439,7 @@
 			B(this, t);
 			return this.sync("read", this, t)
 		},
-		save : function (t, e, r) {
+		save: function (t, e, r) {
 			var n;
 			if (t == null || typeof t === "object") {
 				n = t;
@@ -448,8 +448,8 @@
 				(n = {})[t] = e
 			}
 			r = i.extend({
-					validate : true,
-					parse : true
+					validate: true,
+					parse: true
 				}, r);
 			var s = r.wait;
 			if (n && !s) {
@@ -482,7 +482,7 @@
 			this.attributes = o;
 			return u
 		},
-		destroy : function (t) {
+		destroy: function (t) {
 			t = t ? i.clone(t) : {};
 			var e = this;
 			var r = t.success;
@@ -510,28 +510,28 @@
 				s();
 			return a
 		},
-		url : function () {
+		url: function () {
 			var t = i.result(this, "urlRoot") || i.result(this.collection, "url") || F();
 			if (this.isNew())
 				return t;
 			var e = this.get(this.idAttribute);
 			return t.replace(/[^\/]$/, "$&/") + encodeURIComponent(e)
 		},
-		parse : function (t, e) {
+		parse: function (t, e) {
 			return t
 		},
-		clone : function () {
+		clone: function () {
 			return new this.constructor(this.attributes)
 		},
-		isNew : function () {
+		isNew: function () {
 			return !this.has(this.idAttribute)
 		},
-		isValid : function (t) {
+		isValid: function (t) {
 			return this._validate({}, i.extend({}, t, {
-					validate : true
+					validate: true
 				}))
 		},
-		_validate : function (t, e) {
+		_validate: function (t, e) {
 			if (!e.validate || !this.validate)
 				return true;
 			t = i.extend({}, this.attributes, t);
@@ -539,20 +539,20 @@
 			if (!r)
 				return true;
 			this.trigger("invalid", this, r, i.extend(e, {
-					validationError : r
+					validationError: r
 				}));
 			return false
 		}
 	});
 	var b = {
-		keys : 1,
-		values : 1,
-		pairs : 1,
-		invert : 1,
-		pick : 0,
-		omit : 0,
-		chain : 1,
-		isEmpty : 1
+		keys: 1,
+		values: 1,
+		pairs: 1,
+		invert: 1,
+		pick: 0,
+		omit: 0,
+		chain: 1,
+		isEmpty: 1
 	};
 	h(y, b, "attributes");
 	var x = e.Collection = function (t, e) {
@@ -565,17 +565,17 @@
 		this.initialize.apply(this, arguments);
 		if (t)
 			this.reset(t, i.extend({
-					silent : true
+					silent: true
 				}, e))
 	};
 	var w = {
-		add : true,
-		remove : true,
-		merge : true
+		add: true,
+		remove: true,
+		merge: true
 	};
 	var E = {
-		add : true,
-		remove : false
+		add: true,
+		remove: false
 	};
 	var I = function (t, e, i) {
 		i = Math.min(Math.max(i, 0), t.length);
@@ -590,37 +590,37 @@
 			t[s + n + i] = r[s]
 	};
 	i.extend(x.prototype, u, {
-		model : y,
-		initialize : function () {},
-		toJSON : function (t) {
+		model: y,
+		initialize: function () {},
+		toJSON: function (t) {
 			return this.map(function (e) {
 				return e.toJSON(t)
 			})
 		},
-		sync : function () {
+		sync: function () {
 			return e.sync.apply(this, arguments)
 		},
-		add : function (t, e) {
+		add: function (t, e) {
 			return this.set(t, i.extend({
-					merge : false
+					merge: false
 				}, e, E))
 		},
-		remove : function (t, e) {
+		remove: function (t, e) {
 			e = i.extend({}, e);
 			var r = !i.isArray(t);
 			t = r ? [t] : t.slice();
 			var n = this._removeModels(t, e);
 			if (!e.silent && n.length) {
 				e.changes = {
-					added : [],
-					merged : [],
-					removed : n
+					added: [],
+					merged: [],
+					removed: n
 				};
 				this.trigger("update", this, e)
 			}
 			return r ? n[0] : n
 		},
-		set : function (t, e) {
+		set: function (t, e) {
 			if (t == null)
 				return;
 			e = i.extend({}, w, e);
@@ -703,7 +703,7 @@
 			}
 			if (d)
 				this.sort({
-					silent : true
+					silent: true
 				});
 			if (!e.silent) {
 				for (m = 0; m < a.length; m++) {
@@ -716,16 +716,16 @@
 					this.trigger("sort", this, e);
 				if (a.length || o.length || h.length) {
 					e.changes = {
-						added : a,
-						removed : o,
-						merged : h
+						added: a,
+						removed: o,
+						merged: h
 					};
 					this.trigger("update", this, e)
 				}
 			}
 			return r ? t[0] : t
 		},
-		reset : function (t, e) {
+		reset: function (t, e) {
 			e = e ? i.clone(e) : {};
 			for (var r = 0; r < this.models.length; r++) {
 				this._removeReference(this.models[r], e)
@@ -733,53 +733,53 @@
 			e.previousModels = this.models;
 			this._reset();
 			t = this.add(t, i.extend({
-						silent : true
+						silent: true
 					}, e));
 			if (!e.silent)
 				this.trigger("reset", this, e);
 			return t
 		},
-		push : function (t, e) {
+		push: function (t, e) {
 			return this.add(t, i.extend({
-					at : this.length
+					at: this.length
 				}, e))
 		},
-		pop : function (t) {
+		pop: function (t) {
 			var e = this.at(this.length - 1);
 			return this.remove(e, t)
 		},
-		unshift : function (t, e) {
+		unshift: function (t, e) {
 			return this.add(t, i.extend({
-					at : 0
+					at: 0
 				}, e))
 		},
-		shift : function (t) {
+		shift: function (t) {
 			var e = this.at(0);
 			return this.remove(e, t)
 		},
-		slice : function () {
+		slice: function () {
 			return s.apply(this.models, arguments)
 		},
-		get : function (t) {
+		get: function (t) {
 			if (t == null)
 				return void 0;
 			return this._byId[t] || this._byId[this.modelId(t.attributes || t)] || t.cid && this._byId[t.cid]
 		},
-		has : function (t) {
+		has: function (t) {
 			return this.get(t) != null
 		},
-		at : function (t) {
+		at: function (t) {
 			if (t < 0)
 				t += this.length;
 			return this.models[t]
 		},
-		where : function (t, e) {
+		where: function (t, e) {
 			return this[e ? "find" : "filter"](t)
 		},
-		findWhere : function (t) {
+		findWhere: function (t) {
 			return this.where(t, true)
 		},
-		sort : function (t) {
+		sort: function (t) {
 			var e = this.comparator;
 			if (!e)
 				throw new Error("Cannot sort a set without a comparator");
@@ -796,12 +796,12 @@
 				this.trigger("sort", this, t);
 			return this
 		},
-		pluck : function (t) {
+		pluck: function (t) {
 			return this.map(t + "")
 		},
-		fetch : function (t) {
+		fetch: function (t) {
 			t = i.extend({
-					parse : true
+					parse: true
 				}, t);
 			var e = t.success;
 			var r = this;
@@ -815,7 +815,7 @@
 			B(this, t);
 			return this.sync("read", this, t)
 		},
-		create : function (t, e) {
+		create: function (t, e) {
 			e = e ? i.clone(e) : {};
 			var r = e.wait;
 			t = this._prepareModel(t, e);
@@ -834,24 +834,24 @@
 			t.save(null, e);
 			return t
 		},
-		parse : function (t, e) {
+		parse: function (t, e) {
 			return t
 		},
-		clone : function () {
+		clone: function () {
 			return new this.constructor(this.models, {
-				model : this.model,
-				comparator : this.comparator
+				model: this.model,
+				comparator: this.comparator
 			})
 		},
-		modelId : function (t) {
+		modelId: function (t) {
 			return t[this.model.prototype.idAttribute || "id"]
 		},
-		_reset : function () {
+		_reset: function () {
 			this.length = 0;
 			this.models = [];
 			this._byId = {}
 		},
-		_prepareModel : function (t, e) {
+		_prepareModel: function (t, e) {
 			if (this._isModel(t)) {
 				if (!t.collection)
 					t.collection = this;
@@ -865,7 +865,7 @@
 			this.trigger("invalid", this, r.validationError, e);
 			return false
 		},
-		_removeModels : function (t, e) {
+		_removeModels: function (t, e) {
 			var i = [];
 			for (var r = 0; r < t.length; r++) {
 				var n = this.get(t[r]);
@@ -887,17 +887,17 @@
 			}
 			return i
 		},
-		_isModel : function (t) {
+		_isModel: function (t) {
 			return t instanceof y
 		},
-		_addReference : function (t, e) {
+		_addReference: function (t, e) {
 			this._byId[t.cid] = t;
 			var i = this.modelId(t.attributes);
 			if (i != null)
 				this._byId[i] = t;
 			t.on("all", this._onModelEvent, this)
 		},
-		_removeReference : function (t, e) {
+		_removeReference: function (t, e) {
 			delete this._byId[t.cid];
 			var i = this.modelId(t.attributes);
 			if (i != null)
@@ -906,7 +906,7 @@
 				delete t.collection;
 			t.off("all", this._onModelEvent, this)
 		},
-		_onModelEvent : function (t, e, i, r) {
+		_onModelEvent: function (t, e, i, r) {
 			if (e) {
 				if ((t === "add" || t === "remove") && i !== this)
 					return;
@@ -927,55 +927,55 @@
 		}
 	});
 	var S = {
-		forEach : 3,
-		each : 3,
-		map : 3,
-		collect : 3,
-		reduce : 0,
-		foldl : 0,
-		inject : 0,
-		reduceRight : 0,
-		foldr : 0,
-		find : 3,
-		detect : 3,
-		filter : 3,
-		select : 3,
-		reject : 3,
-		every : 3,
-		all : 3,
-		some : 3,
-		any : 3,
-		include : 3,
-		includes : 3,
-		contains : 3,
-		invoke : 0,
-		max : 3,
-		min : 3,
-		toArray : 1,
-		size : 1,
-		first : 3,
-		head : 3,
-		take : 3,
-		initial : 3,
-		rest : 3,
-		tail : 3,
-		drop : 3,
-		last : 3,
-		without : 0,
-		difference : 0,
-		indexOf : 3,
-		shuffle : 1,
-		lastIndexOf : 3,
-		isEmpty : 1,
-		chain : 1,
-		sample : 3,
-		partition : 3,
-		groupBy : 3,
-		countBy : 3,
-		sortBy : 3,
-		indexBy : 3,
-		findIndex : 3,
-		findLastIndex : 3
+		forEach: 3,
+		each: 3,
+		map: 3,
+		collect: 3,
+		reduce: 0,
+		foldl: 0,
+		inject: 0,
+		reduceRight: 0,
+		foldr: 0,
+		find: 3,
+		detect: 3,
+		filter: 3,
+		select: 3,
+		reject: 3,
+		every: 3,
+		all: 3,
+		some: 3,
+		any: 3,
+		include: 3,
+		includes: 3,
+		contains: 3,
+		invoke: 0,
+		max: 3,
+		min: 3,
+		toArray: 1,
+		size: 1,
+		first: 3,
+		head: 3,
+		take: 3,
+		initial: 3,
+		rest: 3,
+		tail: 3,
+		drop: 3,
+		last: 3,
+		without: 0,
+		difference: 0,
+		indexOf: 3,
+		shuffle: 1,
+		lastIndexOf: 3,
+		isEmpty: 1,
+		chain: 1,
+		sample: 3,
+		partition: 3,
+		groupBy: 3,
+		countBy: 3,
+		sortBy: 3,
+		indexBy: 3,
+		findIndex: 3,
+		findLastIndex: 3
 	};
 	h(x, S, "models");
 	var k = e.View = function (t) {
@@ -987,33 +987,33 @@
 	var T = /^(\S+)\s*(.*)$/;
 	var P = ["model", "collection", "el", "id", "attributes", "className", "tagName", "events"];
 	i.extend(k.prototype, u, {
-		tagName : "div",
-		$ : function (t) {
+		tagName: "div",
+		$: function (t) {
 			return this.$el.find(t)
 		},
-		initialize : function () {},
-		render : function () {
+		initialize: function () {},
+		render: function () {
 			return this
 		},
-		remove : function () {
+		remove: function () {
 			this._removeElement();
 			this.stopListening();
 			return this
 		},
-		_removeElement : function () {
+		_removeElement: function () {
 			this.$el.remove()
 		},
-		setElement : function (t) {
+		setElement: function (t) {
 			this.undelegateEvents();
 			this._setElement(t);
 			this.delegateEvents();
 			return this
 		},
-		_setElement : function (t) {
+		_setElement: function (t) {
 			this.$el = t instanceof e.$ ? t : e.$(t);
 			this.el = this.$el[0]
 		},
-		delegateEvents : function (t) {
+		delegateEvents: function (t) {
 			t || (t = i.result(this, "events"));
 			if (!t)
 				return this;
@@ -1029,23 +1029,23 @@
 			}
 			return this
 		},
-		delegate : function (t, e, i) {
+		delegate: function (t, e, i) {
 			this.$el.on(t + ".delegateEvents" + this.cid, e, i);
 			return this
 		},
-		undelegateEvents : function () {
+		undelegateEvents: function () {
 			if (this.$el)
 				this.$el.off(".delegateEvents" + this.cid);
 			return this
 		},
-		undelegate : function (t, e, i) {
+		undelegate: function (t, e, i) {
 			this.$el.off(t + ".delegateEvents" + this.cid, e, i);
 			return this
 		},
-		_createElement : function (t) {
+		_createElement: function (t) {
 			return document.createElement(t)
 		},
-		_ensureElement : function () {
+		_ensureElement: function () {
 			if (!this.el) {
 				var t = i.extend({}, i.result(this, "attributes"));
 				if (this.id)
@@ -1058,19 +1058,19 @@
 				this.setElement(i.result(this, "el"))
 			}
 		},
-		_setAttributes : function (t) {
+		_setAttributes: function (t) {
 			this.$el.attr(t)
 		}
 	});
 	e.sync = function (t, r, n) {
 		var s = H[t];
 		i.defaults(n || (n = {}), {
-			emulateHTTP : e.emulateHTTP,
-			emulateJSON : e.emulateJSON
+			emulateHTTP: e.emulateHTTP,
+			emulateJSON: e.emulateJSON
 		});
 		var a = {
-			type : s,
-			dataType : "json"
+			type: s,
+			dataType: "json"
 		};
 		if (!n.url) {
 			a.url = i.result(r, "url") || F()
@@ -1082,7 +1082,7 @@
 		if (n.emulateJSON) {
 			a.contentType = "application/x-www-form-urlencoded";
 			a.data = a.data ? {
-				model : a.data
+				model: a.data
 			}
 			 : {}
 		}
@@ -1112,11 +1112,11 @@
 		return l
 	};
 	var H = {
-		create : "POST",
-		update : "PUT",
-		patch : "PATCH",
-		"delete" : "DELETE",
-		read : "GET"
+		create: "POST",
+		update: "PUT",
+		patch: "PATCH",
+		"delete": "DELETE",
+		read: "GET"
 	};
 	e.ajax = function () {
 		return e.$.ajax.apply(e.$, arguments)
@@ -1133,8 +1133,8 @@
 	var R = /\*\w+/g;
 	var j = /[\-{}\[\]+?.,\\\^$|#\s]/g;
 	i.extend($.prototype, u, {
-		initialize : function () {},
-		route : function (t, r, n) {
+		initialize: function () {},
+		route: function (t, r, n) {
 			if (!i.isRegExp(t))
 				t = this._routeToRegExp(t);
 			if (i.isFunction(r)) {
@@ -1154,15 +1154,15 @@
 			});
 			return this
 		},
-		execute : function (t, e, i) {
+		execute: function (t, e, i) {
 			if (t)
 				t.apply(this, e)
 		},
-		navigate : function (t, i) {
+		navigate: function (t, i) {
 			e.history.navigate(t, i);
 			return this
 		},
-		_bindRoutes : function () {
+		_bindRoutes: function () {
 			if (!this.routes)
 				return;
 			this.routes = i.result(this, "routes");
@@ -1172,13 +1172,13 @@
 				this.route(t, this.routes[t])
 			}
 		},
-		_routeToRegExp : function (t) {
+		_routeToRegExp: function (t) {
 			t = t.replace(j, "\\$&").replace(A, "(?:$1)?").replace(C, function (t, e) {
 					return e ? t : "([^/?]+)"
 				}).replace(R, "([^?]*?)");
 			return new RegExp("^" + t + "(?:\\?([\\s\\S]*))?$")
 		},
-		_extractParameters : function (t, e) {
+		_extractParameters: function (t, e) {
 			var r = t.exec(e).slice(1);
 			return i.map(r, function (t, e) {
 				if (e === r.length - 1)
@@ -1200,32 +1200,32 @@
 	var U = /#.*$/;
 	N.started = false;
 	i.extend(N.prototype, u, {
-		interval : 50,
-		atRoot : function () {
+		interval: 50,
+		atRoot: function () {
 			var t = this.location.pathname.replace(/[^\/]$/, "$&/");
 			return t === this.root && !this.getSearch()
 		},
-		matchRoot : function () {
+		matchRoot: function () {
 			var t = this.decodeFragment(this.location.pathname);
 			var e = t.slice(0, this.root.length - 1) + "/";
 			return e === this.root
 		},
-		decodeFragment : function (t) {
+		decodeFragment: function (t) {
 			return decodeURI(t.replace(/%25/g, "%2525"))
 		},
-		getSearch : function () {
+		getSearch: function () {
 			var t = this.location.href.replace(/#.*/, "").match(/\?.+/);
 			return t ? t[0] : ""
 		},
-		getHash : function (t) {
+		getHash: function (t) {
 			var e = (t || this).location.href.match(/#(.*)$/);
 			return e ? e[1] : ""
 		},
-		getPath : function () {
+		getPath: function () {
 			var t = this.decodeFragment(this.location.pathname + this.getSearch()).slice(this.root.length - 1);
 			return t.charAt(0) === "/" ? t.slice(1) : t
 		},
-		getFragment : function (t) {
+		getFragment: function (t) {
 			if (t == null) {
 				if (this._usePushState || !this._wantsHashChange) {
 					t = this.getPath()
@@ -1235,12 +1235,12 @@
 			}
 			return t.replace(M, "")
 		},
-		start : function (t) {
+		start: function (t) {
 			if (N.started)
 				throw new Error("Backbone.history has already been started");
 			N.started = true;
 			this.options = i.extend({
-					root : "/"
+					root: "/"
 				}, this.options, t);
 			this.root = this.options.root;
 			this._wantsHashChange = this.options.hashChange !== false;
@@ -1258,7 +1258,7 @@
 					return true
 				} else if (this._hasPushState && this.atRoot()) {
 					this.navigate(this.getHash(), {
-						replace : true
+						replace: true
 					})
 				}
 			}
@@ -1286,7 +1286,7 @@
 			if (!this.options.silent)
 				return this.loadUrl()
 		},
-		stop : function () {
+		stop: function () {
 			var t = window.removeEventListener || function (t, e) {
 				return detachEvent("on" + t, e)
 			};
@@ -1303,13 +1303,13 @@
 				clearInterval(this._checkUrlInterval);
 			N.started = false
 		},
-		route : function (t, e) {
+		route: function (t, e) {
 			this.handlers.unshift({
-				route : t,
-				callback : e
+				route: t,
+				callback: e
 			})
 		},
-		checkUrl : function (t) {
+		checkUrl: function (t) {
 			var e = this.getFragment();
 			if (e === this.fragment && this.iframe) {
 				e = this.getHash(this.iframe.contentWindow)
@@ -1320,7 +1320,7 @@
 				this.navigate(e);
 			this.loadUrl()
 		},
-		loadUrl : function (t) {
+		loadUrl: function (t) {
 			if (!this.matchRoot())
 				return false;
 			t = this.fragment = this.getFragment(t);
@@ -1331,12 +1331,12 @@
 				}
 			})
 		},
-		navigate : function (t, e) {
+		navigate: function (t, e) {
 			if (!N.started)
 				return false;
 			if (!e || e === true)
 				e = {
-					trigger : !!e
+					trigger: !!e
 				};
 			t = this.getFragment(t || "");
 			var i = this.root;
@@ -1366,7 +1366,7 @@
 			if (e.trigger)
 				return this.loadUrl(t)
 		},
-		_updateHash : function (t, e, i) {
+		_updateHash: function (t, e, i) {
 			if (i) {
 				var r = t.href.replace(/(javascript:|#).*$/, "");
 				t.replace(r + "#" + e)

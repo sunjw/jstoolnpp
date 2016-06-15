@@ -47,12 +47,12 @@
 
 			const firebugURLs = // TODO chrome.js
 		{
-			main : "http://www.getfirebug.com",
-			docs : "http://www.getfirebug.com/docs.html",
-			keyboard : "http://getfirebug.com/wiki/index.php/Keyboard_and_Mouse_Shortcuts",
-			discuss : "http://groups.google.com/group/firebug",
-			issues : "http://code.google.com/p/fbug/issues/list",
-			donate : "http://getfirebug.com/getinvolved"
+			main: "http://www.getfirebug.com",
+			docs: "http://www.getfirebug.com/docs.html",
+			keyboard: "http://getfirebug.com/wiki/index.php/Keyboard_and_Mouse_Shortcuts",
+			discuss: "http://groups.google.com/group/firebug",
+			issues: "http://code.google.com/p/fbug/issues/list",
+			donate: "http://getfirebug.com/getinvolved"
 		};
 
 		const prefNames = // XXXjjb TODO distribute to modules
@@ -160,32 +160,32 @@
 		 * created for each browser window (browser.xul).
 		 */
 		top.Firebug = {
-			version : "1.6",
+			version: "1.6",
 
-			dispatchName : "Firebug",
-			modules : modules,
-			panelTypes : panelTypes,
-			uiListeners : [],
-			reps : reps,
-			prefDomain : "extensions.firebug",
-			servicePrefDomain : "extensions.firebug.service",
+			dispatchName: "Firebug",
+			modules: modules,
+			panelTypes: panelTypes,
+			uiListeners: [],
+			reps: reps,
+			prefDomain: "extensions.firebug",
+			servicePrefDomain: "extensions.firebug.service",
 
-			stringCropLength : 50,
+			stringCropLength: 50,
 
-			tabBrowser : null,
-			originalChrome : FirebugChrome,
-			chrome : FirebugChrome,
+			tabBrowser: null,
+			originalChrome: FirebugChrome,
+			chrome: FirebugChrome,
 
-			isInitialized : false,
-			migrations : {},
+			isInitialized: false,
+			migrations: {},
 
 			// Custom stylesheets registered by extensions.
-			stylesheets : [],
+			stylesheets: [],
 
 			// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 			// Initialization
 
-			initialize : function () {
+			initialize: function () {
 				if (FBTrace.sysout && (!FBL || !FBL.initialize))
 					FBTrace.sysout("Firebug is broken, FBL incomplete, if the last function is QI, check lib.js:", FBL);
 				else if (FBTrace.DBG_INITIALIZE)
@@ -218,14 +218,14 @@
 				dispatch(modules, "initialize", [this.prefDomain, prefNames]);
 			},
 
-			getVersion : function () {
+			getVersion: function () {
 				if (!this.fullVersion)
 					this.fullVersion = this.loadVersion(versionURL);
 
 				return this.fullVersion;
 			},
 
-			loadVersion : function (versionURL) {
+			loadVersion: function (versionURL) {
 				var content = getResource(versionURL);
 				if (!content)
 					return "no content at " + versionURL;
@@ -248,7 +248,7 @@
 			/*
 			 *  Substitute strings in the UI, with fall back to en-US
 			 */
-			internationalizeUI : function (doc) // TODO chrome.js
+			internationalizeUI: function (doc) // TODO chrome.js
 			{
 				if (!doc)
 					return;
@@ -330,7 +330,7 @@
 			 * Called when the UI is ready to be initialized, once the panel browsers are loaded,
 			 * but before any contexts are created.
 			 */
-			initializeUI : function (detachArgs) {
+			initializeUI: function (detachArgs) {
 				if (FBTrace.DBG_INITIALIZE)
 					FBTrace.sysout("firebug.initializeUI detachArgs:", detachArgs);
 
@@ -368,7 +368,7 @@
 			/*
 			 * called in browser when Firefox closes and in externalMode when fbs gets quitApplicationGranted.
 			 */
-			shutdown : function () {
+			shutdown: function () {
 				this.shutdownUI();
 
 				prefService.savePrefFile(null);
@@ -384,7 +384,7 @@
 					FBTrace.sysout("firebug.shutdown exited client " + this.clientID);
 			},
 
-			shutdownUI : function () // TODO chrome.js
+			shutdownUI: function () // TODO chrome.js
 			{
 				window.removeEventListener('unload', shutdownFirebug, false);
 
@@ -401,7 +401,7 @@
 			// ----------------------------------------------------------------------------------------------------------------
 			// TODO this entire section to XULWindow
 
-			getSuspended : function () // TODO XULWindow
+			getSuspended: function () // TODO XULWindow
 			{
 				var suspendMarker = $("fbStatusIcon");
 				if (suspendMarker.hasAttribute("suspended"))
@@ -409,7 +409,7 @@
 				return null;
 			},
 
-			setSuspended : function (value) // TODO XULWindow
+			setSuspended: function (value) // TODO XULWindow
 			{
 				var suspendMarker = $("fbStatusIcon");
 				if (FBTrace.DBG_ACTIVATION)
@@ -424,7 +424,7 @@
 				Firebug.resetTooltip();
 			},
 
-			toggleSuspend : function () // TODO XULWindow
+			toggleSuspend: function () // TODO XULWindow
 			{
 				// getSuspended returns non-null value if Firebug is suspended.
 				if (this.getSuspended()) {
@@ -451,17 +451,17 @@
 				}
 			},
 
-			broadcast : function (message, args) {
+			broadcast: function (message, args) {
 				// dispatch message to all XUL windows registered to firebug service.
 				// Implemented in Firebug.Debugger.
 			},
 
-			suspend : function () // dispatch suspendFirebug to all windows
+			suspend: function () // dispatch suspendFirebug to all windows
 			{
 				this.broadcast('suspendFirebug', []);
 			},
 
-			suspendFirebug : function () // dispatch onSuspendFirebug to all modules
+			suspendFirebug: function () // dispatch onSuspendFirebug to all modules
 			{
 
 				var cancelSuspend = dispatch2(activableModules, 'onSuspendingFirebug', []);
@@ -478,18 +478,18 @@
 					this.setSuspended("suspended");
 			},
 
-			resume : function () {
+			resume: function () {
 				this.broadcast('resumeFirebug', []);
 			},
 
-			resumeFirebug : function () // dispatch onResumeFirebug to all modules
+			resumeFirebug: function () // dispatch onResumeFirebug to all modules
 			{
 				this.setSuspended("resuming");
 				dispatch(activableModules, 'onResumeFirebug', [Firebug.currentContext]); // TODO no context arg
 				this.setSuspended(null);
 			},
 
-			getEnablementStatus : function () {
+			getEnablementStatus: function () {
 				var strOn = $STR("enablement.on");
 				var strOff = $STR("enablement.off");
 
@@ -513,7 +513,7 @@
 				return status;
 			},
 
-			resetTooltip : function () {
+			resetTooltip: function () {
 				if (FBTrace.DBG_TOOLTIP)
 					FBTrace.sysout("resetTooltip called");
 
@@ -537,7 +537,7 @@
 				$('fbStatusBar').setAttribute("tooltiptext", tooltip);
 			},
 
-			getURLsForAllActiveContexts : function () {
+			getURLsForAllActiveContexts: function () {
 				var contextURLSet = []; // create a list of all unique activeContexts
 				TabWatcher.iterateContexts(function createActiveContextList(context) {
 					if (FBTrace.DBG_WINDOWS)
@@ -573,17 +573,17 @@
 			// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 			// Dead Windows  XXXjjb this code is not used by 1.4, external placement.
 
-			killWindow : function (browser, chrome) {
+			killWindow: function (browser, chrome) {
 				deadWindows.push({
-					browser : browser,
-					chrome : chrome
+					browser: browser,
+					chrome: chrome
 				});
 				deadWindowTimeout = setTimeout(function () {
 						Firebug.closeDeadWindows();
 					}, 3000);
 			},
 
-			rescueWindow : function (browser) {
+			rescueWindow: function (browser) {
 				for (var i = 0; i < deadWindows.length; ++i) {
 					if (deadWindows[i].browser == browser) {
 						deadWindows.splice(i, 1);
@@ -594,7 +594,7 @@
 				}
 			},
 
-			closeDeadWindows : function () {
+			closeDeadWindows: function () {
 				for (var i = 0; i < deadWindows.length; ++i)
 					deadWindows[i].chrome.close();
 
@@ -611,7 +611,7 @@
 			 * @param value default value of preference
 			 * @return true if default set, else false
 			 */
-			registerPreference : function (name, value) {
+			registerPreference: function (name, value) {
 				var currentValue = this.getPref(this.prefDomain, name);
 
 				if (FBTrace.DBG_INITIALIZE)
@@ -629,7 +629,7 @@
 				return false;
 			},
 
-			registerModule : function () {
+			registerModule: function () {
 				modules.push.apply(modules, arguments);
 
 				if (FBTrace.DBG_INITIALIZE) {
@@ -638,17 +638,17 @@
 				}
 			},
 
-			unregisterModule : function () {
+			unregisterModule: function () {
 				for (var i = 0; i < arguments.length; ++i)
 					remove(modules, arguments[i]);
 			},
 
-			registerActivableModule : function () {
+			registerActivableModule: function () {
 				activableModules.push.apply(activableModules, arguments);
 				this.registerModule.apply(this, arguments);
 			},
 
-			registerExtension : function () // TODO remove
+			registerExtension: function () // TODO remove
 			{
 				extensions.push.apply(extensions, arguments);
 
@@ -659,7 +659,7 @@
 					Firebug.uiListeners.push(arguments[j]);
 			},
 
-			unregisterExtension : function () // TODO remove
+			unregisterExtension: function () // TODO remove
 			{
 				for (var i = 0; i < arguments.length; ++i) {
 					TabWatcher.removeListener(arguments[i]);
@@ -668,17 +668,17 @@
 				}
 			},
 
-			registerUIListener : function () {
+			registerUIListener: function () {
 				for (var j = 0; j < arguments.length; j++)
 					Firebug.uiListeners.push(arguments[j]);
 			},
 
-			unregisterUIListener : function () {
+			unregisterUIListener: function () {
 				for (var i = 0; i < arguments.length; ++i)
 					remove(Firebug.uiListeners, arguments[i]);
 			},
 
-			registerPanel : function () {
+			registerPanel: function () {
 				// In order to keep built in panels (like Console, Script...) be the first one
 				// and insert all panels coming from extension at the end, catch any early registered
 				// panel (i.e. before FBL.initialize is called, such as YSlow) in a temp array
@@ -696,7 +696,7 @@
 						FBTrace.sysout("registerPanel " + arguments[i].prototype.name + "\n");
 			},
 
-			unregisterPanel : function (panelType) {
+			unregisterPanel: function (panelType) {
 				for (var i = 0; i < panelTypes.length; ++i) {
 					if (panelTypes[i] == panelType) {
 						panelTypes.splice(i, 1);
@@ -707,25 +707,25 @@
 				delete panelTypeMap[panelType.prototype.name];
 			},
 
-			registerRep : function () {
+			registerRep: function () {
 				reps.push.apply(reps, arguments);
 			},
 
-			unregisterRep : function () {
+			unregisterRep: function () {
 				for (var i = 0; i < arguments.length; ++i)
 					remove(reps, arguments[i]);
 			},
 
-			setDefaultReps : function (funcRep, rep) {
+			setDefaultReps: function (funcRep, rep) {
 				defaultRep = rep;
 				defaultFuncRep = funcRep;
 			},
 
-			registerEditor : function () {
+			registerEditor: function () {
 				editors.push.apply(editors, arguments);
 			},
 
-			registerStringBundle : function (bundleURI) {
+			registerStringBundle: function (bundleURI) {
 				categoryManager.addCategoryEntry("strings_firebug", bundleURI, "", false, true);
 				this.stringBundle = null;
 			},
@@ -735,11 +735,11 @@
 			 * used automatially thorough Firebug UI.
 			 * @param {Object} styleURI URI of the stylesheet.
 			 */
-			registerStylesheet : function (styleURI) {
+			registerStylesheet: function (styleURI) {
 				this.stylesheets.push(styleURI);
 			},
 
-			registerMenuItem : function (menuItemController) {
+			registerMenuItem: function (menuItemController) {
 				FBTrace.sysout("Firebug.registerMenuItem");
 				menuItemControllers.push(menuItemController);
 			},
@@ -747,13 +747,13 @@
 			// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 			// Localization
 
-			getStringBundle : function () {
+			getStringBundle: function () {
 				if (!this.stringBundle)
 					this.stringBundle = stringBundleService.createExtensibleBundle("strings_firebug");
 				return this.stringBundle;
 			},
 
-			getDefaultStringBundle : function () {
+			getDefaultStringBundle: function () {
 				if (!this.defaultStringBundle) {
 					var ioService = Cc["@mozilla.org/network/io-service;1"].getService(Ci.nsIIOService);
 					var chromeRegistry = Cc["@mozilla.org/chrome/chrome-registry;1"].getService(Ci.nsIChromeRegistry);
@@ -767,7 +767,7 @@
 				return this.defaultStringBundle;
 			},
 
-			getPluralRule : function () {
+			getPluralRule: function () {
 				try {
 					return this.getStringBundle().GetStringFromName("pluralRule");
 				} catch (err) {}
@@ -777,7 +777,7 @@
 			// Options
 			// TODO create options.js as module, support per context options eg break on error
 
-			initializePrefs : function () {
+			initializePrefs: function () {
 				for (var i = 0; i < prefNames.length; ++i)
 					this[prefNames[i]] = this.getPref(this.prefDomain, prefNames[i]);
 				for (var i = 0; i < servicePrefNames.length; ++i)
@@ -805,11 +805,11 @@
 				}
 			},
 
-			togglePref : function (name) {
+			togglePref: function (name) {
 				this.setPref(Firebug.prefDomain, name, !this[name]);
 			},
 
-			getPref : function (prefDomain, name) {
+			getPref: function (prefDomain, name) {
 				var prefName = prefDomain + "." + name;
 
 				var type = prefs.getPrefType(prefName);
@@ -827,7 +827,7 @@
 			 * @param value setting for X
 			 * @param prefType optional for adding a new pref,
 			 */
-			setPref : function (prefDomain, name, value, prefType) {
+			setPref: function (prefDomain, name, value, prefType) {
 				var prefName = prefDomain + "." + name;
 
 				var type = this.getPreferenceTypeByExample((prefType ? prefType : typeof(value)));
@@ -845,7 +845,7 @@
 					FBTrace.sysout("firebug.setPref type=" + type + " name=" + prefName + " value=" + value + "\n");
 			},
 
-			setPreference : function (prefName, value, type, prefBranch) {
+			setPreference: function (prefName, value, type, prefBranch) {
 				// xxxHonza, XXXjjb: sometimes I am seeing: extensions.firebugcommandLineShowCompleterPopup
 				// preference that should really be: extensions.firebug.commandLineShowCompleterPopup
 				// Is the better fix for this (this is rather a workaround).
@@ -853,8 +853,8 @@
 				//    prefName = "." + prefName;
 				if ((prefBranch.root + prefName).indexOf("bug.") == -1)
 					FBTrace.sysout("WARNING setPreference called without bug.", {
-						prefName : prefName,
-						value : value
+						prefName: prefName,
+						value: value
 					});
 				// The above lines and comments should be removed once the prefs seem correct
 
@@ -871,7 +871,7 @@
 				return true;
 			},
 
-			getPreferenceTypeByExample : function (prefType) {
+			getPreferenceTypeByExample: function (prefType) {
 				if (prefType) {
 					if (prefType === typeof("s"))
 						var type = nsIPrefBranch.PREF_STRING;
@@ -887,21 +887,21 @@
 				return type;
 			},
 
-			clearPref : function (prefDomain, name) {
+			clearPref: function (prefDomain, name) {
 				var prefName = prefDomain + "." + name;
 				if (prefs.prefHasUserValue(prefName))
 					prefs.clearUserPref(prefName);
 			},
 
-			increaseTextSize : function (amt) {
+			increaseTextSize: function (amt) {
 				this.setTextSize(this.textSize + amt);
 			},
 
-			setTextSize : function (value) {
+			setTextSize: function (value) {
 				this.setPref(Firebug.prefDomain, "textSize", value);
 			},
 
-			updatePref : function (name, value) {
+			updatePref: function (name, value) {
 				// Prevent infinite recursion due to pref observer
 				if (optionUpdateMap.hasOwnProperty(name))
 					return;
@@ -939,7 +939,7 @@
 			// External editors
 			// TODO move to editors.js as Firebug.Editors module
 
-			loadExternalEditors : function () {
+			loadExternalEditors: function () {
 				const prefName = "externalEditors";
 				const editorPrefNames = ["label", "executable", "cmdline", "image"];
 
@@ -950,7 +950,7 @@
 					if (!editorId || editorId == "")
 						continue;
 					var item = {
-						id : editorId
+						id: editorId
 					};
 					for (var j = 0; j < editorPrefNames.length; ++j) {
 						try {
@@ -979,15 +979,15 @@
 				return newArray;
 			},
 
-			openEditors : function () {
+			openEditors: function () {
 				var args = {
-					FBL : FBL,
-					prefName : this.prefDomain + ".externalEditors"
+					FBL: FBL,
+					prefName: this.prefDomain + ".externalEditors"
 				};
 				openWindow("Firebug:ExternalEditors", "chrome://firebug/content/editors.xul", "", args);
 			},
 
-			openInEditor : function (context, editorId) {
+			openInEditor: function (context, editorId) {
 				try {
 					if (!editorId)
 						return;
@@ -1056,7 +1056,7 @@
 				}
 			},
 
-			getLocalSourceFile : function (context, href) {
+			getLocalSourceFile: function (context, href) {
 				if (isLocalURL(href))
 					return getLocalPath(href);
 
@@ -1068,8 +1068,8 @@
 					// (a) the browser cache or (b) request to the server.
 					var selectedBrowser = Firebug.chrome.getCurrentBrowser();
 					var ctx = {
-						browser : selectedBrowser,
-						window : selectedBrowser.contentWindow
+						browser: selectedBrowser,
+						window: selectedBrowser.contentWindow
 					};
 					data = new Firebug.SourceCache(ctx).loadText(href);
 				}
@@ -1116,7 +1116,7 @@
 				return file.path;
 			},
 
-			deleteTemporaryFiles : function () // TODO call on "shutdown" event to modules
+			deleteTemporaryFiles: function () // TODO call on "shutdown" event to modules
 			{
 				try {
 					var file = CCIN("@mozilla.org/file/local;1", "nsILocalFile");
@@ -1136,7 +1136,7 @@
 			// Browser Bottom Bar
 			// TODO XULWindow
 
-			showBar : function (show) {
+			showBar: function (show) {
 				var browser = Firebug.chrome.getCurrentBrowser();
 				if (FBTrace.DBG_WINDOWS || FBTrace.DBG_ACTIVATION)
 					FBTrace.sysout("showBar(" + show + ") for browser " + browser.currentURI.spec + " Firebug.currentContext " + Firebug.currentContext);
@@ -1170,7 +1170,7 @@
 					Firebug.chrome.syncPanel();
 			},
 
-			showKeys : function (shouldShow) {
+			showKeys: function (shouldShow) {
 				if (!this.fbOnlyKeys) {
 					var keyset = document.getElementById("mainKeyset");
 					this.fbOnlyKeys = keyset.getElementsByClassName("fbOnlyKey").item(0);
@@ -1180,7 +1180,7 @@
 					keys[i].setAttribute("disabled", !!shouldShow);
 			},
 
-			closeFirebug : function (userCommand) // this is really deactivate
+			closeFirebug: function (userCommand) // this is really deactivate
 			{
 				var browser = FirebugChrome.getCurrentBrowser();
 
@@ -1197,7 +1197,7 @@
 			 * @param forceOpen: don't minimize, stay open if open.
 			 * @param panelName: eg 'script', to select a specific panel.
 			 */
-			toggleBar : function (forceOpen, panelName) {
+			toggleBar: function (forceOpen, panelName) {
 				var browser = FirebugChrome.getCurrentBrowser();
 
 				if (panelName)
@@ -1234,7 +1234,7 @@
 				return true;
 			},
 
-			minimizeBar : function () // just pull down the UI, but don't deactivate the context
+			minimizeBar: function () // just pull down the UI, but don't deactivate the context
 			{
 				if (Firebug.isDetached()) // TODO disable minimize on externalMode
 				{
@@ -1248,19 +1248,19 @@
 				}
 			},
 
-			unMinimize : function () {
+			unMinimize: function () {
 				this.updateActiveContexts(Firebug.currentContext);
 				Firebug.setPlacement("inBrowser");
 				Firebug.showBar(true);
 			},
 
-			onShowDetachTooltip : function (tooltip) {
+			onShowDetachTooltip: function (tooltip) {
 				tooltip.label = Firebug.isDetached() ? $STR("firebug.AttachFirebug") :
 					$STR("firebug.DetachFirebug");
 				return true;
 			},
 
-			toggleDetachBar : function (forceOpen, reopenInBrowser) // detached -> closed; inBrowser -> detached TODO reattach
+			toggleDetachBar: function (forceOpen, reopenInBrowser) // detached -> closed; inBrowser -> detached TODO reattach
 			{
 				if (!forceOpen && Firebug.isDetached()) // detached -> minimized
 				{
@@ -1275,7 +1275,7 @@
 					this.detachBar(Firebug.currentContext);
 			},
 
-			closeDetachedWindow : function (userCommands) {
+			closeDetachedWindow: function (userCommands) {
 				Firebug.showBar(false);
 
 				if (Firebug.currentContext)
@@ -1285,7 +1285,7 @@
 				Firebug.resetTooltip();
 			},
 
-			setChrome : function (newChrome, newPlacement) {
+			setChrome: function (newChrome, newPlacement) {
 				var oldChrome = Firebug.chrome;
 				Firebug.chrome = newChrome;
 				Firebug.setPlacement(newPlacement);
@@ -1298,7 +1298,7 @@
 				});
 			},
 
-			detachBar : function (context) {
+			detachBar: function (context) {
 				if (!context) {
 					var browser = Firebug.chrome.getCurrentBrowser();
 					var created = TabWatcher.watchBrowser(browser); // create a context for this page
@@ -1326,22 +1326,22 @@
 					FBTrace.sysout("Firebug.detachBar opening firebug.xul for context " + Firebug.currentContext.getName());
 
 				var args = {
-					FBL : FBL,
-					Firebug : this,
-					browser : context.browser,
+					FBL: FBL,
+					Firebug: this,
+					browser: context.browser,
 				};
 				var win = openWindow("Firebug", "chrome://firebug/content/firebug.xul", "", args);
 
 				return win;
 			},
 
-			syncBar : function () // show firebug if we should
+			syncBar: function () // show firebug if we should
 			{
 				var browser = FirebugChrome.getCurrentBrowser();
 				this.showBar(browser && browser.showFirebug); // implicitly this is operating in the chrome of browser.xul
 			},
 
-			onClickStatusIcon : function (context, event) {
+			onClickStatusIcon: function (context, event) {
 				if (event.button != 0)
 					return;
 				else if (isControl(event))
@@ -1352,7 +1352,7 @@
 					this.toggleBar();
 			},
 
-			onClickStatusText : function (context, event) {
+			onClickStatusText: function (context, event) {
 				if (event.button != 0)
 					return;
 
@@ -1369,7 +1369,7 @@
 			// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 			// TODO to options.js
 
-			resetAllOptions : function (confirm) // to default state
+			resetAllOptions: function (confirm) // to default state
 			{
 				if (confirm) {
 					if (!promptService.confirm(null, $STR("Firebug"), $STR("confirmation.Reset_All_Firebug_Options")))
@@ -1397,19 +1397,19 @@
 			// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 			// Panels
 
-			getPanelType : function (panelName) {
+			getPanelType: function (panelName) {
 				if (panelTypeMap.hasOwnProperty(panelName))
 					return panelTypeMap[panelName];
 				else
 					return null;
 			},
 
-			getPanelTitle : function (panelType) {
+			getPanelTitle: function (panelType) {
 				return panelType.prototype.title ? panelType.prototype.title
 				 : FBL.$STR("Panel-" + panelType.prototype.name);
 			},
 
-			getMainPanelTypes : function (context) {
+			getMainPanelTypes: function (context) {
 				var resultTypes = [];
 
 				for (var i = 0; i < panelTypes.length; ++i) {
@@ -1433,7 +1433,7 @@
 				return resultTypes;
 			},
 
-			getSidePanelTypes : function (context, mainPanel) {
+			getSidePanelTypes: function (context, mainPanel) {
 				if (!mainPanel)
 					return [];
 
@@ -1467,7 +1467,7 @@
 			 * Note that panel.context may not have a persistedState, but in addition the persisted
 			 * state for panel.name may be null.
 			 */
-			getPanelState : function (panel) {
+			getPanelState: function (panel) {
 				var persistedState = panel.context.persistedState;
 				if (!persistedState || !persistedState.panelState)
 					return null;
@@ -1475,20 +1475,20 @@
 				return persistedState.panelState[panel.name];
 			},
 
-			showPanel : function (browser, panel) {
+			showPanel: function (browser, panel) {
 				// The panel may be null
 				dispatch(modules, "showPanel", [browser, panel]);
 			},
 
-			showSidePanel : function (browser, sidePanel) {
+			showSidePanel: function (browser, sidePanel) {
 				dispatch(modules, "showSidePanel", [browser, sidePanel]);
 			},
 
-			reattachContext : function (browser, context) {
+			reattachContext: function (browser, context) {
 				dispatch(modules, "reattachContext", [browser, context]);
 			},
 
-			eachPanel : function (callback) {
+			eachPanel: function (callback) {
 				TabWatcher.iterateContexts(function iteratePanels(context) {
 					var rc = context.eachPanelInContext(callback);
 					if (rc)
@@ -1496,7 +1496,7 @@
 				});
 			},
 
-			dispatchToPanels : function (fName, args) {
+			dispatchToPanels: function (fName, args) {
 				Firebug.eachPanel(function dispatchToPanel(panel) {
 					if (panel[fName])
 						return panel[fName].apply(panel, args);
@@ -1506,7 +1506,7 @@
 			// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 			// URL mapping
 
-			getObjectByURL : function (context, url) {
+			getObjectByURL: function (context, url) {
 				for (var i = 0; i < modules.length; ++i) {
 					var object = modules[i].getObjectByURL(context, url);
 					if (object)
@@ -1517,7 +1517,7 @@
 			// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 			// Reps
 
-			getRep : function (object, context) {
+			getRep: function (object, context) {
 				var type = typeof(object);
 				if (type == 'object' && object instanceof String)
 					type = 'string';
@@ -1544,7 +1544,7 @@
 				return (type == 'function') ? defaultFuncRep : defaultRep;
 			},
 
-			getRepObject : function (node) {
+			getRepObject: function (node) {
 				var target = null;
 				for (var child = node; child; child = child.parentNode) {
 					if (hasClass(child, "repTarget"))
@@ -1562,14 +1562,14 @@
 			/*
 			 * The child node that has a repObject
 			 */
-			getRepNode : function (node) {
+			getRepNode: function (node) {
 				for (var child = node; child; child = child.parentNode) {
 					if (child.repObject)
 						return child;
 				}
 			},
 
-			getElementByRepObject : function (element, object) {
+			getElementByRepObject: function (element, object) {
 				for (var child = element.firstChild; child; child = child.nextSibling) {
 					if (child.repObject == object)
 						return child;
@@ -1579,7 +1579,7 @@
 			/**
 			 * Takes an element from a panel document and finds the owning panel.
 			 */
-			getElementPanel : function (element) {
+			getElementPanel: function (element) {
 				for (; element; element = element.parentNode) {
 					if (element.ownerPanel)
 						return element.ownerPanel;
@@ -1588,14 +1588,14 @@
 
 			// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-			visitWebsite : function (which) {
+			visitWebsite: function (which) {
 				openNewTab(firebugURLs[which]);
 			},
 
 			// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 			// nsISupports
 
-			QueryInterface : function (iid) {
+			QueryInterface: function (iid) {
 				if (iid.equals(nsISupports)) {
 					return this;
 				}
@@ -1607,7 +1607,7 @@
 			// nsIPrefObserver
 			// TODO options.js
 
-			observe : function (subject, topic, data) {
+			observe: function (subject, topic, data) {
 				if (data.indexOf("extensions.") == -1)
 					return;
 
@@ -1628,7 +1628,7 @@
 			// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 			// nsIFireBugClient  These are per Firefox XUL window callbacks
 
-			enableXULWindow : function () // Called when the first context is created.
+			enableXULWindow: function () // Called when the first context is created.
 			{
 				if (window.closed)
 					throw new Error("enableXULWindow window is closed!!");
@@ -1639,7 +1639,7 @@
 				dispatch(modules, "enable", [FirebugChrome]); // allows errors to flow thru fbs and callbacks to supportWindow to begin
 			},
 
-			disableXULWindow : function () {
+			disableXULWindow: function () {
 				dispatch(modules, "disable", [FirebugChrome]);
 				if (FBTrace.DBG_ACTIVATION)
 					FBTrace.sysout("disable XUL Window --------------------------------------");
@@ -1649,14 +1649,14 @@
 			// These are XUL window level call backs and should be moved into Firebug where is says nsIFirebugClient
 			// xxxHonza: so I did
 
-			onPauseJSDRequested : function (rejection) {
+			onPauseJSDRequested: function (rejection) {
 				if (top.Firebug.currentContext) // then we are active in this browser.xul
 					rejection.push(true); // so reject the request
 
 				dispatch2(Firebug.Debugger.fbListeners, "onPauseJSDRequested", [rejection]);
 			},
 
-			onJSDActivate : function (active, why) // just before hooks are set
+			onJSDActivate: function (active, why) // just before hooks are set
 			{
 				this.setIsJSDActive(active);
 
@@ -1666,7 +1666,7 @@
 				dispatch2(Firebug.Debugger.fbListeners, "onJSDActivate", [active, why]);
 			},
 
-			onJSDDeactivate : function (active, why) {
+			onJSDDeactivate: function (active, why) {
 				this.setIsJSDActive(active);
 
 				if (FBTrace.DBG_ACTIVATION)
@@ -1675,7 +1675,7 @@
 				dispatch2(Firebug.Debugger.fbListeners, "onJSDDeactivate", [active, why]);
 			},
 
-			setIsJSDActive : function (active) // should only be call on the jsd activation events, so it correctly reflects jsd state
+			setIsJSDActive: function (active) // should only be call on the jsd activation events, so it correctly reflects jsd state
 			{
 				if (active)
 					$('fbStatusIcon').setAttribute("script", "on");
@@ -1690,23 +1690,23 @@
 			// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 			// Placement
 
-			isDetached : function () {
+			isDetached: function () {
 				return Firebug.placement == PLACEMENT_DETACHED;
 			},
 
-			isMinimized : function () {
+			isMinimized: function () {
 				return Firebug.placement == PLACEMENT_MINIMIZED;
 			},
 
-			isInBrowser : function () {
+			isInBrowser: function () {
 				return Firebug.placement == PLACEMENT_INBROWSER;
 			},
 
-			placements : ["none", "inBrowser", "detached", "minimized"],
+			placements: ["none", "inBrowser", "detached", "minimized"],
 
-			placement : 1,
+			placement: 1,
 
-			setPlacement : function (toPlacement) {
+			setPlacement: function (toPlacement) {
 				// TODO : This should probably be an event so others can link into this
 				Firebug.chrome.$("fbSearchBox").hideOptions();
 
@@ -1728,11 +1728,11 @@
 				throw new Error("Firebug.setPlacement cannot match " + toPlacement + " as a placement");
 			},
 
-			getPlacement : function () {
+			getPlacement: function () {
 				return Firebug.placements[Firebug.placement];
 			},
 
-			openMinimized : function () {
+			openMinimized: function () {
 				if (!Firebug.previousPlacement)
 					Firebug.previousPlacement = Firebug.getPref(Firebug.prefDomain, "previousPlacement");
 
@@ -1742,23 +1742,23 @@
 			// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 			// TabWatcher Listener
 
-			getContextType : function () {
+			getContextType: function () {
 				return Firebug.TabContext;
 			},
 
-			shouldShowContext : function (context) {
+			shouldShowContext: function (context) {
 				return dispatch2(modules, "shouldShowContext", [context]);
 			},
 
-			shouldCreateContext : function (browser, url, userCommands) {
+			shouldCreateContext: function (browser, url, userCommands) {
 				return dispatch2(modules, "shouldCreateContext", [browser, url, userCommands]);
 			},
 
-			shouldNotCreateContext : function (browser, url, userCommands) {
+			shouldNotCreateContext: function (browser, url, userCommands) {
 				return dispatch2(modules, "shouldNotCreateContext", [browser, url, userCommands]);
 			},
 
-			initContext : function (context, persistedState) // called after a context is created.
+			initContext: function (context, persistedState) // called after a context is created.
 			{
 				context.panelName = context.browser.panelName;
 				if (context.browser.sidePanelNames)
@@ -1777,7 +1777,7 @@
 					this.rescueWindow(context.browser); // if there is already a window, clear showDetached.
 			},
 
-			updateActiveContexts : function (context) // this should be the only method to call suspend and resume.
+			updateActiveContexts: function (context) // this should be the only method to call suspend and resume.
 			{
 				if (context) // either a new context or revisiting an old one
 				{
@@ -1794,7 +1794,7 @@
 			/*
 			 * To be called from TabWatcher only, see selectContext
 			 */
-			showContext : function (browser, context) // TabWatcher showContext. null context means we don't debug that browser
+			showContext: function (browser, context) // TabWatcher showContext. null context means we don't debug that browser
 			{
 				if (clearContextTimeout) {
 					clearTimeout(clearContextTimeout);
@@ -1831,7 +1831,7 @@
 
 			},
 
-			syncResumeBox : function (context) {
+			syncResumeBox: function (context) {
 				var contentBox = Firebug.chrome.$('fbContentBox');
 				var resumeBox = Firebug.chrome.$('fbResumeBox');
 
@@ -1849,13 +1849,13 @@
 				}
 			},
 
-			unwatchBrowser : function (browser) // the context for this browser has been destroyed and removed
+			unwatchBrowser: function (browser) // the context for this browser has been destroyed and removed
 			{
 				Firebug.updateActiveContexts(null);
 			},
 
 			// Either a top level or a frame, (interior window) for an exist context is seen by the tabWatcher.
-			watchWindow : function (context, win) {
+			watchWindow: function (context, win) {
 				for (var panelName in context.panelMap) {
 					var panel = context.panelMap[panelName];
 					panel.watchWindow(win);
@@ -1864,7 +1864,7 @@
 				dispatch(modules, "watchWindow", [context, win]);
 			},
 
-			unwatchWindow : function (context, win) {
+			unwatchWindow: function (context, win) {
 				for (var panelName in context.panelMap) {
 					var panel = context.panelMap[panelName];
 					panel.unwatchWindow(win);
@@ -1872,14 +1872,14 @@
 				dispatch(modules, "unwatchWindow", [context, win]);
 			},
 
-			loadedContext : function (context) {
+			loadedContext: function (context) {
 				if (!context.browser.currentURI)
 					FBTrace.sysout("firebug.loadedContext problem browser ", context.browser);
 
 				dispatch(modules, "loadedContext", [context]);
 			},
 
-			destroyContext : function (context, persistedState, browser) {
+			destroyContext: function (context, persistedState, browser) {
 				if (!context) // then we are called just to clean up
 					return;
 
@@ -1898,7 +1898,7 @@
 				// next the context is deleted and removed from the TabWatcher, we clean up in unWatchBrowser
 			},
 
-			onSourceFileCreated : function (context, sourceFile) {
+			onSourceFileCreated: function (context, sourceFile) {
 				dispatch(modules, "onSourceFileCreated", [context, sourceFile]);
 			},
 
@@ -1908,13 +1908,13 @@
 			 * This method syncs the UI to a context
 			 * @param context to become the active and visible context
 			 */
-			selectContext : function (context) {
+			selectContext: function (context) {
 				this.showContext(context.browser, context);
 			},
 
 			//*********************************************************************************************
 
-			getTabForWindow : function (aWindow) // TODO move to FBL, only used by getTabIdForWindow
+			getTabForWindow: function (aWindow) // TODO move to FBL, only used by getTabIdForWindow
 			{
 				aWindow = getRootWindow(aWindow);
 
@@ -1936,13 +1936,13 @@
 				return null;
 			},
 
-			getTabIdForWindow : function (win) // TODO move to FBL, rename to getIdForWindow, at 1.7 reimplement with bug 534149
+			getTabIdForWindow: function (win) // TODO move to FBL, rename to getIdForWindow, at 1.7 reimplement with bug 534149
 			{
 				var tab = this.getTabForWindow(win);
 				return tab ? tab.linkedPanel : null;
 			},
 
-			focusBrowserTab : function (win) // TODO move to FBL
+			focusBrowserTab: function (win) // TODO move to FBL
 			{
 				this.tabBrowser.selectedTab = this.getTabForWindow(win);
 				this.chrome.focus();
@@ -1952,10 +1952,10 @@
 			// FBTest
 
 			// Expose our test list to the FBTest console for automated testing.
-			onGetTestList : function (testLists) {
+			onGetTestList: function (testLists) {
 				testLists.push({
-					extension : "Firebug",
-					testListURL : "http://getfirebug.com/tests/content/testlists/firebug1.6.html"
+					extension: "Firebug",
+					testListURL: "http://getfirebug.com/tests/content/testlists/firebug1.6.html"
 				});
 			}
 		};
@@ -1976,7 +1976,7 @@
 			this.fbListeners = null;
 		}
 		Firebug.Listener.prototype = {
-			addListener : function (listener) {
+			addListener: function (listener) {
 				if (!listener) {
 					if (FBTrace.DBG_ERRORS)
 						FBTrace.sysout("firebug.Listener.addListener; ERROR null listener registered.");
@@ -1991,7 +1991,7 @@
 				this.fbListeners.push(listener);
 			},
 
-			removeListener : function (listener) {
+			removeListener: function (listener) {
 				remove(this.fbListeners, listener); // if this.fbListeners is null, remove is being called with no add
 			}
 		};
@@ -2009,84 +2009,84 @@
 				/**
 				 * Called by Firebug when Firefox window is opened.
 				 */
-				initialize : function () {},
+				initialize: function () {},
 
 				/**
 				 * Called when the UI is ready for context creation.
 				 * Used by chromebug; normally FrameProgressListener events trigger UI synchronization,
 				 * this event allows sync without progress events.
 				 */
-				initializeUI : function (detachArgs) {},
+				initializeUI: function (detachArgs) {},
 
 				/**
 				 * Called by Firebug when Firefox window is closed.
 				 */
-				shutdown : function () {},
+				shutdown: function () {},
 
 				/**
 				 * Called when a new context is created but before the page is loaded.
 				 */
-				initContext : function (context, persistedState) {},
+				initContext: function (context, persistedState) {},
 
 				/**
 				 * Called after a context is detached to a separate window;
 				 */
-				reattachContext : function (browser, context) {},
+				reattachContext: function (browser, context) {},
 
 				/**
 				 * Called when a context is destroyed. Module may store info on persistedState for reloaded pages.
 				 */
-				destroyContext : function (context, persistedState) {},
+				destroyContext: function (context, persistedState) {},
 
 				/**
 				 * Called when attaching to a window (top-level or frame).
 				 */
-				watchWindow : function (context, win) {},
+				watchWindow: function (context, win) {},
 
 				/**
 				 * Called when unwatching a window (top-level or frame).
 				 */
-				unwatchWindow : function (context, win) {},
+				unwatchWindow: function (context, win) {},
 
 				// Called when a FF tab is create or activated (user changes FF tab)
 				// Called after context is created or with context == null (to abort?)
-				showContext : function (browser, context) {},
+				showContext: function (browser, context) {},
 
 				/**
 				 * Called after a context's page gets DOMContentLoaded
 				 */
-				loadedContext : function (context) {},
+				loadedContext: function (context) {},
 
 				/*
 				 * After "onSelectingPanel", a panel has been selected but is not yet visible
 				 * @param browser a tab's browser element
 				 * @param panel selectet panel OR null
 				 */
-				showPanel : function (browser, panel) {},
+				showPanel: function (browser, panel) {},
 
-				showSidePanel : function (browser, sidePanel) {},
+				showSidePanel: function (browser, sidePanel) {},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				updateOption : function (name, value) {},
+				updateOption: function (name, value) {},
 
-				getObjectByURL : function (context, url) {},
+				getObjectByURL: function (context, url) {},
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// intermodule dependency
 
 				// caller needs module. win maybe context.window or iframe in context.window.
 				// true means module is ready now, else getting ready
-				isReadyElsePreparing : function (context, win) {},
+				isReadyElsePreparing: function (context, win) {},
 			});
 
 		//************************************************************************************************
 
 		Firebug.Extension = {
-			acceptContext : function (win, uri) {
+			acceptContext: function (win, uri) {
 				return false;
 			},
 
-			declineContext : function (win, uri) {
+			declineContext: function (win, uri) {
 				return false;
 			}
 		};
@@ -2101,15 +2101,15 @@
 		Firebug.Panel = extend(new Firebug.Listener(),
 				/** @lends Firebug.Panel */
 			{
-				searchable : false, // supports search
-				editable : true, // clicking on contents in the panel will invoke the inline editor, eg the CSS Style panel or HTML panel.
-				breakable : false, // if true, supports break-on-next (the pause button functionality)
-				order : 2147483647, // relative position of the panel (or a side panel)
-				statusSeparator : "<", // the character used to separate items on the panel status (aka breadcrumbs) in the tool bar, eg ">"  in the DOM panel
-				enableA11y : false, // true if the panel wants to participate in A11y accessibility support.
-				deriveA11yFrom : null, // Name of the panel that uses the same a11y logic.
+				searchable: false, // supports search
+				editable: true, // clicking on contents in the panel will invoke the inline editor, eg the CSS Style panel or HTML panel.
+				breakable: false, // if true, supports break-on-next (the pause button functionality)
+				order: 2147483647, // relative position of the panel (or a side panel)
+				statusSeparator: "<", // the character used to separate items on the panel status (aka breadcrumbs) in the tool bar, eg ">"  in the DOM panel
+				enableA11y: false, // true if the panel wants to participate in A11y accessibility support.
+				deriveA11yFrom: null, // Name of the panel that uses the same a11y logic.
 
-				initialize : function (context, doc) {
+				initialize: function (context, doc) {
 					if (!context.browser) {
 						if (FBTrace.DBG_ERRORS)
 							FBTrace.sysout("attempt to create panel with dud context!");
@@ -2144,7 +2144,7 @@
 					this.initializeNode(this.panelNode);
 				},
 
-				destroy : function (state) // Panel may store info on state
+				destroy: function (state) // Panel may store info on state
 				{
 					if (FBTrace.DBG_INITIALIZE)
 						FBTrace.sysout("firebug.destroy panelNode for " + this.name + "\n");
@@ -2163,12 +2163,12 @@
 					clearDomplate(this.panelNode);
 				},
 
-				savePersistedContent : function (state) {
+				savePersistedContent: function (state) {
 					state.panelNode = this.panelNode;
 					state.persistContent = this.persistContent;
 				},
 
-				loadPersistedContent : function (persistedState) {
+				loadPersistedContent: function (persistedState) {
 					// move the nodes from the persistedState to the panel
 					while (persistedState.panelNode.firstChild)
 						this.panelNode.appendChild(persistedState.panelNode.firstChild);
@@ -2177,9 +2177,9 @@
 				},
 
 				// called when a panel in one XUL window is about to appear in another one.
-				detach : function (oldChrome, newChrome) {},
+				detach: function (oldChrome, newChrome) {},
 
-				reattach : function (doc) // this is how a panel in one window reappears in another window; lazy called
+				reattach: function (doc) // this is how a panel in one window reappears in another window; lazy called
 				{
 					this.document = doc;
 
@@ -2191,39 +2191,39 @@
 				},
 
 				// Called at the end of module.initialize; addEventListener-s here
-				initializeNode : function (panelNode) {
+				initializeNode: function (panelNode) {
 					dispatch(this.fbListeners, "onInitializeNode", [this]);
 				},
 
 				// removeEventListener-s here.
-				destroyNode : function () {
+				destroyNode: function () {
 					dispatch(this.fbListeners, "onDestroyNode", [this]);
 				},
 
-				show : function (state) // persistedPanelState plus non-persisted hide() values
+				show: function (state) // persistedPanelState plus non-persisted hide() values
 				{},
 
-				hide : function (state) // store info on state for next show.
+				hide: function (state) // store info on state for next show.
 				{},
 
-				watchWindow : function (win) {},
+				watchWindow: function (win) {},
 
-				unwatchWindow : function (win) {},
+				unwatchWindow: function (win) {},
 
-				updateOption : function (name, value) {},
+				updateOption: function (name, value) {},
 
 				/*
 				 * Called after chrome.applyTextSize
 				 * @param zoom: ratio of current size to normal size, eg 1.5
 				 */
-				onTextSizeChange : function (zoom) {},
+				onTextSizeChange: function (zoom) {},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 				/**
 				 * Toolbar helpers
 				 */
-				showToolbarButtons : function (buttonsId, show) {
+				showToolbarButtons: function (buttonsId, show) {
 					try {
 						var buttons = Firebug.chrome.$(buttonsId);
 						collapse(buttons, !show);
@@ -2240,16 +2240,16 @@
 				 *
 				 * Zero means not supported, and higher numbers indicate specificity.
 				 */
-				supportsObject : function (object, type) {
+				supportsObject: function (object, type) {
 					return 0;
 				},
 
-				hasObject : function (object) // beyond type testing, is this object selectable?
+				hasObject: function (object) // beyond type testing, is this object selectable?
 				{
 					return false;
 				},
 
-				navigate : function (object) {
+				navigate: function (object) {
 					if (FBTrace.DBG_PANELS)
 						FBTrace.sysout("navigate " + this.name + " to " + object + " when this.location=" + this.location + "\n");
 					if (!object)
@@ -2274,9 +2274,9 @@
 				 * @param object a location, must be one of getLocationList() returns
 				 *  if  getDefaultLocation() can return null, then updateLocation must handle it here.
 				 */
-				updateLocation : function (object) {},
+				updateLocation: function (object) {},
 
-				select : function (object, forceUpdate) {
+				select: function (object, forceUpdate) {
 					if (!object)
 						object = this.getDefaultSelection();
 
@@ -2295,19 +2295,19 @@
 				 * Firebug wants to show an object to the user and this panel has the best supportsObject() result for the object.
 				 * If the panel displays a container for objects of this type, it should set this.selectedObject = object
 				 */
-				updateSelection : function (object) {},
+				updateSelection: function (object) {},
 
 				/*
 				 * Redisplay the panel based on the current location and selection
 				 */
-				refresh : function () {
+				refresh: function () {
 					if (this.location)
 						this.updateLocation(this.location);
 					else if (this.selection)
 						this.updateSelection(this.selection);
 				},
 
-				markChange : function (skipSelf) {
+				markChange: function (skipSelf) {
 					if (this.dependents) {
 						if (skipSelf) {
 							for (var i = 0; i < this.dependents.length; ++i) {
@@ -2322,19 +2322,19 @@
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				startInspecting : function () {},
+				startInspecting: function () {},
 
-				stopInspecting : function (object, cancelled) {},
+				stopInspecting: function (object, cancelled) {},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				search : function (text, reverse) {},
+				search: function (text, reverse) {},
 
 				/**
 				 * Retrieves the search options that this modules supports.
 				 * This is used by the search UI to present the proper options.
 				 */
-				getSearchOptionsMenuItems : function () {
+				getSearchOptionsMenuItems: function () {
 					return [
 						Firebug.Search.searchOptionMenu("search.Case Sensitive", "searchCaseSensitive")
 					];
@@ -2343,7 +2343,7 @@
 				/**
 				 * Navigates to the next document whose match parameter returns true.
 				 */
-				navigateToNextDocument : function (match, reverse) {
+				navigateToNextDocument: function (match, reverse) {
 					// This is an approximation of the UI that is displayed by the location
 					// selector. This should be close enough, although it may be better
 					// to simply generate the sorted list within the module, rather than
@@ -2389,7 +2389,7 @@
 
 				// Called when "Options" clicked. Return array of
 				// {label: 'name', nol10n: true,  type: "checkbox", checked: <value>, command:function to set <value>}
-				getOptionsMenuItems : function () {
+				getOptionsMenuItems: function () {
 					return null;
 				},
 
@@ -2401,56 +2401,56 @@
 				 * @param target: the HTML element clicked on.
 				 * @return an array of menu items.
 				 */
-				getContextMenuItems : function (object, target) {
+				getContextMenuItems: function (object, target) {
 					return [];
 				},
 
-				getBreakOnMenuItems : function () {
+				getBreakOnMenuItems: function () {
 					return [];
 				},
 
-				getEditor : function (target, value) {},
+				getEditor: function (target, value) {},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				getDefaultSelection : function () {
+				getDefaultSelection: function () {
 					return null;
 				},
 
-				browseObject : function (object) {},
+				browseObject: function (object) {},
 
-				getPopupObject : function (target) {
+				getPopupObject: function (target) {
 					return Firebug.getRepObject(target);
 				},
 
-				getTooltipObject : function (target) {
+				getTooltipObject: function (target) {
 					return Firebug.getRepObject(target);
 				},
 
-				showInfoTip : function (infoTip, x, y) {},
+				showInfoTip: function (infoTip, x, y) {},
 
-				getObjectPath : function (object) {
+				getObjectPath: function (object) {
 					return null;
 				},
 
 				// An array of objects that can be passed to getObjectLocation.
 				// The list of things a panel can show, eg sourceFiles.
 				// Only shown if panel.location defined and supportsObject true
-				getLocationList : function () {
+				getLocationList: function () {
 					return null;
 				},
 
-				getDefaultLocation : function () {
+				getDefaultLocation: function () {
 					return null;
 				},
 
-				getObjectLocation : function (object) {
+				getObjectLocation: function (object) {
 					return "";
 				},
 
 				// Text for the location list menu eg script panel source file list
 				// return.path: group/category label, return.name: item label
-				getObjectDescription : function (object) {
+				getObjectDescription: function (object) {
 					var url = this.getObjectLocation(object);
 					return FBL.splitURLBase(url);
 				},
@@ -2459,7 +2459,7 @@
 				 *  UI signal that a tab needs attention, eg Script panel is currently stopped on a breakpoint
 				 *  @param: show boolean, true turns on.
 				 */
-				highlight : function (show) {
+				highlight: function (show) {
 					var tab = this.getTab();
 					if (!tab)
 						return;
@@ -2470,7 +2470,7 @@
 						tab.removeAttribute("highlight");
 				},
 
-				getTab : function () {
+				getTab: function () {
 					var chrome = Firebug.chrome;
 
 					var tab = chrome.$("fbPanelBar2").getTab(this.name);
@@ -2488,13 +2488,13 @@
 				 * to be armed for action and set to false if the Break On Next should be disarmed.
 				 * If 'armed' is true, then the next call to shouldBreakOnNext should be |true|.
 				 */
-				breakOnNext : function (armed) {},
+				breakOnNext: function (armed) {},
 
 				/**
 				 * Called when a panel is selected/displayed. The method should return true
 				 * if the Break On Next feature is currently armed for this panel.
 				 */
-				shouldBreakOnNext : function () {
+				shouldBreakOnNext: function () {
 					return false;
 				},
 
@@ -2503,7 +2503,7 @@
 				 * @param {Boolean} enabled Set to true if the Break On Next feature is
 				 * currently activated for this panel.
 				 */
-				getBreakOnNextTooltip : function (enabled) {
+				getBreakOnNextTooltip: function (enabled) {
 					return null;
 				},
 			});
@@ -2519,13 +2519,13 @@
 		 * and so, |this| points to the panel's prototype and *not* to the panel instance.
 		 */
 		Firebug.ActivablePanel = extend(Firebug.Panel, {
-				activable : true,
+				activable: true,
 
-				isActivable : function () {
+				isActivable: function () {
 					return this.activable;
 				},
 
-				isEnabled : function () {
+				isEnabled: function () {
 					if (!this.isActivable())
 						return true;
 
@@ -2535,7 +2535,7 @@
 					return Firebug.getPref(Firebug.prefDomain + "." + this.name, "enableSites");
 				},
 
-				setEnabled : function (enable) {
+				setEnabled: function (enable) {
 					if (!this.name || !this.activable)
 						return;
 
@@ -2558,7 +2558,7 @@
 				 * not accessible from this method.
 				 * @param {Object} enable Set to true if this panel type is now enabled.
 				 */
-				onActivationChanged : function (enable) {
+				onActivationChanged: function (enable) {
 					// TODO: Use Firebug.ActivableModule.addObserver to express dependencies on modules.
 				},
 			});
@@ -2579,31 +2579,31 @@
 				 * that wants to have it enabled (and display provided data). The rule is
 				 * if there is no panel (view) the module is disabled.
 				 */
-				enabled : false,
+				enabled: false,
 
 				/**
 				 * List of observers (typically panels). If there is at least one observer registered
 				 * The module becomes active.
 				 */
-				observers : null,
+				observers: null,
 
 				/**
 				 * List of dependent modules.
 				 */
-				dependents : null,
+				dependents: null,
 
-				initialize : function () {
+				initialize: function () {
 					Firebug.Module.initialize.apply(this, arguments);
 				},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// Observers (dependencies)
 
-				hasObservers : function () {
+				hasObservers: function () {
 					return this.observers ? this.observers.length > 0 : false;
 				},
 
-				addObserver : function (observer) {
+				addObserver: function (observer) {
 					if (!this.observers)
 						this.observers = [];
 
@@ -2611,7 +2611,7 @@
 					this.onObserverChange(observer); // not dispatched.
 				},
 
-				removeObserver : function (observer) {
+				removeObserver: function (observer) {
 					if (!this.observers)
 						return;
 
@@ -2624,7 +2624,7 @@
 				 * The module should decide about activation/deactivation upon existence of at least one
 				 * observer.
 				 */
-				onObserverChange : function (observer) {
+				onObserverChange: function (observer) {
 					if (FBTrace.DBG_WINDOWS)
 						FBTrace.sysout("firebug.ActivableModule.onObserverChange;");
 				},
@@ -2632,7 +2632,7 @@
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// Cross module dependencies.
 
-				addDependentModule : function (dependent) {
+				addDependentModule: function (dependent) {
 					if (!this.dependents)
 						this.dependents = [];
 
@@ -2640,7 +2640,7 @@
 					this.onDependentModuleChange(dependent); // not dispatched.
 				},
 
-				removeDependentModule : function (dependent) {
+				removeDependentModule: function (dependent) {
 					if (!this.dependents)
 						return;
 
@@ -2648,7 +2648,7 @@
 					this.onDependentModuleChange(dependent); // not dispatched
 				},
 
-				onDependentModuleChange : function (dependent) {
+				onDependentModuleChange: function (dependent) {
 					if (FBTrace.DBG_WINDOWS)
 						FBTrace.sysout("onDependentModuleChange no-op for " + dependent.dispatchName);
 				},
@@ -2656,31 +2656,31 @@
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// Firebug Activation
 
-				onSuspendingFirebug : function () {
+				onSuspendingFirebug: function () {
 					// Called before any suspend actions. Firest caller to return true aborts suspend.
 				},
 
-				onSuspendFirebug : function () {
+				onSuspendFirebug: function () {
 					// When the number of activeContexts decreases to zero. Modules should remove listeners, disable function that takes resources
 				},
 
-				onResumeFirebug : function () {
+				onResumeFirebug: function () {
 					// When the number of activeContexts increases from zero. Modules should undo the work done in onSuspendFirebug
 				},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// Module enable/disable APIs.
 
-				setDefaultState : function (enable) {
+				setDefaultState: function (enable) {
 					//@deprecated
 					Firebug.Console.log("Deprecated: don't use ActivableModule.setDefaultState!", Firebug.currentContext);
 				},
 
-				isEnabled : function () {
+				isEnabled: function () {
 					return this.hasObservers();
 				},
 
-				isAlwaysEnabled : function () {
+				isAlwaysEnabled: function () {
 					return this.hasObservers();
 				}
 			});
@@ -2696,7 +2696,7 @@
 		 * </ul>
 		 */
 		Firebug.MeasureBox = {
-			startMeasuring : function (target) {
+			startMeasuring: function (target) {
 				if (!this.measureBox) {
 					this.measureBox = target.ownerDocument.createElement("span");
 					this.measureBox.className = "measureBox";
@@ -2706,36 +2706,36 @@
 				target.ownerDocument.body.appendChild(this.measureBox);
 			},
 
-			getMeasuringElement : function () {
+			getMeasuringElement: function () {
 				return this.measureBox;
 			},
 
-			measureText : function (value) {
+			measureText: function (value) {
 				this.measureBox.innerHTML = value ? escapeForSourceLine(value) : "m";
 				return {
-					width : this.measureBox.offsetWidth,
-					height : this.measureBox.offsetHeight - 1
+					width: this.measureBox.offsetWidth,
+					height: this.measureBox.offsetHeight - 1
 				};
 			},
 
-			measureInputText : function (value) {
+			measureInputText: function (value) {
 				value = value ? escapeForTextNode(value) : "m";
 				if (!Firebug.showTextNodesWithWhitespace)
 					value = value.replace(/\t/g, 'mmmmmm').replace(/\ /g, 'm');
 				this.measureBox.innerHTML = value;
 				return {
-					width : this.measureBox.offsetWidth,
-					height : this.measureBox.offsetHeight - 1
+					width: this.measureBox.offsetWidth,
+					height: this.measureBox.offsetHeight - 1
 				};
 			},
 
-			getBox : function (target) {
+			getBox: function (target) {
 				var style = this.measureBox.ownerDocument.defaultView.getComputedStyle(this.measureBox, "");
 				var box = getBoxFromStyles(style, this.measureBox);
 				return box;
 			},
 
-			stopMeasuring : function () {
+			stopMeasuring: function () {
 				this.measureBox.parentNode.removeChild(this.measureBox);
 			}
 		};
@@ -2743,36 +2743,36 @@
 		// ************************************************************************************************
 
 		Firebug.Rep = domplate({
-				className : "",
-				inspectable : true,
+				className: "",
+				inspectable: true,
 
-				supportsObject : function (object, type) {
+				supportsObject: function (object, type) {
 					return false;
 				},
 
-				highlightObject : function (object, context) {
+				highlightObject: function (object, context) {
 					var realObject = this.getRealObject(object, context);
 					if (realObject)
 						Firebug.Inspector.highlightObject(realObject, context);
 				},
 
-				unhighlightObject : function (object, context) {
+				unhighlightObject: function (object, context) {
 					Firebug.Inspector.highlightObject(null);
 				},
 
-				inspectObject : function (object, context) {
+				inspectObject: function (object, context) {
 					Firebug.chrome.select(object);
 				},
 
-				browseObject : function (object, context) {},
+				browseObject: function (object, context) {},
 
-				persistObject : function (object, context) {},
+				persistObject: function (object, context) {},
 
-				getRealObject : function (object, context) {
+				getRealObject: function (object, context) {
 					return object;
 				},
 
-				getTitle : function (object) {
+				getTitle: function (object) {
 					var label = safeToString(object); // eg [object XPCWrappedNative [object foo]]
 
 					const re = /\[object ([^\]]*)/;
@@ -2787,7 +2787,7 @@
 						return m ? m[1] : label;
 				},
 
-				getTooltip : function (object) {
+				getTooltip: function (object) {
 					return null;
 				},
 
@@ -2800,30 +2800,30 @@
 				 * @param context: the context, probably Firebug.currentContext
 				 * @return an array of menu items.
 				 */
-				getContextMenuItems : function (object, target, context) {
+				getContextMenuItems: function (object, target, context) {
 					return [];
 				},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// Convenience for domplates
 
-				STR : function (name) {
+				STR: function (name) {
 					return $STR(name);
 				},
 
-				cropString : function (text) {
+				cropString: function (text) {
 					return cropString(text);
 				},
 
-				cropMultipleLines : function (text, limit) {
+				cropMultipleLines: function (text, limit) {
 					return cropMultipleLines(text, limit);
 				},
 
-				toLowerCase : function (text) {
+				toLowerCase: function (text) {
 					return text ? text.toLowerCase() : text;
 				},
 
-				plural : function (n) {
+				plural: function (n) {
 					return n == 1 ? "" : "s";
 				}
 			});
@@ -2836,7 +2836,7 @@
 			 * On first call, Arrow points from old to new, button OK required
 			 * After OK, the oldButton is removed and not shown again unless preference is erased.
 			 */
-			migrateButton : function (oldButton, newButton) {
+			migrateButton: function (oldButton, newButton) {
 				if (Firebug.Migrator.getMigrated(oldButton)) {
 					oldButton.parentNode.removeChild(oldButton);
 					return;
@@ -2899,7 +2899,7 @@
 				oldButton.addEventListener('mouseover', showMigration, false);
 			},
 
-			drawMigrationLine : function (x1, y1, x2, y2) {
+			drawMigrationLine: function (x1, y1, x2, y2) {
 				var migrationFrame = Firebug.chrome.$('fbMigrationFrame');
 
 				var line = migrationFrame.contentDocument.getElementById("migrationPath");
@@ -2931,7 +2931,7 @@
 					}, 50);
 			},
 
-			removeButtonOnOk : function (oldButton, migrationPanel) {
+			removeButtonOnOk: function (oldButton, migrationPanel) {
 				var migrationOk = Firebug.chrome.$('fbMigrationOk');
 				migrationOk.addEventListener('click', function migrationComplete(event) {
 					// xxxHonza, XXXjjb: I have seen an exception saying that oldButton.parentNode is null.
@@ -2943,12 +2943,12 @@
 				}, true);
 			},
 
-			getMigrated : function (elt) {
+			getMigrated: function (elt) {
 				var id = elt.getAttribute('id');
 				return Firebug.getPref(Firebug.prefDomain, "migrated_" + id);
 			},
 
-			setMigrated : function (elt) {
+			setMigrated: function (elt) {
 				var id = elt.getAttribute('id');
 				Firebug.setPref(Firebug.prefDomain, "migrated_" + id, true, typeof(true));
 			},
