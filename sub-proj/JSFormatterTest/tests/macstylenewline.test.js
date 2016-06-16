@@ -57,12 +57,12 @@ var Firebug = null;
 	// ************************************************************************************************
 
 	top.FirebugChrome = {
-		window : window,
+		window: window,
 
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		// Initialization
 
-		panelBarReady : function (panelBar) {
+		panelBarReady: function (panelBar) {
 			try {
 				// Wait until all panelBar bindings are ready before initializing
 				if (--waitingPanelBarCount == 0)
@@ -80,7 +80,7 @@ var Firebug = null;
 			return true; // the panel bar is ready
 		},
 
-		initialize : function () {
+		initialize: function () {
 			panelBox = $("fbPanelBox");
 			panelSplitter = $("fbPanelSplitter");
 			sidePanelDeck = $("fbSidePanelDeck");
@@ -140,7 +140,7 @@ var Firebug = null;
 				FBTrace.sysout("chrome.initialized ", window);
 		},
 
-		initializeMenu : function (parentMenu, popupMenu) {
+		initializeMenu: function (parentMenu, popupMenu) {
 			if (!parentMenu)
 				return;
 
@@ -154,7 +154,7 @@ var Firebug = null;
 		/**
 		 * Called when the UI is ready to be initialized, once the panel browsers are loaded.
 		 */
-		initializeUI : function () {
+		initializeUI: function () {
 			// we listen for panel update
 			Firebug.registerUIListener(this);
 
@@ -217,7 +217,7 @@ var Firebug = null;
 			}
 		},
 
-		shutdown : function () {
+		shutdown: function () {
 			if (FBTrace.DBG_INITIALIZE || !panelBar1)
 				FBTrace.sysout("chrome.shutdown entered for " + window.location + "\n");
 
@@ -254,7 +254,7 @@ var Firebug = null;
 				Firebug.shutdown();
 		},
 
-		updateOption : function (name, value) {
+		updateOption: function (name, value) {
 			if (panelBar1.selectedPanel)
 				panelBar1.selectedPanel.updateOption(name, value);
 			if (panelBar2.selectedPanel)
@@ -268,7 +268,7 @@ var Firebug = null;
 
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		attachBrowser : function (context) // XXXjjb context == (Firebug.currentContext || null)  and inDetachedScope == true
+		attachBrowser: function (context) // XXXjjb context == (Firebug.currentContext || null)  and inDetachedScope == true
 		{
 			if (FBTrace.DBG_ACTIVATION)
 				FBTrace.sysout("chrome.attachBrowser with inDetachedScope=" + inDetachedScope +
@@ -287,7 +287,7 @@ var Firebug = null;
 			}
 		},
 
-		undetach : function () {
+		undetach: function () {
 			var detachedChrome = Firebug.chrome;
 			Firebug.setChrome(Firebug.originalChrome, "minimized");
 
@@ -298,21 +298,21 @@ var Firebug = null;
 			detachedChrome.window = "This is detached chrome!";
 		},
 
-		disableOff : function (collapse) {
+		disableOff: function (collapse) {
 			FBL.collapse($("fbCloseButton"), collapse); // disable/enable this button in the Firebug.chrome window.
 		},
 
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		getBrowsers : function () {
+		getBrowsers: function () {
 			return Firebug.tabBrowser.browsers;
 		},
 
-		getCurrentBrowser : function () {
+		getCurrentBrowser: function () {
 			return Firebug.tabBrowser.selectedBrowser;
 		},
 
-		getCurrentURI : function () {
+		getCurrentURI: function () {
 			try {
 				return Firebug.tabBrowser.currentURI;
 			} catch (exc) {
@@ -320,7 +320,7 @@ var Firebug = null;
 			}
 		},
 
-		getPanelDocument : function (panelType) {
+		getPanelDocument: function (panelType) {
 			// Console panel can be displayed for all the other panels
 			// (except of the console panel itself)
 			// XXXjjb, xxxHonza: this should be somehow better, more generic and extensible...
@@ -337,21 +337,21 @@ var Firebug = null;
 				return panelBar2.browser.contentDocument;
 		},
 
-		getPanelBrowser : function (panel) {
+		getPanelBrowser: function (panel) {
 			if (!panel.parentPanel)
 				return panelBar1.browser;
 			else
 				return panelBar2.browser;
 		},
 
-		savePanels : function () {
+		savePanels: function () {
 			var path = this.writePanels(panelBar1.browser.contentDocument);
 			$("fbStatusText").setAttribute("value", path);
 			if (FBTrace.DBG_PANELS)
 				FBTrace.sysout("Wrote panels to " + path + "\n");
 		},
 
-		writePanels : function (doc) {
+		writePanels: function (doc) {
 			var serializer = new XMLSerializer();
 			var foStream = Components.classes["@mozilla.org/network/file-output-stream;1"]
 				.createInstance(Components.interfaces.nsIFileOutputStream);
@@ -368,7 +368,7 @@ var Firebug = null;
 			return file.path;
 		},
 
-		updatePanelBar1 : function (panelTypes) // part of initializeUI
+		updatePanelBar1: function (panelTypes) // part of initializeUI
 		{
 			var mainPanelTypes = [];
 			for (var i = 0; i < panelTypes.length; ++i) {
@@ -381,26 +381,26 @@ var Firebug = null;
 
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		getName : function () {
+		getName: function () {
 			return window ? window.location.href : null;
 		},
 
-		close : function () {
+		close: function () {
 			if (FBTrace.DBG_INITIALIZE)
 				FBTrace.sysout("chrome.close closing window " + window.location);
 			window.close();
 		},
 
-		focus : function () {
+		focus: function () {
 			window.focus();
 			panelBar1.browser.contentWindow.focus();
 		},
 
-		isFocused : function () {
+		isFocused: function () {
 			return wm.getMostRecentWindow(null) == window;
 		},
 
-		focusWatch : function (context) {
+		focusWatch: function (context) {
 			if (Firebug.isDetached())
 				Firebug.chrome.focus();
 			else
@@ -415,11 +415,11 @@ var Firebug = null;
 			}
 		},
 
-		isOpen : function () {
+		isOpen: function () {
 			return !($("fbContentBox").collapsed);
 		},
 
-		reload : function (skipCache) {
+		reload: function (skipCache) {
 			var reloadFlags = skipCache
 				 ? LOAD_FLAGS_BYPASS_PROXY | LOAD_FLAGS_BYPASS_CACHE
 				 : LOAD_FLAGS_NONE;
@@ -433,12 +433,12 @@ var Firebug = null;
 				FBTrace.sysout("chrome.reload; " + skipCache + ", " + browser.currentURI.spec);
 		},
 
-		gotoPreviousTab : function () {
+		gotoPreviousTab: function () {
 			if (Firebug.currentContext.previousPanelName)
 				this.selectPanel(Firebug.currentContext.previousPanelName);
 		},
 
-		gotoSiblingTab : function (goRight) {
+		gotoSiblingTab: function (goRight) {
 			if ($('fbContentBox').collapsed)
 				return;
 			var i,
@@ -464,7 +464,7 @@ var Firebug = null;
 			}
 		},
 
-		getNextObject : function (reverse) {
+		getNextObject: function (reverse) {
 			var panel = Firebug.currentContext.getPanel(Firebug.currentContext.panelName);
 			if (panel) {
 				var item = panelStatus.getItemByObject(panel.selection);
@@ -480,7 +480,7 @@ var Firebug = null;
 			}
 		},
 
-		gotoNextObject : function (reverse) {
+		gotoNextObject: function (reverse) {
 			var nextObject = this.getNextObject(reverse);
 			if (nextObject)
 				this.select(nextObject);
@@ -499,7 +499,7 @@ var Firebug = null;
 		 * @param panelName the .name field for the desired panel, null means current panel
 		 * @param sidePanelName I don't know how this affects the outcome
 		 */
-		navigate : function (object, panelName, sidePanelName) {
+		navigate: function (object, panelName, sidePanelName) {
 			var panel;
 			if (panelName || sidePanelName)
 				panel = this.selectPanel(panelName, sidePanelName);
@@ -517,7 +517,7 @@ var Firebug = null;
 		 *  @param sidePanelName default side panel name, used if its supportObject returns true value
 		 *  @param forceUpdate if true, then (object === this.selection) is ignored and updateSelection is called
 		 */
-		select : function (object, panelName, sidePanelName, forceUpdate) {
+		select: function (object, panelName, sidePanelName, forceUpdate) {
 			if (FBTrace.DBG_PANELS)
 				FBTrace.sysout("chrome.select object:" + object + " panelName:" + panelName + " sidePanelName:" + sidePanelName + " forceUpdate:" + forceUpdate + "\n");
 			var bestPanelName = getBestPanelName(object, Firebug.currentContext, panelName);
@@ -526,39 +526,39 @@ var Firebug = null;
 				panel.select(object, forceUpdate);
 		},
 
-		selectPanel : function (panelName, sidePanelName, noRefresh) {
+		selectPanel: function (panelName, sidePanelName, noRefresh) {
 			if (panelName && sidePanelName)
 				Firebug.currentContext.sidePanelNames[panelName] = sidePanelName;
 
 			return panelBar1.selectPanel(panelName, false, noRefresh); // cause panel visibility changes and events
 		},
 
-		selectSidePanel : function (panelName) {
+		selectSidePanel: function (panelName) {
 			return panelBar2.selectPanel(panelName);
 		},
 
-		selectSupportingPanel : function (object, context, forceUpdate) {
+		selectSupportingPanel: function (object, context, forceUpdate) {
 			var bestPanelName = getBestPanelSupportingObject(object, context);
 			var panel = this.selectPanel(bestPanelName, false, true);
 			if (panel)
 				panel.select(object, forceUpdate);
 		},
 
-		clearPanels : function () {
+		clearPanels: function () {
 			panelBar1.hideSelectedPanel();
 			panelBar1.selectedPanel = null;
 			panelBar2.selectedPanel = null;
 		},
 
-		getSelectedPanel : function () {
+		getSelectedPanel: function () {
 			return panelBar1.selectedPanel;
 		},
 
-		getSelectedSidePanel : function () {
+		getSelectedSidePanel: function () {
 			return panelBar2.selectedPanel;
 		},
 
-		switchToPanel : function (context, switchToPanelName) {
+		switchToPanel: function (context, switchToPanelName) {
 			// Remember the previous panel and bar state so we can revert if the user cancels
 			this.previousPanelName = context.panelName;
 			this.previousSidePanelName = context.sidePanelName;
@@ -572,7 +572,7 @@ var Firebug = null;
 			return switchPanel;
 		},
 
-		unswitchToPanel : function (context, switchToPanelName, cancelled) {
+		unswitchToPanel: function (context, switchToPanelName, cancelled) {
 			var switchToPanel = context.getPanel(switchToPanelName);
 
 			if (this.previouslyFocused)
@@ -606,7 +606,7 @@ var Firebug = null;
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		// Location interface provider for binding.xml panelFileList
 
-		getLocationProvider : function () {
+		getLocationProvider: function () {
 			// a function that returns an object with .getObjectDescription() and .getLocationList()
 			return function getSelectedPanelFromCurrentContext() {
 				return Firebug.chrome.getSelectedPanel(); // panels provide location, use the selected panel
@@ -616,7 +616,7 @@ var Firebug = null;
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		// UI Synchronization
 
-		setFirebugContext : function (context) {
+		setFirebugContext: function (context) {
 			// This sets the global value of Firebug.currentContext in the window that this chrome is compiled into.
 			// Note that for firebug.xul, the Firebug object is shared across windows, but not FirebugChrome and Firebug.currentContext
 			FirebugContext = context;
@@ -626,7 +626,7 @@ var Firebug = null;
 				FBTrace.sysout("setFirebugContext " + (Firebug.currentContext ? Firebug.currentContext.getName() : " **> NULL <** ") + " in " + window.location);
 		},
 
-		hidePanel : function () {
+		hidePanel: function () {
 			if (panelBar1.selectedPanel)
 				panelBar1.hideSelectedPanel()
 
@@ -634,7 +634,7 @@ var Firebug = null;
 					panelBar2.hideSelectedPanel()
 		},
 
-		syncPanel : function (panelName) {
+		syncPanel: function (panelName) {
 			var context = Firebug.currentContext;
 
 			if (FBTrace.DBG_PANELS)
@@ -662,12 +662,12 @@ var Firebug = null;
 				this.syncTitle();
 		},
 
-		syncMainPanels : function () {
+		syncMainPanels: function () {
 			var panelTypes = Firebug.getMainPanelTypes(Firebug.currentContext);
 			panelBar1.updatePanels(panelTypes);
 		},
 
-		syncSidePanels : function () {
+		syncSidePanels: function () {
 			if (FBTrace.DBG_PANELS)
 				FBTrace.sysout("syncSidePanels " + panelBar1.selectedPanel);
 			if (!panelBar1.selectedPanel)
@@ -693,7 +693,7 @@ var Firebug = null;
 			FBL.collapse(panelSplitter, !panelBar2.selectedPanel);
 		},
 
-		syncTitle : function () {
+		syncTitle: function () {
 			if (Firebug.currentContext) {
 				var title = Firebug.currentContext.getTitle();
 				window.document.title = FBL.$STRF("WindowTitle", [title]);
@@ -701,11 +701,11 @@ var Firebug = null;
 				window.document.title = FBL.$STR("Firebug");
 		},
 
-		focusLocationList : function () {
+		focusLocationList: function () {
 			locationList.popup.showPopup(locationList, -1, -1, "popup", "bottomleft", "topleft");
 		},
 
-		syncLocationList : function () {
+		syncLocationList: function () {
 			var panel = panelBar1.selectedPanel;
 			if (panel && panel.location) {
 				locationList.location = panel.location;
@@ -715,11 +715,11 @@ var Firebug = null;
 			}
 		},
 
-		clearStatusPath : function () {
+		clearStatusPath: function () {
 			panelStatus.clear();
 		},
 
-		syncStatusPath : function () {
+		syncStatusPath: function () {
 			var panel = panelBar1.selectedPanel;
 			if (!panel || (panel && !panel.selection)) {
 				panelStatus.clear();
@@ -775,7 +775,7 @@ var Firebug = null;
 			}
 		},
 
-		toggleOrient : function () {
+		toggleOrient: function () {
 			var panelPane = $("fbPanelPane");
 			panelSplitter.orient = panelPane.orient
 				 = panelPane.orient == "vertical" ? "horizontal" : "vertical";
@@ -785,7 +785,7 @@ var Firebug = null;
 
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		addTab : function (context, url, title, parentPanel) {
+		addTab: function (context, url, title, parentPanel) {
 			context.addPanelType(url, title, parentPanel);
 			if (context == Firebug.currentContext) {
 				if (parentPanel) {
@@ -798,18 +798,18 @@ var Firebug = null;
 			}
 		},
 
-		removeTab : function (context, url) {
+		removeTab: function (context, url) {
 			context.removePanelType(url);
 		},
 
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		getGlobalAttribute : function (id, name) {
+		getGlobalAttribute: function (id, name) {
 			var elt = $(id);
 			return elt.getAttribute(name);
 		},
 
-		setGlobalAttribute : function (id, name, value) {
+		setGlobalAttribute: function (id, name, value) {
 			var elt = $(id);
 			if (elt) {
 				if (value == null)
@@ -822,14 +822,14 @@ var Firebug = null;
 				Firebug.externalChrome.setGlobalAttribute(id, name, value);
 		},
 
-		setChromeDocumentAttribute : function (id, name, value) {
+		setChromeDocumentAttribute: function (id, name, value) {
 			// Call as  Firebug.chrome.setChromeDocumentAttribute() to set attributes in another window.
 			var elt = $(id);
 			if (elt)
 				elt.setAttribute(name, value);
 		},
 
-		keyCodeListen : function (key, filter, listener, capture) {
+		keyCodeListen: function (key, filter, listener, capture) {
 			if (!filter)
 				filter = FBL.noKeyModifiers;
 
@@ -847,7 +847,7 @@ var Firebug = null;
 			return [fn, capture];
 		},
 
-		keyListen : function (ch, filter, listener, capture) {
+		keyListen: function (ch, filter, listener, capture) {
 			if (!filter)
 				filter = FBL.noKeyModifiers;
 
@@ -865,17 +865,17 @@ var Firebug = null;
 			return [fn, capture];
 		},
 
-		keyIgnore : function (listener) {
+		keyIgnore: function (listener) {
 			window.removeEventListener("keypress", listener[0], listener[1]);
 		},
 
-		$ : function (id) {
+		$: function (id) {
 			return $(id);
 		},
 
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		applyTextSize : function (value) {
+		applyTextSize: function (value) {
 			var zoom = value >= 0 ? positiveZoomFactors[value] : negativeZoomFactors[Math.abs(value)];
 
 			panelBar1.browser.markupDocumentViewer.textZoom = zoom;
@@ -896,22 +896,22 @@ var Firebug = null;
 			Firebug.dispatchToPanels("onTextSizeChange", [zoom]);
 		},
 
-		obeyOmitObjectPathStack : function (value) {
+		obeyOmitObjectPathStack: function (value) {
 			FBL.hide(panelStatus, (value ? true : false));
 		},
 
-		getPanelStatusElements : function () {
+		getPanelStatusElements: function () {
 			return panelStatus;
 		},
 
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 		// UI Event Listeners uilisteners  or "panelListeners"
 
-		onPanelNavigate : function (object, panel) {
+		onPanelNavigate: function (object, panel) {
 			this.syncLocationList();
 		},
 
-		onObjectSelected : function (object, panel) {
+		onObjectSelected: function (object, panel) {
 			if (panel == panelBar1.selectedPanel) {
 				this.syncStatusPath();
 
@@ -921,21 +921,21 @@ var Firebug = null;
 			}
 		},
 
-		onApplyDecorator : function (sourceBox) // called on setTimeout after sourceBox viewport has been repainted
+		onApplyDecorator: function (sourceBox) // called on setTimeout after sourceBox viewport has been repainted
 		{},
 
-		onViewportChange : function (sourceLink) // called on scrollTo, passing in the selected line
+		onViewportChange: function (sourceLink) // called on scrollTo, passing in the selected line
 		{},
 
-		showUI : function (browser, context) // called when the Firebug UI comes up in browser or detached
+		showUI: function (browser, context) // called when the Firebug UI comes up in browser or detached
 		{},
 
-		hideUI : function (browser, context) // called when the Firebug UI comes down; context may be null
+		hideUI: function (browser, context) // called when the Firebug UI comes down; context may be null
 		{},
 
 		//* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-		onMenuShowing : function (popup) {
+		onMenuShowing: function (popup) {
 			var detachFirebug = FBL.getElementsByAttribute(popup, "id", "menu_detachFirebug")[0];
 			if (detachFirebug) {
 				detachFirebug.setAttribute("label", (Firebug.isDetached() ?
@@ -943,7 +943,7 @@ var Firebug = null;
 			}
 		},
 
-		onOptionsShowing : function (popup) {
+		onOptionsShowing: function (popup) {
 			for (var child = popup.firstChild; child; child = child.nextSibling) {
 				if (child.localName == "menuitem") {
 					var option = child.getAttribute("option");
@@ -960,14 +960,14 @@ var Firebug = null;
 			}
 		},
 
-		onToggleOption : function (menuitem) {
+		onToggleOption: function (menuitem) {
 			var option = menuitem.getAttribute("option");
 			var checked = menuitem.getAttribute("checked") == "true";
 
 			Firebug.setPref(Firebug.prefDomain, option, checked);
 		},
 
-		onContextShowing : function (event) {
+		onContextShowing: function (event) {
 			// xxxHonza: This context-menu support can be used even in separate window, which
 			// doesn't contain the FBUI (panels).
 			//if (!panelBar1.selectedPanel)
@@ -987,7 +987,7 @@ var Firebug = null;
 			var sel = target.ownerDocument.defaultView.getSelection();
 			if (!this.contextMenuObject && !$("cmd_copy").getAttribute("disabled") && !sel.isCollapsed) {
 				var menuitem = FBL.createMenuItem(popup, {
-						label : "Copy"
+						label: "Copy"
 					});
 				menuitem.setAttribute("command", "cmd_copy");
 			}
@@ -1055,7 +1055,7 @@ var Firebug = null;
 				return false;
 		},
 
-		onEditorsShowing : function (popup) // TODO move to Firebug.Editors module in editors.js
+		onEditorsShowing: function (popup) // TODO move to Firebug.Editors module in editors.js
 		{
 			var editors = Firebug.registeredEditors;
 			if (editors.length > 0) {
@@ -1068,10 +1068,10 @@ var Firebug = null;
 						continue;
 					}
 					var item = {
-						label : editors[i].label,
-						image : editors[i].image,
-						nol10n : true,
-						disabled : disabled
+						label: editors[i].label,
+						image: editors[i].image,
+						nol10n: true,
+						disabled: disabled
 					};
 					var menuitem = FBL.createMenuItem(popup, item);
 					menuitem.setAttribute("command", "cmd_openInEditor");
@@ -1082,7 +1082,7 @@ var Firebug = null;
 			}
 		},
 
-		getInspectMenuItems : function (object) {
+		getInspectMenuItems: function (object) {
 			var items = [];
 
 			// Domplate (+ support for context menus) can be used even in separate
@@ -1102,9 +1102,9 @@ var Firebug = null;
 
 					var command = bindFixed(this.select, this, object, panelName);
 					items.push({
-						label : label,
-						command : command,
-						nol10n : true
+						label: label,
+						command: command,
+						nol10n: true
 					});
 				}
 			}
@@ -1112,7 +1112,7 @@ var Firebug = null;
 			return items;
 		},
 
-		onTooltipShowing : function (event) {
+		onTooltipShowing: function (event) {
 			// xxxHonza: This tooltip support can be used even in separate window, which
 			// doesn't contain the FBUI (panels).
 			//if (!panelBar1.selectedPanel)
@@ -1165,7 +1165,7 @@ var Firebug = null;
 			return false;
 		},
 
-		openAboutDialog : function () {
+		openAboutDialog: function () {
 			if (FBTrace.DBG_WINDOWS)
 				FBTrace.sysout("Firebug.openAboutDialog");
 
@@ -1190,7 +1190,7 @@ var Firebug = null;
 			}
 		},
 
-		breakOnNext : function (context, event) {
+		breakOnNext: function (context, event) {
 			// Avoid bubbling from associated options.
 			if (event.target.id != "cmd_breakOnNext")
 				return;
@@ -1216,7 +1216,7 @@ var Firebug = null;
 	// Welcome Page (first run)
 
 	var FirstRunPage = {
-		initializeUI : function () {
+		initializeUI: function () {
 			// If the version in preferences is smaller than the current version
 			// display the welcome page.
 			if (FBL.checkFirebugVersion(Firebug.currentVersion) > 0) {
@@ -1228,7 +1228,7 @@ var Firebug = null;
 			}
 		},
 
-		observe : function (subjet, topic, data) {
+		observe: function (subjet, topic, data) {
 			if (topic != "sessionstore-windows-restored")
 				return;
 

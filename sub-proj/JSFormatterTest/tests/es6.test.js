@@ -3,10 +3,10 @@ const PI = 3.141593;
 //  only in ES5 through the help of object properties
 //  and only in global context and not in a block scope
 Object.defineProperty(typeof global === "object" ? global : window, "PI", {
-	value : 3.141593,
-	enumerable : true,
-	writable : false,
-	configurable : false
+	value: 3.141593,
+	enumerable: true,
+	writable: false,
+	configurable: false
 })
 
 for (let i = 0; i < a.length; i++) {
@@ -25,8 +25,8 @@ for (let i = 0; i <= 2; i++) {
 
 odds = evens.map(v => v + 1);
 pairs = evens.map(v => ({
-			even : v,
-			odd : v + 1
+			even: v,
+			odd: v + 1
 		}));
 nums = evens.map((v, i) => v + i);
 
@@ -56,12 +56,12 @@ var str = "foo";
 var chars = [...str]; // [ "f", "o", "o" ]
 
 var customer = {
-	name : "Foo"
+	name: "Foo"
 };
 var card = {
-	amount : 7,
-	product : "Bar",
-	unitprice : 42
+	amount: 7,
+	product: "Bar",
+	unitprice: 42
 };
 
 message = `Hello ${customer.name},
@@ -112,17 +112,17 @@ let report = (match) => {
 	console.log(JSON.stringify(match));
 };
 parser("Foo 1 Bar 7 Baz 42", [{
-			pattern : /^Foo\s+(\d+)/y,
-			action : (match) => report(match)
+			pattern: /^Foo\s+(\d+)/y,
+			action: (match) => report(match)
 		}, {
-			pattern : /^Bar\s+(\d+)/y,
-			action : (match) => report(match)
+			pattern: /^Bar\s+(\d+)/y,
+			action: (match) => report(match)
 		}, {
-			pattern : /^Baz\s+(\d+)/y,
-			action : (match) => report(match)
+			pattern: /^Baz\s+(\d+)/y,
+			action: (match) => report(match)
 		}, {
-			pattern : /^\s*/y,
-			action : (match) => {}
+			pattern: /^\s*/y,
+			action: (match) => {}
 		}
 	]);
 
@@ -136,8 +136,8 @@ obj = {
 };
 
 let obj = {
-	foo : "bar",
-	["baz" + quux()] : 42
+	foo: "bar",
+	["baz" + quux()]: 42
 };
 
 obj = {
@@ -162,8 +162,8 @@ function f([name, val]) {
 	console.log(name, val);
 }
 function g({
-	name : n,
-	val : v
+	name: n,
+	val: v
 }) {
 	console.log(n, v);
 }
@@ -175,12 +175,12 @@ function h({
 }
 f(["bar", 42]);
 g({
-	name : "foo",
-	val : 7
+	name: "foo",
+	val: 7
 });
 h({
-	name : "bar",
-	val : 42
+	name: "bar",
+	val: 42
 });
 
 var list = [7, 42];
@@ -384,8 +384,8 @@ let fibonacci = {
 			next() {
 				[pre, cur] = [cur, pre + cur];
 				return {
-					done : false,
-					value : cur
+					done: false,
+					value: cur
 				};
 			}
 		};
@@ -602,7 +602,7 @@ msgAfterTimeout("", "Foo", 100).then((msg) =>
 });
 
 let target = {
-	foo : "Welcome, foo"
+	foo: "Welcome, foo"
 };
 let proxy = new Proxy(target, {
 		get(receiver, name) {
@@ -623,16 +623,16 @@ console.log(list.sort(i10nDE.compare)); // [ "a", "ä", "z" ]
 console.log(list.sort(i10nSV.compare)); // [ "a", "z", "ä" ]
 
 var i10nUSD = new Intl.NumberFormat("en-US", {
-		style : "currency",
-		currency : "USD"
+		style: "currency",
+		currency: "USD"
 	});
 var i10nGBP = new Intl.NumberFormat("en-GB", {
-		style : "currency",
-		currency : "GBP"
+		style: "currency",
+		currency: "GBP"
 	});
 var i10nEUR = new Intl.NumberFormat("de-DE", {
-		style : "currency",
-		currency : "EUR"
+		style: "currency",
+		currency: "EUR"
 	});
 i10nUSD.format(100200300.40) === "$100,200,300.40";
 i10nGBP.format(100200300.40) === "£100,200,300.40";
