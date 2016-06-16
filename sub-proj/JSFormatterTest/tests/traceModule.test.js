@@ -41,7 +41,7 @@ FBL.ns(function () {
 			this.addObserver = function () {
 				prefs.setBoolPref("browser.dom.window.dump.enabled", true);
 				this.observer = {
-					observe : bind(this.observe, this)
+					observe: bind(this.observe, this)
 				};
 				prefs.addObserver(prefDomain, this.observer, false);
 			};
@@ -85,12 +85,12 @@ FBL.ns(function () {
 						var prefValue = Firebug.getPref(this.prefDomain, p);
 						var label = p.substr(4);
 						items.push({
-							label : label,
-							nol10n : true,
-							type : "checkbox",
-							checked : prefValue,
-							pref : p,
-							command : bind(this.userEventToPrefEvent, this)
+							label: label,
+							nol10n: true,
+							type: "checkbox",
+							checked: prefValue,
+							pref: p,
+							command: bind(this.userEventToPrefEvent, this)
 						});
 					} catch (err) {
 						if (FBTrace.DBG_ERRORS)
@@ -130,8 +130,8 @@ FBL.ns(function () {
 			else {
 				this.prefEventToUserEvent = function (optionName, optionValue) {
 					FBTrace.sysout("TraceOptionsController owner needs to implement prefEventToUser Event", {
-						name : optionName,
-						value : optionValue
+						name: optionName,
+						value: optionValue
 					});
 				};
 			}
@@ -155,9 +155,9 @@ FBL.ns(function () {
 		// Trace Module
 
 		Firebug.TraceModule = extend(Firebug.Module, {
-				dispatchName : "traceModule",
+				dispatchName: "traceModule",
 
-				initialize : function (prefDomain, prefNames) // prefDomain is the calling app, firebug or chromebug
+				initialize: function (prefDomain, prefNames) // prefDomain is the calling app, firebug or chromebug
 				{
 					Firebug.Module.initialize.apply(this, arguments);
 
@@ -174,7 +174,7 @@ FBL.ns(function () {
 							Firebug.getPref(this.prefDomain, "alwaysOpenTraceConsole"));
 				},
 
-				internationalizeUI : function (doc) {
+				internationalizeUI: function (doc) {
 					var elements = ["FirebugMenu_Options_alwaysOpenTraceConsole", "menu_openTraceConsole"];
 					for (var i = 0; i < elements.length; i++) {
 						var element = doc.getElementById(elements[i]);
@@ -183,20 +183,20 @@ FBL.ns(function () {
 					}
 				},
 
-				shutdown : function () {},
+				shutdown: function () {},
 
-				reattachContext : function (browser, context) {
+				reattachContext: function (browser, context) {
 					if (FBTrace.DBG_OPTIONS)
 						FBTrace.sysout("traceModule.reattachContext for: " +
 							context ? context.getName() : "null context",
 							[browser, context]);
 				},
 
-				getTraceConsoleURL : function () {
+				getTraceConsoleURL: function () {
 					return "chrome://firebug/content/traceConsole.xul";
 				},
 
-				openConsole : function (prefDomain, windowURL) {
+				openConsole: function (prefDomain, windowURL) {
 					if (!prefDomain)
 						prefDomain = this.prefDomain;
 
@@ -222,10 +222,10 @@ FBL.ns(function () {
 
 					var self = this;
 					var args = {
-						FBL : FBL,
-						Firebug : Firebug,
-						traceModule : self,
-						prefDomain : prefDomain,
+						FBL: FBL,
+						Firebug: Firebug,
+						traceModule: self,
+						prefDomain: prefDomain,
 					};
 
 					if (FBTrace.DBG_OPTIONS) {
@@ -242,30 +242,30 @@ FBL.ns(function () {
 				},
 
 				// Trace console listeners
-				onLoadConsole : function (win, rootNode) {
+				onLoadConsole: function (win, rootNode) {
 					dispatch(this.fbListeners, "onLoadConsole", [win, rootNode]);
 				},
 
-				onUnloadConsole : function (win) {
+				onUnloadConsole: function (win) {
 					dispatch(this.fbListeners, "onUnloadConsole", [win]);
 				},
 
-				onDump : function (message) {
+				onDump: function (message) {
 					dispatch(this.fbListeners, "onDump", [message]);
 				},
 
-				dump : function (message, outputNodes) {
+				dump: function (message, outputNodes) {
 					Firebug.TraceModule.MessageTemplate.dump(message, outputNodes);
 				},
 			});
 
 		Firebug.TraceModule.CommonBaseUI = {
 
-			destroy : function () {
+			destroy: function () {
 				this.optionsController.removeObserver();
 			},
 
-			initializeContent : function (parentNode, outputNodes, prefDomain, callback) {
+			initializeContent: function (parentNode, outputNodes, prefDomain, callback) {
 				var doc = parentNode.ownerDocument;
 
 				// Create basic layout for trace console content.
@@ -335,59 +335,59 @@ FBL.ns(function () {
 
 		Firebug.TraceModule.PanelTemplate = domplate({
 
-				tag :
+				tag:
 				TABLE({
-					"class" : "traceTable",
-					cellpadding : 0,
-					cellspacing : 0
+					"class": "traceTable",
+					cellpadding: 0,
+					cellspacing: 0
 				},
 					TBODY(
 						TR({
-							"class" : "traceInfoRow"
+							"class": "traceInfoRow"
 						},
 							TD({
-								"class" : "traceInfoCol"
+								"class": "traceInfoCol"
 							},
 								DIV({
-									"class" : "traceInfoBody"
+									"class": "traceInfoBody"
 								},
 									DIV({
-										"class" : "traceInfoTabs"
+										"class": "traceInfoTabs"
 									},
 										A({
-											"class" : "traceInfoLogsTab traceInfoTab",
-											onclick : "$onClickTab",
-											view : "Logs"
+											"class": "traceInfoLogsTab traceInfoTab",
+											onclick: "$onClickTab",
+											view: "Logs"
 										},
 											$STR("Logs")),
 										A({
-											"class" : "traceInfoOptionsTab traceInfoTab",
-											onclick : "$onClickTab",
-											view : "Options"
+											"class": "traceInfoOptionsTab traceInfoTab",
+											onclick: "$onClickTab",
+											view: "Options"
 										},
 											$STR("Options"))),
 									DIV({
-										"class" : "traceInfoLogsText traceInfoText"
+										"class": "traceInfoLogsText traceInfoText"
 									},
 										IFRAME({
-											"class" : "traceInfoLogsFrame",
-											src : "chrome://firebug/content/traceLogFrame.html"
+											"class": "traceInfoLogsFrame",
+											src: "chrome://firebug/content/traceLogFrame.html"
 										})),
 									DIV({
-										"class" : "traceInfoOptionsText traceInfoText"
+										"class": "traceInfoOptionsText traceInfoText"
 									})))))),
 
-				onClickTab : function (event) {
+				onClickTab: function (event) {
 					this.selectTab(event.currentTarget);
 				},
 
-				selectTabByName : function (parentNode, tabName) {
+				selectTabByName: function (parentNode, tabName) {
 					var tab = parentNode.getElementsByClassName("traceInfo" + tabName + "Tab").item(0);
 					if (tab)
 						this.selectTab(tab);
 				},
 
-				selectTab : function (tab) {
+				selectTab: function (tab) {
 					var messageInfoBody = tab.parentNode.parentNode;
 
 					var view = tab.getAttribute("view");
@@ -410,65 +410,65 @@ FBL.ns(function () {
 		// Trace message
 
 		Firebug.TraceModule.MessageTemplate = domplate(Firebug.Rep, {
-				inspectable : false,
+				inspectable: false,
 
-				tableTag :
+				tableTag:
 				TABLE({
-					"class" : "messageTable",
-					cellpadding : 0,
-					cellspacing : 0
+					"class": "messageTable",
+					cellpadding: 0,
+					cellspacing: 0
 				},
 					TBODY()),
 
-				rowTag :
+				rowTag:
 				TR({
-					"class" : "messageRow $message|getMessageType",
-					_repObject : "$message",
-					$exception : "$message|isException",
-					onclick : "$onClickRow"
+					"class": "messageRow $message|getMessageType",
+					_repObject: "$message",
+					$exception: "$message|isException",
+					onclick: "$onClickRow"
 				},
 					TD({
-						"class" : "messageNameCol messageCol"
+						"class": "messageNameCol messageCol"
 					},
 						DIV({
-							"class" : "messageNameLabel messageLabel"
+							"class": "messageNameLabel messageLabel"
 						},
 							"$message|getMessageIndex")),
 					TD({
-						"class" : "messageTimeCol messageCol"
+						"class": "messageTimeCol messageCol"
 					},
 						DIV({
-							"class" : "messageTimeLabel messageLabel"
+							"class": "messageTimeLabel messageLabel"
 						},
 							"$message|getMessageTime")),
 					TD({
-						"class" : "messageBodyCol messageCol"
+						"class": "messageBodyCol messageCol"
 					},
 						DIV({
-							"class" : "messageLabel",
-							title : "$message|getMessageTitle"
+							"class": "messageLabel",
+							title: "$message|getMessageTitle"
 						},
 							"$message|getMessageLabel"))),
 
-				separatorTag :
+				separatorTag:
 				TR({
-					"class" : "messageRow separatorRow",
-					_repObject : "$message"
+					"class": "messageRow separatorRow",
+					_repObject: "$message"
 				},
 					TD({
-						"class" : "messageCol",
-						colspan : "3"
+						"class": "messageCol",
+						colspan: "3"
 					},
 						DIV("$message|getMessageIndex"))),
 
-				importHeaderTag :
+				importHeaderTag:
 				TR({
-					"class" : "messageRow importHeaderRow",
-					_repObject : "$message"
+					"class": "messageRow importHeaderRow",
+					_repObject: "$message"
 				},
 					TD({
-						"class" : "messageCol",
-						colspan : "3"
+						"class": "messageCol",
+						colspan: "3"
 					},
 						DIV(B("Firebug: $message.firebug")),
 						DIV("$message.app.name, $message.app.version, " +
@@ -478,79 +478,79 @@ FBL.ns(function () {
 						DIV("$message.date"),
 						DIV("$message.filePath"))),
 
-				importFooterTag :
+				importFooterTag:
 				TR({
-					"class" : "messageRow importFooterRow",
-					_repObject : "$message"
+					"class": "messageRow importFooterRow",
+					_repObject: "$message"
 				},
 					TD({
-						"class" : "messageCol",
-						colspan : "3"
+						"class": "messageCol",
+						colspan: "3"
 					})),
 
-				bodyRow :
+				bodyRow:
 				TR({
-					"class" : "messageInfoRow"
+					"class": "messageInfoRow"
 				},
 					TD({
-						"class" : "messageInfoCol",
-						colspan : 8
+						"class": "messageInfoCol",
+						colspan: 8
 					})),
 
-				bodyTag :
+				bodyTag:
 				DIV({
-					"class" : "messageInfoBody",
-					_repObject : "$message"
+					"class": "messageInfoBody",
+					_repObject: "$message"
 				},
 					DIV({
-						"class" : "messageInfoTabs"
+						"class": "messageInfoTabs"
 					},
 						A({
-							"class" : "messageInfoStackTab messageInfoTab",
-							onclick : "$onClickTab",
-							view : "Stack"
+							"class": "messageInfoStackTab messageInfoTab",
+							onclick: "$onClickTab",
+							view: "Stack"
 						},
 							$STR("tracing.tab.Stack")),
 						A({
-							"class" : "messageInfoExcTab messageInfoTab",
-							onclick : "$onClickTab",
-							view : "Exc",
-							$collapsed : "$message|hideException"
+							"class": "messageInfoExcTab messageInfoTab",
+							onclick: "$onClickTab",
+							view: "Exc",
+							$collapsed: "$message|hideException"
 						},
 							$STR("tracing.tab.Exception")),
 						A({
-							"class" : "messageInfoPropsTab messageInfoTab",
-							onclick : "$onClickTab",
-							view : "Props",
-							$collapsed : "$message|hideProperties"
+							"class": "messageInfoPropsTab messageInfoTab",
+							onclick: "$onClickTab",
+							view: "Props",
+							$collapsed: "$message|hideProperties"
 						},
 							$STR("tracing.tab.Properties")),
 						A({
-							"class" : "messageInfoScopeTab messageInfoTab",
-							onclick : "$onClickTab",
-							view : "Scope",
-							$collapsed : "$message|hideScope"
+							"class": "messageInfoScopeTab messageInfoTab",
+							onclick: "$onClickTab",
+							view: "Scope",
+							$collapsed: "$message|hideScope"
 						},
 							$STR("tracing.tab.Scope")),
 						A({
-							"class" : "messageInfoResponseTab messageInfoTab",
-							onclick : "$onClickTab",
-							view : "Response",
-							$collapsed : "$message|hideResponse"
+							"class": "messageInfoResponseTab messageInfoTab",
+							onclick: "$onClickTab",
+							view: "Response",
+							$collapsed: "$message|hideResponse"
 						},
 							$STR("tracing.tab.Response")),
 						A({
-							"class" : "messageInfoSourceTab messageInfoTab",
-							onclick : "$onClickTab",
-							view : "Source",
-							$collapsed : "$message|hideSource"
+							"class": "messageInfoSourceTab messageInfoTab",
+							onclick: "$onClickTab",
+							view: "Source",
+							$collapsed: "$message|hideSource"
 						},
 							$STR("tracing.tab.Source")),
 						A({
-							"class" : "messageInfoIfacesTab messageInfoTab",
-							onclick : "$onClickTab",
-							view : "Ifaces",
-							$collapsed : "$message|hideInterfaces"
+							"class": "messageInfoIfacesTab messageInfoTab",
+							onclick: "$onClickTab",
+							view: "Ifaces",
+							$collapsed: "$message|hideInterfaces"
 						},
 							$STR("tracing.tab.Interfaces")),
 						// xxxHonza: this doesn't seem to be much useful.
@@ -560,94 +560,94 @@ FBL.ns(function () {
 						"Types"
 						),*/
 						A({
-							"class" : "messageInfoObjectTab messageInfoTab",
-							onclick : "$onClickTab",
-							view : "Types",
-							$collapsed : "$message|hideObject"
+							"class": "messageInfoObjectTab messageInfoTab",
+							onclick: "$onClickTab",
+							view: "Types",
+							$collapsed: "$message|hideObject"
 						},
 							$STR("tracing.tab.Object")),
 						A({
-							"class" : "messageInfoEventTab messageInfoTab",
-							onclick : "$onClickTab",
-							view : "Event",
-							$collapsed : "$message|hideEvent"
+							"class": "messageInfoEventTab messageInfoTab",
+							onclick: "$onClickTab",
+							view: "Event",
+							$collapsed: "$message|hideEvent"
 						},
 							$STR("tracing.tab.Event"))),
 					DIV({
-						"class" : "messageInfoStackText messageInfoText"
+						"class": "messageInfoStackText messageInfoText"
 					},
 						TABLE({
-							"class" : "messageInfoStackTable",
-							cellpadding : 0,
-							cellspacing : 0
+							"class": "messageInfoStackTable",
+							cellpadding: 0,
+							cellspacing: 0
 						},
 							TBODY(
 								FOR("stack", "$message|stackIterator",
 									TR(
 										TD({
-											"class" : "stackFrame"
+											"class": "stackFrame"
 										},
 											A({
-												"class" : "stackFrameLink",
-												onclick : "$onClickStackFrame",
-												lineNumber : "$stack.lineNumber"
+												"class": "stackFrameLink",
+												onclick: "$onClickStackFrame",
+												lineNumber: "$stack.lineNumber"
 											},
 												"$stack.fileName"),
 											SPAN("&nbsp;"),
 											SPAN("(", "$stack.lineNumber", ")"),
 											SPAN("&nbsp;"),
 											SPAN({
-												"class" : "stackFuncName"
+												"class": "stackFuncName"
 											},
 												"$stack.funcName"),
 											A({
-												"class" : "openDebugger",
-												onclick : "$onOpenDebugger",
-												lineNumber : "$stack.lineNumber",
-												fileName : "$stack.fileName"
+												"class": "openDebugger",
+												onclick: "$onOpenDebugger",
+												lineNumber: "$stack.lineNumber",
+												fileName: "$stack.fileName"
 											},
 												"[...]"))))))),
 					DIV({
-						"class" : "messageInfoExcText messageInfoText"
+						"class": "messageInfoExcText messageInfoText"
 					}),
 					DIV({
-						"class" : "messageInfoPropsText messageInfoText"
+						"class": "messageInfoPropsText messageInfoText"
 					}),
 					DIV({
-						"class" : "messageInfoResponseText messageInfoText"
+						"class": "messageInfoResponseText messageInfoText"
 					},
 						IFRAME({
-							"class" : "messageInfoResponseFrame"
+							"class": "messageInfoResponseFrame"
 						})),
 					DIV({
-						"class" : "messageInfoSourceText messageInfoText"
+						"class": "messageInfoSourceText messageInfoText"
 					}),
 					DIV({
-						"class" : "messageInfoIfacesText messageInfoText"
+						"class": "messageInfoIfacesText messageInfoText"
 					}),
 					DIV({
-						"class" : "messageInfoScopeText messageInfoText"
+						"class": "messageInfoScopeText messageInfoText"
 					}),
 					DIV({
-						"class" : "messageInfoTypesText messageInfoText"
+						"class": "messageInfoTypesText messageInfoText"
 					}),
 					DIV({
-						"class" : "messageInfoObjectText messageInfoText"
+						"class": "messageInfoObjectText messageInfoText"
 					}),
 					DIV({
-						"class" : "messageInfoEventText messageInfoText"
+						"class": "messageInfoEventText messageInfoText"
 					})),
 
 				// Data providers
-				getMessageType : function (message) {
+				getMessageType: function (message) {
 					return message.getType();
 				},
 
-				getMessageIndex : function (message) {
+				getMessageIndex: function (message) {
 					return message.index + 1;
 				},
 
-				getMessageTime : function (message) {
+				getMessageTime: function (message) {
 					var date = new Date(message.time);
 					var m = date.getMinutes() + "";
 					var s = date.getSeconds() + "";
@@ -657,21 +657,21 @@ FBL.ns(function () {
 					((ms.length > 2) ? ms : ((ms.length > 1) ? "0" + ms : "00" + ms)) + "]";
 				},
 
-				getMessageLabel : function (message) {
+				getMessageLabel: function (message) {
 					var maxLength = Firebug.getPref(Firebug.TraceModule.prefDomain,
 							"trace.maxMessageLength");
 					return message.getLabel(maxLength);
 				},
 
-				getMessageTitle : function (message) {
+				getMessageTitle: function (message) {
 					return message.getLabel(-1);
 				},
 
-				isException : function (message) {
+				isException: function (message) {
 					return message.getException();
 				},
 
-				hideProperties : function (message) {
+				hideProperties: function (message) {
 					var props = message.getProperties();
 					for (var name in props)
 						return false;
@@ -679,11 +679,11 @@ FBL.ns(function () {
 					return true;
 				},
 
-				hideScope : function (message) {
+				hideScope: function (message) {
 					return !message.getScope();
 				},
 
-				hideInterfaces : function (message) {
+				hideInterfaces: function (message) {
 					var ifaces = message.getInterfaces();
 					for (var name in ifaces)
 						return false;
@@ -691,36 +691,36 @@ FBL.ns(function () {
 					return true;
 				},
 
-				hideTypes : function (message) {
+				hideTypes: function (message) {
 					return !message.getTypes();
 				},
 
-				hideObject : function (message) {
+				hideObject: function (message) {
 					return !message.getObject();
 				},
 
-				hideEvent : function (message) {
+				hideEvent: function (message) {
 					return !message.getEvent();
 				},
 
-				hideException : function (message) {
+				hideException: function (message) {
 					return !message.getException();
 				},
 
-				hideResponse : function (message) {
+				hideResponse: function (message) {
 					return !(message.obj instanceof Ci.nsIHttpChannel);
 				},
 
-				hideSource : function (message) {
+				hideSource: function (message) {
 					return !(message.obj instanceof Ci.nsIHttpChannel);
 				},
 
 				// Stack frame support
-				stackIterator : function (message) {
+				stackIterator: function (message) {
 					return message.getStackArray();
 				},
 
-				onClickStackFrame : function (event) {
+				onClickStackFrame: function (event) {
 					var winType = "FBTraceConsole-SourceView";
 					var lineNumber = event.target.getAttribute("lineNumber");
 
@@ -729,7 +729,7 @@ FBL.ns(function () {
 						event.target.innerHTML, null, null, lineNumber, false);
 				},
 
-				onOpenDebugger : function (event) {
+				onOpenDebugger: function (event) {
 					var target = event.target;
 					var lineNumber = target.getAttribute("lineNumber");
 					var fileName = target.getAttribute("fileName");
@@ -757,58 +757,58 @@ FBL.ns(function () {
 				},
 
 				// Firebug rep support
-				supportsObject : function (object, type) {
+				supportsObject: function (object, type) {
 					return object instanceof Firebug.TraceModule.TraceMessage ||
 					object instanceof Firebug.TraceModule.ImportedMessage;
 				},
 
-				browseObject : function (message, context) {
+				browseObject: function (message, context) {
 					return false;
 				},
 
-				getRealObject : function (message, context) {
+				getRealObject: function (message, context) {
 					return message;
 				},
 
 				// Context menu
-				getContextMenuItems : function (message, target, context) {
+				getContextMenuItems: function (message, target, context) {
 					var items = [];
 
 					if (getAncestorByClass(target, "messageRow")) {
 						items.push({
-							label : $STR("Cut"),
-							nol10n : true,
-							command : bindFixed(this.onCutMessage, this, message)
+							label: $STR("Cut"),
+							nol10n: true,
+							command: bindFixed(this.onCutMessage, this, message)
 						});
 
 						items.push({
-							label : $STR("Copy"),
-							nol10n : true,
-							command : bindFixed(this.onCopyMessage, this, message)
+							label: $STR("Copy"),
+							nol10n: true,
+							command: bindFixed(this.onCopyMessage, this, message)
 						});
 
 						items.push("-");
 
 						items.push({
-							label : $STR("Remove"),
-							nol10n : true,
-							command : bindFixed(this.onRemoveMessage, this, message)
+							label: $STR("Remove"),
+							nol10n: true,
+							command: bindFixed(this.onRemoveMessage, this, message)
 						});
 					}
 
 					if (getAncestorByClass(target, "messageInfoStackText")) {
 						items.push({
-							label : $STR("Copy Stack"),
-							nol10n : true,
-							command : bindFixed(this.onCopyStack, this, message)
+							label: $STR("Copy Stack"),
+							nol10n: true,
+							command: bindFixed(this.onCopyStack, this, message)
 						});
 					}
 
 					if (getAncestorByClass(target, "messageInfoExcText")) {
 						items.push({
-							label : $STR("Copy Exception"),
-							nol10n : true,
-							command : bindFixed(this.onCopyException, this, message)
+							label: $STR("Copy Exception"),
+							nol10n: true,
+							command: bindFixed(this.onCopyException, this, message)
 						});
 					}
 
@@ -820,69 +820,69 @@ FBL.ns(function () {
 					items.push("-");
 
 					items.push({
-						label : $STR("tracing.cmd.Expand All"),
-						nol10n : true,
-						command : bindFixed(this.onExpandAll, this, message)
+						label: $STR("tracing.cmd.Expand All"),
+						nol10n: true,
+						command: bindFixed(this.onExpandAll, this, message)
 					});
 
 					items.push({
-						label : $STR("tracing.cmd.Collapse All"),
-						nol10n : true,
-						command : bindFixed(this.onCollapseAll, this, message)
+						label: $STR("tracing.cmd.Collapse All"),
+						nol10n: true,
+						command: bindFixed(this.onCollapseAll, this, message)
 					});
 
 					return items;
 				},
 
-				optionMenu : function (label, option) {
+				optionMenu: function (label, option) {
 					var checked = Firebug.getPref(Firebug.TraceModule.prefDomain, option);
 					return {
-						label : label,
-						type : "checkbox",
-						checked : checked,
-						nol10n : true,
-						command : bindFixed(Firebug.setPref, Firebug, Firebug.TraceModule.prefDomain,
+						label: label,
+						type: "checkbox",
+						checked: checked,
+						nol10n: true,
+						command: bindFixed(Firebug.setPref, Firebug, Firebug.TraceModule.prefDomain,
 							option, !checked)
 					};
 				},
 
-				getTooltip : function (message) {
+				getTooltip: function (message) {
 					return message.text;
 				},
 
 				// Context menu commands
-				onCutMessage : function (message) {
+				onCutMessage: function (message) {
 					this.onCopyMessage(message);
 					this.onRemoveMessage(message);
 				},
 
-				onCopyMessage : function (message) {
+				onCopyMessage: function (message) {
 					copyToClipboard(message.text);
 				},
 
-				onRemoveMessage : function (message) {
+				onRemoveMessage: function (message) {
 					var row = message.row;
 					var parentNode = row.parentNode;
 					this.toggleRow(row, false);
 					parentNode.removeChild(row);
 				},
 
-				onCopyStack : function (message) {
+				onCopyStack: function (message) {
 					copyToClipboard(message.getStack());
 				},
 
-				onCopyException : function (message) {
+				onCopyException: function (message) {
 					copyToClipboard(message.getException());
 				},
 
-				onExpandAll : function (message) {
+				onExpandAll: function (message) {
 					var table = getAncestorByClass(message.row, "messageTable");
 					var rows = cloneArray(table.firstChild.childNodes);
 					for (var i = 0; i < rows.length; i++)
 						this.expandRow(rows[i]);
 				},
 
-				onCollapseAll : function (message) {
+				onCollapseAll: function (message) {
 					var table = getAncestorByClass(message.row, "messageTable");
 					var rows = cloneArray(table.firstChild.childNodes);
 					for (var i = 0; i < rows.length; i++)
@@ -890,7 +890,7 @@ FBL.ns(function () {
 				},
 
 				// Clipboard helpers
-				copyToClipboard : function (text) {
+				copyToClipboard: function (text) {
 					if (!text)
 						return;
 
@@ -906,11 +906,11 @@ FBL.ns(function () {
 				},
 
 				// Implementation
-				createTable : function (parentNode) {
+				createTable: function (parentNode) {
 					return HelperDomplate.replace(this.tableTag, {}, parentNode, this);
 				},
 
-				dump : function (message, outputNodes, index) {
+				dump: function (message, outputNodes, index) {
 					// Notify listeners
 					Firebug.TraceModule.onDump(message);
 
@@ -935,7 +935,7 @@ FBL.ns(function () {
 
 					// Insert log into the console.
 					var row = HelperDomplate.insertRows(this.rowTag, {
-							message : message
+							message: message
 						},
 							targetNode, this)[0];
 
@@ -952,7 +952,7 @@ FBL.ns(function () {
 						scrollToBottom(scrollingNode);
 				},
 
-				dumpSeparator : function (outputNodes, tag, object) {
+				dumpSeparator: function (outputNodes, tag, object) {
 					var panelNode = outputNodes.getScrollingNode();
 					var scrolledToBottom = isScrolledToBottom(panelNode);
 
@@ -963,13 +963,13 @@ FBL.ns(function () {
 
 					if (!object)
 						object = {
-							type : "separator"
+							type: "separator"
 						};
 
 					object.index = targetNode.childNodes.length;
 
 					var row = HelperDomplate.insertRows(tag, {
-							message : object
+							message: object
 						}, targetNode, this)[0];
 
 					if (scrolledToBottom)
@@ -979,7 +979,7 @@ FBL.ns(function () {
 				},
 
 				// Body of the message.
-				onClickRow : function (event) {
+				onClickRow: function (event) {
 					if (isLeftClick(event)) {
 						var row = getAncestorByClass(event.target, "messageRow");
 						if (row) {
@@ -989,17 +989,17 @@ FBL.ns(function () {
 					}
 				},
 
-				collapseRow : function (row) {
+				collapseRow: function (row) {
 					if (hasClass(row, "messageRow") && hasClass(row, "opened"))
 						this.toggleRow(row);
 				},
 
-				expandRow : function (row) {
+				expandRow: function (row) {
 					if (hasClass(row, "messageRow"))
 						this.toggleRow(row, true);
 				},
 
-				toggleRow : function (row, state) {
+				toggleRow: function (row, state) {
 					var opened = hasClass(row, "opened");
 					if ((state != null) && (opened == state))
 						return;
@@ -1013,7 +1013,7 @@ FBL.ns(function () {
 
 						var bodyRow = HelperDomplate.insertRows(this.bodyRow, {}, row)[0];
 						var messageInfo = HelperDomplate.replace(this.bodyTag, {
-								message : message
+								message: message
 							}, bodyRow.firstChild);
 						message.bodyRow = bodyRow;
 
@@ -1023,18 +1023,18 @@ FBL.ns(function () {
 					}
 				},
 
-				selectTabByName : function (messageInfoBody, tabName) {
+				selectTabByName: function (messageInfoBody, tabName) {
 					var tab = getChildByClass(messageInfoBody, "messageInfoTabs",
 							"messageInfo" + tabName + "Tab");
 					if (tab)
 						this.selectTab(tab);
 				},
 
-				onClickTab : function (event) {
+				onClickTab: function (event) {
 					this.selectTab(event.currentTarget);
 				},
 
-				selectTab : function (tab) {
+				selectTab: function (tab) {
 					var messageInfoBody = tab.parentNode.parentNode;
 
 					var view = tab.getAttribute("view");
@@ -1060,7 +1060,7 @@ FBL.ns(function () {
 					FBTrace.DBG_DOMPLATE = dumpDOM;
 				},
 
-				updateInfo : function (messageInfoBody, view, message) {
+				updateInfo: function (messageInfoBody, view, message) {
 					var tab = messageInfoBody.selectedTab;
 					if (hasClass(tab, "messageInfoStackTab")) {
 						// The content is generated by domplate template.
@@ -1068,7 +1068,7 @@ FBL.ns(function () {
 						this.updateInfoImpl(messageInfoBody, view, message, message.getProperties,
 							function (message, valueBox, text) {
 							Firebug.TraceModule.Tree.tag.replace({
-								object : message.props
+								object: message.props
 							}, valueBox,
 								Firebug.TraceModule.Tree);
 						});
@@ -1076,7 +1076,7 @@ FBL.ns(function () {
 						this.updateInfoImpl(messageInfoBody, view, message, message.getScope,
 							function (message, valueBox, text) {
 							Firebug.TraceModule.PropertyTree.tag.replace({
-								object : message.scope
+								object: message.scope
 							}, valueBox,
 								Firebug.TraceModule.PropertyTree);
 						});
@@ -1084,7 +1084,7 @@ FBL.ns(function () {
 						this.updateInfoImpl(messageInfoBody, view, message, message.getInterfaces,
 							function (message, valueBox, text) {
 							Firebug.TraceModule.Tree.tag.replace({
-								object : message.ifaces
+								object: message.ifaces
 							}, valueBox,
 								Firebug.TraceModule.Tree);
 						});
@@ -1097,12 +1097,12 @@ FBL.ns(function () {
 							function (message, valueBox, text) {
 							if (message.obj instanceof Element)
 								Firebug.HTMLPanel.CompleteElement.tag.replace({
-									object : message.obj
+									object: message.obj
 								}, valueBox,
 									Firebug.HTMLPanel.CompleteElement);
 							else
 								Firebug.TraceModule.PropertyTree.tag.replace({
-									object : message.obj
+									object: message.obj
 								}, valueBox,
 									Firebug.TraceModule.PropertyTree);
 						});
@@ -1123,7 +1123,7 @@ FBL.ns(function () {
 					}
 				},
 
-				updateInfoImpl : function (messageInfoBody, view, message, getter, setter) {
+				updateInfoImpl: function (messageInfoBody, view, message, getter, setter) {
 					var valueBox = getChildByClass(messageInfoBody, "messageInfo" + view + "Text");
 					if (!valueBox.valuePresented) {
 						var text = getter.apply(message);
@@ -1164,11 +1164,11 @@ FBL.ns(function () {
 			}
 
 			return {
-				insertRows : function (tag, args, parentNode, self) {
+				insertRows: function (tag, args, parentNode, self) {
 					return execute(tag.insertRows, tag, args, parentNode, self);
 				},
 
-				replace : function (tag, args, parentNode, self) {
+				replace: function (tag, args, parentNode, self) {
 					return execute(tag.replace, tag, args, parentNode, self);
 				}
 			}
@@ -1188,7 +1188,7 @@ FBL.ns(function () {
 
 			if (typeof(this.obj) == "function") {
 				this.obj = {
-					'' : this.obj
+					'': this.obj
 				}; // will make functions visible
 			}
 
@@ -1199,17 +1199,17 @@ FBL.ns(function () {
 						var frame = trace.frames[i];
 						if (frame.href && frame.line)
 							this.stack.push({
-								fileName : frame.href,
-								lineNumber : frame.line,
-								funcName : ""
+								fileName: frame.href,
+								lineNumber: frame.line,
+								funcName: ""
 							});
 					}
 				} else {
 					// Put info about the script error location into the stack.
 					this.stack.push({
-						fileName : this.obj.sourceName,
-						lineNumber : this.obj.lineNumber,
-						funcName : ""
+						fileName: this.obj.sourceName,
+						lineNumber: this.obj.lineNumber,
+						funcName: ""
 					});
 				}
 			}
@@ -1226,9 +1226,9 @@ FBL.ns(function () {
 
 					var index = frame[1].lastIndexOf(":");
 					this.stack.push({
-						fileName : frame[1].substr(0, index),
-						lineNumber : frame[1].substr(index + 1),
-						funcName : frame[0]
+						fileName: frame[1].substr(0, index),
+						lineNumber: frame[1].substr(index + 1),
+						funcName: frame[0]
 					});
 				}
 			} else {
@@ -1246,9 +1246,9 @@ FBL.ns(function () {
 					var sourceLine = frame.sourceLine ? frame.sourceLine : "";
 					var lineNumber = frame.lineNumber ? frame.lineNumber : "";
 					this.stack.push({
-						fileName : fileName,
-						lineNumber : lineNumber,
-						funcName : ""
+						fileName: fileName,
+						lineNumber: lineNumber,
+						funcName: ""
 					});
 				}
 			}
@@ -1280,11 +1280,11 @@ FBL.ns(function () {
 		// ************************************************************************************************
 
 		Firebug.TraceModule.TraceMessage.prototype = {
-			getType : function () {
+			getType: function () {
 				return this.type;
 			},
 
-			getLabel : function (maxLength) {
+			getLabel: function (maxLength) {
 				if (!this.text)
 					return "";
 
@@ -1294,11 +1294,11 @@ FBL.ns(function () {
 				return this.text.substr(0, maxLength - 3) + "...";
 			},
 
-			getStackArray : function () {
+			getStackArray: function () {
 				return this.stack;
 			},
 
-			getStack : function () {
+			getStack: function () {
 				var result = "";
 				for (var i = 0; i < this.stack.length; i++) {
 					var frame = this.stack[i];
@@ -1308,7 +1308,7 @@ FBL.ns(function () {
 				return result;
 			},
 
-			getProperties : function () {
+			getProperties: function () {
 				if (this.props)
 					return this.props;
 
@@ -1350,10 +1350,10 @@ FBL.ns(function () {
 					this.props = this.obj;
 				} else if (this.obj instanceof Ci.jsdIValue) {
 					var listValue = {
-						value : null
+						value: null
 					},
 					lengthValue = {
-						value : 0
+						value: 0
 					};
 					this.obj.getProperties(listValue, lengthValue);
 					for (var i = 0; i < lengthValue.value; ++i) {
@@ -1399,7 +1399,7 @@ FBL.ns(function () {
 				return this.props;
 			},
 
-			getInterfaces : function () {
+			getInterfaces: function () {
 				if (this.ifaces)
 					return this.ifaces;
 
@@ -1418,7 +1418,7 @@ FBL.ns(function () {
 				return this.ifaces;
 			},
 
-			getScope : function () {
+			getScope: function () {
 				if (!Firebug.getPref(Firebug.prefDomain, "trace.enableScope"))
 					return null;
 
@@ -1432,10 +1432,10 @@ FBL.ns(function () {
 
 					if (frame) {
 						var listValue = {
-							value : null
+							value: null
 						},
 						lengthValue = {
-							value : 0
+							value: 0
 						};
 						frame.scope.getProperties(listValue, lengthValue);
 
@@ -1453,7 +1453,7 @@ FBL.ns(function () {
 				return this.scope = scope;
 			},
 
-			getResponse : function () {
+			getResponse: function () {
 				var result = null;
 				try {
 					var self = this;
@@ -1466,7 +1466,7 @@ FBL.ns(function () {
 				return result;
 			},
 
-			getException : function () {
+			getException: function () {
 				if (this.err)
 					return this.err;
 
@@ -1492,7 +1492,7 @@ FBL.ns(function () {
 				return this.err;
 			},
 
-			getTypes : function () {
+			getTypes: function () {
 				if (this.types)
 					return this.types;
 
@@ -1514,7 +1514,7 @@ FBL.ns(function () {
 				return this.types;
 			},
 
-			getEvent : function () {
+			getEvent: function () {
 				if (!(this.obj instanceof Event))
 					return;
 
@@ -1549,7 +1549,7 @@ FBL.ns(function () {
 				return this.eventInfo;
 			},
 
-			getObject : function () {
+			getObject: function () {
 				return this.obj;
 			}
 		}
@@ -1567,7 +1567,7 @@ FBL.ns(function () {
 		}
 
 		Firebug.TraceModule.ImportedMessage.prototype = extend(Firebug.TraceModule.TraceMessage.prototype, {
-				getStackArray : function () {
+				getStackArray: function () {
 					return cloneArray(this.stack);
 				},
 			})
@@ -1596,56 +1596,56 @@ FBL.ns(function () {
 		 * getMembers method should be implemented.
 		 */
 		Firebug.TraceModule.Tree = domplate(Firebug.Rep, {
-				tag :
+				tag:
 				TABLE({
-					"class" : "domTable",
-					cellpadding : 0,
-					cellspacing : 0,
-					onclick : "$onClick"
+					"class": "domTable",
+					cellpadding: 0,
+					cellspacing: 0,
+					onclick: "$onClick"
 				},
 					TBODY(
 						FOR("member", "$object|memberIterator",
 							TAG("$member|getRowTag", {
-								member : "$member"
+								member: "$member"
 							})))),
 
-				rowTag :
+				rowTag:
 				TR({
-					"class" : "memberRow $member.open $member.type\\Row",
-					$hasChildren : "$member.hasChildren",
-					_repObject : "$member",
-					level : "$member.level"
+					"class": "memberRow $member.open $member.type\\Row",
+					$hasChildren: "$member.hasChildren",
+					_repObject: "$member",
+					level: "$member.level"
 				},
 					TD({
-						"class" : "memberLabelCell",
-						style : "padding-left: $member.indent\\px; width:1%; white-space: nowrap"
+						"class": "memberLabelCell",
+						style: "padding-left: $member.indent\\px; width:1%; white-space: nowrap"
 					},
 						DIV({
-							"class" : "memberLabel $member.type\\Label"
+							"class": "memberLabel $member.type\\Label"
 						}, "$member.name")),
 					TD({
-						"class" : "memberValueCell",
-						style : "width: 100%;"
+						"class": "memberValueCell",
+						style: "width: 100%;"
 					},
 						TAG("$member.tag", {
-							object : "$member.value"
+							object: "$member.value"
 						}))),
 
-				loop :
+				loop:
 				FOR("member", "$members",
 					TAG("$member|getRowTag", {
-						member : "$member"
+						member: "$member"
 					})),
 
-				memberIterator : function (object) {
+				memberIterator: function (object) {
 					return this.getMembers(object);
 				},
 
-				getRowTag : function (member) {
+				getRowTag: function (member) {
 					return this.rowTag;
 				},
 
-				onClick : function (event) {
+				onClick: function (event) {
 					if (!isLeftClick(event))
 						return;
 
@@ -1655,7 +1655,7 @@ FBL.ns(function () {
 						this.toggleRow(row);
 				},
 
-				toggleRow : function (row) {
+				toggleRow: function (row) {
 					var level = parseInt(row.getAttribute("level"));
 					var target = row.lastChild.firstChild;
 					var isString = hasClass(target, "objectBox-string");
@@ -1685,14 +1685,14 @@ FBL.ns(function () {
 								var members = this.getMembers(repObject.value, level + 1);
 								if (members)
 									this.loop.insertRows({
-										members : members
+										members: members
 									}, row);
 							}
 						}
 					}
 				},
 
-				getMembers : function (object, level) {
+				getMembers: function (object, level) {
 					if (!level)
 						level = 0;
 
@@ -1709,7 +1709,7 @@ FBL.ns(function () {
 					return members;
 				},
 
-				createMember : function (type, name, value, level) {
+				createMember: function (type, name, value, level) {
 					var rep = Firebug.getRep(value);
 					var tag = rep.shortTag ? rep.shortTag : rep.tag;
 					var valueType = typeof(value);
@@ -1719,15 +1719,15 @@ FBL.ns(function () {
 							 || (valueType == "string" && value.length > Firebug.stringCropLength));
 
 					return {
-						name : name,
-						value : value,
-						type : type,
-						rowClass : "memberRow-" + type,
-						open : "",
-						level : level,
-						indent : level * 16,
-						hasChildren : hasChildren,
-						tag : tag
+						name: name,
+						value: value,
+						type: type,
+						rowClass: "memberRow-" + type,
+						open: "",
+						level: level,
+						indent: level * 16,
+						hasChildren: hasChildren,
+						tag: tag
 					};
 				}
 			});
@@ -1735,7 +1735,7 @@ FBL.ns(function () {
 		// ************************************************************************************************
 
 		Firebug.TraceModule.PropertyTree = domplate(Firebug.TraceModule.Tree, {
-				getMembers : function (object, level) {
+				getMembers: function (object, level) {
 					if (!level)
 						level = 0;
 
