@@ -31,12 +31,12 @@ FBL.ns(function () {
 		// ************************************************************************************************
 
 		Firebug.Editor = extend(Firebug.Module, {
-				supportsStopEvent : true,
+				supportsStopEvent: true,
 
-				dispatchName : "editor",
-				tabCharacter : "    ",
+				dispatchName: "editor",
+				tabCharacter: "    ",
 
-				startEditing : function (target, value, editor) {
+				startEditing: function (target, value, editor) {
 					this.stopEditing();
 
 					if (hasClass(target, "insertBefore") || hasClass(target, "insertAfter"))
@@ -86,7 +86,7 @@ FBL.ns(function () {
 					this.attachListeners(currentEditor, panel.context);
 				},
 
-				saveAndClose : function () {
+				saveAndClose: function () {
 					if (!currentTarget)
 						return;
 
@@ -94,7 +94,7 @@ FBL.ns(function () {
 					this.stopEditing();
 				},
 
-				stopEditing : function (cancel) {
+				stopEditing: function (cancel) {
 					if (!currentTarget)
 						return;
 
@@ -156,11 +156,11 @@ FBL.ns(function () {
 					return value;
 				},
 
-				cancelEditing : function () {
+				cancelEditing: function () {
 					return this.stopEditing(true);
 				},
 
-				update : function (saveNow) {
+				update: function (saveNow) {
 					if (this.saveTimeout)
 						clearTimeout(this.saveTimeout);
 
@@ -178,7 +178,7 @@ FBL.ns(function () {
 					}
 				},
 
-				save : function (value) {
+				save: function (value) {
 					if (!invalidEditor)
 						return;
 
@@ -197,12 +197,12 @@ FBL.ns(function () {
 					}
 				},
 
-				saveEditAndNotifyListeners : function (currentTarget, value, previousValue) {
+				saveEditAndNotifyListeners: function (currentTarget, value, previousValue) {
 					currentEditor.saveEdit(currentTarget, value, previousValue);
 					dispatch(this.fbListeners, "onSaveEdit", [currentPanel, currentEditor, currentTarget, value, previousValue]);
 				},
 
-				setEditTarget : function (element) {
+				setEditTarget: function (element) {
 					if (!element) {
 						dispatch(currentPanel.fbListeners, 'onInlineEditorClose', [currentPanel, currentTarget, true]);
 						this.stopEditing();
@@ -214,7 +214,7 @@ FBL.ns(function () {
 						this.startEditing(element);
 				},
 
-				tabNextEditor : function () {
+				tabNextEditor: function () {
 					if (!currentTarget)
 						return;
 
@@ -229,7 +229,7 @@ FBL.ns(function () {
 					this.setEditTarget(nextEditable);
 				},
 
-				tabPreviousEditor : function () {
+				tabPreviousEditor: function () {
 					if (!currentTarget)
 						return;
 
@@ -244,7 +244,7 @@ FBL.ns(function () {
 					this.setEditTarget(prevEditable);
 				},
 
-				insertRow : function (relative, insertWhere) {
+				insertRow: function (relative, insertWhere) {
 					var group =
 						relative || getAncestorByClass(currentTarget, "editGroup") || currentTarget;
 					var value = this.stopEditing();
@@ -267,7 +267,7 @@ FBL.ns(function () {
 						this.setEditTarget(editable);
 				},
 
-				insertRowForObject : function (relative) {
+				insertRowForObject: function (relative) {
 					var container = getAncestorByClass(relative, "insertInto");
 					if (container) {
 						relative = getChildByClass(container, "insertBefore");
@@ -278,7 +278,7 @@ FBL.ns(function () {
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				attachListeners : function (editor, context) {
+				attachListeners: function (editor, context) {
 					var win = currentTarget.ownerDocument.defaultView;
 					win.addEventListener("resize", this.onResize, true);
 					win.addEventListener("blur", this.onBlur, true);
@@ -323,7 +323,7 @@ FBL.ns(function () {
 					}
 				},
 
-				detachListeners : function (editor, context) {
+				detachListeners: function (editor, context) {
 					if (!this.listeners)
 						return;
 
@@ -341,11 +341,11 @@ FBL.ns(function () {
 					delete this.listeners;
 				},
 
-				onResize : function (event) {
+				onResize: function (event) {
 					currentEditor.layout(true);
 				},
 
-				onBlur : function (event) {
+				onBlur: function (event) {
 					if (currentEditor.enterOnBlur && isAncestor(event.target, currentEditor.box))
 						this.stopEditing();
 				},
@@ -353,22 +353,22 @@ FBL.ns(function () {
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// extends Module
 
-				initialize : function () {
+				initialize: function () {
 					Firebug.Module.initialize.apply(this, arguments);
 
 					this.onResize = bindFixed(this.onResize, this);
 					this.onBlur = bind(this.onBlur, this);
 				},
 
-				disable : function () {
+				disable: function () {
 					this.stopEditing();
 				},
 
-				showContext : function (browser, context) {
+				showContext: function (browser, context) {
 					this.stopEditing();
 				},
 
-				showPanel : function (browser, panel) {
+				showPanel: function (browser, panel) {
 					this.stopEditing();
 				}
 			});
@@ -377,32 +377,32 @@ FBL.ns(function () {
 		// BaseEditor
 
 		Firebug.BaseEditor = extend(Firebug.MeasureBox, {
-				getValue : function () {},
+				getValue: function () {},
 
-				setValue : function (value) {},
+				setValue: function (value) {},
 
-				show : function (target, panel, value, textSize, targetSize) {},
+				show: function (target, panel, value, textSize, targetSize) {},
 
-				hide : function () {},
+				hide: function () {},
 
-				layout : function (forceAll) {},
+				layout: function (forceAll) {},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// Support for context menus within inline editors.
 
-				getContextMenuItems : function (target) {
+				getContextMenuItems: function (target) {
 					var items = [];
 					items.push({
-						label : "Cut",
-						commandID : "cmd_cut"
+						label: "Cut",
+						commandID: "cmd_cut"
 					});
 					items.push({
-						label : "Copy",
-						commandID : "cmd_copy"
+						label: "Copy",
+						commandID: "cmd_copy"
 					});
 					items.push({
-						label : "Paste",
-						commandID : "cmd_paste"
+						label: "Paste",
+						commandID: "cmd_paste"
 					});
 					return items;
 				},
@@ -410,17 +410,17 @@ FBL.ns(function () {
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 				// Editor Module listeners will get "onBeginEditing" just before this call
 
-				beginEditing : function (target, value) {},
+				beginEditing: function (target, value) {},
 
 				// Editor Module listeners will get "onSaveEdit" just after this call
-				saveEdit : function (target, value, previousValue) {},
+				saveEdit: function (target, value, previousValue) {},
 
-				endEditing : function (target, value, cancel) {
+				endEditing: function (target, value, cancel) {
 					// Remove empty groups by default
 					return true;
 				},
 
-				insertNewRow : function (target, insertWhere) {},
+				insertNewRow: function (target, insertWhere) {},
 			});
 
 		// ************************************************************************************************
@@ -431,57 +431,57 @@ FBL.ns(function () {
 		};
 
 		Firebug.InlineEditor.prototype = domplate(Firebug.BaseEditor, {
-				enterOnBlur : true,
-				outerMargin : 8,
-				shadowExpand : 7,
+				enterOnBlur: true,
+				outerMargin: 8,
+				shadowExpand: 7,
 
-				tag :
+				tag:
 				DIV({
-					"class" : "inlineEditor"
+					"class": "inlineEditor"
 				},
 					DIV({
-						"class" : "textEditorTop1"
+						"class": "textEditorTop1"
 					},
 						DIV({
-							"class" : "textEditorTop2"
+							"class": "textEditorTop2"
 						})),
 					DIV({
-						"class" : "textEditorInner1"
+						"class": "textEditorInner1"
 					},
 						DIV({
-							"class" : "textEditorInner2"
+							"class": "textEditorInner2"
 						},
 							INPUT({
-								"class" : "textEditorInner",
-								type : "text",
-								oninput : "$onInput",
-								onkeypress : "$onKeyPress",
-								onoverflow : "$onOverflow",
-								oncontextmenu : "$onContextMenu"
+								"class": "textEditorInner",
+								type: "text",
+								oninput: "$onInput",
+								onkeypress: "$onKeyPress",
+								onoverflow: "$onOverflow",
+								oncontextmenu: "$onContextMenu"
 							}))),
 					DIV({
-						"class" : "textEditorBottom1"
+						"class": "textEditorBottom1"
 					},
 						DIV({
-							"class" : "textEditorBottom2"
+							"class": "textEditorBottom2"
 						}))),
 
-				inputTag :
+				inputTag:
 				INPUT({
-					"class" : "textEditorInner",
-					type : "text",
-					oninput : "$onInput",
-					onkeypress : "$onKeyPress",
-					onoverflow : "$onOverflow"
+					"class": "textEditorInner",
+					type: "text",
+					oninput: "$onInput",
+					onkeypress: "$onKeyPress",
+					onoverflow: "$onOverflow"
 				}),
 
-				expanderTag :
+				expanderTag:
 				IMG({
-					"class" : "inlineExpander",
-					src : "blank.gif"
+					"class": "inlineExpander",
+					src: "blank.gif"
 				}),
 
-				initialize : function () {
+				initialize: function () {
 					this.fixedWidth = false;
 					this.completeAsYouType = true;
 					this.tabNavigation = true;
@@ -492,31 +492,31 @@ FBL.ns(function () {
 					this.numeric = false;
 				},
 
-				destroy : function () {
+				destroy: function () {
 					this.destroyInput();
 				},
 
-				initializeInline : function (doc) {
+				initializeInline: function (doc) {
 					this.box = this.tag.replace({}, doc, this);
 					this.input = this.box.childNodes[1].firstChild.firstChild; // XXXjjb childNode[1] required
 					this.expander = this.expanderTag.replace({}, doc, this);
 					this.initialize();
 				},
 
-				destroyInput : function () {
+				destroyInput: function () {
 					// XXXjoe Need to remove input/keypress handlers to avoid leaks
 				},
 
-				getValue : function () {
+				getValue: function () {
 					return this.input.value;
 				},
 
-				setValue : function (value) {
+				setValue: function (value) {
 					// It's only a one-line editor, so new lines shouldn't be allowed
 					return this.input.value = stripNewLines(value);
 				},
 
-				show : function (target, panel, value, targetSize) {
+				show: function (target, panel, value, targetSize) {
 					dispatch(panel.fbListeners, "onInlineEditorShow", [panel, this]);
 					this.target = target;
 					this.panel = panel;
@@ -569,7 +569,7 @@ FBL.ns(function () {
 					scrollIntoCenterView(this.box, null, true);
 				},
 
-				hide : function () {
+				hide: function () {
 					this.box.className = this.originalClassName;
 
 					if (!this.fixedWidth) {
@@ -592,7 +592,7 @@ FBL.ns(function () {
 					delete this.panel;
 				},
 
-				layout : function (forceAll) {
+				layout: function (forceAll) {
 					if (!this.fixedWidth)
 						this.textSize = this.measureInputText(this.input.value);
 
@@ -604,34 +604,34 @@ FBL.ns(function () {
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				beginEditing : function (target, value) {},
+				beginEditing: function (target, value) {},
 
-				saveEdit : function (target, value, previousValue) {},
+				saveEdit: function (target, value, previousValue) {},
 
-				endEditing : function (target, value, cancel) {
+				endEditing: function (target, value, cancel) {
 					// Remove empty groups by default
 					return true;
 				},
 
-				insertNewRow : function (target, insertWhere) {},
+				insertNewRow: function (target, insertWhere) {},
 
-				advanceToNext : function (target, charCode) {
+				advanceToNext: function (target, charCode) {
 					return false;
 				},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				getAutoCompleteRange : function (value, offset) {},
+				getAutoCompleteRange: function (value, offset) {},
 
-				getAutoCompleteList : function (preExpr, expr, postExpr) {},
+				getAutoCompleteList: function (preExpr, expr, postExpr) {},
 
-				isValidAutoCompleteProperty : function (value) {
+				isValidAutoCompleteProperty: function (value) {
 					return true;
 				},
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				getAutoCompleter : function () {
+				getAutoCompleter: function () {
 					if (!this.autoCompleter) {
 						this.autoCompleter = new Firebug.AutoCompleter(null,
 								bind(this.getAutoCompleteRange, this), bind(this.getAutoCompleteList, this),
@@ -641,14 +641,14 @@ FBL.ns(function () {
 					return this.autoCompleter;
 				},
 
-				completeValue : function (amt) {
+				completeValue: function (amt) {
 					if (this.getAutoCompleter().complete(currentPanel.context, this.input, null, true, amt < 0, true))
 						Firebug.Editor.update(true);
 					else
 						this.incrementValue(amt);
 				},
 
-				incrementValue : function (amt) {
+				incrementValue: function (amt) {
 					var value = this.input.value;
 					var start = this.input.selectionStart,
 					end = this.input.selectionEnd;
@@ -656,8 +656,8 @@ FBL.ns(function () {
 					var range = this.getAutoCompleteRange(value, start);
 					if (!range || range.type != "int")
 						range = {
-							start : 0,
-							end : value.length - 1
+							start: 0,
+							end: value.length - 1
 						};
 
 					var expr = value.substr(range.start, range.end - range.start + 1);
@@ -683,7 +683,7 @@ FBL.ns(function () {
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				onKeyPress : function (event) {
+				onKeyPress: function (event) {
 					if (event.keyCode == 27 && !this.completeAsYouType) {
 						var reverted = this.getAutoCompleter().revert(this.input);
 						if (reverted)
@@ -699,11 +699,11 @@ FBL.ns(function () {
 					}
 				},
 
-				onOverflow : function () {
+				onOverflow: function () {
 					this.updateLayout(false, false, 3);
 				},
 
-				onInput : function () {
+				onInput: function () {
 					if (this.ignoreNextInput) {
 						this.ignoreNextInput = false;
 						this.getAutoCompleter().reset();
@@ -715,7 +715,7 @@ FBL.ns(function () {
 					Firebug.Editor.update();
 				},
 
-				onContextMenu : function (event) {
+				onContextMenu: function (event) {
 					cancelEvent(event);
 
 					var popup = $("fbInlineEditorPopup");
@@ -737,7 +737,7 @@ FBL.ns(function () {
 
 				// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
-				updateLayout : function (initial, forceAll, extraWidth) {
+				updateLayout: function (initial, forceAll, extraWidth) {
 					if (this.fixedWidth) {
 						this.box.style.left = (this.targetOffset.x) + "px";
 						this.box.style.top = (this.targetOffset.y) + "px";
@@ -886,8 +886,8 @@ FBL.ns(function () {
 					var range = getRange ? getRange(parsed, offset - parseStart, context) : null;
 					if (!range)
 						range = {
-							start : 0,
-							end : parsed.length - 1
+							start: 0,
+							end: parsed.length - 1
 						};
 
 					var expr = parsed.substr(range.start, range.end - range.start + 1);

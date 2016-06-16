@@ -1,28 +1,28 @@
 var FileManager = {
-	funcBg : null,
-	multilanTitles : null,
-	inputChecks : null,
-	selectedItems : null,
-	sortName : null,
-	sortOrder : null,
-	isSearch : null,
-	delayID : 0,
-	miniMainViewHeight : 120,
-	isIE : null,
+	funcBg: null,
+	multilanTitles: null,
+	inputChecks: null,
+	selectedItems: null,
+	sortName: null,
+	sortOrder: null,
+	isSearch: null,
+	delayID: 0,
+	miniMainViewHeight: 120,
+	isIE: null,
 
-	funcDialog : {
-		body : null,
-		header : null,
-		divInput : null,
-		divDelete : null,
-		divAudio : null,
-		divWaiting : null
+	funcDialog: {
+		body: null,
+		header: null,
+		divInput: null,
+		divDelete: null,
+		divAudio: null,
+		divWaiting: null
 	},
 
 	/*
 	 * 阻止事件浮升
 	 */
-	stopBubble : function (e) {
+	stopBubble: function (e) {
 		var e = e ? e : window.event;
 		if (window.event) { // IE
 			e.cancelBubble = true;
@@ -35,18 +35,18 @@ var FileManager = {
 	/*
 	 * 什么也不做
 	 */
-	doNothing : function () {
+	doNothing: function () {
 		return;
 	},
 
-	getItemCheckbox : function (item) {
+	getItemCheckbox: function (item) {
 		return $(item.children().get(0)).children().get(0); // 比较笨的办法
 	},
 
 	/*
 	 * 详细信息模式时，当鼠标移到项目上的操作
 	 */
-	detailViewItemOver : function (item) {
+	detailViewItemOver: function (item) {
 		var detailViewItem = $(item);
 		detailViewItem.addClass("selected");
 	},
@@ -54,7 +54,7 @@ var FileManager = {
 	/*
 	 * 详细信息模式时，当鼠标移出项目的操作
 	 */
-	detailViewItemOut : function (item) {
+	detailViewItemOut: function (item) {
 		var detailViewItem = $(item);
 		var checkBox = FileManager.getItemCheckbox(detailViewItem);
 		if (checkBox.checked != true) {
@@ -65,7 +65,7 @@ var FileManager = {
 	/*
 	 * 详细信息模式时，当鼠标点击项目的操作
 	 */
-	detailViewItemClicked : function (item) {
+	detailViewItemClicked: function (item) {
 		var detailViewItem = $(item);
 		var checkBox = FileManager.getItemCheckbox(detailViewItem);
 		if (checkBox.checked) {
@@ -80,7 +80,7 @@ var FileManager = {
 	/*
 	 * 大图标模式时，当鼠标移到项目上的操作
 	 */
-	largeiconViewItemOver : function (item) {
+	largeiconViewItemOver: function (item) {
 		var largeiconViewItem = $(item);
 		largeiconViewItem.addClass("selected");
 	},
@@ -88,7 +88,7 @@ var FileManager = {
 	/*
 	 * 大图标模式时，当鼠标移出项目的操作
 	 */
-	largeiconViewItemOut : function (item) {
+	largeiconViewItemOut: function (item) {
 		var largeiconViewItem = $(item);
 		var checkBox = FileManager.getItemCheckbox(largeiconViewItem);
 		if (checkBox.checked != true) {
@@ -99,7 +99,7 @@ var FileManager = {
 	/*
 	 * 大图标模式时，当鼠标点击项目的操作
 	 */
-	largeiconViewItemClicked : function (item) {
+	largeiconViewItemClicked: function (item) {
 		var largeiconViewItem = $(item);
 		var checkBox = FileManager.getItemCheckbox(largeiconViewItem);
 		if (checkBox.checked) {
@@ -114,7 +114,7 @@ var FileManager = {
 	/*
 	 * 项目选择改变
 	 */
-	viewItemCheck : function () {
+	viewItemCheck: function () {
 		FileManager.setButton("toolbarCut", "images/toolbar-cut-disable.gif",
 			FileManager.doNothing, "disable", "");
 		FileManager.setButton("toolbarCopy", "images/toolbar-copy-disable.gif",
@@ -160,7 +160,7 @@ var FileManager = {
 	/*
 	 * 设置按钮
 	 */
-	setButton : function (className, src, clickFunc, addClass, removeClass) {
+	setButton: function (className, src, clickFunc, addClass, removeClass) {
 		var buttons = $("div#toolbar .toolbarButton");
 
 		for (var i = 0; i < buttons.length; i++) {
@@ -180,7 +180,7 @@ var FileManager = {
 	/*
 	 * 点击了重命名的操作
 	 */
-	clickRename : function () {
+	clickRename: function () {
 		FileManager.setOldname();
 
 		FileManager.displayFuncDialog("func/post.func.php", "rename", "rename",
@@ -190,7 +190,7 @@ var FileManager = {
 	/*
 	 * 点击了新建目录的操作
 	 */
-	clickNewFolder : function () {
+	clickNewFolder: function () {
 		// alert("newfolder");
 		FileManager.displayFuncDialog("func/post.func.php", "newfolder",
 			"new folder", null);
@@ -199,7 +199,7 @@ var FileManager = {
 	/*
 	 * 点击了剪切的操作
 	 */
-	clickCut : function () {
+	clickCut: function () {
 		// alert("cut");
 		FileManager.sendAjaxOper("cut");
 	},
@@ -207,14 +207,14 @@ var FileManager = {
 	/*
 	 * 点击了复制的操作
 	 */
-	clickCopy : function () {
+	clickCopy: function () {
 		FileManager.sendAjaxOper("copy");
 	},
 
 	/*
 	 * 点击了粘贴的操作
 	 */
-	clickPaste : function () {
+	clickPaste: function () {
 		var subdir = $("input#subdir").attr("value");
 		var returnURL = $("input#return").val();
 
@@ -222,9 +222,9 @@ var FileManager = {
 			"waiting", null);
 
 		$.post("func/post.func.php", {
-			"oper" : "paste",
-			"subdir" : subdir,
-			"return" : returnURL
+			"oper": "paste",
+			"subdir": subdir,
+			"return": returnURL
 		}, function (data) {
 			// alert(data);
 			window.location.reload();
@@ -239,7 +239,7 @@ var FileManager = {
 	/*
 	 * 点击了删除的操作
 	 */
-	clickDelete : function () {
+	clickDelete: function () {
 		FileManager.displayFuncDialog("", "delete",
 			"delete", null);
 	},
@@ -247,7 +247,7 @@ var FileManager = {
 	/*
 	 * 确认删除后的操作
 	 */
-	doDelete : function () {
+	doDelete: function () {
 		// 准备界面
 		var funcDelete = $("div#funcDelete");
 		funcDelete.css("display", "none");
@@ -262,8 +262,8 @@ var FileManager = {
 		// var subdir = $("input#subdir").val();
 
 		$.post("func/post.func.php", {
-			"oper" : "delete",
-			"items" : itemsStr
+			"oper": "delete",
+			"items": itemsStr
 		}, function (data) {
 			// alert(data);
 			if (data == "ok") {
@@ -275,7 +275,7 @@ var FileManager = {
 	/*
 	 * 点击了上传的操作
 	 */
-	clickUpload : function () {
+	clickUpload: function () {
 		FileManager.displayFuncDialog("func/post.func.php", "upload", "upload",
 			null);
 	},
@@ -283,7 +283,7 @@ var FileManager = {
 	/*
 	 * 点击了全选的操作
 	 */
-	selectAll : function () {
+	selectAll: function () {
 		var count = FileManager.inputChecks.length;
 
 		for (var i = 0; i < count; i++) {
@@ -297,7 +297,7 @@ var FileManager = {
 	/*
 	 * 点击了取消选择的操作
 	 */
-	deselect : function () {
+	deselect: function () {
 		var count = FileManager.inputChecks.length;
 
 		for (var i = 0; i < count; i++) {
@@ -311,7 +311,7 @@ var FileManager = {
 	/*
 	 * 设置显示排序的箭头
 	 */
-	setSortArrow : function (name, order) {
+	setSortArrow: function (name, order) {
 		FileManager.sortName = name;
 		FileManager.sortOrder = order;
 	},
@@ -319,14 +319,14 @@ var FileManager = {
 	/*
 	 * 设置为搜索模式
 	 */
-	setSearchMode : function (isSearch) {
+	setSearchMode: function (isSearch) {
 		FileManager.isSearch = isSearch;
 	},
 
 	/*
 	 * 获得消息
 	 */
-	getMessage : function () {
+	getMessage: function () {
 		$.get("func/getmessage.ajax.php", function (data) {
 			if (data != "") {
 				var phpfmMessage = $("#phpfmMessage");
@@ -359,14 +359,14 @@ var FileManager = {
 	/*
 	 * 关闭消息
 	 */
-	closeMessage : function () {
+	closeMessage: function () {
 		$("#phpfmMessage").fadeOut();
 	},
 
 	/*
 	 * 获得左边距，使得输入部分居中
 	 */
-	getLeftMargin : function () {
+	getLeftMargin: function () {
 		var viewWidth = document.documentElement.clientWidth;
 		var leftMargin = (viewWidth - 420) / 2; // 居中
 		return leftMargin;
@@ -375,15 +375,15 @@ var FileManager = {
 	/*
 	 * 发送 ajax
 	 */
-	sendAjaxOper : function (oper) {
+	sendAjaxOper: function (oper) {
 
 		var itemsStr = FileManager.selectedItems.join("|");
 
 		// var subdir = $("input#subdir").val();
 
 		$.post("func/post.func.php", {
-			"oper" : oper,
-			"items" : itemsStr
+			"oper": oper,
+			"items": itemsStr
 		}, function (data) {
 			if (data == "ok" && FileManager.isSearch == false) {
 				FileManager.setButton("toolbarPaste",
@@ -402,7 +402,7 @@ var FileManager = {
 	/*
 	 * 设置修改名称时的原名称
 	 */
-	setOldname : function () {
+	setOldname: function () {
 		$("div#oldnameLine").css("display", "block");
 		var oldPathInput = $("input#renamePath");
 		var oldnameInput = $("input#oldname");
@@ -417,7 +417,7 @@ var FileManager = {
 	/*
 	 * 清除修改名称输入框中的原名称
 	 */
-	cleanOldname : function () {
+	cleanOldname: function () {
 		var oldnameInput = FileManager.funcDialog.body.find("input#oldname");
 		var newnameInput = FileManager.funcDialog.body.find("input#newname");
 		oldnameInput.attr("value", ""); // 显示原文件名
@@ -427,7 +427,7 @@ var FileManager = {
 	/*
 	 * 初始化 Func
 	 */
-	initFuncDialog : function () {
+	initFuncDialog: function () {
 		FileManager.funcBg = $("div#funcBg");
 
 		FileManager.funcDialog.body = $("div#funcDialog");
@@ -466,7 +466,7 @@ var FileManager = {
 	/*
 	 * 显示 Func 输入的半透明背景
 	 */
-	displayFuncBg : function (canClose) {
+	displayFuncBg: function (canClose) {
 		if (canClose) {
 			FileManager.funcBg.get(0).onclick = FileManager.closeFunc;
 			FileManager.funcDialog.header.find(".funcClose").css("display", "block");
@@ -481,7 +481,7 @@ var FileManager = {
 	/*
 	 * 显示 Func 输入部分
 	 */
-	displayFuncDialog : function (action, oper, title, data) {
+	displayFuncDialog: function (action, oper, title, data) {
 		var funcDialog = FileManager.funcDialog.body;
 		var divHeader = FileManager.funcDialog.header;
 		var divInput = FileManager.funcDialog.divInput;
@@ -543,7 +543,7 @@ var FileManager = {
 			var audioLink = data.link;
 			// Player
 			AudioPlayer.embed("divAudioPlayer", {
-				soundFile : audioLink
+				soundFile: audioLink
 			});
 			var divLink = divAudio.find("div#link");
 			divLink.html("<a href=\"" + audioLink + "\">"
@@ -567,7 +567,7 @@ var FileManager = {
 	/*
 	 * 关闭 Func 部分
 	 */
-	closeFunc : function () {
+	closeFunc: function () {
 		if (FileManager.funcDialog.body.is(":visible"))
 			FileManager.funcDialog.body.fadeOut();
 
@@ -582,7 +582,7 @@ var FileManager = {
 		}
 	},
 
-	changeMainViewListHeight : function () {
+	changeMainViewListHeight: function () {
 		// 自适应 mainViewList 高度
 		var mainViewList = $("div#mainViewList");
 		var mainViewListOffset = mainViewList.offset();
@@ -602,20 +602,20 @@ var FileManager = {
 		}
 	},
 
-	toolbarButtonMouseIn : function () {
+	toolbarButtonMouseIn: function () {
 		if (!$(this).hasClass("disable")) {
 			$(this).css("border-bottom", "1px solid #B8D1ED");
 		}
 	},
 
-	toolbarButtonMouseOut : function () {
+	toolbarButtonMouseOut: function () {
 		$(this).css("border-bottom", "1px solid white");
 	},
 
 	/*
 	 * 准备工具栏
 	 */
-	initToolbar : function () {
+	initToolbar: function () {
 		var buttons = $("div#toolbar .toolbarButton");
 
 		if (buttons.filter(".toolbarBack").hasClass("disable")) { // 后退
@@ -668,7 +668,7 @@ var FileManager = {
 	/*
 	 * 准备主视图
 	 */
-	initMainView : function () {
+	initMainView: function () {
 		// changeMainViewHeight();
 		FileManager.changeMainViewListHeight();
 		$(window).resize(FileManager.changeMainViewListHeight);
@@ -745,10 +745,10 @@ var FileManager = {
 	/*
 	 * 准备 AudioPlayer
 	 */
-	initAudioPlayer : function () {
+	initAudioPlayer: function () {
 		AudioPlayer.setup("images/player.swf", {
-			width : 290,
-			initialvolume : 100
+			width: 290,
+			initialvolume: 100
 		});
 
 		$("a.audioPlayer").click(function () {
@@ -756,18 +756,18 @@ var FileManager = {
 			var audioTitle = $(this).attr("title");
 			FileManager.displayFuncDialog("", "audio",
 				"audio", {
-				link : audioLink,
-				title : audioTitle
+				link: audioLink,
+				title: audioTitle
 			});
 			return false;
 		});
 	},
 
-	initMediaPreview : function () {
+	initMediaPreview: function () {
 		// lightbox
 		$('a.lightboxImg').lightBox({
-			overlayOpacity : 0.5,
-			autoAdapt : true
+			overlayOpacity: 0.5,
+			autoAdapt: true
 		});
 
 		// AudioPlayer
@@ -788,10 +788,10 @@ FileManager.init = function () {
 
 	// FileManager.initFullPath();
 	jqMenu.setup({
-		menuItemsSelector : ".menuContainer",
-		menuButtonSelector : ".menuButton",
-		subMenuSelector : ".subMenu",
-		inlineShadow : "transparent url('images/shadow.png') no-repeat right bottom"
+		menuItemsSelector: ".menuContainer",
+		menuButtonSelector: ".menuButton",
+		subMenuSelector: ".subMenu",
+		inlineShadow: "transparent url('images/shadow.png') no-repeat right bottom"
 	});
 	jqMenu.init();
 
