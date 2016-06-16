@@ -75,9 +75,9 @@ var YUI = function () {
 	NOOP = function () {},
 	SLICE = Array.prototype.slice,
 	APPLY_TO_AUTH = {
-		'io.xdrReady' : 1, // the functions applyTo
-		'io.xdrResponse' : 1, // can call. this should
-		'SWF.eventHandler' : 1
+		'io.xdrReady': 1, // the functions applyTo
+		'io.xdrResponse': 1, // can call. this should
+		'SWF.eventHandler': 1
 	}, // be done at build time
 	hasWin = (typeof window != 'undefined'),
 	win = (hasWin) ? window : null,
@@ -160,7 +160,7 @@ var YUI = function () {
 		 * @param the configuration object
 		 * @since 3.2.0
 		 */
-		applyConfig : function (o) {
+		applyConfig: function (o) {
 
 			o = o || NOOP;
 
@@ -198,7 +198,7 @@ var YUI = function () {
 			}
 		},
 
-		_config : function (o) {
+		_config: function (o) {
 			this.applyConfig(o);
 		},
 
@@ -206,7 +206,7 @@ var YUI = function () {
 		 * Initialize this YUI instance
 		 * @private
 		 */
-		_init : function () {
+		_init: function () {
 			var filter,
 			Y = this,
 			G_ENV = YUI.Env,
@@ -218,19 +218,19 @@ var YUI = function () {
 
 			if (!Env) {
 				Y.Env = {
-					mods : {}, // flat module map
-					versions : {}, // version module map
-					base : BASE,
-					cdn : BASE + VERSION + '/build/',
+					mods: {}, // flat module map
+					versions: {}, // version module map
+					base: BASE,
+					cdn: BASE + VERSION + '/build/',
 					// bootstrapped: false,
-					_idx : 0,
-					_used : {},
-					_attached : {},
-					_yidx : 0,
-					_uidx : 0,
-					_guidp : 'y',
-					_loaded : {},
-					getBase : G_ENV && G_ENV.getBase || function (srcPattern, comboPattern) {
+					_idx: 0,
+					_used: {},
+					_attached: {},
+					_yidx: 0,
+					_uidx: 0,
+					_guidp: 'y',
+					_loaded: {},
+					getBase: G_ENV && G_ENV.getBase || function (srcPattern, comboPattern) {
 						var b,
 						nodes,
 						i,
@@ -305,13 +305,13 @@ var YUI = function () {
 			// configuration defaults
 			Y.config = Y.config || {
 				// _sig:              '',
-				win : win,
-				doc : doc,
-				debug : true,
-				useBrowserConsole : true,
-				throwFail : true,
-				bootstrap : true,
-				fetchCSS : true
+				win: win,
+				doc: doc,
+				debug: true,
+				useBrowserConsole: true,
+				throwFail: true,
+				bootstrap: true,
+				fetchCSS: true
 			};
 
 			config = Y.config;
@@ -331,7 +331,7 @@ var YUI = function () {
 		 * @method _setup
 		 * @private
 		 */
-		_setup : function (o) {
+		_setup: function (o) {
 			var i,
 			Y = this,
 			core = [],
@@ -365,7 +365,7 @@ var YUI = function () {
 		 * @param args {Array} the arguments to apply to the method
 		 * @return {object} the return value from the applied method or null
 		 */
-		applyTo : function (id, method, args) {
+		applyTo: function (id, method, args) {
 			if (!(method in APPLY_TO_AUTH)) {
 				this.log(method + ': applyTo not allowed', 'warn', 'yui');
 				return null;
@@ -417,14 +417,14 @@ var YUI = function () {
 		 * @return {YUI} the YUI instance
 		 *
 		 */
-		add : function (name, fn, version, details) {
+		add: function (name, fn, version, details) {
 			details = details || {};
 			var env = YUI.Env,
 			mod = {
-				name : name,
-				fn : fn,
-				version : version,
-				details : details
+				name: name,
+				fn: fn,
+				version: version,
+				details: details
 			},
 			loader,
 			i;
@@ -453,7 +453,7 @@ var YUI = function () {
 		 * @method _attach
 		 * @private
 		 */
-		_attach : function (r, fromLoader) {
+		_attach: function (r, fromLoader) {
 			var i,
 			name,
 			mod,
@@ -540,7 +540,7 @@ var YUI = function () {
 		 *
 		 * @return {YUI} the YUI instance
 		 */
-		use : function () {
+		use: function () {
 
 			if (!this.Array) {
 				this._attach(['yui-base']);
@@ -624,8 +624,8 @@ var YUI = function () {
 
 			handleLoader = function (fromLoader) {
 				var response = fromLoader || {
-					success : true,
-					msg : 'not dynamic'
+					success: true,
+					msg: 'not dynamic'
 				},
 				newData,
 				redo,
@@ -736,10 +736,10 @@ var YUI = function () {
 
 				// server side loader service
 				Y.Get.script(Y._rls(args), {
-					onEnd : function (o) {
+					onEnd: function (o) {
 						handleLoader(o);
 					},
-					data : args
+					data: args
 				});
 
 			} else if (boot && len && Y.Get && !Env.bootstrapped) {
@@ -761,7 +761,7 @@ var YUI = function () {
 				} else {
 					G_ENV._bootstrapping = true;
 					Y.Get.script(config.base + config.loaderPath, {
-						onEnd : handleBoot
+						onEnd: handleBoot
 					});
 				}
 
@@ -799,7 +799,7 @@ var YUI = function () {
 		 * @param  {string*} arguments 1-n namespaces to create
 		 * @return {object}  A reference to the last namespace object created
 		 */
-		namespace : function () {
+		namespace: function () {
 			var a = arguments,
 			o = null,
 			i,
@@ -817,8 +817,8 @@ var YUI = function () {
 		},
 
 		// this is replaced if the log module is included
-		log : NOOP,
-		message : NOOP,
+		log: NOOP,
+		message: NOOP,
 
 		/**
 		 * Report an error.  The reporting mechanism is controled by
@@ -831,7 +831,7 @@ var YUI = function () {
 		 * and throwFail is specified, this error will be re-thrown.
 		 * @return {YUI} this YUI instance
 		 */
-		error : function (msg, e) {
+		error: function (msg, e) {
 
 			var Y = this,
 			ret;
@@ -855,7 +855,7 @@ var YUI = function () {
 		 * @param pre {string} optional guid prefix
 		 * @return {string} the guid
 		 */
-		guid : function (pre) {
+		guid: function (pre) {
 			var id = this.Env._guidp + (++this.Env._uidx);
 			return (pre) ? (pre + id) : id;
 		},
@@ -870,7 +870,7 @@ var YUI = function () {
 		 * be returned if the object has one assigned to it.
 		 * @return {string} The object's guid or null
 		 */
-		stamp : function (o, readOnly) {
+		stamp: function (o, readOnly) {
 			var uid;
 			if (!o) {
 				return o;
@@ -1454,15 +1454,15 @@ YUI.add('yui-base', function (Y) {
 	UNDEFINED = 'undefined',
 
 	TYPES = {
-		'undefined' : UNDEFINED,
-		'number' : NUMBER,
-		'boolean' : BOOLEAN,
-		'string' : STRING,
-		'[object Function]' : FUNCTION,
-		'[object RegExp]' : REGEX,
-		'[object Array]' : ARRAY,
-		'[object Date]' : DATE,
-		'[object Error]' : ERROR
+		'undefined': UNDEFINED,
+		'number': NUMBER,
+		'boolean': BOOLEAN,
+		'string': STRING,
+		'[object Function]': FUNCTION,
+		'[object RegExp]': REGEX,
+		'[object Array]': ARRAY,
+		'[object Date]': DATE,
+		'[object Error]': ERROR
 	},
 
 	TRIMREGEX = /^\s+|\s+$/g,
@@ -1890,7 +1890,7 @@ YUI.add('yui-base', function (Y) {
 		 * @method _init
 		 * @protected
 		 */
-		_init : function () {
+		_init: function () {
 			/**
 			 * The collection of enqueued items
 			 *
@@ -1907,7 +1907,7 @@ YUI.add('yui-base', function (Y) {
 		 * @method next
 		 * @return {MIXED} the next item in the queue
 		 */
-		next : function () {
+		next: function () {
 			return this._q.shift();
 		},
 
@@ -1917,7 +1917,7 @@ YUI.add('yui-base', function (Y) {
 		 * @method last
 		 * @return {MIXED} the last item in the queue
 		 */
-		last : function () {
+		last: function () {
 			return this._q.pop();
 		},
 
@@ -1927,7 +1927,7 @@ YUI.add('yui-base', function (Y) {
 		 * @method add
 		 * @param item* {MIXED} 0..n items
 		 */
-		add : function () {
+		add: function () {
 			Y.Array.each(Y.Array(arguments, 0, true), function (fn) {
 				this._q.push(fn);
 			}, this);
@@ -1941,7 +1941,7 @@ YUI.add('yui-base', function (Y) {
 		 * @method size
 		 * @return {Number}
 		 */
-		size : function () {
+		size: function () {
 			return this._q.length;
 		}
 	};
@@ -2439,7 +2439,7 @@ YUI.add('yui-base', function (Y) {
 			 * @type float
 			 * @static
 			 */
-			ie : 0,
+			ie: 0,
 
 			/**
 			 * Opera version number or 0.  Example: 9.2
@@ -2447,7 +2447,7 @@ YUI.add('yui-base', function (Y) {
 			 * @type float
 			 * @static
 			 */
-			opera : 0,
+			opera: 0,
 
 			/**
 			 * Gecko engine revision number.  Will evaluate to 1 if Gecko
@@ -2464,7 +2464,7 @@ YUI.add('yui-base', function (Y) {
 			 * @type float
 			 * @static
 			 */
-			gecko : 0,
+			gecko: 0,
 
 			/**
 			 * AppleWebKit version.  KHTML browsers that are not WebKit browsers
@@ -2491,7 +2491,7 @@ YUI.add('yui-base', function (Y) {
 			 * @type float
 			 * @static
 			 */
-			webkit : 0,
+			webkit: 0,
 
 			/**
 			 * Chrome will be detected as webkit, but this property will also
@@ -2500,7 +2500,7 @@ YUI.add('yui-base', function (Y) {
 			 * @type float
 			 * @static
 			 */
-			chrome : 0,
+			chrome: 0,
 
 			/**
 			 * The mobile property will be set to a string containing any relevant
@@ -2511,7 +2511,7 @@ YUI.add('yui-base', function (Y) {
 			 * @type string
 			 * @static
 			 */
-			mobile : null,
+			mobile: null,
 
 			/**
 			 * Adobe AIR version number or 0.  Only populated if webkit is detected.
@@ -2519,49 +2519,49 @@ YUI.add('yui-base', function (Y) {
 			 * @property air
 			 * @type float
 			 */
-			air : 0,
+			air: 0,
 			/**
 			 * Detects Apple iPad's OS version
 			 * @property ipad
 			 * @type float
 			 * @static
 			 */
-			ipad : 0,
+			ipad: 0,
 			/**
 			 * Detects Apple iPhone's OS version
 			 * @property iphone
 			 * @type float
 			 * @static
 			 */
-			iphone : 0,
+			iphone: 0,
 			/**
 			 * Detects Apples iPod's OS version
 			 * @property ipod
 			 * @type float
 			 * @static
 			 */
-			ipod : 0,
+			ipod: 0,
 			/**
 			 * General truthy check for iPad, iPhone or iPod
 			 * @property ios
 			 * @type float
 			 * @static
 			 */
-			ios : null,
+			ios: null,
 			/**
 			 * Detects Googles Android OS version
 			 * @property android
 			 * @type float
 			 * @static
 			 */
-			android : 0,
+			android: 0,
 
 			/**
 			 * Google Caja version number or 0.
 			 * @property caja
 			 * @type float
 			 */
-			caja : nav && nav.cajaVersion,
+			caja: nav && nav.cajaVersion,
 
 			/**
 			 * Set to true if the page appears to be in SSL
@@ -2569,7 +2569,7 @@ YUI.add('yui-base', function (Y) {
 			 * @type boolean
 			 * @static
 			 */
-			secure : false,
+			secure: false,
 
 			/**
 			 * The operating system.  Currently only detecting windows or macintosh
@@ -2577,7 +2577,7 @@ YUI.add('yui-base', function (Y) {
 			 * @type string
 			 * @static
 			 */
-			os : null
+			os: null
 
 		},
 
@@ -2769,10 +2769,10 @@ YUI.add('get', function (Y) {
 			 */
 			_linkNode = function (url, win, attributes) {
 				var o = {
-					id : Y.guid(),
-					type : TYPE_CSS,
-					rel : STYLESHEET,
-					href : url
+					id: Y.guid(),
+					type: TYPE_CSS,
+					rel: STYLESHEET,
+					href: url
 				};
 				if (attributes) {
 					Y.mix(o, attributes);
@@ -2791,8 +2791,8 @@ YUI.add('get', function (Y) {
 			 */
 			_scriptNode = function (url, win, attributes) {
 				var o = {
-					id : Y.guid(),
-					type : TYPE_JS
+					id: Y.guid(),
+					type: TYPE_JS
 				};
 
 				if (attributes) {
@@ -2811,13 +2811,13 @@ YUI.add('get', function (Y) {
 			 */
 			_returnData = function (q, msg, result) {
 				return {
-					tId : q.tId,
-					win : q.win,
-					data : q.data,
-					nodes : q.nodes,
-					msg : msg,
-					statusText : result,
-					purge : function () {
+					tId: q.tId,
+					win: q.win,
+					data: q.data,
+					nodes: q.nodes,
+					msg: msg,
+					statusText: result,
+					purge: function () {
 						_purge(this.tId);
 					}
 				};
@@ -3061,11 +3061,11 @@ YUI.add('get', function (Y) {
 				}
 
 				queues[id] = Y.merge(opts, {
-						tId : id,
-						type : type,
-						url : url,
-						finished : false,
-						nodes : []
+						tId: id,
+						type: type,
+						url: url,
+						finished: false,
+						nodes: []
 					});
 
 				q = queues[id];
@@ -3080,7 +3080,7 @@ YUI.add('get', function (Y) {
 				_next(id);
 
 				return {
-					tId : id
+					tId: id
 				};
 			};
 
@@ -3212,7 +3212,7 @@ YUI.add('get', function (Y) {
 				 * @default 20
 				 * @private
 				 */
-				PURGE_THRESH : 20,
+				PURGE_THRESH: 20,
 
 				/**
 				 * Called by the the helper for detecting script load in Safari
@@ -3221,7 +3221,7 @@ YUI.add('get', function (Y) {
 				 * @param id {string} the transaction id
 				 * @private
 				 */
-				_finalize : function (id) {
+				_finalize: function (id) {
 					setTimeout(function () {
 						_finish(id);
 					}, 0);
@@ -3234,7 +3234,7 @@ YUI.add('get', function (Y) {
 				 * @param o {string|object} Either the tId or the object returned from
 				 * script() or css()
 				 */
-				abort : function (o) {
+				abort: function (o) {
 					var id = (L.isString(o)) ? o : o.tId,
 					q = queues[id];
 					if (q) {
@@ -3360,7 +3360,7 @@ YUI.add('get', function (Y) {
 				 * </pre>
 				 * @return {tId: string} an object containing info about the transaction
 				 */
-				script : function (url, opts) {
+				script: function (url, opts) {
 					return _queue("script", url, opts);
 				},
 
@@ -3418,7 +3418,7 @@ YUI.add('get', function (Y) {
 				 * </pre>
 				 * @return {tId: string} an object containing info about the transaction
 				 */
-				css : function (url, opts) {
+				css: function (url, opts) {
 					return _queue("css", url, opts);
 				}
 			};
@@ -3434,14 +3434,14 @@ YUI.add('features', function (Y) {
 
 	Y.mix(Y.namespace("Features"), {
 
-		tests : tests,
+		tests: tests,
 
-		add : function (cat, name, o) {
+		add: function (cat, name, o) {
 			tests[cat] = tests[cat] || {};
 			tests[cat][name] = o;
 		},
 
-		all : function (cat, args) {
+		all: function (cat, args) {
 			var cat_o = tests[cat],
 			// results = {};
 			result = '';
@@ -3455,7 +3455,7 @@ YUI.add('features', function (Y) {
 			return result;
 		},
 
-		test : function (cat, name, args) {
+		test: function (cat, name, args) {
 
 			var result,
 			ua,
@@ -3496,29 +3496,29 @@ YUI.add('features', function (Y) {
 	var add = Y.Features.add;
 	// 0
 	add('load', '0', {
-		"trigger" : "dom-style",
-		"ua" : "ie"
+		"trigger": "dom-style",
+		"ua": "ie"
 	});
 	// history-hash-ie-test.js
 	add('load', '1', {
-		"test" : function (Y) {
+		"test": function (Y) {
 			var docMode = Y.config.doc.documentMode;
 
 			return Y.UA.ie && (!('onhashchange' in Y.config.win) ||
 				!docMode || docMode < 8);
 		},
-		"trigger" : "history-hash"
+		"trigger": "history-hash"
 	});
 	// dd-gestures-test.js
 	add('load', '2', {
-		"test" : function (Y) {
+		"test": function (Y) {
 			return (Y.config.win && ('ontouchstart' in Y.config.win && !Y.UA.chrome));
 		},
-		"trigger" : "dd-drag"
+		"trigger": "dd-drag"
 	});
 
 }, '3.2.0', {
-	requires : ['yui-base']
+	requires: ['yui-base']
 });
 YUI.add('rls', function (Y) {
 
@@ -3534,16 +3534,16 @@ YUI.add('rls', function (Y) {
 
 		// the configuration
 		rls = config.rls || {
-			m : 1, // required in the template
-			v : Y.version,
-			gv : config.gallery,
-			env : 1, // required in the template
-			lang : config.lang,
-			'2in3v' : config['2in3'],
-			'2v' : config.yui2,
-			filt : config.filter,
-			filts : config.filters,
-			tests : 1 // required in the template
+			m: 1, // required in the template
+			v: Y.version,
+			gv: config.gallery,
+			env: 1, // required in the template
+			lang: config.lang,
+			'2in3v': config['2in3'],
+			'2v': config.yui2,
+			filt: config.filter,
+			filts: config.filters,
+			tests: 1 // required in the template
 		},
 
 		// The rls base path
@@ -3580,7 +3580,7 @@ YUI.add('rls', function (Y) {
 	};
 
 }, '3.2.0', {
-	requires : ['yui-base', 'get', 'features']
+	requires: ['yui-base', 'get', 'features']
 });
 YUI.add('intl-base', function (Y) {
 
@@ -3616,7 +3616,7 @@ YUI.add('intl-base', function (Y) {
 		 * preferred language list, or "".
 		 * @since 3.1.0
 		 */
-		lookupBestLang : function (preferredLanguages, availableLanguages) {
+		lookupBestLang: function (preferredLanguages, availableLanguages) {
 
 			var i,
 			language,
@@ -3668,7 +3668,7 @@ YUI.add('intl-base', function (Y) {
 	});
 
 }, '3.2.0', {
-	requires : ['yui-base']
+	requires: ['yui-base']
 });
 YUI.add('yui-log', function (Y) {
 
@@ -3684,10 +3684,10 @@ YUI.add('yui-log', function (Y) {
 		LOGEVENT = 'yui:log',
 		UNDEFINED = 'undefined',
 		LEVELS = {
-			debug : 1,
-			info : 1,
-			warn : 1,
-			error : 1
+			debug: 1,
+			info: 1,
+			warn: 1,
+			error: 1
 		};
 
 		/**
@@ -3748,14 +3748,14 @@ YUI.add('yui-log', function (Y) {
 
 						if (publisher == Y && (!publisher.getEvent(LOGEVENT))) {
 							publisher.publish(LOGEVENT, {
-								broadcast : 2
+								broadcast: 2
 							});
 						}
 
 						publisher.fire(LOGEVENT, {
-							msg : msg,
-							cat : cat,
-							src : src
+							msg: msg,
+							cat: cat,
+							src: src
 						});
 					}
 				}
@@ -3784,7 +3784,7 @@ YUI.add('yui-log', function (Y) {
 	})();
 
 }, '3.2.0', {
-	requires : ['yui-base']
+	requires: ['yui-base']
 });
 YUI.add('yui-later', function (Y) {
 
@@ -3838,9 +3838,9 @@ YUI.add('yui-later', function (Y) {
 			id = (periodic) ? setInterval(f, when) : setTimeout(f, when);
 
 			return {
-				id : id,
-				interval : periodic,
-				cancel : function () {
+				id: id,
+				interval: periodic,
+				cancel: function () {
 					if (this.interval) {
 						clearInterval(id);
 					} else {
@@ -3856,7 +3856,7 @@ YUI.add('yui-later', function (Y) {
 	})();
 
 }, '3.2.0', {
-	requires : ['yui-base']
+	requires: ['yui-base']
 });
 YUI.add('yui-throttle', function (Y) {
 
@@ -3907,9 +3907,9 @@ YUI.add('yui-throttle', function (Y) {
 
 
 }, '3.2.0', {
-	requires : ['yui-base']
+	requires: ['yui-base']
 });
 
 YUI.add('yui', function (Y) {}, '3.2.0', {
-	use : ['yui-base', 'get', 'features', 'rls', 'intl-base', 'yui-log', 'yui-later', 'yui-throttle']
+	use: ['yui-base', 'get', 'features', 'rls', 'intl-base', 'yui-log', 'yui-later', 'yui-throttle']
 });

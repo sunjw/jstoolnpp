@@ -1,23 +1,23 @@
 var FileManager = {
-	funcBg : null,
-	multilanTitles : null,
-	inputChecks : null,
-	selectedItems : null,
-	sortName : null,
-	sortOrder : null,
-	isSearch : null,
-	delayID : 0,
-	miniMainViewHeight : 120,
-	isIE : null,
-	funcDialog : {
-		body : null,
-		header : null,
-		divInput : null,
-		divDelete : null,
-		divAudio : null,
-		divWaiting : null
+	funcBg: null,
+	multilanTitles: null,
+	inputChecks: null,
+	selectedItems: null,
+	sortName: null,
+	sortOrder: null,
+	isSearch: null,
+	delayID: 0,
+	miniMainViewHeight: 120,
+	isIE: null,
+	funcDialog: {
+		body: null,
+		header: null,
+		divInput: null,
+		divDelete: null,
+		divAudio: null,
+		divWaiting: null
 	},
-	stopBubble : function (e) {
+	stopBubble: function (e) {
 		var e = e ? e : window.event;
 		if (window.event) {
 			e.cancelBubble = true;
@@ -25,24 +25,24 @@ var FileManager = {
 			e.stopPropagation();
 		}
 	},
-	doNothing : function () {
+	doNothing: function () {
 		return;
 	},
-	getItemCheckbox : function (item) {
+	getItemCheckbox: function (item) {
 		return $(item.children().get(0)).children().get(0);
 	},
-	detailViewItemOver : function (item) {
+	detailViewItemOver: function (item) {
 		var detailViewItem = $(item);
 		detailViewItem.addClass("selected");
 	},
-	detailViewItemOut : function (item) {
+	detailViewItemOut: function (item) {
 		var detailViewItem = $(item);
 		var checkBox = FileManager.getItemCheckbox(detailViewItem);
 		if (checkBox.checked != true) {
 			detailViewItem.removeClass("selected");
 		}
 	},
-	detailViewItemClicked : function (item) {
+	detailViewItemClicked: function (item) {
 		var detailViewItem = $(item);
 		var checkBox = FileManager.getItemCheckbox(detailViewItem);
 		if (checkBox.checked) {
@@ -53,18 +53,18 @@ var FileManager = {
 		}
 		FileManager.viewItemCheck();
 	},
-	largeiconViewItemOver : function (item) {
+	largeiconViewItemOver: function (item) {
 		var largeiconViewItem = $(item);
 		largeiconViewItem.addClass("selected");
 	},
-	largeiconViewItemOut : function (item) {
+	largeiconViewItemOut: function (item) {
 		var largeiconViewItem = $(item);
 		var checkBox = FileManager.getItemCheckbox(largeiconViewItem);
 		if (checkBox.checked != true) {
 			largeiconViewItem.removeClass("selected");
 		}
 	},
-	largeiconViewItemClicked : function (item) {
+	largeiconViewItemClicked: function (item) {
 		var largeiconViewItem = $(item);
 		var checkBox = FileManager.getItemCheckbox(largeiconViewItem);
 		if (checkBox.checked) {
@@ -75,7 +75,7 @@ var FileManager = {
 		}
 		FileManager.viewItemCheck();
 	},
-	viewItemCheck : function () {
+	viewItemCheck: function () {
 		FileManager.setButton("toolbarCut", "images/toolbar-cut-disable.gif", FileManager.doNothing, "disable", "");
 		FileManager.setButton("toolbarCopy", "images/toolbar-copy-disable.gif", FileManager.doNothing, "disable", "");
 		FileManager.setButton("toolbarRename", "images/toolbar-rename-disable.gif", FileManager.doNothing, "disable", "");
@@ -103,7 +103,7 @@ var FileManager = {
 			}
 		}
 	},
-	setButton : function (className, src, clickFunc, addClass, removeClass) {
+	setButton: function (className, src, clickFunc, addClass, removeClass) {
 		var buttons = $("div#toolbar .toolbarButton");
 		for (var i = 0; i < buttons.length; i++) {
 			var button = $(buttons.get(i));
@@ -118,53 +118,53 @@ var FileManager = {
 			}
 		}
 	},
-	clickRename : function () {
+	clickRename: function () {
 		FileManager.setOldname();
 		FileManager.displayFuncDialog("func/post.func.php", "rename", "rename", null);
 	},
-	clickNewFolder : function () {
+	clickNewFolder: function () {
 		FileManager.displayFuncDialog("func/post.func.php", "newfolder", "new folder", null);
 	},
-	clickCut : function () {
+	clickCut: function () {
 		FileManager.sendAjaxOper("cut");
 	},
-	clickCopy : function () {
+	clickCopy: function () {
 		FileManager.sendAjaxOper("copy");
 	},
-	clickPaste : function () {
+	clickPaste: function () {
 		var subdir = $("input#subdir").attr("value");
 		var returnURL = $("input#return").val();
 		FileManager.displayFuncDialog("", "waiting", "waiting", null);
 		$.post("func/post.func.php", {
-			"oper" : "paste",
-			"subdir" : subdir,
-			"return" : returnURL
+			"oper": "paste",
+			"subdir": subdir,
+			"return": returnURL
 		}, function (data) {
 			window.location.reload();
 		});
 	},
-	clickDelete : function () {
+	clickDelete: function () {
 		FileManager.displayFuncDialog("", "delete", "delete", null);
 	},
-	doDelete : function () {
+	doDelete: function () {
 		var funcDelete = $("div#funcDelete");
 		funcDelete.css("display", "none");
 		FileManager.funcBg.get(0).onclick = FileManager.doNothing;
 		FileManager.displayFuncDialog("", "waiting", "waiting", null);
 		var itemsStr = FileManager.selectedItems.join("|");
 		$.post("func/post.func.php", {
-			"oper" : "delete",
-			"items" : itemsStr
+			"oper": "delete",
+			"items": itemsStr
 		}, function (data) {
 			if (data == "ok") {
 				window.location.reload();
 			}
 		});
 	},
-	clickUpload : function () {
+	clickUpload: function () {
 		FileManager.displayFuncDialog("func/post.func.php", "upload", "upload", null);
 	},
-	selectAll : function () {
+	selectAll: function () {
 		var count = FileManager.inputChecks.length;
 		for (var i = 0; i < count; i++) {
 			var checkBox = $(FileManager.inputChecks.get(i));
@@ -172,7 +172,7 @@ var FileManager = {
 		}
 		FileManager.viewItemCheck();
 	},
-	deselect : function () {
+	deselect: function () {
 		var count = FileManager.inputChecks.length;
 		for (var i = 0; i < count; i++) {
 			var checkBox = $(FileManager.inputChecks.get(i));
@@ -180,14 +180,14 @@ var FileManager = {
 		}
 		FileManager.viewItemCheck();
 	},
-	setSortArrow : function (name, order) {
+	setSortArrow: function (name, order) {
 		FileManager.sortName = name;
 		FileManager.sortOrder = order;
 	},
-	setSearchMode : function (isSearch) {
+	setSearchMode: function (isSearch) {
 		FileManager.isSearch = isSearch;
 	},
-	getMessage : function () {
+	getMessage: function () {
 		$.get("func/getmessage.ajax.php", function (data) {
 			if (data != "") {
 				var phpfmMessage = $("#phpfmMessage");
@@ -210,19 +210,19 @@ var FileManager = {
 			}
 		});
 	},
-	closeMessage : function () {
+	closeMessage: function () {
 		$("#phpfmMessage").fadeOut();
 	},
-	getLeftMargin : function () {
+	getLeftMargin: function () {
 		var viewWidth = document.documentElement.clientWidth;
 		var leftMargin = (viewWidth - 420) / 2;
 		return leftMargin;
 	},
-	sendAjaxOper : function (oper) {
+	sendAjaxOper: function (oper) {
 		var itemsStr = FileManager.selectedItems.join("|");
 		$.post("func/post.func.php", {
-			"oper" : oper,
-			"items" : itemsStr
+			"oper": oper,
+			"items": itemsStr
 		}, function (data) {
 			if (data == "ok" && FileManager.isSearch == false) {
 				FileManager.setButton("toolbarPaste", "images/toolbar-paste.gif", FileManager.clickPaste, "", "disable");
@@ -232,7 +232,7 @@ var FileManager = {
 		});
 		setTimeout("FileManager.getMessage()", 500);
 	},
-	setOldname : function () {
+	setOldname: function () {
 		$("div#oldnameLine").css("display", "block");
 		var oldPathInput = $("input#renamePath");
 		var oldnameInput = $("input#oldname");
@@ -243,13 +243,13 @@ var FileManager = {
 		oldnameInput.attr("value", oldname);
 		newnameInput.attr("value", oldname);
 	},
-	cleanOldname : function () {
+	cleanOldname: function () {
 		var oldnameInput = FileManager.funcDialog.body.find("input#oldname");
 		var newnameInput = FileManager.funcDialog.body.find("input#newname");
 		oldnameInput.attr("value", "");
 		newnameInput.attr("value", "");
 	},
-	initFuncDialog : function () {
+	initFuncDialog: function () {
 		FileManager.funcBg = $("div#funcBg");
 		FileManager.funcDialog.body = $("div#funcDialog");
 		FileManager.funcDialog.header = FileManager.funcDialog.body.children("div.divHeader");
@@ -279,7 +279,7 @@ var FileManager = {
 			funcClose.get(i).onclick = FileManager.closeFunc;
 		}
 	},
-	displayFuncBg : function (canClose) {
+	displayFuncBg: function (canClose) {
 		if (canClose) {
 			FileManager.funcBg.get(0).onclick = FileManager.closeFunc;
 			FileManager.funcDialog.header.find(".funcClose").css("display", "block");
@@ -290,7 +290,7 @@ var FileManager = {
 		FileManager.funcBg.css("height", document.documentElement.scrollHeight + "px");
 		FileManager.funcBg.css("display", "block");
 	},
-	displayFuncDialog : function (action, oper, title, data) {
+	displayFuncDialog: function (action, oper, title, data) {
 		var funcDialog = FileManager.funcDialog.body;
 		var divHeader = FileManager.funcDialog.header;
 		var divInput = FileManager.funcDialog.divInput;
@@ -341,7 +341,7 @@ var FileManager = {
 			divWaiting.addClass("hidden");
 			var audioLink = data.link;
 			AudioPlayer.embed("divAudioPlayer", {
-				soundFile : audioLink
+				soundFile: audioLink
 			});
 			var divLink = divAudio.find("div#link");
 			divLink.html("<a href=\"" + audioLink + "\">"
@@ -359,7 +359,7 @@ var FileManager = {
 			break;
 		}
 	},
-	closeFunc : function () {
+	closeFunc: function () {
 		if (FileManager.funcDialog.body.is(":visible"))
 			FileManager.funcDialog.body.fadeOut();
 		FileManager.funcDialog.body.find("div#oldnameLine").css("display", "none");
@@ -371,7 +371,7 @@ var FileManager = {
 			funcAudioPlayer.fadeOut();
 		}
 	},
-	changeMainViewListHeight : function () {
+	changeMainViewListHeight: function () {
 		var mainViewList = $("div#mainViewList");
 		var mainViewListOffset = mainViewList.offset();
 		var footerHeight = $("div#footer").height();
@@ -387,15 +387,15 @@ var FileManager = {
 			mainViewList.css("overflow", "auto");
 		}
 	},
-	toolbarButtonMouseIn : function () {
+	toolbarButtonMouseIn: function () {
 		if (!$(this).hasClass("disable")) {
 			$(this).css("border-bottom", "1px solid #B8D1ED");
 		}
 	},
-	toolbarButtonMouseOut : function () {
+	toolbarButtonMouseOut: function () {
 		$(this).css("border-bottom", "1px solid white");
 	},
-	initToolbar : function () {
+	initToolbar: function () {
 		var buttons = $("div#toolbar .toolbarButton");
 		if (buttons.filter(".toolbarBack").hasClass("disable")) {
 			buttons.filter(".toolbarBack").find("img").attr("src", "images/toolbar-back-disable.gif");
@@ -424,7 +424,7 @@ var FileManager = {
 				FileManager.deselect();
 		});
 	},
-	initMainView : function () {
+	initMainView: function () {
 		FileManager.changeMainViewListHeight();
 		$(window).resize(FileManager.changeMainViewListHeight);
 		var detailViewItems = $("ul#detailView");
@@ -491,25 +491,25 @@ var FileManager = {
 		}
 		FileManager.viewItemCheck();
 	},
-	initAudioPlayer : function () {
+	initAudioPlayer: function () {
 		AudioPlayer.setup("images/player.swf", {
-			width : 290,
-			initialvolume : 100
+			width: 290,
+			initialvolume: 100
 		});
 		$("a.audioPlayer").click(function () {
 			var audioLink = $(this).attr("href");
 			var audioTitle = $(this).attr("title");
 			FileManager.displayFuncDialog("", "audio", "audio", {
-				link : audioLink,
-				title : audioTitle
+				link: audioLink,
+				title: audioTitle
 			});
 			return false;
 		});
 	},
-	initMediaPreview : function () {
+	initMediaPreview: function () {
 		$('a.lightboxImg').lightBox({
-			overlayOpacity : 0.5,
-			autoAdapt : true
+			overlayOpacity: 0.5,
+			autoAdapt: true
 		});
 		FileManager.initAudioPlayer();
 	}
@@ -520,10 +520,10 @@ FileManager.init = function () {
 	var item = $(str);
 	item.addClass("sort" + FileManager.sortOrder);
 	jqMenu.setup({
-		menuItemsSelector : ".menuContainer",
-		menuButtonSelector : ".menuButton",
-		subMenuSelector : ".subMenu",
-		inlineShadow : "transparent url('images/shadow.png') no-repeat right bottom"
+		menuItemsSelector: ".menuContainer",
+		menuButtonSelector: ".menuButton",
+		subMenuSelector: ".subMenu",
+		inlineShadow: "transparent url('images/shadow.png') no-repeat right bottom"
 	});
 	jqMenu.init();
 	FileManager.initToolbar();

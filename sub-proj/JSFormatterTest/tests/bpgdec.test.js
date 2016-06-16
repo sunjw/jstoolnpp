@@ -73,19 +73,19 @@ n.postRun = [];
 for (v in p)
 	p.hasOwnProperty(v) && (n[v] = p[v]);
 var B = {
-	ca : function (a) {
+	ca: function (a) {
 		fa = a
 	},
-	Z : function () {
+	Z: function () {
 		return fa
 	},
-	D : function () {
+	D: function () {
 		return A
 	},
-	J : function (a) {
+	J: function (a) {
 		A = a
 	},
-	H : function (a) {
+	H: function (a) {
 		switch (a) {
 		case "i1":
 		case "i8":
@@ -104,28 +104,28 @@ var B = {
 			return "*" === a[a.length - 1] ? B.p : "i" === a[0] ? (a = parseInt(a.substr(1)), z(0 === a % 8), a / 8) : 0
 		}
 	},
-	Y : function (a) {
+	Y: function (a) {
 		return Math.max(B.H(a), B.p)
 	},
-	da : 16,
-	oa : function (a, d, c) {
+	da: 16,
+	oa: function (a, d, c) {
 		return !c && ("i64" == a || "double" == a) ? 8 : !a ? Math.min(d, 8) : Math.min(d || (a ? B.Y(a) : 0), B.p)
 	},
-	A : function (a,
+	A: function (a,
 		d, c) {
 		return c && c.length ? (c.splice || (c = Array.prototype.slice.call(c)), c.splice(0, 0, d), n["dynCall_" + a].apply(k, c)) : n["dynCall_" + a].call(k, d)
 	},
-	n : [],
-	M : function (a) {
+	n: [],
+	M: function (a) {
 		for (var d = 0; d < B.n.length; d++)
 			if (!B.n[d])
 				return B.n[d] = a, 2 * (1 + d);
 		b("Finished up all reserved function pointers. Use a higher value for RESERVED_FUNCTION_POINTERS.")
 	},
-	ba : function (a) {
+	ba: function (a) {
 		B.n[(a - 2) / 2] = k
 	},
-	pa : function (a, d) {
+	pa: function (a, d) {
 		B.u || (B.u = {});
 		var c = B.u[a];
 		if (c)
@@ -143,12 +143,12 @@ var B = {
 		}
 		return B.u[a] = f
 	},
-	g : function (a) {
+	g: function (a) {
 		B.g.C || (B.g.C = {});
 		B.g.C[a] || (B.g.C[a] = 1, n.e(a))
 	},
-	B : {},
-	ra : function (a, d) {
+	B: {},
+	ra: function (a, d) {
 		z(d);
 		B.B[d] || (B.B[d] = {});
 		var c = B.B[d];
@@ -157,7 +157,7 @@ var B = {
 		});
 		return c[a]
 	},
-	F : function () {
+	F: function () {
 		var a = [],
 		d = 0;
 		this.$ = function (c) {
@@ -186,22 +186,22 @@ var B = {
 			return d
 		}
 	},
-	qa : function () {
+	qa: function () {
 		b("You must build with -s RETAIN_COMPILER_SETTINGS=1 for Runtime.getCompilerSetting or emscripten_get_compiler_setting to work")
 	},
-	o : function (a) {
+	o: function (a) {
 		var d = A;
 		A = A + a | 0;
 		A = A + 15 & -16;
 		return d
 	},
-	K : function (a) {
+	K: function (a) {
 		var d = F;
 		F = F + a | 0;
 		F = F + 15 & -16;
 		return d
 	},
-	k : function (a) {
+	k: function (a) {
 		var d =
 			H;
 		H = H + a | 0;
@@ -209,15 +209,15 @@ var B = {
 		H >= I && E("Cannot enlarge memory arrays. Either (1) compile with -s TOTAL_MEMORY=X with X higher than the current value " + I + ", (2) compile with ALLOW_MEMORY_GROWTH which adjusts the size at runtime but prevents some optimizations, or (3) set Module.TOTAL_MEMORY before the program runs.");
 		return d
 	},
-	q : function (a, d) {
+	q: function (a, d) {
 		return Math.ceil(a / (d ? d : 16)) * (d ? d : 16)
 	},
-	ua : function (a, d, c) {
+	ua: function (a, d, c) {
 		return c ?  + (a >>> 0) + 4294967296 *  + (d >>> 0) :  + (a >>> 0) + 4294967296 *  + (d | 0)
 	},
-	L : 8,
-	p : 4,
-	ea : 0
+	L: 8,
+	p: 4,
+	ea: 0
 };
 n.Runtime = B;
 B.addFunction = B.M;
@@ -240,33 +240,33 @@ var ia, ja;
 	function a(a) {
 		a = a.toString().match(f).slice(1);
 		return {
-			arguments : a[0],
-			body : a[1],
-			returnValue : a[2]
+			arguments: a[0],
+			body: a[1],
+			returnValue: a[2]
 		}
 	}
 	var d = 0,
 	c = {
-		stackSave : function () {
+		stackSave: function () {
 			d = B.D()
 		},
-		stackRestore : function () {
+		stackRestore: function () {
 			B.J(d)
 		},
-		arrayToC : function (a) {
+		arrayToC: function (a) {
 			var c = B.o(a.length);
 			ka(a, c);
 			return c
 		},
-		stringToC : function (a) {
+		stringToC: function (a) {
 			var c = 0;
 			a !== k && (void 0 !== a && 0 !== a) && (c = B.o((a.length << 2) + 1), la(a, c));
 			return c
 		}
 	},
 	e = {
-		string : c.stringToC,
-		array : c.arrayToC
+		string: c.stringToC,
+		array: c.arrayToC
 	};
 	ja = function (a, f, g, h) {
 		var a = ha(a),
@@ -507,7 +507,7 @@ function wa(a) {
 			t = a.substr(i + m, r), i += m + r;
 		C = l;
 		"I" === a[i] ? (i++, r = d(j), m = d(j, 1, j), g += m[0] + " " + t + "<" + r.join(", ") + ">") : g = t;
-		a : for (; i < a.length && 0 < e--; )
+		a: for (; i < a.length && 0 < e--; )
 			if (t = a[i++], t in q)
 				h.push(q[t]);
 			else
@@ -558,23 +558,23 @@ function wa(a) {
 	}
 	var i = 3,
 	q = {
-		v : "void",
-		b : "bool",
-		c : "char",
-		s : "short",
-		i : "int",
-		l : "long",
-		f : "float",
-		d : "double",
-		w : "wchar_t",
-		a : "signed char",
-		h : "unsigned char",
-		t : "unsigned short",
-		j : "unsigned int",
-		m : "unsigned long",
-		x : "long long",
-		y : "unsigned long long",
-		z : "..."
+		v: "void",
+		b: "bool",
+		c: "char",
+		s: "short",
+		i: "int",
+		l: "long",
+		f: "float",
+		d: "double",
+		w: "wchar_t",
+		a: "signed char",
+		h: "unsigned char",
+		t: "unsigned short",
+		j: "unsigned int",
+		m: "unsigned long",
+		x: "long long",
+		y: "unsigned long long",
+		z: "..."
 	},
 	s = [],
 	C = j,
@@ -600,7 +600,7 @@ function wa(a) {
 }
 function ya() {
 	var a;
-	a : {
+	a: {
 		a = Error();
 		if (!a.stack) {
 			try {
@@ -817,21 +817,21 @@ var gb = P([8, 7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3,
 			0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "i8", 3), hb = P([8, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 7, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 6, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0, 5, 0, 1, 0, 2, 0, 1, 0, 3,
 			0, 1, 0, 2, 0, 1, 0, 4, 0, 1, 0, 2, 0, 1, 0, 3, 0, 1, 0, 2, 0, 1, 0], "i8", 3);
 n.O = {
-	Math : Math,
-	Int8Array : Int8Array,
-	Int16Array : Int16Array,
-	Int32Array : Int32Array,
-	Uint8Array : Uint8Array,
-	Uint16Array : Uint16Array,
-	Uint32Array : Uint32Array,
-	Float32Array : Float32Array,
-	Float64Array : Float64Array
+	Math: Math,
+	Int8Array: Int8Array,
+	Int16Array: Int16Array,
+	Int32Array: Int32Array,
+	Uint8Array: Uint8Array,
+	Uint16Array: Uint16Array,
+	Uint32Array: Uint32Array,
+	Float32Array: Float32Array,
+	Float64Array: Float64Array
 };
 n.P = {
-	abort : E,
-	assert : z,
-	min : oa,
-	invoke_iiii : function (a, d, c, e) {
+	abort: E,
+	assert: z,
+	min: oa,
+	invoke_iiii: function (a, d, c, e) {
 		try {
 			return n.dynCall_iiii(a, d, c, e)
 		} catch (f) {
@@ -839,7 +839,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_viiiiiiiiii : function (a, d, c, e, f, g, h, i, q, s, C) {
+	invoke_viiiiiiiiii: function (a, d, c, e, f, g, h, i, q, s, C) {
 		try {
 			n.dynCall_viiiiiiiiii(a, d, c, e, f, g, h, i, q, s, C)
 		} catch (m) {
@@ -847,7 +847,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_viiiiiii : function (a, d, c, e, f, g, h, i) {
+	invoke_viiiiiii: function (a, d, c, e, f, g, h, i) {
 		try {
 			n.dynCall_viiiiiii(a, d, c, e, f, g, h, i)
 		} catch (q) {
@@ -855,7 +855,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_viiiiiiiiiiiii : function (a,
+	invoke_viiiiiiiiiiiii: function (a,
 		d, c, e, f, g, h, i, q, s, C, m, u, Q) {
 		try {
 			n.dynCall_viiiiiiiiiiiii(a, d, c, e, f, g, h, i, q, s, C, m, u, Q)
@@ -864,7 +864,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_vi : function (a, d) {
+	invoke_vi: function (a, d) {
 		try {
 			n.dynCall_vi(a, d)
 		} catch (c) {
@@ -872,7 +872,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_vii : function (a, d, c) {
+	invoke_vii: function (a, d, c) {
 		try {
 			n.dynCall_vii(a, d, c)
 		} catch (e) {
@@ -880,7 +880,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_iiiiiii : function (a, d, c, e, f, g, h) {
+	invoke_iiiiiii: function (a, d, c, e, f, g, h) {
 		try {
 			return n.dynCall_iiiiiii(a, d, c, e, f, g, h)
 		} catch (i) {
@@ -889,7 +889,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_ii : function (a, d) {
+	invoke_ii: function (a, d) {
 		try {
 			return n.dynCall_ii(a, d)
 		} catch (c) {
@@ -897,7 +897,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_viii : function (a, d, c, e) {
+	invoke_viii: function (a, d, c, e) {
 		try {
 			n.dynCall_viii(a, d, c, e)
 		} catch (f) {
@@ -905,7 +905,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_viiiiiiii : function (a, d, c, e, f, g, h, i, q) {
+	invoke_viiiiiiii: function (a, d, c, e, f, g, h, i, q) {
 		try {
 			n.dynCall_viiiiiiii(a, d, c, e, f, g, h, i, q)
 		} catch (s) {
@@ -913,7 +913,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_iiiii : function (a, d, c, e, f) {
+	invoke_iiiii: function (a, d, c, e, f) {
 		try {
 			return n.dynCall_iiiii(a, d, c, e, f)
 		} catch (g) {
@@ -922,7 +922,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_viiiiii : function (a, d, c, e, f, g, h) {
+	invoke_viiiiii: function (a, d, c, e, f, g, h) {
 		try {
 			n.dynCall_viiiiii(a, d, c, e, f, g, h)
 		} catch (i) {
@@ -930,7 +930,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_iii : function (a, d, c) {
+	invoke_iii: function (a, d, c) {
 		try {
 			return n.dynCall_iii(a, d, c)
 		} catch (e) {
@@ -938,7 +938,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_iiiiii : function (a, d, c, e, f, g) {
+	invoke_iiiiii: function (a, d, c, e, f, g) {
 		try {
 			return n.dynCall_iiiiii(a, d, c, e, f, g)
 		} catch (h) {
@@ -946,7 +946,7 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	invoke_viiii : function (a, d, c, e, f) {
+	invoke_viiii: function (a, d, c, e, f) {
 		try {
 			n.dynCall_viiii(a,
 				d, c, e, f)
@@ -955,10 +955,10 @@ n.P = {
 			$.setThrew(1, 0)
 		}
 	},
-	_lrint : function () {
+	_lrint: function () {
 		return $a.apply(k, arguments)
 	},
-	_sysconf : function (a) {
+	_sysconf: function (a) {
 		switch (a) {
 		case 30:
 			return 4096;
@@ -1112,36 +1112,36 @@ n.P = {
 		db(22);
 		return -1
 	},
-	_abort : function () {
+	_abort: function () {
 		n.abort()
 	},
-	___setErrNo : db,
-	_sbrk : Z,
-	_time : function (a) {
+	___setErrNo: db,
+	_sbrk: Z,
+	_time: function (a) {
 		var d = Date.now() / 1E3 | 0;
 		a && (N[a >> 2] = d);
 		return d
 	},
-	_emscripten_memcpy_big : function (a, d, c) {
+	_emscripten_memcpy_big: function (a, d, c) {
 		S.set(S.subarray(d, d + c), a);
 		return a
 	},
-	_rint : $a,
-	_exit : function (a) {
+	_rint: $a,
+	_exit: function (a) {
 		fb(a)
 	},
-	__exit : fb,
-	___errno_location : function () {
+	__exit: fb,
+	___errno_location: function () {
 		return cb
 	},
-	STACKTOP : A,
-	STACK_MAX : Ea,
-	tempDoublePtr : Ua,
-	ABORT : J,
-	cttz_i8 : hb,
-	ctlz_i8 : gb,
-	NaN : NaN,
-	Infinity : Infinity
+	STACKTOP: A,
+	STACK_MAX: Ea,
+	tempDoublePtr: Ua,
+	ABORT: J,
+	cttz_i8: hb,
+	ctlz_i8: gb,
+	NaN: NaN,
+	Infinity: Infinity
 }; // EMSCRIPTEN_START_ASM
 var $ = (function (global, env, buffer) {
 	"use asm";
@@ -1592,7 +1592,7 @@ var $ = (function (global, env, buffer) {
 						break
 			}
 		while (0);
-		a : do
+		a: do
 			if (!ga) {
 				if (fa) {
 					O = ze(e[t + (G << 1) >> 1] | 0, 0, 65537, 65537) | 0;
@@ -1814,7 +1814,7 @@ var $ = (function (global, env, buffer) {
 		}
 		H = b[t >> 1] | 0;
 		b[w >> 1] = H;
-		b : do
+		b: do
 			if (!(c[p + 13112 >> 2] | 0)) {
 				if (E) {
 					if ((k | 0) == 1 | (G | 0) == 4) {
@@ -4548,7 +4548,7 @@ var $ = (function (global, env, buffer) {
 		c[m >> 2] = u >>> 0 > A >>> 0 ? A : u;
 		u = k + 4 | 0;
 		c[u >> 2] = B >>> 24;
-		a : do
+		a: do
 			if (B >>> 0 <= 67108863) {
 				a[k + 8 >> 0] = 0;
 				l = c[m >> 2] | 0;
@@ -5034,7 +5034,7 @@ var $ = (function (global, env, buffer) {
 		c[j + 64 >> 2] = 0;
 		a[j + 1629 >> 0] = 2;
 		j = ad(r) | 0;
-		a : do
+		a: do
 			if (j >>> 0 > 255) {
 				M = c[k >> 2] | 0;
 				c[g >> 2] = j;
@@ -5508,7 +5508,7 @@ var $ = (function (global, env, buffer) {
 					E = F + 212 | 0;
 					F = F + 220 | 0;
 					B = 0;
-					b : do {
+					b: do {
 						u = (B | 0) > 0 ? 64 : 16;
 						A = (B | 0) > 1;
 						z = B + -2 | 0;
@@ -6037,7 +6037,7 @@ var $ = (function (global, env, buffer) {
 					o = o + 1684 | 0;
 					t = 0;
 					while (1) {
-						c : do
+						c: do
 							if ((y | 0) > -1) {
 								w = t >> n;
 								v = c[m >> 2] | 0;
@@ -7472,7 +7472,7 @@ var $ = (function (global, env, buffer) {
 				return x | 0
 			}
 		while (0);
-		a : do
+		a: do
 			if (((c[f + 24 >> 2] | 0) + -3 | 0) >>> 0 < 2) {
 				n = (c[f + 64 >> 2] | 0) + ($(c[f + 80 >> 2] | 0, n) | 0) | 0;
 				p = c[f + 192 >> 2] | 0;
@@ -8099,7 +8099,7 @@ var $ = (function (global, env, buffer) {
 		c[h >> 2] = 0;
 		t = c[l >> 2] | 0;
 		l = t + o | 0;
-		a : do
+		a: do
 			if (l >>> 0 > f >>> 0)
 				e = d;
 			else {
@@ -8396,7 +8396,7 @@ var $ = (function (global, env, buffer) {
 		j = 0,
 		k = 0;
 		g = i;
-		a : do
+		a: do
 			if ((f | 0) >= 1) {
 				j = a[e >> 0] | 0;
 				h = j & 255;
@@ -9890,7 +9890,7 @@ var $ = (function (global, env, buffer) {
 						ta = pa;
 				while (0);
 				pa = ta & 255;
-				a : do
+				a: do
 					if (ta << 24 >> 24) {
 						ta = na ? ga : 0;
 						if (!(c[(c[m >> 2] | 0) + 13116 >> 2] | 0))
@@ -9981,7 +9981,7 @@ var $ = (function (global, env, buffer) {
 							za = Da & 255;
 							Aa = (d[K + za >> 0] | 0) + va | 0;
 							za = (d[J + za >> 0] | 0) + xa | 0;
-							b : do
+							b: do
 								if ((ya | 0) < 8) {
 									Ha = (d[s + ya >> 0] | 0) + 1 | 0;
 									Na = (ya | 0) == (ra | 0);
@@ -11775,7 +11775,7 @@ var $ = (function (global, env, buffer) {
 		g = i;
 		k = b + 5916 | 0;
 		c[k >> 2] = 0;
-		a : do
+		a: do
 			if ((e | 0) > 1) {
 				m = 0;
 				while (1) {
@@ -11815,12 +11815,12 @@ var $ = (function (global, env, buffer) {
 		}
 		qe(j | 0, d | 0, m | 0) | 0;
 		o = m + 2 | 0;
-		b : do
+		b: do
 			if ((o | 0) < (e | 0)) {
 				l = b + 5924 | 0;
 				b = b + 5920 | 0;
 				n = m;
-				c : while (1) {
+				c: while (1) {
 					p = d + o | 0;
 					q = a[p >> 0] | 0;
 					do
@@ -11933,7 +11933,7 @@ var $ = (function (global, env, buffer) {
 		c[f + 4 >> 2] = b;
 		g = Dd(31328) | 0;
 		c[f + 136 >> 2] = g;
-		a : do
+		a: do
 			if (((g | 0) != 0 ? (c[f + 72 >> 2] = g, c[f + 8 >> 2] = f, j = xd(199) | 0, c[f + 152 >> 2] = j, (j | 0) != 0) : 0) ? (j = Ld() | 0, c[f + 164 >> 2] = j, (j | 0) != 0) : 0) {
 				g = f + 2524 | 0;
 				h = 0;
@@ -12107,7 +12107,7 @@ var $ = (function (global, env, buffer) {
 		c[A >> 2] = 0;
 		y = n + 5948 | 0;
 		c[y >> 2] = 0;
-		a : do
+		a: do
 			if ((I | 0) > 3) {
 				G = n + 6010 | 0;
 				E = n + 5952 | 0;
@@ -12121,7 +12121,7 @@ var $ = (function (global, env, buffer) {
 				r = n + 136 | 0;
 				x = n + 2512 | 0;
 				F = n + 6020 | 0;
-				b : while (1) {
+				b: while (1) {
 					z = (a[G >> 0] | 0) == 0;
 					if (z) {
 						while (1) {
@@ -12293,7 +12293,7 @@ var $ = (function (global, env, buffer) {
 					Oa = n + 5904 | 0;
 					Pa = n + 168 | 0;
 					C = 0;
-					c : while (1) {
+					c: while (1) {
 						c[v >> 2] = c[(c[w >> 2] | 0) + (C << 2) >> 2];
 						c[t >> 2] = c[(c[s >> 2] | 0) + (C << 2) >> 2];
 						db = c[u >> 2] | 0;
@@ -12309,13 +12309,13 @@ var $ = (function (global, env, buffer) {
 						c[eb + 220 >> 2] = db + 8;
 						c[eb + 208 >> 2] = cb + (db >> 3);
 						c[eb + 212 >> 2] = 0;
-						d : do
+						d: do
 							if (Ra) {
 								q = Ra ? -1094995529 : 0;
 								A = 242
 							} else {
 								Ra = Xb(n) | 0;
-								e : do
+								e: do
 									if ((Ra | 0) < 0) {
 										eb = c[B >> 2] | 0;
 										c[m >> 2] = c[x >> 2];
@@ -12411,7 +12411,7 @@ var $ = (function (global, env, buffer) {
 												Ya = c[(c[n + (c[Ya >> 2] << 2) + 272 >> 2] | 0) + 4 >> 2] | 0;
 												if ((Va | 0) != (Ya | 0)) {
 													c[qa >> 2] = Ya;
-													f : do
+													f: do
 														if (Va) {
 															if ((Wa + -16 | 0) >>> 0 > 7 | Xa)
 																break;
@@ -12657,7 +12657,7 @@ var $ = (function (global, env, buffer) {
 														A = 111
 													}
 												while (0);
-												g : do
+												g: do
 													if ((A | 0) == 111) {
 														A = 0;
 														a[Da >> 0] = 0;
@@ -12707,7 +12707,7 @@ var $ = (function (global, env, buffer) {
 														}
 														c[J >> 2] = 0;
 														c[pa >> 2] = 0;
-														h : do
+														h: do
 															if (!(c[H >> 2] | 0)) {
 																switch (Va | 0) {
 																case 9:
@@ -12784,7 +12784,7 @@ var $ = (function (global, env, buffer) {
 															Va = Va & 255
 														}
 														a[Q >> 0] = Va;
-														i : do
+														i: do
 															if (!(a[Wa + 55 >> 0] | 0)) {
 																a[ia >> 0] = 0;
 																c[S >> 2] = 0;
@@ -12828,7 +12828,7 @@ var $ = (function (global, env, buffer) {
 															}
 														while (0);
 														Va = a[Wa + 54 >> 0] | 0;
-														j : do
+														j: do
 															if (Va << 24 >> 24) {
 																do
 																	if (!(a[T >> 0] | 0)) {
@@ -12851,7 +12851,7 @@ var $ = (function (global, env, buffer) {
 												c[Ja >> 2] = 0;
 												if (!((a[Wa + 42 >> 0] | 0) == 0 ? (a[Wa + 43 >> 0] | 0) == 0 : 0))
 													A = 169;
-												k : do
+												k: do
 													if ((A | 0) == 169) {
 														A = 0;
 														eb = bc(Ua) | 0;
@@ -13009,7 +13009,7 @@ var $ = (function (global, env, buffer) {
 												a[(c[r >> 2] | 0) + 303 >> 0] = 0;
 												Sa = c[Ba >> 2] | 0;
 												Ra = c[x >> 2] | 0;
-												l : do
+												l: do
 													if ((Sa | 0) == 2147483647)
 														switch (Ra | 0) {
 														case 18:
@@ -13043,7 +13043,7 @@ var $ = (function (global, env, buffer) {
 														c[Ba >> 2] = -2147483648
 													}
 												while (0);
-												m : do
+												m: do
 													if (a[Aa >> 0] | 0) {
 														Ra = c[r >> 2] | 0;
 														fb = c[qa >> 2] | 0;
@@ -13723,7 +13723,7 @@ var $ = (function (global, env, buffer) {
 			do {
 				M = c[l >> 2] | 0;
 				M = d[((S | 0) == 0 ? M + 1644 | 0 : M + 1645 | 0) >> 0] | 0;
-				a : do
+				a: do
 					if (a[e + S + 2056 >> 0] | 0) {
 						T = (S | 0) == 2;
 						do
@@ -14736,7 +14736,7 @@ var $ = (function (global, env, buffer) {
 					H = 1;
 					F = 48
 				}
-			a : do
+			a: do
 				if ((F | 0) == 48) {
 					F = e + 204 | 0;
 					do
@@ -15948,7 +15948,7 @@ var $ = (function (global, env, buffer) {
 					else
 						C = 0;
 					D = c[8e3 + (C << 2) >> 2] | 0;
-					a : do
+					a: do
 						if (!D) {
 							F = 0;
 							z = 0
@@ -16123,7 +16123,7 @@ var $ = (function (global, env, buffer) {
 									}
 							}
 						while (0);
-						b : do
+						b: do
 							if (A >>> 0 >= 16) {
 								c[z + 4 >> 2] = a | 3;
 								c[z + (a | 4) >> 2] = A | 1;
@@ -16190,7 +16190,7 @@ var $ = (function (global, env, buffer) {
 									e = 0;
 								else
 									e = 25 - (e >>> 1) | 0;
-								c : do
+								c: do
 									if ((c[f + 4 >> 2] & -8 | 0) != (A | 0)) {
 										e = A << e;
 										while (1) {
@@ -16314,10 +16314,10 @@ var $ = (function (global, env, buffer) {
 			i = b;
 			return H | 0
 		}
-		d : do
+		d: do
 			if (!(c[2035] & 4)) {
 				B = c[1930] | 0;
-				e : do
+				e: do
 					if (B) {
 						A = 8144 | 0;
 						while (1) {
@@ -16378,7 +16378,7 @@ var $ = (function (global, env, buffer) {
 							A = 0
 					}
 				while (0);
-				f : do
+				f: do
 					if ((o | 0) == 191) {
 						o = 0 - z | 0;
 						if ((p | 0) != (-1 | 0)) {
@@ -16422,7 +16422,7 @@ var $ = (function (global, env, buffer) {
 			if (r >>> 0 > (c[2033] | 0) >>> 0)
 				c[2033] = r;
 			r = c[1930] | 0;
-			g : do
+			g: do
 				if (r) {
 					v = 8144 | 0;
 					while (1) {
@@ -16489,7 +16489,7 @@ var $ = (function (global, env, buffer) {
 						k = p + j | 0;
 						m = o - (p + h) - a | 0;
 						c[p + (h + 4) >> 2] = a | 3;
-						h : do
+						h: do
 							if ((o | 0) != (c[1930] | 0)) {
 								if ((o | 0) == (c[1929] | 0)) {
 									H = (c[1926] | 0) + m | 0;
@@ -16504,7 +16504,7 @@ var $ = (function (global, env, buffer) {
 								if ((t & 3 | 0) == 1) {
 									a = t & -8;
 									s = t >>> 3;
-									i : do
+									i: do
 										if (t >>> 0 >= 256) {
 											l = c[p + ((n | 24) + q) >> 2] | 0;
 											u = c[p + (q + 12 + n) >> 2] | 0;
@@ -16717,7 +16717,7 @@ var $ = (function (global, env, buffer) {
 									e = 0;
 								else
 									e = 25 - (e >>> 1) | 0;
-								j : do
+								j: do
 									if ((c[l + 4 >> 2] & -8 | 0) != (m | 0)) {
 										e = m << e;
 										while (1) {
@@ -16882,7 +16882,7 @@ var $ = (function (global, env, buffer) {
 							e = 0;
 						else
 							e = 25 - (e >>> 1) | 0;
-						k : do
+						k: do
 							if ((c[f + 4 >> 2] & -8 | 0) != (d | 0)) {
 								e = d << e;
 								while (1) {
@@ -17409,14 +17409,14 @@ var $ = (function (global, env, buffer) {
 		c[d + 16 >> 2] = 0;
 		a = c[1925] | 0;
 		h = 1 << f;
-		a : do
+		a: do
 			if (a & h) {
 				g = c[g >> 2] | 0;
 				if ((f | 0) == 31)
 					f = 0;
 				else
 					f = 25 - (f >>> 1) | 0;
-				b : do
+				b: do
 					if ((c[g + 4 >> 2] & -8 | 0) != (m | 0)) {
 						f = m << f;
 						a = g;
@@ -18231,7 +18231,7 @@ var $ = (function (global, env, buffer) {
 			f = 0;
 		else
 			f = 25 - (f >>> 1) | 0;
-		a : do
+		a: do
 			if ((c[g + 4 >> 2] & -8 | 0) != (n | 0)) {
 				f = n << f;
 				a = g;
@@ -19030,45 +19030,45 @@ var $ = (function (global, env, buffer) {
 	var Ra = [df, id];
 	var Sa = [ef, dc, ec, fc, gc, hc, ic, jc, kc, Bc, Cc, Dc, Ec, ef, ef, ef];
 	return {
-		_i64Subtract : me,
-		_free : fe,
-		_bpg_decoder_decode : Zd,
-		_bpg_decoder_start : Xd,
-		_realloc : ge,
-		_i64Add : ne,
-		_bpg_decoder_open : Yd,
-		_bitshift64Ashr : le,
-		_memset : oe,
-		_bpg_decoder_close : $d,
-		_strlen : se,
-		_malloc : ee,
-		_memcpy : qe,
-		_bpg_decoder_get_line : Ud,
-		_bpg_decoder_get_info : Td,
-		_llvm_bswap_i32 : re,
-		_bitshift64Shl : pe,
-		runPostSets : ke,
-		stackAlloc : Ta,
-		stackSave : Ua,
-		stackRestore : Va,
-		setThrew : Wa,
-		setTempRet0 : Za,
-		getTempRet0 : _a,
-		dynCall_iiii : De,
-		dynCall_viiiiiiiiii : Ee,
-		dynCall_viiiiiii : Fe,
-		dynCall_viiiiiiiiiiiii : Ge,
-		dynCall_vi : He,
-		dynCall_vii : Ie,
-		dynCall_iiiiiii : Je,
-		dynCall_ii : Ke,
-		dynCall_viii : Le,
-		dynCall_viiiiiiii : Me,
-		dynCall_iiiii : Ne,
-		dynCall_viiiiii : Oe,
-		dynCall_iii : Pe,
-		dynCall_iiiiii : Qe,
-		dynCall_viiii : Re
+		_i64Subtract: me,
+		_free: fe,
+		_bpg_decoder_decode: Zd,
+		_bpg_decoder_start: Xd,
+		_realloc: ge,
+		_i64Add: ne,
+		_bpg_decoder_open: Yd,
+		_bitshift64Ashr: le,
+		_memset: oe,
+		_bpg_decoder_close: $d,
+		_strlen: se,
+		_malloc: ee,
+		_memcpy: qe,
+		_bpg_decoder_get_line: Ud,
+		_bpg_decoder_get_info: Td,
+		_llvm_bswap_i32: re,
+		_bitshift64Shl: pe,
+		runPostSets: ke,
+		stackAlloc: Ta,
+		stackSave: Ua,
+		stackRestore: Va,
+		setThrew: Wa,
+		setTempRet0: Za,
+		getTempRet0: _a,
+		dynCall_iiii: De,
+		dynCall_viiiiiiiiii: Ee,
+		dynCall_viiiiiii: Fe,
+		dynCall_viiiiiiiiiiiii: Ge,
+		dynCall_vi: He,
+		dynCall_vii: Ie,
+		dynCall_iiiiiii: Je,
+		dynCall_ii: Ke,
+		dynCall_viii: Le,
+		dynCall_viiiiiiii: Me,
+		dynCall_iiiii: Ne,
+		dynCall_viiiiii: Oe,
+		dynCall_iii: Pe,
+		dynCall_iiiiii: Qe,
+		dynCall_viiii: Re
 	}
 })
 
@@ -19208,15 +19208,15 @@ window.BPGDecoder = function (a) {
 	this.onload = this.imageData = k
 };
 window.BPGDecoder.prototype = {
-	I : n.cwrap("malloc", "number", ["number"]),
-	G : n.cwrap("free", "void", ["number"]),
-	U : n.cwrap("bpg_decoder_open", "number", []),
-	R : n.cwrap("bpg_decoder_decode", "number", ["number", "array", "number"]),
-	S : n.cwrap("bpg_decoder_get_info", "number", ["number", "number"]),
-	V : n.cwrap("bpg_decoder_start", "number", ["number", "number"]),
-	T : n.cwrap("bpg_decoder_get_line", "number", ["number", "number"]),
-	Q : n.cwrap("bpg_decoder_close", "void", ["number"]),
-	load : function (a) {
+	I: n.cwrap("malloc", "number", ["number"]),
+	G: n.cwrap("free", "void", ["number"]),
+	U: n.cwrap("bpg_decoder_open", "number", []),
+	R: n.cwrap("bpg_decoder_decode", "number", ["number", "array", "number"]),
+	S: n.cwrap("bpg_decoder_get_info", "number", ["number", "number"]),
+	V: n.cwrap("bpg_decoder_start", "number", ["number", "number"]),
+	T: n.cwrap("bpg_decoder_get_line", "number", ["number", "number"]),
+	Q: n.cwrap("bpg_decoder_close", "void", ["number"]),
+	load: function (a) {
 		var d = new XMLHttpRequest,
 		c = this;
 		d.open("get",
