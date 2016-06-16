@@ -647,12 +647,12 @@ try { /*@explore*/
 
 		this.ToggleBranch.prototype = {
 			// Another implementation could simply prefix all keys with "#".
-			getMeta : function (name) {
+			getMeta: function (name) {
 				if (FBL.metaNames.indexOf(name) !== -1)
 					return "meta_" + name;
 			},
 
-			get : function (name) // return the toggle branch at name
+			get: function (name) // return the toggle branch at name
 			{
 				var metaName = this.getMeta(name);
 				if (metaName)
@@ -669,7 +669,7 @@ try { /*@explore*/
 				return value;
 			},
 
-			set : function (name, value) // value will be another toggle branch
+			set: function (name, value) // value will be another toggle branch
 			{
 				if (FBTrace.DBG_DOMPLATE)
 					if (value && !(value instanceof ToggleBranch))
@@ -682,7 +682,7 @@ try { /*@explore*/
 					return this.normal[name] = value;
 			},
 
-			remove : function (name) // remove the toggle branch at name
+			remove: function (name) // remove the toggle branch at name
 			{
 				var metaName = this.getMeta(name);
 				if (metaName)
@@ -691,7 +691,7 @@ try { /*@explore*/
 					delete this.normal[name];
 			},
 
-			toString : function () {
+			toString: function () {
 				return "[ToggleBranch]";
 			},
 		};
@@ -1353,8 +1353,8 @@ try { /*@explore*/
 			}
 
 			var coords = {
-				x : 0,
-				y : 0
+				x: 0,
+				y: 0
 			};
 			if (elt) {
 				var view = elt.ownerDocument.defaultView;
@@ -1367,12 +1367,12 @@ try { /*@explore*/
 		this.getLTRBWH = function (elt) {
 			var bcrect,
 			dims = {
-				"left" : 0,
-				"top" : 0,
-				"right" : 0,
-				"bottom" : 0,
-				"width" : 0,
-				"height" : 0
+				"left": 0,
+				"top": 0,
+				"right": 0,
+				"bottom": 0,
+				"width": 0,
+				"height": 0
 			};
 
 			if (elt) {
@@ -1395,8 +1395,8 @@ try { /*@explore*/
 
 		this.getOffsetSize = function (elt) {
 			return {
-				width : elt.offsetWidth,
-				height : elt.offsetHeight
+				width: elt.offsetWidth,
+				height: elt.offsetHeight
 			};
 		};
 
@@ -1461,8 +1461,8 @@ try { /*@explore*/
 			}
 
 			return {
-				before : Math.round((topSpace / element.offsetHeight) + 0.5),
-				after : Math.round((bottomSpace / element.offsetHeight) + 0.5)
+				before: Math.round((topSpace / element.offsetHeight) + 0.5),
+				after: Math.round((bottomSpace / element.offsetHeight) + 0.5)
 			}
 		};
 
@@ -1613,19 +1613,19 @@ try { /*@explore*/
 
 		this.readBoxStyles = function (style) {
 			const styleNames = {
-				"margin-top" : "marginTop",
-				"margin-right" : "marginRight",
-				"margin-left" : "marginLeft",
-				"margin-bottom" : "marginBottom",
-				"border-top-width" : "borderTop",
-				"border-right-width" : "borderRight",
-				"border-left-width" : "borderLeft",
-				"border-bottom-width" : "borderBottom",
-				"padding-top" : "paddingTop",
-				"padding-right" : "paddingRight",
-				"padding-left" : "paddingLeft",
-				"padding-bottom" : "paddingBottom",
-				"z-index" : "zIndex",
+				"margin-top": "marginTop",
+				"margin-right": "marginRight",
+				"margin-left": "marginLeft",
+				"margin-bottom": "marginBottom",
+				"border-top-width": "borderTop",
+				"border-right-width": "borderRight",
+				"border-left-width": "borderLeft",
+				"border-bottom-width": "borderBottom",
+				"padding-top": "paddingTop",
+				"padding-right": "paddingRight",
+				"padding-left": "paddingLeft",
+				"padding-bottom": "paddingBottom",
+				"z-index": "zIndex",
 			};
 
 			var styles = {};
@@ -1864,22 +1864,22 @@ try { /*@explore*/
 		// Whitespace and Entity conversions
 
 		var entityConversionLists = this.entityConversionLists = {
-			normal : {
-				whitespace : {
-					'\t' : '\u200c\u2192',
-					'\n' : '\u200c\u00b6',
-					'\r' : '\u200c\u00ac',
-					' ' : '\u200c\u00b7'
+			normal: {
+				whitespace: {
+					'\t': '\u200c\u2192',
+					'\n': '\u200c\u00b6',
+					'\r': '\u200c\u00ac',
+					' ': '\u200c\u00b7'
 				}
 			},
-			reverse : {
-				whitespace : {
-					'&Tab;' : '\t',
-					'&NewLine;' : '\n',
-					'\u200c\u2192' : '\t',
-					'\u200c\u00b6' : '\n',
-					'\u200c\u00ac' : '\r',
-					'\u200c\u00b7' : ' '
+			reverse: {
+				whitespace: {
+					'&Tab;': '\t',
+					'&NewLine;': '\n',
+					'\u200c\u2192': '\t',
+					'\u200c\u00b6': '\n',
+					'\u200c\u00ac': '\r',
+					'\u200c\u00b7': ' '
 				}
 			}
 		};
@@ -1937,19 +1937,19 @@ try { /*@explore*/
 		// Entity escaping
 
 		var entityConversionRegexes = {
-			normal : {},
-			reverse : {}
+			normal: {},
+			reverse: {}
 		};
 
 		var escapeEntitiesRegEx = {
-			normal : function (list) {
+			normal: function (list) {
 				var chars = [];
 				for (var ch in list) {
 					chars.push(ch);
 				}
 				return new RegExp('([' + chars.join('') + '])', 'gm');
 			},
-			reverse : function (list) {
+			reverse: function (list) {
 				var chars = [];
 				for (var ch in list) {
 					chars.push(ch);
@@ -1989,8 +1989,8 @@ try { /*@explore*/
 				var list = entityConversionLists[direction][name];
 				return String(value).replace(
 					getEscapeRegexp(direction, {
-						group : name,
-						list : list
+						group: name,
+						list: list
 					}),
 					function (ch) {
 					return list[ch];
@@ -2013,9 +2013,9 @@ try { /*@explore*/
 			last = '';
 			if (!len)
 				return [{
-						str : String(str),
-						group : '',
-						name : ''
+						str: String(str),
+						group: '',
+						name: ''
 					}
 				];
 			for (i = 0; i < len; i++) {
@@ -2029,9 +2029,9 @@ try { /*@explore*/
 					//     r = ' ';
 					if (r) {
 						results[ri] = {
-							'str' : r,
-							'class' : list['class'],
-							'extra' : list.extra[cur] ? list['class']
+							'str': r,
+							'class': list['class'],
+							'extra': list.extra[cur] ? list['class']
 							 + list.extra[cur] : ''
 						};
 						break;
@@ -2040,9 +2040,9 @@ try { /*@explore*/
 				// last=cur;
 				if (!r)
 					results[ri] = {
-						'str' : cur,
-						'class' : '',
-						'extra' : ''
+						'str': cur,
+						'class': '',
+						'extra': ''
 					};
 				ri++;
 			}
@@ -2374,24 +2374,24 @@ try { /*@explore*/
 		 */
 		this.optionMenu = function (label, option, tooltiptext) {
 			return {
-				label : label,
-				type : "checkbox",
-				checked : Firebug[option],
-				option : option,
-				tooltiptext : tooltiptext,
-				command : this.bindFixed(Firebug.setPref, Firebug, Firebug.prefDomain,
+				label: label,
+				type: "checkbox",
+				checked: Firebug[option],
+				option: option,
+				tooltiptext: tooltiptext,
+				command: this.bindFixed(Firebug.setPref, Firebug, Firebug.prefDomain,
 					option, !Firebug[option])
 			};
 		};
 
 		this.serviceOptionMenu = function (label, option, tooltiptext) {
 			return {
-				label : label,
-				type : "checkbox",
-				checked : Firebug[option],
-				option : option,
-				tooltiptext : tooltiptext,
-				command : this.bindFixed(Firebug.setPref, Firebug, Firebug.servicePrefDomain,
+				label: label,
+				type: "checkbox",
+				checked: Firebug[option],
+				option: option,
+				tooltiptext: tooltiptext,
+				command: this.bindFixed(Firebug.setPref, Firebug, Firebug.servicePrefDomain,
 					option, !Firebug[option])
 			};
 		};
@@ -2459,7 +2459,7 @@ try { /*@explore*/
 					trace.frames.splice(50, originalLength - 100);
 					var excuse = "(eliding " + (originalLength - 100) + " frames)";
 					trace.frames[50] = new this.StackFrame({
-							href : excuse
+							href: excuse
 						}, 0, excuse, []);
 				}
 
@@ -2480,7 +2480,7 @@ try { /*@explore*/
 				if (FBTrace.DBG_STACK)
 					FBTrace.sysout("lib.getStackFrame " + excuse + " frame\n");
 				return new this.StackFrame({
-					href : excuse
+					href: excuse
 				}, 0, excuse, []);
 			}
 			try {
@@ -2499,10 +2499,10 @@ try { /*@explore*/
 
 					if (FBTrace.DBG_STACK)
 						FBTrace.sysout("lib.getStackFrame " + fncSpec.name, {
-							sourceFile : sourceFile,
-							script : frame.script,
-							fncSpec : fncSpec,
-							analyzer : analyzer
+							sourceFile: sourceFile,
+							script: frame.script,
+							fncSpec: fncSpec,
+							analyzer: analyzer
 						});
 					return new this.StackFrame(sourceFile, lineNo, fncSpec.name, fncSpec.args, frame);
 				} else {
@@ -2512,7 +2512,7 @@ try { /*@explore*/
 					var script = frame.script;
 
 					return new this.StackFrame({
-						href : FBL.normalizeURL(script.fileName)
+						href: FBL.normalizeURL(script.fileName)
 					}, frame.line, script.functionName, [], frame);
 				}
 			} catch (exc) {
@@ -2593,8 +2593,8 @@ try { /*@explore*/
 					context.eventsMonitored = [];
 
 				context.eventsMonitored.push({
-					object : object,
-					type : type
+					object: object,
+					type: type
 				});
 
 				if (!type)
@@ -2659,9 +2659,9 @@ try { /*@explore*/
 
 			if (!found && FBTrace.DBG_ERRORS)
 				FBTrace.sysout("findScriptForFunctionInContext ", {
-					fn : fn,
-					wrapValue : this.jsd.wrapValue(fn),
-					found : found
+					fn: fn,
+					wrapValue: this.jsd.wrapValue(fn),
+					found: found
 				});
 			if (FBTrace.DBG_FUNCTION_NAMES)
 				FBTrace.sysout("findScriptForFunctionInContext found " + (found ? found.tag : "none") + "\n");
@@ -2759,7 +2759,7 @@ try { /*@explore*/
 
 			if (FBTrace.DBG_STACK)
 				FBTrace.sysout("lib.getFunctionArgValues " + frame + " scope: " + frame.scope.jsClassName, {
-					values : values
+					values: values
 				});
 
 			return values;
@@ -2779,12 +2779,12 @@ try { /*@explore*/
 					//?? XXXjjb why are we unwrapping here, scope is a normal object
 					//var value = pvalue ? FBL.unwrapIValue(pvalue.value) : undefined;
 					values.push({
-						name : argName,
-						value : pvalue
+						name: argName,
+						value: pvalue
 					});
 				} else {
 					values.push({
-						name : argName
+						name: argName
 					});
 				}
 			}
@@ -2801,8 +2801,8 @@ try { /*@explore*/
 				var pvalue = scope.getProperty(argName); // jsdIValue in jsdIDebuggerService
 				var value = pvalue ? FBL.unwrapIValue(pvalue.value) : undefined;
 				values.push({
-					name : argName,
-					value : value
+					name: argName,
+					value: value
 				});
 			}
 
@@ -2812,10 +2812,10 @@ try { /*@explore*/
 		this.unwrapIValueObject = function (scope) {
 			scopeVars = {};
 			var listValue = {
-				value : null
+				value: null
 			},
 			lengthValue = {
-				value : 0
+				value: 0
 			};
 			scope.getProperties(listValue, lengthValue);
 
@@ -3086,8 +3086,8 @@ try { /*@explore*/
 					var dots = word.substr(0, innerOffset).split(".").length;
 					var subExpr = word.split(".").slice(0, dots).join(".");
 					return {
-						expr : subExpr,
-						offset : wordOffset
+						expr: subExpr,
+						offset: wordOffset
 					};
 				}
 
@@ -3095,45 +3095,45 @@ try { /*@explore*/
 			}
 
 			return {
-				expr : null,
-				offset : -1
+				expr: null,
+				offset: -1
 			};
 		};
 
 		this.jsKeywords = {
-			"var" : 1,
-			"const" : 1,
-			"class" : 1,
-			"extends" : 1,
-			"import" : 1,
-			"namespace" : 1,
-			"function" : 1,
-			"debugger" : 1,
-			"new" : 1,
-			"delete" : 1,
-			"null" : 1,
-			"undefined" : 1,
-			"true" : 1,
-			"false" : 1,
-			"void" : 1,
-			"typeof" : 1,
-			"instanceof" : 1,
-			"break" : 1,
-			"continue" : 1,
-			"return" : 1,
-			"throw" : 1,
-			"try" : 1,
-			"catch" : 1,
-			"finally" : 1,
-			"if" : 1,
-			"else" : 1,
-			"for" : 1,
-			"while" : 1,
-			"do" : 1,
-			"with" : 1,
-			"switch" : 1,
-			"case" : 1,
-			"default" : 1
+			"var": 1,
+			"const": 1,
+			"class": 1,
+			"extends": 1,
+			"import": 1,
+			"namespace": 1,
+			"function": 1,
+			"debugger": 1,
+			"new": 1,
+			"delete": 1,
+			"null": 1,
+			"undefined": 1,
+			"true": 1,
+			"false": 1,
+			"void": 1,
+			"typeof": 1,
+			"instanceof": 1,
+			"break": 1,
+			"continue": 1,
+			"return": 1,
+			"throw": 1,
+			"try": 1,
+			"catch": 1,
+			"finally": 1,
+			"if": 1,
+			"else": 1,
+			"for": 1,
+			"while": 1,
+			"do": 1,
+			"with": 1,
+			"switch": 1,
+			"case": 1,
+			"default": 1
 		};
 
 		this.isJavaScriptKeyword = function (name) {
@@ -3276,38 +3276,38 @@ try { /*@explore*/
 		// DOM Events
 
 		const eventTypes = {
-			composition : [
+			composition: [
 				"composition",
 				"compositionstart",
 				"compositionend"],
-			contextmenu : [
+			contextmenu: [
 				"contextmenu"],
-			drag : [
+			drag: [
 				"dragenter",
 				"dragover",
 				"dragexit",
 				"dragdrop",
 				"draggesture"],
-			focus : [
+			focus: [
 				"focus",
 				"blur"],
-			form : [
+			form: [
 				"submit",
 				"reset",
 				"change",
 				"select",
 				"input"],
-			key : [
+			key: [
 				"keydown",
 				"keyup",
 				"keypress"],
-			load : [
+			load: [
 				"load",
 				"beforeunload",
 				"unload",
 				"abort",
 				"error"],
-			mouse : [
+			mouse: [
 				"mousedown",
 				"mouseup",
 				"click",
@@ -3315,7 +3315,7 @@ try { /*@explore*/
 				"mouseover",
 				"mouseout",
 				"mousemove"],
-			mutation : [
+			mutation: [
 				"DOMSubtreeModified",
 				"DOMNodeInserted",
 				"DOMNodeRemoved",
@@ -3323,21 +3323,21 @@ try { /*@explore*/
 				"DOMNodeInsertedIntoDocument",
 				"DOMAttrModified",
 				"DOMCharacterDataModified"],
-			paint : [
+			paint: [
 				"paint",
 				"resize",
 				"scroll"],
-			scroll : [
+			scroll: [
 				"overflow",
 				"underflow",
 				"overflowchanged"],
-			text : [
+			text: [
 				"text"],
-			ui : [
+			ui: [
 				"DOMActivate",
 				"DOMFocusIn",
 				"DOMFocusOut"],
-			xul : [
+			xul: [
 				"popupshowing",
 				"popupshown",
 				"popuphiding",
@@ -3346,7 +3346,7 @@ try { /*@explore*/
 				"command",
 				"broadcast",
 				"commandupdate"],
-			clipboard : [
+			clipboard: [
 				"cut",
 				"copy",
 				"paste"],
@@ -3416,7 +3416,7 @@ try { /*@explore*/
 				return false; // syntax error
 
 			var props = {
-				encodedContent : url.substr(point + 1)
+				encodedContent: url.substr(point + 1)
 			};
 
 			var metadataBuffer = url.substring(5, point);
@@ -3458,18 +3458,18 @@ try { /*@explore*/
 			var m = reSplitFile.exec(url);
 			if (!m)
 				return {
-					name : url,
-					path : url
+					name: url,
+					path: url
 				};
 			else if (!m[2])
 				return {
-					path : m[1],
-					name : m[1]
+					path: m[1],
+					name: m[1]
 				};
 			else
 				return {
-					path : m[1],
-					name : m[2] + m[3]
+					path: m[1],
+					name: m[2] + m[3]
 				};
 		};
 
@@ -3733,14 +3733,14 @@ try { /*@explore*/
 							paramValue = this.$STR("LargeData");
 
 						params.push({
-							name : decodeText(paramName),
-							value : decodeText(paramValue)
+							name: decodeText(paramName),
+							value: decodeText(paramValue)
 						});
 					} else {
 						var paramName = args[i];
 						params.push({
-							name : decodeText(paramName),
-							value : ""
+							name: decodeText(paramName),
+							value: ""
 						});
 					}
 				} catch (e) {
@@ -4001,7 +4001,7 @@ try { /*@explore*/
 		// ************************************************************************************************
 
 		this.BaseProgressListener = {
-			QueryInterface : function (iid) {
+			QueryInterface: function (iid) {
 				if (iid.equals(Ci.nsIWebProgressListener) ||
 					iid.equals(Ci.nsISupportsWeakReference) ||
 					iid.equals(Ci.nsISupports)) {
@@ -4011,13 +4011,13 @@ try { /*@explore*/
 				throw Components.results.NS_NOINTERFACE;
 			},
 
-			stateIsRequest : false,
-			onLocationChange : function () {},
-			onStateChange : function () {},
-			onProgressChange : function () {},
-			onStatusChange : function () {},
-			onSecurityChange : function () {},
-			onLinkIconAvailable : function () {}
+			stateIsRequest: false,
+			onLocationChange: function () {},
+			onStateChange: function () {},
+			onProgressChange: function () {},
+			onStatusChange: function () {},
+			onSecurityChange: function () {},
+			onLinkIconAvailable: function () {}
 		};
 
 		// ************************************************************************************************
@@ -4284,16 +4284,16 @@ try { /*@explore*/
 		};
 
 		this.ErrorMessage.prototype = {
-			getSourceLine : function () {
+			getSourceLine: function () {
 				return this.context.sourceCache.getLine(this.href, this.lineNo);
 			},
 
-			resetSource : function () {
+			resetSource: function () {
 				if (this.href && this.lineNo)
 					this.source = this.getSourceLine();
 			},
 
-			correctWithStackTrace : function (trace) {
+			correctWithStackTrace: function (trace) {
 				var frame = trace.frames[0];
 				if (frame) {
 					this.href = frame.href;
@@ -4302,7 +4302,7 @@ try { /*@explore*/
 				}
 			},
 
-			correctSourcePoint : function (sourceName, lineNumber) {
+			correctSourcePoint: function (sourceName, lineNumber) {
 				this.href = sourceName;
 				this.lineNo = lineNumber;
 			},
@@ -4451,14 +4451,14 @@ try { /*@explore*/
 		this.Continued = function () {};
 
 		this.Continued.prototype = {
-			complete : function () {
+			complete: function () {
 				if (this.callback)
 					this.callback.apply(top, arguments);
 				else
 					this.result = cloneArray(arguments);
 			},
 
-			wait : function (cb) {
+			wait: function (cb) {
 				if ("result" in this)
 					cb.apply(top, this.result);
 				else
@@ -4477,10 +4477,10 @@ try { /*@explore*/
 		};
 
 		this.SourceLink.prototype = {
-			toString : function () {
+			toString: function () {
 				return this.href;
 			},
-			toJSON : function () // until 3.1...
+			toJSON: function () // until 3.1...
 			{
 				return "{\"href\":\"" + this.href + "\", " +
 				(this.line ? ("\"line\":" + this.line + ",") : "") +
@@ -4508,7 +4508,7 @@ try { /*@explore*/
 		};
 
 		this.StackTrace.prototype = {
-			toString : function () {
+			toString: function () {
 				var trace = "<top>\n";
 				for (var i = 0; i < this.frames.length; i++) {
 					trace += "[" + i + "]" + this.frames[i] + "\n";
@@ -4516,12 +4516,12 @@ try { /*@explore*/
 				trace += "<bottom>\n";
 				return trace;
 			},
-			reverse : function () {
+			reverse: function () {
 				this.frames.reverse();
 				return this;
 			},
 
-			destroy : function () {
+			destroy: function () {
 				for (var i = 0; i < this.frames.length; i++) {
 					this.frames[i].destroy();
 				}
@@ -4561,45 +4561,45 @@ try { /*@explore*/
 		};
 
 		this.StackFrame.prototype = {
-			getFunctionName : function () {
+			getFunctionName: function () {
 				return this.fn;
 			},
 
-			toSourceLink : function () {
+			toSourceLink: function () {
 				return new FBL.SourceLink(this.sourceFile.href, this.line, "js");
 			},
 
-			toString : function () {
+			toString: function () {
 				return this.fn + ", " + this.sourceFile.href + "@" + this.line;
 			},
 
-			setCallingFrame : function (caller, frameIndex) {
+			setCallingFrame: function (caller, frameIndex) {
 				this.callingFrame = caller;
 				this.frameIndex = frameIndex;
 			},
 
-			getCallingFrame : function () {
+			getCallingFrame: function () {
 				return this.callingFrame;
 			},
 
-			getFrameIndex : function () {
+			getFrameIndex: function () {
 				return this.frameIndex;
 			},
 
-			getNativeFrame : function () // Mozilla, used for backwards compat, TODO remove
+			getNativeFrame: function () // Mozilla, used for backwards compat, TODO remove
 			{
 				if (this.nativeFrame && this.nativeFrame.isValid)
 					return this.nativeFrame;
 			},
 
-			destroy : function () {
+			destroy: function () {
 				if (FBTrace.DBG_STACK)
 					FBTrace.sysout("StackFrame destroyed:" + this.uid + "\n");
 				this.script = null;
 				this.nativeFrame = null;
 			},
 
-			signature : function () {
+			signature: function () {
 				return this.script.tag + "." + this.pc;
 			}
 		};
@@ -4610,7 +4610,7 @@ try { /*@explore*/
 			var m = reErrorStackLine.exec(line);
 			if (m)
 				return new this.StackFrame({
-					href : m[3]
+					href: m[3]
 				}, m[4], m[1], m[2].split(','));
 		}
 		this.parseToStackTrace = function (stack) {
@@ -5458,461 +5458,461 @@ try { /*@explore*/
 		}
 
 		this.domConstantMap = {
-			"ELEMENT_NODE" : 1,
-			"ATTRIBUTE_NODE" : 1,
-			"TEXT_NODE" : 1,
-			"CDATA_SECTION_NODE" : 1,
-			"ENTITY_REFERENCE_NODE" : 1,
-			"ENTITY_NODE" : 1,
-			"PROCESSING_INSTRUCTION_NODE" : 1,
-			"COMMENT_NODE" : 1,
-			"DOCUMENT_NODE" : 1,
-			"DOCUMENT_TYPE_NODE" : 1,
-			"DOCUMENT_FRAGMENT_NODE" : 1,
-			"NOTATION_NODE" : 1,
+			"ELEMENT_NODE": 1,
+			"ATTRIBUTE_NODE": 1,
+			"TEXT_NODE": 1,
+			"CDATA_SECTION_NODE": 1,
+			"ENTITY_REFERENCE_NODE": 1,
+			"ENTITY_NODE": 1,
+			"PROCESSING_INSTRUCTION_NODE": 1,
+			"COMMENT_NODE": 1,
+			"DOCUMENT_NODE": 1,
+			"DOCUMENT_TYPE_NODE": 1,
+			"DOCUMENT_FRAGMENT_NODE": 1,
+			"NOTATION_NODE": 1,
 
-			"DOCUMENT_POSITION_DISCONNECTED" : 1,
-			"DOCUMENT_POSITION_PRECEDING" : 1,
-			"DOCUMENT_POSITION_FOLLOWING" : 1,
-			"DOCUMENT_POSITION_CONTAINS" : 1,
-			"DOCUMENT_POSITION_CONTAINED_BY" : 1,
-			"DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC" : 1,
+			"DOCUMENT_POSITION_DISCONNECTED": 1,
+			"DOCUMENT_POSITION_PRECEDING": 1,
+			"DOCUMENT_POSITION_FOLLOWING": 1,
+			"DOCUMENT_POSITION_CONTAINS": 1,
+			"DOCUMENT_POSITION_CONTAINED_BY": 1,
+			"DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC": 1,
 
-			"UNKNOWN_RULE" : 1,
-			"STYLE_RULE" : 1,
-			"CHARSET_RULE" : 1,
-			"IMPORT_RULE" : 1,
-			"MEDIA_RULE" : 1,
-			"FONT_FACE_RULE" : 1,
-			"PAGE_RULE" : 1,
+			"UNKNOWN_RULE": 1,
+			"STYLE_RULE": 1,
+			"CHARSET_RULE": 1,
+			"IMPORT_RULE": 1,
+			"MEDIA_RULE": 1,
+			"FONT_FACE_RULE": 1,
+			"PAGE_RULE": 1,
 
-			"CAPTURING_PHASE" : 1,
-			"AT_TARGET" : 1,
-			"BUBBLING_PHASE" : 1,
+			"CAPTURING_PHASE": 1,
+			"AT_TARGET": 1,
+			"BUBBLING_PHASE": 1,
 
-			"SCROLL_PAGE_UP" : 1,
-			"SCROLL_PAGE_DOWN" : 1,
+			"SCROLL_PAGE_UP": 1,
+			"SCROLL_PAGE_DOWN": 1,
 
-			"MOUSEUP" : 1,
-			"MOUSEDOWN" : 1,
-			"MOUSEOVER" : 1,
-			"MOUSEOUT" : 1,
-			"MOUSEMOVE" : 1,
-			"MOUSEDRAG" : 1,
-			"CLICK" : 1,
-			"DBLCLICK" : 1,
-			"KEYDOWN" : 1,
-			"KEYUP" : 1,
-			"KEYPRESS" : 1,
-			"DRAGDROP" : 1,
-			"FOCUS" : 1,
-			"BLUR" : 1,
-			"SELECT" : 1,
-			"CHANGE" : 1,
-			"RESET" : 1,
-			"SUBMIT" : 1,
-			"SCROLL" : 1,
-			"LOAD" : 1,
-			"UNLOAD" : 1,
-			"XFER_DONE" : 1,
-			"ABORT" : 1,
-			"ERROR" : 1,
-			"LOCATE" : 1,
-			"MOVE" : 1,
-			"RESIZE" : 1,
-			"FORWARD" : 1,
-			"HELP" : 1,
-			"BACK" : 1,
-			"TEXT" : 1,
+			"MOUSEUP": 1,
+			"MOUSEDOWN": 1,
+			"MOUSEOVER": 1,
+			"MOUSEOUT": 1,
+			"MOUSEMOVE": 1,
+			"MOUSEDRAG": 1,
+			"CLICK": 1,
+			"DBLCLICK": 1,
+			"KEYDOWN": 1,
+			"KEYUP": 1,
+			"KEYPRESS": 1,
+			"DRAGDROP": 1,
+			"FOCUS": 1,
+			"BLUR": 1,
+			"SELECT": 1,
+			"CHANGE": 1,
+			"RESET": 1,
+			"SUBMIT": 1,
+			"SCROLL": 1,
+			"LOAD": 1,
+			"UNLOAD": 1,
+			"XFER_DONE": 1,
+			"ABORT": 1,
+			"ERROR": 1,
+			"LOCATE": 1,
+			"MOVE": 1,
+			"RESIZE": 1,
+			"FORWARD": 1,
+			"HELP": 1,
+			"BACK": 1,
+			"TEXT": 1,
 
-			"ALT_MASK" : 1,
-			"CONTROL_MASK" : 1,
-			"SHIFT_MASK" : 1,
-			"META_MASK" : 1,
+			"ALT_MASK": 1,
+			"CONTROL_MASK": 1,
+			"SHIFT_MASK": 1,
+			"META_MASK": 1,
 
-			"DOM_VK_TAB" : 1,
-			"DOM_VK_PAGE_UP" : 1,
-			"DOM_VK_PAGE_DOWN" : 1,
-			"DOM_VK_UP" : 1,
-			"DOM_VK_DOWN" : 1,
-			"DOM_VK_LEFT" : 1,
-			"DOM_VK_RIGHT" : 1,
-			"DOM_VK_CANCEL" : 1,
-			"DOM_VK_HELP" : 1,
-			"DOM_VK_BACK_SPACE" : 1,
-			"DOM_VK_CLEAR" : 1,
-			"DOM_VK_RETURN" : 1,
-			"DOM_VK_ENTER" : 1,
-			"DOM_VK_SHIFT" : 1,
-			"DOM_VK_CONTROL" : 1,
-			"DOM_VK_ALT" : 1,
-			"DOM_VK_PAUSE" : 1,
-			"DOM_VK_CAPS_LOCK" : 1,
-			"DOM_VK_ESCAPE" : 1,
-			"DOM_VK_SPACE" : 1,
-			"DOM_VK_END" : 1,
-			"DOM_VK_HOME" : 1,
-			"DOM_VK_PRINTSCREEN" : 1,
-			"DOM_VK_INSERT" : 1,
-			"DOM_VK_DELETE" : 1,
-			"DOM_VK_0" : 1,
-			"DOM_VK_1" : 1,
-			"DOM_VK_2" : 1,
-			"DOM_VK_3" : 1,
-			"DOM_VK_4" : 1,
-			"DOM_VK_5" : 1,
-			"DOM_VK_6" : 1,
-			"DOM_VK_7" : 1,
-			"DOM_VK_8" : 1,
-			"DOM_VK_9" : 1,
-			"DOM_VK_SEMICOLON" : 1,
-			"DOM_VK_EQUALS" : 1,
-			"DOM_VK_A" : 1,
-			"DOM_VK_B" : 1,
-			"DOM_VK_C" : 1,
-			"DOM_VK_D" : 1,
-			"DOM_VK_E" : 1,
-			"DOM_VK_F" : 1,
-			"DOM_VK_G" : 1,
-			"DOM_VK_H" : 1,
-			"DOM_VK_I" : 1,
-			"DOM_VK_J" : 1,
-			"DOM_VK_K" : 1,
-			"DOM_VK_L" : 1,
-			"DOM_VK_M" : 1,
-			"DOM_VK_N" : 1,
-			"DOM_VK_O" : 1,
-			"DOM_VK_P" : 1,
-			"DOM_VK_Q" : 1,
-			"DOM_VK_R" : 1,
-			"DOM_VK_S" : 1,
-			"DOM_VK_T" : 1,
-			"DOM_VK_U" : 1,
-			"DOM_VK_V" : 1,
-			"DOM_VK_W" : 1,
-			"DOM_VK_X" : 1,
-			"DOM_VK_Y" : 1,
-			"DOM_VK_Z" : 1,
-			"DOM_VK_CONTEXT_MENU" : 1,
-			"DOM_VK_NUMPAD0" : 1,
-			"DOM_VK_NUMPAD1" : 1,
-			"DOM_VK_NUMPAD2" : 1,
-			"DOM_VK_NUMPAD3" : 1,
-			"DOM_VK_NUMPAD4" : 1,
-			"DOM_VK_NUMPAD5" : 1,
-			"DOM_VK_NUMPAD6" : 1,
-			"DOM_VK_NUMPAD7" : 1,
-			"DOM_VK_NUMPAD8" : 1,
-			"DOM_VK_NUMPAD9" : 1,
-			"DOM_VK_MULTIPLY" : 1,
-			"DOM_VK_ADD" : 1,
-			"DOM_VK_SEPARATOR" : 1,
-			"DOM_VK_SUBTRACT" : 1,
-			"DOM_VK_DECIMAL" : 1,
-			"DOM_VK_DIVIDE" : 1,
-			"DOM_VK_F1" : 1,
-			"DOM_VK_F2" : 1,
-			"DOM_VK_F3" : 1,
-			"DOM_VK_F4" : 1,
-			"DOM_VK_F5" : 1,
-			"DOM_VK_F6" : 1,
-			"DOM_VK_F7" : 1,
-			"DOM_VK_F8" : 1,
-			"DOM_VK_F9" : 1,
-			"DOM_VK_F10" : 1,
-			"DOM_VK_F11" : 1,
-			"DOM_VK_F12" : 1,
-			"DOM_VK_F13" : 1,
-			"DOM_VK_F14" : 1,
-			"DOM_VK_F15" : 1,
-			"DOM_VK_F16" : 1,
-			"DOM_VK_F17" : 1,
-			"DOM_VK_F18" : 1,
-			"DOM_VK_F19" : 1,
-			"DOM_VK_F20" : 1,
-			"DOM_VK_F21" : 1,
-			"DOM_VK_F22" : 1,
-			"DOM_VK_F23" : 1,
-			"DOM_VK_F24" : 1,
-			"DOM_VK_NUM_LOCK" : 1,
-			"DOM_VK_SCROLL_LOCK" : 1,
-			"DOM_VK_COMMA" : 1,
-			"DOM_VK_PERIOD" : 1,
-			"DOM_VK_SLASH" : 1,
-			"DOM_VK_BACK_QUOTE" : 1,
-			"DOM_VK_OPEN_BRACKET" : 1,
-			"DOM_VK_BACK_SLASH" : 1,
-			"DOM_VK_CLOSE_BRACKET" : 1,
-			"DOM_VK_QUOTE" : 1,
-			"DOM_VK_META" : 1,
+			"DOM_VK_TAB": 1,
+			"DOM_VK_PAGE_UP": 1,
+			"DOM_VK_PAGE_DOWN": 1,
+			"DOM_VK_UP": 1,
+			"DOM_VK_DOWN": 1,
+			"DOM_VK_LEFT": 1,
+			"DOM_VK_RIGHT": 1,
+			"DOM_VK_CANCEL": 1,
+			"DOM_VK_HELP": 1,
+			"DOM_VK_BACK_SPACE": 1,
+			"DOM_VK_CLEAR": 1,
+			"DOM_VK_RETURN": 1,
+			"DOM_VK_ENTER": 1,
+			"DOM_VK_SHIFT": 1,
+			"DOM_VK_CONTROL": 1,
+			"DOM_VK_ALT": 1,
+			"DOM_VK_PAUSE": 1,
+			"DOM_VK_CAPS_LOCK": 1,
+			"DOM_VK_ESCAPE": 1,
+			"DOM_VK_SPACE": 1,
+			"DOM_VK_END": 1,
+			"DOM_VK_HOME": 1,
+			"DOM_VK_PRINTSCREEN": 1,
+			"DOM_VK_INSERT": 1,
+			"DOM_VK_DELETE": 1,
+			"DOM_VK_0": 1,
+			"DOM_VK_1": 1,
+			"DOM_VK_2": 1,
+			"DOM_VK_3": 1,
+			"DOM_VK_4": 1,
+			"DOM_VK_5": 1,
+			"DOM_VK_6": 1,
+			"DOM_VK_7": 1,
+			"DOM_VK_8": 1,
+			"DOM_VK_9": 1,
+			"DOM_VK_SEMICOLON": 1,
+			"DOM_VK_EQUALS": 1,
+			"DOM_VK_A": 1,
+			"DOM_VK_B": 1,
+			"DOM_VK_C": 1,
+			"DOM_VK_D": 1,
+			"DOM_VK_E": 1,
+			"DOM_VK_F": 1,
+			"DOM_VK_G": 1,
+			"DOM_VK_H": 1,
+			"DOM_VK_I": 1,
+			"DOM_VK_J": 1,
+			"DOM_VK_K": 1,
+			"DOM_VK_L": 1,
+			"DOM_VK_M": 1,
+			"DOM_VK_N": 1,
+			"DOM_VK_O": 1,
+			"DOM_VK_P": 1,
+			"DOM_VK_Q": 1,
+			"DOM_VK_R": 1,
+			"DOM_VK_S": 1,
+			"DOM_VK_T": 1,
+			"DOM_VK_U": 1,
+			"DOM_VK_V": 1,
+			"DOM_VK_W": 1,
+			"DOM_VK_X": 1,
+			"DOM_VK_Y": 1,
+			"DOM_VK_Z": 1,
+			"DOM_VK_CONTEXT_MENU": 1,
+			"DOM_VK_NUMPAD0": 1,
+			"DOM_VK_NUMPAD1": 1,
+			"DOM_VK_NUMPAD2": 1,
+			"DOM_VK_NUMPAD3": 1,
+			"DOM_VK_NUMPAD4": 1,
+			"DOM_VK_NUMPAD5": 1,
+			"DOM_VK_NUMPAD6": 1,
+			"DOM_VK_NUMPAD7": 1,
+			"DOM_VK_NUMPAD8": 1,
+			"DOM_VK_NUMPAD9": 1,
+			"DOM_VK_MULTIPLY": 1,
+			"DOM_VK_ADD": 1,
+			"DOM_VK_SEPARATOR": 1,
+			"DOM_VK_SUBTRACT": 1,
+			"DOM_VK_DECIMAL": 1,
+			"DOM_VK_DIVIDE": 1,
+			"DOM_VK_F1": 1,
+			"DOM_VK_F2": 1,
+			"DOM_VK_F3": 1,
+			"DOM_VK_F4": 1,
+			"DOM_VK_F5": 1,
+			"DOM_VK_F6": 1,
+			"DOM_VK_F7": 1,
+			"DOM_VK_F8": 1,
+			"DOM_VK_F9": 1,
+			"DOM_VK_F10": 1,
+			"DOM_VK_F11": 1,
+			"DOM_VK_F12": 1,
+			"DOM_VK_F13": 1,
+			"DOM_VK_F14": 1,
+			"DOM_VK_F15": 1,
+			"DOM_VK_F16": 1,
+			"DOM_VK_F17": 1,
+			"DOM_VK_F18": 1,
+			"DOM_VK_F19": 1,
+			"DOM_VK_F20": 1,
+			"DOM_VK_F21": 1,
+			"DOM_VK_F22": 1,
+			"DOM_VK_F23": 1,
+			"DOM_VK_F24": 1,
+			"DOM_VK_NUM_LOCK": 1,
+			"DOM_VK_SCROLL_LOCK": 1,
+			"DOM_VK_COMMA": 1,
+			"DOM_VK_PERIOD": 1,
+			"DOM_VK_SLASH": 1,
+			"DOM_VK_BACK_QUOTE": 1,
+			"DOM_VK_OPEN_BRACKET": 1,
+			"DOM_VK_BACK_SLASH": 1,
+			"DOM_VK_CLOSE_BRACKET": 1,
+			"DOM_VK_QUOTE": 1,
+			"DOM_VK_META": 1,
 
-			"SVG_ZOOMANDPAN_DISABLE" : 1,
-			"SVG_ZOOMANDPAN_MAGNIFY" : 1,
-			"SVG_ZOOMANDPAN_UNKNOWN" : 1
+			"SVG_ZOOMANDPAN_DISABLE": 1,
+			"SVG_ZOOMANDPAN_MAGNIFY": 1,
+			"SVG_ZOOMANDPAN_UNKNOWN": 1
 		};
 
 		// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 		this.cssInfo = {};
 		this.cssInfo.html = {
-			"background" : ["bgRepeat", "bgAttachment", "bgPosition", "color", "systemColor", "none"],
-			"background-attachment" : ["bgAttachment"],
-			"background-color" : ["color", "systemColor"],
-			"background-image" : ["none"],
-			"background-position" : ["bgPosition"],
-			"background-repeat" : ["bgRepeat"],
+			"background": ["bgRepeat", "bgAttachment", "bgPosition", "color", "systemColor", "none"],
+			"background-attachment": ["bgAttachment"],
+			"background-color": ["color", "systemColor"],
+			"background-image": ["none"],
+			"background-position": ["bgPosition"],
+			"background-repeat": ["bgRepeat"],
 
-			"border" : ["borderStyle", "thickness", "color", "systemColor", "none"],
-			"border-top" : ["borderStyle", "borderCollapse", "color", "systemColor", "none"],
-			"border-right" : ["borderStyle", "borderCollapse", "color", "systemColor", "none"],
-			"border-bottom" : ["borderStyle", "borderCollapse", "color", "systemColor", "none"],
-			"border-left" : ["borderStyle", "borderCollapse", "color", "systemColor", "none"],
-			"border-collapse" : ["borderCollapse"],
-			"border-color" : ["color", "systemColor"],
-			"border-top-color" : ["color", "systemColor"],
-			"border-right-color" : ["color", "systemColor"],
-			"border-bottom-color" : ["color", "systemColor"],
-			"border-left-color" : ["color", "systemColor"],
-			"border-spacing" : [],
-			"border-style" : ["borderStyle"],
-			"border-top-style" : ["borderStyle"],
-			"border-right-style" : ["borderStyle"],
-			"border-bottom-style" : ["borderStyle"],
-			"border-left-style" : ["borderStyle"],
-			"border-width" : ["thickness"],
-			"border-top-width" : ["thickness"],
-			"border-right-width" : ["thickness"],
-			"border-bottom-width" : ["thickness"],
-			"border-left-width" : ["thickness"],
+			"border": ["borderStyle", "thickness", "color", "systemColor", "none"],
+			"border-top": ["borderStyle", "borderCollapse", "color", "systemColor", "none"],
+			"border-right": ["borderStyle", "borderCollapse", "color", "systemColor", "none"],
+			"border-bottom": ["borderStyle", "borderCollapse", "color", "systemColor", "none"],
+			"border-left": ["borderStyle", "borderCollapse", "color", "systemColor", "none"],
+			"border-collapse": ["borderCollapse"],
+			"border-color": ["color", "systemColor"],
+			"border-top-color": ["color", "systemColor"],
+			"border-right-color": ["color", "systemColor"],
+			"border-bottom-color": ["color", "systemColor"],
+			"border-left-color": ["color", "systemColor"],
+			"border-spacing": [],
+			"border-style": ["borderStyle"],
+			"border-top-style": ["borderStyle"],
+			"border-right-style": ["borderStyle"],
+			"border-bottom-style": ["borderStyle"],
+			"border-left-style": ["borderStyle"],
+			"border-width": ["thickness"],
+			"border-top-width": ["thickness"],
+			"border-right-width": ["thickness"],
+			"border-bottom-width": ["thickness"],
+			"border-left-width": ["thickness"],
 
-			"bottom" : ["auto"],
-			"caption-side" : ["captionSide"],
-			"clear" : ["clear", "none"],
-			"clip" : ["auto"],
-			"color" : ["color", "systemColor"],
-			"content" : ["content", "none"],
-			"counter-increment" : ["none"],
-			"counter-reset" : ["none"],
-			"cursor" : ["cursor", "none"],
-			"direction" : ["direction"],
-			"display" : ["display", "none"],
-			"empty-cells" : [],
-			"float" : ["float", "none"],
-			"font" : ["fontStyle", "fontVariant", "fontWeight", "fontFamily"],
+			"bottom": ["auto"],
+			"caption-side": ["captionSide"],
+			"clear": ["clear", "none"],
+			"clip": ["auto"],
+			"color": ["color", "systemColor"],
+			"content": ["content", "none"],
+			"counter-increment": ["none"],
+			"counter-reset": ["none"],
+			"cursor": ["cursor", "none"],
+			"direction": ["direction"],
+			"display": ["display", "none"],
+			"empty-cells": [],
+			"float": ["float", "none"],
+			"font": ["fontStyle", "fontVariant", "fontWeight", "fontFamily"],
 
-			"font-family" : ["fontFamily"],
-			"font-size" : ["fontSize"],
-			"font-size-adjust" : [],
-			"font-stretch" : [],
-			"font-style" : ["fontStyle"],
-			"font-variant" : ["fontVariant"],
-			"font-weight" : ["fontWeight"],
+			"font-family": ["fontFamily"],
+			"font-size": ["fontSize"],
+			"font-size-adjust": [],
+			"font-stretch": [],
+			"font-style": ["fontStyle"],
+			"font-variant": ["fontVariant"],
+			"font-weight": ["fontWeight"],
 
-			"height" : ["auto"],
-			"ime-mode" : ["imeMode", "auto"],
-			"left" : ["auto"],
-			"letter-spacing" : [],
-			"line-height" : [],
+			"height": ["auto"],
+			"ime-mode": ["imeMode", "auto"],
+			"left": ["auto"],
+			"letter-spacing": [],
+			"line-height": [],
 
-			"list-style" : ["listStyleType", "listStylePosition", "none"],
-			"list-style-image" : ["none"],
-			"list-style-position" : ["listStylePosition"],
-			"list-style-type" : ["listStyleType", "none"],
+			"list-style": ["listStyleType", "listStylePosition", "none"],
+			"list-style-image": ["none"],
+			"list-style-position": ["listStylePosition"],
+			"list-style-type": ["listStyleType", "none"],
 
-			"margin" : [],
-			"margin-top" : [],
-			"margin-right" : [],
-			"margin-bottom" : [],
-			"margin-left" : [],
+			"margin": [],
+			"margin-top": [],
+			"margin-right": [],
+			"margin-bottom": [],
+			"margin-left": [],
 
-			"marker-offset" : ["auto"],
-			"min-height" : ["none"],
-			"max-height" : ["none"],
-			"min-width" : ["width", "none"],
-			"max-width" : ["width", "none"],
+			"marker-offset": ["auto"],
+			"min-height": ["none"],
+			"max-height": ["none"],
+			"min-width": ["width", "none"],
+			"max-width": ["width", "none"],
 
-			"opacity" : [],
+			"opacity": [],
 
-			"outline" : ["borderStyle", "color", "systemColor", "none"],
-			"outline-color" : ["color", "systemColor"],
-			"outline-style" : ["borderStyle"],
-			"outline-width" : [],
+			"outline": ["borderStyle", "color", "systemColor", "none"],
+			"outline-color": ["color", "systemColor"],
+			"outline-style": ["borderStyle"],
+			"outline-width": [],
 
-			"overflow" : ["overflow", "auto"],
-			"overflow-x" : ["overflow", "auto"],
-			"overflow-y" : ["overflow", "auto"],
+			"overflow": ["overflow", "auto"],
+			"overflow-x": ["overflow", "auto"],
+			"overflow-y": ["overflow", "auto"],
 
-			"padding" : [],
-			"padding-top" : [],
-			"padding-right" : [],
-			"padding-bottom" : [],
-			"padding-left" : [],
+			"padding": [],
+			"padding-top": [],
+			"padding-right": [],
+			"padding-bottom": [],
+			"padding-left": [],
 
-			"position" : ["position"],
-			"quotes" : ["none"],
-			"right" : ["auto"],
-			"table-layout" : ["tableLayout", "auto"],
-			"text-align" : ["textAlign"],
-			"text-decoration" : ["textDecoration", "none"],
-			"text-indent" : [],
-			"text-rendering" : ["textRendering", "auto"],
-			"text-shadow" : [],
-			"text-transform" : ["textTransform", "none"],
-			"top" : ["auto"],
-			"unicode-bidi" : [],
-			"vertical-align" : ["verticalAlign"],
-			"visibility" : ["visibility"],
-			"white-space" : ["whiteSpace"],
-			"width" : ["width", "auto"],
-			"word-spacing" : [],
-			"word-wrap" : ["wordWrap"],
-			"z-index" : [],
+			"position": ["position"],
+			"quotes": ["none"],
+			"right": ["auto"],
+			"table-layout": ["tableLayout", "auto"],
+			"text-align": ["textAlign"],
+			"text-decoration": ["textDecoration", "none"],
+			"text-indent": [],
+			"text-rendering": ["textRendering", "auto"],
+			"text-shadow": [],
+			"text-transform": ["textTransform", "none"],
+			"top": ["auto"],
+			"unicode-bidi": [],
+			"vertical-align": ["verticalAlign"],
+			"visibility": ["visibility"],
+			"white-space": ["whiteSpace"],
+			"width": ["width", "auto"],
+			"word-spacing": [],
+			"word-wrap": ["wordWrap"],
+			"z-index": [],
 
-			"-moz-appearance" : ["mozAppearance"],
-			"-moz-border-image" : ["mozBorderImage", "thickness", "none"],
-			"-moz-border-radius" : [],
-			"-moz-border-radius-bottomleft" : [],
-			"-moz-border-radius-bottomright" : [],
-			"-moz-border-radius-topleft" : [],
-			"-moz-border-radius-topright" : [],
-			"-moz-border-top-colors" : ["color", "systemColor"],
-			"-moz-border-right-colors" : ["color", "systemColor"],
-			"-moz-border-bottom-colors" : ["color", "systemColor"],
-			"-moz-border-left-colors" : ["color", "systemColor"],
-			"-moz-border-start" : ["borderStyle", "borderCollapse", "color", "systemColor", "none"],
-			"-moz-border-end" : ["borderStyle", "borderCollapse", "color", "systemColor", "none"],
-			"-moz-border-start-color" : ["color", "systemColor"],
-			"-moz-border-end-color" : ["color", "systemColor"],
-			"-moz-border-start-style" : ["borderStyle"],
-			"-moz-border-end-style" : ["borderStyle"],
-			"-moz-border-start-width" : ["thickness"],
-			"-moz-border-end-width" : ["thickness"],
-			"-moz-box-align" : ["mozBoxAlign"],
-			"-moz-box-direction" : ["mozBoxDirection"],
-			"-moz-box-flex" : [],
-			"-moz-box-ordinal-group" : [],
-			"-moz-box-orient" : ["mozBoxOrient"],
-			"-moz-box-pack" : ["mozBoxPack"],
-			"-moz-box-shadow" : ["mozBoxShadow", "none"],
-			"-moz-box-sizing" : ["mozBoxSizing"],
-			"-moz-user-focus" : ["userFocus", "none"],
-			"-moz-user-input" : ["userInput"],
-			"-moz-user-modify" : [],
-			"-moz-user-select" : ["userSelect", "none"],
-			"-moz-background-clip" : [],
-			"-moz-background-inline-policy" : [],
-			"-moz-background-origin" : [],
-			"-moz-binding" : [],
-			"-moz-column-count" : [],
-			"-moz-column-gap" : [],
-			"-moz-column-rule" : ["thickness", "borderStyle", "color", "systemColor"],
-			"-moz-column-rule-width" : ["thickness"],
-			"-moz-column-rule-style" : ["borderStyle"],
-			"-moz-column-rule-color" : ["color", "systemColor"],
-			"-moz-column-width" : [],
-			"-moz-image-region" : [],
-			"-moz-transform" : ["mozTransformFunction", "none"],
-			"-moz-transform-origin" : ["bgPosition"]
+			"-moz-appearance": ["mozAppearance"],
+			"-moz-border-image": ["mozBorderImage", "thickness", "none"],
+			"-moz-border-radius": [],
+			"-moz-border-radius-bottomleft": [],
+			"-moz-border-radius-bottomright": [],
+			"-moz-border-radius-topleft": [],
+			"-moz-border-radius-topright": [],
+			"-moz-border-top-colors": ["color", "systemColor"],
+			"-moz-border-right-colors": ["color", "systemColor"],
+			"-moz-border-bottom-colors": ["color", "systemColor"],
+			"-moz-border-left-colors": ["color", "systemColor"],
+			"-moz-border-start": ["borderStyle", "borderCollapse", "color", "systemColor", "none"],
+			"-moz-border-end": ["borderStyle", "borderCollapse", "color", "systemColor", "none"],
+			"-moz-border-start-color": ["color", "systemColor"],
+			"-moz-border-end-color": ["color", "systemColor"],
+			"-moz-border-start-style": ["borderStyle"],
+			"-moz-border-end-style": ["borderStyle"],
+			"-moz-border-start-width": ["thickness"],
+			"-moz-border-end-width": ["thickness"],
+			"-moz-box-align": ["mozBoxAlign"],
+			"-moz-box-direction": ["mozBoxDirection"],
+			"-moz-box-flex": [],
+			"-moz-box-ordinal-group": [],
+			"-moz-box-orient": ["mozBoxOrient"],
+			"-moz-box-pack": ["mozBoxPack"],
+			"-moz-box-shadow": ["mozBoxShadow", "none"],
+			"-moz-box-sizing": ["mozBoxSizing"],
+			"-moz-user-focus": ["userFocus", "none"],
+			"-moz-user-input": ["userInput"],
+			"-moz-user-modify": [],
+			"-moz-user-select": ["userSelect", "none"],
+			"-moz-background-clip": [],
+			"-moz-background-inline-policy": [],
+			"-moz-background-origin": [],
+			"-moz-binding": [],
+			"-moz-column-count": [],
+			"-moz-column-gap": [],
+			"-moz-column-rule": ["thickness", "borderStyle", "color", "systemColor"],
+			"-moz-column-rule-width": ["thickness"],
+			"-moz-column-rule-style": ["borderStyle"],
+			"-moz-column-rule-color": ["color", "systemColor"],
+			"-moz-column-width": [],
+			"-moz-image-region": [],
+			"-moz-transform": ["mozTransformFunction", "none"],
+			"-moz-transform-origin": ["bgPosition"]
 		};
 
 		this.cssInfo.svg = {
-			"alignment-baseline" : ["svgAlignmentBaseline"],
-			"baseline-shift" : ["baselineShift"],
-			"clip" : ["auto"],
-			"clip-path" : ["none"],
-			"clip-rule" : ["clipRule"],
-			"color" : ["color"],
-			"color-interpolation" : ["colorInterpolation"],
-			"color-interpolation-filters" : ["colorInterpolation"],
-			"color-profile" : ["colorProfile"],
-			"color-rendering" : ["colorRendering"],
-			"cursor" : ["cursor"],
-			"direction" : ["direction"],
-			"display" : ["display"],
-			"dominant-baseline" : ["dominantBaseline"],
-			"enable-background" : ["accumulate"],
-			"fill" : ["clipRule"],
-			"fill-opacity" : [],
-			"fill-rule" : ["clipRule"],
-			"filter" : ["none"],
-			"flood-color" : ["currentColor"],
-			"flood-opacity" : [],
-			"font" : ["fontStyle", "fontVariant", "fontWeight"],
-			"font-family" : ["fontFamily"],
-			"font-size" : ["fontSize"],
-			"font-size-adjust" : [],
-			"font-stretch" : ["fontStretch"],
-			"font-style" : ["fontStyle"],
-			"font-variant" : ["fontVariant"],
-			"font-weight" : ["fontWeight"],
-			"glyph-orientation-horizontal" : [],
-			"glyph-orientation-vertical" : ["auto"],
-			"image-rendering" : ["imageRendering"],
-			"kerning" : ["auto"],
-			"letter-spacing" : ["normal"],
-			"lighting-color" : ["currentColor"],
-			"marker" : ["none"],
-			"marker-end" : ["none"],
-			"mask" : ["none"],
-			"opacity" : [],
-			"overflow" : ["auto", "svgOverflow"],
-			"pointer-events" : ["pointerEvents", "none"],
-			"shape-rendering" : ["auto", "shapeRendering"],
-			"stop-color" : ["currentColor"],
-			"stop-opacity" : [],
-			"stroke" : [],
-			"stroke-dasharray" : ["none"],
-			"stroke-dashoffset" : [],
-			"stroke-linecap" : ["strokeLinecap"],
-			"stroke-linejoin" : ["strokeLinejoin"],
-			"stroke-miterlimit" : [],
-			"stroke-opacity" : [],
-			"stroke-width" : [],
-			"text-anchor" : ["mozBoxPack"],
-			"text-decoration" : ["none", "textDecoration"],
-			"text-rendering" : ["none", "textRendering"],
-			"unicode-bidi" : ["unicodeBidi"],
-			"visibility" : ["visibility"],
-			"word-spacing" : ["normal"],
-			"writing-mode" : ["writingMode"]
+			"alignment-baseline": ["svgAlignmentBaseline"],
+			"baseline-shift": ["baselineShift"],
+			"clip": ["auto"],
+			"clip-path": ["none"],
+			"clip-rule": ["clipRule"],
+			"color": ["color"],
+			"color-interpolation": ["colorInterpolation"],
+			"color-interpolation-filters": ["colorInterpolation"],
+			"color-profile": ["colorProfile"],
+			"color-rendering": ["colorRendering"],
+			"cursor": ["cursor"],
+			"direction": ["direction"],
+			"display": ["display"],
+			"dominant-baseline": ["dominantBaseline"],
+			"enable-background": ["accumulate"],
+			"fill": ["clipRule"],
+			"fill-opacity": [],
+			"fill-rule": ["clipRule"],
+			"filter": ["none"],
+			"flood-color": ["currentColor"],
+			"flood-opacity": [],
+			"font": ["fontStyle", "fontVariant", "fontWeight"],
+			"font-family": ["fontFamily"],
+			"font-size": ["fontSize"],
+			"font-size-adjust": [],
+			"font-stretch": ["fontStretch"],
+			"font-style": ["fontStyle"],
+			"font-variant": ["fontVariant"],
+			"font-weight": ["fontWeight"],
+			"glyph-orientation-horizontal": [],
+			"glyph-orientation-vertical": ["auto"],
+			"image-rendering": ["imageRendering"],
+			"kerning": ["auto"],
+			"letter-spacing": ["normal"],
+			"lighting-color": ["currentColor"],
+			"marker": ["none"],
+			"marker-end": ["none"],
+			"mask": ["none"],
+			"opacity": [],
+			"overflow": ["auto", "svgOverflow"],
+			"pointer-events": ["pointerEvents", "none"],
+			"shape-rendering": ["auto", "shapeRendering"],
+			"stop-color": ["currentColor"],
+			"stop-opacity": [],
+			"stroke": [],
+			"stroke-dasharray": ["none"],
+			"stroke-dashoffset": [],
+			"stroke-linecap": ["strokeLinecap"],
+			"stroke-linejoin": ["strokeLinejoin"],
+			"stroke-miterlimit": [],
+			"stroke-opacity": [],
+			"stroke-width": [],
+			"text-anchor": ["mozBoxPack"],
+			"text-decoration": ["none", "textDecoration"],
+			"text-rendering": ["none", "textRendering"],
+			"unicode-bidi": ["unicodeBidi"],
+			"visibility": ["visibility"],
+			"word-spacing": ["normal"],
+			"writing-mode": ["writingMode"]
 		};
 
 		this.inheritedStyleNames = {
-			"border-collapse" : 1,
-			"border-spacing" : 1,
-			"border-style" : 1,
-			"caption-side" : 1,
-			"color" : 1,
-			"cursor" : 1,
-			"direction" : 1,
-			"empty-cells" : 1,
-			"font" : 1,
-			"font-family" : 1,
-			"font-size-adjust" : 1,
-			"font-size" : 1,
-			"font-style" : 1,
-			"font-variant" : 1,
-			"font-weight" : 1,
-			"letter-spacing" : 1,
-			"line-height" : 1,
-			"list-style" : 1,
-			"list-style-image" : 1,
-			"list-style-position" : 1,
-			"list-style-type" : 1,
-			"opacity" : 1,
-			"quotes" : 1,
-			"text-align" : 1,
-			"text-decoration" : 1,
-			"text-indent" : 1,
-			"text-shadow" : 1,
-			"text-transform" : 1,
-			"white-space" : 1,
-			"word-spacing" : 1,
-			"word-wrap" : 1
+			"border-collapse": 1,
+			"border-spacing": 1,
+			"border-style": 1,
+			"caption-side": 1,
+			"color": 1,
+			"cursor": 1,
+			"direction": 1,
+			"empty-cells": 1,
+			"font": 1,
+			"font-family": 1,
+			"font-size-adjust": 1,
+			"font-size": 1,
+			"font-style": 1,
+			"font-variant": 1,
+			"font-weight": 1,
+			"letter-spacing": 1,
+			"line-height": 1,
+			"list-style": 1,
+			"list-style-image": 1,
+			"list-style-position": 1,
+			"list-style-type": 1,
+			"opacity": 1,
+			"quotes": 1,
+			"text-align": 1,
+			"text-decoration": 1,
+			"text-indent": 1,
+			"text-shadow": 1,
+			"text-transform": 1,
+			"white-space": 1,
+			"word-spacing": 1,
+			"word-wrap": 1
 		};
 
 		this.cssKeywords = {
-			"appearance" :
+			"appearance":
 			[
 				"button",
 				"button-small",
@@ -5957,7 +5957,7 @@ try { /*@explore*/
 				"window"
 			],
 
-			"systemColor" :
+			"systemColor":
 			[
 				"ActiveBorder",
 				"ActiveCaption",
@@ -5995,7 +5995,7 @@ try { /*@explore*/
 				"-moz-use-text-color"
 			],
 
-			"color" :
+			"color":
 			[
 				"AliceBlue",
 				"AntiqueWhite",
@@ -6144,17 +6144,17 @@ try { /*@explore*/
 				"invert"
 			],
 
-			"auto" :
+			"auto":
 			[
 				"auto"
 			],
 
-			"none" :
+			"none":
 			[
 				"none"
 			],
 
-			"captionSide" :
+			"captionSide":
 			[
 				"top",
 				"bottom",
@@ -6162,14 +6162,14 @@ try { /*@explore*/
 				"right"
 			],
 
-			"clear" :
+			"clear":
 			[
 				"left",
 				"right",
 				"both"
 			],
 
-			"cursor" :
+			"cursor":
 			[
 				"auto",
 				"cell",
@@ -6214,19 +6214,19 @@ try { /*@explore*/
 				"-moz-spinning"
 			],
 
-			"direction" :
+			"direction":
 			[
 				"ltr",
 				"rtl"
 			],
 
-			"bgAttachment" :
+			"bgAttachment":
 			[
 				"scroll",
 				"fixed"
 			],
 
-			"bgPosition" :
+			"bgPosition":
 			[
 				"top",
 				"center",
@@ -6235,7 +6235,7 @@ try { /*@explore*/
 				"right"
 			],
 
-			"bgRepeat" :
+			"bgRepeat":
 			[
 				"repeat",
 				"repeat-x",
@@ -6243,7 +6243,7 @@ try { /*@explore*/
 				"no-repeat"
 			],
 
-			"borderStyle" :
+			"borderStyle":
 			[
 				"hidden",
 				"dotted",
@@ -6259,13 +6259,13 @@ try { /*@explore*/
 				"-moz-bg-solid"
 			],
 
-			"borderCollapse" :
+			"borderCollapse":
 			[
 				"collapse",
 				"separate"
 			],
 
-			"overflow" :
+			"overflow":
 			[
 				"visible",
 				"hidden",
@@ -6275,7 +6275,7 @@ try { /*@explore*/
 				"-moz-scrollbars-vertical"
 			],
 
-			"listStyleType" :
+			"listStyleType":
 			[
 				"disc",
 				"circle",
@@ -6300,13 +6300,13 @@ try { /*@explore*/
 				"inherit"
 			],
 
-			"listStylePosition" :
+			"listStylePosition":
 			[
 				"inside",
 				"outside"
 			],
 
-			"content" :
+			"content":
 			[
 				"open-quote",
 				"close-quote",
@@ -6315,7 +6315,7 @@ try { /*@explore*/
 				"inherit"
 			],
 
-			"fontStyle" :
+			"fontStyle":
 			[
 				"normal",
 				"italic",
@@ -6323,14 +6323,14 @@ try { /*@explore*/
 				"inherit"
 			],
 
-			"fontVariant" :
+			"fontVariant":
 			[
 				"normal",
 				"small-caps",
 				"inherit"
 			],
 
-			"fontWeight" :
+			"fontWeight":
 			[
 				"normal",
 				"bold",
@@ -6339,7 +6339,7 @@ try { /*@explore*/
 				"inherit"
 			],
 
-			"fontSize" :
+			"fontSize":
 			[
 				"xx-small",
 				"x-small",
@@ -6352,7 +6352,7 @@ try { /*@explore*/
 				"larger"
 			],
 
-			"fontFamily" :
+			"fontFamily":
 			[
 				"Arial",
 				"Comic Sans MS",
@@ -6377,7 +6377,7 @@ try { /*@explore*/
 				"inherit"
 			],
 
-			"display" :
+			"display":
 			[
 				"block",
 				"inline",
@@ -6414,7 +6414,7 @@ try { /*@explore*/
 				"-moz-stack"
 			],
 
-			"position" :
+			"position":
 			[
 				"static",
 				"relative",
@@ -6423,13 +6423,13 @@ try { /*@explore*/
 				"inherit"
 			],
 
-			"float" :
+			"float":
 			[
 				"left",
 				"right"
 			],
 
-			"textAlign" :
+			"textAlign":
 			[
 				"left",
 				"right",
@@ -6437,12 +6437,12 @@ try { /*@explore*/
 				"justify"
 			],
 
-			"tableLayout" :
+			"tableLayout":
 			[
 				"fixed"
 			],
 
-			"textDecoration" :
+			"textDecoration":
 			[
 				"underline",
 				"overline",
@@ -6450,7 +6450,7 @@ try { /*@explore*/
 				"blink"
 			],
 
-			"textTransform" :
+			"textTransform":
 			[
 				"capitalize",
 				"lowercase",
@@ -6458,14 +6458,14 @@ try { /*@explore*/
 				"inherit"
 			],
 
-			"unicodeBidi" :
+			"unicodeBidi":
 			[
 				"normal",
 				"embed",
 				"bidi-override"
 			],
 
-			"visibility" :
+			"visibility":
 			[
 				"visible",
 				"hidden",
@@ -6473,7 +6473,7 @@ try { /*@explore*/
 				"inherit"
 			],
 
-			"whiteSpace" :
+			"whiteSpace":
 			[
 				"normal",
 				"pre",
@@ -6483,7 +6483,7 @@ try { /*@explore*/
 				"inherit"
 			],
 
-			"verticalAlign" :
+			"verticalAlign":
 			[
 				"baseline",
 				"sub",
@@ -6496,38 +6496,38 @@ try { /*@explore*/
 				"inherit"
 			],
 
-			"thickness" :
+			"thickness":
 			[
 				"thin",
 				"medium",
 				"thick"
 			],
 
-			"userFocus" :
+			"userFocus":
 			[
 				"ignore",
 				"normal"
 			],
 
-			"userInput" :
+			"userInput":
 			[
 				"disabled",
 				"enabled"
 			],
 
-			"userSelect" :
+			"userSelect":
 			[
 				"normal"
 			],
 
-			"mozBoxSizing" :
+			"mozBoxSizing":
 			[
 				"content-box",
 				"padding-box",
 				"border-box"
 			],
 
-			"mozBoxAlign" :
+			"mozBoxAlign":
 			[
 				"start",
 				"center",
@@ -6536,38 +6536,38 @@ try { /*@explore*/
 				"stretch"
 			],
 
-			"mozBoxDirection" :
+			"mozBoxDirection":
 			[
 				"normal",
 				"reverse"
 			],
 
-			"mozBoxOrient" :
+			"mozBoxOrient":
 			[
 				"horizontal",
 				"vertical"
 			],
 
-			"mozBoxPack" :
+			"mozBoxPack":
 			[
 				"start",
 				"center",
 				"end"
 			],
 
-			"mozBoxShadow" :
+			"mozBoxShadow":
 			[
 				"inset"
 			],
 
-			"mozBorderImage" :
+			"mozBorderImage":
 			[
 				"stretch",
 				"round",
 				"repeat"
 			],
 
-			"mozTransformFunction" :
+			"mozTransformFunction":
 			[
 				"matrix",
 				"rotate",
@@ -6582,7 +6582,7 @@ try { /*@explore*/
 				"translateY"
 			],
 
-			"width" :
+			"width":
 			[
 				"-moz-max-content",
 				"-moz-min-content",
@@ -6590,7 +6590,7 @@ try { /*@explore*/
 				"-moz-available"
 			],
 
-			"imeMode" :
+			"imeMode":
 			[
 				"normal",
 				"active",
@@ -6598,14 +6598,14 @@ try { /*@explore*/
 				"disabled"
 			],
 
-			"textRendering" :
+			"textRendering":
 			[
 				"optimizeSpeed",
 				"optimizeLegibility",
 				"geometricPrecision"
 			],
 
-			"wordWrap" :
+			"wordWrap":
 			[
 				"normal",
 				"break-word",
@@ -6614,7 +6614,7 @@ try { /*@explore*/
 
 			// start SVG specific
 
-			"alignmentBaseline" :
+			"alignmentBaseline":
 			[
 				"auto",
 				"baseline",
@@ -6630,40 +6630,40 @@ try { /*@explore*/
 				"mathematical"
 			],
 
-			"baselineShift" :
+			"baselineShift":
 			[
 				"baseline",
 				"sub",
 				"super"
 			],
 
-			"colorInterpolation" :
+			"colorInterpolation":
 			[
 				"auto",
 				"sRGB",
 				"linearRGB"
 			],
 
-			"clipRule" :
+			"clipRule":
 			[
 				"nonzero",
 				"evenodd"
 			],
 
-			"colorProfile" :
+			"colorProfile":
 			[
 				"auto",
 				"sRGB"
 			],
 
-			"colorRendering" :
+			"colorRendering":
 			[
 				"auto",
 				"optimizeSpeed",
 				"optimizeQuality"
 			],
 
-			"dominantBaseline" :
+			"dominantBaseline":
 			[
 				"auto",
 				"use-script",
@@ -6679,12 +6679,12 @@ try { /*@explore*/
 				"text-before-edge"
 			],
 
-			"accumulate" :
+			"accumulate":
 			[
 				"accumulate"
 			],
 
-			"fontStretch" :
+			"fontStretch":
 			[
 				"normal",
 				"wider",
@@ -6699,21 +6699,21 @@ try { /*@explore*/
 				"ultra-expanded"
 			],
 
-			"imageRendering" :
+			"imageRendering":
 			[
 				"auto",
 				"optimizeSpeed",
 				"optimizeQuality"
 			],
 
-			"svgOverflow" :
+			"svgOverflow":
 			[
 				"visible",
 				"hidden",
 				"scroll"
 			],
 
-			"pointerEvents" :
+			"pointerEvents":
 			[
 				"visiblePainted",
 				"visibleFill",
@@ -6725,28 +6725,28 @@ try { /*@explore*/
 				"all"
 			],
 
-			"shapeRendering" :
+			"shapeRendering":
 			[
 				"optimizeSpeed",
 				"crispEdges",
 				"geometricPrecision"
 			],
 
-			"strokeLinecap" :
+			"strokeLinecap":
 			[
 				"butt",
 				"round",
 				"square"
 			],
 
-			"strokeLinejoin" :
+			"strokeLinejoin":
 			[
 				"miter",
 				"round",
 				"bevel"
 			],
 
-			"writingMode" :
+			"writingMode":
 			[
 				"lr-tb",
 				"rl-tb",
@@ -6758,55 +6758,55 @@ try { /*@explore*/
 		};
 
 		this.nonEditableTags = {
-			"HTML" : 1,
-			"HEAD" : 1,
-			"html" : 1,
-			"head" : 1
+			"HTML": 1,
+			"HEAD": 1,
+			"html": 1,
+			"head": 1
 		};
 
 		this.innerEditableTags = {
-			"BODY" : 1,
-			"body" : 1
+			"BODY": 1,
+			"body": 1
 		};
 
 		this.selfClosingTags = { // End tags for void elements are forbidden http://wiki.whatwg.org/wiki/HTML_vs._XHTML
-			"meta" : 1,
-			"link" : 1,
-			"area" : 1,
-			"base" : 1,
-			"col" : 1,
-			"input" : 1,
-			"img" : 1,
-			"br" : 1,
-			"hr" : 1,
-			"param" : 1,
-			"embed" : 1
+			"meta": 1,
+			"link": 1,
+			"area": 1,
+			"base": 1,
+			"col": 1,
+			"input": 1,
+			"img": 1,
+			"br": 1,
+			"hr": 1,
+			"param": 1,
+			"embed": 1
 		};
 
 		const invisibleTags = this.invisibleTags = {
-			"HTML" : 1,
-			"HEAD" : 1,
-			"TITLE" : 1,
-			"META" : 1,
-			"LINK" : 1,
-			"STYLE" : 1,
-			"SCRIPT" : 1,
-			"NOSCRIPT" : 1,
-			"BR" : 1,
-			"PARAM" : 1,
-			"COL" : 1,
+			"HTML": 1,
+			"HEAD": 1,
+			"TITLE": 1,
+			"META": 1,
+			"LINK": 1,
+			"STYLE": 1,
+			"SCRIPT": 1,
+			"NOSCRIPT": 1,
+			"BR": 1,
+			"PARAM": 1,
+			"COL": 1,
 
-			"html" : 1,
-			"head" : 1,
-			"title" : 1,
-			"meta" : 1,
-			"link" : 1,
-			"style" : 1,
-			"script" : 1,
-			"noscript" : 1,
-			"br" : 1,
-			"param" : 1,
-			"col" : 1,
+			"html": 1,
+			"head": 1,
+			"title": 1,
+			"meta": 1,
+			"link": 1,
+			"style": 1,
+			"script": 1,
+			"noscript": 1,
+			"br": 1,
+			"param": 1,
+			"col": 1,
 			/*
 			"window": 1,
 			"browser": 1,
@@ -6820,24 +6820,24 @@ try { /*@explore*/
 		};
 
 		this.ignoreVars = {
-			"__firebug__" : 1,
-			"eval" : 1,
+			"__firebug__": 1,
+			"eval": 1,
 
 			// We are forced to ignore Java-related variables, because
 			// trying to access them causes browser freeze
-			"java" : 1,
-			"sun" : 1,
-			"Packages" : 1,
-			"JavaArray" : 1,
-			"JavaMember" : 1,
-			"JavaObject" : 1,
-			"JavaClass" : 1,
-			"JavaPackage" : 1,
+			"java": 1,
+			"sun": 1,
+			"Packages": 1,
+			"JavaArray": 1,
+			"JavaMember": 1,
+			"JavaObject": 1,
+			"JavaClass": 1,
+			"JavaPackage": 1,
 			// internal firebug things XXXjjb todo we should privatize these
-			"_firebug" : 1,
-			"_FirebugConsole" : 1,
-			"_FirebugCommandLine" : 1,
-			"loadFirebugConsole" : 1,
+			"_firebug": 1,
+			"_FirebugConsole": 1,
+			"_FirebugCommandLine": 1,
+			"loadFirebugConsole": 1,
 		};
 
 		this.shouldIgnore = function (name) {
@@ -7112,9 +7112,9 @@ try { /*@explore*/
 			} catch (exc) {
 				if (FBTrace.DBG_ERRORS)
 					FBTrace.sysout("unwrapIValue FAILS for " + object + " cause: " + exc, {
-						exc : exc,
-						object : object,
-						unwrapped : unwrapped
+						exc: exc,
+						object: object,
+						unwrapped: unwrapped
 					});
 			}
 		}
