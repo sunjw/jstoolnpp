@@ -31,15 +31,8 @@
 //#define IDC_STATIC -1
 //#endif
 
-const int nbFunc = 13;
-
 HINSTANCE _hInst;
 NppData nppData;
-FuncItem funcItem[nbFunc];
-HMENU ownMenu;
-
-HANDLE g_hMod;
-JSONDialog jsonDialog;
 StruOptions struOptions;
 
 void jsMinCurrent();
@@ -53,6 +46,9 @@ void options();
 
 HMENU getOwnMenu();
 void changeUpdateMenuString(TCHAR *pszString);
+
+void checkUpdateThread();
+
 void checkUpdate();
 
 void donate();

@@ -30,6 +30,14 @@
 #include "jsminCharArray.h"
 #include "jsformatString.h"
 
+static const int nbFunc = 13;
+
+static FuncItem funcItem[nbFunc];
+static HMENU ownMenu;
+
+static HANDLE g_hMod;
+static JSONDialog jsonDialog;
+
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        DWORD  reasonForCall, 
                        LPVOID lpReserved )
@@ -451,6 +459,11 @@ void changeUpdateMenuString(TCHAR *pszString)
 		mii.dwTypeData = pszString;
 		::SetMenuItemInfo(hMenuOwn, 11, TRUE, &mii);
 	}
+}
+
+void checkUpdateThread()
+{
+
 }
 
 void checkUpdate()
