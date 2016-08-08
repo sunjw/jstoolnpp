@@ -553,6 +553,8 @@ static int checkUpdateThread(void *param)
 	tstring tstrJson;
 	readInternetString(TEXT(UPDATE_FILE_URL), &tstrJson);
 
+	s_foundNewVersion = FALSE;
+
 	if (tstrJson != TEXT(""))
 	{
 		// We read something.
@@ -571,7 +573,6 @@ static int checkUpdateThread(void *param)
 			int localVersionArray[4] = {0};
 			splitVersionToArray(string(VERSION_VALUE), localVersionArray);
 
-			s_foundNewVersion = FALSE;
 			for (int i = 0; i < 4; ++i)
 			{
 				if (curVersionArray[i] > localVersionArray[i])
@@ -609,7 +610,7 @@ void doInternetCheckUpdate()
 		(s_foundNewVersion &&
 		(curTime - s_lastUpdateCheckTime) < 3600))
 	{
-		// Donot check.
+		// Do not check.
 		return;
 	}
 
