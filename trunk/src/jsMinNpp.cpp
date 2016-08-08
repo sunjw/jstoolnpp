@@ -52,8 +52,8 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 	{
 		case DLL_PROCESS_ATTACH:
 		{
-			_hInst = (HINSTANCE)hModule;
-			s_jsonDialog.init((HINSTANCE)_hInst, nppData._nppHandle);
+			g_hInst = (HINSTANCE)hModule;
+			s_jsonDialog.init((HINSTANCE)g_hInst, g_nppData._nppHandle);
 
 			ShortcutKey *pShKey;
 			for(int i = 0; i < s_nbFunc; ++i)
@@ -127,9 +127,9 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 
 extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
 {
-	nppData = notpadPlusData;
+	g_nppData = notpadPlusData;
 	// ÔØÈëÉèÖÃ
-	loadOption(nppData._nppHandle, struOptions);
+	loadOption(g_nppData._nppHandle, g_struOptions);
 }
 
 extern "C" __declspec(dllexport) const TCHAR *getName()
@@ -171,8 +171,8 @@ extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam
 static HWND getCurrentScintillaHandle()
 {
     int currentEdit;
-    ::SendMessage(nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM)&currentEdit);
-	return (currentEdit == 0)?nppData._scintillaMainHandle:nppData._scintillaSecondHandle;
+    ::SendMessage(g_nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM)&currentEdit);
+	return (currentEdit == 0) ? g_nppData._scintillaMainHandle : g_nppData._scintillaSecondHandle;
 };
 
 static void trim(unsigned char *source)
@@ -221,7 +221,7 @@ void jsMin(bool bNewFile)
 
 	try
 	{
-		JSMinCharArray jsmin(pJS, pJSMin, struOptions.bPutCR, struOptions.bKeepTopComt);
+		JSMinCharArray jsmin(pJS, pJSMin, g_struOptions.bPutCR, g_struOptions.bKeepTopComt);
 		jsmin.go();
 
 		trim(pJSMin);
@@ -229,7 +229,7 @@ void jsMin(bool bNewFile)
 		if(bNewFile)
 		{
 			// Open a new document
-			::SendMessage(nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_FILE_NEW);
+			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_FILE_NEW);
 
 			// ReGet the current scintilla
 			hCurrScintilla = getCurrentScintillaHandle();
@@ -237,7 +237,7 @@ void jsMin(bool bNewFile)
 			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJSMin);
 
 			// Set file's language 
-			::SendMessage(nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
+			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
 		}
 		else
 		{
@@ -247,7 +247,7 @@ void jsMin(bool bNewFile)
 	}
 	catch(std::runtime_error ex)
 	{
-		::MessageBox(nppData._nppHandle, TEXT("ERROR"), TEXT("JSMin"), MB_OK);
+		::MessageBox(g_nppData._nppHandle, TEXT("ERROR"), TEXT("JSMin"), MB_OK);
 		//cout << "Error: " << ex.what() << endl;
 	}
 
@@ -332,18 +332,18 @@ void jsFormat()
 
 	try
 	{
-		int _nChPerInd = struOptions.nChPerInd;
-		if(struOptions.chIndent == '\t')
+		int _nChPerInd = g_struOptions.nChPerInd;
+		if(g_struOptions.chIndent == '\t')
 			_nChPerInd = 1;
 
 		FormatterOption formatterOption;
-		formatterOption.chIndent = struOptions.chIndent;
+		formatterOption.chIndent = g_struOptions.chIndent;
 		formatterOption.nChPerInd = _nChPerInd;
-		formatterOption.eCRPut = struOptions.bPutCR ? 
+		formatterOption.eCRPut = g_struOptions.bPutCR ? 
 									PUT_CR : NOT_PUT_CR;
-		formatterOption.eBracNL = struOptions.bNLBracket ? 
+		formatterOption.eBracNL = g_struOptions.bNLBracket ? 
 									NEWLINE_BRAC : NO_NEWLINE_BRAC;
-		formatterOption.eEmpytIndent = struOptions.bIndentInEmpty ? 
+		formatterOption.eEmpytIndent = g_struOptions.bIndentInEmpty ? 
 										INDENT_IN_EMPTYLINE : NO_INDENT_IN_EMPTYLINE;
 
 		JSFormatString jsformat(pJS, &strJSFormat, formatterOption);
@@ -354,7 +354,7 @@ void jsFormat()
 		if(!bFormatSel)
 		{
 			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)(strJSFormat.c_str()));
-			::SendMessage(nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
+			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
 
 			// line starts from 0, lineFixed starts from 1
 			size_t lineJSF = line + 1;
@@ -380,7 +380,7 @@ void jsFormat()
 	}
 	catch(std::exception ex)
 	{
-		::MessageBox(nppData._nppHandle, TEXT("ERROR"), TEXT("JSFormat"), MB_OK);
+		::MessageBox(g_nppData._nppHandle, TEXT("ERROR"), TEXT("JSFormat"), MB_OK);
 	}
 
 	delete[] pJS;
@@ -388,8 +388,7 @@ void jsFormat()
 
 void jsonTree()
 {
-	//::MessageBox(nppData._nppHandle, TEXT("SUNViewer"), TEXT("JsonTree!!!"), MB_OK);
-	s_jsonDialog.setParent(nppData._nppHandle);
+	s_jsonDialog.setParent(g_nppData._nppHandle);
 	tTbData	data = {0};
 
 	if (!s_jsonDialog.isCreated())
@@ -404,7 +403,7 @@ void jsonTree()
 
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		data.dlgID = 0;
-		::SendMessage(nppData._nppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&data);
+		::SendMessage(g_nppData._nppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&data);
 	}
 	s_jsonDialog.display();
 
@@ -415,9 +414,9 @@ void jsonTree()
 
 void options()
 {
-	INT_PTR nRet = ::DialogBox(_hInst, 
+	INT_PTR nRet = ::DialogBox(g_hInst, 
 							MAKEINTRESOURCE(IDD_OPTIONSBOX),
-							nppData._nppHandle, 
+							g_nppData._nppHandle, 
 							(DLGPROC)dlgProcOptions);
 }
 
@@ -426,7 +425,7 @@ HMENU getOwnMenu()
 {
 	if (s_funcItem && s_ownMenu == NULL)
 	{
-		HMENU hPluginMenu = (HMENU)::SendMessage(nppData._nppHandle, NPPM_GETMENUHANDLE, 0, 0);
+		HMENU hPluginMenu = (HMENU)::SendMessage(g_nppData._nppHandle, NPPM_GETMENUHANDLE, 0, 0);
 
 		int iMenuItems = GetMenuItemCount(hPluginMenu);
 		for (int i = 0; i < iMenuItems; ++i)
@@ -618,8 +617,8 @@ void openGitHub()
 
 void about()
 {
-	INT_PTR nRet = ::DialogBox(_hInst, 
+	INT_PTR nRet = ::DialogBox(g_hInst, 
 							MAKEINTRESOURCE(IDD_ABOUTBOX),
-							nppData._nppHandle, 
+							g_nppData._nppHandle, 
 							(DLGPROC)dlgProcAbout);
 }

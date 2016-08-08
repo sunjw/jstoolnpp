@@ -2,7 +2,7 @@
 #include "comDef.h"
 #include "aboutDlg.h"
 
-extern HINSTANCE _hInst;
+extern HINSTANCE g_hInst;
 
 BOOL CALLBACK dlgProcAbout(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam) 
 {
@@ -10,7 +10,7 @@ BOOL CALLBACK dlgProcAbout(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
 	{
 		case WM_DRAWITEM :
 			{
-				HICON hIcon = (HICON)::LoadImage(_hInst, 
+				HICON hIcon = (HICON)::LoadImage(g_hInst, 
 					MAKEINTRESOURCE(IDI_JS_ICON), IMAGE_ICON, 
 					48, 48, LR_DEFAULTSIZE);
 				DRAWITEMSTRUCT *pdis = (DRAWITEMSTRUCT *)lParam;

@@ -31,9 +31,9 @@
 //#define IDC_STATIC -1
 //#endif
 
-HINSTANCE _hInst;
-NppData nppData;
-StruOptions struOptions;
+HINSTANCE g_hInst;
+NppData g_nppData;
+StruOptions g_struOptions;
 
 void jsMinCurrent();
 void jsMinNew();

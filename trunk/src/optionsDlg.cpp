@@ -9,7 +9,7 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 	{
 	case WM_INITDIALOG:
 		// 初始化
-		if(struOptions.bPutCR)
+		if(g_struOptions.bPutCR)
 		{
 			CheckRadioButton(hwnd, IDC_WINRADIO, IDC_UNIXRADIO, IDC_WINRADIO);
 		}
@@ -18,19 +18,19 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			CheckRadioButton(hwnd, IDC_WINRADIO, IDC_UNIXRADIO, IDC_UNIXRADIO);
 		}
 
-		if(struOptions.bNLBracket)
+		if(g_struOptions.bNLBracket)
 			CheckDlgButton(hwnd, IDC_NEWLINECHECK, TRUE);
 		else
 			CheckDlgButton(hwnd, IDC_NEWLINECHECK, FALSE);
 
-		if(struOptions.bKeepTopComt)
+		if(g_struOptions.bKeepTopComt)
 			CheckDlgButton(hwnd, IDC_KEEPCOMTCHECK, TRUE);
 		else
 			CheckDlgButton(hwnd, IDC_KEEPCOMTCHECK, FALSE);
 
-		setIndent(hwnd, (struOptions.chIndent == ' ' ? TRUE : FALSE));
+		setIndent(hwnd, (g_struOptions.chIndent == ' ' ? TRUE : FALSE));
 
-		if(struOptions.bIndentInEmpty)
+		if(g_struOptions.bIndentInEmpty)
 			CheckDlgButton(hwnd, IDC_EMPTYINDENT, TRUE);
 		else
 			CheckDlgButton(hwnd, IDC_EMPTYINDENT, FALSE);
@@ -42,27 +42,27 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
         case IDCLOSE:
 		case IDCANCEL:
 			// 重新读取配置
-			loadOption(nppData._nppHandle, struOptions);
+			loadOption(g_nppData._nppHandle, g_struOptions);
 			::EndDialog(hwnd, 0);
 			return TRUE;
 		case IDOK:
 			// 保存设置
-			struOptions.bPutCR = IsDlgButtonChecked(hwnd, IDC_WINRADIO) ? true : false;
-			struOptions.chIndent = IsDlgButtonChecked(hwnd, IDC_SPACECHECK) ? ' ' : '\t';
-			struOptions.bKeepTopComt = IsDlgButtonChecked(hwnd, IDC_KEEPCOMTCHECK) ? true : false;
-			struOptions.bIndentInEmpty = IsDlgButtonChecked(hwnd, IDC_EMPTYINDENT) ? true : false;
+			g_struOptions.bPutCR = IsDlgButtonChecked(hwnd, IDC_WINRADIO) ? true : false;
+			g_struOptions.chIndent = IsDlgButtonChecked(hwnd, IDC_SPACECHECK) ? ' ' : '\t';
+			g_struOptions.bKeepTopComt = IsDlgButtonChecked(hwnd, IDC_KEEPCOMTCHECK) ? true : false;
+			g_struOptions.bIndentInEmpty = IsDlgButtonChecked(hwnd, IDC_EMPTYINDENT) ? true : false;
 			TCHAR buffer[256];
 			GetWindowText(GetDlgItem(hwnd, IDC_COUNTEDIT), buffer, 255);
 			#if defined(UNICODE) || defined(_UNICODE)
-			struOptions.nChPerInd = _wtoi(buffer);
+			g_struOptions.nChPerInd = _wtoi(buffer);
 			#else
-			struOptions.nChPerInd = atoi(buffer);
+			g_struOptions.nChPerInd = atoi(buffer);
 			#endif
 
-			saveOption(nppData._nppHandle, struOptions);
+			saveOption(g_nppData._nppHandle, g_struOptions);
 
 			// 重新读取配置
-			loadOption(nppData._nppHandle, struOptions);
+			loadOption(g_nppData._nppHandle, g_struOptions);
 
 			::EndDialog(hwnd, 0);
 			return TRUE;
@@ -74,7 +74,7 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			setIndent(hwnd, IsDlgButtonChecked(hwnd, IDC_SPACECHECK));
 			return TRUE;
 		case IDC_NEWLINECHECK:
-			struOptions.bNLBracket = (IsDlgButtonChecked(hwnd, IDC_NEWLINECHECK) == TRUE);
+			g_struOptions.bNLBracket = (IsDlgButtonChecked(hwnd, IDC_NEWLINECHECK) == TRUE);
 			return TRUE;
 		}
 		return FALSE;
@@ -86,9 +86,9 @@ void setIndent(HWND hwnd, BOOL bSpace)
 {
 	TCHAR strCount[256];
 	#if defined(UNICODE) || defined(_UNICODE)
-	_itow(struOptions.nChPerInd, strCount, 10);
+	_itow(g_struOptions.nChPerInd, strCount, 10);
 	#else
-	_itoa(struOptions.nChPerInd, strCount, 10);
+	_itoa(g_struOptions.nChPerInd, strCount, 10);
 	#endif
 
 	CheckDlgButton(hwnd, IDC_SPACECHECK, bSpace);

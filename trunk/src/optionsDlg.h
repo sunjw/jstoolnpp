@@ -4,8 +4,8 @@
 #include "menuCmdID.h"
 #include "utility.h"
 
-extern StruOptions struOptions;
-extern NppData nppData;
+extern StruOptions g_struOptions;
+extern NppData g_nppData;
 
 BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 

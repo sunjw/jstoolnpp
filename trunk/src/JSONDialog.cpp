@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 using namespace std;
 using namespace sunjwbase;
 
-extern NppData nppData;
+extern NppData g_nppData;
 
 
 BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
@@ -272,7 +272,7 @@ void JSONDialog::drawTree(const JsonValue& jsonValue)
 	const JsonValue::VALUE_TYPE& valType = jsonValue.GetValueType();
 	if(valType == JsonValue::UNKNOWN_VALUE)
 	{
-		::MessageBox(nppData._nppHandle, TEXT("Cannot parse json..."), TEXT("JsonViewer"), MB_OK);
+		::MessageBox(g_nppData._nppHandle, TEXT("Cannot parse json..."), TEXT("JsonViewer"), MB_OK);
 		return;
 	}
 
