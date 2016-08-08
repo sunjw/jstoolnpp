@@ -159,19 +159,14 @@ extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam
 	return TRUE;
 }
 
-HWND getCurrentScintillaHandle() {
+static HWND getCurrentScintillaHandle()
+{
     int currentEdit;
     ::SendMessage(nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM)&currentEdit);
 	return (currentEdit == 0)?nppData._scintillaMainHandle:nppData._scintillaSecondHandle;
 };
 
-void fillZero(unsigned char *buffer, size_t length)
-{
-	for(size_t i = 0; i < length; ++i)
-		buffer[i] = '\0';
-}
-
-void trim(unsigned char *source)
+static void trim(unsigned char *source)
 {
 	size_t realStart = 0;
 	size_t len = strlen(reinterpret_cast<char*>(source));
@@ -213,8 +208,7 @@ void jsMin(bool bNewFile)
 
 	size_t jsMinLen = jsLen + 10; // seem to be something wrong, so add some empty places
 	unsigned char *pJSMin = new unsigned char[jsMinLen];
-
-	fillZero(pJSMin, jsMinLen);
+	memset(pJSMin, 0, jsMinLen);
 
 	try
 	{
@@ -444,7 +438,7 @@ HMENU getOwnMenu()
 	return ownMenu;
 }
 
-void changeUpdateMenuString(TCHAR *pszString)
+static void changeUpdateMenuString(TCHAR *pszString)
 {
 	HMENU hMenuOwn = getOwnMenu();
 	if (hMenuOwn != NULL)
