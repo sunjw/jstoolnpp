@@ -35,14 +35,14 @@
 #include "jsformatString.h"
 #include "jsonStringProc.h"
 
-static const int nbFunc = 13;
+static const int s_nbFunc = 13;
 
-static FuncItem funcItem[nbFunc];
-static HMENU ownMenu = NULL;
+static FuncItem s_funcItem[s_nbFunc];
+static HMENU s_ownMenu = NULL;
 
-static JSONDialog jsonDialog;
+static JSONDialog s_jsonDialog;
 
-static BOOL foundNewVersion = FALSE;
+static BOOL s_foundNewVersion = FALSE;
 
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        DWORD  reasonForCall, 
@@ -53,63 +53,63 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 		case DLL_PROCESS_ATTACH:
 		{
 			_hInst = (HINSTANCE)hModule;
-			jsonDialog.init((HINSTANCE)_hInst, nppData._nppHandle);
+			s_jsonDialog.init((HINSTANCE)_hInst, nppData._nppHandle);
 
 			ShortcutKey *pShKey;
-			for(int i = 0; i < nbFunc; ++i)
+			for(int i = 0; i < s_nbFunc; ++i)
 			{
-				funcItem[i]._init2Check = false;
+				s_funcItem[i]._init2Check = false;
 				// If you don't need the shortcut, you have to make it NULL
-				funcItem[i]._pShKey = NULL;
+				s_funcItem[i]._pShKey = NULL;
 			}
 
-			funcItem[0]._pFunc = jsMinCurrent;
-			funcItem[1]._pFunc = jsMinNew;
-			funcItem[2]._pFunc = NULL;
+			s_funcItem[0]._pFunc = jsMinCurrent;
+			s_funcItem[1]._pFunc = jsMinNew;
+			s_funcItem[2]._pFunc = NULL;
 
-			funcItem[3]._pFunc = jsFormat;
-			funcItem[4]._pFunc = NULL;
+			s_funcItem[3]._pFunc = jsFormat;
+			s_funcItem[4]._pFunc = NULL;
 
-			funcItem[5]._pFunc = jsonTree;
-			funcItem[6]._pFunc = NULL;
+			s_funcItem[5]._pFunc = jsonTree;
+			s_funcItem[6]._pFunc = NULL;
 
-			funcItem[7]._pFunc = options;
-			funcItem[8]._pFunc = NULL;
+			s_funcItem[7]._pFunc = options;
+			s_funcItem[8]._pFunc = NULL;
 
-			funcItem[9]._pFunc = openProjectSite;
-			funcItem[10]._pFunc = openGitHub;
-			funcItem[11]._pFunc = checkUpdate;
-			funcItem[12]._pFunc = about;
+			s_funcItem[9]._pFunc = openProjectSite;
+			s_funcItem[10]._pFunc = openGitHub;
+			s_funcItem[11]._pFunc = checkUpdate;
+			s_funcItem[12]._pFunc = about;
 
-			lstrcpy(funcItem[0]._itemName, TEXT(STRING_JSMIN));
-			lstrcpy(funcItem[1]._itemName, TEXT(STRING_JSMIN_NEW_FILE));
-			lstrcpy(funcItem[2]._itemName, TEXT("-SEPARATOR-"));
+			lstrcpy(s_funcItem[0]._itemName, TEXT(STRING_JSMIN));
+			lstrcpy(s_funcItem[1]._itemName, TEXT(STRING_JSMIN_NEW_FILE));
+			lstrcpy(s_funcItem[2]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[3]._itemName, TEXT(STRING_JSFORMAT));
+			lstrcpy(s_funcItem[3]._itemName, TEXT(STRING_JSFORMAT));
 			pShKey = new ShortcutKey; // Ctrl+Alt+M
 			pShKey->_isAlt = true;
 			pShKey->_isCtrl = true;
 			pShKey->_isShift = false;
 			pShKey->_key = 'M';
-			funcItem[3]._pShKey = pShKey;
-			lstrcpy(funcItem[4]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[3]._pShKey = pShKey;
+			lstrcpy(s_funcItem[4]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[5]._itemName, TEXT(STRING_JSON_VIEWER));
+			lstrcpy(s_funcItem[5]._itemName, TEXT(STRING_JSON_VIEWER));
 			pShKey = new ShortcutKey; // Ctrl+Alt+J
 			pShKey->_isAlt = true;
 			pShKey->_isCtrl = true;
 			pShKey->_isShift = false;
 			pShKey->_key = 'J';
-			funcItem[5]._pShKey = pShKey;
-			lstrcpy(funcItem[6]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[5]._pShKey = pShKey;
+			lstrcpy(s_funcItem[6]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[7]._itemName, TEXT(STRING_OPTIONS));
-			lstrcpy(funcItem[8]._itemName, TEXT("-SEPARATOR-"));
+			lstrcpy(s_funcItem[7]._itemName, TEXT(STRING_OPTIONS));
+			lstrcpy(s_funcItem[8]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[9]._itemName, TEXT(STRING_PROJECT_SITE));
-			lstrcpy(funcItem[10]._itemName, TEXT(STRING_SOURCE_CODE_GITHUB));
-			lstrcpy(funcItem[11]._itemName, TEXT(STRING_CHECK_UPDATE));
-			lstrcpy(funcItem[12]._itemName, TEXT(STRING_ABOUT));
+			lstrcpy(s_funcItem[9]._itemName, TEXT(STRING_PROJECT_SITE));
+			lstrcpy(s_funcItem[10]._itemName, TEXT(STRING_SOURCE_CODE_GITHUB));
+			lstrcpy(s_funcItem[11]._itemName, TEXT(STRING_CHECK_UPDATE));
+			lstrcpy(s_funcItem[12]._itemName, TEXT(STRING_ABOUT));
 		}
 		break;
 
@@ -139,12 +139,12 @@ extern "C" __declspec(dllexport) const TCHAR *getName()
 
 extern "C" __declspec(dllexport) FuncItem *getFuncsArray(int *nbF)
 {
-	*nbF = nbFunc;
+	*nbF = s_nbFunc;
 
 	// After npp get our menu, we check update.
 	doInternetCheckUpdate();
 
-	return funcItem;
+	return s_funcItem;
 }
 
 extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
@@ -389,28 +389,28 @@ void jsFormat()
 void jsonTree()
 {
 	//::MessageBox(nppData._nppHandle, TEXT("SUNViewer"), TEXT("JsonTree!!!"), MB_OK);
-	jsonDialog.setParent(nppData._nppHandle);
+	s_jsonDialog.setParent(nppData._nppHandle);
 	tTbData	data = {0};
 
-	if (!jsonDialog.isCreated())
+	if (!s_jsonDialog.isCreated())
 	{
-		jsonDialog.create(&data);
+		s_jsonDialog.create(&data);
 
 		// define the default docking behaviour
 		data.uMask = DWS_DF_CONT_LEFT;
 
-		data.pszModuleName = jsonDialog.getPluginFileName();
+		data.pszModuleName = s_jsonDialog.getPluginFileName();
 		data.pszName = TEXT("JSToolNpp JSON Viewer");
 
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		data.dlgID = 0;
 		::SendMessage(nppData._nppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&data);
 	}
-	jsonDialog.display();
+	s_jsonDialog.display();
 
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
-	jsonDialog.refreshTree(hCurrScintilla);
+	s_jsonDialog.refreshTree(hCurrScintilla);
 }
 
 void options()
@@ -424,7 +424,7 @@ void options()
 /* This code was shamefully robbed from NppExec & PythonScript*/
 HMENU getOwnMenu()
 {
-	if (funcItem && ownMenu == NULL)
+	if (s_funcItem && s_ownMenu == NULL)
 	{
 		HMENU hPluginMenu = (HMENU)::SendMessage(nppData._nppHandle, NPPM_GETMENUHANDLE, 0, 0);
 
@@ -438,13 +438,13 @@ HMENU getOwnMenu()
 			if (tstrMenuString == TEXT(STRING_JSMIN))
 			{
 				// this is our sub-menu
-				ownMenu = hSubMenu;
+				s_ownMenu = hSubMenu;
 				break;
 			}
 		}
 	}
 
-	return ownMenu;
+	return s_ownMenu;
 }
 
 static void changeUpdateMenuString(LPTSTR pszString)
@@ -553,17 +553,17 @@ static int checkUpdateThread(void *param)
 			int localVersionArray[4] = {0};
 			splitVersionToArray(string(VERSION_VALUE), localVersionArray);
 
-			foundNewVersion = FALSE;
+			s_foundNewVersion = FALSE;
 			for (int i = 0; i < 4; ++i)
 			{
 				if (curVersionArray[i] > localVersionArray[i])
 				{
-					foundNewVersion = TRUE;
+					s_foundNewVersion = TRUE;
 					break;
 				}
 			}
 
-			if (foundNewVersion)
+			if (s_foundNewVersion)
 			{
 				changeUpdateMenuString(TEXT(STRING_NEW_VERSION));
 			}
