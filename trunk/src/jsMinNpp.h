@@ -46,7 +46,8 @@ void options();
 
 HMENU getOwnMenu();
 
-void checkUpdateThread();
+int readInternetString(LPCTSTR pszUrl, sunjwbase::tstring *tstrResp);
+void doCheckUpdate();
 void checkUpdate();
 
 void donate();

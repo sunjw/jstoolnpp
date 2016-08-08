@@ -27,6 +27,8 @@
 #include "optionsDlg.h"
 #include "aboutDlg.h"
 
+#include <Wininet.h>
+
 #include "jsminCharArray.h"
 #include "jsformatString.h"
 
@@ -438,7 +440,7 @@ HMENU getOwnMenu()
 	return ownMenu;
 }
 
-static void changeUpdateMenuString(TCHAR *pszString)
+static void changeUpdateMenuString(LPTSTR pszString)
 {
 	HMENU hMenuOwn = getOwnMenu();
 	if (hMenuOwn != NULL)
@@ -452,7 +454,46 @@ static void changeUpdateMenuString(TCHAR *pszString)
 	}
 }
 
-void checkUpdateThread()
+int readInternetString(LPCTSTR pszUrl, tstring *tstrResp)
+{
+	HINTERNET hInternet = NULL;
+	hInternet = ::InternetOpen(TEXT("JSToolNpp"), NULL, NULL, NULL, NULL);
+	if (hInternet == NULL)
+		return -1;
+
+	HINTERNET hConnect = NULL;
+	hConnect = ::InternetOpenUrl(hInternet, pszUrl, NULL, 0, INTERNET_FLAG_DONT_CACHE, 0);
+	if (hConnect == NULL)
+	{
+		::InternetCloseHandle(hInternet);
+		return -1;
+	}
+
+	char buffer[1024] = {0};
+	DWORD dwSizeOut = 0;
+
+	do
+	{
+		if (!InternetReadFile(hConnect, buffer, 1024, &dwSizeOut))
+			break;
+
+		if (dwSizeOut == 0)
+			break;
+	} // do
+	while (TRUE);
+
+	::InternetCloseHandle(hConnect);
+	::InternetCloseHandle(hInternet);
+
+	return 0;
+}
+
+static int checkUpdateThread(void *param)
+{
+
+}
+
+void doCheckUpdate()
 {
 
 }
