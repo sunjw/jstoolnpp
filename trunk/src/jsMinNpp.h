@@ -52,6 +52,7 @@ void jsonTree();
 void options();
 
 HMENU getOwnMenu();
+void changeUpdateMenuString(TCHAR *pszString);
 void checkUpdate();
 
 void donate();

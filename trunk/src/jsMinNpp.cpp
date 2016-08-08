@@ -439,6 +439,20 @@ HMENU getOwnMenu()
 	return ownMenu;
 }
 
+void changeUpdateMenuString(TCHAR *pszString)
+{
+	HMENU hMenuOwn = getOwnMenu();
+	if (hMenuOwn != NULL)
+	{
+		MENUITEMINFO mii = { sizeof(MENUITEMINFO) };
+		mii.cbSize = sizeof(MENUITEMINFO);
+		mii.fMask = MIIM_STRING;
+		mii.fType = MFT_STRING;
+		mii.dwTypeData = pszString;
+		::SetMenuItemInfo(hMenuOwn, 11, TRUE, &mii);
+	}
+}
+
 void checkUpdate()
 {
 	tstring url(TEXT(CHECK_UPDATE));
