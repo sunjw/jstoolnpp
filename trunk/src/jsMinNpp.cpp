@@ -33,13 +33,16 @@
 
 #include "jsminCharArray.h"
 #include "jsformatString.h"
+#include "jsonStringProc.h"
 
 static const int nbFunc = 13;
 
 static FuncItem funcItem[nbFunc];
-static HMENU ownMenu;
+static HMENU ownMenu = NULL;
 
 static JSONDialog jsonDialog;
+
+static BOOL foundNewVersion = FALSE;
 
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        DWORD  reasonForCall, 
@@ -78,11 +81,11 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[11]._pFunc = checkUpdate;
 			funcItem[12]._pFunc = about;
 
-			lstrcpy(funcItem[0]._itemName, TEXT("JS&Min"));
-			lstrcpy(funcItem[1]._itemName, TEXT("JSMin (&New file)"));
+			lstrcpy(funcItem[0]._itemName, TEXT(STRING_JSMIN));
+			lstrcpy(funcItem[1]._itemName, TEXT(STRING_JSMIN_NEW_FILE));
 			lstrcpy(funcItem[2]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[3]._itemName, TEXT("JS&Format"));
+			lstrcpy(funcItem[3]._itemName, TEXT(STRING_JSFORMAT));
 			pShKey = new ShortcutKey; // Ctrl+Alt+M
 			pShKey->_isAlt = true;
 			pShKey->_isCtrl = true;
@@ -91,7 +94,7 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[3]._pShKey = pShKey;
 			lstrcpy(funcItem[4]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[5]._itemName, TEXT("Json &Viewer"));
+			lstrcpy(funcItem[5]._itemName, TEXT(STRING_JSON_VIEWER));
 			pShKey = new ShortcutKey; // Ctrl+Alt+J
 			pShKey->_isAlt = true;
 			pShKey->_isCtrl = true;
@@ -100,15 +103,13 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			funcItem[5]._pShKey = pShKey;
 			lstrcpy(funcItem[6]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[7]._itemName, TEXT("&Options..."));
+			lstrcpy(funcItem[7]._itemName, TEXT(STRING_OPTIONS));
 			lstrcpy(funcItem[8]._itemName, TEXT("-SEPARATOR-"));
 
-			lstrcpy(funcItem[9]._itemName, TEXT("&Project site"));
-			lstrcpy(funcItem[10]._itemName, TEXT("&Source code on GitHub"));
-			lstrcpy(funcItem[11]._itemName, TEXT("&Check for update"));
-			lstrcpy(funcItem[12]._itemName, TEXT("&About"));
-
-			ownMenu = NULL;
+			lstrcpy(funcItem[9]._itemName, TEXT(STRING_PROJECT_SITE));
+			lstrcpy(funcItem[10]._itemName, TEXT(STRING_SOURCE_CODE_GITHUB));
+			lstrcpy(funcItem[11]._itemName, TEXT(STRING_CHECK_UPDATE));
+			lstrcpy(funcItem[12]._itemName, TEXT(STRING_ABOUT));
 		}
 		break;
 
@@ -434,7 +435,7 @@ HMENU getOwnMenu()
 			TCHAR pszMenuString[256] = {0};
 			::GetMenuString(hSubMenu, 0, pszMenuString, 255, MF_BYPOSITION);
 			tstring tstrMenuString(pszMenuString);
-			if (tstrMenuString == TEXT("JS&Min"))
+			if (tstrMenuString == TEXT(STRING_JSMIN))
 			{
 				// this is our sub-menu
 				ownMenu = hSubMenu;
@@ -460,7 +461,7 @@ static void changeUpdateMenuString(LPTSTR pszString)
 	}
 }
 
-int readInternetString(LPCTSTR pszUrl, tstring *tstrResp)
+static int readInternetString(LPCTSTR pszUrl, tstring *tstrResp)
 {
 	if (pszUrl == NULL || tstrResp == NULL)
 		return -1;
@@ -500,10 +501,79 @@ int readInternetString(LPCTSTR pszUrl, tstring *tstrResp)
 	return 0;
 }
 
+static void splitVersionToArray(const string& strVersion, int *versionArray)
+{
+	if (versionArray == NULL)
+		return;
+
+	size_t startIdx = 0;
+	for (int i = 0; i < 4; ++i)
+	{
+		size_t findIdx = strVersion.find(".", startIdx);
+		size_t substrLen = 0;
+		if (findIdx != string::npos)
+		{
+			substrLen = findIdx - startIdx;
+		}
+		else
+		{
+			substrLen = strVersion.length() - startIdx;
+		}
+		
+		string strSubver = strVersion.substr(startIdx, substrLen);
+		versionArray[i] = atoi(strSubver.c_str());
+
+		if (findIdx == string::npos)
+			break;
+
+		startIdx = findIdx + 1;
+	}
+}
+
 static int checkUpdateThread(void *param)
 {
-	tstring tstrVersion;
-	readInternetString(TEXT(UPDATE_FILE_URL), &tstrVersion);
+	tstring tstrJson;
+	readInternetString(TEXT(UPDATE_FILE_URL), &tstrJson);
+
+	if (tstrJson != TEXT(""))
+	{
+		// We read something.
+		string strJson = tstrtostr(tstrJson);
+
+		JsonStringProc jsonProc(strJson);
+		JsonValue jsonVal;
+		jsonProc.Go(jsonVal);
+		
+		if (jsonVal.HasKey("CurrentVersion"))
+		{
+			string strCurVersion = jsonVal["CurrentVersion"].GetStrValue();
+			int curVersionArray[4] = {0};
+			splitVersionToArray(strCurVersion, curVersionArray);
+
+			int localVersionArray[4] = {0};
+			splitVersionToArray(string(VERSION_VALUE), localVersionArray);
+
+			foundNewVersion = FALSE;
+			for (int i = 0; i < 4; ++i)
+			{
+				if (curVersionArray[i] > localVersionArray[i])
+				{
+					foundNewVersion = TRUE;
+					break;
+				}
+			}
+
+			if (foundNewVersion)
+			{
+				changeUpdateMenuString(TEXT(STRING_NEW_VERSION));
+			}
+			else
+			{
+				changeUpdateMenuString(TEXT(STRING_CHECK_UPDATE));
+			}
+
+		}
+	}
 
 	return 0;
 }

@@ -46,7 +46,6 @@ void options();
 
 HMENU getOwnMenu();
 
-int readInternetString(LPCTSTR pszUrl, sunjwbase::tstring *tstrResp);
 void doInternetCheckUpdate();
 void checkUpdate();
 
