@@ -15,6 +15,7 @@
 //You should have received a copy of the GNU General Public License
 //along with this program; if not, write to the Free Software
 //Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+#include <time.h>
 #include <stdexcept>
 #include <string>
 
@@ -42,7 +43,10 @@ static HMENU s_ownMenu = NULL;
 
 static JSONDialog s_jsonDialog;
 
+static BOOL s_updateThreadRunning = FALSE;
+static time_t s_lastUpdateCheckTime = 0;
 static BOOL s_foundNewVersion = FALSE;
+
 
 BOOL APIENTRY DllMain( HANDLE hModule, 
                        DWORD  reasonForCall, 
@@ -203,6 +207,8 @@ void jsMinNew()
 
 void jsMin(bool bNewFile)
 {
+	doInternetCheckUpdate();
+
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
@@ -261,6 +267,8 @@ void jsMin(bool bNewFile)
 
 void jsFormat()
 {
+	doInternetCheckUpdate();
+
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
@@ -388,6 +396,8 @@ void jsFormat()
 
 void jsonTree()
 {
+	doInternetCheckUpdate();
+
 	s_jsonDialog.setParent(g_nppData._nppHandle);
 	tTbData	data = {0};
 
@@ -529,8 +539,17 @@ static void splitVersionToArray(const string& strVersion, int *versionArray)
 	}
 }
 
+static time_t getCurrentTimeSecond()
+{
+	time_t seconds;
+	seconds = ::time(NULL);
+	return seconds;
+}
+
 static int checkUpdateThread(void *param)
 {
+	s_updateThreadRunning = TRUE;
+
 	tstring tstrJson;
 	readInternetString(TEXT(UPDATE_FILE_URL), &tstrJson);
 
@@ -574,11 +593,26 @@ static int checkUpdateThread(void *param)
 		}
 	}
 
+	s_lastUpdateCheckTime = getCurrentTimeSecond();
+
+	s_updateThreadRunning = FALSE;
+
 	return 0;
 }
 
 void doInternetCheckUpdate()
 {
+	time_t curTime = getCurrentTimeSecond();
+	if (s_updateThreadRunning ||
+		(!s_foundNewVersion &&
+		(curTime - s_lastUpdateCheckTime) < 300) ||
+		(s_foundNewVersion &&
+		(curTime - s_lastUpdateCheckTime) < 3600))
+	{
+		// Donot check.
+		return;
+	}
+
 	DWORD dwThreadID;
 	HANDLE hThread = (HANDLE)_beginthreadex(NULL, 0, 
 		(unsigned int (WINAPI *)(void *))checkUpdateThread, NULL, 
