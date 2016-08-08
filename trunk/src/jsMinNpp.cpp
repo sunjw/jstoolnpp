@@ -35,7 +35,6 @@ static const int nbFunc = 13;
 static FuncItem funcItem[nbFunc];
 static HMENU ownMenu;
 
-static HANDLE g_hMod;
 static JSONDialog jsonDialog;
 
 BOOL APIENTRY DllMain( HANDLE hModule, 
@@ -46,12 +45,10 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 	{
 		case DLL_PROCESS_ATTACH:
 		{
-			g_hMod = hModule;
-			jsonDialog.init((HINSTANCE)g_hMod, nppData._nppHandle);
+			_hInst = (HINSTANCE)hModule;
+			jsonDialog.init((HINSTANCE)_hInst, nppData._nppHandle);
 
 			ShortcutKey *pShKey;
-			_hInst = (HINSTANCE)hModule;
-			
 			for(int i = 0; i < nbFunc; ++i)
 			{
 				funcItem[i]._init2Check = false;
