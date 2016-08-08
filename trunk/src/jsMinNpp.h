@@ -36,6 +36,7 @@ const int nbFunc = 13;
 HINSTANCE _hInst;
 NppData nppData;
 FuncItem funcItem[nbFunc];
+HMENU ownMenu;
 
 HANDLE g_hMod;
 JSONDialog jsonDialog;
@@ -50,7 +51,9 @@ void jsonTree();
 
 void options();
 
+HMENU getOwnMenu();
 void checkUpdate();
+
 void donate();
 void openProjectSite();
 void openGitHub();

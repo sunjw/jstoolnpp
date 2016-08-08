@@ -98,6 +98,8 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			lstrcpy(funcItem[10]._itemName, TEXT("&Source code on GitHub"));
 			lstrcpy(funcItem[11]._itemName, TEXT("&Check for update"));
 			lstrcpy(funcItem[12]._itemName, TEXT("&About"));
+
+			ownMenu = NULL;
 		}
 		break;
 
@@ -409,6 +411,32 @@ void options()
 							MAKEINTRESOURCE(IDD_OPTIONSBOX),
 							nppData._nppHandle, 
 							(DLGPROC)dlgProcOptions);
+}
+
+/* This code was shamefully robbed from NppExec & PythonScript*/
+HMENU getOwnMenu()
+{
+	if (funcItem && ownMenu == NULL)
+	{
+		HMENU hPluginMenu = (HMENU)::SendMessage(nppData._nppHandle, NPPM_GETMENUHANDLE, 0, 0);
+
+		int iMenuItems = GetMenuItemCount(hPluginMenu);
+		for (int i = 0; i < iMenuItems; ++i)
+		{
+			HMENU hSubMenu = ::GetSubMenu(hPluginMenu, i);
+			TCHAR pszMenuString[256] = {0};
+			::GetMenuString(hSubMenu, 0, pszMenuString, 255, MF_BYPOSITION);
+			tstring tstrMenuString(pszMenuString);
+			if (tstrMenuString == TEXT("JS&Min"))
+			{
+				// this is our sub-menu
+				ownMenu = hSubMenu;
+				break;
+			}
+		}
+	}
+
+	return ownMenu;
 }
 
 void checkUpdate()
