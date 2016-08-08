@@ -456,6 +456,9 @@ static void changeUpdateMenuString(LPTSTR pszString)
 
 int readInternetString(LPCTSTR pszUrl, tstring *tstrResp)
 {
+	if (pszUrl == NULL || tstrResp == NULL)
+		return -1;
+
 	HINTERNET hInternet = NULL;
 	hInternet = ::InternetOpen(TEXT("JSToolNpp"), NULL, NULL, NULL, NULL);
 	if (hInternet == NULL)
@@ -474,11 +477,14 @@ int readInternetString(LPCTSTR pszUrl, tstring *tstrResp)
 
 	do
 	{
-		if (!InternetReadFile(hConnect, buffer, 1024, &dwSizeOut))
+		if (!::InternetReadFile(hConnect, buffer, 1024, &dwSizeOut))
 			break;
 
 		if (dwSizeOut == 0)
 			break;
+
+		tstring tstrTmp = strtotstr(string(buffer));
+		tstrResp->append(tstrTmp);
 	} // do
 	while (TRUE);
 
