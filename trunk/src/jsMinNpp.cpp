@@ -18,6 +18,10 @@
 #include <stdexcept>
 #include <string>
 
+#include <windows.h>
+#include <process.h>
+#include <Wininet.h>
+
 #include "comDef.h"
 #include "PluginInterface.h"
 #include "menuCmdID.h"
@@ -26,8 +30,6 @@
 #include "version.h"
 #include "optionsDlg.h"
 #include "aboutDlg.h"
-
-#include <Wininet.h>
 
 #include "jsminCharArray.h"
 #include "jsformatString.h"
@@ -137,6 +139,10 @@ extern "C" __declspec(dllexport) const TCHAR *getName()
 extern "C" __declspec(dllexport) FuncItem *getFuncsArray(int *nbF)
 {
 	*nbF = nbFunc;
+
+	// After npp get our menu, we check update.
+	doInternetCheckUpdate();
+
 	return funcItem;
 }
 
@@ -496,12 +502,23 @@ int readInternetString(LPCTSTR pszUrl, tstring *tstrResp)
 
 static int checkUpdateThread(void *param)
 {
+	tstring tstrVersion;
+	readInternetString(TEXT(UPDATE_FILE_URL), &tstrVersion);
 
+	return 0;
 }
 
-void doCheckUpdate()
+void doInternetCheckUpdate()
 {
+	DWORD dwThreadID;
+	HANDLE hThread = (HANDLE)_beginthreadex(NULL, 0, 
+		(unsigned int (WINAPI *)(void *))checkUpdateThread, NULL, 
+		0, (unsigned int *)&dwThreadID);
 
+	if ((uintptr_t)hThread != -1)
+	{
+		::CloseHandle(hThread);
+	}
 }
 
 void checkUpdate()
