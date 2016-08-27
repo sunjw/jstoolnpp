@@ -358,30 +358,38 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 void JSONDialog::clickJsonTree(LPARAM lParam)
 {
 	LPNMHDR lpnmh = (LPNMHDR)lParam;
-    if (lpnmh->code == NM_CLICK && lpnmh->idFrom == IDC_TREE_JSON)  
-    {
-		DWORD dwPos = GetMessagePos();
-		POINT pt;
-		pt.x = LOWORD(dwPos);
-		pt.y = HIWORD(dwPos);
-		ScreenToClient(m_hTree, &pt);
-		TVHITTESTINFO ht = {0};
-		ht.pt = pt;
-		//ht.flags = TVHT_ONITEMLABEL;
-		HTREEITEM hItem = TreeView_HitTest(m_hTree, &ht);
-		if(hItem && (ht.flags & TVHT_ONITEMLABEL))
-		{
-			clickJsonTreeItem(hItem);
-		}
-	}
-	else if (lpnmh->code == TVN_SELCHANGED && lpnmh->idFrom == IDC_TREE_JSON)
+	if (lpnmh->idFrom != IDC_TREE_JSON)
+		return; // Not click inside JsonTree
+
+	switch (lpnmh->code)
 	{
-		NMTREEVIEW *pnmtv = (LPNMTREEVIEW)lParam;
-		HTREEITEM hItem = pnmtv->itemNew.hItem;
-		if(hItem && pnmtv->action == TVC_BYKEYBOARD)
+	case NM_CLICK:
 		{
-			clickJsonTreeItem(hItem);
+			DWORD dwPos = GetMessagePos();
+			POINT pt;
+			pt.x = LOWORD(dwPos);
+			pt.y = HIWORD(dwPos);
+			ScreenToClient(m_hTree, &pt);
+			TVHITTESTINFO ht = {0};
+			ht.pt = pt;
+			//ht.flags = TVHT_ONITEMLABEL;
+			HTREEITEM hItem = TreeView_HitTest(m_hTree, &ht);
+			if(hItem && (ht.flags & TVHT_ONITEMLABEL))
+			{
+				clickJsonTreeItem(hItem);
+			}
 		}
+		break;
+	case TVN_SELCHANGED:
+		{
+			NMTREEVIEW *pnmtv = (LPNMTREEVIEW)lParam;
+			HTREEITEM hItem = pnmtv->itemNew.hItem;
+			if(hItem && pnmtv->action == TVC_BYKEYBOARD)
+			{
+				clickJsonTreeItem(hItem);
+			}
+		}
+		break;
 	}
 }
 
