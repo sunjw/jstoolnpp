@@ -376,7 +376,7 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 	}
 	else if (lpnmh->code == TVN_SELCHANGED && lpnmh->idFrom == IDC_TREE_JSON)
 	{
-		NMTREEVIEW* pnmtv = (LPNMTREEVIEW)lParam;
+		NMTREEVIEW *pnmtv = (LPNMTREEVIEW)lParam;
 		HTREEITEM hItem = pnmtv->itemNew.hItem;
 		if(hItem && pnmtv->action == TVC_BYKEYBOARD)
 		{
