@@ -23,6 +23,14 @@ TreeViewController::TreeViewController(HWND hWndWindow, HWND hWndTree):
 }
 
 /*
+ * Get HTREEITEM's parent HTREEITEM on TreeView.
+ */
+HTREEITEM TreeViewController::getParentItem(HTREEITEM hti)
+{
+	return TreeView_GetParent(m_hWndTree, hti);
+}
+
+/*
  * Get next item of current item on the TreeView.
  * If current item has a child (or chidren) item, next will be the first child item.
  * If current item has no child, next will be its sibling item.
@@ -53,4 +61,18 @@ HTREEITEM TreeViewController::nextItem(HTREEITEM htiCurrent)
 	}
 
 	return NULL;
+}
+
+/*
+ * Get TVITEM of specified HTREEITEM on TreeView.
+ */
+BOOL TreeViewController::getTVItem(HTREEITEM hti, TCHAR *buf, int bufSize, TVITEM *tvi)
+{
+	tvi->mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM;
+	tvi->cchTextMax = bufSize;
+	tvi->pszText = buf;
+	tvi->hItem = hti;
+	tvi->lParam = -1;
+
+	return TreeView_GetItem(m_hWndTree, tvi);
 }

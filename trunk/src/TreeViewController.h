@@ -27,7 +27,10 @@ public:
 	inline HWND getHWndTree()
 	{ return m_hWndTree; }
 
+	HTREEITEM getParentItem(HTREEITEM hti);
 	HTREEITEM nextItem(HTREEITEM htiCurrent);
+
+	BOOL getTVItem(HTREEITEM hti, TCHAR *buf, int bufSize, TVITEM *tvi);
 
 private:
 	HWND m_hWndWindow; // Window's handle

@@ -30,10 +30,10 @@ class JsonTree: public TreeViewController
 public:
 	JsonTree(HWND hScintilla = NULL, HWND hWndWindow = NULL, HWND hWndTree = NULL);
 
-	BOOL getTVItem(HTREEITEM hti, TCHAR *buf, int bufSize, TVITEM *tvi);
-	HTREEITEM getParentItem(HTREEITEM hti);
 	HTREEITEM search(sunjwbase::tstring& tstrSearchKey, HTREEITEM htiCurrent);
+
 	sunjwbase::tstring getJsonNodePath(HTREEITEM hti);
+
 	void jumpToSciLine(HTREEITEM hti, int iLineBase);
 
 private:

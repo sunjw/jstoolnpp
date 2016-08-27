@@ -24,28 +24,6 @@ JsonTree::JsonTree(HWND hScintilla, HWND hWndWindow, HWND hWndTree):
 	m_hScintilla(hScintilla), TreeViewController(hWndWindow, hWndTree)
 {}
 
-/*
- * Get TVITEM of specified HTREEITEM on TreeView.
- */
-BOOL JsonTree::getTVItem(HTREEITEM hti, TCHAR *buf, int bufSize, TVITEM *tvi)
-{
-	tvi->mask = TVIF_HANDLE | TVIF_TEXT | TVIF_PARAM;
-	tvi->cchTextMax = bufSize;
-	tvi->pszText = buf;
-	tvi->hItem = hti;
-	tvi->lParam = -1;
-					
-	return TreeView_GetItem(getHWndTree(), tvi);
-}
-
-/*
- * Get HTREEITEM's parent HTREEITEM on TreeView.
- */
-HTREEITEM JsonTree::getParentItem(HTREEITEM hti)
-{		
-	return TreeView_GetParent(getHWndTree(), hti);
-}
-
 HTREEITEM JsonTree::search(tstring& tstrSearchKey, HTREEITEM htiCurrent)
 {
 	return doSearch(tstrSearchKey, htiCurrent, true);
