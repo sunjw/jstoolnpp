@@ -80,8 +80,8 @@ private:
 	void insertJsonValue(const std::string& key, const JsonValue& jsonValue, HTREEITEM node);
 
 	void clickJsonTree(LPARAM lParam);
-	void clickJsonTreeItem(HTREEITEM htiNode, PPOINT ppointScreen);
-	void clickJsonTreeItemRight(HTREEITEM htiNode, PPOINT ppointScreen);
+	void clickJsonTreeItem(HTREEITEM htiNode, LPPOINT lppScreen);
+	void clickJsonTreeItemRight(HTREEITEM htiNode, LPPOINT lppScreen);
 
 	void search();
 };

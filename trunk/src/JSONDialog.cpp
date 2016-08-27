@@ -410,20 +410,20 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 	}
 }
 
-void JSONDialog::clickJsonTreeItem(HTREEITEM htiNode, PPOINT ppointScreen)
+void JSONDialog::clickJsonTreeItem(HTREEITEM htiNode, LPPOINT lppScreen)
 {
 	tstring tstrJsonPath = m_jsonTree->getJsonNodePath(htiNode);
 	SetDlgItemText(m_hDlg, IDC_JSONPATH, tstrJsonPath.c_str());
 	m_jsonTree->jumpToSciLine(htiNode, m_iSelStartLine);
 }
 
-void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode, PPOINT ppointScreen)
+void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode, LPPOINT lppScreen)
 {
 	// Select it
 	m_jsonTree->selectItem(htiNode);
 
 	// Show menu
-	if (ppointScreen != NULL)
+	if (lppScreen != NULL)
 	{
 		HMENU hMenuPopup = CreatePopupMenu();
 
@@ -435,7 +435,7 @@ void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode, PPOINT ppointScreen)
 		AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
 
 		TrackPopupMenu(hMenuPopup, TPM_LEFTALIGN | TPM_RIGHTBUTTON,
-			ppointScreen->x, ppointScreen->y, 0, m_hDlg, NULL);
+			lppScreen->x, lppScreen->y, 0, m_hDlg, NULL);
 
 		DestroyMenu(hMenuPopup);
 	}
