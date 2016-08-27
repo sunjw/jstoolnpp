@@ -42,7 +42,7 @@ HTREEITEM JsonTree::doSearch(tstring& tstrSearchKey, HTREEITEM htiCurrent, bool 
 		{
 			tstring tstrTreeText = tvi.pszText;
 			tstring tstrKey, tstrValue;
-			splitText(tstrTreeText, tstrKey, tstrValue);
+			splitNodeText(tstrTreeText, tstrKey, tstrValue);
 
 			if(tstrValue == TEXT("[Object]") || tstrValue == TEXT("[Array]"))
 			{
@@ -75,26 +75,27 @@ tstring JsonTree::getJsonNodePath(HTREEITEM hti)
 	tstring tstrJsonPath;
 	HTREEITEM hitTravel = hti;
 
-	while(hitTravel != NULL)
+	while (hitTravel != NULL)
 	{
-		TCHAR buf[1024] = {0};
+		const int bufLen = 1024;
+		TCHAR buf[bufLen] = {0};
 		TVITEM tvi = {0};
-		if(getTVItem(hitTravel, buf, 1024, &tvi))
+		if (getTVItem(hitTravel, buf, bufLen, &tvi))
 		{
 			tstring tstrTreeText = tvi.pszText;
 			tstring tstrKey, tstrValue;
-			splitText(tstrTreeText, tstrKey, tstrValue);
+			splitNodeText(tstrTreeText, tstrKey, tstrValue);
 
-			if(tstrJsonPath == TEXT(""))
+			if (tstrJsonPath == TEXT(""))
 			{
 				tstrJsonPath = tstrKey;
 			}
 			else
 			{
-				if(tstrTreeText == TEXT("ROOT"))
+				if (tstrTreeText == TEXT("ROOT"))
 					tstrKey = TEXT("ROOT");
 
-				if(tstrJsonPath[0] == TEXT('['))
+				if (tstrJsonPath[0] == TEXT('['))
 					tstrJsonPath = tstrKey + tstrJsonPath;
 				else
 					tstrJsonPath = tstrKey + TEXT(".") + tstrJsonPath;
@@ -125,7 +126,7 @@ void JsonTree::jumpToSciLine(HTREEITEM hti, int iLineBase)
 	}
 }
 
-void JsonTree::splitText(tstring& tstrText, 
+void JsonTree::splitNodeText(tstring& tstrText, 
 				tstring& tstrKey, 
 				tstring& tstrValue)
 {

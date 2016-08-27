@@ -36,11 +36,12 @@ public:
 
 	void jumpToSciLine(HTREEITEM hti, int iLineBase);
 
+	void splitNodeText(sunjwbase::tstring& tstrText, sunjwbase::tstring& tstrKey, sunjwbase::tstring& tstrValue);
+
 private:
 	HWND m_hScintilla;
 	
 	HTREEITEM doSearch(sunjwbase::tstring& tstrSearchKey, HTREEITEM htiCurrent, bool bSkipCurrent);
-	void splitText(sunjwbase::tstring& tstrText, sunjwbase::tstring& tstrKey, sunjwbase::tstring& tstrValue);
 };
 
 #endif
