@@ -374,8 +374,10 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 			POINT ptScreen, ptClient;
 			ptScreen.x = LOWORD(dwPos);
 			ptScreen.y = HIWORD(dwPos);
+
 			ptClient = ptScreen;
-			ScreenToClient(m_hTree, &ptClient);
+			m_jsonTree->screenToTreeView(&ptClient);
+
 			TVHITTESTINFO ht = {0};
 			ht.pt = ptClient;
 			HTREEITEM hItem = TreeView_HitTest(m_hTree, &ht);
@@ -468,7 +470,7 @@ void JSONDialog::search()
 	if(htiFound != NULL)
 	{
 		// We found in search.
-		TreeView_SelectItem(m_hTree, htiFound);
+		m_jsonTree->selectItem(htiFound);
 		clickJsonTreeItem(htiFound, NULL);
 	}
 	else

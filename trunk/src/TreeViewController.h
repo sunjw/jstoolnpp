@@ -27,6 +27,8 @@ public:
 	inline HWND getHWndTree()
 	{ return m_hWndTree; }
 
+	BOOL screenToTreeView(LPPOINT lpPoint);
+
 	BOOL selectItem(HTREEITEM hti);
 
 	HTREEITEM getParentItem(HTREEITEM hti);

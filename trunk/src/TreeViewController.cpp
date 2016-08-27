@@ -23,6 +23,14 @@ TreeViewController::TreeViewController(HWND hWndWindow, HWND hWndTree):
 }
 
 /*
+ * ScreenToClient on TreeViewController
+ */
+BOOL TreeViewController::screenToTreeView(LPPOINT lpPoint)
+{
+	return ScreenToClient(m_hWndTree, lpPoint);
+}
+
+/*
  * Select HTREEITEM
  */
 BOOL TreeViewController::selectItem(HTREEITEM hti)
