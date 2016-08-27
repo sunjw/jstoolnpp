@@ -377,7 +377,6 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 			ScreenToClient(m_hTree, &pt);
 			TVHITTESTINFO ht = {0};
 			ht.pt = pt;
-			//ht.flags = TVHT_ONITEMLABEL;
 			HTREEITEM hItem = TreeView_HitTest(m_hTree, &ht);
 			if (hItem == NULL)
 				return; // No hit
