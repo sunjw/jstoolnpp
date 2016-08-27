@@ -21,9 +21,9 @@ tstring GetConfigFilePath(HWND nppHandle)
 	return strConfigFilePath;
 }
 
-void loadOption(HWND nppHandle, StruOptions& struOptions)
+void LoadOption(HWND nppHandle, StruOptions& struOptions)
 {
-	loadDefaultOption(struOptions);
+	LoadDefaultOption(struOptions);
 	tstring tsConfigFilePath = GetConfigFilePath(nppHandle);
 
 	IniFileProcessor processor(tsConfigFilePath);
@@ -71,7 +71,7 @@ void loadOption(HWND nppHandle, StruOptions& struOptions)
 	}
 }
 
-void loadDefaultOption(StruOptions& struOptions)
+void LoadDefaultOption(StruOptions& struOptions)
 {
 	struOptions.bPutCR = true;
 	struOptions.chIndent = '\t';
@@ -81,7 +81,7 @@ void loadDefaultOption(StruOptions& struOptions)
 	struOptions.bIndentInEmpty = false;
 }
 
-void saveOption(HWND nppHandle, StruOptions struOptions)
+void SaveOption(HWND nppHandle, StruOptions struOptions)
 {
 	tstring tsConfigFilePath = GetConfigFilePath(nppHandle);
 

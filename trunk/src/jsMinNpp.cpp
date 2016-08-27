@@ -133,7 +133,7 @@ extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
 {
 	g_nppData = notpadPlusData;
 	// ‘ÿ»Î…Ë÷√
-	loadOption(g_nppData._nppHandle, g_struOptions);
+	LoadOption(g_nppData._nppHandle, g_struOptions);
 }
 
 extern "C" __declspec(dllexport) const TCHAR *getName()

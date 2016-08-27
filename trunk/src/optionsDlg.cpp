@@ -42,7 +42,7 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
         case IDCLOSE:
 		case IDCANCEL:
 			// 重新读取配置
-			loadOption(g_nppData._nppHandle, g_struOptions);
+			LoadOption(g_nppData._nppHandle, g_struOptions);
 			::EndDialog(hwnd, 0);
 			return TRUE;
 		case IDOK:
@@ -59,10 +59,10 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			g_struOptions.nChPerInd = atoi(buffer);
 			#endif
 
-			saveOption(g_nppData._nppHandle, g_struOptions);
+			SaveOption(g_nppData._nppHandle, g_struOptions);
 
 			// 重新读取配置
-			loadOption(g_nppData._nppHandle, g_struOptions);
+			LoadOption(g_nppData._nppHandle, g_struOptions);
 
 			::EndDialog(hwnd, 0);
 			return TRUE;

@@ -26,9 +26,9 @@ const string keyIndentInEmpty("Indent in empty");
 
 tstring GetConfigFilePath(HWND nppHandle);
 
-void loadOption(HWND nppHandle, StruOptions& struOptions);
-void loadDefaultOption(StruOptions& struOptions);
+void LoadOption(HWND nppHandle, StruOptions& struOptions);
+void LoadDefaultOption(StruOptions& struOptions);
 
-void saveOption(HWND nppHandle, StruOptions struOptions);
+void SaveOption(HWND nppHandle, StruOptions struOptions);
 
 #endif
