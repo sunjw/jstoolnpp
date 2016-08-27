@@ -36,6 +36,8 @@ public:
 	BOOL selectItem(HTREEITEM hti);
 	HTREEITEM getSelection();
 
+	BOOL hasChild(HTREEITEM hti);
+
 	HTREEITEM getParentItem(HTREEITEM hti);
 	HTREEITEM nextItem(HTREEITEM htiCurrent);
 

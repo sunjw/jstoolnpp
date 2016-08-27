@@ -62,6 +62,13 @@ HTREEITEM TreeViewController::getSelection()
 	return TreeView_GetSelection(m_hWndTree);
 }
 
+BOOL TreeViewController::hasChild(HTREEITEM hti)
+{
+	HTREEITEM htiChild = NULL;
+	htiChild = TreeView_GetChild(m_hWndTree, hti);
+	return (htiChild != NULL);
+}
+
 /*
  * Get HTREEITEM's parent HTREEITEM on TreeView.
  */

@@ -106,8 +106,14 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 				case IDC_BTN_SEARCH:
 					search();
 					break;
+				case IDM_JSON_COPYALL:
+					contextMenuCopy(COPY_ALL);
+					break;
 				case IDM_JSON_COPYNAME:
-					contextMenuCopyName();
+					contextMenuCopy(COPY_NAME);
+					break;
+				case IDM_JSON_COPYVALUE:
+					contextMenuCopy(COPY_VALUE);
 					break;
 			}
 		}
@@ -429,11 +435,35 @@ void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode, LPPOINT lppScreen)
 	// Show menu
 	if (lppScreen != NULL)
 	{
-		HMENU hMenuPopup = CreatePopupMenu();
+		BOOL bEnableCopyName = TRUE;
+		BOOL bEnableCopyValue = TRUE;
 
-		AppendMenu(hMenuPopup, MF_STRING, 
+		if (m_jsonTree->getRoot() == htiNode)
+		{
+			bEnableCopyName = FALSE;
+			bEnableCopyValue = FALSE;
+		}
+
+		if (m_jsonTree->hasChild(htiNode))
+		{
+			bEnableCopyValue = FALSE;
+		}
+
+		HMENU hMenuPopup = CreatePopupMenu();
+		UINT itemFlag;
+
+		itemFlag = MF_STRING | MF_ENABLED;
+		AppendMenu(hMenuPopup, itemFlag, 
+			IDM_JSON_COPYALL, TEXT("Copy"));
+
+		AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
+
+		itemFlag = MF_STRING | (bEnableCopyName ? MF_ENABLED : MF_DISABLED);
+		AppendMenu(hMenuPopup, itemFlag, 
 			IDM_JSON_COPYNAME, TEXT("Copy name"));
-		AppendMenu(hMenuPopup, MF_STRING | MF_DISABLED, 
+
+		itemFlag = MF_STRING | (bEnableCopyValue ? MF_ENABLED : MF_DISABLED);
+		AppendMenu(hMenuPopup, itemFlag, 
 			IDM_JSON_COPYVALUE, TEXT("Copy value"));
 
 		AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
@@ -486,7 +516,7 @@ void JSONDialog::search()
 	enableControls();
 }
 
-void JSONDialog::contextMenuCopyName()
+void JSONDialog::contextMenuCopy(COPY_TYPE copyType)
 {
 	HTREEITEM htiSelected = m_jsonTree->getSelection();
 	if (htiSelected == NULL)
@@ -500,6 +530,17 @@ void JSONDialog::contextMenuCopyName()
 		tstring tstrNodeText = buf;
 		tstring tstrNodeKey, tstrNodeValue;
 		m_jsonTree->splitNodeText(tstrNodeText, tstrNodeKey, tstrNodeValue);
-		CopyText(tstrNodeKey.c_str());
+		switch (copyType)
+		{
+		case COPY_ALL:
+			CopyText(tstrNodeText.c_str());
+			break;
+		case COPY_NAME:
+			CopyText(tstrNodeKey.c_str());
+			break;
+		case COPY_VALUE:
+			CopyText(tstrNodeValue.c_str());
+			break;
+		}
 	}
 }

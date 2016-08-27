@@ -56,6 +56,13 @@ protected :
 	virtual BOOL CALLBACK run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
+	enum COPY_TYPE
+	{
+		COPY_ALL = 0,
+		COPY_NAME,
+		COPY_VALUE
+	};
+
 	HWND m_hDlg;
 	HWND m_hCurrScintilla;
 	HWND m_hTree;
@@ -85,7 +92,7 @@ private:
 
 	void search();
 
-	void contextMenuCopyName();
+	void contextMenuCopy(COPY_TYPE copyType);
 };
 
 #endif //JSONDIALOG_H
