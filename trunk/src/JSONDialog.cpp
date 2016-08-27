@@ -371,12 +371,13 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 				bRightClick = TRUE;
 
 			DWORD dwPos = GetMessagePos();
-			POINT pt;
-			pt.x = LOWORD(dwPos);
-			pt.y = HIWORD(dwPos);
-			ScreenToClient(m_hTree, &pt);
+			POINT ptScreen, ptClient;
+			ptScreen.x = LOWORD(dwPos);
+			ptScreen.y = HIWORD(dwPos);
+			ptClient = ptScreen;
+			ScreenToClient(m_hTree, &ptClient);
 			TVHITTESTINFO ht = {0};
-			ht.pt = pt;
+			ht.pt = ptClient;
 			HTREEITEM hItem = TreeView_HitTest(m_hTree, &ht);
 			if (hItem == NULL)
 				return; // No hit
@@ -384,13 +385,13 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 			if (!bRightClick && (ht.flags & TVHT_ONITEMLABEL))
 			{
 				// Left click
-				clickJsonTreeItem(hItem);
+				clickJsonTreeItem(hItem, &ptScreen);
 			}
 			else if (bRightClick && (ht.flags & (TVHT_ONITEM | TVHT_ONITEMBUTTON)))
 			{
 				// Right click
-				clickJsonTreeItemRight(hItem);
-				clickJsonTreeItem(hItem);
+				clickJsonTreeItem(hItem, &ptScreen);
+				clickJsonTreeItemRight(hItem, &ptScreen);
 			}
 		}
 		break;
@@ -400,23 +401,42 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 			HTREEITEM hItem = pnmtv->itemNew.hItem;
 			if (hItem && pnmtv->action == TVC_BYKEYBOARD)
 			{
-				clickJsonTreeItem(hItem);
+				clickJsonTreeItem(hItem, NULL);
 			}
 		}
 		break;
 	}
 }
 
-void JSONDialog::clickJsonTreeItem(HTREEITEM htiNode)
+void JSONDialog::clickJsonTreeItem(HTREEITEM htiNode, PPOINT ppointScreen)
 {
 	tstring tstrJsonPath = m_jsonTree->getJsonNodePath(htiNode);
 	SetDlgItemText(m_hDlg, IDC_JSONPATH, tstrJsonPath.c_str());
 	m_jsonTree->jumpToSciLine(htiNode, m_iSelStartLine);
 }
 
-void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode)
+void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode, PPOINT ppointScreen)
 {
+	// Select it
 	m_jsonTree->selectItem(htiNode);
+
+	// Show menu
+	if (ppointScreen != NULL)
+	{
+		HMENU hMenuPopup = CreatePopupMenu();
+
+		AppendMenu(hMenuPopup, MF_STRING, 
+			IDM_JSON_COPYNAME, TEXT("Copy name"));
+		AppendMenu(hMenuPopup, MF_STRING | MF_DISABLED, 
+			IDM_JSON_COPYVALUE, TEXT("Copy value"));
+
+		AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
+
+		TrackPopupMenu(hMenuPopup, TPM_LEFTALIGN | TPM_RIGHTBUTTON,
+			ppointScreen->x, ppointScreen->y, 0, m_hDlg, NULL);
+
+		DestroyMenu(hMenuPopup);
+	}
 }
 
 void JSONDialog::search()
@@ -449,7 +469,7 @@ void JSONDialog::search()
 	{
 		// We found in search.
 		TreeView_SelectItem(m_hTree, htiFound);
-		clickJsonTreeItem(htiFound);
+		clickJsonTreeItem(htiFound, NULL);
 	}
 	else
 	{
