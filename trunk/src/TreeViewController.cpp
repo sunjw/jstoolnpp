@@ -31,6 +31,14 @@ BOOL TreeViewController::screenToTreeView(LPPOINT lpPoint)
 }
 
 /*
+ * TreeView_HitTest on TreeViewController
+ */
+HTREEITEM TreeViewController::hitTest(LPTVHITTESTINFO lpHTInfo)
+{
+	return TreeView_HitTest(m_hWndTree, lpHTInfo);
+}
+
+/*
  * Get root HTREEITEM
  */
 HTREEITEM TreeViewController::getRoot()

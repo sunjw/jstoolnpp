@@ -29,6 +29,8 @@ public:
 
 	BOOL screenToTreeView(LPPOINT lpPoint);
 
+	HTREEITEM hitTest(LPTVHITTESTINFO lpHTInfo);
+
 	HTREEITEM getRoot();
 
 	BOOL selectItem(HTREEITEM hti);
