@@ -386,7 +386,7 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 				// Left click
 				clickJsonTreeItem(hItem);
 			}
-			else if (bRightClick && (ht.flags & TVHT_ONITEM))
+			else if (bRightClick && (ht.flags & (TVHT_ONITEM | TVHT_ONITEMBUTTON)))
 			{
 				// Right click
 				clickJsonTreeItemRight(hItem);
