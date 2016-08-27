@@ -450,13 +450,14 @@ void JSONDialog::search()
 	
 	tstring tstrSearchKey(buffer);
 
-	HTREEITEM htiSelected = TreeView_GetSelection(m_hTree);
-	if(htiSelected == NULL)
+	HTREEITEM htiSelected = m_jsonTree->getSelection();
+	if (htiSelected == NULL)
 	{
 		// Nothing, so we do search from ROOT
-		htiSelected = TreeView_GetRoot(m_hTree);
+		htiSelected = m_jsonTree->getRoot();
 	}
-	if(htiSelected == NULL)
+
+	if (htiSelected == NULL)
 		return; // Still NULL, return.
 
 	/*
@@ -467,7 +468,7 @@ void JSONDialog::search()
 	
 	htiFound = m_jsonTree->search(tstrSearchKey, htiSelected);
 
-	if(htiFound != NULL)
+	if (htiFound != NULL)
 	{
 		// We found in search.
 		m_jsonTree->selectItem(htiFound);

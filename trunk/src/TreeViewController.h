@@ -29,7 +29,10 @@ public:
 
 	BOOL screenToTreeView(LPPOINT lpPoint);
 
+	HTREEITEM getRoot();
+
 	BOOL selectItem(HTREEITEM hti);
+	HTREEITEM getSelection();
 
 	HTREEITEM getParentItem(HTREEITEM hti);
 	HTREEITEM nextItem(HTREEITEM htiCurrent);

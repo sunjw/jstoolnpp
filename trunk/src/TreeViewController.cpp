@@ -31,11 +31,27 @@ BOOL TreeViewController::screenToTreeView(LPPOINT lpPoint)
 }
 
 /*
+ * Get root HTREEITEM
+ */
+HTREEITEM getRoot()
+{
+	return TreeView_GetRoot(m_hWndTree);
+}
+
+/*
  * Select HTREEITEM
  */
 BOOL TreeViewController::selectItem(HTREEITEM hti)
 {
 	return TreeView_Select(m_hWndTree, hti, TVGN_CARET);
+}
+
+/*
+ * Get TreeView current selected HTREEITEM
+ */
+HTREEITEM TreeViewController::getSelection()
+{
+	return TreeView_GetSelection(m_hWndTree);
 }
 
 /*
