@@ -22,6 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "JSONDialog.h"
 
 #include "jsonpp.h"
+#include "utility.h"
 #include "jsonStringProc.h"
 #include "JsonTree.h"
 #include "EditControlEx.h"
@@ -104,6 +105,9 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 					break;
 				case IDC_BTN_SEARCH:
 					search();
+					break;
+				case IDM_JSON_COPYNAME:
+					contextMenuCopyName();
 					break;
 			}
 		}
@@ -482,3 +486,20 @@ void JSONDialog::search()
 	enableControls();
 }
 
+void JSONDialog::contextMenuCopyName()
+{
+	HTREEITEM htiSelected = m_jsonTree->getSelection();
+	if (htiSelected == NULL)
+		return;
+
+	const int bufLen = 1024;
+	TCHAR buf[bufLen] = {0};
+	TVITEM tvi = {0};
+	if (m_jsonTree->getTVItem(htiSelected, buf, bufLen, &tvi))
+	{
+		tstring tstrNodeText = buf;
+		tstring tstrNodeKey, tstrNodeValue;
+		m_jsonTree->splitNodeText(tstrNodeText, tstrNodeKey, tstrNodeValue);
+		CopyText(tstrNodeKey.c_str());
+	}
+}

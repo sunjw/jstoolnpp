@@ -101,3 +101,23 @@ void SaveOption(HWND nppHandle, StruOptions struOptions)
 
 	processor.Save();
 }
+
+void CopyText(LPCTSTR lpcText)
+{
+	HGLOBAL hMoveable;
+	LPTSTR pszArr;
+
+	size_t textLen = _tcslen(lpcText);
+
+	size_t bytes = (textLen + 1)*sizeof(TCHAR);
+	hMoveable = GlobalAlloc(GMEM_MOVEABLE, bytes);
+	pszArr = (LPTSTR)GlobalLock(hMoveable);
+	ZeroMemory(pszArr, bytes);
+	_tcscpy_s(pszArr, textLen + 1, lpcText);
+	GlobalUnlock(hMoveable);
+
+	OpenClipboard(NULL);
+	EmptyClipboard();
+	SetClipboardData(CF_UNICODETEXT, hMoveable);
+	CloseClipboard();
+}

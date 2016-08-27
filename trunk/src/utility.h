@@ -31,4 +31,6 @@ void LoadDefaultOption(StruOptions& struOptions);
 
 void SaveOption(HWND nppHandle, StruOptions struOptions);
 
+void CopyText(LPCTSTR lpcText);
+
 #endif

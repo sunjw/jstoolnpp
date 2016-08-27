@@ -84,6 +84,8 @@ private:
 	void clickJsonTreeItemRight(HTREEITEM htiNode, LPPOINT lppScreen);
 
 	void search();
+
+	void contextMenuCopyName();
 };
 
 #endif //JSONDIALOG_H
