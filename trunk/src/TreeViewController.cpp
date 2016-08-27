@@ -33,7 +33,7 @@ BOOL TreeViewController::screenToTreeView(LPPOINT lpPoint)
 /*
  * Get root HTREEITEM
  */
-HTREEITEM getRoot()
+HTREEITEM TreeViewController::getRoot()
 {
 	return TreeView_GetRoot(m_hWndTree);
 }
