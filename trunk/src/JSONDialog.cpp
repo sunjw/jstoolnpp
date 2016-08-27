@@ -364,7 +364,12 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 	switch (lpnmh->code)
 	{
 	case NM_CLICK:
+	case NM_RCLICK:
 		{
+			BOOL bRightClick = FALSE;
+			if (lpnmh->code == NM_RCLICK)
+				bRightClick = TRUE;
+
 			DWORD dwPos = GetMessagePos();
 			POINT pt;
 			pt.x = LOWORD(dwPos);
@@ -374,8 +379,18 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 			ht.pt = pt;
 			//ht.flags = TVHT_ONITEMLABEL;
 			HTREEITEM hItem = TreeView_HitTest(m_hTree, &ht);
-			if(hItem && (ht.flags & TVHT_ONITEMLABEL))
+			if (hItem == NULL)
+				return; // No hit
+
+			if (!bRightClick && (ht.flags & TVHT_ONITEMLABEL))
 			{
+				// Left click
+				clickJsonTreeItem(hItem);
+			}
+			else if (bRightClick && (ht.flags & TVHT_ONITEM))
+			{
+				// Right click
+				clickJsonTreeItemRight(hItem);
 				clickJsonTreeItem(hItem);
 			}
 		}
@@ -384,7 +399,7 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 		{
 			NMTREEVIEW *pnmtv = (LPNMTREEVIEW)lParam;
 			HTREEITEM hItem = pnmtv->itemNew.hItem;
-			if(hItem && pnmtv->action == TVC_BYKEYBOARD)
+			if (hItem && pnmtv->action == TVC_BYKEYBOARD)
 			{
 				clickJsonTreeItem(hItem);
 			}
@@ -398,6 +413,11 @@ void JSONDialog::clickJsonTreeItem(HTREEITEM htiNode)
 	tstring tstrJsonPath = m_jsonTree->getJsonNodePath(htiNode);
 	SetDlgItemText(m_hDlg, IDC_JSONPATH, tstrJsonPath.c_str());
 	m_jsonTree->jumpToSciLine(htiNode, m_iSelStartLine);
+}
+
+void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode)
+{
+	m_jsonTree->selectItem(htiNode);
 }
 
 void JSONDialog::search()

@@ -27,6 +27,8 @@ public:
 	inline HWND getHWndTree()
 	{ return m_hWndTree; }
 
+	BOOL selectItem(HTREEITEM hti);
+
 	HTREEITEM getParentItem(HTREEITEM hti);
 	HTREEITEM nextItem(HTREEITEM htiCurrent);
 

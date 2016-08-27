@@ -81,6 +81,7 @@ private:
 
 	void clickJsonTree(LPARAM lParam);
 	void clickJsonTreeItem(HTREEITEM htiNode);
+	void clickJsonTreeItemRight(HTREEITEM htiNode);
 
 	void search();
 };

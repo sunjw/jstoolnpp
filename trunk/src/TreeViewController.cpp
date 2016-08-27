@@ -23,6 +23,14 @@ TreeViewController::TreeViewController(HWND hWndWindow, HWND hWndTree):
 }
 
 /*
+ * Select HTREEITEM
+ */
+BOOL TreeViewController::selectItem(HTREEITEM hti)
+{
+	return TreeView_Select(m_hWndTree, hti, TVGN_CARET);
+}
+
+/*
  * Get HTREEITEM's parent HTREEITEM on TreeView.
  */
 HTREEITEM TreeViewController::getParentItem(HTREEITEM hti)
