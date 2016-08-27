@@ -24,12 +24,14 @@ JsonTree::JsonTree(HWND hScintilla, HWND hWndWindow, HWND hWndTree):
 	m_hScintilla(hScintilla), TreeViewController(hWndWindow, hWndTree)
 {}
 
-HTREEITEM JsonTree::search(tstring& tstrSearchKey, HTREEITEM htiCurrent)
+HTREEITEM JsonTree::search(const tstring& tstrSearchKey, HTREEITEM htiCurrent)
 {
 	return doSearch(tstrSearchKey, htiCurrent, true);
 }
 
-HTREEITEM JsonTree::doSearch(tstring& tstrSearchKey, HTREEITEM htiCurrent, bool bSkipCurrent)
+HTREEITEM JsonTree::doSearch(const tstring& tstrSearchKey, 
+							 HTREEITEM htiCurrent, 
+							 bool bSkipCurrent)
 {
 	if(bSkipCurrent)
 		htiCurrent = nextItem(htiCurrent);
@@ -126,7 +128,7 @@ void JsonTree::jumpToSciLine(HTREEITEM hti, int iLineBase)
 	}
 }
 
-void JsonTree::splitNodeText(tstring& tstrText, 
+void JsonTree::splitNodeText(const tstring& tstrText, 
 				tstring& tstrKey, 
 				tstring& tstrValue)
 {

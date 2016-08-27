@@ -30,18 +30,22 @@ class JsonTree: public TreeViewController
 public:
 	JsonTree(HWND hScintilla = NULL, HWND hWndWindow = NULL, HWND hWndTree = NULL);
 
-	HTREEITEM search(sunjwbase::tstring& tstrSearchKey, HTREEITEM htiCurrent);
+	HTREEITEM search(const sunjwbase::tstring& tstrSearchKey, HTREEITEM htiCurrent);
 
 	sunjwbase::tstring getJsonNodePath(HTREEITEM hti);
 
 	void jumpToSciLine(HTREEITEM hti, int iLineBase);
 
-	void splitNodeText(sunjwbase::tstring& tstrText, sunjwbase::tstring& tstrKey, sunjwbase::tstring& tstrValue);
+	void splitNodeText(const sunjwbase::tstring& tstrText, 
+		sunjwbase::tstring& tstrKey, 
+		sunjwbase::tstring& tstrValue);
 
 private:
 	HWND m_hScintilla;
 	
-	HTREEITEM doSearch(sunjwbase::tstring& tstrSearchKey, HTREEITEM htiCurrent, bool bSkipCurrent);
+	HTREEITEM doSearch(const sunjwbase::tstring& tstrSearchKey, 
+		HTREEITEM htiCurrent, 
+		bool bSkipCurrent);
 };
 
 #endif
