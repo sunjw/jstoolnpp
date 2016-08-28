@@ -586,5 +586,19 @@ void JSONDialog::contextMenuCopy(COPY_TYPE copyType)
 
 void JSONDialog::contextMenuExpand(BOOL bExpand)
 {
+	HTREEITEM htiSelected = m_jsonTree->getSelection();
+	if (htiSelected == NULL)
+		return;
 
+	HTREEITEM htiRoot = m_jsonTree->getRoot();
+
+	UINT flag = (bExpand ? TVE_EXPAND : TVE_COLLAPSE);
+
+	HTREEITEM htiNext = htiSelected;
+	while (htiNext != NULL)
+	{
+		if (!(htiNext == htiRoot && !bExpand))
+			m_jsonTree->expandItem(htiNext, flag);
+		htiNext = m_jsonTree->nextItem(htiNext, htiSelected);
+	}
 }

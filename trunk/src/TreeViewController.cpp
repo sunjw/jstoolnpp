@@ -62,6 +62,9 @@ HTREEITEM TreeViewController::getSelection()
 	return TreeView_GetSelection(m_hWndTree);
 }
 
+/*
+ * Detect if HTREEITEM has child node 
+ */
 BOOL TreeViewController::hasChild(HTREEITEM hti)
 {
 	HTREEITEM htiChild = NULL;
@@ -122,4 +125,12 @@ BOOL TreeViewController::getTVItem(HTREEITEM hti, TCHAR *buf, int bufSize, TVITE
 	tvi->lParam = -1;
 
 	return TreeView_GetItem(m_hWndTree, tvi);
+}
+
+/*
+ * TreeView_Expand on TreeViewController
+ */
+BOOL TreeViewController::expandItem(HTREEITEM hti, UINT flag)
+{
+	return TreeView_Expand(m_hWndTree, hti, flag);
 }

@@ -45,6 +45,8 @@ public:
 
 	BOOL getTVItem(HTREEITEM hti, TCHAR *buf, int bufSize, TVITEM *tvi);
 
+	BOOL expandItem(HTREEITEM hti, UINT flag);
+
 private:
 	HWND m_hWndWindow; // Window's handle
 	HWND m_hWndTree; // TreeView's handle
