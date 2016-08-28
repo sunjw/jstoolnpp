@@ -920,6 +920,8 @@
 #define IDM_JSON_COPYVALUE				1016
 #define IDM_JSON_COPYALL				1017
 #define IDM_JSON_COPYPATH				1018
+#define IDM_JSON_EXPANDALL				1019
+#define IDM_JSON_COLLAPSEALL			1020
 #define CF_GDIOBJLAST                   0x03FF
 #define WM_USER                         0x0400
 #define WVR_VALIDRECTS                  0x0400

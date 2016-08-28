@@ -442,6 +442,9 @@ void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode, LPPOINT lppScreen)
 		BOOL bEnableCopyValue = TRUE;
 		BOOL bEnableCopyPath = TRUE;
 
+		BOOL bEnableExpand = FALSE;
+		BOOL bEnableCollapse = FALSE;
+
 		if (m_jsonTree->getRoot() == htiNode)
 		{
 			bEnableCopyName = FALSE;
@@ -452,8 +455,11 @@ void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode, LPPOINT lppScreen)
 		if (m_jsonTree->hasChild(htiNode))
 		{
 			bEnableCopyValue = FALSE;
+			bEnableExpand = TRUE;
+			bEnableCollapse = TRUE;
 		}
 
+		// Create menu
 		HMENU hMenuPopup = CreatePopupMenu();
 		UINT itemFlag;
 
@@ -461,6 +467,7 @@ void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode, LPPOINT lppScreen)
 		AppendMenu(hMenuPopup, itemFlag, 
 			IDM_JSON_COPYALL, TEXT("Copy"));
 
+		// separator
 		AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
 
 		itemFlag = MF_STRING | (bEnableCopyName ? MF_ENABLED : MF_DISABLED);
@@ -475,11 +482,22 @@ void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode, LPPOINT lppScreen)
 		AppendMenu(hMenuPopup, itemFlag, 
 			IDM_JSON_COPYPATH, TEXT("Copy path"));
 
+		// separator
 		AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
 
+		itemFlag = MF_STRING | (bEnableExpand ? MF_ENABLED : MF_DISABLED);;
+		AppendMenu(hMenuPopup, itemFlag, 
+			IDM_JSON_EXPANDALL, TEXT("Expand all"));
+
+		itemFlag = MF_STRING | (bEnableCollapse ? MF_ENABLED : MF_DISABLED);;
+		AppendMenu(hMenuPopup, itemFlag, 
+			IDM_JSON_COLLAPSEALL, TEXT("Collapse all"));
+
+		// Open menu
 		TrackPopupMenu(hMenuPopup, TPM_LEFTALIGN | TPM_RIGHTBUTTON,
 			lppScreen->x, lppScreen->y, 0, m_hDlg, NULL);
 
+		// Clean up
 		DestroyMenu(hMenuPopup);
 	}
 }
