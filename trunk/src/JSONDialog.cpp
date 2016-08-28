@@ -232,8 +232,8 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 
 	size_t jsLen, jsLenSel;
 	jsLen = ::SendMessage(m_hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
-    if (jsLen == 0) 
-		return;
+    //if (jsLen == 0) 
+	//	return;
 
 	size_t selStart = ::SendMessage(m_hCurrScintilla, SCI_GETSELECTIONSTART, 0, 0);
 	size_t selEnd = ::SendMessage(m_hCurrScintilla, SCI_GETSELECTIONEND, 0, 0);
