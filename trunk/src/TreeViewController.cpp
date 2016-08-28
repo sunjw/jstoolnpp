@@ -84,7 +84,7 @@ HTREEITEM TreeViewController::getParentItem(HTREEITEM hti)
  * If current item has no child and no sibling, next will be its parent's (parent's parent's ...) sibling item.
  * If current item's parent is ROOT and has no sibling item, it will return NULL.
  */
-HTREEITEM TreeViewController::nextItem(HTREEITEM htiCurrent)
+HTREEITEM TreeViewController::nextItem(HTREEITEM htiCurrent, HTREEITEM htiNextRoot)
 {
 	HTREEITEM htiNext = NULL;
 	
@@ -100,7 +100,7 @@ HTREEITEM TreeViewController::nextItem(HTREEITEM htiCurrent)
 
 	// Has no child and no sibling. Find its parent's (parent's parent's ...) sibling.
 	HTREEITEM htiParent = htiCurrent;
-	while((htiParent = TreeView_GetParent(m_hWndTree, htiParent)) != NULL)
+	while((htiParent = TreeView_GetParent(m_hWndTree, htiParent)) != htiNextRoot)
 	{
 		htiNext = TreeView_GetNextSibling(m_hWndTree, htiParent);
 		if(htiNext != NULL)

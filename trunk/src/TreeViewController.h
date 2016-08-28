@@ -37,9 +37,11 @@ public:
 	HTREEITEM getSelection();
 
 	BOOL hasChild(HTREEITEM hti);
-
 	HTREEITEM getParentItem(HTREEITEM hti);
-	HTREEITEM nextItem(HTREEITEM htiCurrent);
+
+	inline HTREEITEM nextItem(HTREEITEM htiCurrent)
+	{ return nextItem(htiCurrent, NULL); }
+	HTREEITEM nextItem(HTREEITEM htiCurrent, HTREEITEM htiNextRoot);
 
 	BOOL getTVItem(HTREEITEM hti, TCHAR *buf, int bufSize, TVITEM *tvi);
 
