@@ -33,8 +33,10 @@ public:
 
 	HTREEITEM getRoot();
 
-	BOOL selectItem(HTREEITEM hti);
+	BOOL selectItem(HTREEITEM hti, BOOL firstVisible = FALSE);
 	HTREEITEM getSelection();
+
+	BOOL isItemVisible(HTREEITEM hti);
 
 	BOOL hasChild(HTREEITEM hti);
 	HTREEITEM getParentItem(HTREEITEM hti);

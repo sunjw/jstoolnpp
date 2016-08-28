@@ -601,4 +601,7 @@ void JSONDialog::contextMenuExpand(BOOL bExpand)
 			m_jsonTree->expandItem(htiNext, flag);
 		htiNext = m_jsonTree->nextItem(htiNext, htiSelected);
 	}
+
+	if (bExpand && !m_jsonTree->isItemVisible(htiSelected))
+		m_jsonTree->selectItem(htiSelected, TRUE);
 }

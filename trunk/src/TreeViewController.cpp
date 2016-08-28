@@ -49,9 +49,12 @@ HTREEITEM TreeViewController::getRoot()
 /*
  * Select HTREEITEM
  */
-BOOL TreeViewController::selectItem(HTREEITEM hti)
+BOOL TreeViewController::selectItem(HTREEITEM hti, BOOL firstVisible /*= FALSE*/)
 {
-	return TreeView_Select(m_hWndTree, hti, TVGN_CARET);
+	UINT flag = TVGN_CARET;
+	if (firstVisible)
+		flag = TVGN_FIRSTVISIBLE;
+	return TreeView_Select(m_hWndTree, hti, flag);
 }
 
 /*
@@ -60,6 +63,22 @@ BOOL TreeViewController::selectItem(HTREEITEM hti)
 HTREEITEM TreeViewController::getSelection()
 {
 	return TreeView_GetSelection(m_hWndTree);
+}
+
+/*
+ * Detect HTREEITEM visible
+ */
+BOOL TreeViewController::isItemVisible(HTREEITEM hti)
+{
+	RECT rect = {0};
+	BOOL ret = TreeView_GetItemRect(m_hWndTree, hti, &rect, FALSE);
+	if (ret == FALSE)
+		return FALSE;
+
+	if (rect.top < 0)
+		return FALSE;
+
+	return TRUE;
 }
 
 /*
