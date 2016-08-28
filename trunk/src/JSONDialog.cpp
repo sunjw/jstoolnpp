@@ -115,6 +115,9 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 				case IDM_JSON_COPYVALUE:
 					contextMenuCopy(COPY_VALUE);
 					break;
+				case IDM_JSON_COPYPATH:
+					contextMenuCopy(COPY_PATH);
+					break;
 			}
 		}
 		return TRUE;
@@ -437,11 +440,13 @@ void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode, LPPOINT lppScreen)
 	{
 		BOOL bEnableCopyName = TRUE;
 		BOOL bEnableCopyValue = TRUE;
+		BOOL bEnableCopyPath = TRUE;
 
 		if (m_jsonTree->getRoot() == htiNode)
 		{
 			bEnableCopyName = FALSE;
 			bEnableCopyValue = FALSE;
+			bEnableCopyPath = FALSE;
 		}
 
 		if (m_jsonTree->hasChild(htiNode))
@@ -465,6 +470,10 @@ void JSONDialog::clickJsonTreeItemRight(HTREEITEM htiNode, LPPOINT lppScreen)
 		itemFlag = MF_STRING | (bEnableCopyValue ? MF_ENABLED : MF_DISABLED);
 		AppendMenu(hMenuPopup, itemFlag, 
 			IDM_JSON_COPYVALUE, TEXT("Copy value"));
+
+		itemFlag = MF_STRING | (bEnableCopyPath ? MF_ENABLED : MF_DISABLED);;
+		AppendMenu(hMenuPopup, itemFlag, 
+			IDM_JSON_COPYPATH, TEXT("Copy path"));
 
 		AppendMenu(hMenuPopup, MF_SEPARATOR, 0, NULL);
 
@@ -527,9 +536,12 @@ void JSONDialog::contextMenuCopy(COPY_TYPE copyType)
 	TVITEM tvi = {0};
 	if (m_jsonTree->getTVItem(htiSelected, buf, bufLen, &tvi))
 	{
+		tstring tstrJsonPath = m_jsonTree->getJsonNodePath(htiSelected);
+
 		tstring tstrNodeText = buf;
 		tstring tstrNodeKey, tstrNodeValue;
 		m_jsonTree->splitNodeText(tstrNodeText, tstrNodeKey, tstrNodeValue);
+
 		switch (copyType)
 		{
 		case COPY_ALL:
@@ -540,6 +552,9 @@ void JSONDialog::contextMenuCopy(COPY_TYPE copyType)
 			break;
 		case COPY_VALUE:
 			CopyText(tstrNodeValue.c_str());
+			break;
+		case COPY_PATH:
+			CopyText(tstrJsonPath.c_str());
 			break;
 		}
 	}

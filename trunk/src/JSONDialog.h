@@ -60,7 +60,8 @@ private:
 	{
 		COPY_ALL = 0,
 		COPY_NAME,
-		COPY_VALUE
+		COPY_VALUE,
+		COPY_PATH
 	};
 
 	HWND m_hDlg;
