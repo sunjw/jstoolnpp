@@ -118,6 +118,12 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 				case IDM_JSON_COPYPATH:
 					contextMenuCopy(COPY_PATH);
 					break;
+				case IDM_JSON_EXPANDALL:
+					contextMenuExpand(TRUE);
+					break;
+				case IDM_JSON_COLLAPSEALL:
+					contextMenuExpand(FALSE);
+					break;
 			}
 		}
 		return TRUE;
@@ -576,4 +582,9 @@ void JSONDialog::contextMenuCopy(COPY_TYPE copyType)
 			break;
 		}
 	}
+}
+
+void JSONDialog::contextMenuExpand(BOOL bExpand)
+{
+
 }

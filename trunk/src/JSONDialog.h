@@ -94,6 +94,7 @@ private:
 	void search();
 
 	void contextMenuCopy(COPY_TYPE copyType);
+	void contextMenuExpand(BOOL bExpand);
 };
 
 #endif //JSONDIALOG_H
