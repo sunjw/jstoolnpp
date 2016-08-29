@@ -412,8 +412,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 	if(m_tokenA.code == "(" || m_tokenA.code == ")" ||
 		m_tokenA.code == "[" || m_tokenA.code == "]" ||
 		m_tokenA.code == "!" || m_tokenA.code == "!!" ||
-		m_tokenA.code == "~" || m_tokenA.code == "^" ||
-		m_tokenA.code == ".")
+		m_tokenA.code == "~" || m_tokenA.code == ".")
 	{
 		// ()[]!. 都是前后没有样式的运算符
 		if((m_tokenA.code == ")" || m_tokenA.code == "]") &&
