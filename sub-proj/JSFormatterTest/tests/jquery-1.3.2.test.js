@@ -1656,7 +1656,7 @@
 							for (var i = 0; (item = curLoop[i]) != null; i++) {
 								if (item) {
 									found = filter(item, match, i, curLoop);
-									var pass = not^!!found;
+									var pass = not ^ !!found;
 
 									if (inplace && found != null) {
 										if (pass) {
@@ -1834,7 +1834,7 @@
 
 					for (var i = 0, elem; (elem = curLoop[i]) != null; i++) {
 						if (elem) {
-							if (not^(elem.className && (" " + elem.className + " ").indexOf(match) >= 0)) {
+							if (not ^ (elem.className && (" " + elem.className + " ").indexOf(match) >= 0)) {
 								if (!inplace)
 									result.push(elem);
 							} else if (inplace) {
@@ -1888,7 +1888,7 @@
 						if (match[3].match(chunker).length > 1 || /^\w/.test(match[3])) {
 							match[3] = Sizzle(match[3], null, null, curLoop);
 						} else {
-							var ret = Sizzle.filter(match[3], curLoop, inplace, true^not);
+							var ret = Sizzle.filter(match[3], curLoop, inplace, true ^ not);
 							if (!inplace) {
 								result.push.apply(result, ret);
 							}

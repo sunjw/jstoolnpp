@@ -1029,7 +1029,7 @@
 				d[f[1]] = g.add,
 				h && g.add(function () {
 					c = h
-				}, b[a^1][2].disable, b[2][2].lock),
+				}, b[a ^ 1][2].disable, b[2][2].lock),
 				e[f[0]] = g.fire,
 				e[f[0] + "With"] = g.fireWith
 			}),

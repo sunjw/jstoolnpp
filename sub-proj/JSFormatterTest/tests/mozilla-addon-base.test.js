@@ -1972,7 +1972,7 @@
 								for (var bb = 0; (Z = bw[bb]) != null; bb++) {
 									if (Z) {
 										bu = br(Z, bx, bb, bw);
-										var bs = ba^!!bu;
+										var bs = ba ^ !!bu;
 										if (bn && bu != null) {
 											if (bs) {
 												bt = true
@@ -2121,7 +2121,7 @@
 					bo = 0;
 					for (var ab; (ab = ba[bo]) != null; bo++) {
 						if (ab) {
-							if (bn^(ab.className && (" " + ab.className + " ").replace(/[\t\n]/g, " ").indexOf(bb) >= 0)) {
+							if (bn ^ (ab.className && (" " + ab.className + " ").replace(/[\t\n]/g, " ").indexOf(bb) >= 0)) {
 								aa || Z.push(ab)
 							} else {
 								if (aa) {
@@ -2162,7 +2162,7 @@
 						if ((R.exec(ba[3]) || "").length > 1 || /^\w/.test(ba[3])) {
 							ba[3] = O(ba[3], null, null, ab)
 						} else {
-							ba = O.filter(ba[3], ab, aa, true^bb);
+							ba = O.filter(ba[3], ab, aa, true ^ bb);
 							aa || Z.push.apply(Z, ba);
 							return false
 						}

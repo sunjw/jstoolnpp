@@ -1179,7 +1179,7 @@
 						state = stateString;
 
 						// [ reject_list | resolve_list ].disable; progress_list.lock
-					}, tuples[i^1][2].disable, tuples[2][2].lock);
+					}, tuples[i ^ 1][2].disable, tuples[2][2].lock);
 				}
 
 				// deferred[ resolve | reject | notify ] = list.fire

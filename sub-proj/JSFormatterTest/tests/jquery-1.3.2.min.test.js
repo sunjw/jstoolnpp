@@ -1197,7 +1197,7 @@
 							for (var X = 0; (af = aa[X]) != null; X++) {
 								if (af) {
 									ah = U(af, Y, X, aa);
-									var ae = W^!!ah;
+									var ae = W ^ !!ah;
 									if (ag && ah != null) {
 										if (ae) {
 											T = true
@@ -1348,7 +1348,7 @@
 					}
 					for (var X = 0, Y; (Y = U[X]) != null; X++) {
 						if (Y) {
-							if (Z^(Y.className && (" " + Y.className + " ").indexOf(W) >= 0)) {
+							if (Z ^ (Y.className && (" " + Y.className + " ").indexOf(W) >= 0)) {
 								if (!V) {
 									T.push(Y)
 								}
@@ -1392,7 +1392,7 @@
 						if (X[3].match(R).length > 1 || /^\w/.test(X[3])) {
 							X[3] = F(X[3], null, null, U)
 						} else {
-							var W = F.filter(X[3], U, V, true^Y);
+							var W = F.filter(X[3], U, V, true ^ Y);
 							if (!V) {
 								T.push.apply(T, W)
 							}

@@ -2063,7 +2063,7 @@
 								for (var j = 0; (D = F[j]) != null; j++)
 									if (D) {
 										O = R(D, p, j, F);
-										var s = m^!!O;
+										var s = m ^ !!O;
 										if (n && O != null)
 											if (s)
 												q = true;
@@ -2200,7 +2200,7 @@
 					q = 0;
 					for (var u; (u = i[q]) != null; q++)
 						if (u)
-							if (p^(u.className && (" " + u.className + " ").replace(/[\t\n]/g, " ").indexOf(g) >= 0))
+							if (p ^ (u.className && (" " + u.className + " ").replace(/[\t\n]/g, " ").indexOf(g) >= 0))
 								n || m.push(u);
 							else if (n)
 								i[q] = false;
@@ -2235,7 +2235,7 @@
 						if ((d.exec(g[3]) || "").length > 1 || /^\w/.test(g[3]))
 							g[3] = k(g[3], null, null, i);
 						else {
-							g = k.filter(g[3], i, n, true^p);
+							g = k.filter(g[3], i, n, true ^ p);
 							n || m.push.apply(m, g);
 							return false
 						}

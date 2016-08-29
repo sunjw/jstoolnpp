@@ -1393,7 +1393,7 @@
 				r[o[1]] = s.add,
 				a && s.add(function () {
 					n = a
-				}, t[1^e][2].disable, t[2][2].lock),
+				}, t[1 ^ e][2].disable, t[2][2].lock),
 				i[o[0]] = function () {
 					return i[o[0] + "With"](this === i ? r : this, arguments),
 					this
