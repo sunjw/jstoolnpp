@@ -99,8 +99,9 @@ def main():
 			JSFORMATTER_LIB_PATH_SEL = JSFORMATTER_LIB_REL_PATH_MAC
 
 		os.environ["DYLD_LIBRARY_PATH"] = JSFORMATTER_LIB_PATH_SEL
-	
+
 	# run cases
+	allpass = True
 	for name, case in test_cases.items():
 		print "name: " + name
 		print "source: " + case.source
@@ -109,11 +110,13 @@ def main():
 		
 		result = run_case(case, release)
 		if result == "ERROR":
-			return;
+			allpass = False
+			break;
 		
 		print ""
 
-	print "%d cases PASS" % len(test_cases)
+	if allpass:
+		print "%d cases ALL PASS" % len(test_cases)
 
 	print ""
 	if is_osx_sys():
