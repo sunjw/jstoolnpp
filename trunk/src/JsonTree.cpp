@@ -134,14 +134,14 @@ void JsonTree::splitNodeText(const tstring& tstrText,
 {
 	tstring::size_type beginPos = 0;
 	tstring::size_type splitPos = 0;
-	while(1)
+	while (1)
 	{
 		tstring::size_type pos = tstrText.find(tstring(TEXT(" : ")), beginPos);
-		if(pos == tstring::npos)
+		if (pos == tstring::npos)
 			return; // NOT found
 
 		TCHAR cTest = tstrText[pos + 3];
-		if(cTest == TEXT('\"') || cTest == TEXT('[') || 
+		if (cTest == TEXT('\"') || cTest == TEXT('[') || 
 			cTest == TEXT('/') || // regex
 			cTest == TEXT('-') || (cTest >= TEXT('0') && cTest <= TEXT('9')) ||
 			cTest == TEXT('t') || cTest == TEXT('f') || // true, false
