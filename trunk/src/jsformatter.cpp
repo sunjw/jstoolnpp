@@ -1,6 +1,7 @@
 #include "jsformatter.h"
 #include "realjsformatter.h"
 #include "jsfGenericIO.h"
+#include "version.h"
 
 DLLAPI JSFormatter *CreateJSFormatter(void *ioContext,
 							 ReadCharFunc readCharFunc, 
@@ -47,4 +48,9 @@ DLLAPI const char *GetJSFormatterDebugOutput(JSFormatter *jsf)
 DLLAPI int GetFormattedLine(JSFormatter *jsf, int originalLine)
 {
 	return ((JSFormatGenericIO *)jsf)->GetFormattedLine(originalLine);
+}
+
+DLLAPI const char *GetVersion()
+{
+	return VERSION_VALUE;
 }

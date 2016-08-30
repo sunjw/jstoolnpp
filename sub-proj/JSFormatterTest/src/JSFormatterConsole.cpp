@@ -43,8 +43,11 @@ void StreamIOContext::WriteCharFromStream(void *ioContext, const char ch)
 
 int main(int argc, char *argv[])
 {
-	if(argc == 3)
+	bool processed = false;
+	if (argc == 3)
 	{
+		processed = true;
+
 		char *inputFile = argv[1];
 		char *outputFile = argv[2];
 
@@ -111,9 +114,21 @@ int main(int argc, char *argv[])
 			cout << "Error: " << ex.what() << endl;
 		}
 	}
-	else
+	else if (argc == 2)
 	{
-		cout << "Usage: jsformatter [input file] [output file]" << endl;
+		const char *argvCmd = argv[1];
+		if (strcmp(argvCmd, "--version") == 0)
+		{
+			processed = true;
+			cout << "jsformatter version: " << GetVersion() << endl;
+		}
+	}
+
+
+	if (!processed)
+	{
+		cout << "Usage: jsformatter [input file] [output file]" << "\n\n"
+			<< "  --version    Display version info." << endl;
 	}
 
 

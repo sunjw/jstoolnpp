@@ -219,6 +219,10 @@
 				RelativePath=".\src\resource.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\trunk\src\version.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="资源文件"
