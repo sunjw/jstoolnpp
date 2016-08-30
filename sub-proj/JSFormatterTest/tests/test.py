@@ -113,11 +113,13 @@ def main():
 		
 		print ""
 
+	print "%d cases PASS" % len(test_cases)
+
+	print ""
 	if is_osx_sys():
 		print "DYLD_LIBRARY_PATH=" + os.environ["DYLD_LIBRARY_PATH"]
 	print "Using " + JSFORMATTER_PATH_SEL
-	print "%d cases" % len(test_cases)
-	print "ALL PASS"
+	call([JSFORMATTER_PATH_SEL, "--version"])
 
 if __name__ == '__main__':
 	main()

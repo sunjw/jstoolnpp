@@ -118,6 +118,8 @@ DLLAPI const char *GetJSFormatterDebugOutput(JSFormatter *jsf);
 
 DLLAPI int GetFormattedLine(JSFormatter *jsf, int originalLine);
 
+DLLAPI const char *GetVersion();
+
 #endif
 
 #ifdef __cplusplus
