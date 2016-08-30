@@ -138,7 +138,15 @@ void JsonTree::splitNodeText(const tstring& tstrText,
 	{
 		tstring::size_type pos = tstrText.find(tstring(TEXT(" : ")), beginPos);
 		if (pos == tstring::npos)
-			return; // NOT found
+		{
+			// fallback, the first
+			pos = tstrText.find(tstring(TEXT(" : ")), 0);
+			if (pos == tstring::npos)
+				return; // still not able to find
+
+			splitPos = pos + 1;
+			break;
+		}
 
 		TCHAR cTest = tstrText[pos + 3];
 		if (cTest == TEXT('\"') || cTest == TEXT('[') || 
