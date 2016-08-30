@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4102C69A1D75D1A00008E61C /* version.h in Headers */ = {isa = PBXBuildFile; fileRef = 4102C6991D75D1A00008E61C /* version.h */; };
 		416F58481BA849AA0086D6D5 /* jsfGenericIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 416F58441BA849AA0086D6D5 /* jsfGenericIO.h */; };
 		416F58491BA849AA0086D6D5 /* jsformatter.h in Headers */ = {isa = PBXBuildFile; fileRef = 416F58451BA849AA0086D6D5 /* jsformatter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		416F584A1BA849AA0086D6D5 /* jsparser.h in Headers */ = {isa = PBXBuildFile; fileRef = 416F58461BA849AA0086D6D5 /* jsparser.h */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4102C6991D75D1A00008E61C /* version.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = version.h; path = ../../trunk/src/version.h; sourceTree = "<group>"; };
 		416F583B1BA8477D0086D6D5 /* libJSFormatter.dylib */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.dylib"; includeInIndex = 0; path = libJSFormatter.dylib; sourceTree = BUILT_PRODUCTS_DIR; };
 		416F58441BA849AA0086D6D5 /* jsfGenericIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsfGenericIO.h; path = ../../trunk/src/jsfGenericIO.h; sourceTree = "<group>"; usesTabs = 1; };
 		416F58451BA849AA0086D6D5 /* jsformatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsformatter.h; path = ../../trunk/src/jsformatter.h; sourceTree = "<group>"; usesTabs = 1; };
@@ -60,6 +62,7 @@
 		416F58421BA8480B0086D6D5 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				4102C6991D75D1A00008E61C /* version.h */,
 				416F58441BA849AA0086D6D5 /* jsfGenericIO.h */,
 				416F58471BA849AA0086D6D5 /* realjsformatter.h */,
 				416F58461BA849AA0086D6D5 /* jsparser.h */,
@@ -86,6 +89,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4102C69A1D75D1A00008E61C /* version.h in Headers */,
 				416F58491BA849AA0086D6D5 /* jsformatter.h in Headers */,
 				416F584B1BA849AA0086D6D5 /* realjsformatter.h in Headers */,
 				416F58481BA849AA0086D6D5 /* jsfGenericIO.h in Headers */,
