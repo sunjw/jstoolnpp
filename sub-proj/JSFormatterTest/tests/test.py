@@ -11,6 +11,8 @@ from subprocess import call
 
 JSFORMATTER_PATH_WIN = "..\\..\\..\\trunk\\debug\\JSFormatterTest.exe"
 JSFORMATTER_REL_PATH_WIN = "..\\..\\..\\trunk\\release\\JSFormatterTest.exe"
+JSFORMATTER_PATH_WIN_64 = "..\\..\\..\\trunk\\x64\\debug\\JSFormatterTest.exe"
+JSFORMATTER_REL_PATH_WIN_64 = "..\\..\\..\\trunk\\x64\\release\\JSFormatterTest.exe"
 JSFORMATTER_LIB_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Debug"
 JSFORMATTER_LIB_REL_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release"
 JSFORMATTER_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Debug/JSFormatterTest"
@@ -63,15 +65,6 @@ def make_test_case(files):
 def run_case(test_case, release):
 	global JSFORMATTER_PATH_SEL
 	
-	if is_windows_sys():
-		JSFORMATTER_PATH_SEL = JSFORMATTER_PATH_WIN
-		if release:
-			JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH_WIN
-	else:
-		JSFORMATTER_PATH_SEL = JSFORMATTER_PATH_MAC
-		if release:
-			JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH_MAC
-	
 	result = "ERROR"
 	
 	# os.system(JSFORMATTER_PATH_SEL + " " + test_case.source + " out.js")
@@ -85,12 +78,26 @@ def run_case(test_case, release):
 	return result
 
 def main():
+	global JSFORMATTER_PATH_SEL
+
 	files = list_file()
 	test_cases = make_test_case(files)
+	x64 = False
 	release = False
 	
-	if len(sys.argv) == 2 and sys.argv[1] == "release":
-		release = True
+	if is_windows_sys():
+		if len(sys.argv) == 2:
+			if sys.argv[1] == "release":
+				release = True
+			elif sys.argv[1] == "64":
+				x64 = True
+
+		if len(sys.argv) == 3 and ((sys.argv[1] == "release" and sys.argv[2] == "64") or (sys.argv[2] == "release" and sys.argv[1] == "64")):
+			release = True
+			x64 = True
+	else:
+		if len(sys.argv) == 2 and sys.argv[1] == "release":
+			release = True
 	
 	JSFORMATTER_LIB_PATH_SEL = ""
 	if is_osx_sys():
@@ -99,6 +106,19 @@ def main():
 			JSFORMATTER_LIB_PATH_SEL = JSFORMATTER_LIB_REL_PATH_MAC
 
 		os.environ["DYLD_LIBRARY_PATH"] = JSFORMATTER_LIB_PATH_SEL
+
+	if is_windows_sys():
+		JSFORMATTER_PATH_SEL = JSFORMATTER_PATH_WIN
+		if release and x64:
+			JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH_WIN_64
+		elif x64:
+			JSFORMATTER_PATH_SEL = JSFORMATTER_PATH_WIN_64
+		elif release:
+			JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH_WIN
+	else:
+		JSFORMATTER_PATH_SEL = JSFORMATTER_PATH_MAC
+		if release:
+			JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH_MAC
 
 	# run cases
 	allpass = True
