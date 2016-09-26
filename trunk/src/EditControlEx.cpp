@@ -15,8 +15,8 @@ EditControlEx::EditControlEx(HWND hDlg, int editControlId):
 	if (m_hEditControl != NULL)
 	{
 		// Let's replace WindowProc.
-		// Save ourself in GWL_USERDATA.
-		::SetWindowLongPtr(m_hEditControl, GWL_USERDATA, (LONG_PTR)this);
+		// Save ourself in GWLP_USERDATA.
+		::SetWindowLongPtr(m_hEditControl, GWLP_USERDATA, (LONG_PTR)this);
 
 		// Save old WindowProc.
 		m_oldEditControlProc = ::GetWindowLongPtr(m_hEditControl, GWLP_WNDPROC);
@@ -40,7 +40,7 @@ EditControlEx::~EditControlEx()
 LRESULT CALLBACK EditControlEx::EditControlProc(
 	HWND hEditControl, UINT message, UINT wParam, LONG lParam)
 {
-	EditControlEx *pEditControlEx = (EditControlEx *)(::GetWindowLongPtr(hEditControl, GWL_USERDATA));
+	EditControlEx *pEditControlEx = (EditControlEx *)(::GetWindowLongPtr(hEditControl, GWLP_USERDATA));
 
 	switch (message)
     {

@@ -42,8 +42,8 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 		{
 			m_hDlg = hWnd;
 
-			// Save ourself in GWL_USERDATA.
-			::SetWindowLongPtr(m_hDlg, GWL_USERDATA, (LONG_PTR)this);
+			// Save ourself in GWLP_USERDATA.
+			::SetWindowLongPtr(m_hDlg, GWLP_USERDATA, (LONG_PTR)this);
 
 			m_hTree = GetDlgItem(hWnd, IDC_TREE_JSON); // tree control
 			::SendMessage(hWnd, DM_SETDEFID, 
@@ -144,7 +144,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 													 UINT wParam, 
 													 LONG lParam)
 {
-	//JSONDialog *pJsonDlg = (JSONDialog *)(::GetWindowLongPtr(hDlg, GWL_USERDATA));
+	//JSONDialog *pJsonDlg = (JSONDialog *)(::GetWindowLongPtr(hDlg, GWLP_USERDATA));
 	//return CallWindowProc((WNDPROC)pJsonDlg->m_oldJsonPathEditControlProc, 
 	//	hDlg, message, wParam, lParam);
 }*/
