@@ -52,5 +52,9 @@ DLLAPI int GetFormattedLine(JSFormatter *jsf, int originalLine)
 
 DLLAPI const char *GetVersion()
 {
+#ifdef _WIN64
+	return VERSION_VALUE " x64";
+#else
 	return VERSION_VALUE;
+#endif
 }
