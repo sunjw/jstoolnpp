@@ -87,7 +87,7 @@ BEGIN
     LTEXT           "Licence : GPL",IDC_STATIC,20,62,43,8
     LTEXT           "Special thanks to : Don HO, Douglas Crockford and Kapil Ratnani",IDC_STATIC,20,81,230,8
 #ifdef _WIN64
-	LTEXT           VERSION_VALUE " x64",IDC_STATIC,49,43,50,8
+	LTEXT           VERSION_VALUE" x64",IDC_STATIC,49,43,50,8
 #else
 	LTEXT           VERSION_VALUE,IDC_STATIC,49,43,50,8
 #endif

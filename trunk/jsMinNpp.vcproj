@@ -628,6 +628,7 @@
 			/>
 			<Tool
 				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_VC80_UPGRADE=0x0700;_WIN64"
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
