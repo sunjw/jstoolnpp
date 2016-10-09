@@ -1,3 +1,12 @@
+1.20.0
+Add 64bit Notepad++ support.
+Add new version check.
+Add context menu in Json Viewer.
+Better ":" format.
+Fix XOR "~" format bug.
+Fix bug in Json Viewer.
+Other tweak.
+
 1.18.0
 Add some ES6 support.
 Fix UTF-8 characters display in Json Viewer.
