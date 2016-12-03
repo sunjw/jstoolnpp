@@ -130,11 +130,12 @@ def main():
 		print "running..."
 		
 		result = run_case(case, release)
+		print "[%d/%d]" % (idx, len(test_cases))
+		
 		if result == "ERROR":
 			allpass = False
 			break;
 		
-		print "[%d/%d]" % (idx, len(test_cases))
 		print ""
 		idx += 1
 
