@@ -122,6 +122,7 @@ def main():
 
 	# run cases
 	allpass = True
+	idx = 1
 	for name, case in test_cases.items():
 		print "name: " + name
 		print "source: " + case.source
@@ -133,7 +134,9 @@ def main():
 			allpass = False
 			break;
 		
+		print "[%d/%d]" % (idx, len(test_cases))
 		print ""
+		idx += 1
 
 	if allpass:
 		print "%d cases ALL PASS" % len(test_cases)
