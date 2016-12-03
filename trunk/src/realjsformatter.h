@@ -64,6 +64,8 @@ private:
 	void ProcessOper(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
 	void ProcessString(bool bHaveNewLine, char tokenAFirst, char tokenBFirst);
 
+	void ProcessQuote(Token& token);
+
 	void PutToken(const Token& token,
 		const string& leftStyle = string(""),
 		const string& rightStyle = string("")); // Put a token out with style

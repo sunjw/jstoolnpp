@@ -142,6 +142,33 @@ int RealJSFormatter::GetFormattedLine(int originalLine)
 	return -1;
 }
 
+void RealJSFormatter::ProcessQuote(Token& token)
+{
+	char chFirst = token.code[0];
+	char chLast = token.code[token.code.length() - 1];
+	if(token.type == STRING_TYPE && 
+		((chFirst == '"' && chLast == '"') ||
+		(chFirst == '\'' && chLast == '\'')))
+	{
+		string tokenNewCode;
+		string tokenLine;
+		int tokenLen = token.code.length();
+		for(int i = 0; i < tokenLen; ++i)
+		{
+			char ch = token.code[i];
+			tokenLine += ch;
+
+			if(ch == '\n' || i == (tokenLen - 1))
+			{
+				tokenNewCode.append(TrimSpace(tokenLine));
+				tokenLine = "";
+			}
+		}
+
+		token.code = tokenNewCode;
+	}
+}
+
 void RealJSFormatter::PutToken(const Token& token,
 		const string& leftStyle,
 		const string& rightStyle)
@@ -867,6 +894,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	}
 	else
 	{
+		ProcessQuote(m_tokenA);
 		PutToken(m_tokenA);
 	}
 
