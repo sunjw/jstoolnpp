@@ -38,7 +38,7 @@ EditControlEx::~EditControlEx()
 }
 
 LRESULT CALLBACK EditControlEx::EditControlProc(
-	HWND hEditControl, UINT message, UINT wParam, LONG lParam)
+	HWND hEditControl, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	EditControlEx *pEditControlEx = (EditControlEx *)(::GetWindowLongPtr(hEditControl, GWLP_USERDATA));
 
