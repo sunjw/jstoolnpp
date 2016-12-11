@@ -139,16 +139,6 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	return FALSE;
 }
 
-/*LRESULT CALLBACK JSONDialog::JsonPathEditControlProc(HWND hDlg, 
-													 UINT message, 
-													 UINT wParam, 
-													 LONG lParam)
-{
-	//JSONDialog *pJsonDlg = (JSONDialog *)(::GetWindowLongPtr(hDlg, GWLP_USERDATA));
-	//return CallWindowProc((WNDPROC)pJsonDlg->m_oldJsonPathEditControlProc, 
-	//	hDlg, message, wParam, lParam);
-}*/
-
 tstring JSONDialog::convertJsonStrToDialogTstr(const string& str)
 {
 	if(m_bUTF8Json)
