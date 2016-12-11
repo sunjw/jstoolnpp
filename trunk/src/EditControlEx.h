@@ -9,7 +9,7 @@ public:
 	virtual ~EditControlEx();
 
 	static LRESULT CALLBACK EditControlProc(HWND hEditControl, 
-		UINT message, UINT wParam, LONG lParam);
+		UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
 	HWND m_hDlg;
