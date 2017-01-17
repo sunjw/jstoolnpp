@@ -326,9 +326,9 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 			}
 
 			if((topStack == JS_IF && m_tokenB.code == "else") ||
-				(topStack == JS_DO && m_tokenB.code == "while") ||
+				(topStack == JS_DO /*&& m_tokenB.code == "while"*/) ||
 				(topStack == JS_TRY && m_tokenB.code == "catch"))
-				break; // 直到刚刚结束一个 if...else, do...while, try...catch
+				break; // 直到刚刚结束一个 if...else, do..., try...catch
 			if(!GetStackTop(m_blockStack, topStack))
 				break;
 		}
