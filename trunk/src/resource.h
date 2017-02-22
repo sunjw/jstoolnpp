@@ -894,7 +894,6 @@
 #define WM_PENWINFIRST                  0x0380
 #define WM_PENWINLAST                   0x038F
 #define WM_DDE_FIRST                    0x03E0
-#define IDC_BUTTON1                     1000
 #define IDC_PROPAGE                     1000
 #define IDC_BTN_REFRESH                 1000
 #define IDC_SPACECHECK                  1002
@@ -904,23 +903,21 @@
 #define IDC_COUNTEDIT                   1005
 #define IDC_STATIC_USE                  1006
 #define IDC_STATIC_SPACE                1007
-#define IDC_CHECK1                      1008
 #define IDC_NEWLINECHECK                1008
 #define IDC_STATIC_VERSION              1009
 #define IDC_EMPTYINDENT                 1009
-#define IDC_CHECK2                      1010
 #define IDC_KEEPCOMTCHECK               1010
 #define IDC_TREE_JSON                   1011
 #define IDC_SEARCHEDIT                  1012
 #define IDC_BTN_SEARCH                  1013
 #define IDC_JSONPATH                    1014
-#define IDC_CHECK3                      1014
 #define IDM_JSON_COPYNAME               1015
 #define IDM_JSON_COPYVALUE              1016
 #define IDM_JSON_COPYALL                1017
 #define IDM_JSON_COPYPATH               1018
 #define IDM_JSON_EXPANDALL              1019
 #define IDM_JSON_COLLAPSEALL            1020
+#define IDC_NEWVERSIONCHECK             1021
 #define CF_GDIOBJLAST                   0x03FF
 #define WM_USER                         0x0400
 #define WVR_VALIDRECTS                  0x0400
@@ -1224,7 +1221,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        103
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1015
+#define _APS_NEXT_CONTROL_VALUE         1022
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

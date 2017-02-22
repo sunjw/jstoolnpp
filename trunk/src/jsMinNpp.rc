@@ -88,15 +88,15 @@ BEGIN
     LTEXT           "1.20.3.0",IDC_STATIC,49,43,50,8
 END
 
-IDD_OPTIONSBOX DIALOGEX 0, 0, 241, 183
+IDD_OPTIONSBOX DIALOGEX 0, 0, 241, 202
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Options"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     GROUPBOX        "Basic",IDC_STATIC,7,7,227,44
     LTEXT           "End of line:",IDC_STATIC,13,19,37,8
-    CONTROL         " &Windows style (CRLF \\r\\n)",IDC_WINRADIO,"Button",BS_AUTORADIOBUTTON,13,32,104,10
-    CONTROL         " Uni&x style (LF \\n)",IDC_UNIXRADIO,"Button",BS_AUTORADIOBUTTON,129,32,75,10
+    CONTROL         " Windows style (CRLF \\r\\n)",IDC_WINRADIO,"Button",BS_AUTORADIOBUTTON,13,32,104,10
+    CONTROL         " Unix style (LF \\n)",IDC_UNIXRADIO,"Button",BS_AUTORADIOBUTTON,129,32,75,10
     GROUPBOX        "Min",IDC_STATIC,7,55,227,28
     CONTROL         "Keep comments (/*...*/ ) at the top of codes.",IDC_KEEPCOMTCHECK,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,67,163,10
@@ -107,11 +107,14 @@ BEGIN
     EDITTEXT        IDC_COUNTEDIT,70,96,17,12,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "spaces instead of tab (\\t).",IDC_STATIC_SPACE,92,99,88,8,SS_NOTIFY
     LTEXT           "{ ... } :",IDC_STATIC,13,125,24,8
-    CONTROL         " &New line before '{'.",IDC_NEWLINECHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,125,79,10
-    CONTROL         " &Keep indent in empty line. (NOT recommended)",IDC_EMPTYINDENT,
+    CONTROL         " New line before '{'.",IDC_NEWLINECHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,125,79,10
+    CONTROL         " Keep indent in empty line. (NOT recommended)",IDC_EMPTYINDENT,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,112,172,10
-    DEFPUSHBUTTON   "OK",IDOK,125,162,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,184,162,50,14
+    GROUPBOX        "Other",IDC_STATIC,7,145,227,28
+    CONTROL         "Check new version automatically. (Will NOT change anything)",IDC_NEWVERSIONCHECK,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,157,213,10
+    DEFPUSHBUTTON   "OK",IDOK,125,181,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,184,181,50,14
 END
 
 IDD_TREE DIALOGEX 0, 0, 230, 165
@@ -173,7 +176,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 234
         TOPMARGIN, 7
-        BOTTOMMARGIN, 176
+        BOTTOMMARGIN, 195
     END
 
     IDD_TREE, DIALOG
