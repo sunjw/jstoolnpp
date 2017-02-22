@@ -98,7 +98,7 @@ void SaveOption(HWND nppHandle, StruOptions struOptions)
 	map[keyPutCR] = IniValue(struOptions.bPutCR ? string("1") : string("0"));
 	map[keyChIndent] = IniValue(struOptions.chIndent == '\t' ? string("tab") : string("space"));
 	char buffer[256];
-	itoa(struOptions.nChPerInd, buffer, 10);
+	_itoa_s(struOptions.nChPerInd, buffer, 250, 10);
 	map[keyChPerInd] = IniValue(string(buffer));
 	map[keyNLBracket] = IniValue(struOptions.bNLBracket ? string("1") : string("0"));
 	map[keyKeepTopComt] = IniValue(struOptions.bKeepTopComt ? string("1") : string("0"));

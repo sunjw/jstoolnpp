@@ -91,11 +91,11 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 void setIndent(HWND hwnd, BOOL bSpace)
 {
 	TCHAR strCount[256];
-	#if defined(UNICODE) || defined(_UNICODE)
-	_itow(g_struOptions.nChPerInd, strCount, 10);
-	#else
-	_itoa(g_struOptions.nChPerInd, strCount, 10);
-	#endif
+#if defined(UNICODE) || defined(_UNICODE)
+	_itow_s(g_struOptions.nChPerInd, strCount, 250, 10);
+#else
+	_itoa_s(g_struOptions.nChPerInd, strCount, 250, 10);
+#endif
 
 	CheckDlgButton(hwnd, IDC_SPACECHECK, bSpace);
 	SetWindowText(GetDlgItem(hwnd, IDC_COUNTEDIT), strCount);

@@ -319,7 +319,7 @@ void JSONDialog::insertJsonValue(const JsonValue& jsonValue, HTREEITEM node)
 		{
 			const JsonValue& value = *itr;
 			
-			itoa(count, buffer, 10);
+			_itoa_s(count, buffer, 1000, 10);
 			string key(buffer);
 			key = "[" + key + "]";
 
