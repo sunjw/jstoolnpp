@@ -73,7 +73,7 @@ BEGIN
             VALUE "FileDescription", "JSFormatter Library"
             VALUE "FileVersion", VERSION_VALUE
             VALUE "InternalName", "JSFormatter"
-            VALUE "LegalCopyright", "(C) 2015-2016 Sun Junwen"
+            VALUE "LegalCopyright", "(C) 2015- Sun Junwen"
             VALUE "OriginalFilename", "JSFormatter.dll"
             VALUE "ProductName", "JSFormatter Library"
             VALUE "ProductVersion", VERSION_VALUE
