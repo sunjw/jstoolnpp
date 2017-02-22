@@ -183,16 +183,20 @@ static void trim(unsigned char *source)
 {
 	size_t realStart = 0;
 	size_t len = strlen(reinterpret_cast<char*>(source));
-	for(; realStart < len; ++realStart)
+	for (; realStart < len; ++realStart)
 	{
-		if(source[realStart] != ' ' &&
+		if (source[realStart] != ' ' &&
 			source[realStart] != '\t' &&
 			source[realStart] != '\r' &&
 			source[realStart] != '\n')
 			break;
 	}
 
-	strcpy(reinterpret_cast<char*>(source), reinterpret_cast<char*>(source + realStart));
+#if defined (WIN32)
+	strcpy_s(reinterpret_cast<char*>(source), len, reinterpret_cast<char*>(source + realStart));
+#else
+	strncpy(reinterpret_cast<char*>(source), reinterpret_cast<char*>(source + realStart), len);
+#endif
 }
 
 void jsMinCurrent()
