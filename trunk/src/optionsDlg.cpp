@@ -9,31 +9,32 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 	{
 	case WM_INITDIALOG:
 		// 初始化
-		if(g_struOptions.bPutCR)
-		{
+		if (g_struOptions.bPutCR)
 			CheckRadioButton(hwnd, IDC_WINRADIO, IDC_UNIXRADIO, IDC_WINRADIO);
-		}
 		else
-		{
 			CheckRadioButton(hwnd, IDC_WINRADIO, IDC_UNIXRADIO, IDC_UNIXRADIO);
-		}
 
-		if(g_struOptions.bNLBracket)
+		if (g_struOptions.bNLBracket)
 			CheckDlgButton(hwnd, IDC_NEWLINECHECK, TRUE);
 		else
 			CheckDlgButton(hwnd, IDC_NEWLINECHECK, FALSE);
 
-		if(g_struOptions.bKeepTopComt)
+		if (g_struOptions.bKeepTopComt)
 			CheckDlgButton(hwnd, IDC_KEEPCOMTCHECK, TRUE);
 		else
 			CheckDlgButton(hwnd, IDC_KEEPCOMTCHECK, FALSE);
 
 		setIndent(hwnd, (g_struOptions.chIndent == ' ' ? TRUE : FALSE));
 
-		if(g_struOptions.bIndentInEmpty)
+		if (g_struOptions.bIndentInEmpty)
 			CheckDlgButton(hwnd, IDC_EMPTYINDENT, TRUE);
 		else
 			CheckDlgButton(hwnd, IDC_EMPTYINDENT, FALSE);
+
+		if (g_struOptions.bDisableVersionCheck)
+			CheckDlgButton(hwnd, IDC_NEWVERSIONCHECK, TRUE);
+		else
+			CheckDlgButton(hwnd, IDC_NEWVERSIONCHECK, FALSE);
 
 		return TRUE;
 	case WM_COMMAND:
@@ -49,8 +50,13 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			// 保存设置
 			g_struOptions.bPutCR = IsDlgButtonChecked(hwnd, IDC_WINRADIO) ? true : false;
 			g_struOptions.chIndent = IsDlgButtonChecked(hwnd, IDC_SPACECHECK) ? ' ' : '\t';
-			g_struOptions.bKeepTopComt = IsDlgButtonChecked(hwnd, IDC_KEEPCOMTCHECK) ? true : false;
-			g_struOptions.bIndentInEmpty = IsDlgButtonChecked(hwnd, IDC_EMPTYINDENT) ? true : false;
+			g_struOptions.bKeepTopComt = 
+				IsDlgButtonChecked(hwnd, IDC_KEEPCOMTCHECK) ? true : false;
+			g_struOptions.bIndentInEmpty = 
+				IsDlgButtonChecked(hwnd, IDC_EMPTYINDENT) ? true : false;
+			g_struOptions.bDisableVersionCheck = 
+				IsDlgButtonChecked(hwnd, IDC_NEWVERSIONCHECK) ? true : false;
+
 			TCHAR buffer[256];
 			GetWindowText(GetDlgItem(hwnd, IDC_COUNTEDIT), buffer, 255);
 			#if defined(UNICODE) || defined(_UNICODE)

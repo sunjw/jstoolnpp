@@ -15,6 +15,7 @@ struct StruOptions
 	bool bNLBracket; // { 之前是否换行
 	bool bKeepTopComt; // 是否保留头部的注释
 	bool bIndentInEmpty; // 是否保留空行中的缩进
+	bool bDisableVersionCheck; // 是否关闭自动版本检查
 };
 
 const string keyPutCR("Put CR");
@@ -23,6 +24,7 @@ const string keyChPerInd("Chars per indent");
 const string keyNLBracket("New line before {");
 const string keyKeepTopComt("Kepp top comment");
 const string keyIndentInEmpty("Indent in empty");
+const string keyDisableVersionCheck("Disable version check");
 
 tstring GetConfigFilePath(HWND nppHandle);
 

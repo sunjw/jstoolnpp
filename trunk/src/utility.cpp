@@ -32,42 +32,48 @@ void LoadOption(HWND nppHandle, StruOptions& struOptions)
 	map = processor.GetInfo(true);
 	IniFileProcessor::IniMap::iterator itrEnd = map.end();
 
-	if(map.find(keyPutCR) != itrEnd)
+	if (map.find(keyPutCR) != itrEnd)
 	{
-		if(!map[keyPutCR].GetStrValue().compare("0"))
+		if (!map[keyPutCR].GetStrValue().compare("0"))
 			struOptions.bPutCR = false;
 	}
 
-	if(map.find(keyChIndent) != itrEnd)
+	if (map.find(keyChIndent) != itrEnd)
 	{
 		string strIndent = map[keyChIndent].GetStrValue();
-		if(!strIndent.compare("tab"))
+		if (!strIndent.compare("tab"))
 			struOptions.chIndent = '\t';
-		else if(!strIndent.compare("space"))
+		else if (!strIndent.compare("space"))
 			struOptions.chIndent = ' ';
 	}
 
-	if(map.find(keyChPerInd) != itrEnd)
+	if (map.find(keyChPerInd) != itrEnd)
 	{
 		struOptions.nChPerInd = atoi(map[keyChPerInd].GetStrValue().c_str());
 	}
 
-	if(map.find(keyNLBracket) != itrEnd)
+	if (map.find(keyNLBracket) != itrEnd)
 	{
-		if(!map[keyNLBracket].GetStrValue().compare("1"))
+		if (!map[keyNLBracket].GetStrValue().compare("1"))
 			struOptions.bNLBracket = true;
 	}
 
-	if(map.find(keyKeepTopComt) != itrEnd)
+	if (map.find(keyKeepTopComt) != itrEnd)
 	{
-		if(!map[keyKeepTopComt].GetStrValue().compare("1"))
+		if (!map[keyKeepTopComt].GetStrValue().compare("1"))
 			struOptions.bKeepTopComt = true;
 	}
 
-	if(map.find(keyIndentInEmpty) != itrEnd)
+	if (map.find(keyIndentInEmpty) != itrEnd)
 	{
-		if(!map[keyIndentInEmpty].GetStrValue().compare("1"))
+		if (!map[keyIndentInEmpty].GetStrValue().compare("1"))
 			struOptions.bIndentInEmpty = true;
+	}
+
+	if (map.find(keyDisableVersionCheck) != itrEnd)
+	{
+		if (!map[keyDisableVersionCheck].GetStrValue().compare("1"))
+			struOptions.bDisableVersionCheck = true;
 	}
 }
 
@@ -79,6 +85,7 @@ void LoadDefaultOption(StruOptions& struOptions)
 	struOptions.bNLBracket = false;
 	struOptions.bKeepTopComt = false;
 	struOptions.bIndentInEmpty = false;
+	struOptions.bDisableVersionCheck = false;
 }
 
 void SaveOption(HWND nppHandle, StruOptions struOptions)
@@ -96,6 +103,7 @@ void SaveOption(HWND nppHandle, StruOptions struOptions)
 	map[keyNLBracket] = IniValue(struOptions.bNLBracket ? string("1") : string("0"));
 	map[keyKeepTopComt] = IniValue(struOptions.bKeepTopComt ? string("1") : string("0"));
 	map[keyIndentInEmpty] = IniValue(struOptions.bIndentInEmpty ? string("1") : string("0"));
+	map[keyDisableVersionCheck] = IniValue(struOptions.bDisableVersionCheck ? string("1") : string("0"));
 
 	processor.SetMap(map);
 
