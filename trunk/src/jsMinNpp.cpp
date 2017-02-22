@@ -603,6 +603,12 @@ static int checkUpdateThread(void *param)
 
 void doInternetCheckUpdate()
 {
+	if (g_struOptions.bDisableVersionCheck)
+	{
+		// User diable this.
+		return;
+	}
+
 	time_t curTime = getCurrentTimeSecond();
 	if (s_updateThreadRunning ||
 		(!s_foundNewVersion &&
