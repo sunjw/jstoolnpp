@@ -243,13 +243,13 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 		pJS = new char[jsLenSel];
 		::SendMessage(m_hCurrScintilla, SCI_GETSELTEXT, jsLen, (LPARAM)pJS);
 
-		m_iSelStartLine = ::SendMessage(m_hCurrScintilla, SCI_LINEFROMPOSITION, selStart, 0);
+		m_iSelStartLine = (int)::SendMessage(m_hCurrScintilla, SCI_LINEFROMPOSITION, selStart, 0);
 	}
 
 	std::string strJSCode(pJS);
 	m_bUTF8Json = false;
 
-	int codePage = ::SendMessage(m_hCurrScintilla, SCI_GETCODEPAGE, 0, 0);
+	int codePage = (int)::SendMessage(m_hCurrScintilla, SCI_GETCODEPAGE, 0, 0);
 	if(codePage == 65001)
 	{
 		// UTF-8

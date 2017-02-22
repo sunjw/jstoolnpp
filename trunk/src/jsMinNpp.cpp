@@ -303,7 +303,7 @@ void jsFormat()
 		// ’“––Õ∑
 		while(selStart > 0)
 		{
-			testChar = ::SendMessage(hCurrScintilla, SCI_GETCHARAT, selStart - 1, 0);
+			testChar = (char)::SendMessage(hCurrScintilla, SCI_GETCHARAT, selStart - 1, 0);
 			if(testChar == '\r' || testChar == '\n')
 				break;
 
@@ -312,7 +312,7 @@ void jsFormat()
 		// ’“––Œ≤
 		while(selEnd < jsLen)
 		{
-			testChar = ::SendMessage(hCurrScintilla, SCI_GETCHARAT, selEnd, 0);
+			testChar = (char)::SendMessage(hCurrScintilla, SCI_GETCHARAT, selEnd, 0);
 			if(testChar == '\r' || testChar == '\n')
 				break;
 
