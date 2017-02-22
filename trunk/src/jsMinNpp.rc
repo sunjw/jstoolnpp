@@ -102,7 +102,10 @@ BEGIN
     LTEXT           "End of line:",IDC_STATIC,13,19,37,8
     CONTROL         " &Windows style (CRLF \\r\\n)",IDC_WINRADIO,"Button",BS_AUTORADIOBUTTON,13,32,104,10
     CONTROL         " Uni&x style (LF \\n)",IDC_UNIXRADIO,"Button",BS_AUTORADIOBUTTON,129,32,75,10
-    GROUPBOX        "Format",IDC_STATIC,7,101,227,56
+    GROUPBOX        "Min",IDC_STATIC,7,54,227,44
+    CONTROL         "Keep comments (/*...*/ ) at the top of codes.",IDC_KEEPCOMTCHECK,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,66,163,10
+	GROUPBOX        "Format",IDC_STATIC,7,101,227,56
     LTEXT           "Indent:",IDC_STATIC,13,113,25,8
     CONTROL         "",IDC_SPACECHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,113,12,10
     LTEXT           "Use",IDC_STATIC_USE,54,114,13,8,SS_NOTIFY
@@ -110,13 +113,10 @@ BEGIN
     LTEXT           "spaces instead of tab (\\t).",IDC_STATIC_SPACE,92,114,88,8,SS_NOTIFY
     LTEXT           "{ ... } :",IDC_STATIC,13,140,24,8
     CONTROL         " &New line before '{'.",IDC_NEWLINECHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,140,79,10
-    DEFPUSHBUTTON   "OK",IDOK,125,162,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,184,162,50,14
-    GROUPBOX        "Min",IDC_STATIC,7,54,227,44
-    CONTROL         "Keep comments (/*...*/ ) at the top of codes.",IDC_KEEPCOMTCHECK,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,66,163,10
     CONTROL         " &Keep indent in empty line. (NOT recommended)",IDC_EMPTYINDENT,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,127,172,10
+	DEFPUSHBUTTON   "OK",IDOK,125,162,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,184,162,50,14
 END
 
 IDD_TREE DIALOGEX 0, 0, 230, 165
