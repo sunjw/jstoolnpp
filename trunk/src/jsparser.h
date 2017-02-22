@@ -95,7 +95,7 @@ public:
 	typedef stack<char> CharStack;
 	typedef stack<bool> BoolStack;
 	typedef stack<int> IntStack;
-	typedef stack<unsigned int> UIntStack;
+	typedef stack<size_t> SizeStack;
 	typedef queue<Token> TokenQueue;
 	typedef map<string, char> StrCharMap;
 	typedef set<string> StrSet;
