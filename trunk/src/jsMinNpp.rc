@@ -1,6 +1,7 @@
 // Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
+#include "version.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -27,8 +28,8 @@ LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,20,3,0
- PRODUCTVERSION 1,20,3,0
+ FILEVERSION VERSION_DIGITALVALUE
+ PRODUCTVERSION VERSION_DIGITALVALUE
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -49,12 +50,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Sun Junwen"
             VALUE "FileDescription", "JSTool plugin for Notepad++"
-            VALUE "FileVersion", "1.20.3.0"
+            VALUE "FileVersion", VERSION_VALUE
             VALUE "InternalName", "JSMinNPP.dll"
             VALUE "LegalCopyright", "Copyright 2010- by Sun Junwen"
             VALUE "OriginalFilename", "JSMinNPP.dll"
             VALUE "ProductName", "JSToolNPP"
-            VALUE "ProductVersion", "1.20.3.0"
+            VALUE "ProductVersion", VERSION_VALUE
         END
     END
 END
@@ -85,7 +86,11 @@ BEGIN
     LTEXT           "Version : ",IDC_STATIC,20,43,31,8
     LTEXT           "Licence : GPL",IDC_STATIC,20,62,43,8
     LTEXT           "Special thanks to : Don HO, Douglas Crockford and Kapil Ratnani",IDC_STATIC,20,81,230,8
-    LTEXT           "1.20.3.0",IDC_STATIC,49,43,50,8
+    LTEXT           VERSION_VALUE,IDC_STATIC,49,43,50,8
+#ifdef _WIN64
+    LTEXT           "x64",IDC_STATIC,85,43,50,8
+#endif
+    //PUSHBUTTON      "Project Home",IDC_PROPAGE,10,108,50,14
 END
 
 IDD_OPTIONSBOX DIALOGEX 0, 0, 241, 202
