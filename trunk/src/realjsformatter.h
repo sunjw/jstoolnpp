@@ -51,7 +51,7 @@ public:
 
 	void Go();
 
-	int GetFormattedLine(int originalLine);
+	int GetFormattedLine(unsigned int originalLine);
 
 private:
 	void Init();
@@ -98,7 +98,7 @@ private:
 	bool m_bTemplatePut; // Template String
 
 	int m_nQuestOperCount;
-	IntStack m_QuestOperStackCount;
+	UIntStack m_QuestOperStackCount;
 
 	string m_initIndent; // ÆðÊ¼Ëõ½ø
 
