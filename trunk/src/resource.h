@@ -758,7 +758,7 @@
 #define WM_KEYDOWN                      0x0100
 #define WVR_HREDRAW                     0x0100
 #define HDS_FILTERBAR                   0x0100
-#define RBS_TOOLTIPS                    0x0100
+//#define RBS_TOOLTIPS                    0x0100
 #define SBARS_SIZEGRIP                  0x0100
 #define TBS_TOOLTIPS                    0x0100
 #define UDS_HOTTRACK                    0x0100
@@ -809,7 +809,7 @@
 #define WVR_VREDRAW                     0x0200
 #define CS_NOCLOSE                      0x0200
 #define CF_PRIVATEFIRST                 0x0200
-#define RBS_VARHEIGHT                   0x0200
+//#define RBS_VARHEIGHT                   0x0200
 #define TBS_REVERSED                    0x0200
 #define LVS_EDITLABELS                  0x0200
 #define TVS_TRACKSELECT                 0x0200
@@ -925,7 +925,7 @@
 #define CF_GDIOBJLAST                   0x03FF
 #define WM_USER                         0x0400
 #define WVR_VALIDRECTS                  0x0400
-#define RBS_BANDBORDERS                 0x0400
+//#define RBS_BANDBORDERS                 0x0400
 #define TBS_DOWNISLEFT                  0x0400
 #define LVS_OWNERDRAWFIXED              0x0400
 #define TVS_SINGLEEXPAND                0x0400
@@ -1106,7 +1106,7 @@
 #define COLORMGMTDLGORD                 1551
 #define NEWFILEOPENV2ORD                1552
 #define CS_SAVEBITS                     0x0800
-#define RBS_FIXEDORDER                  0x0800
+//#define RBS_FIXEDORDER                  0x0800
 #define SBARS_TOOLTIPS                  0x0800
 #define SBT_TOOLTIPS                    0x0800
 #define LVS_ALIGNLEFT                   0x0800
@@ -1114,17 +1114,17 @@
 #define TCS_RAGGEDRIGHT                 0x0800
 #define LVS_ALIGNMASK                   0x0c00
 #define CS_BYTEALIGNCLIENT              0x1000
-#define RBS_REGISTERDROP                0x1000
+//#define RBS_REGISTERDROP                0x1000
 #define LVS_OWNERDATA                   0x1000
 #define TVS_FULLROWSELECT               0x1000
 #define TCS_FOCUSONBUTTONDOWN           0x1000
 #define CS_BYTEALIGNWINDOW              0x2000
-#define RBS_AUTOSIZE                    0x2000
+//#define RBS_AUTOSIZE                    0x2000
 #define LVS_NOSCROLL                    0x2000
 #define TVS_NOSCROLL                    0x2000
 #define TCS_OWNERDRAWFIXED              0x2000
 #define CS_GLOBALCLASS                  0x4000
-#define RBS_VERTICALGRIPPER             0x4000
+//#define RBS_VERTICALGRIPPER             0x4000
 #define LVS_NOCOLUMNHEADER              0x4000
 #define TVS_NONEVENHEIGHT               0x4000
 #define TCS_TOOLTIPS                    0x4000
@@ -1199,7 +1199,7 @@
 #define OBM_OLD_CLOSE                   32767
 #define WM_APP                          0x8000
 #define HELP_TCARD                      0x8000
-#define RBS_DBLCLKTOGGLE                0x8000
+//#define RBS_DBLCLKTOGGLE                0x8000
 #define LVS_NOSORTHEADER                0x8000
 #define TVS_NOHSCROLL                   0x8000
 #define TCS_FOCUSNEVER                  0x8000
@@ -1224,9 +1224,9 @@
 #define SC_MONITORPOWER                 0xF170
 #define SC_CONTEXTHELP                  0xF180
 #define LVS_TYPESTYLEMASK               0xfc00
-#define HTERROR                         -2
-#define PWR_FAIL                        -1
-#define HTTRANSPARENT                   -1
+//#define HTERROR                         -2
+//#define PWR_FAIL                        -1
+//#define HTTRANSPARENT                   -1
 
 // Next default values for new objects
 // 
