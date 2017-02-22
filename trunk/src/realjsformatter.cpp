@@ -123,7 +123,7 @@ void RealJSFormatter::Init()
 void RealJSFormatter::PrintAdditionalDebug(string& strDebugOutput)
 {
 	char buf[1024] = {0};
-	sprintf(buf, "Formatted line count: %d\n", m_nFormattedLineCount);
+	SNPRINTF(buf, 1000, "Formatted line count: %d\n", m_nFormattedLineCount);
 	strDebugOutput.append(buf);
 }
 

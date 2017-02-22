@@ -47,15 +47,15 @@ void JSParser::Init()
 
 void JSParser::PrintDebug()
 {
-	if(m_debug)
+	if (m_debug)
 	{
 		m_strDebugOutput = "";
 		char buf[1024] = {0};
-		sprintf(buf, "Processed tokens: %ld\n", m_tokenCount);
+		SNPRINTF(buf, 1000, "Processed tokens: %ld\n", m_tokenCount);
 		m_strDebugOutput.append(buf);
-		sprintf(buf, "Time used: %.3fs\n", m_duration);
+		SNPRINTF(buf, 1000, "Time used: %.3fs\n", m_duration);
 		m_strDebugOutput.append(buf);
-		sprintf(buf, "%.3f tokens/second\n", m_tokenCount / m_duration);
+		SNPRINTF(buf, 1000, "%.3f tokens/second\n", m_tokenCount / m_duration);
 		m_strDebugOutput.append(buf);
 
 		PrintAdditionalDebug(m_strDebugOutput);

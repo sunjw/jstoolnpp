@@ -20,7 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 #ifndef _JS_PARSER_H_
 #define _JS_PARSER_H_
-#include <ctime>
+#include <stdio.h>
+#include <time.h>
 #include <string>
 #include <stack>
 #include <queue>
@@ -28,6 +29,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <set>
 
 using namespace std;
+
+#if defined (WIN32)
+#define SNPRINTF sprintf_s
+#else
+#define SNPRINTF snprintf
+#endif
 
 template<class T>
 bool GetStackTop(const stack<T>& stk, T& ret)
