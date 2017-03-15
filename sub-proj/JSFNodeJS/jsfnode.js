@@ -49,10 +49,10 @@ function CallLibJSF() {
     });
 
     var formatterOption = new FormatterOptionStruct;
-    formatterOption.chIndent = ' ';
-    formatterOption.nChPerInd = 4;
+    formatterOption.chIndent = '\t';
+    formatterOption.nChPerInd = 1;
     formatterOption.eCRRead = 0;
-    formatterOption.eCRPut = 0;
+    formatterOption.eCRPut = 1;
     formatterOption.eBracNL = 0;
     formatterOption.eEmpytIndent = 0;
 
