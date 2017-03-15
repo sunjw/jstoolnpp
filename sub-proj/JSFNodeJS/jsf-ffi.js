@@ -33,12 +33,7 @@ var resultJs = "";
 var WriteCharFunc = Ffi.Callback('void', [VoidPtr, 'char'],
     function(context, ch) {
         console.log("WriteCharFunc(" + ch + ")");
-        var chStr;
-        if (ch == -48) {
-            chStr = '\t';
-        } else {
-            chStr = String.fromCharCode(ch);
-        }
+        var chStr = String.fromCharCode(ch);
         resultJs = resultJs + chStr;
     }
 );
@@ -53,8 +48,8 @@ function CallLibJSF() {
     });
 
     var formatterOption = new FormatterOptionStruct;
-    formatterOption.chIndent = ' ';
-    formatterOption.nChPerInd = 4;
+    formatterOption.chIndent = '\t';
+    formatterOption.nChPerInd = 1;
     formatterOption.eCRRead = 0;
     formatterOption.eCRPut = 0;
     formatterOption.eBracNL = 0;
