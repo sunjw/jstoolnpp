@@ -7,6 +7,7 @@ import hashlib
 import os
 import platform
 import sys
+import time
 from subprocess import call
 
 JSFORMATTER_PATH_WIN = "..\\..\\..\\trunk\\debug\\JSFormatterTest.exe"
@@ -23,12 +24,15 @@ JSFORMATTER_PATH_SEL = ""
 class TestCase:
 	source = ""
 	result = ""
-	
+
 def is_windows_sys():
 	return (platform.system() == "Windows")
 
 def is_osx_sys():
 	return (platform.system() == "Darwin")
+
+def current_millis():
+	return int(round(time.time() * 1000));
 
 def list_file():
 	files = [f for f in os.listdir('.') if os.path.isfile(f)]
@@ -121,6 +125,7 @@ def main():
 			JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH_MAC
 
 	# run cases
+	start_time = current_millis()
 	allpass = True
 	idx = 1
 	for name, case in test_cases.items():
@@ -139,8 +144,11 @@ def main():
 		print ""
 		idx += 1
 
+	end_time = current_millis()
+	duration_time = (end_time - start_time) / 1000
+
 	if allpass:
-		print "%d cases ALL PASS" % len(test_cases)
+		print "%d cases ALL PASS in %ds" % (len(test_cases), duration_time)
 
 	print ""
 	if is_osx_sys():
