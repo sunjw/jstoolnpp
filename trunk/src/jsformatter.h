@@ -101,24 +101,24 @@ typedef void (*WriteCharFunc)(void *ioContext, const char ch);
 struct _JSFormatter;
 typedef struct _JSFormatter JSFormatter;
 
-DLLAPI JSFormatter *CreateJSFormatter(void *ioContext,
+DLLAPI JSFormatter *JSFCreateGenericIO(void *ioContext,
 							 ReadCharFunc readCharFunc, 
 							 WriteCharFunc writeCharFunc,
 							 const FormatterOption *option);
 
-DLLAPI void ReleaseJSFormatter(JSFormatter *jsf);
+DLLAPI void JSFRelease(JSFormatter *jsf);
 
-DLLAPI void FormatJavaScript(JSFormatter *jsf);
+DLLAPI void JSFFormatJavaScript(JSFormatter *jsf);
 
-DLLAPI void EnableJSFormatterDebug(JSFormatter *jsf);
+DLLAPI void JSFEnableDebug(JSFormatter *jsf);
 
-DLLAPI void DisableJSFormatterDebug(JSFormatter *jsf);
+DLLAPI void JSFDisableDebug(JSFormatter *jsf);
 
-DLLAPI const char *GetJSFormatterDebugOutput(JSFormatter *jsf);
+DLLAPI const char *JSFGetDebugOutput(JSFormatter *jsf);
 
-DLLAPI int GetFormattedLine(JSFormatter *jsf, int originalLine);
+DLLAPI int JSFGetFormattedLine(JSFormatter *jsf, int originalLine);
 
-DLLAPI const char *GetVersion();
+DLLAPI const char *JSFGetVersion();
 
 #endif
 

@@ -98,17 +98,17 @@ int main(int argc, char *argv[])
 
 			StreamIOContext streamIOCtx(inFileStream2, outStrStream);
 
-			JSFormatter *jsf = CreateJSFormatter(
+			JSFormatter *jsf = JSFCreateGenericIO(
 							(void *)&(streamIOCtx), 
 							StreamIOContext::ReadCharFromStream,
 							StreamIOContext::WriteCharFromStream,
 							&option);
 
-			EnableJSFormatterDebug(jsf);
+			JSFEnableDebug(jsf);
 
-			FormatJavaScript(jsf);
+			JSFFormatJavaScript(jsf);
 
-			ReleaseJSFormatter(jsf);
+			JSFRelease(jsf);
 
 			jsf = NULL;
 
@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
 		if (strcmp(argvCmd, "--version") == 0)
 		{
 			processed = true;
-			cout << "jsformatter version: " << GetVersion() << endl;
+			cout << "jsformatter version: " << JSFGetVersion() << endl;
 		}
 	}
 

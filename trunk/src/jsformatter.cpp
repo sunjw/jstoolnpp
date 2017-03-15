@@ -12,7 +12,7 @@
 #include <crtdbg.h>
 #endif
 
-DLLAPI JSFormatter *CreateJSFormatter(void *ioContext,
+DLLAPI JSFormatter *JSFCreateGenericIO(void *ioContext,
 							 ReadCharFunc readCharFunc, 
 							 WriteCharFunc writeCharFunc,
 							 const FormatterOption *option)
@@ -33,37 +33,37 @@ DLLAPI JSFormatter *CreateJSFormatter(void *ioContext,
 	return (JSFormatter *)jsf;
 }
 
-DLLAPI void ReleaseJSFormatter(JSFormatter *jsf)
+DLLAPI void JSFRelease(JSFormatter *jsf)
 {
 	delete (RealJSFormatter *)jsf;
 }
 
-DLLAPI void FormatJavaScript(JSFormatter *jsf)
+DLLAPI void JSFFormatJavaScript(JSFormatter *jsf)
 {
 	((RealJSFormatter *)jsf)->Go();
 }
 
-DLLAPI void EnableJSFormatterDebug(JSFormatter *jsf)
+DLLAPI void JSFEnableDebug(JSFormatter *jsf)
 {
 	((RealJSFormatter *)jsf)->m_debug = true;
 }
 
-DLLAPI void DisableJSFormatterDebug(JSFormatter *jsf)
+DLLAPI void JSFDisableDebug(JSFormatter *jsf)
 {
 	((RealJSFormatter *)jsf)->m_debug = false;
 }
 
-DLLAPI const char *GetJSFormatterDebugOutput(JSFormatter *jsf)
+DLLAPI const char *JSFGetDebugOutput(JSFormatter *jsf)
 {
 	return ((RealJSFormatter *)jsf)->GetDebugOutput();
 }
 
-DLLAPI int GetFormattedLine(JSFormatter *jsf, int originalLine)
+DLLAPI int JSFGetFormattedLine(JSFormatter *jsf, int originalLine)
 {
 	return ((RealJSFormatter *)jsf)->GetFormattedLine(originalLine);
 }
 
-DLLAPI const char *GetVersion()
+DLLAPI const char *JSFGetVersion()
 {
 #ifdef _WIN64
 	return VERSION_VALUE " x64";
