@@ -1,3 +1,4 @@
+var FS = require('fs');
 var Ffi = require('ffi');
 var Ref = require('ref');
 var StructType = require('ref-struct');
@@ -16,15 +17,15 @@ var FormatterOptionStruct = StructType({
 });
 var FormatterOptionStructPtr = Ref.refType(FormatterOptionStruct);
 
-var testJs = "var zzz={xxx:ddd};"
+var inputJS = "";
 var idx = 0;
 
 var ReadCharFunc = Ffi.Callback('char', [VoidPtr],
     function(context) {
-        if (idx == testJs.length) {
+        if (idx == inputJS.length) {
             return 0;
         }
-        return testJs.charAt(idx++);
+        return inputJS.charAt(idx++);
     }
 );
 
@@ -69,9 +70,18 @@ function CallLibJSF() {
     console.log("libJSFormatter version: " + libJSFormatter.GetVersion());
 }
 
-CallLibJSF();
+if (process.argv.length != 3) {
+    console.log("Usage: node jsfnode.js [input file]");
+} else {
+    var inputJSFile = process.argv[2];
+    inputJS = FS.readFileSync(inputJSFile);
+    inputJS = inputJS.toString();
+    //console.log("inputJS:\n" + inputJS);
 
-process.on('exit', function() {
-    var keepRCF = ReadCharFunc;
-    var keepWCF = WriteCharFunc;
-});
+    CallLibJSF();
+
+    process.on('exit', function() {
+        var keepRCF = ReadCharFunc;
+        var keepWCF = WriteCharFunc;
+    });
+}
