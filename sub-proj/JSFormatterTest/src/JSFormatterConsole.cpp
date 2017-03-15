@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <streambuf>
 #include <string>
 #include <stdexcept>
 
@@ -28,7 +29,7 @@ public:
 	{}
 
 	static char ReadCharFromStream(void *ioContext);
-	static void WriteCharFromStream(void *ioContext, const char ch);
+	static void WriteCharToStream(void *ioContext, const char ch);
 
 private:
 	istream& in;
@@ -44,11 +45,34 @@ char StreamIOContext::ReadCharFromStream(void *ioContext)
 	return ret;
 }
 
-void StreamIOContext::WriteCharFromStream(void *ioContext, const char ch)
+void StreamIOContext::WriteCharToStream(void *ioContext, const char ch)
 {
 	StreamIOContext *streamIOCtx = (StreamIOContext *)ioContext;
 	(streamIOCtx->out) << static_cast<char>(ch);
 }
+
+class StringWriteOnceContext
+{
+public:
+	StringWriteOnceContext(ostream& o): out(o)
+	{}
+
+	static void WriteStringToStream(void *ioContext, const char *outputString);
+
+private:
+	ostream& out;
+};
+
+void StringWriteOnceContext::WriteStringToStream(void *ioContext, const char *outputString)
+{
+	StringWriteOnceContext *stringWriteCtx = (StringWriteOnceContext *)ioContext;
+	(stringWriteCtx->out) << outputString;
+}
+
+//#define USE_GENERIC_IO
+#undef USE_GENERIC_IO
+#define USE_STRING_WRITE_ONCE
+//#undef USE_STRING_WRITE_ONCE
 
 int main(int argc, char *argv[])
 {
@@ -85,6 +109,7 @@ int main(int argc, char *argv[])
 		ifstream inFileStream2(inputFile);
 		ofstream outFileStream2(outputFile);
 		ostringstream outStrStream;
+
 		try
 		{
 			FormatterOption option;
@@ -96,13 +121,25 @@ int main(int argc, char *argv[])
 			option.eBracNL = NO_NEWLINE_BRAC;
 			option.eEmpytIndent = NO_INDENT_IN_EMPTYLINE;
 
+#if defined (USE_GENERIC_IO)
 			StreamIOContext streamIOCtx(inFileStream2, outStrStream);
 
 			JSFormatter *jsf = JSFCreateGenericIO(
 							(void *)&(streamIOCtx), 
 							StreamIOContext::ReadCharFromStream,
-							StreamIOContext::WriteCharFromStream,
+							StreamIOContext::WriteCharToStream,
 							&option);
+#elif defined (USE_STRING_WRITE_ONCE)
+			string strInput((istreambuf_iterator<char>(inFileStream2)), istreambuf_iterator<char>());
+
+			StringWriteOnceContext stringWriteCtx(outStrStream);
+
+			JSFormatter *jsf = JSFCreateStringWriteOnce(
+							(void *)&(stringWriteCtx), 
+							strInput.c_str(),
+							StringWriteOnceContext::WriteStringToStream,
+							&option);
+#endif
 
 			JSFEnableDebug(jsf);
 

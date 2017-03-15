@@ -34,6 +34,27 @@ DLLAPI JSFormatter *JSFCreateGenericIO(void *ioContext,
 	return (JSFormatter *)jsf;
 }
 
+DLLAPI JSFormatter *JSFCreateStringWriteOnce(void *ioContext, 
+							 const char *inputString, 
+							 WriteStringOnceFunc writeStringFunc,
+							 const FormatterOption *option)
+{
+#ifdef DEBUG_MEM_LEAK
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
+	JSFormatStringWriteOnce *jsf = new JSFormatStringWriteOnce(
+		ioContext, inputString, writeStringFunc, 
+		FormatterOption(option->chIndent,
+			option->nChPerInd,
+			option->eCRRead,
+			option->eCRPut,
+			option->eBracNL,
+			option->eEmpytIndent));
+
+	return (JSFormatter *)jsf;
+}
+
 DLLAPI void JSFRelease(JSFormatter *jsf)
 {
 	delete (RealJSFormatter *)jsf;

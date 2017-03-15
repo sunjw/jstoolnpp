@@ -6,7 +6,7 @@ using namespace std;
 void JSFormatStringWriteOnce::Go()
 {
 	RealJSFormatter::Go();
-	_writeStringFunc(_outputString.c_str());
+	_writeStringFunc(_ioContext, _outputString.c_str());
 }
 
 int JSFormatStringWriteOnce::GetChar()
