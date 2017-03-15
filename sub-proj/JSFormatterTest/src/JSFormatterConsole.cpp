@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
 		ifstream inFileStream2(inputFile);
 		ofstream outFileStream2(outputFile);
-	    ostringstream outStrStream;
+		ostringstream outStrStream;
 		try
 		{
 			FormatterOption option;
