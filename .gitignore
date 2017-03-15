@@ -1,3 +1,6 @@
+*~
+.DS_Store
+
 sub-proj/JSFormatter/Debug/*
 sub-proj/JSFormatter/Release/*
 sub-proj/JSFormatter/x64/*
