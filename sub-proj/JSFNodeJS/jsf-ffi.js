@@ -2,6 +2,8 @@ var Ffi = require('ffi');
 var Ref = require('ref');
 var StructType = require('ref-struct');
 
+var JSFORMATTER_REL_PATH_MAC = '../../trunk/DerivedData/JSTool/Build/Products/Release/libJSFormatter.dylib';
+
 var VoidPtr = Ref.refType('void');
 
 var FormatterOptionStruct = StructType({
@@ -41,11 +43,12 @@ var WriteCharFunc = Ffi.Callback('void', [VoidPtr, 'char'],
     }
 );
 
-var libJSFormatter = new Ffi.Library('libJSFormatter', { 
+var libJSFormatter = new Ffi.Library(JSFORMATTER_REL_PATH_MAC, {
     'CreateJSFormatter': [VoidPtr, [VoidPtr, 'pointer', 'pointer', FormatterOptionStructPtr]],
     'ReleaseJSFormatter': ['void', [VoidPtr]],
     'EnableJSFormatterDebug': ['void', [VoidPtr]],
-    'FormatJavaScript': ['void', [VoidPtr]]
+    'FormatJavaScript': ['void', [VoidPtr]],
+    'GetVersion': ['string', []]
 });
 
 var formatterOption = new FormatterOptionStruct;
@@ -66,6 +69,8 @@ libJSFormatter.FormatJavaScript(jsfObj);
 libJSFormatter.ReleaseJSFormatter(jsfObj);
 
 console.log(resultJs);
+
+console.log("libJSFormatter version: " + libJSFormatter.GetVersion());
 
 process.on('exit', function() {
     var keepFO = formatterOption;
