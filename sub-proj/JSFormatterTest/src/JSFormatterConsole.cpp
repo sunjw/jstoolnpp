@@ -39,7 +39,7 @@ char StreamIOContext::ReadCharFromStream(void *ioContext)
 {
 	StreamIOContext *streamIOCtx = (StreamIOContext *)ioContext;
 	int ret = streamIOCtx->in.get();
-	if(ret == EOF)
+	if (ret == EOF)
 		return 0;
 	return ret;
 }
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 		clock_t startClock = clock();
 
 		string line;
-		while(getline(inFileStream1, line))
+		while (getline(inFileStream1, line))
 		{
 		    outFileStream1 << line;
 		}
