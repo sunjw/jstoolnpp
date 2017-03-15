@@ -12,9 +12,13 @@ sub-proj/JSFormatterTest/x64/*
 sub-proj/JSFormatterTest/JSFormatterTest.xcodeproj/xcuserdata/*
 sub-proj/JSFormatterTest/JSFormatterTest.xcodeproj/xcshareddata/*
 sub-proj/JSFormatterTest/tests/out.js
+
 sub-proj/JsonPP/Debug/*
 sub-proj/JsonPP/Release/*
 sub-proj/JsonPP/x64/*
+
+sub-proj/JSFNodeJS/out.js
+
 trunk/_UpgradeReport_Files/*
 trunk/Debug/*
 trunk/Unicode Debug/*
@@ -24,6 +28,7 @@ trunk/x64/*
 trunk/DerivedData/*
 trunk/JSTool.xcworkspace/xcuserdata/*
 trunk/JSTool.xcworkspace/xcshareddata/*
+
 *.aps
 *.ncb
 *.old
