@@ -98,6 +98,8 @@ typedef struct _FormatterOption FormatterOption;
 typedef char (*ReadCharFunc)(void *ioContext);
 typedef void (*WriteCharFunc)(void *ioContext, const char ch);
 
+typedef void (*WriteStringOnceFunc)(const char *outputString);
+
 struct _JSFormatter;
 typedef struct _JSFormatter JSFormatter;
 

@@ -1,6 +1,7 @@
 #include "jsformatter.h"
 #include "realjsformatter.h"
 #include "jsfGenericIO.h"
+#include "jsfStringWriteOnce.h"
 #include "version.h"
 
 //#define DEBUG_MEM_LEAK

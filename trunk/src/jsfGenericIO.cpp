@@ -1,7 +1,3 @@
-#include <cstdlib>
-#include <cstdio>
-#include <iostream>
-
 #include "jsfGenericIO.h"
 
 using namespace std;
