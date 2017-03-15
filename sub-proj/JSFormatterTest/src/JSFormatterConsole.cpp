@@ -7,6 +7,15 @@
 #include <string>
 #include <stdexcept>
 
+//#define DEBUG_MEM_LEAK
+#undef DEBUG_MEM_LEAK
+
+#ifdef DEBUG_MEM_LEAK
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
+
 #include "jsformatter.h"
 
 using namespace std;
@@ -43,6 +52,10 @@ void StreamIOContext::WriteCharFromStream(void *ioContext, const char ch)
 
 int main(int argc, char *argv[])
 {
+#ifdef DEBUG_MEM_LEAK
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
 	bool processed = false;
 	if (argc == 3)
 	{

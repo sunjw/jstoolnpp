@@ -19,6 +19,9 @@ public:
 		_readCharFunc(readCharFunc), _writeCharFunc(writeCharFunc)
 	{}
 
+	virtual ~JSFormatGenericIO()
+	{}
+
 private:
 	void *_ioContext;
 	ReadCharFunc _readCharFunc;
