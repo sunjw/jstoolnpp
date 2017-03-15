@@ -17,7 +17,7 @@ var FormatterOptionStruct = StructType({
 });
 var FormatterOptionStructPtr = Ref.refType(FormatterOptionStruct);
 
-var inputJS = "";
+var inputJS = '';
 var idx = 0;
 
 var ReadCharFunc = Ffi.Callback('char', [VoidPtr],
@@ -29,11 +29,11 @@ var ReadCharFunc = Ffi.Callback('char', [VoidPtr],
     }
 );
 
-var resultJs = "";
+var resultJs = '';
 
 var WriteCharFunc = Ffi.Callback('void', [VoidPtr, 'char'],
     function(context, ch) {
-        console.log("WriteCharFunc(" + ch + ")");
+        //console.log('WriteCharFunc(' + ch + ')');
         var chStr = String.fromCharCode(ch);
         resultJs = resultJs + chStr;
     }
@@ -65,18 +65,19 @@ function CallLibJSF() {
 
     libJSFormatter.ReleaseJSFormatter(jsfObj);
 
+    console.log('');
     console.log(resultJs);
 
-    console.log("libJSFormatter version: " + libJSFormatter.GetVersion());
+    console.log('libJSFormatter version: ' + libJSFormatter.GetVersion() + '\n');
 }
 
 if (process.argv.length != 3) {
-    console.log("Usage: node jsfnode.js [input file]");
+    console.log('Usage: node jsfnode.js [input file]');
 } else {
     var inputJSFile = process.argv[2];
     inputJS = FS.readFileSync(inputJSFile);
     inputJS = inputJS.toString();
-    //console.log("inputJS:\n" + inputJS);
+    //console.log('inputJS:\n' + inputJS);
 
     CallLibJSF();
 
