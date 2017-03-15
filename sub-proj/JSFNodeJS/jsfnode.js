@@ -49,8 +49,8 @@ function CallLibJSF() {
     });
 
     var formatterOption = new FormatterOptionStruct;
-    formatterOption.chIndent = '\t';
-    formatterOption.nChPerInd = 1;
+    formatterOption.chIndent = ' ';
+    formatterOption.nChPerInd = 4;
     formatterOption.eCRRead = 0;
     formatterOption.eCRPut = 0;
     formatterOption.eBracNL = 0;
@@ -71,15 +71,19 @@ function CallLibJSF() {
     console.log('libJSFormatter version: ' + libJSFormatter.GetVersion() + '\n');
 }
 
-if (process.argv.length != 3) {
-    console.log('Usage: node jsfnode.js [input file]');
+if (process.argv.length != 4) {
+    console.log('Usage: node jsfnode.js [input file] [output file]');
 } else {
     var inputJSFile = process.argv[2];
+    var outputJSFile = process.argv[3];
+
     inputJS = FS.readFileSync(inputJSFile);
     inputJS = inputJS.toString();
     //console.log('inputJS:\n' + inputJS);
 
     CallLibJSF();
+
+    FS.writeFileSync(outputJSFile, resultJs);
 
     process.on('exit', function() {
         var keepRCF = ReadCharFunc;
