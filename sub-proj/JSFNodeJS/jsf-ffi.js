@@ -43,37 +43,40 @@ var WriteCharFunc = Ffi.Callback('void', [VoidPtr, 'char'],
     }
 );
 
-var libJSFormatter = new Ffi.Library(JSFORMATTER_REL_PATH_MAC, {
-    'CreateJSFormatter': [VoidPtr, [VoidPtr, 'pointer', 'pointer', FormatterOptionStructPtr]],
-    'ReleaseJSFormatter': ['void', [VoidPtr]],
-    'EnableJSFormatterDebug': ['void', [VoidPtr]],
-    'FormatJavaScript': ['void', [VoidPtr]],
-    'GetVersion': ['string', []]
-});
+function CallLibJSF() {
+    var libJSFormatter = new Ffi.Library(JSFORMATTER_REL_PATH_MAC, {
+        'CreateJSFormatter': [VoidPtr, [VoidPtr, 'pointer', 'pointer', FormatterOptionStructPtr]],
+        'ReleaseJSFormatter': ['void', [VoidPtr]],
+        'EnableJSFormatterDebug': ['void', [VoidPtr]],
+        'FormatJavaScript': ['void', [VoidPtr]],
+        'GetVersion': ['string', []]
+    });
 
-var formatterOption = new FormatterOptionStruct;
-formatterOption.chIndent = ' ';
-formatterOption.nChPerInd = 4;
-formatterOption.eCRRead = 0;
-formatterOption.eCRPut = 0;
-formatterOption.eBracNL = 0;
-formatterOption.eEmpytIndent = 0;
+    var formatterOption = new FormatterOptionStruct;
+    formatterOption.chIndent = ' ';
+    formatterOption.nChPerInd = 4;
+    formatterOption.eCRRead = 0;
+    formatterOption.eCRPut = 0;
+    formatterOption.eBracNL = 0;
+    formatterOption.eEmpytIndent = 0;
 
-var ioContext = Ref.alloc(VoidPtr);
-var jsfObj = libJSFormatter.CreateJSFormatter(ioContext, ReadCharFunc, WriteCharFunc, formatterOption.ref());
+    var ioContext = Ref.alloc(VoidPtr);
+    var jsfObj = libJSFormatter.CreateJSFormatter(ioContext, ReadCharFunc, WriteCharFunc, formatterOption.ref());
 
-libJSFormatter.EnableJSFormatterDebug(jsfObj);
+    libJSFormatter.EnableJSFormatterDebug(jsfObj);
 
-libJSFormatter.FormatJavaScript(jsfObj);
+    libJSFormatter.FormatJavaScript(jsfObj);
 
-libJSFormatter.ReleaseJSFormatter(jsfObj);
+    libJSFormatter.ReleaseJSFormatter(jsfObj);
 
-console.log(resultJs);
+    console.log(resultJs);
 
-console.log("libJSFormatter version: " + libJSFormatter.GetVersion());
+    console.log("libJSFormatter version: " + libJSFormatter.GetVersion());
+}
+
+CallLibJSF();
 
 process.on('exit', function() {
-    var keepFO = formatterOption;
     var keepRCF = ReadCharFunc;
     var keepWCF = WriteCharFunc;
 });
