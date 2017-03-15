@@ -69,10 +69,10 @@ void StringWriteOnceContext::WriteStringToStream(void *ioContext, const char *ou
 	(stringWriteCtx->out) << outputString;
 }
 
-//#define USE_GENERIC_IO
-#undef USE_GENERIC_IO
-#define USE_STRING_WRITE_ONCE
-//#undef USE_STRING_WRITE_ONCE
+#define USE_GENERIC_IO
+//#undef USE_GENERIC_IO
+//#define USE_STRING_WRITE_ONCE
+#undef USE_STRING_WRITE_ONCE
 
 int main(int argc, char *argv[])
 {
