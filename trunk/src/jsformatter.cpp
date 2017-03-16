@@ -34,7 +34,7 @@ DLLAPI JSFormatter *JSFCreateGenericIO(void *ioContext,
 	return (JSFormatter *)jsf;
 }
 
-DLLAPI JSFormatter *JSFCreateStringWriteOnce(void *ioContext, 
+DLLAPI JSFormatter *JSFCreateStringIO(void *ioContext, 
 							 const char *inputString, 
 							 WriteStringOnceFunc writeStringFunc,
 							 const FormatterOption *option)

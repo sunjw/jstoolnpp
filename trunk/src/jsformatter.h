@@ -108,7 +108,7 @@ DLLAPI JSFormatter *JSFCreateGenericIO(void *ioContext,
 							 WriteCharFunc writeCharFunc,
 							 const FormatterOption *option);
 
-DLLAPI JSFormatter *JSFCreateStringWriteOnce(void *ioContext, 
+DLLAPI JSFormatter *JSFCreateStringIO(void *ioContext, 
 							 const char *inputString, 
 							 WriteStringOnceFunc writeStringFunc,
 							 const FormatterOption *option);
