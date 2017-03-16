@@ -73,13 +73,13 @@ if (process.argv.length != 4 && process.argv.length != 5) {
         outputJSFile = process.argv[4];
     }
 
-    inputJS = FS.readFileSync(inputJSFile);
+    inputJS = FS.readFileSync(inputJSFile, 'binary');
     inputJS = inputJS.toString();
     //console.log('inputJS:\n' + inputJS);
 
     CallLibJSF();
 
-    FS.writeFileSync(outputJSFile, resultJs);
+    FS.writeFileSync(outputJSFile, resultJs, 'binary');
 
     process.on('exit', function() {
         var keepWSF = WriteStringFunc;
