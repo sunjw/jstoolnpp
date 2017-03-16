@@ -18,7 +18,7 @@ var FormatterOptionStruct = StructType({
 
 var FormatterOptionStructPtr = Ref.refType(FormatterOptionStruct);
 
-function CallLibJSFFormat(inputJS) {
+function LoadLibJSF() {
     var libJSFormatter = new Ffi.Library(JSFORMATTER_REL_PATH_MAC, {
         'JSFCreateStringIO': [VoidPtr, [VoidPtr, 'string', 'pointer', FormatterOptionStructPtr]],
         'JSFRelease': ['void', [VoidPtr]],
@@ -26,6 +26,12 @@ function CallLibJSFFormat(inputJS) {
         'JSFFormatJavaScript': ['void', [VoidPtr]],
         'JSFGetVersion': ['string', []]
     });
+
+    return libJSFormatter;
+}
+
+function CallLibJSFFormat(inputJS) {
+    var libJSFormatter = LoadLibJSF();
 
     var formatterOption = new FormatterOptionStruct;
     formatterOption.chIndent = '\t';
@@ -63,8 +69,19 @@ function CallLibJSFFormat(inputJS) {
     return resultJS;
 }
 
+function CallLibJSFVersion() {
+    var libJSFormatter = LoadLibJSF();
+    return libJSFormatter.JSFGetVersion();
+}
+
 function Main() {
-    if (process.argv.length != 4 && process.argv.length != 5) {
+    if ((process.argv.length == 3 && process.argv[2] == '--version') ||
+        (process.argv.length == 4 && process.argv[3] == '--version')) {
+        if (process.argv.length == 4) {
+            JSFORMATTER_REL_PATH_MAC = process.argv[2];
+        }
+        console.log('libJSFormatter version: ' + CallLibJSFVersion());
+    } else if (process.argv.length != 4 && process.argv.length != 5) {
         console.log('Usage: node jsfnode.js {libJSFormatter path} [input file] [output file]');
     } else {
         var inputJSFile = '';

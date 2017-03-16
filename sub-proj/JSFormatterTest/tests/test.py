@@ -70,6 +70,7 @@ def make_test_case(files):
 
 def run_case(test_case, release, nodejs):
 	global JSFORMATTER_PATH_SEL
+	global JSFORMATTER_NODEJS_LIB_PATH_MAC
 	
 	result = "ERROR"
 	
@@ -85,6 +86,15 @@ def run_case(test_case, release, nodejs):
 	
 	print result
 	return result
+
+def dump_version(nodejs):
+	global JSFORMATTER_PATH_SEL
+	global JSFORMATTER_NODEJS_LIB_PATH_MAC
+
+	if nodejs == False:
+		call([JSFORMATTER_PATH_SEL, "--version"])
+	else:
+		call(["node", JSFORMATTER_PATH_SEL, JSFORMATTER_NODEJS_LIB_PATH_MAC, "--version"])
 
 def main():
 	global JSFORMATTER_PATH_SEL
@@ -170,9 +180,9 @@ def main():
 		print "DYLD_LIBRARY_PATH=" + os.environ["DYLD_LIBRARY_PATH"]
 	if nodejs == False:
 		print "Using " + JSFORMATTER_PATH_SEL
-		call([JSFORMATTER_PATH_SEL, "--version"])
 	else:
 		print "Using " + JSFORMATTER_PATH_SEL + " with " + JSFORMATTER_NODEJS_LIB_PATH_MAC
+	dump_version(nodejs)
 
 if __name__ == '__main__':
 	main()
