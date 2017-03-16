@@ -18,6 +18,8 @@ JSFORMATTER_LIB_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Deb
 JSFORMATTER_LIB_REL_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release"
 JSFORMATTER_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Debug/JSFormatterTest"
 JSFORMATTER_REL_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release/JSFormatterTest"
+JSFORMATTER_NODEJS_LIB_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release/libJSFormatter.dylib"
+JSFORMATTER_NODEJS_PATH_MAC = "../../JSFNodeJS/jsfnode.js"
 
 JSFORMATTER_PATH_SEL = ""
 
@@ -66,13 +68,16 @@ def make_test_case(files):
 	
 	return test_cases
 
-def run_case(test_case, release):
+def run_case(test_case, release, nodejs):
 	global JSFORMATTER_PATH_SEL
 	
 	result = "ERROR"
 	
-	# os.system(JSFORMATTER_PATH_SEL + " " + test_case.source + " out.js")
-	call([JSFORMATTER_PATH_SEL, test_case.source, "out.js"])
+	if nodejs == False:
+		call([JSFORMATTER_PATH_SEL, test_case.source, "out.js"])
+	else:
+		call(["node", JSFORMATTER_PATH_SEL, JSFORMATTER_NODEJS_LIB_PATH_MAC, test_case.source, "out.js"])
+
 	out_md5 = hashlib.md5(open("out.js").read()).hexdigest()
 	result_md5 = hashlib.md5(open(test_case.result).read()).hexdigest()
 	if out_md5 == result_md5:
@@ -88,6 +93,7 @@ def main():
 	test_cases = make_test_case(files)
 	x64 = False
 	release = False
+	nodejs = False
 	
 	if is_windows_sys():
 		if len(sys.argv) == 2:
@@ -99,12 +105,18 @@ def main():
 		if len(sys.argv) == 3 and ((sys.argv[1] == "release" and sys.argv[2] == "64") or (sys.argv[2] == "release" and sys.argv[1] == "64")):
 			release = True
 			x64 = True
+	elif is_osx_sys():
+		if len(sys.argv) == 2:
+			if sys.argv[1] == "release":
+				release = True
+			elif sys.argv[1] == "nodejs":
+				nodejs = True
 	else:
-		if len(sys.argv) == 2 and sys.argv[1] == "release":
-			release = True
+		print "Unknown operating system."
+		return
 	
 	JSFORMATTER_LIB_PATH_SEL = ""
-	if is_osx_sys():
+	if is_osx_sys() and nodejs == False:
 		JSFORMATTER_LIB_PATH_SEL = JSFORMATTER_LIB_PATH_MAC
 		if release:
 			JSFORMATTER_LIB_PATH_SEL = JSFORMATTER_LIB_REL_PATH_MAC
@@ -119,10 +131,13 @@ def main():
 			JSFORMATTER_PATH_SEL = JSFORMATTER_PATH_WIN_64
 		elif release:
 			JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH_WIN
-	else:
-		JSFORMATTER_PATH_SEL = JSFORMATTER_PATH_MAC
-		if release:
-			JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH_MAC
+	elif is_osx_sys():
+		if nodejs == False:
+			JSFORMATTER_PATH_SEL = JSFORMATTER_PATH_MAC
+			if release:
+				JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH_MAC
+		else:
+			JSFORMATTER_PATH_SEL = JSFORMATTER_NODEJS_PATH_MAC
 
 	# run cases
 	start_time = current_millis()
@@ -134,7 +149,7 @@ def main():
 		print "result: " + case.result
 		print "running..."
 		
-		result = run_case(case, release)
+		result = run_case(case, release, nodejs)
 		print "[%d/%d]" % (idx, len(test_cases))
 		
 		if result == "ERROR":
@@ -151,10 +166,13 @@ def main():
 		print "%d cases ALL PASS, took %ds." % (len(test_cases), duration_time)
 
 	print ""
-	if is_osx_sys():
+	if is_osx_sys() and nodejs == False:
 		print "DYLD_LIBRARY_PATH=" + os.environ["DYLD_LIBRARY_PATH"]
-	print "Using " + JSFORMATTER_PATH_SEL
-	call([JSFORMATTER_PATH_SEL, "--version"])
+	if nodejs == False:
+		print "Using " + JSFORMATTER_PATH_SEL
+		call([JSFORMATTER_PATH_SEL, "--version"])
+	else:
+		print "Using " + JSFORMATTER_PATH_SEL + " " + JSFORMATTER_NODEJS_LIB_PATH_MAC
 
 if __name__ == '__main__':
 	main()

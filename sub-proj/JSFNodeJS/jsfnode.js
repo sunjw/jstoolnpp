@@ -52,17 +52,26 @@ function CallLibJSF() {
 
     libJSFormatter.JSFRelease(jsfObj);
 
-    console.log('');
-    console.log(resultJs);
+    //console.log('');
+    //console.log(resultJs);
 
     console.log('libJSFormatter version: ' + libJSFormatter.JSFGetVersion() + '\n');
 }
 
-if (process.argv.length != 4) {
-    console.log('Usage: node jsfnode.js [input file] [output file]');
+if (process.argv.length != 4 && process.argv.length != 5) {
+    console.log('Usage: node jsfnode.js {libJSFormatter path} [input file] [output file]');
 } else {
-    var inputJSFile = process.argv[2];
-    var outputJSFile = process.argv[3];
+    var inputJSFile = '';
+    var outputJSFile = '';
+
+    if (process.argv.length == 4) {
+        inputJSFile = process.argv[2];
+        outputJSFile = process.argv[3];
+    } else if (process.argv.length == 5) {
+        JSFORMATTER_REL_PATH_MAC = process.argv[2];
+        inputJSFile = process.argv[3];
+        outputJSFile = process.argv[4];
+    }
 
     inputJS = FS.readFileSync(inputJSFile);
     inputJS = inputJS.toString();
