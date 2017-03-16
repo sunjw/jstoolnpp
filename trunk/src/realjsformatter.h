@@ -49,7 +49,7 @@ public:
 	inline void SetInitIndent(const string& initIndent)
 	{ m_initIndent = initIndent; }
 
-	void Go();
+	virtual void Go();
 
 	int GetFormattedLine(unsigned int originalLine);
 

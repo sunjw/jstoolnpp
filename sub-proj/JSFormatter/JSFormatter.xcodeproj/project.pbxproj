@@ -16,6 +16,8 @@
 		416F58511BA849CE0086D6D5 /* jsformatter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 416F584D1BA849CE0086D6D5 /* jsformatter.cpp */; };
 		416F58521BA849CE0086D6D5 /* jsparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 416F584E1BA849CE0086D6D5 /* jsparser.cpp */; };
 		416F58531BA849CE0086D6D5 /* realjsformatter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 416F584F1BA849CE0086D6D5 /* realjsformatter.cpp */; };
+		41F6C8D31E7A2BC60096D29C /* jsfStringIO.h in Headers */ = {isa = PBXBuildFile; fileRef = 41F6C8D21E7A2BC60096D29C /* jsfStringIO.h */; };
+		41F6C8D51E7A2BD50096D29C /* jsfStringIO.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 41F6C8D41E7A2BD50096D29C /* jsfStringIO.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +31,8 @@
 		416F584D1BA849CE0086D6D5 /* jsformatter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsformatter.cpp; path = ../../trunk/src/jsformatter.cpp; sourceTree = "<group>"; usesTabs = 1; };
 		416F584E1BA849CE0086D6D5 /* jsparser.cpp */ = {isa = PBXFileReference; fileEncoding = 2147486000; lastKnownFileType = sourcecode.cpp.cpp; name = jsparser.cpp; path = ../../trunk/src/jsparser.cpp; sourceTree = "<group>"; usesTabs = 1; };
 		416F584F1BA849CE0086D6D5 /* realjsformatter.cpp */ = {isa = PBXFileReference; fileEncoding = 2147486000; lastKnownFileType = sourcecode.cpp.cpp; name = realjsformatter.cpp; path = ../../trunk/src/realjsformatter.cpp; sourceTree = "<group>"; usesTabs = 1; };
+		41F6C8D21E7A2BC60096D29C /* jsfStringIO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = jsfStringIO.h; path = ../../trunk/src/jsfStringIO.h; sourceTree = "<group>"; };
+		41F6C8D41E7A2BD50096D29C /* jsfStringIO.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = jsfStringIO.cpp; path = ../../trunk/src/jsfStringIO.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +68,7 @@
 			children = (
 				4102C6991D75D1A00008E61C /* version.h */,
 				416F58441BA849AA0086D6D5 /* jsfGenericIO.h */,
+				41F6C8D21E7A2BC60096D29C /* jsfStringIO.h */,
 				416F58471BA849AA0086D6D5 /* realjsformatter.h */,
 				416F58461BA849AA0086D6D5 /* jsparser.h */,
 				416F58451BA849AA0086D6D5 /* jsformatter.h */,
@@ -75,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				416F584C1BA849CE0086D6D5 /* jsfGenericIO.cpp */,
+				41F6C8D41E7A2BD50096D29C /* jsfStringIO.cpp */,
 				416F584F1BA849CE0086D6D5 /* realjsformatter.cpp */,
 				416F584E1BA849CE0086D6D5 /* jsparser.cpp */,
 				416F584D1BA849CE0086D6D5 /* jsformatter.cpp */,
@@ -92,6 +98,7 @@
 				4102C69A1D75D1A00008E61C /* version.h in Headers */,
 				416F58491BA849AA0086D6D5 /* jsformatter.h in Headers */,
 				416F584B1BA849AA0086D6D5 /* realjsformatter.h in Headers */,
+				41F6C8D31E7A2BC60096D29C /* jsfStringIO.h in Headers */,
 				416F58481BA849AA0086D6D5 /* jsfGenericIO.h in Headers */,
 				416F584A1BA849AA0086D6D5 /* jsparser.h in Headers */,
 			);
@@ -154,6 +161,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				416F58501BA849CE0086D6D5 /* jsfGenericIO.cpp in Sources */,
+				41F6C8D51E7A2BD50096D29C /* jsfStringIO.cpp in Sources */,
 				416F58531BA849CE0086D6D5 /* realjsformatter.cpp in Sources */,
 				416F58511BA849CE0086D6D5 /* jsformatter.cpp in Sources */,
 				416F58521BA849CE0086D6D5 /* jsparser.cpp in Sources */,

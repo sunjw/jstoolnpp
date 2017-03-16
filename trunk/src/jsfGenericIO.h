@@ -1,11 +1,8 @@
 #ifndef _JSFORMAT_GENERIC_IO_H_
 #define _JSFORMAT_GENERIC_IO_H_
 
-#include <string>
 #include "jsformatter.h"
 #include "realjsformatter.h"
-
-using namespace std;
 
 class JSFormatGenericIO: public RealJSFormatter
 {
@@ -17,6 +14,9 @@ public:
 		RealJSFormatter(option),
 		_ioContext(ioContext),
 		_readCharFunc(readCharFunc), _writeCharFunc(writeCharFunc)
+	{}
+
+	virtual ~JSFormatGenericIO()
 	{}
 
 private:

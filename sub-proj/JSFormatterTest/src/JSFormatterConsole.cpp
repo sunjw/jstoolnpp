@@ -4,8 +4,18 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <streambuf>
 #include <string>
 #include <stdexcept>
+
+//#define DEBUG_MEM_LEAK
+#undef DEBUG_MEM_LEAK
+
+#ifdef DEBUG_MEM_LEAK
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
 
 #include "jsformatter.h"
 
@@ -19,7 +29,7 @@ public:
 	{}
 
 	static char ReadCharFromStream(void *ioContext);
-	static void WriteCharFromStream(void *ioContext, const char ch);
+	static void WriteCharToStream(void *ioContext, const char ch);
 
 private:
 	istream& in;
@@ -30,19 +40,34 @@ char StreamIOContext::ReadCharFromStream(void *ioContext)
 {
 	StreamIOContext *streamIOCtx = (StreamIOContext *)ioContext;
 	int ret = streamIOCtx->in.get();
-	if(ret == EOF)
+	if (ret == EOF)
 		return 0;
 	return ret;
 }
 
-void StreamIOContext::WriteCharFromStream(void *ioContext, const char ch)
+void StreamIOContext::WriteCharToStream(void *ioContext, const char ch)
 {
 	StreamIOContext *streamIOCtx = (StreamIOContext *)ioContext;
 	(streamIOCtx->out) << static_cast<char>(ch);
 }
 
+
+void WriteStringToStream(void *ioContext, const char *outputString)
+{
+	*((ostream *)ioContext) << outputString;
+}
+
+#define USE_GENERIC_IO
+//#undef USE_GENERIC_IO
+//#define USE_STRING_IO
+#undef USE_STRING_IO
+
 int main(int argc, char *argv[])
 {
+#ifdef DEBUG_MEM_LEAK
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
 	bool processed = false;
 	if (argc == 3)
 	{
@@ -57,7 +82,7 @@ int main(int argc, char *argv[])
 		clock_t startClock = clock();
 
 		string line;
-		while(getline(inFileStream1, line))
+		while (getline(inFileStream1, line))
 		{
 		    outFileStream1 << line;
 		}
@@ -72,6 +97,7 @@ int main(int argc, char *argv[])
 		ifstream inFileStream2(inputFile);
 		ofstream outFileStream2(outputFile);
 		ostringstream outStrStream;
+
 		try
 		{
 			FormatterOption option;
@@ -83,19 +109,29 @@ int main(int argc, char *argv[])
 			option.eBracNL = NO_NEWLINE_BRAC;
 			option.eEmpytIndent = NO_INDENT_IN_EMPTYLINE;
 
+#if defined (USE_GENERIC_IO)
 			StreamIOContext streamIOCtx(inFileStream2, outStrStream);
 
-			JSFormatter *jsf = CreateJSFormatter(
+			JSFormatter *jsf = JSFCreateGenericIO(
 							(void *)&(streamIOCtx), 
 							StreamIOContext::ReadCharFromStream,
-							StreamIOContext::WriteCharFromStream,
+							StreamIOContext::WriteCharToStream,
 							&option);
+#elif defined (USE_STRING_IO)
+			string strInput((istreambuf_iterator<char>(inFileStream2)), istreambuf_iterator<char>());
 
-			EnableJSFormatterDebug(jsf);
+			JSFormatter *jsf = JSFCreateStringIO(
+							(void *)&(outStrStream), 
+							strInput.c_str(),
+							WriteStringToStream,
+							&option);
+#endif
 
-			FormatJavaScript(jsf);
+			JSFEnableDebug(jsf);
 
-			ReleaseJSFormatter(jsf);
+			JSFFormatJavaScript(jsf);
+
+			JSFRelease(jsf);
 
 			jsf = NULL;
 
@@ -120,7 +156,13 @@ int main(int argc, char *argv[])
 		if (strcmp(argvCmd, "--version") == 0)
 		{
 			processed = true;
-			cout << "jsformatter version: " << GetVersion() << endl;
+			cout << "libJSFormatter version: " << JSFGetVersion() << ", using ";
+#if defined (USE_GENERIC_IO)
+			cout << "JSFCreateGenericIO";
+#elif defined (USE_STRING_IO)
+			cout << "JSFCreateStringIO";
+#endif
+			cout << "." << endl;
 		}
 	}
 

@@ -1,13 +1,27 @@
 #include "jsformatter.h"
 #include "realjsformatter.h"
 #include "jsfGenericIO.h"
+#include "jsfStringIO.h"
 #include "version.h"
 
-DLLAPI JSFormatter *CreateJSFormatter(void *ioContext,
+//#define DEBUG_MEM_LEAK
+#undef DEBUG_MEM_LEAK
+
+#ifdef DEBUG_MEM_LEAK
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
+
+DLLAPI JSFormatter *JSFCreateGenericIO(void *ioContext,
 							 ReadCharFunc readCharFunc, 
 							 WriteCharFunc writeCharFunc,
 							 const FormatterOption *option)
 {
+#ifdef DEBUG_MEM_LEAK
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
 	JSFormatGenericIO *jsf = new JSFormatGenericIO(
 		ioContext, readCharFunc, writeCharFunc, 
 		FormatterOption(option->chIndent,
@@ -20,37 +34,58 @@ DLLAPI JSFormatter *CreateJSFormatter(void *ioContext,
 	return (JSFormatter *)jsf;
 }
 
-DLLAPI void ReleaseJSFormatter(JSFormatter *jsf)
+DLLAPI JSFormatter *JSFCreateStringIO(void *ioContext, 
+							 const char *inputString, 
+							 WriteStringFunc writeStringFunc,
+							 const FormatterOption *option)
 {
-	delete (JSFormatGenericIO *)jsf;
+#ifdef DEBUG_MEM_LEAK
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
+
+	JSFormatStringIO *jsf = new JSFormatStringIO(
+		ioContext, inputString, writeStringFunc, 
+		FormatterOption(option->chIndent,
+			option->nChPerInd,
+			option->eCRRead,
+			option->eCRPut,
+			option->eBracNL,
+			option->eEmpytIndent));
+
+	return (JSFormatter *)jsf;
 }
 
-DLLAPI void FormatJavaScript(JSFormatter *jsf)
+DLLAPI void JSFRelease(JSFormatter *jsf)
 {
-	((JSFormatGenericIO *)jsf)->Go();
+	delete (RealJSFormatter *)jsf;
 }
 
-DLLAPI void EnableJSFormatterDebug(JSFormatter *jsf)
+DLLAPI void JSFFormatJavaScript(JSFormatter *jsf)
 {
-	((JSFormatGenericIO *)jsf)->m_debug = true;
+	((RealJSFormatter *)jsf)->Go();
 }
 
-DLLAPI void DisableJSFormatterDebug(JSFormatter *jsf)
+DLLAPI void JSFEnableDebug(JSFormatter *jsf)
 {
-	((JSFormatGenericIO *)jsf)->m_debug = false;
+	((RealJSFormatter *)jsf)->m_debug = true;
 }
 
-DLLAPI const char *GetJSFormatterDebugOutput(JSFormatter *jsf)
+DLLAPI void JSFDisableDebug(JSFormatter *jsf)
 {
-	return ((JSFormatGenericIO *)jsf)->GetDebugOutput();
+	((RealJSFormatter *)jsf)->m_debug = false;
 }
 
-DLLAPI int GetFormattedLine(JSFormatter *jsf, int originalLine)
+DLLAPI const char *JSFGetDebugOutput(JSFormatter *jsf)
 {
-	return ((JSFormatGenericIO *)jsf)->GetFormattedLine(originalLine);
+	return ((RealJSFormatter *)jsf)->GetDebugOutput();
 }
 
-DLLAPI const char *GetVersion()
+DLLAPI int JSFGetFormattedLine(JSFormatter *jsf, int originalLine)
+{
+	return ((RealJSFormatter *)jsf)->GetFormattedLine(originalLine);
+}
+
+DLLAPI const char *JSFGetVersion()
 {
 #ifdef _WIN64
 	return VERSION_VALUE " x64";
