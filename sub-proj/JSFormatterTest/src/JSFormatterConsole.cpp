@@ -170,9 +170,9 @@ int main(int argc, char *argv[])
 		if (strcmp(argvCmd, "--version") == 0)
 		{
 			processed = true;
-			cout << "jsformatter version: " << JSFGetVersion();
+			cout << "libJSFormatter version: " << JSFGetVersion();
 #if defined (USE_GENERIC_IO)
-			cout << ", with JSFCreateGenericIO";
+			cout << ", using JSFCreateGenericIO.";
 #elif defined (USE_STRING_WRITE_ONCE)
 			cout << ", with JSFCreateStringWriteOnce";
 #endif

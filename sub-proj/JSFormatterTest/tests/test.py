@@ -148,7 +148,7 @@ def main():
 	duration_time = (end_time - start_time) / 1000
 
 	if allpass:
-		print "%d cases ALL PASS in %ds" % (len(test_cases), duration_time)
+		print "%d cases ALL PASS, took %ds." % (len(test_cases), duration_time)
 
 	print ""
 	if is_osx_sys():
