@@ -145,10 +145,10 @@ def main():
 		idx += 1
 
 	end_time = current_millis()
-	duration_time = (end_time - start_time) / 1000
+	duration_time = (end_time - start_time) / 1000.0
 
 	if allpass:
-		print "%d cases ALL PASS, took %ds." % (len(test_cases), duration_time)
+		print "%d cases ALL PASS, took %.2fs." % (len(test_cases), duration_time)
 
 	print ""
 	if is_osx_sys():
