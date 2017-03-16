@@ -15,18 +15,10 @@ var FormatterOptionStruct = StructType({
 	'eBracNL': 'int',
 	'eEmpytIndent': 'int'
 });
+
 var FormatterOptionStructPtr = Ref.refType(FormatterOptionStruct);
 
-var inputJS = '';
-var resultJs = '';
-
-var WriteStringFunc = Ffi.Callback('void', [VoidPtr, 'string'],
-    function(context, outputString) {
-        resultJs = outputString.toString();
-    }
-);
-
-function CallLibJSF() {
+function CallLibJSFFormat(inputJS) {
     var libJSFormatter = new Ffi.Library(JSFORMATTER_REL_PATH_MAC, {
         'JSFCreateStringIO': [VoidPtr, [VoidPtr, 'string', 'pointer', FormatterOptionStructPtr]],
         'JSFRelease': ['void', [VoidPtr]],
@@ -43,6 +35,13 @@ function CallLibJSF() {
     formatterOption.eBracNL = 0;
     formatterOption.eEmpytIndent = 0;
 
+    var resultJS = '';
+    var WriteStringFunc = Ffi.Callback('void', [VoidPtr, 'string'],
+        function(context, outputString) {
+            resultJS = outputString.toString();
+        }
+    );
+
     var ioContext = Ref.alloc(VoidPtr);
     var jsfObj = libJSFormatter.JSFCreateStringIO(ioContext, inputJS, WriteStringFunc, formatterOption.ref());
 
@@ -56,6 +55,12 @@ function CallLibJSF() {
     //console.log(resultJs);
 
     //console.log('libJSFormatter version: ' + libJSFormatter.JSFGetVersion() + '\n');
+
+    process.on('exit', function() {
+        var keepWSF = WriteStringFunc;
+    });
+
+    return resultJS;
 }
 
 function Main() {
@@ -74,17 +79,13 @@ function Main() {
             outputJSFile = process.argv[4];
         }
 
-        inputJS = FS.readFileSync(inputJSFile, 'binary');
+        var inputJS = FS.readFileSync(inputJSFile, 'binary');
         inputJS = inputJS.toString();
         //console.log('inputJS:\n' + inputJS);
 
-        CallLibJSF();
+        var resultJS = CallLibJSFFormat(inputJS);
 
-        FS.writeFileSync(outputJSFile, resultJs, 'binary');
-
-        process.on('exit', function() {
-            var keepWSF = WriteStringFunc;
-        });
+        FS.writeFileSync(outputJSFile, resultJS, 'binary');
     }
 }
 
