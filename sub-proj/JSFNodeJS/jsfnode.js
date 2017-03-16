@@ -18,30 +18,17 @@ var FormatterOptionStruct = StructType({
 var FormatterOptionStructPtr = Ref.refType(FormatterOptionStruct);
 
 var inputJS = '';
-var idx = 0;
-
-var ReadCharFunc = Ffi.Callback('char', [VoidPtr],
-    function(context) {
-        if (idx == inputJS.length) {
-            return 0;
-        }
-        return inputJS.charAt(idx++);
-    }
-);
-
 var resultJs = '';
 
-var WriteCharFunc = Ffi.Callback('void', [VoidPtr, 'char'],
-    function(context, ch) {
-        //console.log('WriteCharFunc(' + ch + ')');
-        var chStr = String.fromCharCode(ch);
-        resultJs = resultJs + chStr;
+var WriteStringFunc = Ffi.Callback('void', [VoidPtr, 'string'],
+    function(context, outputString) {
+        resultJs = outputString.toString();
     }
 );
 
 function CallLibJSF() {
     var libJSFormatter = new Ffi.Library(JSFORMATTER_REL_PATH_MAC, {
-        'JSFCreateGenericIO': [VoidPtr, [VoidPtr, 'pointer', 'pointer', FormatterOptionStructPtr]],
+        'JSFCreateStringIO': [VoidPtr, [VoidPtr, 'string', 'pointer', FormatterOptionStructPtr]],
         'JSFRelease': ['void', [VoidPtr]],
         'JSFEnableDebug': ['void', [VoidPtr]],
         'JSFFormatJavaScript': ['void', [VoidPtr]],
@@ -57,7 +44,7 @@ function CallLibJSF() {
     formatterOption.eEmpytIndent = 0;
 
     var ioContext = Ref.alloc(VoidPtr);
-    var jsfObj = libJSFormatter.JSFCreateGenericIO(ioContext, ReadCharFunc, WriteCharFunc, formatterOption.ref());
+    var jsfObj = libJSFormatter.JSFCreateStringIO(ioContext, inputJS, WriteStringFunc, formatterOption.ref());
 
     libJSFormatter.JSFEnableDebug(jsfObj);
 
@@ -86,7 +73,6 @@ if (process.argv.length != 4) {
     FS.writeFileSync(outputJSFile, resultJs);
 
     process.on('exit', function() {
-        var keepRCF = ReadCharFunc;
-        var keepWCF = WriteCharFunc;
+        var keepWSF = WriteStringFunc;
     });
 }
