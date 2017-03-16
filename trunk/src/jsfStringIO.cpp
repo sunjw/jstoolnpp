@@ -1,4 +1,4 @@
-#include "jsfStringWriteOnce.h"
+#include "jsfStringIO.h"
 #include <string>
 
 using namespace std;

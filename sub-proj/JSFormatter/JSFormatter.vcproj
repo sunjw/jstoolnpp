@@ -343,7 +343,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\trunk\src\jsfStringWriteOnce.cpp"
+				RelativePath="..\..\trunk\src\jsfStringIO.cpp"
 				>
 			</File>
 			<File
@@ -369,7 +369,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\trunk\src\jsfStringWriteOnce.h"
+				RelativePath="..\..\trunk\src\jsfStringIO.h"
 				>
 			</File>
 			<File
