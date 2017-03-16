@@ -57,10 +57,10 @@ void WriteStringToStream(void *ioContext, const char *outputString)
 	*((ostream *)ioContext) << outputString;
 }
 
-//#define USE_GENERIC_IO
-#undef USE_GENERIC_IO
-#define USE_STRING_IO
-//#undef USE_STRING_IO
+#define USE_GENERIC_IO
+//#undef USE_GENERIC_IO
+//#define USE_STRING_IO
+#undef USE_STRING_IO
 
 int main(int argc, char *argv[])
 {
