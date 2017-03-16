@@ -41,11 +41,11 @@ var WriteCharFunc = Ffi.Callback('void', [VoidPtr, 'char'],
 
 function CallLibJSF() {
     var libJSFormatter = new Ffi.Library(JSFORMATTER_REL_PATH_MAC, {
-        'CreateJSFormatter': [VoidPtr, [VoidPtr, 'pointer', 'pointer', FormatterOptionStructPtr]],
-        'ReleaseJSFormatter': ['void', [VoidPtr]],
-        'EnableJSFormatterDebug': ['void', [VoidPtr]],
-        'FormatJavaScript': ['void', [VoidPtr]],
-        'GetVersion': ['string', []]
+        'JSFCreateGenericIO': [VoidPtr, [VoidPtr, 'pointer', 'pointer', FormatterOptionStructPtr]],
+        'JSFRelease': ['void', [VoidPtr]],
+        'JSFEnableDebug': ['void', [VoidPtr]],
+        'JSFFormatJavaScript': ['void', [VoidPtr]],
+        'JSFGetVersion': ['string', []]
     });
 
     var formatterOption = new FormatterOptionStruct;
@@ -57,18 +57,18 @@ function CallLibJSF() {
     formatterOption.eEmpytIndent = 0;
 
     var ioContext = Ref.alloc(VoidPtr);
-    var jsfObj = libJSFormatter.CreateJSFormatter(ioContext, ReadCharFunc, WriteCharFunc, formatterOption.ref());
+    var jsfObj = libJSFormatter.JSFCreateGenericIO(ioContext, ReadCharFunc, WriteCharFunc, formatterOption.ref());
 
-    libJSFormatter.EnableJSFormatterDebug(jsfObj);
+    libJSFormatter.JSFEnableDebug(jsfObj);
 
-    libJSFormatter.FormatJavaScript(jsfObj);
+    libJSFormatter.JSFFormatJavaScript(jsfObj);
 
-    libJSFormatter.ReleaseJSFormatter(jsfObj);
+    libJSFormatter.JSFRelease(jsfObj);
 
     console.log('');
     console.log(resultJs);
 
-    console.log('libJSFormatter version: ' + libJSFormatter.GetVersion() + '\n');
+    console.log('libJSFormatter version: ' + libJSFormatter.JSFGetVersion() + '\n');
 }
 
 if (process.argv.length != 4) {
