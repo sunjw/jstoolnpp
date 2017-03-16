@@ -172,7 +172,7 @@ def main():
 		print "Using " + JSFORMATTER_PATH_SEL
 		call([JSFORMATTER_PATH_SEL, "--version"])
 	else:
-		print "Using " + JSFORMATTER_PATH_SEL + " " + JSFORMATTER_NODEJS_LIB_PATH_MAC
+		print "Using " + JSFORMATTER_PATH_SEL + " with " + JSFORMATTER_NODEJS_LIB_PATH_MAC
 
 if __name__ == '__main__':
 	main()

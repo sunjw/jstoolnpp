@@ -55,33 +55,37 @@ function CallLibJSF() {
     //console.log('');
     //console.log(resultJs);
 
-    console.log('libJSFormatter version: ' + libJSFormatter.JSFGetVersion() + '\n');
+    //console.log('libJSFormatter version: ' + libJSFormatter.JSFGetVersion() + '\n');
 }
 
-if (process.argv.length != 4 && process.argv.length != 5) {
-    console.log('Usage: node jsfnode.js {libJSFormatter path} [input file] [output file]');
-} else {
-    var inputJSFile = '';
-    var outputJSFile = '';
+function Main() {
+    if (process.argv.length != 4 && process.argv.length != 5) {
+        console.log('Usage: node jsfnode.js {libJSFormatter path} [input file] [output file]');
+    } else {
+        var inputJSFile = '';
+        var outputJSFile = '';
 
-    if (process.argv.length == 4) {
-        inputJSFile = process.argv[2];
-        outputJSFile = process.argv[3];
-    } else if (process.argv.length == 5) {
-        JSFORMATTER_REL_PATH_MAC = process.argv[2];
-        inputJSFile = process.argv[3];
-        outputJSFile = process.argv[4];
+        if (process.argv.length == 4) {
+            inputJSFile = process.argv[2];
+            outputJSFile = process.argv[3];
+        } else if (process.argv.length == 5) {
+            JSFORMATTER_REL_PATH_MAC = process.argv[2];
+            inputJSFile = process.argv[3];
+            outputJSFile = process.argv[4];
+        }
+
+        inputJS = FS.readFileSync(inputJSFile, 'binary');
+        inputJS = inputJS.toString();
+        //console.log('inputJS:\n' + inputJS);
+
+        CallLibJSF();
+
+        FS.writeFileSync(outputJSFile, resultJs, 'binary');
+
+        process.on('exit', function() {
+            var keepWSF = WriteStringFunc;
+        });
     }
-
-    inputJS = FS.readFileSync(inputJSFile, 'binary');
-    inputJS = inputJS.toString();
-    //console.log('inputJS:\n' + inputJS);
-
-    CallLibJSF();
-
-    FS.writeFileSync(outputJSFile, resultJs, 'binary');
-
-    process.on('exit', function() {
-        var keepWSF = WriteStringFunc;
-    });
 }
+
+Main();
