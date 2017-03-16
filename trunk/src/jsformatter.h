@@ -98,7 +98,7 @@ typedef struct _FormatterOption FormatterOption;
 typedef char (*ReadCharFunc)(void *ioContext);
 typedef void (*WriteCharFunc)(void *ioContext, const char ch);
 
-typedef void (*WriteStringOnceFunc)(void *ioContext, const char *outputString);
+typedef void (*WriteStringFunc)(void *ioContext, const char *outputString);
 
 struct _JSFormatter;
 typedef struct _JSFormatter JSFormatter;
@@ -110,7 +110,7 @@ DLLAPI JSFormatter *JSFCreateGenericIO(void *ioContext,
 
 DLLAPI JSFormatter *JSFCreateStringIO(void *ioContext, 
 							 const char *inputString, 
-							 WriteStringOnceFunc writeStringFunc,
+							 WriteStringFunc writeStringFunc,
 							 const FormatterOption *option);
 
 DLLAPI void JSFRelease(JSFormatter *jsf);

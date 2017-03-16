@@ -51,28 +51,16 @@ void StreamIOContext::WriteCharToStream(void *ioContext, const char ch)
 	(streamIOCtx->out) << static_cast<char>(ch);
 }
 
-class StringWriteOnceContext
+
+void WriteStringToStream(void *ioContext, const char *outputString)
 {
-public:
-	StringWriteOnceContext(ostream& o): out(o)
-	{}
-
-	static void WriteStringToStream(void *ioContext, const char *outputString);
-
-private:
-	ostream& out;
-};
-
-void StringWriteOnceContext::WriteStringToStream(void *ioContext, const char *outputString)
-{
-	StringWriteOnceContext *stringWriteCtx = (StringWriteOnceContext *)ioContext;
-	(stringWriteCtx->out) << outputString;
+	*((ostream *)ioContext) << outputString;
 }
 
 //#define USE_GENERIC_IO
 #undef USE_GENERIC_IO
-#define USE_STRING_WRITE_ONCE
-//#undef USE_STRING_WRITE_ONCE
+#define USE_STRING_IO
+//#undef USE_STRING_IO
 
 int main(int argc, char *argv[])
 {
@@ -129,15 +117,13 @@ int main(int argc, char *argv[])
 							StreamIOContext::ReadCharFromStream,
 							StreamIOContext::WriteCharToStream,
 							&option);
-#elif defined (USE_STRING_WRITE_ONCE)
+#elif defined (USE_STRING_IO)
 			string strInput((istreambuf_iterator<char>(inFileStream2)), istreambuf_iterator<char>());
 
-			StringWriteOnceContext stringWriteCtx(outStrStream);
-
 			JSFormatter *jsf = JSFCreateStringIO(
-							(void *)&(stringWriteCtx), 
+							(void *)&(outStrStream), 
 							strInput.c_str(),
-							StringWriteOnceContext::WriteStringToStream,
+							WriteStringToStream,
 							&option);
 #endif
 
@@ -170,13 +156,13 @@ int main(int argc, char *argv[])
 		if (strcmp(argvCmd, "--version") == 0)
 		{
 			processed = true;
-			cout << "libJSFormatter version: " << JSFGetVersion();
+			cout << "libJSFormatter version: " << JSFGetVersion() << ", using ";
 #if defined (USE_GENERIC_IO)
-			cout << ", using JSFCreateGenericIO.";
-#elif defined (USE_STRING_WRITE_ONCE)
-			cout << ", with JSFCreateStringWriteOnce";
+			cout << "JSFCreateGenericIO";
+#elif defined (USE_STRING_IO)
+			cout << "JSFCreateStringIO";
 #endif
-			cout << endl;
+			cout << "." << endl;
 		}
 	}
 

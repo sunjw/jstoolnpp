@@ -3,13 +3,13 @@
 
 using namespace std;
 
-void JSFormatStringWriteOnce::Go()
+void JSFormatStringIO::Go()
 {
 	RealJSFormatter::Go();
 	_writeStringFunc(_ioContext, _outputString.c_str());
 }
 
-int JSFormatStringWriteOnce::GetChar()
+int JSFormatStringIO::GetChar()
 {
 	if (_inputIdx <= _inputLen)
 		return _inputString[_inputIdx++];
@@ -17,7 +17,7 @@ int JSFormatStringWriteOnce::GetChar()
 		return 0;
 }
 
-void JSFormatStringWriteOnce::PutChar(int ch)
+void JSFormatStringIO::PutChar(int ch)
 {
 	_outputString.append(1, ch);
 }

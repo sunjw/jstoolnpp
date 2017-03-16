@@ -1,7 +1,7 @@
 #include "jsformatter.h"
 #include "realjsformatter.h"
 #include "jsfGenericIO.h"
-#include "jsfStringWriteOnce.h"
+#include "jsfStringIO.h"
 #include "version.h"
 
 //#define DEBUG_MEM_LEAK
@@ -36,14 +36,14 @@ DLLAPI JSFormatter *JSFCreateGenericIO(void *ioContext,
 
 DLLAPI JSFormatter *JSFCreateStringIO(void *ioContext, 
 							 const char *inputString, 
-							 WriteStringOnceFunc writeStringFunc,
+							 WriteStringFunc writeStringFunc,
 							 const FormatterOption *option)
 {
 #ifdef DEBUG_MEM_LEAK
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 #endif
 
-	JSFormatStringWriteOnce *jsf = new JSFormatStringWriteOnce(
+	JSFormatStringIO *jsf = new JSFormatStringIO(
 		ioContext, inputString, writeStringFunc, 
 		FormatterOption(option->chIndent,
 			option->nChPerInd,
