@@ -1,16 +1,15 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSMinNPP", "JSMinNPP.vcproj", "{1590D7CD-7D3A-4AB7-A355-EE02F7FB987D}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSMinNPP", "JSMinNPP.vcxproj", "{1590D7CD-7D3A-4AB7-A355-EE02F7FB987D}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JsonPP", "..\sub-proj\JsonPP\JsonPP.vcproj", "{46AA0176-C11F-4539-A521-8FF0D57CC087}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JsonPP", "..\sub-proj\JsonPP\JsonPP.vcxproj", "{46AA0176-C11F-4539-A521-8FF0D57CC087}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSFormatterTest", "..\sub-proj\JSFormatterTest\JSFormatterTest.vcproj", "{82AD0251-9EF8-4D70-80D4-D1B1AC608224}"
-	ProjectSection(ProjectDependencies) = postProject
-		{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6} = {EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}
-	EndProjectSection
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSFormatterTest", "..\sub-proj\JSFormatterTest\JSFormatterTest.vcxproj", "{82AD0251-9EF8-4D70-80D4-D1B1AC608224}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSFormatter", "..\sub-proj\JSFormatter\JSFormatter.vcproj", "{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSFormatter", "..\sub-proj\JSFormatter\JSFormatter.vcxproj", "{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
