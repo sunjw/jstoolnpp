@@ -69,11 +69,12 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 		return TRUE;
 	case WM_SIZE:
 		{
-			int iDlgWidth,iDlgHeight;
+			int iDlgWidth, iDlgHeight;
 			iDlgWidth = LOWORD(lParam);
 			iDlgHeight = HIWORD(lParam);
 
-			int iJsonTreeWidth = iDlgWidth, iJsonTreeHeight = iDlgHeight - 55;
+			int iJsonTreeWidth = iDlgWidth;
+			int iJsonTreeHeight = iDlgHeight - 55;
 			SetWindowPos(GetDlgItem(hWnd, IDC_TREE_JSON), 
 				HWND_TOP, 0, 30, iJsonTreeWidth, iJsonTreeHeight, 
 				SWP_SHOWWINDOW);
