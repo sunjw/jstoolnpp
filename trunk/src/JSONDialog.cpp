@@ -73,39 +73,36 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 			iDlgWidth = LOWORD(lParam);
 			iDlgHeight = HIWORD(lParam);
 
-			// Calculate DPI.
-			RECT rectRefreshBtn;
-			GetWindowRect(GetDlgItem(hWnd, IDC_BTN_REFRESH), &rectRefreshBtn);
-			int iRefreshBtnWidthDpi = rectRefreshBtn.right - rectRefreshBtn.left;
-			double dScreenDpi = iRefreshBtnWidthDpi / 71.0;
+			// Calculate desktop scale.
+			float fDeskScale = GetDesktopScale(m_hDlg);
 
 			int iJsonTreeWidth = iDlgWidth;
-			int iJsonTreeHeight = iDlgHeight - (55 * dScreenDpi);
+			int iJsonTreeHeight = iDlgHeight - (55 * fDeskScale);
 			SetWindowPos(GetDlgItem(hWnd, IDC_TREE_JSON), HWND_TOP, 
-				0, (30 * dScreenDpi), 
+				0, (30 * fDeskScale), 
 				iJsonTreeWidth, iJsonTreeHeight, 
 				SWP_SHOWWINDOW);
 
-			int iMinDlgWidth = 215 * dScreenDpi;  // 170 + 45
+			int iMinDlgWidth = 215 * fDeskScale;  // 170 + 45
 			if(iDlgWidth < iMinDlgWidth)
 				iDlgWidth = iMinDlgWidth;
 
-			int iSearchEditWidth = iDlgWidth - (170 * dScreenDpi);
+			int iSearchEditWidth = iDlgWidth - (170 * fDeskScale);
 
 			SetWindowPos(GetDlgItem(hWnd, IDC_SEARCHEDIT), HWND_TOP, 
-				(88 * dScreenDpi), (2 * dScreenDpi), 
-				iSearchEditWidth, (18 * dScreenDpi), 
+				(88 * fDeskScale), (2 * fDeskScale), 
+				iSearchEditWidth, (18 * fDeskScale), 
 				SWP_SHOWWINDOW);
 
 			SetWindowPos(GetDlgItem(hWnd, IDC_BTN_SEARCH), HWND_TOP, 
-				(92 * dScreenDpi) + iSearchEditWidth, 0, 
-				(74 * dScreenDpi), (22 * dScreenDpi), 
+				(92 * fDeskScale) + iSearchEditWidth, 0, 
+				(74 * fDeskScale), (22 * fDeskScale), 
 				SWP_SHOWWINDOW);
 
-			int iJsonPathEditWidth = iDlgWidth - (4 * dScreenDpi);
+			int iJsonPathEditWidth = iDlgWidth - (4 * fDeskScale);
 			SetWindowPos(GetDlgItem(hWnd, IDC_JSONPATH), HWND_TOP, 
-				(1 * dScreenDpi), iJsonTreeHeight + (33 * dScreenDpi), 
-				iJsonPathEditWidth, (18 * dScreenDpi), 
+				(1 * fDeskScale), iJsonTreeHeight + (33 * fDeskScale), 
+				iJsonPathEditWidth, (18 * fDeskScale), 
 				SWP_SHOWWINDOW);
 		}
 		return TRUE;
