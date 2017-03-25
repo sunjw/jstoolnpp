@@ -81,8 +81,8 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 
 			int iJsonTreeWidth = iDlgWidth;
 			int iJsonTreeHeight = iDlgHeight - (55 * dScreenDpi);
-			SetWindowPos(GetDlgItem(hWnd, IDC_TREE_JSON), 
-				HWND_TOP, 0, (30 * dScreenDpi), 
+			SetWindowPos(GetDlgItem(hWnd, IDC_TREE_JSON), HWND_TOP, 
+				0, (30 * dScreenDpi), 
 				iJsonTreeWidth, iJsonTreeHeight, 
 				SWP_SHOWWINDOW);
 
@@ -92,19 +92,19 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 
 			int iSearchEditWidth = iDlgWidth - (170 * dScreenDpi);
 
-			SetWindowPos(GetDlgItem(hWnd, IDC_SEARCHEDIT), 
-				HWND_TOP, (88 * dScreenDpi), 2, 
+			SetWindowPos(GetDlgItem(hWnd, IDC_SEARCHEDIT), HWND_TOP, 
+				(88 * dScreenDpi), (2 * dScreenDpi), 
 				iSearchEditWidth, (18 * dScreenDpi), 
 				SWP_SHOWWINDOW);
 
-			SetWindowPos(GetDlgItem(hWnd, IDC_BTN_SEARCH), 
-				HWND_TOP, (92 * dScreenDpi) + iSearchEditWidth, 0, 
+			SetWindowPos(GetDlgItem(hWnd, IDC_BTN_SEARCH), HWND_TOP, 
+				(92 * dScreenDpi) + iSearchEditWidth, 0, 
 				(74 * dScreenDpi), (22 * dScreenDpi), 
 				SWP_SHOWWINDOW);
 
 			int iJsonPathEditWidth = iDlgWidth - (4 * dScreenDpi);
-			SetWindowPos(GetDlgItem(hWnd, IDC_JSONPATH), 
-				HWND_TOP, 1, iJsonTreeHeight + (33 * dScreenDpi), 
+			SetWindowPos(GetDlgItem(hWnd, IDC_JSONPATH), HWND_TOP, 
+				(1 * dScreenDpi), iJsonTreeHeight + (33 * dScreenDpi), 
 				iJsonPathEditWidth, (18 * dScreenDpi), 
 				SWP_SHOWWINDOW);
 		}
