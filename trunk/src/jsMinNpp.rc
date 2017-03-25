@@ -84,7 +84,7 @@ BEGIN
     CONTROL         "",IDI_JS_ICON,"Static",SS_OWNERDRAW,212,24,48,48
     LTEXT           "Author : Sun Junwen",IDC_STATIC,20,26,100,8
     LTEXT           "Version : ",IDC_STATIC,20,43,31,8
-    LTEXT           "Licence : GPL",IDC_STATIC,20,62,43,8
+    LTEXT           "Licence : GPL",IDC_STATIC,20,62,150,8
     LTEXT           "Special thanks to : Don HO, Douglas Crockford and Kapil Ratnani",IDC_STATIC,20,81,230,8
     LTEXT           VERSION_VALUE,IDC_STATIC,49,43,50,8
 #ifdef _WIN64
