@@ -69,30 +69,40 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 		return TRUE;
 	case WM_SIZE:
 		{
-			int iDlgWidth,iDlgHeight;
+			int iDlgWidth, iDlgHeight;
 			iDlgWidth = LOWORD(lParam);
 			iDlgHeight = HIWORD(lParam);
 
-			int iJsonTreeWidth = iDlgWidth, iJsonTreeHeight = iDlgHeight - 55;
-			SetWindowPos(GetDlgItem(hWnd, IDC_TREE_JSON), 
-				HWND_TOP, 0, 30, iJsonTreeWidth, iJsonTreeHeight, 
+			// Calculate desktop scale.
+			float fDeskScale = GetDesktopScale(m_hDlg);
+
+			int iJsonTreeWidth = iDlgWidth;
+			int iJsonTreeHeight = iDlgHeight - (55 * fDeskScale);
+			SetWindowPos(GetDlgItem(hWnd, IDC_TREE_JSON), HWND_TOP, 
+				0, (30 * fDeskScale), 
+				iJsonTreeWidth, iJsonTreeHeight, 
 				SWP_SHOWWINDOW);
 
-			if(iDlgWidth < 215) // 170 + 45
-				iDlgWidth = 215;
+			int iMinDlgWidth = 215 * fDeskScale;  // 170 + 45
+			if(iDlgWidth < iMinDlgWidth)
+				iDlgWidth = iMinDlgWidth;
 
-			int iSearchEditWidth = iDlgWidth - 170;
-			SetWindowPos(GetDlgItem(hWnd, IDC_BTN_SEARCH), 
-				HWND_TOP, 92 + iSearchEditWidth, 0, 74, 22, 
+			int iSearchEditWidth = iDlgWidth - (170 * fDeskScale);
+
+			SetWindowPos(GetDlgItem(hWnd, IDC_SEARCHEDIT), HWND_TOP, 
+				(88 * fDeskScale), (2 * fDeskScale), 
+				iSearchEditWidth, (18 * fDeskScale), 
 				SWP_SHOWWINDOW);
 
-			SetWindowPos(GetDlgItem(hWnd, IDC_SEARCHEDIT), 
-				HWND_TOP, 88, 2, iSearchEditWidth, 18, 
+			SetWindowPos(GetDlgItem(hWnd, IDC_BTN_SEARCH), HWND_TOP, 
+				(92 * fDeskScale) + iSearchEditWidth, 0, 
+				(74 * fDeskScale), (22 * fDeskScale), 
 				SWP_SHOWWINDOW);
 
-			int iJsonPathEditWidth = iDlgWidth - 4;
-			SetWindowPos(GetDlgItem(hWnd, IDC_JSONPATH), 
-				HWND_TOP, 1, iJsonTreeHeight + 33, iJsonPathEditWidth, 18, 
+			int iJsonPathEditWidth = iDlgWidth - (4 * fDeskScale);
+			SetWindowPos(GetDlgItem(hWnd, IDC_JSONPATH), HWND_TOP, 
+				(1 * fDeskScale), iJsonTreeHeight + (33 * fDeskScale), 
+				iJsonPathEditWidth, (18 * fDeskScale), 
 				SWP_SHOWWINDOW);
 		}
 		return TRUE;

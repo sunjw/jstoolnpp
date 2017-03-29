@@ -35,4 +35,6 @@ void SaveOption(HWND nppHandle, StruOptions struOptions);
 
 void CopyText(LPCTSTR lpcText);
 
+float GetDesktopScale(HWND hWnd);
+
 #endif

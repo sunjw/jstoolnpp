@@ -129,3 +129,11 @@ void CopyText(LPCTSTR lpcText)
 	SetClipboardData(CF_UNICODETEXT, hMoveable);
 	CloseClipboard();
 }
+
+float GetDesktopScale(HWND hWnd)
+{
+	HDC hdc = GetDC(hWnd);
+	float fScale = GetDeviceCaps(hdc, LOGPIXELSX) / 96.0f;
+	ReleaseDC(hWnd, hdc);
+	return fScale;
+}
