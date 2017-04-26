@@ -609,7 +609,7 @@ void doInternetCheckUpdate()
 {
 	if (g_struOptions.bDisableVersionCheck)
 	{
-		// User diable this.
+		// User disable this.
 		return;
 	}
 
