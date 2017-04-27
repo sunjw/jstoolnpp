@@ -178,7 +178,7 @@ bool JSONDialog::isVisible() const
 
 tstring JSONDialog::convertJsonStrToDialogTstr(const string& str)
 {
-	if(m_bUTF8Json)
+	if (m_bUTF8Json)
 		return strtotstrutf8(str);
 	else
 		return strtotstr(str);
@@ -295,13 +295,13 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 	}
 
 	std::string strJSCode(pJS);
-	m_bUTF8Json = false;
+	m_bUTF8Json = FALSE;
 
 	int codePage = (int)::SendMessage(m_hCurrScintilla, SCI_GETCODEPAGE, 0, 0);
 	if(codePage == 65001)
 	{
 		// UTF-8
-		m_bUTF8Json = true;
+		m_bUTF8Json = TRUE;
 	}
 
 	JsonStringProc jsonProc(strJSCode);

@@ -76,7 +76,7 @@ private:
 
 	BOOL m_bVisible;
 
-	bool m_bUTF8Json;
+	BOOL m_bUTF8Json;
 
 	int m_iSelStartLine;
 
