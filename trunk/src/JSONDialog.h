@@ -47,7 +47,8 @@ public :
 	virtual void display(bool toShow = true) const
 	{ DockingDlgInterface::display(toShow); }
 
-	virtual bool isVisible() const;
+	virtual bool isVisible() const
+	{ return m_bVisible; }
 
 	void setParent(HWND parent2set)
 	{ _hParent = parent2set; };

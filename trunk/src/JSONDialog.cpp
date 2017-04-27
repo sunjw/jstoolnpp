@@ -170,11 +170,6 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	return FALSE;
 }
 
-bool JSONDialog::isVisible() const
-{
-	return m_bVisible;
-}
-
 tstring JSONDialog::convertJsonStrToDialogTstr(const string& str)
 {
 	if (m_bUTF8Json)
