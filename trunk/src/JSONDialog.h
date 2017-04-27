@@ -44,7 +44,7 @@ public :
 
 	virtual ~JSONDialog();
 
-    virtual void display(bool toShow = true);
+	virtual void display(bool toShow = true);
 
 	virtual bool isVisible() const;
 
