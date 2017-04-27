@@ -19,6 +19,10 @@
 #include <stdexcept>
 #include <string>
 
+//#define _CRTDBG_MAP_ALLOC
+//#include <stdlib.h>
+//#include <crtdbg.h>
+
 #include <windows.h>
 #include <process.h>
 #include <Wininet.h>
@@ -57,6 +61,8 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 	{
 		case DLL_PROCESS_ATTACH:
 		{
+			/*_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );*/
+
 			g_hInst = (HINSTANCE)hModule;
 			s_jsonDialog.init((HINSTANCE)g_hInst, g_nppData._nppHandle);
 
