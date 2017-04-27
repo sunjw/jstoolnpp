@@ -44,13 +44,13 @@ public :
 
 	virtual ~JSONDialog();
 
-	virtual void display(bool toShow = true);
+	virtual void display(bool toShow = true) const
+	{ DockingDlgInterface::display(toShow); }
 
 	virtual bool isVisible() const;
 
-	void setParent(HWND parent2set){
-		_hParent = parent2set;
-	};
+	void setParent(HWND parent2set)
+	{ _hParent = parent2set; };
 
 	void refreshTree(HWND hCurrScintilla);
 	void drawTree(const JsonValue& jsonValue);
@@ -82,9 +82,8 @@ private:
 
 	sunjwbase::tstring convertJsonStrToDialogTstr(const std::string& str);
 
-	void onClose();
-
-	void updateToolbarState();
+	void onShow();
+	void onHide();
 
 	void disableControls();
 	void enableControls();

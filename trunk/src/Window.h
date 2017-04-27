@@ -34,7 +34,7 @@ public:
 
 	virtual void destroy() = 0;
 
-	virtual void display(bool toShow = true) {
+	virtual void display(bool toShow = true) const {
 		::ShowWindow(_hSelf, toShow?SW_SHOW:SW_HIDE);
 	};
 	

@@ -145,15 +145,21 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 		return TRUE;
 	case WM_NOTIFY:
 		{
-			LPNMHDR lpnmh = (LPNMHDR)lParam;
-			if (lpnmh->hwndFrom == g_nppData._nppHandle &&
-				lpnmh->code == DMN_CLOSE) 
+			clickJsonTree(lParam);
+		}
+		return TRUE;
+	case WM_SHOWWINDOW:
+		{
+			BOOL bShow = (BOOL)wParam;
+			if (bShow)
 			{
-				onClose();
+				// Show
+				onShow();
 			}
 			else
 			{
-				clickJsonTree(lParam);
+				// Hide
+				onHide();
 			}
 		}
 		return TRUE;
@@ -162,13 +168,6 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	}
 
 	return FALSE;
-}
-
-void JSONDialog::display(bool toShow) 
-{
-	DockingDlgInterface::display(toShow);
-	m_bVisible = toShow ? TRUE : FALSE;
-	updateToolbarState();
 }
 
 bool JSONDialog::isVisible() const
@@ -184,14 +183,15 @@ tstring JSONDialog::convertJsonStrToDialogTstr(const string& str)
 		return strtotstr(str);
 }
 
-void JSONDialog::onClose()
+void JSONDialog::onShow()
 {
-	m_bVisible = FALSE;
-	updateToolbarState();
+	m_bVisible = TRUE;
+	onToggleJsonTree(m_bVisible);
 }
 
-void JSONDialog::updateToolbarState()
+void JSONDialog::onHide()
 {
+	m_bVisible = FALSE;
 	onToggleJsonTree(m_bVisible);
 }
 

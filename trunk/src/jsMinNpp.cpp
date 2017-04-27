@@ -429,6 +429,8 @@ void jsonTree()
 	s_jsonDialog.setParent(g_nppData._nppHandle);
 	tTbData	data = {0};
 
+	BOOL bForceDisplay = FALSE;
+
 	if (!s_jsonDialog.isCreated())
 	{
 		s_jsonDialog.create(&data);
@@ -442,9 +444,11 @@ void jsonTree()
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		data.dlgID = 0;
 		::SendMessage(g_nppData._nppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&data);
+
+		bForceDisplay = TRUE; // bug after created
 	}
 
-	if (!s_jsonDialog.isVisible())
+	if (bForceDisplay || !s_jsonDialog.isVisible())
 	{
 		s_jsonDialog.display(true);
 		HWND hCurrScintilla = getCurrentScintillaHandle();

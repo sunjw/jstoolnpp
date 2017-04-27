@@ -63,7 +63,7 @@ public:
     virtual void destroy() {
     };
 
-	virtual void display(bool toShow = true) {
+	virtual void display(bool toShow = true) const {
 		::SendMessage(_hParent, toShow?NPPM_DMMSHOW:NPPM_DMMHIDE, 0, (LPARAM)_hSelf);
 	};
 
