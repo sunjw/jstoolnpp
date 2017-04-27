@@ -426,8 +426,6 @@ void jsonTree()
 {
 	doInternetCheckUpdate();
 
-	onToggleJsonTree(TRUE);
-
 	s_jsonDialog.setParent(g_nppData._nppHandle);
 	tTbData	data = {0};
 
@@ -445,11 +443,17 @@ void jsonTree()
 		data.dlgID = 0;
 		::SendMessage(g_nppData._nppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&data);
 	}
-	s_jsonDialog.display();
 
-	HWND hCurrScintilla = getCurrentScintillaHandle();
-
-	s_jsonDialog.refreshTree(hCurrScintilla);
+	if (!s_jsonDialog.isVisible())
+	{
+		s_jsonDialog.display(true);
+		HWND hCurrScintilla = getCurrentScintillaHandle();
+		s_jsonDialog.refreshTree(hCurrScintilla);
+	}
+	else
+	{
+		s_jsonDialog.display(false);
+	}
 }
 
 void onToggleJsonTree(BOOL bVisible)

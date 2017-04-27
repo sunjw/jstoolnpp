@@ -164,6 +164,18 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	return FALSE;
 }
 
+void JSONDialog::display(bool toShow) 
+{
+	DockingDlgInterface::display(toShow);
+	m_bVisible = toShow ? TRUE : FALSE;
+	updateToolbarState();
+}
+
+bool JSONDialog::isVisible() const
+{
+	return m_bVisible;
+}
+
 tstring JSONDialog::convertJsonStrToDialogTstr(const string& str)
 {
 	if(m_bUTF8Json)
@@ -174,7 +186,13 @@ tstring JSONDialog::convertJsonStrToDialogTstr(const string& str)
 
 void JSONDialog::onClose()
 {
-	onToggleJsonTree(FALSE);
+	m_bVisible = FALSE;
+	updateToolbarState();
+}
+
+void JSONDialog::updateToolbarState()
+{
+	onToggleJsonTree(m_bVisible);
 }
 
 void JSONDialog::disableControls()
