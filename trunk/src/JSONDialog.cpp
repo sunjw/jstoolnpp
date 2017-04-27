@@ -31,7 +31,21 @@ using namespace std;
 using namespace sunjwbase;
 
 extern NppData g_nppData;
+extern void onToggleJsonTree(BOOL bVisible);
 
+JSONDialog::~JSONDialog()
+{
+	if (m_editExJsonPath != NULL)
+	{
+		delete m_editExJsonPath;
+		m_editExJsonPath = NULL;
+	}
+	if (m_jsonTree != NULL)
+	{
+		delete m_jsonTree;
+		m_jsonTree = NULL;
+	}
+}
 
 BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -57,14 +71,6 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 			//m_oldJsonPathEditControlProc = ::GetWindowLongPtr(hJsonPathEdit, GWLP_WNDPROC);
 			//::SetWindowLongPtr(hJsonPathEdit, GWLP_WNDPROC,
 			//	(LONG_PTR)JSONDialog::JsonPathEditControlProc);
-		}
-		return TRUE;
-	case WM_CLOSE:
-		{
-			if (m_editExJsonPath != NULL)
-				delete m_editExJsonPath;
-			if (m_jsonTree != NULL)
-				delete m_jsonTree;
 		}
 		return TRUE;
 	case WM_SIZE:
@@ -139,7 +145,16 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 		return TRUE;
 	case WM_NOTIFY:
 		{
-			clickJsonTree(lParam);
+			LPNMHDR lpnmh = (LPNMHDR)lParam;
+			if (lpnmh->hwndFrom == g_nppData._nppHandle &&
+				lpnmh->code == DMN_CLOSE) 
+			{
+				onClose();
+			}
+			else
+			{
+				clickJsonTree(lParam);
+			}
 		}
 		return TRUE;
 	default:
@@ -155,6 +170,11 @@ tstring JSONDialog::convertJsonStrToDialogTstr(const string& str)
 		return strtotstrutf8(str);
 	else
 		return strtotstr(str);
+}
+
+void JSONDialog::onClose()
+{
+	onToggleJsonTree(FALSE);
 }
 
 void JSONDialog::disableControls()

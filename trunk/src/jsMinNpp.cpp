@@ -420,6 +420,8 @@ void jsonTree()
 {
 	doInternetCheckUpdate();
 
+	onToggleJsonTree(TRUE);
+
 	s_jsonDialog.setParent(g_nppData._nppHandle);
 	tTbData	data = {0};
 
@@ -442,6 +444,11 @@ void jsonTree()
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
 	s_jsonDialog.refreshTree(hCurrScintilla);
+}
+
+void onToggleJsonTree(BOOL bVisible)
+{
+	::SendMessage(g_nppData._nppHandle, NPPM_SETMENUITEMCHECK, (WPARAM)s_funcItem[5]._cmdID, (LPARAM)bVisible);
 }
 
 void options()

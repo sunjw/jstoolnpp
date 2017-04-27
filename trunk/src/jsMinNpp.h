@@ -41,6 +41,7 @@ void jsMin(bool bNewFile = false);
 void jsFormat();
 
 void jsonTree();
+void onToggleJsonTree(BOOL bVisible);
 
 void options();
 

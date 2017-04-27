@@ -41,6 +41,8 @@ public :
 		   m_iSelStartLine(0)
 	{};
 
+	virtual ~JSONDialog();
+
     virtual void display(bool toShow = true) const {
         DockingDlgInterface::display(toShow);
     };
@@ -76,6 +78,8 @@ private:
 	int m_iSelStartLine;
 
 	sunjwbase::tstring convertJsonStrToDialogTstr(const std::string& str);
+
+	void onClose();
 
 	void disableControls();
 	void enableControls();
