@@ -32,8 +32,6 @@
 #define SORT_KOREAN_KSC                 0x0
 #define SORT_HUNGARIAN_DEFAULT          0x0
 #define SORT_GEORGIAN_TRADITIONAL       0x0
-//#define CREATEPROCESS_MANIFEST_RESOURCE_ID 1
-//#define MINIMUM_RESERVED_MANIFEST_RESOURCE_ID 1
 #define SW_SHOWNORMAL                   1
 #define SW_NORMAL                       1
 #define SHOW_OPENWINDOW                 1
@@ -101,7 +99,6 @@
 #define VFFF_ISSHAREDFILE               0x0001
 #define VFF_CURNEDEST                   0x0001
 #define VIFF_FORCEINSTALL               0x0001
-//#define ISOLATIONAWARE_MANIFEST_RESOURCE_ID 2
 #define SW_SHOWMINIMIZED                2
 #define SHOW_ICONWINDOW                 2
 #define SW_OTHERZOOM                    2
@@ -161,7 +158,6 @@
 #define SORT_CHINESE_PRC                0x2
 #define VFF_FILEINUSE                   0x0002
 #define VIFF_DONTDELETEOLD              0x0002
-//#define ISOLATIONAWARE_NOSTATICIMPORT_MANIFEST_RESOURCE_ID 3
 #define SW_SHOWMAXIMIZED                3
 #define SW_MAXIMIZE                     3
 #define SHOW_FULLSCREEN                 3
@@ -349,7 +345,6 @@
 #define LANG_ICELANDIC                  0x0f
 #define SUBLANG_ARABIC_BAHRAIN          0x0f
 #define SUBLANG_SPANISH_PARAGUAY        0x0f
-//#define MAXIMUM_RESERVED_MANIFEST_RESOURCE_ID 16
 #define VK_SHIFT                        0x10
 #define WM_CLOSE                        0x0010
 #define HTBOTTOMLEFT                    16
@@ -402,7 +397,6 @@
 #define WM_ENDSESSION                   0x0016
 #define LANG_PORTUGUESE                 0x16
 #define VK_JUNJA                        0x17
-//#define RT_MANIFEST                     24
 #define VK_FINAL                        0x18
 #define WM_SHOWWINDOW                   0x0018
 #define LANG_ROMANIAN                   0x18
@@ -559,6 +553,7 @@
 #define VK_NUMPAD6                      0x66
 #define IDD_TREE                        102
 #define VK_NUMPAD7                      0x67
+#define IDB_BITMAP_JSONVIEW             103
 #define VK_NUMPAD8                      0x68
 #define VK_NUMPAD9                      0x69
 #define VK_MULTIPLY                     0x6A
@@ -1128,21 +1123,15 @@
 #define IDTIMEOUT                       32000
 #define OCR_NORMAL                      32512
 #define OIC_SAMPLE                      32512
-//#define IDI_APPLICATION                 32512
 #define OCR_IBEAM                       32513
 #define OIC_HAND                        32513
-//#define IDI_HAND                        32513
 #define OCR_WAIT                        32514
 #define OIC_QUES                        32514
-//#define IDI_QUESTION                    32514
 #define OCR_CROSS                       32515
 #define OIC_BANG                        32515
-//#define IDI_EXCLAMATION                 32515
 #define OCR_UP                          32516
 #define OIC_NOTE                        32516
-//#define IDI_ASTERISK                    32516
 #define OIC_WINLOGO                     32517
-//#define IDI_WINLOGO                     32517
 #define OCR_SIZE                        32640
 #define OCR_ICON                        32641
 #define OCR_SIZENWSE                    32642
@@ -1219,7 +1208,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        103
+#define _APS_NEXT_RESOURCE_VALUE        104
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         1022
 #define _APS_NEXT_SYMED_VALUE           101

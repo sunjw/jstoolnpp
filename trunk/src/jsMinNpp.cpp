@@ -40,6 +40,7 @@ static const int s_nbFunc = 13;
 
 static FuncItem s_funcItem[s_nbFunc];
 static HMENU s_ownMenu = NULL;
+static HBITMAP s_hJsonViewBitmap = NULL;
 
 static JSONDialog s_jsonDialog;
 
@@ -114,6 +115,9 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			lstrcpy(s_funcItem[10]._itemName, TEXT(STRING_SOURCE_CODE_GITHUB));
 			lstrcpy(s_funcItem[11]._itemName, TEXT(STRING_CHECK_UPDATE));
 			lstrcpy(s_funcItem[12]._itemName, TEXT(STRING_ABOUT));
+
+			s_hJsonViewBitmap = (HBITMAP)::LoadImage(g_hInst, MAKEINTRESOURCE(IDB_BITMAP_JSONVIEW), IMAGE_BITMAP,
+				0, 0, (LR_DEFAULTSIZE | LR_LOADMAP3DCOLORS));
 		}
 		break;
 
@@ -152,7 +156,21 @@ extern "C" __declspec(dllexport) FuncItem *getFuncsArray(int *nbF)
 }
 
 extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
-{	
+{
+	if (notifyCode->nmhdr.hwndFrom == g_nppData._nppHandle)
+	{
+		switch (notifyCode->nmhdr.code)
+		{
+		case NPPN_TBMODIFICATION:
+			{
+				toolbarIcons tbiJS;
+				tbiJS.hToolbarBmp = s_hJsonViewBitmap;
+				tbiJS.hToolbarIcon = NULL;
+				SendMessage(g_nppData._nppHandle, NPPM_ADDTOOLBARICON, (WPARAM)s_funcItem[5]._cmdID, (LPARAM)&tbiJS);
+			}
+			break;
+		}
+	}
 }
 
 #ifdef UNICODE
