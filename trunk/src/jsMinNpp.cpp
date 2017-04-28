@@ -19,6 +19,10 @@
 #include <stdexcept>
 #include <string>
 
+//#define _CRTDBG_MAP_ALLOC
+//#include <stdlib.h>
+//#include <crtdbg.h>
+
 #include <windows.h>
 #include <process.h>
 #include <Wininet.h>
@@ -40,6 +44,7 @@ static const int s_nbFunc = 13;
 
 static FuncItem s_funcItem[s_nbFunc];
 static HMENU s_ownMenu = NULL;
+static HBITMAP s_hJsonViewBitmap = NULL;
 
 static JSONDialog s_jsonDialog;
 
@@ -56,6 +61,8 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 	{
 		case DLL_PROCESS_ATTACH:
 		{
+			/*_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );*/
+
 			g_hInst = (HINSTANCE)hModule;
 			s_jsonDialog.init((HINSTANCE)g_hInst, g_nppData._nppHandle);
 
@@ -114,6 +121,9 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			lstrcpy(s_funcItem[10]._itemName, TEXT(STRING_SOURCE_CODE_GITHUB));
 			lstrcpy(s_funcItem[11]._itemName, TEXT(STRING_CHECK_UPDATE));
 			lstrcpy(s_funcItem[12]._itemName, TEXT(STRING_ABOUT));
+
+			s_hJsonViewBitmap = (HBITMAP)::LoadImage(g_hInst, MAKEINTRESOURCE(IDB_BITMAP_JSONVIEW), IMAGE_BITMAP,
+				0, 0, (LR_DEFAULTSIZE | LR_LOADMAP3DCOLORS));
 		}
 		break;
 
@@ -152,7 +162,21 @@ extern "C" __declspec(dllexport) FuncItem *getFuncsArray(int *nbF)
 }
 
 extern "C" __declspec(dllexport) void beNotified(SCNotification *notifyCode)
-{	
+{
+	if (notifyCode->nmhdr.hwndFrom == g_nppData._nppHandle)
+	{
+		switch (notifyCode->nmhdr.code)
+		{
+		case NPPN_TBMODIFICATION:
+			{
+				toolbarIcons tbiJS;
+				tbiJS.hToolbarBmp = s_hJsonViewBitmap;
+				tbiJS.hToolbarIcon = NULL;
+				SendMessage(g_nppData._nppHandle, NPPM_ADDTOOLBARICON, (WPARAM)s_funcItem[5]._cmdID, (LPARAM)&tbiJS);
+			}
+			break;
+		}
+	}
 }
 
 #ifdef UNICODE
@@ -405,6 +429,8 @@ void jsonTree()
 	s_jsonDialog.setParent(g_nppData._nppHandle);
 	tTbData	data = {0};
 
+	BOOL bForceDisplay = FALSE;
+
 	if (!s_jsonDialog.isCreated())
 	{
 		s_jsonDialog.create(&data);
@@ -418,12 +444,25 @@ void jsonTree()
 		// the dlgDlg should be the index of funcItem where the current function pointer is
 		data.dlgID = 0;
 		::SendMessage(g_nppData._nppHandle, NPPM_DMMREGASDCKDLG, 0, (LPARAM)&data);
+
+		bForceDisplay = TRUE; // bug after created
 	}
-	s_jsonDialog.display();
 
-	HWND hCurrScintilla = getCurrentScintillaHandle();
+	if (bForceDisplay || !s_jsonDialog.isVisible())
+	{
+		s_jsonDialog.display(true);
+		HWND hCurrScintilla = getCurrentScintillaHandle();
+		s_jsonDialog.refreshTree(hCurrScintilla);
+	}
+	else
+	{
+		s_jsonDialog.display(false);
+	}
+}
 
-	s_jsonDialog.refreshTree(hCurrScintilla);
+void onToggleJsonTree(BOOL bVisible)
+{
+	::SendMessage(g_nppData._nppHandle, NPPM_SETMENUITEMCHECK, (WPARAM)s_funcItem[5]._cmdID, (LPARAM)bVisible);
 }
 
 void options()
@@ -609,7 +648,7 @@ void doInternetCheckUpdate()
 {
 	if (g_struOptions.bDisableVersionCheck)
 	{
-		// User diable this.
+		// User disable this.
 		return;
 	}
 

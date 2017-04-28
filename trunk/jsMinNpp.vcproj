@@ -828,6 +828,10 @@
 				RelativePath=".\src\jsMinNpp.rc"
 				>
 			</File>
+			<File
+				RelativePath=".\src\jsonviewer.bmp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Source Files"

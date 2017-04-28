@@ -38,16 +38,20 @@ public :
 	   DockingDlgInterface(IDD_TREE), 
 		   m_hDlg(NULL), m_hCurrScintilla(NULL), m_hTree(NULL),
 		   m_editExJsonPath(NULL), m_jsonTree(NULL),
+		   m_bVisible(FALSE),
 		   m_iSelStartLine(0)
 	{};
 
-    virtual void display(bool toShow = true) const {
-        DockingDlgInterface::display(toShow);
-    };
+	virtual ~JSONDialog();
 
-	void setParent(HWND parent2set){
-		_hParent = parent2set;
-	};
+	virtual void display(bool toShow = true) const
+	{ DockingDlgInterface::display(toShow); }
+
+	virtual bool isVisible() const
+	{ return m_bVisible; }
+
+	void setParent(HWND parent2set)
+	{ _hParent = parent2set; };
 
 	void refreshTree(HWND hCurrScintilla);
 	void drawTree(const JsonValue& jsonValue);
@@ -68,14 +72,19 @@ private:
 	HWND m_hCurrScintilla;
 	HWND m_hTree;
 
-	bool m_bUTF8Json;
-
 	EditControlEx *m_editExJsonPath;
 	JsonTree *m_jsonTree;
+
+	BOOL m_bVisible;
+
+	BOOL m_bUTF8Json;
 
 	int m_iSelStartLine;
 
 	sunjwbase::tstring convertJsonStrToDialogTstr(const std::string& str);
+
+	void onShow();
+	void onHide();
 
 	void disableControls();
 	void enableControls();

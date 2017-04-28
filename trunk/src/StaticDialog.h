@@ -42,7 +42,7 @@ class StaticDialog : public Window
 {
 public :
 	StaticDialog() : Window() {};
-	~StaticDialog(){
+	virtual ~StaticDialog() {
 		if (isCreated()) {
 			::SetWindowLongPtr(_hSelf, GWLP_USERDATA, (long)NULL);	//Prevent run_dlgProc from doing anything, since its virtual
 			destroy();
