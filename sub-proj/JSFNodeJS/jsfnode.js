@@ -1,25 +1,100 @@
-var FS = require('fs');
-var Ffi = require('ffi');
-var Ref = require('ref');
-var StructType = require('ref-struct');
+var FileSystem = require('fs');
+var FileSystemEx = require('fs-extra');
 
-var JSFORMATTER_REL_PATH_MAC = '../../trunk/DerivedData/JSTool/Build/Products/Release/libJSFormatter.dylib';
+var Ffi = 0;
+var Ref = 0;
+var StructType = 0;
 
-var VoidPtr = Ref.refType('void');
+var VoidPtr = 0;
 
-var FormatterOptionStruct = StructType({
-    'chIndent': 'char',
-    'nChPerInd': 'int',
-    'eCRRead': 'int',
-    'eCRPut': 'int',
-	'eBracNL': 'int',
-	'eEmpytIndent': 'int'
-});
+var FormatterOptionStruct = 0;
+var FormatterOptionStructPtr = 0;
 
-var FormatterOptionStructPtr = Ref.refType(FormatterOptionStruct);
+var OSType = {
+    WIN32: 0,
+    LINUX: 1,
+    MACOS: 2
+};
+
+var OSRunning = 0;
+
+var JSFORMATTER_REL_PATH = '';
+var JSFORMATTER_REL_PATH_WIN32 = '../../trunk/release/JSFormatter.dll';
+var JSFORMATTER_REL_PATH_MACOS = '../../trunk/DerivedData/JSTool/Build/Products/Release/libJSFormatter.dylib';
+
+function log(logString) {
+    console.log(logString);
+}
+
+function detectOS() {
+    var plat = process.platform;
+    //log('process.platform=' + plat);
+    if (plat.includes('win32')) {
+        return OSType.WIN32;
+    } else if (plat.includes('linux')) {
+        return OSType.LINUX;
+    } else if (plat.includes('darwin')) {
+        return OSType.MACOS;
+    }
+}
+
+function prepareEnv() {
+    OSRunning = detectOS();
+
+    var osPostfix = '';
+    switch (OSRunning) {
+    case OSType.WIN32:
+        osPostfix = '.win32';
+        break;
+    case OSType.LINUX:
+        break;
+    case OSType.MACOS:
+        osPostfix = '.macos';
+        break;
+    }
+
+    var ffiNativePath = 'node_modules/ffi/build/Release/ffi_bindings.node';
+    var ffiNativePathPlatPath = ffiNativePath + osPostfix;
+    var refNativePath = 'node_modules/ref/build/Release/binding.node';
+    var refNativePathPlatPath = refNativePath + osPostfix;
+
+    FileSystemEx.copySync(ffiNativePathPlatPath, ffiNativePath);
+    FileSystemEx.copySync(refNativePathPlatPath, refNativePath);
+
+    Ffi = require('ffi');
+    Ref = require('ref');
+    StructType = require('ref-struct');
+
+    VoidPtr = Ref.refType('void');
+
+    FormatterOptionStruct = StructType({
+        'chIndent': 'char',
+        'nChPerInd': 'int',
+        'eCRRead': 'int',
+        'eCRPut': 'int',
+        'eBracNL': 'int',
+        'eEmpytIndent': 'int'
+    });
+
+    FormatterOptionStructPtr = Ref.refType(FormatterOptionStruct);
+}
 
 function LoadLibJSF() {
-    var libJSFormatter = new Ffi.Library(JSFORMATTER_REL_PATH_MAC, {
+    if (JSFORMATTER_REL_PATH == '') {
+        // Not determined path
+        switch (OSRunning) {
+        case OSType.WIN32:
+            JSFORMATTER_REL_PATH = JSFORMATTER_REL_PATH_WIN32;
+            break;
+        case OSType.LINUX:
+            break;
+        case OSType.MACOS:
+            JSFORMATTER_REL_PATH = JSFORMATTER_REL_PATH_MACOS;
+            break;
+        }
+    }
+
+    var libJSFormatter = new Ffi.Library(JSFORMATTER_REL_PATH, {
         'JSFCreateStringIO': [VoidPtr, [VoidPtr, 'string', 'pointer', FormatterOptionStructPtr]],
         'JSFRelease': ['void', [VoidPtr]],
         'JSFEnableDebug': ['void', [VoidPtr]],
@@ -57,10 +132,10 @@ function CallLibJSFFormat(inputJS) {
 
     libJSFormatter.JSFRelease(jsfObj);
 
-    //console.log('');
-    //console.log(resultJs);
+    //log('');
+    //log(resultJs);
 
-    //console.log('libJSFormatter version: ' + libJSFormatter.JSFGetVersion() + '\n');
+    //log('libJSFormatter version: ' + libJSFormatter.JSFGetVersion() + '\n');
 
     process.on('exit', function() {
         var keepWSF = WriteStringFunc;
@@ -75,14 +150,16 @@ function CallLibJSFVersion() {
 }
 
 function Main() {
+    prepareEnv();
+
     if ((process.argv.length == 3 && process.argv[2] == '--version') ||
         (process.argv.length == 4 && process.argv[3] == '--version')) {
         if (process.argv.length == 4) {
-            JSFORMATTER_REL_PATH_MAC = process.argv[2];
+            JSFORMATTER_REL_PATH = process.argv[2];
         }
-        console.log('libJSFormatter version: ' + CallLibJSFVersion());
+        log('libJSFormatter version: ' + CallLibJSFVersion());
     } else if (process.argv.length != 4 && process.argv.length != 5) {
-        console.log('Usage: node jsfnode.js {libJSFormatter path} [input file] [output file]');
+        log('Usage: node jsfnode.js {libJSFormatter path} [input file] [output file]');
     } else {
         var inputJSFile = '';
         var outputJSFile = '';
@@ -91,18 +168,18 @@ function Main() {
             inputJSFile = process.argv[2];
             outputJSFile = process.argv[3];
         } else if (process.argv.length == 5) {
-            JSFORMATTER_REL_PATH_MAC = process.argv[2];
+            JSFORMATTER_REL_PATH = process.argv[2];
             inputJSFile = process.argv[3];
             outputJSFile = process.argv[4];
         }
 
-        var inputJS = FS.readFileSync(inputJSFile, 'binary');
+        var inputJS = FileSystem.readFileSync(inputJSFile, 'binary');
         inputJS = inputJS.toString();
-        //console.log('inputJS:\n' + inputJS);
+        //log('inputJS:\n' + inputJS);
 
         var resultJS = CallLibJSFFormat(inputJS);
 
-        FS.writeFileSync(outputJSFile, resultJS, 'binary');
+        FileSystem.writeFileSync(outputJSFile, resultJS, 'binary');
     }
 }
 
