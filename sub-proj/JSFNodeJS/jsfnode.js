@@ -82,20 +82,6 @@ function prepareEnv() {
 }
 
 function LoadLibJSF() {
-    if (JSFORMATTER_REL_PATH == '') {
-        // Not determined path
-        switch (OSRunning) {
-        case OSType.WIN32:
-            JSFORMATTER_REL_PATH = JSFORMATTER_REL_PATH_WIN32;
-            break;
-        case OSType.LINUX:
-            break;
-        case OSType.MACOS:
-            JSFORMATTER_REL_PATH = JSFORMATTER_REL_PATH_MACOS;
-            break;
-        }
-    }
-
     var libJSFormatter = new Ffi.Library(JSFORMATTER_REL_PATH, {
             'JSFCreateStringIO': [VoidPtr, [VoidPtr, 'string', 'pointer', FormatterOptionStructPtr]],
             'JSFRelease': ['void', [VoidPtr]],
@@ -153,27 +139,49 @@ function CallLibJSFVersion() {
 function Main() {
     prepareEnv();
 
-    if ((process.argv.length == 3 && process.argv[2] == '--version') ||
-        (process.argv.length == 4 && process.argv[3] == '--version')) {
-        if (process.argv.length == 4) {
-            JSFORMATTER_REL_PATH = process.argv[2];
+    // Load default path
+    switch (OSRunning) {
+    case OSType.WIN32:
+        JSFORMATTER_REL_PATH = JSFORMATTER_REL_PATH_WIN32;
+        break;
+    case OSType.LINUX:
+        break;
+    case OSType.MACOS:
+        JSFORMATTER_REL_PATH = JSFORMATTER_REL_PATH_MACOS;
+        break;
+    }
+
+    var printVersion = false;
+    var inputJSFile = '';
+    var outputJSFile = '';
+
+    var argvLen = process.argv.length;
+    if (argvLen >= 2) {
+        if (process.argv[argvLen - 1] == '--version') {
+            printVersion = true;
+            if (argvLen == 4) {
+                JSFORMATTER_REL_PATH = process.argv[2];
+            }
+        } else if (argvLen >= 4) {
+            inputJSFile = process.argv[argvLen - 2];
+            outputJSFile = process.argv[argvLen - 1];
+            if (argvLen == 5) {
+                JSFORMATTER_REL_PATH = process.argv[2];
+            }
         }
-        log('libJSFormatter version: ' + CallLibJSFVersion());
-    } else if (process.argv.length != 4 && process.argv.length != 5) {
+    }
+
+    if (!printVersion && (inputJSFile == '' || outputJSFile == '')) {
         log('Usage: node jsfnode.js {libJSFormatter path} [input file] [output file]');
+        log('');
+        log('  {libJSFormatter path}: optional specify libJSFormatter path.');
+        log('  --version: print version.');
+        return;
+    }
+
+    if (printVersion) {
+        log('libJSFormatter version: ' + CallLibJSFVersion());
     } else {
-        var inputJSFile = '';
-        var outputJSFile = '';
-
-        if (process.argv.length == 4) {
-            inputJSFile = process.argv[2];
-            outputJSFile = process.argv[3];
-        } else if (process.argv.length == 5) {
-            JSFORMATTER_REL_PATH = process.argv[2];
-            inputJSFile = process.argv[3];
-            outputJSFile = process.argv[4];
-        }
-
         var inputJS = FileSystem.readFileSync(inputJSFile, 'binary');
         inputJS = inputJS.toString();
         //log('inputJS:\n' + inputJS);
@@ -182,6 +190,7 @@ function Main() {
 
         FileSystem.writeFileSync(outputJSFile, resultJS, 'binary');
     }
+
 }
 
 Main();
