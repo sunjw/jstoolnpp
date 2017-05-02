@@ -128,6 +128,7 @@ def main():
 	JSFORMATTER_LIB_PATH_SEL = ""
 	if nodejs == False:
 		if is_osx_sys():
+			x64 = False # no x64 on macOS
 			JSFORMATTER_LIB_PATH_SEL = JSFORMATTER_LIB_PATH_MAC
 			if release:
 				JSFORMATTER_LIB_PATH_SEL = JSFORMATTER_LIB_REL_PATH_MAC
