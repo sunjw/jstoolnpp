@@ -1,4 +1,5 @@
 var FileSystem = require('fs');
+const Path = require('path');
 var FileSystemEx = require('fs-extra');
 
 var Ffi = 0;
@@ -19,8 +20,8 @@ var OSType = {
 var OSRunning = 0;
 
 var JSFORMATTER_REL_PATH = '';
-var JSFORMATTER_REL_PATH_WIN32 = '../../trunk/release/JSFormatter.dll';
-var JSFORMATTER_REL_PATH_MACOS = '../../trunk/DerivedData/JSTool/Build/Products/Release/libJSFormatter.dylib';
+var JSFORMATTER_REL_PATH_WIN32 = Path.resolve(__dirname, '../../trunk/release/JSFormatter.dll');
+var JSFORMATTER_REL_PATH_MACOS = Path.resolve(__dirname, '../../trunk/DerivedData/JSTool/Build/Products/Release/libJSFormatter.dylib');
 
 function log(logString) {
     console.log(logString);
@@ -53,9 +54,9 @@ function prepareEnv() {
         break;
     }
 
-    var ffiNativePath = 'node_modules/ffi/build/Release/ffi_bindings.node';
+    var ffiNativePath = Path.resolve(__dirname, 'node_modules/ffi/build/Release/ffi_bindings.node');
     var ffiNativePathPlatPath = ffiNativePath + osPostfix;
-    var refNativePath = 'node_modules/ref/build/Release/binding.node';
+    var refNativePath = Path.resolve(__dirname, 'node_modules/ref/build/Release/binding.node');
     var refNativePathPlatPath = refNativePath + osPostfix;
 
     FileSystemEx.copySync(ffiNativePathPlatPath, ffiNativePath);
