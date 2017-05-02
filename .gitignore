@@ -18,6 +18,8 @@ sub-proj/JsonPP/Release/*
 sub-proj/JsonPP/x64/*
 
 sub-proj/JSFNodeJS/out.js
+sub-proj/JSFNodeJS/node_modules/ffi/build/*
+!sub-proj/JSFNodeJS/node_modules/ffi/build/Release/ffi_bindings.node
 
 trunk/_UpgradeReport_Files/*
 trunk/Debug/*
