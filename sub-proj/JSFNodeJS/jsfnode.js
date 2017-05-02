@@ -1,6 +1,15 @@
-var FileSystem = require('fs');
+const FileSystem = require('fs');
 const Path = require('path');
-var FileSystemEx = require('fs-extra');
+const FileSystemEx = require('fs-extra');
+
+const OSType = {
+    WIN32: 0,
+    LINUX: 1,
+    MACOS: 2
+};
+
+const JSFORMATTER_REL_PATH_WIN32 = Path.resolve(__dirname, '../../trunk/release/JSFormatter.dll');
+const JSFORMATTER_REL_PATH_MACOS = Path.resolve(__dirname, '../../trunk/DerivedData/JSTool/Build/Products/Release/libJSFormatter.dylib');
 
 var Ffi = 0;
 var Ref = 0;
@@ -11,17 +20,9 @@ var VoidPtr = 0;
 var FormatterOptionStruct = 0;
 var FormatterOptionStructPtr = 0;
 
-var OSType = {
-    WIN32: 0,
-    LINUX: 1,
-    MACOS: 2
-};
-
 var OSRunning = 0;
 
 var JSFORMATTER_REL_PATH = '';
-var JSFORMATTER_REL_PATH_WIN32 = Path.resolve(__dirname, '../../trunk/release/JSFormatter.dll');
-var JSFORMATTER_REL_PATH_MACOS = Path.resolve(__dirname, '../../trunk/DerivedData/JSTool/Build/Products/Release/libJSFormatter.dylib');
 
 function log(logString) {
     console.log(logString);
