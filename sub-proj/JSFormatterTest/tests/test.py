@@ -10,18 +10,20 @@ import sys
 import time
 from subprocess import call
 
-JSFORMATTER_PATH_WIN = "..\\..\\..\\trunk\\debug\\JSFormatterTest.exe"
-JSFORMATTER_REL_PATH_WIN = "..\\..\\..\\trunk\\release\\JSFormatterTest.exe"
-JSFORMATTER_PATH_WIN_64 = "..\\..\\..\\trunk\\x64\\debug\\JSFormatterTest.exe"
-JSFORMATTER_REL_PATH_WIN_64 = "..\\..\\..\\trunk\\x64\\release\\JSFormatterTest.exe"
+JSFORMATTER_PATH_WIN = "../../../trunk/debug/JSFormatterTest.exe"
+JSFORMATTER_REL_PATH_WIN = "../../../trunk/release/JSFormatterTest.exe"
+JSFORMATTER_PATH_WIN_64 = "../../../trunk/x64/debug/JSFormatterTest.exe"
+JSFORMATTER_REL_PATH_WIN_64 = "../../../trunk/x64/release/JSFormatterTest.exe"
 JSFORMATTER_LIB_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Debug"
 JSFORMATTER_LIB_REL_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release"
 JSFORMATTER_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Debug/JSFormatterTest"
 JSFORMATTER_REL_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release/JSFormatterTest"
+JSFORMATTER_NODEJS_LIB_PATH_WIN = "../../../trunk/release/JSFormatter.dll"
 JSFORMATTER_NODEJS_LIB_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release/libJSFormatter.dylib"
-JSFORMATTER_NODEJS_PATH_MAC = "../../JSFNodeJS/jsfnode.js"
+JSFORMATTER_NODEJS_SCRIPT_PATH = "../../JSFNodeJS/jsfnode.js"
 
 JSFORMATTER_PATH_SEL = ""
+JSFORMATTER_NODEJS_LIB_PATH_SEL = ""
 
 class TestCase:
 	source = ""
@@ -70,14 +72,14 @@ def make_test_case(files):
 
 def run_case(test_case, release, nodejs):
 	global JSFORMATTER_PATH_SEL
-	global JSFORMATTER_NODEJS_LIB_PATH_MAC
+	global JSFORMATTER_NODEJS_LIB_PATH_SEL
 
 	result = "ERROR"
 
 	if nodejs == False:
 		call([JSFORMATTER_PATH_SEL, test_case.source, "out.js"])
 	else:
-		call(["node", JSFORMATTER_PATH_SEL, JSFORMATTER_NODEJS_LIB_PATH_MAC, test_case.source, "out.js"])
+		call(["node", JSFORMATTER_PATH_SEL, JSFORMATTER_NODEJS_LIB_PATH_SEL, test_case.source, "out.js"])
 
 	out_md5 = hashlib.md5(open("out.js").read()).hexdigest()
 	result_md5 = hashlib.md5(open(test_case.result).read()).hexdigest()
@@ -89,15 +91,16 @@ def run_case(test_case, release, nodejs):
 
 def dump_version(nodejs):
 	global JSFORMATTER_PATH_SEL
-	global JSFORMATTER_NODEJS_LIB_PATH_MAC
+	global JSFORMATTER_NODEJS_LIB_PATH_SEL
 
 	if nodejs == False:
 		call([JSFORMATTER_PATH_SEL, "--version"])
 	else:
-		call(["node", JSFORMATTER_PATH_SEL, JSFORMATTER_NODEJS_LIB_PATH_MAC, "--version"])
+		call(["node", JSFORMATTER_PATH_SEL, JSFORMATTER_NODEJS_LIB_PATH_SEL, "--version"])
 
 def main():
 	global JSFORMATTER_PATH_SEL
+	global JSFORMATTER_NODEJS_LIB_PATH_SEL
 
 	if not is_windows_sys() and not is_osx_sys():
 		print "Unknown operating system."
@@ -144,7 +147,11 @@ def main():
 			if release:
 				JSFORMATTER_PATH_SEL = JSFORMATTER_REL_PATH_MAC
 	else:
-		JSFORMATTER_PATH_SEL = JSFORMATTER_NODEJS_PATH_MAC
+		if is_osx_sys():
+			JSFORMATTER_NODEJS_LIB_PATH_SEL = JSFORMATTER_NODEJS_LIB_PATH_MAC
+		elif is_windows_sys():
+			JSFORMATTER_NODEJS_LIB_PATH_SEL = JSFORMATTER_NODEJS_LIB_PATH_WIN
+		JSFORMATTER_PATH_SEL = JSFORMATTER_NODEJS_SCRIPT_PATH
 
 	# run cases
 	start_time = current_millis()
@@ -177,11 +184,11 @@ def main():
 
 	if nodejs == False:
 		if is_osx_sys():
-			print "DYLD_LIBRARY_PATH=" + os.environ["DYLD_LIBRARY_PATH"]
+			print "DYLD_LIBRARY_PATH=%s" % (os.environ["DYLD_LIBRARY_PATH"])
 		else:
-			print "Using " + JSFORMATTER_PATH_SEL
+			print "Using %s" % (JSFORMATTER_PATH_SEL)
 	else:
-		print "Using " + JSFORMATTER_PATH_SEL + " with " + JSFORMATTER_NODEJS_LIB_PATH_MAC
+		print "Using %s with %s" % (JSFORMATTER_PATH_SEL, JSFORMATTER_NODEJS_LIB_PATH_SEL)
 
 	dump_version(nodejs)
 
