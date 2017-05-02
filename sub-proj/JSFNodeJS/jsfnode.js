@@ -68,13 +68,13 @@ function prepareEnv() {
     VoidPtr = Ref.refType('void');
 
     FormatterOptionStruct = StructType({
-        'chIndent': 'char',
-        'nChPerInd': 'int',
-        'eCRRead': 'int',
-        'eCRPut': 'int',
-        'eBracNL': 'int',
-        'eEmpytIndent': 'int'
-    });
+            'chIndent': 'char',
+            'nChPerInd': 'int',
+            'eCRRead': 'int',
+            'eCRPut': 'int',
+            'eBracNL': 'int',
+            'eEmpytIndent': 'int'
+        });
 
     FormatterOptionStructPtr = Ref.refType(FormatterOptionStruct);
 }
@@ -95,12 +95,12 @@ function LoadLibJSF() {
     }
 
     var libJSFormatter = new Ffi.Library(JSFORMATTER_REL_PATH, {
-        'JSFCreateStringIO': [VoidPtr, [VoidPtr, 'string', 'pointer', FormatterOptionStructPtr]],
-        'JSFRelease': ['void', [VoidPtr]],
-        'JSFEnableDebug': ['void', [VoidPtr]],
-        'JSFFormatJavaScript': ['void', [VoidPtr]],
-        'JSFGetVersion': ['string', []]
-    });
+            'JSFCreateStringIO': [VoidPtr, [VoidPtr, 'string', 'pointer', FormatterOptionStructPtr]],
+            'JSFRelease': ['void', [VoidPtr]],
+            'JSFEnableDebug': ['void', [VoidPtr]],
+            'JSFFormatJavaScript': ['void', [VoidPtr]],
+            'JSFGetVersion': ['string', []]
+        });
 
     return libJSFormatter;
 }
@@ -118,10 +118,9 @@ function CallLibJSFFormat(inputJS) {
 
     var resultJS = '';
     var WriteStringFunc = Ffi.Callback('void', [VoidPtr, 'string'],
-        function(context, outputString) {
+            function (context, outputString) {
             resultJS = outputString.toString();
-        }
-    );
+        });
 
     var ioContext = Ref.alloc(VoidPtr);
     var jsfObj = libJSFormatter.JSFCreateStringIO(ioContext, inputJS, WriteStringFunc, formatterOption.ref());
@@ -137,7 +136,7 @@ function CallLibJSFFormat(inputJS) {
 
     //log('libJSFormatter version: ' + libJSFormatter.JSFGetVersion() + '\n');
 
-    process.on('exit', function() {
+    process.on('exit', function () {
         var keepWSF = WriteStringFunc;
     });
 
