@@ -223,6 +223,21 @@ static void trim(unsigned char *source)
 #endif
 }
 
+static bool getScintillaEolCR(HWND hScintilla)
+{
+	int eolMode = (int)::SendMessage(hScintilla, SCI_GETEOLMODE, 0, 0);
+	switch (eolMode)
+	{
+	case SC_EOL_CRLF:
+		return true;
+	case SC_EOL_CR:
+	case SC_EOL_LF:
+		return false;
+	}
+
+	return true;
+}
+
 void jsMinCurrent()
 {
 	jsMin(false);
@@ -255,7 +270,25 @@ void jsMin(bool bNewFile)
 
 	try
 	{
-		JSMinCharArray jsmin(pJS, pJSMin, g_struOptions.bPutCR, g_struOptions.bKeepTopComt);
+		bool _bPutCR = true;
+		int _nPutCR = g_struOptions.nPutCR;
+		switch (_nPutCR)
+		{
+		case EOL_AUTO:
+			if (getScintillaEolCR(hCurrScintilla))
+				_bPutCR = true;
+			else
+				_bPutCR = false;
+			break;
+		case EOL_CRLF:
+			_bPutCR = true;
+			break;
+		case EOL_LF:
+			_bPutCR = false;
+			break;
+		}
+
+		JSMinCharArray jsmin(pJS, pJSMin, _bPutCR, g_struOptions.bKeepTopComt);
 		jsmin.go();
 
 		trim(pJSMin);
@@ -372,11 +405,28 @@ void jsFormat()
 		if(g_struOptions.chIndent == '\t')
 			_nChPerInd = 1;
 
+		CR_PUT _eCRPut = PUT_CR;
+		int _nPutCR = g_struOptions.nPutCR;
+		switch (_nPutCR)
+		{
+		case EOL_AUTO:
+			if (getScintillaEolCR(hCurrScintilla))
+				_eCRPut = PUT_CR;
+			else
+				_eCRPut = NOT_PUT_CR;
+			break;
+		case EOL_CRLF:
+			_eCRPut = PUT_CR;
+			break;
+		case EOL_LF:
+			_eCRPut = NOT_PUT_CR;
+			break;
+		}
+
 		FormatterOption formatterOption;
 		formatterOption.chIndent = g_struOptions.chIndent;
 		formatterOption.nChPerInd = _nChPerInd;
-		formatterOption.eCRPut = g_struOptions.bPutCR ? 
-									PUT_CR : NOT_PUT_CR;
+		formatterOption.eCRPut = _eCRPut;
 		formatterOption.eBracNL = g_struOptions.bNLBracket ? 
 									NEWLINE_BRAC : NO_NEWLINE_BRAC;
 		formatterOption.eEmpytIndent = g_struOptions.bIndentInEmpty ? 

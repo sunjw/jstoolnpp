@@ -9,10 +9,18 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 	{
 	case WM_INITDIALOG:
 		// 初始化
-		if (g_struOptions.bPutCR)
-			CheckRadioButton(hwnd, IDC_WINRADIO, IDC_UNIXRADIO, IDC_WINRADIO);
-		else
-			CheckRadioButton(hwnd, IDC_WINRADIO, IDC_UNIXRADIO, IDC_UNIXRADIO);
+		switch (g_struOptions.nPutCR)
+		{
+		case EOL_AUTO:
+			CheckRadioButton(hwnd, IDC_WINRADIO, IDC_AUTORADIO, IDC_AUTORADIO);
+			break;
+		case EOL_CRLF:
+			CheckRadioButton(hwnd, IDC_WINRADIO, IDC_AUTORADIO, IDC_WINRADIO);
+			break;
+		case EOL_LF:
+			CheckRadioButton(hwnd, IDC_WINRADIO, IDC_AUTORADIO, IDC_UNIXRADIO);
+			break;
+		}
 
 		if (g_struOptions.bNLBracket)
 			CheckDlgButton(hwnd, IDC_NEWLINECHECK, TRUE);
@@ -48,7 +56,12 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			return TRUE;
 		case IDOK:
 			// 保存设置
-			g_struOptions.bPutCR = IsDlgButtonChecked(hwnd, IDC_WINRADIO) ? true : false;
+			if (IsDlgButtonChecked(hwnd, IDC_AUTORADIO))
+				g_struOptions.nPutCR = EOL_AUTO;
+			else if (IsDlgButtonChecked(hwnd, IDC_WINRADIO))
+				g_struOptions.nPutCR = EOL_CRLF;
+			else if (IsDlgButtonChecked(hwnd, IDC_UNIXRADIO))
+				g_struOptions.nPutCR = EOL_LF;
 			g_struOptions.chIndent = IsDlgButtonChecked(hwnd, IDC_SPACECHECK) ? ' ' : '\t';
 			g_struOptions.bKeepTopComt = 
 				IsDlgButtonChecked(hwnd, IDC_KEEPCOMTCHECK) ? true : false;

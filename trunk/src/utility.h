@@ -7,9 +7,13 @@
 using namespace std;
 using namespace sunjwbase;
 
+const int EOL_LF = 0; // \n
+const int EOL_CRLF = 1; // \r\n
+const int EOL_AUTO = 3;
+
 struct StruOptions
 {
-	bool bPutCR; // 是否输出 \r\n
+	int nPutCR; // 是否输出 \r\n
 	char chIndent; // 缩进用的字符
 	int nChPerInd; // 每个缩进使用几个字符
 	bool bNLBracket; // { 之前是否换行
