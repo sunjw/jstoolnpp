@@ -913,6 +913,7 @@
 #define IDM_JSON_EXPANDALL              1019
 #define IDM_JSON_COLLAPSEALL            1020
 #define IDC_NEWVERSIONCHECK             1021
+#define IDC_AUTORADIO                   1022
 #define CF_GDIOBJLAST                   0x03FF
 #define WM_USER                         0x0400
 #define WVR_VALIDRECTS                  0x0400
@@ -1210,7 +1211,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        104
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1022
+#define _APS_NEXT_CONTROL_VALUE         1023
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
