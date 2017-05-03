@@ -34,8 +34,11 @@ void LoadOption(HWND nppHandle, StruOptions& struOptions)
 
 	if (map.find(keyPutCR) != itrEnd)
 	{
-		if (!map[keyPutCR].GetStrValue().compare("0"))
-			struOptions.bPutCR = false;
+		struOptions.nPutCR = atoi(map[keyPutCR].GetStrValue().c_str());
+		if (struOptions.nPutCR != EOL_AUTO &&
+			struOptions.nPutCR != EOL_CRLF &&
+			struOptions.nPutCR != EOL_LF)
+			struOptions.nPutCR = EOL_AUTO;
 	}
 
 	if (map.find(keyChIndent) != itrEnd)
@@ -79,7 +82,7 @@ void LoadOption(HWND nppHandle, StruOptions& struOptions)
 
 void LoadDefaultOption(StruOptions& struOptions)
 {
-	struOptions.bPutCR = true;
+	struOptions.nPutCR = EOL_AUTO;
 	struOptions.chIndent = '\t';
 	struOptions.nChPerInd = 1;
 	struOptions.bNLBracket = false;
@@ -95,9 +98,11 @@ void SaveOption(HWND nppHandle, StruOptions struOptions)
 	IniFileProcessor processor(tsConfigFilePath);
 	IniFileProcessor::IniMap map;
 	
-	map[keyPutCR] = IniValue(struOptions.bPutCR ? string("1") : string("0"));
+	char buffer[256] = {0};
+
+	_itoa_s(struOptions.nPutCR, buffer, 250, 10);
+	map[keyPutCR] = IniValue(string(buffer));
 	map[keyChIndent] = IniValue(struOptions.chIndent == '\t' ? string("tab") : string("space"));
-	char buffer[256];
 	_itoa_s(struOptions.nChPerInd, buffer, 250, 10);
 	map[keyChPerInd] = IniValue(string(buffer));
 	map[keyNLBracket] = IniValue(struOptions.bNLBracket ? string("1") : string("0"));
