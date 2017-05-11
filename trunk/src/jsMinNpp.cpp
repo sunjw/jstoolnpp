@@ -668,6 +668,10 @@ static int checkUpdateThread(void *param)
 
 			for (int i = 0; i < 4; ++i)
 			{
+				if (curVersionArray[i] < localVersionArray[i])
+				{
+					break;
+				}
 				if (curVersionArray[i] > localVersionArray[i])
 				{
 					s_foundNewVersion = TRUE;
