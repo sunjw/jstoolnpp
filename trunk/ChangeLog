@@ -1,8 +1,8 @@
 1.21
 Unicode only release build.
-Add option to new version check.
 Add toolbar button for Json Viewer.
-Add "Auto detect" end of line option.
+Add an option to control new version check.
+Add an "Auto detect" end of line option.
 Fix high DPI layout.
 Fix bugs.
 Other tweak.
