@@ -1,3 +1,12 @@
+1.21.0
+Unicode only release build.
+Add toolbar button for Json Viewer.
+Add an option to control new version check.
+Add an "Auto detect" end of line option.
+Fix high DPI layout.
+Fix bugs.
+Other tweak.
+
 1.20.2
 Fix 64bit version crash on some Windows 10 system.
 Better `...`, '...' and "..." format.
