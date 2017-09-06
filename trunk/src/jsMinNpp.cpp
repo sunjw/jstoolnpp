@@ -441,6 +441,7 @@ void jsFormat()
 		{
 			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)(strJSFormat.c_str()));
 			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
+			//::SendMessage(g_nppData._nppHandle, NPPM_SETCURRENTLANGTYPE , 0, (LPARAM)L_JS);
 
 			// line starts from 0, lineFixed starts from 1
 			size_t lineJSF = line + 1;
