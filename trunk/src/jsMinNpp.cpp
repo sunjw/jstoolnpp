@@ -203,10 +203,10 @@ static HWND getCurrentScintillaHandle()
 	return (currentEdit == 0) ? g_nppData._scintillaMainHandle : g_nppData._scintillaSecondHandle;
 };
 
-static void trim(unsigned char *source)
+static void trim(char *source)
 {
 	size_t realStart = 0;
-	size_t len = strlen(reinterpret_cast<char*>(source));
+	size_t len = strlen(source);
 	for (; realStart < len; ++realStart)
 	{
 		if (source[realStart] != ' ' &&
@@ -216,10 +216,11 @@ static void trim(unsigned char *source)
 			break;
 	}
 
+	size_t copyLen = len + 1;
 #if defined (WIN32)
-	strcpy_s(reinterpret_cast<char*>(source), len, reinterpret_cast<char*>(source + realStart));
+	strcpy_s(source, copyLen, source + realStart);
 #else
-	strncpy(reinterpret_cast<char*>(source), reinterpret_cast<char*>(source + realStart), len);
+	strncpy(source, source + realStart, copyLen);
 #endif
 }
 
@@ -291,7 +292,7 @@ void jsMin(bool bNewFile)
 		JSMinCharArray jsmin(pJS, pJSMin, _bPutCR, g_struOptions.bKeepTopComt);
 		jsmin.go();
 
-		trim(pJSMin);
+		trim((char *)pJSMin);
 
 		if(bNewFile)
 		{
