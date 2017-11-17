@@ -510,7 +510,7 @@ export class Node {
 		isMarked.add(this);
 	}
 	unmark() {
-		isMarked.delete (this);
+		isMarked.delete(this);
 	}
 	marked() {
 		return isMarked.has(this);
