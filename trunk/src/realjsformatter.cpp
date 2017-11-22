@@ -828,8 +828,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char tokenBFirst)
 {
 	bool bTokenAPropName = false;
-	if(m_tokenPreA.code == "\"" || m_tokenPreA.code == "'" ||
-		m_tokenPreA.code == ".")
+	if(m_tokenPreA.code == ".")
 		bTokenAPropName = true;
 
 	if(!bTokenAPropName && 
