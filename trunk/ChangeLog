@@ -1,3 +1,6 @@
+1.21.1
+Fix JSMin crash.
+
 1.21.0
 Unicode only release build.
 Add toolbar button for Json Viewer.

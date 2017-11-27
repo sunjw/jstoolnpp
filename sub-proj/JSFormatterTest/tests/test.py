@@ -8,6 +8,7 @@ import os
 import platform
 import sys
 import time
+import collections
 from subprocess import call
 
 JSFORMATTER_PATH_WIN = "../../../trunk/debug/JSFormatterTest.exe"
@@ -67,8 +68,10 @@ def make_test_case(files):
 	for name, case in test_cases.items():
 		if case.source == "" or case.result == "":
 			test_cases.pop(name, 0)
+	
+	test_cases_ordered = collections.OrderedDict(sorted(test_cases.items()))
 
-	return test_cases
+	return test_cases_ordered
 
 def run_case(test_case, release, nodejs):
 	global JSFORMATTER_PATH_SEL
