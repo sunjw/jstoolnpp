@@ -68,7 +68,7 @@ def make_test_case(files):
 	for name, case in test_cases.items():
 		if case.source == "" or case.result == "":
 			test_cases.pop(name, 0)
-	
+
 	test_cases_ordered = collections.OrderedDict(sorted(test_cases.items()))
 
 	return test_cases_ordered
