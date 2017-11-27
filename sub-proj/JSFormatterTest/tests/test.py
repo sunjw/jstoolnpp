@@ -41,7 +41,7 @@ def list_file():
 
 def make_test_case(files):
 	test_cases = {}
-	
+
 	for file in files:
 		# base name
 		fname = os.path.splitext(file)[0]
@@ -50,37 +50,37 @@ def make_test_case(files):
 		if fname_part[len(fname_part) - 1] == "test":
 			# case result
 			case_name = fname[:-5] # remove .test
-			
+
 			if not (case_name in test_cases):
 				test_cases[case_name] = TestCase()
-			
+
 			test_cases[case_name].result = file
 		else:
 			if not (fname in test_cases):
 				test_cases[fname] = TestCase()
-			
+
 			test_cases[fname].source = file
-	
+
 	for name, case in test_cases.items():
 		if case.source == "" or case.result == "":
 			test_cases.pop(name, 0)
-	
+
 	test_cases_ordered = collections.OrderedDict(sorted(test_cases.items()))
 
 	return test_cases_ordered
 
 def run_case(test_case, release):
 	global JSFORMATTER_PATH_SEL
-	
+
 	result = "ERROR"
-	
+
 	# os.system(JSFORMATTER_PATH_SEL + " " + test_case.source + " out.js")
 	call([JSFORMATTER_PATH_SEL, test_case.source, "out.js"])
 	out_md5 = hashlib.md5(open("out.js").read()).hexdigest()
 	result_md5 = hashlib.md5(open(test_case.result).read()).hexdigest()
 	if out_md5 == result_md5:
 		result = "PASS"
-	
+
 	print result
 	return result
 
@@ -91,7 +91,7 @@ def main():
 	test_cases = make_test_case(files)
 	x64 = False
 	release = False
-	
+
 	if is_windows_sys():
 		if len(sys.argv) == 2:
 			if sys.argv[1] == "release":
@@ -105,7 +105,7 @@ def main():
 	else:
 		if len(sys.argv) == 2 and sys.argv[1] == "release":
 			release = True
-	
+
 	JSFORMATTER_LIB_PATH_SEL = ""
 	if is_osx_sys():
 		JSFORMATTER_LIB_PATH_SEL = JSFORMATTER_LIB_PATH_MAC
@@ -136,14 +136,14 @@ def main():
 		print "source: " + case.source
 		print "result: " + case.result
 		print "running..."
-		
+
 		result = run_case(case, release)
 		print "[%d/%d]" % (idx, len(test_cases))
-		
+
 		if result == "ERROR":
 			allpass = False
 			break;
-		
+
 		print ""
 		idx += 1
 
