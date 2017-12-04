@@ -1,3 +1,5 @@
+'use strict';
+
 const FileSystem = require('fs');
 const Path = require('path');
 
@@ -35,7 +37,7 @@ function Main() {
         //log('inputJS:\n' + inputJS);
 
         //var resultJS = CallLibJSFFormat(inputJS);
-        resultJS = inputJS;
+        var resultJS = inputJS;
 
         FileSystem.writeFileSync(outputJSFile, resultJS, 'binary');
     }
