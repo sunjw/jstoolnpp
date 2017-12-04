@@ -21,6 +21,8 @@ sub-proj/JSFNodeNative/out.js
 sub-proj/JSFNodeNative/node_modules/ffi/build/*
 sub-proj/JSFNodeNative/node_modules/ref/build/*
 
+sub-proj/JSFormatterJS/out.js
+
 trunk/_UpgradeReport_Files/*
 trunk/Debug/*
 trunk/Unicode Debug/*
