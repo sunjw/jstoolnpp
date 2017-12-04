@@ -17,9 +17,9 @@ sub-proj/JsonPP/Debug/*
 sub-proj/JsonPP/Release/*
 sub-proj/JsonPP/x64/*
 
-sub-proj/JSFNodeJS/out.js
-sub-proj/JSFNodeJS/node_modules/ffi/build/*
-sub-proj/JSFNodeJS/node_modules/ref/build/*
+sub-proj/JSFNodeNative/out.js
+sub-proj/JSFNodeNative/node_modules/ffi/build/*
+sub-proj/JSFNodeNative/node_modules/ref/build/*
 
 trunk/_UpgradeReport_Files/*
 trunk/Debug/*
@@ -36,4 +36,5 @@ trunk/JSTool.xcworkspace/xcshareddata/*
 *.old
 *.suo
 *.user
+*.VC.db
 UpgradeLog*
