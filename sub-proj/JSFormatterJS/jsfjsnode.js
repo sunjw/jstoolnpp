@@ -14,11 +14,11 @@ class JSTokenDump extends JSParser.JSParser {
         super();
         this.inputJS = inputJS;
         this.inputIdx = 0;
+        this.outputJS = "";
     }
 
     GetChar() {
         if (this.inputIdx <= this.inputJS.length) {
-            log("this.inputIdx=" + this.inputIdx);
             return this.inputJS.charAt(this.inputIdx++);
         } else {
             return '\0';
@@ -26,7 +26,10 @@ class JSTokenDump extends JSParser.JSParser {
     }
 
     Go() {
-        while (this.GetToken()) {}
+        while (this.GetToken()) {
+            this.outputJS += this.m_tokenA.code;
+            this.outputJS += "\r\n";
+        }
     }
 }
 
@@ -61,11 +64,11 @@ function Main() {
 
         var jsTokenDump = new JSTokenDump(inputJS);
         jsTokenDump.Go();
-
-        //var resultJS = CallLibJSFFormat(inputJS);
-        var resultJS = inputJS;
+        var resultJS = jsTokenDump.outputJS;
 
         FileSystem.writeFileSync(outputJSFile, resultJS, 'binary');
+
+        log("done");
     }
 
 }
