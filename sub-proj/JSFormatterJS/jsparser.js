@@ -528,9 +528,10 @@ class JSParser {
             if (this.m_tokenA.code == "{" && this.m_tokenB.code == "}")
                 return; // empty {}
 
-            var temp = new Token();
+            var temp;
             c = c > 2 ? 2 : c;
             for (; c > 0; --c) {
+                var temp = new Token();
                 temp.code = "\n";
                 temp.type = OPER_TYPE;
                 this.m_tokenBQueue.push(temp);
@@ -538,7 +539,7 @@ class JSParser {
             temp = this.m_tokenB;
             this.m_tokenBQueue.push(temp);
             temp = this.m_tokenBQueue[0];
-            this.m_tokenBQueue.pop();
+            this.m_tokenBQueue.shift();
             this.m_tokenB = temp;
         }
     }
