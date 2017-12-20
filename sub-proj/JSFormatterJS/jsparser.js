@@ -280,13 +280,13 @@ class JSParser {
             // Recognize regular on token level
             if (this.m_bRegular) {
                 // output regular until /
-                this.m_tokenB.code.push(this.m_charA);
+                this.m_tokenB.code += this.m_charA;
 
                 if (this.m_charA == '\\' &&
                     (this.m_charB == '/' || this.m_charB == '\\' ||
                         this.m_charB == '[' || this.m_charB == ']')) // escape char
                 {
-                    this.m_tokenB.code.push(this.m_charB);
+                    this.m_tokenB.code += this.m_charB;
                     this.m_charB = this.GetChar();
                 }
 
@@ -328,11 +328,11 @@ class JSParser {
 
             if (bQuote) {
                 // in quote, output all until quote end
-                this.m_tokenB.code.push(this.m_charA);
+                this.m_tokenB.code += this.m_charA;
 
-                if (this.m_charA == '\\' && (this.m_charB == chQuote || this.m_charB == '\\')) // escape char
-                {
-                    this.m_tokenB.code.push(this.m_charB);
+                if (this.m_charA == '\\' && (this.m_charB == chQuote || this.m_charB == '\\')) {
+                    // escape char
+                    this.m_tokenB.code += this.m_charB;
                     this.m_charB = this.GetChar();
                 }
 
@@ -349,21 +349,21 @@ class JSParser {
                     if (bLineBegin && (this.m_charA == '\t' || this.m_charA == ' '))
                         continue;
                     else if (bLineBegin && this.m_charA == '*')
-                        this.m_tokenB.code.push(' ');
+                        this.m_tokenB.code += ' ';
 
                     bLineBegin = false;
 
                     if (this.m_charA == '\n')
                         bLineBegin = true;
                 }
-                this.m_tokenB.code.push(this.m_charA);
+                this.m_tokenB.code += this.m_charA;
 
                 if (chComment == '*') {
                     // until */
                     this.m_tokenB.type = COMMENT_TYPE_2;
                     this.m_tokenB.inlineComment = false;
                     if (this.m_charA == '*' && this.m_charB == '/') {
-                        this.m_tokenB.code.push(this.m_charB);
+                        this.m_tokenB.code += this.m_charB;
                         this.m_charB = this.GetChar();
 
                         this.m_tokenABeforeComment = this.m_tokenA;
@@ -383,7 +383,7 @@ class JSParser {
 
             if (this.IsNormalChar(this.m_charA)) {
                 this.m_tokenB.type = STRING_TYPE;
-                this.m_tokenB.code.push(this.m_charA);
+                this.m_tokenB.code += this.m_charA;
 
                 // handle something like 82e-2, 442e+6, 555E-6
                 // direct number
@@ -397,7 +397,7 @@ class JSParser {
                     (this.m_charB == '-' || this.m_charB == '+' || this.IsNumChar(this.m_charB))) {
                     bNum = true;
                     if (this.m_charB == '-' || this.m_charB == '+') {
-                        this.m_tokenB.code.push(this.m_charB);
+                        this.m_tokenB.code += this.m_charB;
                         this.m_charB = this.GetChar();
                     }
                 }
@@ -417,7 +417,7 @@ class JSParser {
                     chQuote = this.m_charA;
 
                     this.m_tokenB.type = STRING_TYPE;
-                    this.m_tokenB.code.push(this.m_charA);
+                    this.m_tokenB.code += this.m_charA;
                     continue;
                 }
 
@@ -427,7 +427,7 @@ class JSParser {
                     chComment = this.m_charB;
 
                     //m_tokenBType = COMMENT_TYPE;
-                    this.m_tokenB.code.push(this.m_charA);
+                    this.m_tokenB.code += this.m_charA;
                     continue;
                 }
 
@@ -443,21 +443,21 @@ class JSParser {
                     ((this.m_charA == '-' || this.m_charA == '=') && this.m_charB == '>')) {
                     // multi char operator
                     this.m_tokenB.type = OPER_TYPE;
-                    this.m_tokenB.code.push(this.m_charA);
-                    this.m_tokenB.code.push(this.m_charB);
+                    this.m_tokenB.code += this.m_charA;
+                    this.m_tokenB.code += this.m_charB;
                     this.m_charB = this.GetChar();
                     if ((this.m_tokenB.code == "==" || this.m_tokenB.code == "!=" ||
                             this.m_tokenB.code == "<<" || this.m_tokenB.code == ">>") && this.m_charB == '=') {
                         // 3 chars: ===, !==, <<=, >>=
-                        this.m_tokenB.code.push(this.m_charB);
+                        this.m_tokenB.code += this.m_charB;
                         this.m_charB = this.GetChar();
                     } else if (this.m_tokenB.code == ">>" && this.m_charB == '>') {
                         // >>>, >>>=
-                        this.m_tokenB.code.push(this.m_charB);
+                        this.m_tokenB.code += this.m_charB;
                         this.m_charB = this.GetChar();
                         if (this.m_charB == '=') // >>>=
                         {
-                            this.m_tokenB.code.push(this.m_charB);
+                            this.m_tokenB.code += this.m_charB;
                             this.m_charB = this.GetChar();
                         }
                     }
@@ -591,4 +591,4 @@ class JSParser {
         // virtual
     }
 
-};
+}
