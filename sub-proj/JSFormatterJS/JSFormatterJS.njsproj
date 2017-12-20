@@ -30,7 +30,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="package.json" />
-    <Content Include="README.md" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="jsfjsnode.js" />
