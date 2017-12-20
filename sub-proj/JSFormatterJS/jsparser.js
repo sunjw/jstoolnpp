@@ -76,33 +76,6 @@ class Token {
         this.line = 0;
     }
 
-    get code() {
-        return this.code; // code content
-    }
-    set code(code) {
-        this.code = code;
-    }
-
-    get type() {
-        return this.type; // Token type
-    }
-    set type(type) {
-        this.type = type;
-    }
-
-    get inlineComment() {
-        return this.inlineComment; // COMMENT_TYPE_2 inline mode
-    }
-    set inlineComment(inlineComment) {
-        this.inlineComment = inlineComment;
-    }
-
-    get line() {
-        return this.line; // line number
-    }
-    set line(line) {
-        this.line = line;
-    }
 }
 
 class JSParser {
