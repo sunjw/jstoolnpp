@@ -1,5 +1,6 @@
 *~
 .DS_Store
+.vs
 
 sub-proj/JSFormatter/Debug/*
 sub-proj/JSFormatter/Release/*
