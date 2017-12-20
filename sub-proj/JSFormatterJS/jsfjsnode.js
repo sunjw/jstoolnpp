@@ -65,6 +65,8 @@ function Main() {
         var jsTokenDump = new JSTokenDump(inputJS);
         jsTokenDump.Go();
         var resultJS = jsTokenDump.outputJS;
+        // force fix line end for test
+        resultJS = resultJS.replace(/(?:\r\n|\r|\n)/g, "\r\n");
 
         FileSystem.writeFileSync(outputJSFile, resultJS, 'binary');
 
