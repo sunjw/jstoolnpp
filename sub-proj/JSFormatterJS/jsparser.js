@@ -20,6 +20,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 'use strict';
 
+function CopyObject(source) {
+    return Object.assign({}, source);
+}
+
 function GetStackTop(stk) {
     if (stk.length == 0)
         return undefined;
@@ -159,8 +163,8 @@ class JSParser {
         this.PreparePosNeg(); // recognize +/-
 
         ++this.m_tokenCount;
-        this.m_tokenPreA = this.m_tokenA;
-        this.m_tokenA = this.m_tokenB;
+        this.m_tokenPreA = CopyObject(this.m_tokenA);
+        this.m_tokenA = CopyObject(this.m_tokenB);
 
         if (this.m_tokenBQueue.length == 0) {
             this.GetTokenRaw();
@@ -567,6 +571,7 @@ class JSParser {
 }
 
 // exports
+exports.CopyObject = CopyObject;
 exports.GetStackTop = GetStackTop;
 exports.StackTopEq = StackTopEq;
 
