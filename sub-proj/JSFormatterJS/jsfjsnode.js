@@ -21,7 +21,7 @@ class JSTokenDump extends JSParser.JSParser {
             log("this.inputIdx=" + this.inputIdx);
             return this.inputJS.charAt(this.inputIdx++);
         } else {
-            return 0;
+            return '\0';
         }
     }
 

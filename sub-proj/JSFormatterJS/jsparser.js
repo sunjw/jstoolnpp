@@ -69,7 +69,7 @@ const JS_ASSIGN = '=';
 const JS_QUEST_MARK = '?';
 const JS_HELPER = '\\';
 const JS_STUB = ' ';
-const JS_EMPTY = 0;
+const JS_EMPTY = '\0';
 
 class Token {
 
@@ -118,7 +118,7 @@ class JSParser {
         // normal char
         return ((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') ||
             (ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '$' ||
-            ch > 126 || ch < 0);
+            ch.charCodeAt(0) > 126 || ch.charCodeAt(0) < 0);
     }
 
     IsNumChar(ch) {
@@ -175,7 +175,7 @@ class JSParser {
             this.m_tokenBQueue.shift();
         }
 
-        return (this.m_charA != 0 || this.m_tokenA.code != "");
+        return (this.m_charA != '\0' || this.m_tokenA.code != "");
     }
 
     StartParse() {
@@ -229,7 +229,7 @@ class JSParser {
         var chComment = ''; // comment is / or *
         while (1) {
             this.m_charA = this.m_charB;
-            if (this.m_charA == 0) {
+            if (this.m_charA == '\0') {
                 this.m_bRegular = false; // js content error
                 return;
             }
@@ -447,7 +447,7 @@ class JSParser {
                 }
 
                 // What? How could we come here?
-                this.m_charA = 0;
+                this.m_charA = '\0';
                 return;
             }
         }
