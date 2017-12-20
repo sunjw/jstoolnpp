@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSFormatterTest", "..\sub-p
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSFormatter", "..\sub-proj\JSFormatter\JSFormatter.vcproj", "{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSParserTest", "..\sub-proj\JSParserTest\JSParserTest.vcproj", "{67ADE6AC-4162-4F16-932F-A99F00211A14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -88,6 +90,18 @@ Global
 		{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}.Unicode Release|Win32.Build.0 = Release|Win32
 		{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}.Unicode Release|x64.ActiveCfg = Release|x64
 		{EDDA9091-B0F7-4BF1-8E31-735DBD0DA4A6}.Unicode Release|x64.Build.0 = Release|x64
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Debug|Win32.ActiveCfg = Debug|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Debug|Win32.Build.0 = Debug|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Debug|x64.ActiveCfg = Debug|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Release|Win32.ActiveCfg = Release|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Release|Win32.Build.0 = Release|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Release|x64.ActiveCfg = Release|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Debug|Win32.ActiveCfg = Debug|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Debug|Win32.Build.0 = Debug|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Debug|x64.ActiveCfg = Debug|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Release|Win32.ActiveCfg = Release|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Release|Win32.Build.0 = Release|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
