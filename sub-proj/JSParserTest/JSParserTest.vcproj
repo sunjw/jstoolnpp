@@ -180,6 +180,10 @@
 				RelativePath=".\src\JSParserTest.cpp"
 				>
 			</File>
+			<File
+				RelativePath=".\src\JSTokenDump.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -188,6 +192,10 @@
 			>
 			<File
 				RelativePath="..\..\trunk\src\jsparser.h"
+				>
+			</File>
+			<File
+				RelativePath=".\src\JSTokenDump.h"
 				>
 			</File>
 		</Filter>
