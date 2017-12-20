@@ -1,0 +1,9 @@
+{
+  "name": "jsformatter-js",
+  "version": "0.0.0",
+  "description": "JSFormatterJS",
+  "main": "jsfjsnode.js",
+  "author": {
+    "name": "wayne_sun"
+  }
+}
