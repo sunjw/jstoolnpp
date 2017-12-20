@@ -626,4 +626,4 @@ exports.JS_EMPTY = JS_EMPTY;
 exports.Token = Token;
 exports.JSParser = JSParser;
 
-console.log(exports);
+//console.log(exports);
