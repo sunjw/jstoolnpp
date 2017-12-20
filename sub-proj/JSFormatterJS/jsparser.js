@@ -592,3 +592,38 @@ class JSParser {
     }
 
 }
+
+// exports
+exports.GetStackTop = GetStackTop;
+exports.StackTopEq = StackTopEq;
+
+exports.NOT_TOKEN = NOT_TOKEN;
+exports.STRING_TYPE = STRING_TYPE;
+exports.OPER_TYPE = OPER_TYPE;
+exports.REGULAR_TYPE = REGULAR_TYPE;
+exports.COMMENT_TYPE_1 = COMMENT_TYPE_1;
+exports.COMMENT_TYPE_2 = COMMENT_TYPE_2;
+
+exports.JS_IF = JS_IF;
+exports.JS_ELSE = JS_ELSE;
+exports.JS_FOR = JS_FOR;
+exports.JS_DO = JS_DO;
+exports.JS_WHILE = JS_WHILE;
+exports.JS_SWITCH = JS_SWITCH;
+exports.JS_CASE = JS_CASE;
+exports.JS_TRY = JS_TRY;
+exports.JS_CATCH = JS_CATCH;
+exports.JS_FUNCTION = JS_FUNCTION;
+exports.JS_BLOCK = JS_BLOCK;
+exports.JS_BRACKET = JS_BRACKET;
+exports.JS_SQUARE = JS_SQUARE;
+exports.JS_ASSIGN = JS_ASSIGN;
+exports.JS_QUEST_MARK = JS_QUEST_MARK;
+exports.JS_HELPER = JS_HELPER;
+exports.JS_STUB = JS_STUB;
+exports.JS_EMPTY = JS_EMPTY;
+
+exports.Token = Token;
+exports.JSParser = JSParser;
+
+console.log(exports);
