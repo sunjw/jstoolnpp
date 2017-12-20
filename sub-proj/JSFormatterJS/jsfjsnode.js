@@ -28,7 +28,7 @@ class JSTokenDump extends JSParser.JSParser {
     Go() {
         while (this.GetToken()) {
             this.outputJS += this.m_tokenA.code;
-            this.outputJS += "\n";
+            this.outputJS += "\r\n";
         }
     }
 }
