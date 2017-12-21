@@ -4,12 +4,14 @@ const FileSystem = require('fs');
 const Path = require('path');
 
 const JSParser = require('./jsparser.js');
+const RealJSFormatter = require('./realjsformatter.js');
 
 function log(logString) {
     console.log(logString);
 }
 
 class JSTokenDump extends JSParser.JSParser {
+
     constructor(inputJS) {
         super();
         this.inputJS = inputJS;
@@ -30,6 +32,28 @@ class JSTokenDump extends JSParser.JSParser {
             this.outputJS += this.m_tokenA.code;
             this.outputJS += "\r\n";
         }
+    }
+}
+
+class JSFormatStringIO extends RealJSFormatter.RealJSFormatter {
+
+    constructor(inputJS, formatOption) {
+        super(formatOption);
+        this.inputJS = inputJS;
+        this.inputIdx = 0;
+        this.outputJS = "";
+    }
+
+    GetChar() {
+        if (this.inputIdx <= this.inputJS.length) {
+            return this.inputJS.charAt(this.inputIdx++);
+        } else {
+            return '\0';
+        }
+    }
+
+    PutChar(ch) {
+        this.outputJS += ch;
     }
 }
 
