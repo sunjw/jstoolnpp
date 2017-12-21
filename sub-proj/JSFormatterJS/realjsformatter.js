@@ -194,7 +194,84 @@ class RealJSFormatter extends JSParser.JSParser {
     }
 
     Go() {
-        // virtual
+        this.m_blockStack.push(JSParser.JS_STUB);
+        this.m_brcNeedStack.push(true);
+
+        var bHaveNewLine;
+        var tokenAFirst;
+        var tokenBFirst;
+
+        this.StartParse();
+        while (this.GetToken()) {
+            bHaveNewLine = false; // bHaveNewLine means there will be newline, m_bNewLine means already has newline
+            tokenAFirst = this.m_tokenA.code.charAt(0);
+            tokenBFirst = this.m_tokenB.code.length ? this.m_tokenB.code.charAt(0) : 0;
+            if (tokenBFirst == '\r')
+                tokenBFirst = '\n';
+            if (tokenBFirst == '\n' || this.m_tokenB.type == JSParser.COMMENT_TYPE_1)
+                bHaveNewLine = true;
+
+            if (!this.m_bBlockStmt && this.m_tokenA.code != "{" && this.m_tokenA.code != "\n"
+                 && this.m_tokenA.type != JSParser.COMMENT_TYPE_1 && this.m_tokenA.type != JSParser.COMMENT_TYPE_2)
+                this.m_bBlockStmt = true;
+
+            var bCommentInline = false;
+
+            /*
+             * process m_tokenA reference by m_tokenB
+             * output m_tokenA or not
+             * m_tokenB will override m_tokenA in next loop
+             */
+            //PutToken(m_tokenA);
+            switch (this.m_tokenA.type) {
+            case JSParser.REGULAR_TYPE:
+                this.PutToken(this.m_tokenA); // directly output regular without any format
+                break;
+            case JSParser.COMMENT_TYPE_1:
+            case JSParser.COMMENT_TYPE_2:
+                if (this.m_tokenA.code.charAt(1) == '*') {
+                    // multiline comment
+                    if (!bHaveNewLine) {
+                        if (this.IsInlineComment(this.m_tokenA))
+                            bCommentInline = true;
+
+                        if (!bCommentInline) {
+                            this.PutToken(this.m_tokenA, "", "\n"); // need newline
+                        } else if (this.m_tokenB.type != JSParser.OPER_TYPE || this.m_tokenB.code == "{") {
+                            // { get space by previous token
+                            this.PutToken(this.m_tokenA, "", " "); // no need newline
+                        } else {
+                            this.PutToken(this.m_tokenA); // no format
+                        }
+                    } else {
+                        this.PutToken(this.m_tokenA);
+                    }
+                } else {
+                    // single line comment
+                    this.PutToken(this.m_tokenA); // newline will be there
+                }
+
+                // inline comment will be transparent
+                if (!bCommentInline)
+                    this.m_bCommentPut = true;
+
+                break;
+            case JSParser.OPER_TYPE:
+                this.ProcessOper(bHaveNewLine, tokenAFirst, tokenBFirst);
+
+                break;
+            case JSParser.STRING_TYPE:
+                this.ProcessString(bHaveNewLine, tokenAFirst, tokenBFirst);
+                break;
+            }
+        }
+
+        if (!this.m_bLineTemplate)
+            this.m_lineBuffer = Trim(this.m_lineBuffer);
+        if (this.m_lineBuffer.length > 0)
+            this.PutLineBuffer();
+
+        this.EndParse();
     }
 
     GetFormattedLine(originalLine) {
