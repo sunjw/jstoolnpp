@@ -86,11 +86,18 @@ function Main() {
         inputJS = inputJS.toString();
         //log('inputJS:\n' + inputJS);
 
-        var jsTokenDump = new JSTokenDump(inputJS);
-        jsTokenDump.Go();
-        var resultJS = jsTokenDump.outputJS;
+        var formatOption = new RealJSFormatter.FormatterOption();
+        formatOption.chIndent = '\t';
+        formatOption.nChPerInd = 1;
+        formatOption.eCRPut = RealJSFormatter.CR_PUT.PUT_CR;
+        formatOption.eBracNL = RealJSFormatter.BRAC_NEWLINE.NO_NEWLINE_BRAC;
+        formatOption.eEmpytIndent = RealJSFormatter.EMPTYLINE_INDENT.NO_INDENT_IN_EMPTYLINE;
+
+        var jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
+        jsfStrIO.Go();
+        var resultJS = jsfStrIO.outputJS;
         // force fix line end for test
-        resultJS = resultJS.replace(/(?:\r\n|\r|\n)/g, "\r\n");
+        //resultJS = resultJS.replace(/(?:\r\n|\r|\n)/g, "\r\n");
 
         FileSystem.writeFileSync(outputJSFile, resultJS, 'binary');
 
