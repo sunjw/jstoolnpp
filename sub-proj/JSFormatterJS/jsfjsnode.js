@@ -80,7 +80,7 @@ function Main() {
     }
 
     if (printVersion) {
-        log('JSFormatterJS version: ?');
+        log('JSFormatterJS version: ' + RealJSFormatter.VERSION);
     } else {
         var inputJS = FileSystem.readFileSync(inputJSFile, 'binary');
         inputJS = inputJS.toString();
@@ -97,12 +97,8 @@ function Main() {
         jsfStrIO.m_debug = true;
         jsfStrIO.Go();
         var resultJS = jsfStrIO.outputJS;
-        // force fix line end for test
-        //resultJS = resultJS.replace(/(?:\r\n|\r|\n)/g, "\r\n");
 
         FileSystem.writeFileSync(outputJSFile, resultJS, 'binary');
-
-        log("done");
     }
 
 }

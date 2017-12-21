@@ -22,6 +22,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 const JSParser = require('./jsparser.js');
 
+const VERSION = "1.21.6.0";
+
 function Trim(str) {
     return str.trim();
 }
@@ -906,6 +908,8 @@ class RealJSFormatter extends JSParser.JSParser {
 }
 
 // exports
+exports.VERSION = VERSION;
+
 exports.CR_READ = CR_READ;
 exports.CR_PUT = CR_PUT;
 exports.BRAC_NEWLINE = BRAC_NEWLINE;
