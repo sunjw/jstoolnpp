@@ -27,14 +27,14 @@ function CopyObject(source) {
 function GetStackTop(stk) {
     if (stk.length == 0)
         return undefined;
-    var ret = stk[0];
+    var ret = stk[stk.length - 1];
     return ret;
 }
 
 function StackTopEq(stk, eq) {
     if (stk.length == 0)
         return false;
-    return (eq == stk[0]);
+    return (eq == stk[stk.length - 1]);
 }
 
 const NOT_TOKEN = -1;
