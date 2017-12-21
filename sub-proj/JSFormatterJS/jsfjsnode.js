@@ -94,6 +94,7 @@ function Main() {
         formatOption.eEmpytIndent = RealJSFormatter.EMPTYLINE_INDENT.NO_INDENT_IN_EMPTYLINE;
 
         var jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
+        jsfStrIO.m_debug = true;
         jsfStrIO.Go();
         var resultJS = jsfStrIO.outputJS;
         // force fix line end for test
