@@ -176,7 +176,7 @@ def main():
 	print "Test args: nodejs=%r, x64=%r, release=%r" % (nodejs, x64, release)
 	print ""
 
-	if is_osx_sys():
+	if not nodejs and is_osx_sys():
 		print "DYLD_LIBRARY_PATH=%s" % (os.environ["DYLD_LIBRARY_PATH"])
 	else:
 		print "Using %s" % (JSFORMATTER_PATH_SEL)
