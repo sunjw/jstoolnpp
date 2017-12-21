@@ -697,7 +697,7 @@ class RealJSFormatter extends JSParser.JSParser {
                 tokenLine += ch;
 
                 if (ch == '\n' || i == (tokenLen - 1)) {
-                    tokenNewCode += this.TrimSpace(tokenLine);
+                    tokenNewCode += TrimSpace(tokenLine);
                     tokenLine = "";
                 }
             }
@@ -800,7 +800,7 @@ class RealJSFormatter extends JSParser.JSParser {
 
         var line = "";
         if (!this.m_bLineTemplate)
-            line += this.TrimRightSpace(this.m_lineBuffer);
+            line += TrimRightSpace(this.m_lineBuffer);
         else
             line += this.m_lineBuffer; // output Template String directly
 
@@ -830,3 +830,15 @@ class RealJSFormatter extends JSParser.JSParser {
     }
 
 }
+
+// exports
+exports.CR_READ = CR_READ;
+exports.CR_PUT = CR_PUT;
+exports.BRAC_NEWLINE = BRAC_NEWLINE;
+exports.EMPTYLINE_INDENT = EMPTYLINE_INDENT;
+
+exports.FormatterOption = FormatterOption;
+
+exports.RealJSFormatter = RealJSFormatter;
+
+//console.log(exports);
