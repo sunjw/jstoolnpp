@@ -35,6 +35,7 @@
   <ItemGroup>
     <Compile Include="jsfjsnode.js" />
     <Compile Include="jsparser.js" />
+    <Compile Include="realjsformatter.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="typings\" />
