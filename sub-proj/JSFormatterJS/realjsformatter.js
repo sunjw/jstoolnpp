@@ -26,29 +26,6 @@ function Trim(str) {
     return str.trim();
 }
 
-function TrimSpace(str) {
-    var startIdx = -1;
-    var endIdx = -1;
-    for (var i = 0; i < str.length; ++i) {
-        var ch = str.charAt(i);
-        if (ch == ' ' || ch == '\t') {
-            if (startIdx != -1 && endIdx == -1) {
-                endIdx = i;
-            }
-        } else {
-            if (startIdx == -1) {
-                startIdx = i; // found first not space
-            }
-        }
-    }
-    if (startIdx == -1) {
-        // all spaces
-        return "";
-    } else {
-        return str.substring(startIdx, endIdx);
-    }
-}
-
 function TrimRightSpace(str) {
     var endIdx = -1;
     for (var i = str.length - 1; i >= 0; --i) {
@@ -63,6 +40,25 @@ function TrimRightSpace(str) {
         return "";
     } else {
         return str.substring(0, endIdx);
+    }
+}
+
+function TrimSpace(str) {
+    var startIdx = -1;
+    for (var i = 0; i < str.length; ++i) {
+        var ch = str.charAt(i);
+        if (ch != ' ' && ch != '\t') {
+            if (startIdx == -1) {
+                startIdx = i; // found first not space
+                break;
+            }
+        }
+    }
+    if (startIdx == -1) {
+        // all spaces
+        return "";
+    } else {
+        return TrimRightSpace(str.substring(startIdx));
     }
 }
 
@@ -305,9 +301,9 @@ class RealJSFormatter extends JSParser.JSParser {
         if (this.m_tokenB.code == ";") // if m_tokenB is ";", then don't do pop here.
             return;
 
-        if (!((previousStackTop == JSParser.JS_IF && m_tokenB.code == "else") ||
-                (previousStackTop == JSParser.JS_DO && m_tokenB.code == "while") ||
-                (previousStackTop == JSParser.JS_TRY && m_tokenB.code == "catch"))) {
+        if (!((previousStackTop == JSParser.JS_IF && this.m_tokenB.code == "else") ||
+                (previousStackTop == JSParser.JS_DO && this.m_tokenB.code == "while") ||
+                (previousStackTop == JSParser.JS_TRY && this.m_tokenB.code == "catch"))) {
             var topStack = JSParser.GetStackTop(this.m_blockStack);
             if (topStack == undefined)
                 return;
@@ -497,7 +493,7 @@ class RealJSFormatter extends JSParser.JSParser {
             }
             // fix more indents in ({...}), end
 
-            this.m_blockStack.push(this.m_blockMap[m_tokenA.code]); // push and indent
+            this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]); // push and indent
             ++this.m_nIndents;
 
             /*
@@ -600,7 +596,7 @@ class RealJSFormatter extends JSParser.JSParser {
                         (topStack == JSParser.JS_IF && this.m_tokenB.code == "else") ||
                         (topStack == JSParser.JS_TRY && this.m_tokenB.code == "catch") ||
                         this.m_tokenB.code == ")"))) {
-                if (strRight.length == 0 || strRight.charAt(strRight.length() - 1) != '\n')
+                if (strRight.length == 0 || strRight.charAt(strRight.length - 1) != '\n')
                     strRight += "\n"; // no double newline in some situation
 
                 this.PutToken(this.m_tokenA, leftStyle, strRight);
@@ -732,7 +728,7 @@ class RealJSFormatter extends JSParser.JSParser {
         }
 
         if (!bTokenAPropName &&
-            (this.m_specKeywordSet.includes(m_tokenA.code) &&
+            (this.m_specKeywordSet.includes(this.m_tokenA.code) &&
                 this.m_tokenB.code != ";")) {
             this.PutToken(this.m_tokenA, "", " ");
         } else if (this.m_tokenA.code[0] == '`' && this.m_tokenA.code[this.m_tokenA.code.length - 1] == '`') {
@@ -783,14 +779,6 @@ class RealJSFormatter extends JSParser.JSParser {
         }
     }
 
-    PutToken(token) {
-        this.PutToken(token, "", "");
-    }
-
-    PutToken(token, leftStyle) {
-        this.PutToken(token, leftStyle, "");
-    }
-
     // Put a token out with style
     PutToken(token, leftStyle, rightStyle) {
         // debug
@@ -799,6 +787,14 @@ class RealJSFormatter extends JSParser.JSParser {
         PutChar(token[i]);
         PutChar('\n');*/
         // debug
+
+        if (leftStyle == undefined) {
+            leftStyle = "";
+        }
+        if (rightStyle == undefined) {
+            rightStyle = "";
+        }
+
         this.PutString(leftStyle);
         this.PutString(token);
         this.PutString(rightStyle);
@@ -815,7 +811,7 @@ class RealJSFormatter extends JSParser.JSParser {
             tokenWrapper.inlineComment = false;
             tokenWrapper.line = -1;
 
-            PutString(tokenWrapper);
+            this.PutString(tokenWrapper);
             return;
         }
 
