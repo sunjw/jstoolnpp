@@ -72,14 +72,12 @@ const JS_STUB = ' ';
 const JS_EMPTY = '\0';
 
 class Token {
-
     constructor() {
         this.code = "";
         this.type = 0;
         this.inlineComment = false;
         this.line = 0;
     }
-
 }
 
 class JSParser {
