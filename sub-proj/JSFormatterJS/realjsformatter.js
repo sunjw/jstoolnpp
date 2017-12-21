@@ -1,0 +1,832 @@
+/* realjsformatter.js
+2017-12-21
+
+Copyright (c) 2010- SUN Junwen
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+'use strict';
+
+const JSParser = require('./jsparser.js');
+
+function Trim(str) {
+    return str.trim();
+}
+
+function TrimSpace(str) {
+    var startIdx = -1;
+    var endIdx = -1;
+    for (var i = 0; i < str.length; ++i) {
+        var ch = str.charAt(i);
+        if (ch == ' ' || ch == '\t') {
+            if (startIdx != -1 && endIdx == -1) {
+                endIdx = i;
+            }
+        } else {
+            if (startIdx == -1) {
+                startIdx = i; // found first not space
+            }
+        }
+    }
+    if (startIdx == -1) {
+        // all spaces
+        return "";
+    } else {
+        return str.substring(startIdx, endIdx);
+    }
+}
+
+function TrimRightSpace(str) {
+    var endIdx = -1;
+    for (var i = str.length - 1; i >= 0; --i) {
+        var ch = str.charAt(i);
+        if (ch != ' ' && ch != '\t') {
+            endIdx = i + 1;
+            break;
+        }
+    }
+    if (endIdx == -1) {
+        // all spaces
+        return "";
+    } else {
+        return str.substring(0, endIdx);
+    }
+}
+
+/*
+ * CR_READ
+ *   READ_CR, Read \r.
+ *   SKIP_READ_CR, Skip \r when read.
+ */
+const CR_READ = {
+    SKIP_READ_CR: 0,
+    READ_CR: 1
+}
+/*
+ * CR_PUT
+ *   PUT_CR, Use \r\n as new line.
+ *   NOT_PUT_CR, Use \n as new line.
+ */
+const CR_PUT = {
+    NOT_PUT_CR: 0,
+    PUT_CR: 1
+}
+/*
+ * BRAC_NEWLINE
+ *   NEWLINE_BRAC, New line before bracket.
+ *   NO_NEWLINE_BRAC, No bracket before new line.
+ */
+const BRAC_NEWLINE = {
+    NO_NEWLINE_BRAC: 0,
+    NEWLINE_BRAC: 1
+};
+/*
+ * INDENT_IN_EMPTYLINE
+ *   INDENT_IN_EMPTYLINE, Output indent chars in empty line.
+ *   NO_INDENT_IN_EMPTYLINE, No indent chars in empty line.
+ */
+const EMPTYLINE_INDENT = {
+    NO_INDENT_IN_EMPTYLINE: 0,
+    INDENT_IN_EMPTYLINE: 1
+}
+
+class FormatterOption {
+    constructor() {
+        this.chIndent = '\t';
+        this.nChPerInd = 1;
+        this.eCRRead = CR_READ.SKIP_READ_CR;
+        this.eCRPut = CR_PUT.NOT_PUT_CR;
+        this.eBracNL = BRAC_NEWLINE.NO_NEWLINE_BRAC;
+        this.eEmpytIndent = EMPTYLINE_INDENT.NO_INDENT_IN_EMPTYLINE;
+    }
+}
+
+class RealJSFormatter extends JSParser.JSParser {
+    constructor(formatOption) {
+        super();
+
+        this.m_lineWaitVec = [];
+
+        this.m_blockStack = [];
+
+        // stack used for solving loop in if
+        this.m_brcNeedStack = []; // () after if
+
+        this.m_QuestOperStackCount = [];
+
+        // Init();
+        // format option
+        this.m_struOption = formatOption;
+
+        this.m_tokenCount = 0;
+
+        this.m_initIndent = ""; // initial indent
+        this.m_nIndents = 0; // indent count
+
+        this.m_nLineIndents = 0;
+        this.m_bLineTemplate = false;
+        this.m_lineBuffer = "";
+
+        this.m_nFormattedLineCount = 1;
+        this.m_lineFormattedVec = [];
+
+        this.m_bNewLine = false; // prepare to give newline
+
+        this.m_bBlockStmt = true; // block is started
+        this.m_bAssign = false;
+        this.m_bEmptyBracket = false; // empty {}
+        this.m_bCommentPut = false; // output comment
+        this.m_bTemplatePut = false; // Template String
+
+        this.m_nQuestOperCount = 0;
+
+        this.m_blockMap = {};
+        this.m_blockMap["if"] = JSParser.JS_IF;
+        this.m_blockMap["else"] = JSParser.JS_ELSE;
+        this.m_blockMap["for"] = JSParser.JS_FOR;
+        this.m_blockMap["do"] = JSParser.JS_DO;
+        this.m_blockMap["while"] = JSParser.JS_WHILE;
+        this.m_blockMap["switch"] = JSParser.JS_SWITCH;
+        this.m_blockMap["case"] = JSParser.JS_CASE;
+        this.m_blockMap["default"] = JSParser.JS_CASE;
+        this.m_blockMap["try"] = JSParser.JS_TRY;
+        this.m_blockMap["finally"] = JSParser.JS_TRY; // equal to try
+        this.m_blockMap["catch"] = JSParser.JS_CATCH;
+        this.m_blockMap["function"] = JSParser.JS_FUNCTION;
+        this.m_blockMap["{"] = JSParser.JS_BLOCK;
+        this.m_blockMap["("] = JSParser.JS_BRACKET;
+        this.m_blockMap["["] = JSParser.JS_SQUARE;
+        this.m_blockMap["="] = JSParser.JS_ASSIGN;
+
+        this.m_specKeywordSet = []; // keywords need followed by ()
+        this.m_specKeywordSet.push("if");
+        this.m_specKeywordSet.push("for");
+        this.m_specKeywordSet.push("while");
+        this.m_specKeywordSet.push("switch");
+        this.m_specKeywordSet.push("catch");
+        this.m_specKeywordSet.push("function");
+        this.m_specKeywordSet.push("with");
+        this.m_specKeywordSet.push("return");
+        this.m_specKeywordSet.push("throw");
+        this.m_specKeywordSet.push("delete");
+
+    }
+
+    StringReplace(strBase, strSrc, strDes) {
+        return strBase.replace(strSrc, strDes);
+    }
+
+    SetInitIndent(initIndent) {
+        this.m_initIndent = initIndent;
+    }
+
+    Go() {
+        // virtual
+    }
+
+    GetFormattedLine(originalLine) {
+        if (originalLine <= 0 || this.m_lineFormattedVec.length <= originalLine)
+            return -1;
+
+        for (var l = originalLine; l > 0; --l) {
+            var formattedLine = this.m_lineFormattedVec[l];
+            if (formattedLine != -1)
+                return formattedLine;
+        }
+
+        return -1;
+    }
+
+    // void Init(); implement in constructor
+
+    PutChar(ch) {
+        // virtual
+    }
+
+    PrintAdditionalDebug(strDebugOutput) {
+        //char buf[1024] = {0};
+        //SNPRINTF(buf, 1000, "Formatted line count: %d\n", m_nFormattedLineCount);
+        var buf = "Formatted line count: " + this.m_nFormattedLineCount + "\n";
+        //strDebugOutput.append(buf);
+        return strDebugOutput + buf;
+    }
+
+    PopMultiBlock(previousStackTop) {
+        if (this.m_tokenB.code == ";") // if m_tokenB is ";", then don't do pop here.
+            return;
+
+        if (!((previousStackTop == JSParser.JS_IF && m_tokenB.code == "else") ||
+                (previousStackTop == JSParser.JS_DO && m_tokenB.code == "while") ||
+                (previousStackTop == JSParser.JS_TRY && m_tokenB.code == "catch"))) {
+            var topStack = JSParser.GetStackTop(this.m_blockStack);
+            if (topStack == undefined)
+                return;
+            // ; may end multiple if, do, while, for, try, catch
+            while (topStack == JSParser.JS_IF || topStack == JSParser.JS_FOR || topStack == JSParser.JS_WHILE ||
+                topStack == JSParser.JS_DO || topStack == JSParser.JS_ELSE || topStack == JSParser.JS_TRY || topStack == JSParser.JS_CATCH) {
+                if (topStack == JSParser.JS_IF || topStack == JSParser.JS_FOR ||
+                    topStack == JSParser.JS_WHILE || topStack == JSParser.JS_CATCH ||
+                    topStack == JSParser.JS_ELSE || topStack == JSParser.JS_TRY) {
+                    this.m_blockStack.pop();
+                    --this.m_nIndents;
+                } else if (topStack == JSParser.JS_DO) {
+                    --this.m_nIndents;
+                }
+
+                if ((topStack == JSParser.JS_IF && this.m_tokenB.code == "else") ||
+                    (topStack == JSParser.JS_DO /*&& m_tokenB.code == "while"*/) ||
+                    (topStack == JSParser.JS_TRY && this.m_tokenB.code == "catch"))
+                    break; // until end with if...else, do..., try...catch
+                topStack = JSParser.GetStackTop(this.m_blockStack);
+                if (topStack == undefined)
+                    break;
+            }
+        }
+    }
+
+    ProcessOper(bHaveNewLine, tokenAFirst, tokenBFirst) {
+        var topStack;
+        topStack = JSParser.GetStackTop(this.m_blockStack);
+        var strRight = " ";
+
+        if (this.m_tokenA.code == "(" || this.m_tokenA.code == ")" ||
+            this.m_tokenA.code == "[" || this.m_tokenA.code == "]" ||
+            this.m_tokenA.code == "!" || this.m_tokenA.code == "!!" ||
+            this.m_tokenA.code == "~" || this.m_tokenA.code == ".") {
+            // ()[]!. with no format
+            if ((this.m_tokenA.code == ")" || this.m_tokenA.code == "]") &&
+                (topStack == JSParser.JS_ASSIGN || topStack == JSParser.JS_HELPER)) {
+                if (topStack == JSParser.JS_ASSIGN)
+                    --this.m_nIndents;
+                this.m_blockStack.pop();
+            }
+            topStack = JSParser.GetStackTop(this.m_blockStack);
+            if ((this.m_tokenA.code == ")" && topStack == JSParser.JS_BRACKET) ||
+                (this.m_tokenA.code == "]" && topStack == JSParser.JS_SQUARE)) {
+                // )] need pop stack and minus indent
+                this.m_blockStack.pop();
+                --this.m_nIndents;
+                topStack = JSParser.GetStackTop(this.m_blockStack);
+                if (topStack == JSParser.JS_ASSIGN || topStack == JSParser.JS_HELPER)
+                    this.m_blockStack.pop();
+            }
+
+            topStack = JSParser.GetStackTop(this.m_blockStack);
+            if (this.m_tokenA.code == ")" && !JSParser.GetStackTop(this.m_brcNeedStack) &&
+                (topStack == JSParser.JS_IF || topStack == JSParser.JS_FOR || topStack == JSParser.JS_WHILE ||
+                    topStack == JSParser.JS_SWITCH || topStack == JSParser.JS_CATCH)) {
+                // On top of stack, if, for, while, switch, catch is waiting ), then there will be newline and indent
+                // Spaces is for { later, if m_bNLBracket is true, then no space needed
+                var rightDeco = this.m_tokenB.code != ";" ? strRight : "";
+                if (!bHaveNewLine)
+                    rightDeco += "\n";
+                this.PutToken(this.m_tokenA, "", rightDeco);
+                //bBracket = true;
+                this.m_brcNeedStack.pop();
+                this.m_bBlockStmt = false; // wait for statment
+                if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_WHILE)) {
+                    this.m_blockStack.pop();
+                    if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_DO)) {
+                        // finish do...while
+                        this.m_blockStack.pop();
+
+                        this.PopMultiBlock(JSParser.JS_WHILE);
+                    } else {
+                        this.m_blockStack.push(JSParser.JS_WHILE);
+                        ++this.m_nIndents;
+                    }
+                } else
+                    ++this.m_nIndents;
+            } else if (this.m_tokenA.code == ")" &&
+                (this.m_tokenB.code == "{" || this.IsInlineComment(this.m_tokenB) || bHaveNewLine))
+                this.PutToken(this.m_tokenA, "", strRight); // a space for {, /**/ or newline
+            else
+                this.PutToken(this.m_tokenA); // output directly
+
+            if (this.m_tokenA.code == "(" || this.m_tokenA.code == "[") {
+                // push ([ into stack and indent
+                topStack = JSParser.GetStackTop(this.m_blockStack);
+                if (topStack == JSParser.JS_ASSIGN) {
+                    if (!this.m_bAssign)
+                        --this.m_nIndents;
+                    else
+                        this.m_blockStack.push(JSParser.JS_HELPER);
+                }
+                this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
+                ++this.m_nIndents;
+            }
+
+            return;
+        }
+
+        if (this.m_tokenA.code == ";") {
+            topStack = JSParser.GetStackTop(this.m_blockStack);
+            if (topStack == JSParser.JS_ASSIGN) {
+                --this.m_nIndents;
+                this.m_blockStack.pop();
+            }
+
+            topStack = JSParser.GetStackTop(this.m_blockStack);
+
+            // ; will end if, else, while, for, try, catch
+            if (topStack == JSParser.JS_IF || topStack == JSParser.JS_FOR ||
+                topStack == JSParser.JS_WHILE || topStack == JSParser.JS_CATCH) {
+                this.m_blockStack.pop();
+                --this.m_nIndents;
+                // for } below, the save operation
+                this.PopMultiBlock(topStack);
+            }
+            if (topStack == JSParser.JS_ELSE || topStack == JSParser.JS_TRY) {
+                this.m_blockStack.pop();
+                --this.m_nIndents;
+                this.PopMultiBlock(topStack);
+            }
+            if (topStack == JSParser.JS_DO) {
+                --this.m_nIndents;
+                this.PopMultiBlock(topStack);
+            }
+            // change count when read "while" after "do"
+            // the same to do{}
+
+            topStack = JSParser.GetStackTop(this.m_blockStack);
+            if (topStack != JSParser.JS_BRACKET && !bHaveNewLine && !this.IsInlineComment(this.m_tokenB))
+                this.PutToken(this.m_tokenA, "", strRight + "\n"); // if not ; in (), then newline
+            else if (topStack == JSParser.JS_BRACKET || this.m_tokenB.type == JSParser.COMMENT_TYPE_1 ||
+                this.IsInlineComment(this.m_tokenB))
+                this.PutToken(this.m_tokenA, "", strRight); // (; )
+            else
+                this.PutToken(this.m_tokenA);
+
+            return; // ;
+        }
+
+        if (this.m_tokenA.code == ",") {
+            if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_ASSIGN)) {
+                --this.m_nIndents;
+                this.m_blockStack.pop();
+            }
+            if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_BLOCK) && !bHaveNewLine)
+                this.PutToken(this.m_tokenA, "", strRight + "\n"); // inside {}
+            else
+                this.PutToken(this.m_tokenA, "", strRight);
+
+            return; // ,
+        }
+
+        if (this.m_tokenA.code == "{") {
+            topStack = JSParser.GetStackTop(this.m_blockStack);
+            if (topStack == JSParser.JS_IF || topStack == JSParser.JS_FOR ||
+                topStack == JSParser.JS_WHILE || topStack == JSParser.JS_DO ||
+                topStack == JSParser.JS_ELSE || topStack == JSParser.JS_SWITCH ||
+                topStack == JSParser.JS_TRY || topStack == JSParser.JS_CATCH ||
+                topStack == JSParser.JS_ASSIGN) {
+                if (!this.m_bBlockStmt || topStack == JSParser.JS_ASSIGN) //(topStack == JS_ASSIGN && !m_bAssign))
+                {
+                    //m_blockStack.pop(); // don't pop now, pop with } later
+                    --this.m_nIndents;
+                    this.m_bBlockStmt = true;
+                } else {
+                    this.m_blockStack.push(JSParser.JS_HELPER); // push a JS_HELPER to simplify
+                }
+            }
+
+            // fix more indents in ({...})
+            var bPrevFunc = (topStack == JSParser.JS_FUNCTION);
+            var fixTopStack = topStack;
+            if (bPrevFunc) {
+                this.m_blockStack.pop(); // pop JS_FUNCTION
+                fixTopStack = JSParser.GetStackTop(this.m_blockStack);
+            }
+
+            if (fixTopStack == JSParser.JS_BRACKET) {
+                --this.m_nIndents; // ({ minus indent
+            }
+
+            if (bPrevFunc) {
+                this.m_blockStack.push(JSParser.JS_FUNCTION); // push JS_FUNCTION back
+            }
+            // fix more indents in ({...}), end
+
+            this.m_blockStack.push(this.m_blockMap[m_tokenA.code]); // push and indent
+            ++this.m_nIndents;
+
+            /*
+             * spaces between { are prepared by operator before
+             * fix for more space { in newline
+             * we can only look forward, no backward
+             */
+            if (this.m_tokenB.code == "}") {
+                // empty {}
+                this.m_bEmptyBracket = true;
+                if (this.m_bNewLine == false && this.m_struOption.eBracNL == BRAC_NEWLINE.NEWLINE_BRAC &&
+                    (topStack == JSParser.JS_IF || topStack == JSParser.JS_FOR ||
+                        topStack == JSParser.JS_WHILE || topStack == JSParser.JS_SWITCH ||
+                        topStack == JSParser.JS_CATCH || topStack == JSParser.JS_FUNCTION)) {
+                    this.PutToken(this.m_tokenA, " "); // a space in these situations
+                } else {
+                    this.PutToken(this.m_tokenA);
+                }
+            } else {
+                var strLeft = (this.m_struOption.eBracNL == BRAC_NEWLINE.NEWLINE_BRAC && !this.m_bNewLine) ? "\n" : "";
+                if (!bHaveNewLine && !this.IsInlineComment(this.m_tokenB)) // need newline
+                    this.PutToken(this.m_tokenA, strLeft, strRight + "\n");
+                else
+                    this.PutToken(this.m_tokenA, strLeft, strRight);
+            }
+
+            return; // {
+        }
+
+        if (this.m_tokenA.code == "}") {
+            // agrressive policy, pop } until {
+            // make sure all right after {}
+            while ((topStack = JSParser.GetStackTop(this.m_blockStack)) != undefined) {
+                if (topStack == JSParser.JS_BLOCK)
+                    break;
+
+                this.m_blockStack.pop();
+
+                switch (topStack) {
+                case JSParser.JS_IF:
+                case JSParser.JS_FOR:
+                case JSParser.JS_WHILE:
+                case JSParser.JS_CATCH:
+                case JSParser.JS_DO:
+                case JSParser.JS_ELSE:
+                case JSParser.JS_TRY:
+                case JSParser.JS_SWITCH:
+                case JSParser.JS_ASSIGN:
+                case JSParser.JS_FUNCTION:
+                case JSParser.JS_HELPER:
+                    --this.m_nIndents;
+                    break;
+                }
+
+                /*if(!GetStackTop(m_blockStack, topStack))
+                break;*/
+            }
+
+            if (topStack == JSParser.JS_BLOCK) {
+                // pop and minus indent
+                this.m_blockStack.pop();
+                --this.m_nIndents;
+                topStack = JSParser.GetStackTop(this.m_blockStack);
+
+                if (topStack != undefined) {
+                    switch (topStack) {
+                    case JSParser.JS_IF:
+                    case JSParser.JS_FOR:
+                    case JSParser.JS_WHILE:
+                    case JSParser.JS_CATCH:
+                    case JSParser.JS_ELSE:
+                    case JSParser.JS_TRY:
+                    case JSParser.JS_SWITCH:
+                    case JSParser.JS_ASSIGN:
+                    case JSParser.JS_FUNCTION:
+                    case JSParser.JS_HELPER:
+                        this.m_blockStack.pop();
+                        break;
+                    case JSParser.JS_DO:
+                        // do left for while
+                        break;
+                    }
+                }
+            }
+
+            var leftStyle = "";
+            if (!this.m_bNewLine)
+                leftStyle = "\n";
+            if (this.m_bEmptyBracket) {
+                leftStyle = "";
+                strRight += "\n";
+                this.m_bEmptyBracket = false;
+            }
+
+            if ((!bHaveNewLine &&
+                    this.m_tokenB.code != ";" && this.m_tokenB.code != "," && this.m_tokenB.code != "=" &&
+                    !this.IsInlineComment(this.m_tokenB)) &&
+                (this.m_struOption.eBracNL == BRAC_NEWLINE.NEWLINE_BRAC ||
+                    !((topStack == JSParser.JS_DO && this.m_tokenB.code == "while") ||
+                        (topStack == JSParser.JS_IF && this.m_tokenB.code == "else") ||
+                        (topStack == JSParser.JS_TRY && this.m_tokenB.code == "catch") ||
+                        this.m_tokenB.code == ")"))) {
+                if (strRight.length == 0 || strRight.charAt(strRight.length() - 1) != '\n')
+                    strRight += "\n"; // no double newline in some situation
+
+                this.PutToken(this.m_tokenA, leftStyle, strRight);
+            } else if (this.m_tokenB.type == JSParser.STRING_TYPE ||
+                this.m_tokenB.type == JSParser.COMMENT_TYPE_1 ||
+                this.IsInlineComment(this.m_tokenB)) {
+                this.PutToken(this.m_tokenA, leftStyle, strRight); // space for else
+            } else {
+                this.PutToken(this.m_tokenA, leftStyle); // }, }; })
+            }
+            // Do not delete newline before ), not like ,;
+
+            //char tmpTopStack;
+            //GetStackTop(m_blockStack, tmpTopStack);
+            // fix indent in ({...})
+            if (topStack != JSParser.JS_ASSIGN && JSParser.StackTopEq(this.m_blockStack, JSParser.JS_BRACKET))
+                ++this.m_nIndents;
+            // fix indent in ({...}) end
+
+            this.PopMultiBlock(topStack);
+
+            return; // }
+        }
+
+        if (this.m_tokenA.code == "++" || this.m_tokenA.code == "--" ||
+            this.m_tokenA.code == "\n" || this.m_tokenA.code == "\r\n") {
+            this.PutToken(this.m_tokenA);
+            return;
+        }
+
+        if (this.m_tokenA.code == ":" && JSParser.StackTopEq(this.m_blockStack, JSParser.JS_CASE)) {
+            // case, default
+            if (!bHaveNewLine)
+                this.PutToken(this.m_tokenA, "", strRight + "\n");
+            else
+                this.PutToken(this.m_tokenA, "", strRight);
+            this.m_blockStack.pop();
+            return;
+        }
+
+        if (this.m_tokenA.code == "::" || this.m_tokenA.code == "->") {
+            this.PutToken(this.m_tokenA);
+            return;
+        }
+
+        if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_ASSIGN))
+            this.m_bAssign = true;
+
+        if (this.m_tokenA.code == "=" && !JSParser.StackTopEq(this.m_blockStack, JSParser.JS_ASSIGN)) {
+            this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
+            ++this.m_nIndents;
+            this.m_bAssign = false;
+        }
+
+        if (this.m_tokenA.code == "?") {
+            ++this.m_nQuestOperCount;
+            this.m_QuestOperStackCount.push(this.m_blockStack.length);
+        }
+
+        if (this.m_tokenA.code == ":") {
+            if (this.m_nQuestOperCount > 0 &&
+                (JSParser.GetStackTop(this.m_QuestOperStackCount) >= this.m_blockStack.length ||
+                    JSParser.StackTopEq(this.m_blockStack, JSParser.JS_ASSIGN))) {
+                --this.m_nQuestOperCount;
+                this.m_QuestOperStackCount.pop();
+            } else {
+                this.PutToken(this.m_tokenA, "", " ");
+                return;
+            }
+        }
+
+        this.PutToken(this.m_tokenA, " ", " "); // all the other operators are " "oper" "
+    }
+
+    ProcessString(bHaveNewLine, tokenAFirst, tokenBFirst) {
+        var bTokenAPropName = false;
+        if (this.m_tokenPreA.code == ".")
+            bTokenAPropName = true;
+
+        if (!bTokenAPropName &&
+            (this.m_tokenA.code == "case" || this.m_tokenA.code == "default")) {
+            // minus indent for case, default
+            --this.m_nIndents;
+            var rightDeco = this.m_tokenA.code != "default" ? " " : "";
+            this.PutToken(this.m_tokenA, "", rightDeco);
+            ++this.m_nIndents;
+            this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
+            return;
+        }
+
+        if (!bTokenAPropName &&
+            (this.m_tokenA.code == "do" ||
+                (this.m_tokenA.code == "else" && this.m_tokenB.code != "if") ||
+                this.m_tokenA.code == "try" || this.m_tokenA.code == "finally")) {
+            // do, else (NOT else if), try
+            this.PutToken(this.m_tokenA);
+
+            this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
+            ++this.m_nIndents; // no need to wait (), give an indent
+            this.m_bBlockStmt = false; // wait for statment inside block
+
+            this.PutString(" ");
+            if ((this.m_tokenB.type == JSParser.STRING_TYPE || this.m_struOption.eBracNL == BRAC_NEWLINE.NEWLINE_BRAC) && !bHaveNewLine)
+                this.PutString("\n");
+
+            return;
+        }
+
+        if (!bTokenAPropName && this.m_tokenA.code == "function") {
+            if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_ASSIGN)) {
+                --this.m_nIndents;
+                this.m_blockStack.pop();
+            }
+            this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]); // push function into stack, if will be poped when read }
+        }
+
+        if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_ASSIGN))
+            this.m_bAssign = true;
+
+        if (this.m_tokenB.type == JSParser.STRING_TYPE ||
+            this.m_tokenB.type == JSParser.COMMENT_TYPE_1 ||
+            this.m_tokenB.type == JSParser.COMMENT_TYPE_2 ||
+            this.m_tokenB.code == "{") {
+            this.PutToken(this.m_tokenA, "", " ");
+
+            //if(m_blockStack.top() != 't' && IsType(m_tokenA))
+            //m_blockStack.push('t'); // variable statment
+            return;
+        }
+
+        if (!bTokenAPropName &&
+            (this.m_specKeywordSet.includes(m_tokenA.code) &&
+                this.m_tokenB.code != ";")) {
+            this.PutToken(this.m_tokenA, "", " ");
+        } else if (this.m_tokenA.code[0] == '`' && this.m_tokenA.code[this.m_tokenA.code.length - 1] == '`') {
+            this.m_bTemplatePut = true;
+            this.PutToken(this.m_tokenA);
+            this.m_bTemplatePut = false;
+        } else {
+            this.ProcessQuote(this.m_tokenA);
+            this.PutToken(this.m_tokenA);
+        }
+
+        if (!bTokenAPropName &&
+            (this.m_tokenA.code == "if" || this.m_tokenA.code == "for" ||
+                this.m_tokenA.code == "while" || this.m_tokenA.code == "catch")) {
+            // indent after read ()
+            this.m_brcNeedStack.push(false);
+            this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
+
+        }
+
+        if (!bTokenAPropName && this.m_tokenA.code == "switch") {
+            //bBracket = false;
+            this.m_brcNeedStack.push(false);
+            this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
+        }
+    }
+
+    ProcessQuote(token) {
+        var chFirst = token.code.charAt(0);
+        var chLast = token.code.charAt(token.code.length - 1);
+        if (token.type == JSParser.STRING_TYPE &&
+            ((chFirst == '"' && chLast == '"') ||
+                (chFirst == '\'' && chLast == '\''))) {
+            var tokenNewCode = "";
+            var tokenLine = "";
+            var tokenLen = token.code.length;
+            for (var i = 0; i < tokenLen; ++i) {
+                var ch = token.code.charAt(i);
+                tokenLine += ch;
+
+                if (ch == '\n' || i == (tokenLen - 1)) {
+                    tokenNewCode += this.TrimSpace(tokenLine);
+                    tokenLine = "";
+                }
+            }
+
+            token.code = tokenNewCode;
+        }
+    }
+
+    PutToken(token) {
+        this.PutToken(token, "", "");
+    }
+
+    PutToken(token, leftStyle) {
+        this.PutToken(token, leftStyle, "");
+    }
+
+    // Put a token out with style
+    PutToken(token, leftStyle, rightStyle) {
+        // debug
+        /*size_t length = token.size();
+        for(size_t i = 0; i < length; ++i)
+        PutChar(token[i]);
+        PutChar('\n');*/
+        // debug
+        this.PutString(leftStyle);
+        this.PutString(token);
+        this.PutString(rightStyle);
+        if (!(this.m_bCommentPut && this.m_bNewLine))
+            this.m_bCommentPut = false; // must happen after output comment
+    }
+
+    PutString(token) {
+        if (typeof token === "string" || token instanceof String) {
+            var str = token;
+            var tokenWrapper = new JSParser.Token();
+            tokenWrapper.type = JSParser.NOT_TOKEN;
+            tokenWrapper.code = str;
+            tokenWrapper.inlineComment = false;
+            tokenWrapper.line = -1;
+
+            return PutString(tokenWrapper);
+        }
+
+        var length = token.code.length;
+        //char topStack = m_blockStack.top();
+        for (var i = 0; i < length; ++i) {
+            if (this.m_bNewLine && (this.m_bCommentPut ||
+                    ((this.m_struOption.eBracNL == BRAC_NEWLINE.NEWLINE_BRAC || token.code.charAt(i) != '{') &&
+                        token.code.charAt(i) != ',' && token.code.charAt(i) != ';' && !this.IsInlineComment(token)))) {
+                // real newline until not {,; after newline
+                this.PutLineBuffer(); // output line buffer
+
+                this.m_lineBuffer = "";
+                this.m_bLineTemplate = false;
+                this.m_bNewLine = false;
+                this.m_nIndents = this.m_nIndents < 0 ? 0 : this.m_nIndents; // fix anyway
+                this.m_nLineIndents = this.m_nIndents;
+                if (token.code.charAt(i) == '{' || token.code.charAt(i) == ',' || token.code.charAt(i) == ';') // no newline for {,; if line is end with comment
+                    --this.m_nLineIndents;
+            }
+
+            if (this.m_bNewLine && !this.m_bCommentPut &&
+                ((this.m_struOption.eBracNL == BRAC_NEWLINE.NO_NEWLINE_BRAC && token.code.charAt(i) == '{') ||
+                    token.code.charAt(i) == ',' || token.code.charAt(i) == ';' || this.IsInlineComment(token)))
+                this.m_bNewLine = false;
+
+            if (this.m_lineBuffer.length == 0 && this.m_bTemplatePut)
+                this.m_bLineTemplate = true;
+
+            if (token.code.charAt(i) == '\n') {
+                this.m_bNewLine = true;
+            } else {
+                this.m_lineBuffer += token.code.charAt(i);
+                var tokenLine = token.line;
+                if (tokenLine != -1)
+                    this.m_lineWaitVec.push(token.line);
+            }
+        }
+    }
+
+    PutLineBuffer() {
+        // Map original line count to formatted line count
+        var i = 0;
+        while (1) {
+            if (i >= this.m_lineWaitVec.length) {
+                this.m_lineWaitVec = [];
+                break;
+            }
+
+            var oldLine = this.m_lineWaitVec[i];
+            //if (oldLine >= m_lineFormattedVec.size()) {
+            //    m_lineFormattedVec.resize(m_lineFormattedVec.size() * 2, -1);
+            //    continue;
+            //}
+
+            if (this.m_lineFormattedVec[oldLine] == -1)
+                this.m_lineFormattedVec[oldLine] = this.m_nFormattedLineCount;
+            ++i;
+        }
+
+        var line = "";
+        if (!this.m_bLineTemplate)
+            line += this.TrimRightSpace(this.m_lineBuffer);
+        else
+            line += this.m_lineBuffer; // output Template String directly
+
+        if ((!this.m_bLineTemplate || this.m_lineBuffer.charAt(0) == '`') &&
+            (line != "" || this.m_struOption.eEmpytIndent == EMPTYLINE_INDENT.INDENT_IN_EMPTYLINE)) // Fix "JSLint unexpect space" bug
+        {
+            for (var i = 0; i < this.m_initIndent.length; ++i)
+                this.PutChar(m_initIndent.charAt(i)); // first, output init indent
+
+            for (var c = 0; c < this.m_nLineIndents; ++c)
+                for (var c2 = 0; c2 < this.m_struOption.nChPerInd; ++c2)
+                    this.PutChar(this.m_struOption.chIndent); // output indent
+        }
+
+        // add newline
+        if (this.m_struOption.eCRPut == CR_PUT.PUT_CR)
+            line += "\r"; //PutChar('\r');
+        line += "\n"; //PutChar('\n');
+
+        // output line
+        for (var i = 0; i < line.length; ++i) {
+            var ch = line.charAt(i);
+            this.PutChar(ch);
+            if (ch == '\n')
+                ++this.m_nFormattedLineCount;
+        }
+    }
+
+}
