@@ -738,7 +738,8 @@ class RealJSFormatter extends JSParser.JSParser {
             tokenWrapper.inlineComment = false;
             tokenWrapper.line = -1;
 
-            return PutString(tokenWrapper);
+            PutString(tokenWrapper);
+            return;
         }
 
         var length = token.code.length;
