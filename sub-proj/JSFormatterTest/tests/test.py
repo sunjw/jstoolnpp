@@ -95,6 +95,8 @@ def dump_version(nodejs):
 		call([JSFORMATTER_PATH_SEL, "--version"])
 	else:
 		call(["node", JSFORMATTER_PATH_SEL, "--version"])
+		print "node version: "
+		call(["node", "--version"])
 
 def main():
 	global JSFORMATTER_PATH_SEL
