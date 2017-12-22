@@ -99,6 +99,7 @@ function Main() {
         var resultJS = jsfStrIO.outputJS;
 
         FileSystem.writeFileSync(outputJSFile, resultJS, "binary");
+        log("Done");
     }
 
 }
