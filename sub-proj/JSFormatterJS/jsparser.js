@@ -557,7 +557,9 @@ class JSParser {
             //m_strDebugOutput.append(buf);
             this.m_strDebugOutput = this.m_strDebugOutput + (this.m_tokenCount / this.m_duration).toFixed(2) + " tokens/second\n";
 
-            this.PrintAdditionalDebug(this.m_strDebugOutput);
+            this.m_strDebugOutput = this.PrintAdditionalDebug(this.m_strDebugOutput);
+
+            this.m_strDebugOutput = this.m_strDebugOutput.trim();
 
             console.log(this.m_strDebugOutput);
         }
