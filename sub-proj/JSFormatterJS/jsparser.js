@@ -551,8 +551,7 @@ class JSParser {
             this.m_strDebugOutput = this.m_strDebugOutput + "Processed tokens: " + this.m_tokenCount + "\n";
             //SNPRINTF(buf, 1000, "Time used: %.3fs\n", m_duration);
             //m_strDebugOutput.append(buf);
-            this.m_strDebugOutput = this.m_strDebugOutput + "Time used: ",
-            this.m_duration + "\n";
+            this.m_strDebugOutput = this.m_strDebugOutput + "Time used: " + this.m_duration + "s\n";
             //SNPRINTF(buf, 1000, "%.3f tokens/second\n", m_tokenCount / m_duration);
             //m_strDebugOutput.append(buf);
             this.m_strDebugOutput = this.m_strDebugOutput + (this.m_tokenCount / this.m_duration).toFixed(2) + " tokens/second\n";
