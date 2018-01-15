@@ -93,7 +93,6 @@ class NodeCaseRuntime(CaseRuntime):
 		call(["node", "--version"])
 
 class ValidateCaseRuntime(CaseRuntime):
-	# Only support Windows
 	def __init__(self, runtime_path, nodejs_script_path):
 		super(ValidateCaseRuntime, self).__init__(runtime_path)
 		self.nodejs_script_path = nodejs_script_path
@@ -192,8 +191,7 @@ def main():
 	jsformatter_lib_path_sel = ""
 	jsformatter_nodejs_script_sel = ""
 
-	if nodejs == False:
-		# Normal or validate
+	if nodejs == False and validate == False:
 		if is_osx_sys():
 			x64 = False # no x64 on macOS
 			jsformatter_lib_path_sel = JSFORMATTER_LIB_PATH_MAC
@@ -212,6 +210,9 @@ def main():
 			jsformatter_path_sel = JSFORMATTER_PATH_MAC
 			if release:
 				jsformatter_path_sel = JSFORMATTER_REL_PATH_MAC
+	if validate:
+		# only support Windows x64 relase build
+		jsformatter_path_sel = JSFORMATTER_REL_PATH_WIN_64
 	if nodejs or validate:
 		jsformatter_nodejs_script_sel = JSFORMATTER_NODEJS_SCRIPT_PATH
 
