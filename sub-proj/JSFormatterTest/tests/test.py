@@ -92,6 +92,40 @@ class NodeCaseRuntime(CaseRuntime):
 		print "node version: "
 		call(["node", "--version"])
 
+class ValidateCaseRuntime(CaseRuntime):
+	# Only support Windows
+	def __init__(self, runtime_path, nodejs_script_path):
+		super(ValidateCaseRuntime, self).__init__(runtime_path)
+		self.nodejs_script_path = nodejs_script_path
+
+	def _case_execute(self, test_case):
+		print "Call cpp..."
+		call([self.runtime_path, test_case.source, "outcpp.js"])
+		print "Call node..."
+		call(["node", self.nodejs_script_path, test_case.source, "outjs.js"])
+
+	def _case_result(self, test_case):
+		result = "ERROR"
+		out_md5 = hashlib.md5(open("outcpp.js").read()).hexdigest()
+		result_md5 = hashlib.md5(open("outjs.js").read()).hexdigest()
+		if out_md5 == result_md5:
+			result = "PASS"
+
+		print result
+		return result
+
+	def dump_name(self):
+		print "ValidateCaseRuntime"
+
+	def dump_info(self):
+		print "%s vs. %s" % (self.runtime_path, self.nodejs_script_path)
+
+	def dump_version(self):
+		call([self.runtime_path, "--version"])
+		call(["node", self.nodejs_script_path, "--version"])
+		print "node version: "
+		call(["node", "--version"])
+
 def make_test_case(files):
 	test_cases = {}
 
@@ -133,6 +167,7 @@ def main():
 	x64 = False
 	release = False
 	nodejs = False
+	validate = False
 
 	for argv in sys.argv:
 		argv = argv.lower()
@@ -140,6 +175,13 @@ def main():
 			nodejs = True
 			x64 = False
 			release = False
+			validate = False
+			break
+		if argv == "validate":
+			validate = True
+			x64 = False
+			release = False
+			nodejs = False
 			break
 		if argv == "release":
 			release = True
@@ -148,8 +190,10 @@ def main():
 
 	jsformatter_path_sel = ""
 	jsformatter_lib_path_sel = ""
+	jsformatter_nodejs_script_sel = ""
 
 	if nodejs == False:
+		# Normal or validate
 		if is_osx_sys():
 			x64 = False # no x64 on macOS
 			jsformatter_lib_path_sel = JSFORMATTER_LIB_PATH_MAC
@@ -164,22 +208,27 @@ def main():
 				jsformatter_path_sel = JSFORMATTER_PATH_WIN_64
 			elif release:
 				jsformatter_path_sel = JSFORMATTER_REL_PATH_WIN
-		elif is_osx_sys():
+		if is_osx_sys():
 			jsformatter_path_sel = JSFORMATTER_PATH_MAC
 			if release:
 				jsformatter_path_sel = JSFORMATTER_REL_PATH_MAC
-	else:
-		jsformatter_path_sel = JSFORMATTER_NODEJS_SCRIPT_PATH
+	if nodejs or validate:
+		jsformatter_nodejs_script_sel = JSFORMATTER_NODEJS_SCRIPT_PATH
 
 	# make runtime
 	case_runtime = 0
-	if nodejs == False:
+	if nodejs == False and validate == False:
 		if is_windows_sys():
 			case_runtime = CaseRuntime(jsformatter_path_sel)
 		if is_osx_sys():
 			case_runtime = MacOSCaseRuntime(jsformatter_path_sel, jsformatter_lib_path_sel)
-	else:
-		case_runtime = NodeCaseRuntime(jsformatter_path_sel)
+	if nodejs:
+		case_runtime = NodeCaseRuntime(jsformatter_nodejs_script_sel)
+	if validate:
+		if is_osx_sys():
+			print "validate only support Windows."
+			return
+		case_runtime = ValidateCaseRuntime(jsformatter_path_sel, jsformatter_nodejs_script_sel)
 
 	# run cases
 	start_time = current_millis()
@@ -207,7 +256,7 @@ def main():
 	if allpass:
 		print "%d cases ALL PASS, took %.2fs." % (len(test_cases), duration_time)
 
-	print "Test args: nodejs=%r, x64=%r, release=%r" % (nodejs, x64, release)
+	print "Test args: x64=%r, release=%r, nodejs=%r, validat=%r" % (x64, release, nodejs, validate)
 	print ""
 
 	case_runtime.dump_name()
