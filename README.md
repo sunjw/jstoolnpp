@@ -6,7 +6,7 @@ A JavaScript plugin for Notepad++ (formerly JSMinNpp).
 
 Really helpful to JavaScript coder on Notepad++ and really easy to use it.
 Made in China.   
-Project Site http://www.sunjw.us/jstoolnpp
+Project site: http://www.sunjw.us/jstoolnpp
 
 FEATURES  
  * JavaScript minify.
