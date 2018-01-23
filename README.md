@@ -1,11 +1,11 @@
-#### A JavaScript plugin for Notepad++ (formerly JSMinNpp).  
+#### A JavaScript plugin for Notepad++ (formerly JSMinNpp).
  * Douglas Crockford's JSMin algorithm to minimize JavaScript code.
  * My own algorithm to format JavaScript code.
  * A JSON data viewer. This JSON data viewer can handle >10MB JSON file easily.
  * Support 64bit Notepad++ (from version 1.20.0, ".64.zip" package).
 
 Really helpful to JavaScript coder on Notepad++ and really easy to use it.
-Made in China.   
+Made in China.  
 Project site: http://www.sunjw.us/jstoolnpp
 
 #### FEATURES
