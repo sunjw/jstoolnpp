@@ -27,6 +27,9 @@ def is_windows_sys():
 def is_osx_sys():
 	return (platform.system() == "Darwin")
 
+def is_linux_sys():
+	return (platform.system() == "Linux")
+
 def current_millis():
 	return int(round(time.time() * 1000));
 
@@ -156,13 +159,6 @@ def make_test_case(files):
 	return test_cases_ordered
 
 def main():
-	if not is_windows_sys() and not is_osx_sys():
-		print "Unknown operating system."
-		return
-
-	files = list_file()
-	test_cases = make_test_case(files)
-
 	x64 = False
 	release = False
 	nodejs = False
@@ -187,6 +183,20 @@ def main():
 		if argv == "64" or argv == "x64":
 			x64 = True
 
+	# system check
+	if nodejs == False:
+		if not is_windows_sys() and not is_osx_sys():
+			if is_linux_sys():
+				print "Only node support Linux."
+			else:
+				print "Unknown operating system."
+			return
+	else:
+		if not is_windows_sys() and not is_osx_sys() and not is_linux_sys():
+			print "Unknown operating system."
+			return
+
+	# prepare path
 	jsformatter_path_sel = ""
 	jsformatter_lib_path_sel = ""
 	jsformatter_nodejs_script_sel = ""
@@ -211,7 +221,7 @@ def main():
 			if release:
 				jsformatter_path_sel = JSFORMATTER_REL_PATH_MAC
 	if validate:
-		# only support Windows x64 relase build
+		# validate test only support Windows x64 relase build
 		jsformatter_path_sel = JSFORMATTER_REL_PATH_WIN_64
 	if nodejs or validate:
 		jsformatter_nodejs_script_sel = JSFORMATTER_NODEJS_SCRIPT_PATH
@@ -227,9 +237,13 @@ def main():
 		case_runtime = NodeCaseRuntime(jsformatter_nodejs_script_sel)
 	if validate:
 		if is_osx_sys():
-			print "validate only support Windows."
+			print "Validate only support Windows."
 			return
 		case_runtime = ValidateCaseRuntime(jsformatter_path_sel, jsformatter_nodejs_script_sel)
+
+	# prepare cases
+	files = list_file()
+	test_cases = make_test_case(files)
 
 	# run cases
 	start_time = current_millis()
