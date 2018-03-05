@@ -15,6 +15,7 @@ sub-proj/JSFormatterTest/tests/out.js
 sub-proj/JsonPP/Debug/*
 sub-proj/JsonPP/Release/*
 sub-proj/JsonPP/x64/*
+sub-proj/JsonPP/tests/out.js
 trunk/_UpgradeReport_Files/*
 trunk/Debug/*
 trunk/Unicode Debug/*
