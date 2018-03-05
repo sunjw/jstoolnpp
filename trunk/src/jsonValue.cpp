@@ -172,7 +172,7 @@ void JsonValue::ChangeType(VALUE_TYPE newType)
 	m_valType = newType;
 }
 
-string JsonValue::ToString(int nRecuLevel) const
+string JsonValue::ToString(int nRecuLevel, bool sort) const
 {
 	string ret("");
 

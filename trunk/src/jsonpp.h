@@ -106,12 +106,18 @@ public:
 	JsonValue& operator[](const std::string& key);
 
 	// Convert string value or map value to string
-	std::string ToString(int nRecuLevel = 0) const;
+	inline std::string ToString() const
+	{ return ToString(0, false); }
+	inline std::string ToString(int nRecuLevel) const
+	{ return ToString(nRecuLevel, false); }
 
 	long line; // line number
 
 private:
 	void ChangeType(VALUE_TYPE newType);
+
+	// Convert string value or map value to string
+	std::string ToString(int nRecuLevel, bool sort) const;
 
 	VALUE_TYPE m_valType;
 	std::string m_strValue;
