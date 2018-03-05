@@ -19,19 +19,17 @@ void JsonFileProc::GetJsonValue(JsonValue& jsonValue)
 	m_ifile.close();
 }
 
-void JsonFileProc::Save(const JsonValue& jsonValue, const tstring& outputFile)
+void JsonFileProc::Save(const JsonValue& jsonValue, const tstring& outputFile, bool sort)
 {
 	m_ofile.open(tstrtostr(outputFile).c_str());
 	if(m_ofile)
 	{
-		m_ofile << jsonValue.ToString();
+		if(!sort)
+			m_ofile << jsonValue.ToString();
+		else
+			m_ofile << jsonValue.ToStringSorted();
 	}
 	m_ofile.close();
-}
-
-void JsonFileProc::Save(const JsonValue& jsonValue)
-{
-	Save(jsonValue, strtotstr(m_strInputFile));
 }
 
 int JsonFileProc::GetChar()

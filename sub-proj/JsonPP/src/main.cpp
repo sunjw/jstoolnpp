@@ -15,11 +15,27 @@ using namespace sunjwbase;
 
 int main(int argc, char *argv[])
 {
-	if(argc == 3)
-	{
-		char *inputFile = argv[1];
-		char *outputFile = argv[2];
+	bool sort = false;
+	const char *inputFile = NULL;
+	const char *outputFile = NULL;
 
+	if (argc == 3)
+	{
+		inputFile = argv[1];
+		outputFile = argv[2];
+	}
+	else if (argc == 4)
+	{
+		const char *option = argv[1];
+		string strOption(option);
+		if (strOption == "--sort")
+			sort = true;
+		inputFile = argv[2];
+		outputFile = argv[3];
+	}
+
+	if (inputFile != NULL && outputFile != NULL)
+	{
 		try
 		{
 			tstring fileName = strtotstr(string(inputFile));
@@ -46,20 +62,19 @@ int main(int argc, char *argv[])
 			JsonUnsortedMap::iterator itr = jmap.find("txxx");
 			jmap.insert(itr, JsonMapPair("taglib", JsonValue("xxxxx")));*/
 
-			jfp.Save(jsonValue, strtotstr(string(outputFile)));
+			jfp.Save(jsonValue, strtotstr(string(outputFile)), sort);
 
 			cout << "Done" << endl;
 		}
-		catch(runtime_error ex)
+		catch (runtime_error ex)
 		{
 			cout << "Error: " << ex.what() << endl;
 		}
 	}
 	else
 	{
-		cout << "Usage: jsonpp [input file] [output file]" << endl;
+		cout << "Usage: jsonpp [--sort] [input file] [output file]" << endl;
 	}
-
 
     return 0;
 }

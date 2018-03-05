@@ -10,8 +10,10 @@ public:
 	explicit JsonFileProc(const sunjwbase::tstring& intputFile);
 
 	void GetJsonValue(JsonValue& jsonValue);
-	void Save(const JsonValue& jsonValue, const sunjwbase::tstring& outputFile);
-	void Save(const JsonValue& jsonValue);
+
+	inline void Save(const JsonValue& jsonValue, const sunjwbase::tstring& outputFile)
+	{ Save(jsonValue, outputFile, false); }
+	void Save(const JsonValue& jsonValue, const sunjwbase::tstring& outputFile, bool sort);
 
 private:
 	std::string m_strInputFile;
