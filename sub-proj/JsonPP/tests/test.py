@@ -66,7 +66,7 @@ class CaseRuntime(object):
 	def dump_version(self):
 		call([self.runtime_path, "--version"])
 
-def make_test_case(files):
+def make_test_case(files, sort_json):
 	test_cases = {}
 
 	for file in files:
@@ -91,6 +91,14 @@ def make_test_case(files):
 	for name, case in test_cases.items():
 		if case.source == "" or case.result == "":
 			test_cases.pop(name, 0)
+		# filter test case by sort_json
+		if not sort_json:
+			if ".sort" in name:
+				test_cases.pop(name, 0)
+		else:
+			# test ToStringSorted
+			if ".sort" not in name:
+				test_cases.pop(name, 0)
 
 	test_cases_ordered = collections.OrderedDict(sorted(test_cases.items()))
 
@@ -98,11 +106,14 @@ def make_test_case(files):
 
 def main():
 	release = False
+	sort_json = False
 
 	for argv in sys.argv:
 		argv = argv.lower()
 		if argv == "release":
 			release = True
+		if argv == "sort" or argv == "sorted":
+			sort_json = True
 
 	# system check
 	if not is_windows_sys():
@@ -122,7 +133,7 @@ def main():
 
 	# prepare cases
 	files = list_file()
-	test_cases = make_test_case(files)
+	test_cases = make_test_case(files, sort_json)
 
 	# run cases
 	start_time = current_millis()
@@ -150,7 +161,7 @@ def main():
 	if allpass:
 		print "%d cases ALL PASS, took %.2fs." % (len(test_cases), duration_time)
 
-	print "Test args: release=%r" % (release)
+	print "Test args: release=%r, sort=%r" % (release, sort_json)
 	print ""
 
 	case_runtime.dump_name()
