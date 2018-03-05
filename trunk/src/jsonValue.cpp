@@ -172,7 +172,49 @@ void JsonValue::ChangeType(VALUE_TYPE newType)
 	m_valType = newType;
 }
 
-string JsonValue::ToString(int nRecuLevel) const
+template<typename _JsonMap>
+static string JsonMapToString(const _JsonMap& jsonMap, int nRecuLevel, bool sort)
+{
+	string ret("");
+
+	++nRecuLevel;
+
+	ret.append("{");
+	ret.append("\n");
+
+	_JsonMap::const_iterator itr = jsonMap.begin();
+	for(; itr != jsonMap.end(); ++itr)
+	{
+		const string& key = itr->first;
+		const JsonValue& value = itr->second;
+
+		for(int r = 0; r < nRecuLevel; ++ r)
+			ret.append("\t");
+		ret.append("\"");
+		ret.append(key);
+		ret.append("\"");
+		ret.append(": ");
+		if(!sort)
+			ret.append(value.ToString(nRecuLevel));
+		else
+			ret.append(value.ToStringSorted(nRecuLevel));
+		_JsonMap::const_iterator temp = itr;
+		++temp;
+		if(temp != jsonMap.end())
+		{
+			ret.append(",");
+		}
+		ret.append("\n");
+	}
+
+	for(int r = 0; r < nRecuLevel - 1; ++ r)
+		ret.append("\t");
+	ret.append("}");
+
+	return ret;
+}
+
+string JsonValue::ToString(int nRecuLevel, bool sort) const
 {
 	string ret("");
 
@@ -193,36 +235,19 @@ string JsonValue::ToString(int nRecuLevel) const
 		break;
 	case JsonValue::MAP_VALUE:
 		{
-			++nRecuLevel;
-			
-			ret.append("{");
-			ret.append("\n");
-			
-			JsonUnsortedMap::const_iterator itr = m_mapValue.begin();
-			for(; itr != m_mapValue.end(); ++itr)
+			string mapString;
+			if(!sort)
 			{
-				const string& key = itr->first;
-				const JsonValue& value = itr->second;
-
-				for(int r = 0; r < nRecuLevel; ++ r)
-					ret.append("\t");
-				ret.append("\"");
-				ret.append(key);
-				ret.append("\"");
-				ret.append(" : ");
-				ret.append(value.ToString(nRecuLevel));
-				JsonUnsortedMap::const_iterator temp = itr;
-				++temp;
-				if(temp != m_mapValue.end())
-				{
-					ret.append(",");
-				}
-				ret.append("\n");
+				mapString = JsonMapToString(m_mapValue, nRecuLevel, sort);
+			}
+			else
+			{
+				JsonMap sortedJsonMap;
+				sortedJsonMap.insert(m_mapValue.begin(), m_mapValue.end());
+				mapString = JsonMapToString(sortedJsonMap, nRecuLevel, sort);
 			}
 
-			for(int r = 0; r < nRecuLevel - 1; ++ r)
-				ret.append("\t");
-			ret.append("}");
+			ret.append(mapString);
 		}
 		break;
 	case JsonValue::ARRAY_VALUE:
@@ -234,12 +259,12 @@ string JsonValue::ToString(int nRecuLevel) const
 			{
 				const JsonValue& value = *itr;
 
-				ret.append(value.ToString(nRecuLevel));
+				ret.append(value.ToString(nRecuLevel, sort));
 				JsonVec::const_iterator temp = itr;
 				++temp;
 				if(temp != m_arrayValue.end())
 				{
-					ret.append(",");
+					ret.append(", ");
 				}
 			}
 

@@ -29,6 +29,9 @@ sub-proj/JSFormatterJS/typings/*
 sub-proj/JSParserTest/Debug/*
 sub-proj/JSParserTest/Release/*
 
+sub-proj/JsonPP/tests/out.js
+sub-proj/JsonPP/tests/out.json
+
 trunk/_UpgradeReport_Files/*
 trunk/Debug/*
 trunk/Unicode Debug/*

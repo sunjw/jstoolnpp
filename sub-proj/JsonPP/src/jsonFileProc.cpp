@@ -4,14 +4,14 @@
 using namespace std;
 using namespace sunjwbase;
 
-JsonFileProc::JsonFileProc(const tstring& fileName)
+JsonFileProc::JsonFileProc(const tstring& intputFile)
 {
-	m_strFileName = tstrtostr(fileName);
+	m_strInputFile = tstrtostr(intputFile);
 }
 
 void JsonFileProc::GetJsonValue(JsonValue& jsonValue)
 { 
-	m_ifile.open(m_strFileName.c_str());
+	m_ifile.open(m_strInputFile.c_str());
 	if(m_ifile)
 	{
 		Go(jsonValue);
@@ -19,12 +19,15 @@ void JsonFileProc::GetJsonValue(JsonValue& jsonValue)
 	m_ifile.close();
 }
 
-void JsonFileProc::Save(const JsonValue& jsonValue)
+void JsonFileProc::Save(const JsonValue& jsonValue, const tstring& outputFile, bool sort)
 {
-	m_ofile.open(m_strFileName.c_str());
+	m_ofile.open(tstrtostr(outputFile).c_str());
 	if(m_ofile)
 	{
-		m_ofile << jsonValue.ToString();
+		if(!sort)
+			m_ofile << jsonValue.ToString();
+		else
+			m_ofile << jsonValue.ToStringSorted();
 	}
 	m_ofile.close();
 }

@@ -54,8 +54,6 @@ public:
 		MAP_VALUE = 0x20
 	};
 
-	long line; // line number
-
 	/*
 	 * Constructors
 	 * Default is string value
@@ -108,15 +106,28 @@ public:
 	JsonValue& operator[](const std::string& key);
 
 	// Convert string value or map value to string
-	std::string ToString(int nRecuLevel = 0) const;
+	inline std::string ToString() const
+	{ return ToString(0); }
+	inline std::string ToString(int nRecuLevel) const
+	{ return ToString(nRecuLevel, false); }
+
+	// Convert string value or map value to string, sorted
+	inline std::string ToStringSorted() const
+	{ return ToStringSorted(0); }
+	inline std::string ToStringSorted(int nRecuLevel) const
+	{ return ToString(nRecuLevel, true); }
+
+	long line; // line number
 
 private:
+	void ChangeType(VALUE_TYPE newType);
+
+	std::string ToString(int nRecuLevel, bool sort) const;
+
 	VALUE_TYPE m_valType;
 	std::string m_strValue;
 	JsonUnsortedMap m_mapValue;
 	JsonVec m_arrayValue;
-
-	void ChangeType(VALUE_TYPE newType);
 };
 
 #endif
