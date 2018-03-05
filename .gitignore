@@ -16,6 +16,7 @@ sub-proj/JsonPP/Debug/*
 sub-proj/JsonPP/Release/*
 sub-proj/JsonPP/x64/*
 sub-proj/JsonPP/tests/out.js
+sub-proj/JsonPP/tests/out.json
 trunk/_UpgradeReport_Files/*
 trunk/Debug/*
 trunk/Unicode Debug/*
