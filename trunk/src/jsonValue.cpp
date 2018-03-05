@@ -209,7 +209,7 @@ string JsonValue::ToString(int nRecuLevel) const
 				ret.append("\"");
 				ret.append(key);
 				ret.append("\"");
-				ret.append(" : ");
+				ret.append(": ");
 				ret.append(value.ToString(nRecuLevel));
 				JsonUnsortedMap::const_iterator temp = itr;
 				++temp;
