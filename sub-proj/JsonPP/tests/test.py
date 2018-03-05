@@ -66,6 +66,10 @@ class CaseRuntime(object):
 	def dump_version(self):
 		call([self.runtime_path, "--version"])
 
+class SortCaseRuntime(CaseRuntime):
+	def _case_execute(self, test_case):
+		call([self.runtime_path, "--sort", test_case.source, OUTPUT_FILE_NAME])
+
 def make_test_case(files, sort_json):
 	test_cases = {}
 
@@ -129,7 +133,11 @@ def main():
 			jsonpp_path_sel = JSONPP_REL_PATH_WIN
 
 	# make runtime
-	case_runtime = CaseRuntime(jsonpp_path_sel)
+	case_runtime = 0
+	if not sort_json:
+		case_runtime = CaseRuntime(jsonpp_path_sel)
+	else:
+		case_runtime = SortCaseRuntime(jsonpp_path_sel)
 
 	# prepare cases
 	files = list_file()
