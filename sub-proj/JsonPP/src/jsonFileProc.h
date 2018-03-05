@@ -7,13 +7,14 @@
 class JsonFileProc: public JsonParser
 {
 public:
-	explicit JsonFileProc(const sunjwbase::tstring& fileName);
+	explicit JsonFileProc(const sunjwbase::tstring& intputFile);
 
 	void GetJsonValue(JsonValue& jsonValue);
+	void Save(const JsonValue& jsonValue, const sunjwbase::tstring& outputFile);
 	void Save(const JsonValue& jsonValue);
 
 private:
-	std::string m_strFileName;
+	std::string m_strInputFile;
 	std::ifstream m_ifile;
 	std::ofstream m_ofile;
 

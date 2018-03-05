@@ -46,7 +46,7 @@ int main(int argc, char *argv[])
 			JsonUnsortedMap::iterator itr = jmap.find("txxx");
 			jmap.insert(itr, JsonMapPair("taglib", JsonValue("xxxxx")));*/
 
-			jfp.Save(jsonValue);
+			jfp.Save(jsonValue, strtotstr(string(outputFile)));
 
 			cout << "Done" << endl;
 		}
@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		cout << "Usage: jsformatter [input file] [output file]" << endl;
+		cout << "Usage: jsonpp [input file] [output file]" << endl;
 	}
 
 
