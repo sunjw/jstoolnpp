@@ -239,7 +239,7 @@ string JsonValue::ToString(int nRecuLevel) const
 				++temp;
 				if(temp != m_arrayValue.end())
 				{
-					ret.append(",");
+					ret.append(", ");
 				}
 			}
 
