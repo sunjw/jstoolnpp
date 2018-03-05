@@ -119,8 +119,6 @@ private:
 	// Convert string value or map value to string
 	std::string ToString(int nRecuLevel, bool sort) const;
 
-	static std::string ToString(const JsonUnsortedMap& unsortedMap, int nRecuLevel);
-
 	VALUE_TYPE m_valType;
 	std::string m_strValue;
 	JsonUnsortedMap m_mapValue;

@@ -172,6 +172,45 @@ void JsonValue::ChangeType(VALUE_TYPE newType)
 	m_valType = newType;
 }
 
+template<typename _JsonMap>
+static string JsonMapToString(const _JsonMap& jsonMap, int nRecuLevel)
+{
+	string ret("");
+
+	++nRecuLevel;
+
+	ret.append("{");
+	ret.append("\n");
+
+	_JsonMap::const_iterator itr = jsonMap.begin();
+	for(; itr != jsonMap.end(); ++itr)
+	{
+		const string& key = itr->first;
+		const JsonValue& value = itr->second;
+
+		for(int r = 0; r < nRecuLevel; ++ r)
+			ret.append("\t");
+		ret.append("\"");
+		ret.append(key);
+		ret.append("\"");
+		ret.append(": ");
+		ret.append(value.ToString(nRecuLevel));
+		_JsonMap::const_iterator temp = itr;
+		++temp;
+		if(temp != jsonMap.end())
+		{
+			ret.append(",");
+		}
+		ret.append("\n");
+	}
+
+	for(int r = 0; r < nRecuLevel - 1; ++ r)
+		ret.append("\t");
+	ret.append("}");
+
+	return ret;
+}
+
 string JsonValue::ToString(int nRecuLevel, bool sort) const
 {
 	string ret("");
@@ -193,7 +232,7 @@ string JsonValue::ToString(int nRecuLevel, bool sort) const
 		break;
 	case JsonValue::MAP_VALUE:
 		{
-			string mapString = JsonValue::ToString(m_mapValue, nRecuLevel);
+			string mapString = JsonMapToString(m_mapValue, nRecuLevel);
 			ret.append(mapString);
 		}
 		break;
@@ -219,44 +258,6 @@ string JsonValue::ToString(int nRecuLevel, bool sort) const
 		}
 		break;
 	}
-
-	return ret;
-}
-
-string JsonValue::ToString(const JsonUnsortedMap& unsortedMap, int nRecuLevel)
-{
-	string ret("");
-
-	++nRecuLevel;
-
-	ret.append("{");
-	ret.append("\n");
-
-	JsonUnsortedMap::const_iterator itr = unsortedMap.begin();
-	for(; itr != unsortedMap.end(); ++itr)
-	{
-		const string& key = itr->first;
-		const JsonValue& value = itr->second;
-
-		for(int r = 0; r < nRecuLevel; ++ r)
-			ret.append("\t");
-		ret.append("\"");
-		ret.append(key);
-		ret.append("\"");
-		ret.append(": ");
-		ret.append(value.ToString(nRecuLevel));
-		JsonUnsortedMap::const_iterator temp = itr;
-		++temp;
-		if(temp != unsortedMap.end())
-		{
-			ret.append(",");
-		}
-		ret.append("\n");
-	}
-
-	for(int r = 0; r < nRecuLevel - 1; ++ r)
-		ret.append("\t");
-	ret.append("}");
 
 	return ret;
 }
