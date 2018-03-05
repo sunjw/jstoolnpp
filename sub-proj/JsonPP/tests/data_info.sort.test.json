@@ -1,0 +1,176 @@
+{
+	"activity_data": [{
+		"class_name": "com/ihsdkflksadjfl/vmi/testkjxcvkjnv/LoginActivity",
+		"text_views": [{
+			"control_id": "editTextUserName",
+			"kjxcvkjnv_key": "KEY_CNDHHENAME"
+		}, {
+			"control_id": "editTextPassword",
+			"kjxcvkjnv_key": "KEY_CVBDBJFR"
+		}]
+	}, {
+		"class_name": "com/ihsdkflksadjfl/virdroid/ui/LoginActivity",
+		"text_views": [{
+			"control_id": "username_edit_text",
+			"kjxcvkjnv_key": "KEY_CNDHHENAME"
+		}, {
+			"control_id": "password_edit_text",
+			"kjxcvkjnv_key": "KEY_CVBDBJFR"
+		}]
+	}, {
+		"class_name": "com/sap/mobile/meps/core/dialogs/LogonActivity",
+		"text_views": [{
+			"control_id": "core_login_user_name",
+			"kjxcvkjnv_key": "KEY_CNDHHENAME"
+		}, {
+			"control_id": "core_login_password",
+			"kjxcvkjnv_key": "KEY_CVBDBJFR"
+		}]
+	}, {
+		"class_name": "com/nitrodesk/nitroid/settings/ConfigWizard",
+		"text_views": [{
+			"control_id": "txtUserID",
+			"kjxcvkjnv_key": "KEY_CNDHHENAME_WITHOUT_DOMAIN"
+		}, {
+			"control_id": "txtEmailAddress",
+			"kjxcvkjnv_key": "KEY_CNDHHENAME_EMAIL"
+		}, {
+			"control_id": "txtPassword",
+			"kjxcvkjnv_key": "KEY_CVBDBJFR"
+		}, {
+			"control_id": "txtServer",
+			"kjxcvkjnv_key": "KEY_EXCHANGE_PFKKFLG"
+		}]
+	}, {
+		"class_name": "com/seeyon/mobile/android/model/login/fragment/LoginFragment",
+		"text_views": [{
+			"control_id": "et_login_loginName",
+			"kjxcvkjnv_key": "KEY_CNDHHENAME_WITHOUT_DOMAIN"
+		}, {
+			"control_id": "et_login_password",
+			"kjxcvkjnv_key": "KEY_CVBDBJFR"
+		}]
+	}, {
+		"class_name": "com/seeyon/mobile/android/model/login/setting/LoginSettingFragment",
+		"text_views": [{
+			"control_id": "et_setting_safa_add",
+			"kjxcvkjnv_key": "KEY_OTHER_PFKKFLG"
+		}, {
+			"control_id": "et_setting_safa_port",
+			"kjxcvkjnv_key": "KEY_OTHER_PFKKFLG_CNEGGNFF"
+		}]
+	}, {
+		"class_name": "com/microsoft/office/lync/ui/options/CredentialsActivity",
+		"text_views": [{
+			"control_id": "CredentialsActivity_EditTextSignInAddress",
+			"kjxcvkjnv_key": "KEY_CNDHHENAME_EMAIL"
+		}, {
+			"control_id": "CredentialsActivity_EditTextPassword",
+			"kjxcvkjnv_key": "KEY_CVBDBJFR"
+		}]
+	}, {
+		"class_name": "com/ihsdkflksadjfl/workspace/activity/ServerInfo",
+		"text_views": [{
+			"control_id": "login_editText_Serveraddr",
+			"kjxcvkjnv_key": "KEY_OTHER_PFKKFLG"
+		}]
+	}, {
+		"class_name": "com/lotus/sync/traveler/ConfigureApplication_Traveler",
+		"text_views": [{
+			"control_id": "user_name",
+			"kjxcvkjnv_key": "KEY_CNDHHENAME"
+		}, {
+			"control_id": "password",
+			"kjxcvkjnv_key": "KEY_CVBDBJFR"
+		}]
+	}, {
+		"class_name": "com/ihsdkflksadjfl/safesync4biz/ui/LoginActivity",
+		"text_views": [{
+			"control_id": "login_name",
+			"kjxcvkjnv_key": "KEY_CNDHHENAME"
+		}, {
+			"control_id": "login_password",
+			"kjxcvkjnv_key": "KEY_CVBDBJFR"
+		}, {
+			"control_id": "login_server",
+			"kjxcvkjnv_key": "KEY_OTHER_PFKKFLG"
+		}]
+	}, {
+		"class_name": "com/k2/mobile/presentation/auth/login/ServerFragment",
+		"text_views": [{
+			"control_id": "server_URL_Text",
+			"kjxcvkjnv_key": "KEY_OTHER_PFKKFLG"
+		}]
+	}, {
+		"class_name": "com/oracle/obi/fragment/ConnectionsBasicFragment",
+		"text_views": [{
+			"control_id": "edit_username",
+			"kjxcvkjnv_key": "KEY_CNDHHENAME"
+		}, {
+			"control_id": "edit_password",
+			"kjxcvkjnv_key": "KEY_CVBDBJFR"
+		}, {
+			"control_id": "edit_host",
+			"kjxcvkjnv_key": "KEY_OTHER_PFKKFLG"
+		}, {
+			"control_id": "edit_port",
+			"kjxcvkjnv_key": "KEY_OTHER_PFKKFLG_CNEGGNFF"
+		}]
+	}],
+	"app_data": [{
+		"package_name": "*",
+		"special_values": [{
+			"key": "$NOTHING$",
+			"value": "true"
+		}]
+	}, {
+		"package_name": "com.ihsdkflksadjfl.ba.mobile.appstore",
+		"special_values": [{
+			"key": "$ALWAYS_WITHOUT_DOMAIN$",
+			"value": "true"
+		}]
+	}, {
+		"package_name": "com.seeyon.mobile.android",
+		"special_values": [{
+			"key": "$WAIT_TIME$",
+			"value": "10000"
+		}, {
+			"key": "$OTHER_PFKKFLG$",
+			"value": "172.31.1.53"
+		}, {
+			"key": "$OTHER_PFKKFLG_CNEGGNFF$",
+			"value": "9999"
+		}]
+	}, {
+		"package_name": "com.ihsdkflksadjfl.workspace",
+		"special_values": [{
+			"key": "$OTHER_PFKKFLG$",
+			"value": "safecircle.ihsdkflksadjfl.com"
+		}],
+		"using_autokjxcvkjnv": true
+	}, {
+		"package_name": "com.ihsdkflksadjfl.safesync4biz",
+		"special_values": [{
+			"key": "$OTHER_PFKKFLG$",
+			"value": "www.ssfe.ihsdkflksadjfl.com.cn"
+		}],
+		"using_autokjxcvkjnv": true
+	}, {
+		"package_name": "com.k2.mobile",
+		"special_values": [{
+			"key": "$OTHER_PFKKFLG$",
+			"value": "http://ui34hjkfdhkktiudf/"
+		}],
+		"using_autokjxcvkjnv": true
+	}, {
+		"package_name": "com.oracle.obi",
+		"special_values": [{
+			"key": "$OTHER_PFKKFLG$",
+			"value": "jhvuyie4.icmcjr.local"
+		}, {
+			"key": "$OTHER_PFKKFLG_CNEGGNFF$",
+			"value": "4443"
+		}],
+		"using_autokjxcvkjnv": true
+	}]
+}
