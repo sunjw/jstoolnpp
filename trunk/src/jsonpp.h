@@ -107,7 +107,7 @@ public:
 
 	// Convert string value or map value to string
 	inline std::string ToString() const
-	{ return ToString(0, false); }
+	{ return ToString(0); }
 	inline std::string ToString(int nRecuLevel) const
 	{ return ToString(nRecuLevel, false); }
 
