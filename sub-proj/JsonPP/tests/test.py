@@ -11,6 +11,8 @@ import time
 import collections
 from subprocess import call
 
+OUTPUT_FILE_NAME = "out.json"
+
 JSONPP_PATH_WIN = "../../../trunk/debug/JsonPP.exe"
 JSONPP_REL_PATH_WIN = "../../../trunk/release/JsonPP.exe"
 
@@ -39,11 +41,11 @@ class CaseRuntime(object):
 		self.runtime_path = runtime_path
 
 	def _case_execute(self, test_case):
-		call([self.runtime_path, test_case.source, "out.js"])
+		call([self.runtime_path, test_case.source, OUTPUT_FILE_NAME])
 
 	def _case_result(self, test_case):
 		result = "ERROR"
-		out_md5 = hashlib.md5(open("out.js", "rb").read()).hexdigest()
+		out_md5 = hashlib.md5(open(OUTPUT_FILE_NAME, "rb").read()).hexdigest()
 		result_md5 = hashlib.md5(open(test_case.result, "rb").read()).hexdigest()
 		if out_md5 == result_md5:
 			result = "PASS"
