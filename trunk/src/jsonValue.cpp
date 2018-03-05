@@ -232,7 +232,18 @@ string JsonValue::ToString(int nRecuLevel, bool sort) const
 		break;
 	case JsonValue::MAP_VALUE:
 		{
-			string mapString = JsonMapToString(m_mapValue, nRecuLevel);
+			string mapString;
+			if(!sort)
+			{
+				mapString = JsonMapToString(m_mapValue, nRecuLevel);
+			}
+			else
+			{
+				JsonMap sortedJsonMap;
+				sortedJsonMap.insert(m_mapValue.begin(), m_mapValue.end());
+				mapString = JsonMapToString(sortedJsonMap, nRecuLevel);
+			}
+
 			ret.append(mapString);
 		}
 		break;

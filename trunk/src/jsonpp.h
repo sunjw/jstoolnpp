@@ -111,12 +111,17 @@ public:
 	inline std::string ToString(int nRecuLevel) const
 	{ return ToString(nRecuLevel, false); }
 
+	// Convert string value or map value to string, sorted
+	inline std::string ToStringSorted() const
+	{ return ToStringSorted(0); }
+	inline std::string ToStringSorted(int nRecuLevel) const
+	{ return ToString(nRecuLevel, true); }
+
 	long line; // line number
 
 private:
 	void ChangeType(VALUE_TYPE newType);
 
-	// Convert string value or map value to string
 	std::string ToString(int nRecuLevel, bool sort) const;
 
 	VALUE_TYPE m_valType;
