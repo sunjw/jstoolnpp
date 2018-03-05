@@ -173,7 +173,7 @@ void JsonValue::ChangeType(VALUE_TYPE newType)
 }
 
 template<typename _JsonMap>
-static string JsonMapToString(const _JsonMap& jsonMap, int nRecuLevel)
+static string JsonMapToString(const _JsonMap& jsonMap, int nRecuLevel, bool sort)
 {
 	string ret("");
 
@@ -194,7 +194,10 @@ static string JsonMapToString(const _JsonMap& jsonMap, int nRecuLevel)
 		ret.append(key);
 		ret.append("\"");
 		ret.append(": ");
-		ret.append(value.ToString(nRecuLevel));
+		if(!sort)
+			ret.append(value.ToString(nRecuLevel));
+		else
+			ret.append(value.ToStringSorted(nRecuLevel));
 		_JsonMap::const_iterator temp = itr;
 		++temp;
 		if(temp != jsonMap.end())
@@ -235,13 +238,13 @@ string JsonValue::ToString(int nRecuLevel, bool sort) const
 			string mapString;
 			if(!sort)
 			{
-				mapString = JsonMapToString(m_mapValue, nRecuLevel);
+				mapString = JsonMapToString(m_mapValue, nRecuLevel, sort);
 			}
 			else
 			{
 				JsonMap sortedJsonMap;
 				sortedJsonMap.insert(m_mapValue.begin(), m_mapValue.end());
-				mapString = JsonMapToString(sortedJsonMap, nRecuLevel);
+				mapString = JsonMapToString(sortedJsonMap, nRecuLevel, sort);
 			}
 
 			ret.append(mapString);
@@ -256,7 +259,7 @@ string JsonValue::ToString(int nRecuLevel, bool sort) const
 			{
 				const JsonValue& value = *itr;
 
-				ret.append(value.ToString(nRecuLevel));
+				ret.append(value.ToString(nRecuLevel, sort));
 				JsonVec::const_iterator temp = itr;
 				++temp;
 				if(temp != m_arrayValue.end())
