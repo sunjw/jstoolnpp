@@ -324,7 +324,7 @@ void JSONDialog::drawTree(const JsonValue& jsonValue)
 	const JsonValue::VALUE_TYPE& valType = jsonValue.GetValueType();
 	if(valType == JsonValue::UNKNOWN_VALUE)
 	{
-		::MessageBox(g_nppData._nppHandle, TEXT("Cannot parse json..."), TEXT("JsonViewer"), MB_OK);
+		::MessageBox(g_nppData._nppHandle, TEXT("Cannot parse json..."), TEXT("JSON Viewer"), MB_OK);
 		return;
 	}
 
@@ -576,7 +576,7 @@ void JSONDialog::search()
 	}
 	else
 	{
-		MessageBox(m_hDlg, TEXT("No results found."), TEXT("Search in Json"), MB_ICONINFORMATION | MB_OK);
+		MessageBox(m_hDlg, TEXT("No results found."), TEXT("Search in JSON"), MB_ICONINFORMATION | MB_OK);
 	}
 
 	enableControls();

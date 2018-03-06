@@ -40,7 +40,7 @@
 #include "jsformatString.h"
 #include "jsonStringProc.h"
 
-static const int s_nbFunc = 13;
+static const int s_nbFunc = 16;
 
 static FuncItem s_funcItem[s_nbFunc];
 static HMENU s_ownMenu = NULL;
@@ -107,20 +107,28 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			lstrcpy(s_funcItem[6]._itemName, TEXT("-SEPARATOR-"));
 			s_funcItem[6]._pFunc = NULL;
 
-			lstrcpy(s_funcItem[7]._itemName, TEXT(STRING_OPTIONS));
-			s_funcItem[7]._pFunc = options;
+			lstrcpy(s_funcItem[7]._itemName, TEXT(STRING_JSON_SORT));
+			s_funcItem[7]._pFunc = jsMinCurrent;
+			lstrcpy(s_funcItem[8]._itemName, TEXT(STRING_JSON_SORT_NEW_FILE));
+			s_funcItem[8]._pFunc = jsMinNew;
 
-			lstrcpy(s_funcItem[8]._itemName, TEXT("-SEPARATOR-"));
-			s_funcItem[8]._pFunc = NULL;
+			lstrcpy(s_funcItem[9]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[9]._pFunc = NULL;
 
-			lstrcpy(s_funcItem[9]._itemName, TEXT(STRING_PROJECT_SITE));
-			s_funcItem[9]._pFunc = openProjectSite;
-			lstrcpy(s_funcItem[10]._itemName, TEXT(STRING_SOURCE_CODE_GITHUB));
-			s_funcItem[10]._pFunc = openGitHub;
-			lstrcpy(s_funcItem[11]._itemName, TEXT(STRING_CHECK_UPDATE));
-			s_funcItem[11]._pFunc = checkUpdate;
-			lstrcpy(s_funcItem[12]._itemName, TEXT(STRING_ABOUT));
-			s_funcItem[12]._pFunc = about;
+			lstrcpy(s_funcItem[10]._itemName, TEXT(STRING_OPTIONS));
+			s_funcItem[10]._pFunc = options;
+
+			lstrcpy(s_funcItem[11]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[11]._pFunc = NULL;
+
+			lstrcpy(s_funcItem[12]._itemName, TEXT(STRING_PROJECT_SITE));
+			s_funcItem[12]._pFunc = openProjectSite;
+			lstrcpy(s_funcItem[13]._itemName, TEXT(STRING_SOURCE_CODE_GITHUB));
+			s_funcItem[13]._pFunc = openGitHub;
+			lstrcpy(s_funcItem[14]._itemName, TEXT(STRING_CHECK_UPDATE));
+			s_funcItem[14]._pFunc = checkUpdate;
+			lstrcpy(s_funcItem[15]._itemName, TEXT(STRING_ABOUT));
+			s_funcItem[15]._pFunc = about;
 
 
 			s_hJsonViewBitmap = (HBITMAP)::LoadImage(g_hInst, MAKEINTRESOURCE(IDB_BITMAP_JSONVIEW), IMAGE_BITMAP,
