@@ -45,6 +45,9 @@
 #include "jsformatString.h"
 #include "jsonStringProc.h"
 
+// New npp support JSON
+#define IDM_LANG_JSON (IDM_LANG + 57)
+
 static const int s_nbFunc = 16;
 
 static FuncItem s_funcItem[s_nbFunc];
@@ -537,7 +540,7 @@ static void jsonSort(bool bNewFile)
 			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJsonSortedFormat);
 
 			// Set file's language
-			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
+			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JSON);
 		}
 		else
 		{
