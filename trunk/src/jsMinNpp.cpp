@@ -332,6 +332,37 @@ void jsMinNew()
 	jsMin(true);
 }
 
+static void makeFormatOption(HWND hCurrScintilla, FormatterOption *pFormatterOption)
+{
+	int _nChPerInd = g_struOptions.nChPerInd;
+	if(g_struOptions.chIndent == '\t')
+		_nChPerInd = 1;
+
+	CR_PUT _eCRPut = PUT_CR;
+	int _nPutCR = g_struOptions.nPutCR;
+	switch (_nPutCR)
+	{
+	case EOL_AUTO:
+		if (getScintillaEolCR(hCurrScintilla))
+			_eCRPut = PUT_CR;
+		else
+			_eCRPut = NOT_PUT_CR;
+		break;
+	case EOL_CRLF:
+		_eCRPut = PUT_CR;
+		break;
+	case EOL_LF:
+		_eCRPut = NOT_PUT_CR;
+		break;
+	}
+
+	pFormatterOption->chIndent = g_struOptions.chIndent;
+	pFormatterOption->nChPerInd = _nChPerInd;
+	pFormatterOption->eCRPut = _eCRPut;
+	pFormatterOption->eBracNL = g_struOptions.bNLBracket ? NEWLINE_BRAC : NO_NEWLINE_BRAC;
+	pFormatterOption->eEmpytIndent = g_struOptions.bIndentInEmpty ? INDENT_IN_EMPTYLINE : NO_INDENT_IN_EMPTYLINE;
+}
+
 void jsFormat()
 {
 	doInternetCheckUpdate();
@@ -349,7 +380,6 @@ void jsFormat()
 	size_t jsLenSel;
 	char *pJS;
 	std::string initIndent("");
-	std::string strJSFormat;
 	
 	size_t currentPos;
 	size_t line;
@@ -407,37 +437,10 @@ void jsFormat()
 
 	try
 	{
-		int _nChPerInd = g_struOptions.nChPerInd;
-		if(g_struOptions.chIndent == '\t')
-			_nChPerInd = 1;
-
-		CR_PUT _eCRPut = PUT_CR;
-		int _nPutCR = g_struOptions.nPutCR;
-		switch (_nPutCR)
-		{
-		case EOL_AUTO:
-			if (getScintillaEolCR(hCurrScintilla))
-				_eCRPut = PUT_CR;
-			else
-				_eCRPut = NOT_PUT_CR;
-			break;
-		case EOL_CRLF:
-			_eCRPut = PUT_CR;
-			break;
-		case EOL_LF:
-			_eCRPut = NOT_PUT_CR;
-			break;
-		}
-
 		FormatterOption formatterOption;
-		formatterOption.chIndent = g_struOptions.chIndent;
-		formatterOption.nChPerInd = _nChPerInd;
-		formatterOption.eCRPut = _eCRPut;
-		formatterOption.eBracNL = g_struOptions.bNLBracket ? 
-									NEWLINE_BRAC : NO_NEWLINE_BRAC;
-		formatterOption.eEmpytIndent = g_struOptions.bIndentInEmpty ? 
-										INDENT_IN_EMPTYLINE : NO_INDENT_IN_EMPTYLINE;
+		makeFormatOption(hCurrScintilla, &formatterOption);
 
+		std::string strJSFormat;
 		JSFormatString jsformat(pJS, &strJSFormat, formatterOption);
 		if(bFormatSel)
 			jsformat.SetInitIndent(initIndent);
@@ -504,6 +507,7 @@ static void jsonSort(bool bNewFile)
 		jsonProc.Go(jsonVal);
 
 		string strJsonCodeSorted = jsonVal.ToStringSorted();
+
 		const char *pJsonSorted = strJsonCodeSorted.c_str();
 
 		if(bNewFile)
