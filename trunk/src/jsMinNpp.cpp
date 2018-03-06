@@ -255,7 +255,7 @@ static void jsMin(bool bNewFile)
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
-    if (jsLen == 0) 
+    if (jsLen == 0)
 		return;
 
 	//::SendMessage(hCurrScintilla, SCI_SETSEL, 0, jsLen);
@@ -303,7 +303,7 @@ static void jsMin(bool bNewFile)
 
 			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJSMin);
 
-			// Set file's language 
+			// Set file's language
 			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
 		}
 		else
@@ -317,10 +317,6 @@ static void jsMin(bool bNewFile)
 		::MessageBox(g_nppData._nppHandle, TEXT("ERROR"), TEXT("JSMin"), MB_OK);
 		//cout << "Error: " << ex.what() << endl;
 	}
-
-	/*strcpy(pJSMin, pJS);
-	::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)pJSMin);
-	::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+strlen(pJSMin));*/
 
 	delete [] pJS;
 	delete [] pJSMin;
@@ -343,7 +339,7 @@ void jsFormat()
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
-    if (jsLen == 0) 
+    if (jsLen == 0)
 		return;
 
 	size_t selStart = ::SendMessage(hCurrScintilla, SCI_GETSELECTIONSTART, 0, 0);
@@ -484,9 +480,56 @@ void jsFormat()
 
 static void jsonSort(bool bNewFile)
 {
-	::MessageBox(g_nppData._nppHandle,
-		(bNewFile ? TEXT("New") : TEXT("Current")),
-		TEXT("JSON Sort"), MB_OK);
+	doInternetCheckUpdate();
+
+	HWND hCurrScintilla = getCurrentScintillaHandle();
+
+	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
+    if (jsLen == 0)
+		return;
+
+	//::SendMessage(hCurrScintilla, SCI_SETSEL, 0, jsLen);
+
+    unsigned char *pJS = new unsigned char[jsLen+1];
+
+    ::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
+
+	try
+	{
+		string strJsonCode((char *)pJS);
+
+		JsonStringProc jsonProc(strJsonCode);
+
+		JsonValue jsonVal;
+		jsonProc.Go(jsonVal);
+
+		string strJsonCodeSorted = jsonVal.ToStringSorted();
+
+		if(bNewFile)
+		{
+			// Open a new document
+			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_FILE_NEW);
+
+			// ReGet the current scintilla
+			hCurrScintilla = getCurrentScintillaHandle();
+
+			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)strJsonCodeSorted.c_str());
+
+			// Set file's language
+			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
+		}
+		else
+		{
+			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)strJsonCodeSorted.c_str());
+		}
+	}
+	catch(std::runtime_error ex)
+	{
+		::MessageBox(g_nppData._nppHandle, TEXT("ERROR"), TEXT("JSON Sort"), MB_OK);
+		//cout << "Error: " << ex.what() << endl;
+	}
+
+	delete [] pJS;
 }
 
 void jsonSortCurrent()
