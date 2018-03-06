@@ -504,6 +504,7 @@ static void jsonSort(bool bNewFile)
 		jsonProc.Go(jsonVal);
 
 		string strJsonCodeSorted = jsonVal.ToStringSorted();
+		const char *pJsonSorted = strJsonCodeSorted.c_str();
 
 		if(bNewFile)
 		{
@@ -513,14 +514,14 @@ static void jsonSort(bool bNewFile)
 			// ReGet the current scintilla
 			hCurrScintilla = getCurrentScintillaHandle();
 
-			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)strJsonCodeSorted.c_str());
+			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJsonSorted);
 
 			// Set file's language
 			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
 		}
 		else
 		{
-			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)strJsonCodeSorted.c_str());
+			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJsonSorted);
 		}
 	}
 	catch(std::runtime_error ex)
