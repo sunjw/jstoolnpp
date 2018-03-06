@@ -108,9 +108,9 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			s_funcItem[6]._pFunc = NULL;
 
 			lstrcpy(s_funcItem[7]._itemName, TEXT(STRING_JSON_SORT));
-			s_funcItem[7]._pFunc = jsMinCurrent;
+			s_funcItem[7]._pFunc = jsonSortCurrent;
 			lstrcpy(s_funcItem[8]._itemName, TEXT(STRING_JSON_SORT_NEW_FILE));
-			s_funcItem[8]._pFunc = jsMinNew;
+			s_funcItem[8]._pFunc = jsonSortNew;
 
 			lstrcpy(s_funcItem[9]._itemName, TEXT("-SEPARATOR-"));
 			s_funcItem[9]._pFunc = NULL;
@@ -248,17 +248,7 @@ static bool getScintillaEolCR(HWND hScintilla)
 	return true;
 }
 
-void jsMinCurrent()
-{
-	jsMin(false);
-}
-
-void jsMinNew()
-{
-	jsMin(true);
-}
-
-void jsMin(bool bNewFile)
+static void jsMin(bool bNewFile)
 {
 	doInternetCheckUpdate();
 
@@ -334,6 +324,16 @@ void jsMin(bool bNewFile)
 
 	delete [] pJS;
 	delete [] pJSMin;
+}
+
+void jsMinCurrent()
+{
+	jsMin(false);
+}
+
+void jsMinNew()
+{
+	jsMin(true);
 }
 
 void jsFormat()
@@ -480,6 +480,23 @@ void jsFormat()
 	}
 
 	delete[] pJS;
+}
+
+static void jsonSort(bool bNewFile)
+{
+	::MessageBox(g_nppData._nppHandle,
+		(bNewFile ? TEXT("New") : TEXT("Current")),
+		TEXT("JSON Sort"), MB_OK);
+}
+
+void jsonSortCurrent()
+{
+	jsonSort(false);
+}
+
+void jsonSortNew()
+{
+	jsonSort(true);
 }
 
 void jsonTree()

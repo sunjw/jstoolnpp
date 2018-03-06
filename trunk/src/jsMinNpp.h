@@ -37,8 +37,11 @@ StruOptions g_struOptions;
 
 void jsMinCurrent();
 void jsMinNew();
-void jsMin(bool bNewFile = false);
+
 void jsFormat();
+
+void jsonSortCurrent();
+void jsonSortNew();
 
 void jsonTree();
 void onToggleJsonTree(BOOL bVisible);
