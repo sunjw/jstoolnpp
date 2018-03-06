@@ -19,9 +19,14 @@
 #include <stdexcept>
 #include <string>
 
-//#define _CRTDBG_MAP_ALLOC
-//#include <stdlib.h>
-//#include <crtdbg.h>
+//#define DEBUG_MEM_LEAK
+#undef DEBUG_MEM_LEAK
+
+#ifdef DEBUG_MEM_LEAK
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
 
 #include <windows.h>
 #include <process.h>
@@ -61,7 +66,9 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 	{
 		case DLL_PROCESS_ATTACH:
 		{
-			/*_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );*/
+#ifdef DEBUG_MEM_LEAK
+			_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
 
 			g_hInst = (HINSTANCE)hModule;
 			s_jsonDialog.init((HINSTANCE)g_hInst, g_nppData._nppHandle);
