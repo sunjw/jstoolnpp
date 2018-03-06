@@ -66,7 +66,6 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			g_hInst = (HINSTANCE)hModule;
 			s_jsonDialog.init((HINSTANCE)g_hInst, g_nppData._nppHandle);
 
-			ShortcutKey *pShKey;
 			for(int i = 0; i < s_nbFunc; ++i)
 			{
 				s_funcItem[i]._init2Check = false;
@@ -74,27 +73,15 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 				s_funcItem[i]._pShKey = NULL;
 			}
 
-			s_funcItem[0]._pFunc = jsMinCurrent;
-			s_funcItem[1]._pFunc = jsMinNew;
-			s_funcItem[2]._pFunc = NULL;
-
-			s_funcItem[3]._pFunc = jsFormat;
-			s_funcItem[4]._pFunc = NULL;
-
-			s_funcItem[5]._pFunc = jsonTree;
-			s_funcItem[6]._pFunc = NULL;
-
-			s_funcItem[7]._pFunc = options;
-			s_funcItem[8]._pFunc = NULL;
-
-			s_funcItem[9]._pFunc = openProjectSite;
-			s_funcItem[10]._pFunc = openGitHub;
-			s_funcItem[11]._pFunc = checkUpdate;
-			s_funcItem[12]._pFunc = about;
+			ShortcutKey *pShKey;
 
 			lstrcpy(s_funcItem[0]._itemName, TEXT(STRING_JSMIN));
+			s_funcItem[0]._pFunc = jsMinCurrent;
 			lstrcpy(s_funcItem[1]._itemName, TEXT(STRING_JSMIN_NEW_FILE));
+			s_funcItem[1]._pFunc = jsMinNew;
+
 			lstrcpy(s_funcItem[2]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[2]._pFunc = NULL;
 
 			lstrcpy(s_funcItem[3]._itemName, TEXT(STRING_JSFORMAT));
 			pShKey = new ShortcutKey; // Ctrl+Alt+M
@@ -103,7 +90,10 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			pShKey->_isShift = false;
 			pShKey->_key = 'M';
 			s_funcItem[3]._pShKey = pShKey;
+			s_funcItem[3]._pFunc = jsFormat;
+
 			lstrcpy(s_funcItem[4]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[4]._pFunc = NULL;
 
 			lstrcpy(s_funcItem[5]._itemName, TEXT(STRING_JSON_VIEWER));
 			pShKey = new ShortcutKey; // Ctrl+Alt+J
@@ -112,15 +102,26 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			pShKey->_isShift = false;
 			pShKey->_key = 'J';
 			s_funcItem[5]._pShKey = pShKey;
+			s_funcItem[5]._pFunc = jsonTree;
+
 			lstrcpy(s_funcItem[6]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[6]._pFunc = NULL;
 
 			lstrcpy(s_funcItem[7]._itemName, TEXT(STRING_OPTIONS));
+			s_funcItem[7]._pFunc = options;
+
 			lstrcpy(s_funcItem[8]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[8]._pFunc = NULL;
 
 			lstrcpy(s_funcItem[9]._itemName, TEXT(STRING_PROJECT_SITE));
+			s_funcItem[9]._pFunc = openProjectSite;
 			lstrcpy(s_funcItem[10]._itemName, TEXT(STRING_SOURCE_CODE_GITHUB));
+			s_funcItem[10]._pFunc = openGitHub;
 			lstrcpy(s_funcItem[11]._itemName, TEXT(STRING_CHECK_UPDATE));
+			s_funcItem[11]._pFunc = checkUpdate;
 			lstrcpy(s_funcItem[12]._itemName, TEXT(STRING_ABOUT));
+			s_funcItem[12]._pFunc = about;
+
 
 			s_hJsonViewBitmap = (HBITMAP)::LoadImage(g_hInst, MAKEINTRESOURCE(IDB_BITMAP_JSONVIEW), IMAGE_BITMAP,
 				0, 0, (LR_DEFAULTSIZE | LR_LOADMAP3DCOLORS));
