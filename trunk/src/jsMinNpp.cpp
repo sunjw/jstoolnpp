@@ -19,9 +19,14 @@
 #include <stdexcept>
 #include <string>
 
-//#define _CRTDBG_MAP_ALLOC
-//#include <stdlib.h>
-//#include <crtdbg.h>
+//#define DEBUG_MEM_LEAK
+#undef DEBUG_MEM_LEAK
+
+#ifdef DEBUG_MEM_LEAK
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
+#endif
 
 #include <windows.h>
 #include <process.h>
@@ -40,7 +45,10 @@
 #include "jsformatString.h"
 #include "jsonStringProc.h"
 
-static const int s_nbFunc = 13;
+// New npp support JSON
+#define IDM_LANG_JSON (IDM_LANG + 57)
+
+static const int s_nbFunc = 16;
 
 static FuncItem s_funcItem[s_nbFunc];
 static HMENU s_ownMenu = NULL;
@@ -53,20 +61,21 @@ static time_t s_lastUpdateCheckTime = 0;
 static BOOL s_foundNewVersion = FALSE;
 
 
-BOOL APIENTRY DllMain( HANDLE hModule, 
-                       DWORD  reasonForCall, 
-                       LPVOID lpReserved )
+BOOL APIENTRY DllMain(HANDLE hModule,
+					DWORD reasonForCall,
+					LPVOID lpReserved)
 {
 	switch (reasonForCall)
 	{
 		case DLL_PROCESS_ATTACH:
 		{
-			/*_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );*/
+#ifdef DEBUG_MEM_LEAK
+			_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
 
 			g_hInst = (HINSTANCE)hModule;
 			s_jsonDialog.init((HINSTANCE)g_hInst, g_nppData._nppHandle);
 
-			ShortcutKey *pShKey;
 			for(int i = 0; i < s_nbFunc; ++i)
 			{
 				s_funcItem[i]._init2Check = false;
@@ -74,27 +83,15 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 				s_funcItem[i]._pShKey = NULL;
 			}
 
-			s_funcItem[0]._pFunc = jsMinCurrent;
-			s_funcItem[1]._pFunc = jsMinNew;
-			s_funcItem[2]._pFunc = NULL;
-
-			s_funcItem[3]._pFunc = jsFormat;
-			s_funcItem[4]._pFunc = NULL;
-
-			s_funcItem[5]._pFunc = jsonTree;
-			s_funcItem[6]._pFunc = NULL;
-
-			s_funcItem[7]._pFunc = options;
-			s_funcItem[8]._pFunc = NULL;
-
-			s_funcItem[9]._pFunc = openProjectSite;
-			s_funcItem[10]._pFunc = openGitHub;
-			s_funcItem[11]._pFunc = checkUpdate;
-			s_funcItem[12]._pFunc = about;
+			ShortcutKey *pShKey;
 
 			lstrcpy(s_funcItem[0]._itemName, TEXT(STRING_JSMIN));
+			s_funcItem[0]._pFunc = jsMinCurrent;
 			lstrcpy(s_funcItem[1]._itemName, TEXT(STRING_JSMIN_NEW_FILE));
+			s_funcItem[1]._pFunc = jsMinNew;
+
 			lstrcpy(s_funcItem[2]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[2]._pFunc = NULL;
 
 			lstrcpy(s_funcItem[3]._itemName, TEXT(STRING_JSFORMAT));
 			pShKey = new ShortcutKey; // Ctrl+Alt+M
@@ -103,7 +100,10 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			pShKey->_isShift = false;
 			pShKey->_key = 'M';
 			s_funcItem[3]._pShKey = pShKey;
+			s_funcItem[3]._pFunc = jsFormat;
+
 			lstrcpy(s_funcItem[4]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[4]._pFunc = NULL;
 
 			lstrcpy(s_funcItem[5]._itemName, TEXT(STRING_JSON_VIEWER));
 			pShKey = new ShortcutKey; // Ctrl+Alt+J
@@ -112,15 +112,34 @@ BOOL APIENTRY DllMain( HANDLE hModule,
 			pShKey->_isShift = false;
 			pShKey->_key = 'J';
 			s_funcItem[5]._pShKey = pShKey;
+			s_funcItem[5]._pFunc = jsonTree;
+
 			lstrcpy(s_funcItem[6]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[6]._pFunc = NULL;
 
-			lstrcpy(s_funcItem[7]._itemName, TEXT(STRING_OPTIONS));
-			lstrcpy(s_funcItem[8]._itemName, TEXT("-SEPARATOR-"));
+			lstrcpy(s_funcItem[7]._itemName, TEXT(STRING_JSON_SORT));
+			s_funcItem[7]._pFunc = jsonSortCurrent;
+			lstrcpy(s_funcItem[8]._itemName, TEXT(STRING_JSON_SORT_NEW_FILE));
+			s_funcItem[8]._pFunc = jsonSortNew;
 
-			lstrcpy(s_funcItem[9]._itemName, TEXT(STRING_PROJECT_SITE));
-			lstrcpy(s_funcItem[10]._itemName, TEXT(STRING_SOURCE_CODE_GITHUB));
-			lstrcpy(s_funcItem[11]._itemName, TEXT(STRING_CHECK_UPDATE));
-			lstrcpy(s_funcItem[12]._itemName, TEXT(STRING_ABOUT));
+			lstrcpy(s_funcItem[9]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[9]._pFunc = NULL;
+
+			lstrcpy(s_funcItem[10]._itemName, TEXT(STRING_OPTIONS));
+			s_funcItem[10]._pFunc = options;
+
+			lstrcpy(s_funcItem[11]._itemName, TEXT("-SEPARATOR-"));
+			s_funcItem[11]._pFunc = NULL;
+
+			lstrcpy(s_funcItem[12]._itemName, TEXT(STRING_PROJECT_SITE));
+			s_funcItem[12]._pFunc = openProjectSite;
+			lstrcpy(s_funcItem[13]._itemName, TEXT(STRING_SOURCE_CODE_GITHUB));
+			s_funcItem[13]._pFunc = openGitHub;
+			lstrcpy(s_funcItem[14]._itemName, TEXT(STRING_CHECK_UPDATE));
+			s_funcItem[14]._pFunc = checkUpdate;
+			lstrcpy(s_funcItem[15]._itemName, TEXT(STRING_ABOUT));
+			s_funcItem[15]._pFunc = about;
+
 
 			s_hJsonViewBitmap = (HBITMAP)::LoadImage(g_hInst, MAKEINTRESOURCE(IDB_BITMAP_JSONVIEW), IMAGE_BITMAP,
 				0, 0, (LR_DEFAULTSIZE | LR_LOADMAP3DCOLORS));
@@ -198,8 +217,8 @@ extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam
 
 static HWND getCurrentScintillaHandle()
 {
-    int currentEdit;
-    ::SendMessage(g_nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM)&currentEdit);
+	int currentEdit;
+	::SendMessage(g_nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM)&currentEdit);
 	return (currentEdit == 0) ? g_nppData._scintillaMainHandle : g_nppData._scintillaSecondHandle;
 };
 
@@ -239,31 +258,21 @@ static bool getScintillaEolCR(HWND hScintilla)
 	return true;
 }
 
-void jsMinCurrent()
-{
-	jsMin(false);
-}
-
-void jsMinNew()
-{
-	jsMin(true);
-}
-
-void jsMin(bool bNewFile)
+static void jsMin(bool bNewFile)
 {
 	doInternetCheckUpdate();
 
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
-    if (jsLen == 0) 
+	if (jsLen == 0)
 		return;
 
 	//::SendMessage(hCurrScintilla, SCI_SETSEL, 0, jsLen);
 
-    unsigned char *pJS = new unsigned char[jsLen+1];
-    
-    ::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
+	unsigned char *pJS = new unsigned char[jsLen+1];
+
+	::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
 
 	size_t jsMinLen = jsLen + 10; // seem to be something wrong, so add some empty places
 	unsigned char *pJSMin = new unsigned char[jsMinLen];
@@ -304,7 +313,7 @@ void jsMin(bool bNewFile)
 
 			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJSMin);
 
-			// Set file's language 
+			// Set file's language
 			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
 		}
 		else
@@ -319,12 +328,49 @@ void jsMin(bool bNewFile)
 		//cout << "Error: " << ex.what() << endl;
 	}
 
-	/*strcpy(pJSMin, pJS);
-	::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)pJSMin);
-	::SendMessage(hCurrScintilla, SCI_SETSEL, start, start+strlen(pJSMin));*/
-
 	delete [] pJS;
 	delete [] pJSMin;
+}
+
+void jsMinCurrent()
+{
+	jsMin(false);
+}
+
+void jsMinNew()
+{
+	jsMin(true);
+}
+
+static void makeFormatOption(HWND hCurrScintilla, FormatterOption *pFormatterOption)
+{
+	int _nChPerInd = g_struOptions.nChPerInd;
+	if(g_struOptions.chIndent == '\t')
+		_nChPerInd = 1;
+
+	CR_PUT _eCRPut = PUT_CR;
+	int _nPutCR = g_struOptions.nPutCR;
+	switch (_nPutCR)
+	{
+	case EOL_AUTO:
+		if (getScintillaEolCR(hCurrScintilla))
+			_eCRPut = PUT_CR;
+		else
+			_eCRPut = NOT_PUT_CR;
+		break;
+	case EOL_CRLF:
+		_eCRPut = PUT_CR;
+		break;
+	case EOL_LF:
+		_eCRPut = NOT_PUT_CR;
+		break;
+	}
+
+	pFormatterOption->chIndent = g_struOptions.chIndent;
+	pFormatterOption->nChPerInd = _nChPerInd;
+	pFormatterOption->eCRPut = _eCRPut;
+	pFormatterOption->eBracNL = g_struOptions.bNLBracket ? NEWLINE_BRAC : NO_NEWLINE_BRAC;
+	pFormatterOption->eEmpytIndent = g_struOptions.bIndentInEmpty ? INDENT_IN_EMPTYLINE : NO_INDENT_IN_EMPTYLINE;
 }
 
 void jsFormat()
@@ -334,7 +380,7 @@ void jsFormat()
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
-    if (jsLen == 0) 
+	if (jsLen == 0)
 		return;
 
 	size_t selStart = ::SendMessage(hCurrScintilla, SCI_GETSELECTIONSTART, 0, 0);
@@ -344,7 +390,6 @@ void jsFormat()
 	size_t jsLenSel;
 	char *pJS;
 	std::string initIndent("");
-	std::string strJSFormat;
 	
 	size_t currentPos;
 	size_t line;
@@ -402,37 +447,10 @@ void jsFormat()
 
 	try
 	{
-		int _nChPerInd = g_struOptions.nChPerInd;
-		if(g_struOptions.chIndent == '\t')
-			_nChPerInd = 1;
-
-		CR_PUT _eCRPut = PUT_CR;
-		int _nPutCR = g_struOptions.nPutCR;
-		switch (_nPutCR)
-		{
-		case EOL_AUTO:
-			if (getScintillaEolCR(hCurrScintilla))
-				_eCRPut = PUT_CR;
-			else
-				_eCRPut = NOT_PUT_CR;
-			break;
-		case EOL_CRLF:
-			_eCRPut = PUT_CR;
-			break;
-		case EOL_LF:
-			_eCRPut = NOT_PUT_CR;
-			break;
-		}
-
 		FormatterOption formatterOption;
-		formatterOption.chIndent = g_struOptions.chIndent;
-		formatterOption.nChPerInd = _nChPerInd;
-		formatterOption.eCRPut = _eCRPut;
-		formatterOption.eBracNL = g_struOptions.bNLBracket ? 
-									NEWLINE_BRAC : NO_NEWLINE_BRAC;
-		formatterOption.eEmpytIndent = g_struOptions.bIndentInEmpty ? 
-										INDENT_IN_EMPTYLINE : NO_INDENT_IN_EMPTYLINE;
+		makeFormatOption(hCurrScintilla, &formatterOption);
 
+		std::string strJSFormat;
 		JSFormatString jsformat(pJS, &strJSFormat, formatterOption);
 		if(bFormatSel)
 			jsformat.SetInitIndent(initIndent);
@@ -471,6 +489,81 @@ void jsFormat()
 	}
 
 	delete[] pJS;
+}
+
+static void jsonSort(bool bNewFile)
+{
+	doInternetCheckUpdate();
+
+	HWND hCurrScintilla = getCurrentScintillaHandle();
+
+	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
+	if (jsLen == 0)
+		return;
+
+	//::SendMessage(hCurrScintilla, SCI_SETSEL, 0, jsLen);
+
+	unsigned char *pJS = new unsigned char[jsLen+1];
+
+	::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
+
+	try
+	{
+		string strJsonCode((char *)pJS);
+
+		JsonStringProc jsonProc(strJsonCode);
+
+		JsonValue jsonVal;
+		jsonProc.Go(jsonVal);
+
+		// sort
+		string strJsonCodeSorted = jsonVal.ToStringSorted();
+
+		// format
+		FormatterOption formatterOption;
+		makeFormatOption(hCurrScintilla, &formatterOption);
+
+		std::string strJSFormat;
+		JSFormatString jsformat(strJsonCodeSorted.c_str(), &strJSFormat, formatterOption);
+		jsformat.Go();
+
+		const char *pJsonSortedFormat = strJSFormat.c_str();
+
+		if(bNewFile)
+		{
+			// Open a new document
+			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_FILE_NEW);
+
+			// ReGet the current scintilla
+			hCurrScintilla = getCurrentScintillaHandle();
+
+			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJsonSortedFormat);
+
+			// Set file's language
+			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JSON);
+		}
+		else
+		{
+			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJsonSortedFormat);
+		}
+	}
+	catch(std::runtime_error ex)
+	{
+		::MessageBox(g_nppData._nppHandle, TEXT("ERROR"), TEXT("JSON Sort"), MB_OK);
+		//cout << "Error: " << ex.what() << endl;
+	}
+
+	delete [] pJS;
+}
+
+void jsonSortCurrent()
+{
+	jsonSort(false);
+}
+
+void jsonSortNew()
+{
+	jsonSort(true);
 }
 
 void jsonTree()
