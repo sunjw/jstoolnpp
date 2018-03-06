@@ -53,9 +53,9 @@ static time_t s_lastUpdateCheckTime = 0;
 static BOOL s_foundNewVersion = FALSE;
 
 
-BOOL APIENTRY DllMain( HANDLE hModule, 
-                       DWORD  reasonForCall, 
-                       LPVOID lpReserved )
+BOOL APIENTRY DllMain(HANDLE hModule,
+					DWORD reasonForCall,
+					LPVOID lpReserved)
 {
 	switch (reasonForCall)
 	{
@@ -207,8 +207,8 @@ extern "C" __declspec(dllexport) LRESULT messageProc(UINT Message, WPARAM wParam
 
 static HWND getCurrentScintillaHandle()
 {
-    int currentEdit;
-    ::SendMessage(g_nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM)&currentEdit);
+	int currentEdit;
+	::SendMessage(g_nppData._nppHandle, NPPM_GETCURRENTSCINTILLA, 0, (LPARAM)&currentEdit);
 	return (currentEdit == 0) ? g_nppData._scintillaMainHandle : g_nppData._scintillaSecondHandle;
 };
 
@@ -255,14 +255,14 @@ static void jsMin(bool bNewFile)
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
-    if (jsLen == 0)
+	if (jsLen == 0)
 		return;
 
 	//::SendMessage(hCurrScintilla, SCI_SETSEL, 0, jsLen);
 
-    unsigned char *pJS = new unsigned char[jsLen+1];
-    
-    ::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
+	unsigned char *pJS = new unsigned char[jsLen+1];
+
+	::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
 
 	size_t jsMinLen = jsLen + 10; // seem to be something wrong, so add some empty places
 	unsigned char *pJSMin = new unsigned char[jsMinLen];
@@ -339,7 +339,7 @@ void jsFormat()
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
-    if (jsLen == 0)
+	if (jsLen == 0)
 		return;
 
 	size_t selStart = ::SendMessage(hCurrScintilla, SCI_GETSELECTIONSTART, 0, 0);
@@ -485,14 +485,14 @@ static void jsonSort(bool bNewFile)
 	HWND hCurrScintilla = getCurrentScintillaHandle();
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
-    if (jsLen == 0)
+	if (jsLen == 0)
 		return;
 
 	//::SendMessage(hCurrScintilla, SCI_SETSEL, 0, jsLen);
 
-    unsigned char *pJS = new unsigned char[jsLen+1];
+	unsigned char *pJS = new unsigned char[jsLen+1];
 
-    ::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
+	::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
 
 	try
 	{
