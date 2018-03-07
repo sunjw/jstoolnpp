@@ -123,7 +123,7 @@ DLLAPI void JSFDisableDebug(JSFormatter *jsf);
 
 DLLAPI const char *JSFGetDebugOutput(JSFormatter *jsf);
 
-DLLAPI long JSFGetFormattedLine(JSFormatter *jsf, long originalLine);
+DLLAPI int JSFGetFormattedLine(JSFormatter *jsf, int originalLine);
 
 DLLAPI const char *JSFGetVersion();
 

@@ -35,7 +35,6 @@ public:
 	typedef map<string, char> StrCharMap;
 	typedef set<string> StrSet;
 	typedef vector<int> IntVector;
-	typedef vector<long> LongVector;
 
 	RealJSFormatter(const FormatterOption& option);
 
@@ -52,7 +51,7 @@ public:
 
 	virtual void Go();
 
-	long GetFormattedLine(long originalLine);
+	int GetFormattedLine(unsigned int originalLine);
 
 private:
 	void Init();
@@ -79,8 +78,8 @@ private:
 	string m_lineBuffer;
 
 	int m_nFormattedLineCount;
-	LongVector m_lineFormattedVec;
-	LongVector m_lineWaitVec;
+	IntVector m_lineFormattedVec;
+	IntVector m_lineWaitVec;
 
 	StrSet m_specKeywordSet; // 后面要跟着括号的关键字集合
 	StrCharMap m_blockMap;
