@@ -391,8 +391,8 @@ void jsFormat()
 	char *pJS;
 	string initIndent("");
 	
-	int currentPos;
-	int line;
+	size_t currentPos;
+	size_t line;
 
 	if(!bFormatSel)
 	{
@@ -400,8 +400,8 @@ void jsFormat()
 		pJS = new char[jsLen+1];
 		::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
 
-		currentPos = (int)::SendMessage(hCurrScintilla, SCI_GETCURRENTPOS, 0, 0);
-		line = (int)::SendMessage(hCurrScintilla, SCI_LINEFROMPOSITION, currentPos, 0);
+		currentPos = ::SendMessage(hCurrScintilla, SCI_GETCURRENTPOS, 0, 0);
+		line = ::SendMessage(hCurrScintilla, SCI_LINEFROMPOSITION, currentPos, 0);
 	}
 	else
 	{
@@ -462,12 +462,12 @@ void jsFormat()
 			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
 
 			// line starts from 0, lineFixed starts from 1
-			int lineJSF = line + 1;
+			size_t lineJSF = line + 1;
 			// formattedLine starts from 0, formattedLineJSF starts from 1
-			int formattedLineJSF = (int)jsformat.GetFormattedLine(lineJSF);
-			int formattedLine = formattedLineJSF - 1;
+			size_t formattedLineJSF = jsformat.GetFormattedLine(lineJSF);
+			size_t formattedLine = formattedLineJSF - 1;
 
-			const int bigLineJump = 10;
+			const size_t bigLineJump = 10;
 			::SendMessage(hCurrScintilla, SCI_GOTOLINE, formattedLine + bigLineJump, 0);
 			::SendMessage(hCurrScintilla, SCI_GOTOLINE, formattedLine, 0);
 		}
