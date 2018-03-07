@@ -127,14 +127,14 @@ void RealJSFormatter::PrintAdditionalDebug(string& strDebugOutput)
 	strDebugOutput.append(buf);
 }
 
-int RealJSFormatter::GetFormattedLine(unsigned int originalLine)
+long RealJSFormatter::GetFormattedLine(long originalLine)
 {
 	if(originalLine <= 0 || m_lineFormattedVec.size() <= originalLine)
 		return -1;
 
-	for(int l = originalLine; l > 0; --l)
+	for(long l = originalLine; l > 0; --l)
 	{
-		int formattedLine = m_lineFormattedVec[l];
+		long formattedLine = m_lineFormattedVec[l];
 		if(formattedLine != -1)
 			return formattedLine;
 	}
@@ -223,7 +223,7 @@ void RealJSFormatter::PutString(const Token& token)
 		else
 		{
 			m_lineBuffer += token.code[i];
-			int tokenLine = token.line;
+			long tokenLine = token.line;
 			if(tokenLine != -1)
 				m_lineWaitVec.push_back(token.line);
 		}
@@ -253,7 +253,7 @@ void RealJSFormatter::PutLineBuffer()
 			break;
 		}
 
-		unsigned int oldLine = m_lineWaitVec[i];
+		long oldLine = m_lineWaitVec[i];
 		if(oldLine >= m_lineFormattedVec.size())
 		{
 			m_lineFormattedVec.resize(m_lineFormattedVec.size()*2, -1);
