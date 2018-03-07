@@ -139,7 +139,7 @@ JsonValue& JsonValue::operator[](JsonVec::size_type idx)
 }
 
 // for MapValue
-JsonValue& JsonValue::operator[](const std::string& key)
+JsonValue& JsonValue::operator[](const string& key)
 {
 	// Change to MAP_VALUE
 	ChangeType(JsonValue::MAP_VALUE);
