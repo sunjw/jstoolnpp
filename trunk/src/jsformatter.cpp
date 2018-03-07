@@ -80,7 +80,7 @@ DLLAPI const char *JSFGetDebugOutput(JSFormatter *jsf)
 	return ((RealJSFormatter *)jsf)->GetDebugOutput();
 }
 
-DLLAPI long JSFGetFormattedLine(JSFormatter *jsf, long originalLine)
+DLLAPI unsigned int JSFGetFormattedLine(JSFormatter *jsf, unsigned int originalLine)
 {
 	return ((RealJSFormatter *)jsf)->GetFormattedLine(originalLine);
 }
