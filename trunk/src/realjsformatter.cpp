@@ -129,7 +129,7 @@ void RealJSFormatter::PrintAdditionalDebug(string& strDebugOutput)
 
 long RealJSFormatter::GetFormattedLine(long originalLine)
 {
-	if(originalLine <= 0 || m_lineFormattedVec.size() <= originalLine)
+	if(originalLine <= 0 || m_lineFormattedVec.size() <= (size_t)originalLine)
 		return -1;
 
 	for(long l = originalLine; l > 0; --l)
@@ -254,7 +254,7 @@ void RealJSFormatter::PutLineBuffer()
 		}
 
 		long oldLine = m_lineWaitVec[i];
-		if(oldLine >= m_lineFormattedVec.size())
+		if((size_t)oldLine >= m_lineFormattedVec.size())
 		{
 			m_lineFormattedVec.resize(m_lineFormattedVec.size()*2, -1);
 			continue;
