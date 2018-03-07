@@ -36,21 +36,21 @@ RealJSFormatter::RealJSFormatter(const FormatterOption& option):
 
 string RealJSFormatter::Trim(const string& str)
 {
-	std::string ret(str);
+	string ret(str);
 	ret = ret.erase(ret.find_last_not_of(" \r\n\t") + 1);
 	return ret.erase(0, ret.find_first_not_of(" \r\n\t"));
 }
 
 string RealJSFormatter::TrimSpace(const string& str)
 {
-	std::string ret(str);
+	string ret(str);
 	ret = ret.erase(ret.find_last_not_of(" \t") + 1);
 	return ret.erase(0, ret.find_first_not_of(" \t"));
 }
 
 string RealJSFormatter::TrimRightSpace(const string& str)
 {
-	std::string ret(str);
+	string ret(str);
 	return ret.erase(ret.find_last_not_of(" \t") + 1);
 }
 
