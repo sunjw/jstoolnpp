@@ -849,7 +849,7 @@ class RealJSFormatter extends JSParser.JSParser {
                 this.m_lineBuffer += token.code.charAt(i);
                 var tokenLine = token.line;
                 if (tokenLine != -1)
-                    this.m_lineWaitVec.push(token.line);
+                    this.m_lineWaitVec.push(tokenLine);
             }
         }
     }
