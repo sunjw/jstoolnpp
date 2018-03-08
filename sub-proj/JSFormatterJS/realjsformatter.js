@@ -864,10 +864,15 @@ class RealJSFormatter extends JSParser.JSParser {
             }
 
             var oldLine = this.m_lineWaitVec[i];
-            //if (oldLine >= m_lineFormattedVec.size()) {
-            //    m_lineFormattedVec.resize(m_lineFormattedVec.size() * 2, -1);
-            //    continue;
-            //}
+            if (oldLine >= this.m_lineFormattedVec.length) {
+                //m_lineFormattedVec.resize(m_lineFormattedVec.size() * 2, -1);
+                var curLen = this.m_lineFormattedVec.length;
+                for (var growth = curLen; growth <= curLen * 2; ++growth) {
+                    // init -1
+                    this.m_lineFormattedVec[growth] = -1;
+                }
+                continue;
+            }
 
             if (this.m_lineFormattedVec[oldLine] == -1)
                 this.m_lineFormattedVec[oldLine] = this.m_nFormattedLineCount;
