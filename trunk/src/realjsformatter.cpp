@@ -225,7 +225,7 @@ void RealJSFormatter::PutString(const Token& token)
 			m_lineBuffer += token.code[i];
 			int tokenLine = (int)token.line;
 			if(tokenLine != -1)
-				m_lineWaitVec.push_back((int)token.line);
+				m_lineWaitVec.push_back(tokenLine);
 		}
 	}
 }
