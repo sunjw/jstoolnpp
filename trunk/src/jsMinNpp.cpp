@@ -467,7 +467,7 @@ void jsFormat()
 			int formattedLineJSF = jsformat.GetFormattedLine(lineJSF);
 			int formattedLine = formattedLineJSF - 1;
 
-			const int bigLineJump = 10;
+			const int bigLineJump = 10; // for better page scrolling position
 			::SendMessage(hCurrScintilla, SCI_GOTOLINE, formattedLine + bigLineJump, 0);
 			::SendMessage(hCurrScintilla, SCI_GOTOLINE, formattedLine, 0);
 		}
