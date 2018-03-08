@@ -289,7 +289,7 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 		m_iSelStartLine = (int)::SendMessage(m_hCurrScintilla, SCI_LINEFROMPOSITION, selStart, 0);
 	}
 
-	std::string strJSCode(pJS);
+	string strJSCode(pJS);
 	m_bUTF8Json = FALSE;
 
 	int codePage = (int)::SendMessage(m_hCurrScintilla, SCI_GETCODEPAGE, 0, 0);

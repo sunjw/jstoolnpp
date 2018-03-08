@@ -108,8 +108,8 @@ void JSParser::GetTokenRaw()
 	bool bFirst = true;
 	bool bNum = false; // 是不是数字
 	bool bLineBegin = false;
-	char chQuote; // 记录引号类型 ' 或 "
-	char chComment; // 注释类型 / 或 *
+	char chQuote = 0; // 记录引号类型 ' 或 "
+	char chComment = 0; // 注释类型 / 或 *
 
 	while(1)
 	{

@@ -322,7 +322,7 @@ static void jsMin(bool bNewFile)
 		}
 		
 	}
-	catch(std::runtime_error ex)
+	catch(runtime_error ex)
 	{
 		::MessageBox(g_nppData._nppHandle, TEXT("ERROR"), TEXT("JSMin"), MB_OK);
 		//cout << "Error: " << ex.what() << endl;
@@ -389,10 +389,10 @@ void jsFormat()
 
 	size_t jsLenSel;
 	char *pJS;
-	std::string initIndent("");
+	string initIndent("");
 	
-	size_t currentPos;
-	size_t line;
+	int currentPos;
+	int line;
 
 	if(!bFormatSel)
 	{
@@ -400,8 +400,8 @@ void jsFormat()
 		pJS = new char[jsLen+1];
 		::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
 
-		currentPos = ::SendMessage(hCurrScintilla, SCI_GETCURRENTPOS, 0, 0);
-		line = ::SendMessage(hCurrScintilla, SCI_LINEFROMPOSITION, currentPos, 0);
+		currentPos = (int)::SendMessage(hCurrScintilla, SCI_GETCURRENTPOS, 0, 0);
+		line = (int)::SendMessage(hCurrScintilla, SCI_LINEFROMPOSITION, currentPos, 0);
 	}
 	else
 	{
@@ -450,7 +450,7 @@ void jsFormat()
 		FormatterOption formatterOption;
 		makeFormatOption(hCurrScintilla, &formatterOption);
 
-		std::string strJSFormat;
+		string strJSFormat;
 		JSFormatString jsformat(pJS, &strJSFormat, formatterOption);
 		if(bFormatSel)
 			jsformat.SetInitIndent(initIndent);
@@ -462,12 +462,12 @@ void jsFormat()
 			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
 
 			// line starts from 0, lineFixed starts from 1
-			size_t lineJSF = line + 1;
+			int lineJSF = line + 1;
 			// formattedLine starts from 0, formattedLineJSF starts from 1
-			size_t formattedLineJSF = jsformat.GetFormattedLine(lineJSF);
-			size_t formattedLine = formattedLineJSF - 1;
+			int formattedLineJSF = jsformat.GetFormattedLine(lineJSF);
+			int formattedLine = formattedLineJSF - 1;
 
-			const size_t bigLineJump = 10;
+			const int bigLineJump = 10; // for better page scrolling position
 			::SendMessage(hCurrScintilla, SCI_GOTOLINE, formattedLine + bigLineJump, 0);
 			::SendMessage(hCurrScintilla, SCI_GOTOLINE, formattedLine, 0);
 		}
@@ -483,7 +483,7 @@ void jsFormat()
 			::SendMessage(hCurrScintilla, SCI_SETCURRENTPOS, selStart, 0);
 		}
 	}
-	catch(std::exception ex)
+	catch(exception ex)
 	{
 		::MessageBox(g_nppData._nppHandle, TEXT("ERROR"), TEXT("JSFormat"), MB_OK);
 	}
@@ -523,7 +523,7 @@ static void jsonSort(bool bNewFile)
 		FormatterOption formatterOption;
 		makeFormatOption(hCurrScintilla, &formatterOption);
 
-		std::string strJSFormat;
+		string strJSFormat;
 		JSFormatString jsformat(strJsonCodeSorted.c_str(), &strJSFormat, formatterOption);
 		jsformat.Go();
 
@@ -547,7 +547,7 @@ static void jsonSort(bool bNewFile)
 			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJsonSortedFormat);
 		}
 	}
-	catch(std::runtime_error ex)
+	catch(runtime_error ex)
 	{
 		::MessageBox(g_nppData._nppHandle, TEXT("ERROR"), TEXT("JSON Sort"), MB_OK);
 		//cout << "Error: " << ex.what() << endl;
