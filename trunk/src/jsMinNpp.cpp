@@ -617,7 +617,7 @@ void options()
 							(DLGPROC)dlgProcOptions);
 }
 
-/* This code was shamefully robbed from NppExec & PythonScript*/
+/* This code was shamefully robbed from NppExec & PythonScript */
 HMENU getOwnMenu()
 {
 	if (s_funcItem && s_ownMenu == NULL)
