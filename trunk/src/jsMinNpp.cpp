@@ -175,7 +175,7 @@ extern "C" __declspec(dllexport) FuncItem *getFuncsArray(int *nbF)
 	*nbF = s_nbFunc;
 
 	// After npp get our menu, we check update.
-	doInternetCheckUpdate();
+	//doInternetCheckUpdate();
 
 	return s_funcItem;
 }
