@@ -59,6 +59,7 @@ static JSONDialog s_jsonDialog;
 static BOOL s_updateThreadRunning = FALSE;
 static time_t s_lastUpdateCheckTime = 0;
 static BOOL s_foundNewVersion = FALSE;
+static int s_newVersionItemIdx = 0;
 
 
 BOOL APIENTRY DllMain(HANDLE hModule,
@@ -137,6 +138,7 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 			s_funcItem[13]._pFunc = openGitHub;
 			lstrcpy(s_funcItem[14]._itemName, TEXT(STRING_CHECK_UPDATE));
 			s_funcItem[14]._pFunc = checkUpdate;
+			s_newVersionItemIdx = 14;
 			lstrcpy(s_funcItem[15]._itemName, TEXT(STRING_ABOUT));
 			s_funcItem[15]._pFunc = about;
 
@@ -175,7 +177,7 @@ extern "C" __declspec(dllexport) FuncItem *getFuncsArray(int *nbF)
 	*nbF = s_nbFunc;
 
 	// After npp get our menu, we check update.
-	doInternetCheckUpdate();
+	//doInternetCheckUpdate();
 
 	return s_funcItem;
 }
@@ -617,7 +619,7 @@ void options()
 							(DLGPROC)dlgProcOptions);
 }
 
-/* This code was shamefully robbed from NppExec & PythonScript*/
+/* This code was shamefully robbed from NppExec & PythonScript */
 HMENU getOwnMenu()
 {
 	if (s_funcItem && s_ownMenu == NULL)
@@ -646,14 +648,14 @@ HMENU getOwnMenu()
 static void changeUpdateMenuString(LPTSTR pszString)
 {
 	HMENU hMenuOwn = getOwnMenu();
-	if (hMenuOwn != NULL)
+	if (hMenuOwn != NULL && s_newVersionItemIdx != 0)
 	{
 		MENUITEMINFO mii = { sizeof(MENUITEMINFO) };
 		mii.cbSize = sizeof(MENUITEMINFO);
 		mii.fMask = MIIM_STRING;
 		mii.fType = MFT_STRING;
 		mii.dwTypeData = pszString;
-		::SetMenuItemInfo(hMenuOwn, 11, TRUE, &mii);
+		::SetMenuItemInfo(hMenuOwn, s_newVersionItemIdx, TRUE, &mii);
 	}
 }
 
