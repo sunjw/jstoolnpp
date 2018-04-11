@@ -1,5 +1,5 @@
 1.21.6
-Fix format on reserved word as function name. 
+Fix format on reserved word as function name.
 
 1.21.1
 Fix JSMin crash.
