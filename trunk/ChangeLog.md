@@ -1,3 +1,7 @@
+1.22.0  
+Add JSON Sort function.  
+Fix blocking Notepad++ startup in some environment.  
+
 1.21.6  
 Fix format on reserved word as function name.  
 
