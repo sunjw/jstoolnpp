@@ -280,9 +280,12 @@ class JSParser {
                 {
                     if (!bRegularFlags &&
                         (this.IsNormalChar(this.m_charB) || this.m_iRegBracket > 0)) {
-                        // part of regular flags
-                        // /g /i /ig...
-                        bRegularFlags = true;
+                        if (this.m_iRegBracket == 0) {
+                            // part of regular flags
+                            // /g /i /ig...
+                            // or no need escape '/' inside []
+                            bRegularFlags = true;
+                        }
                         continue;
                     } else {
                         // regular end
