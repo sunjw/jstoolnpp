@@ -174,9 +174,13 @@ void JSParser::GetTokenRaw()
 				if(!bRegularFlags && 
 					(IsNormalChar(m_charB) || m_iRegBracket > 0))
 				{
-					// 正则的 flags 部分
-					// /g /i /ig...
-					bRegularFlags = true;
+					if(m_iRegBracket == 0)
+					{
+						// 正则的 flags 部分
+						// /g /i /ig...
+						// 否则 [] 中 / 不需要转移
+						bRegularFlags = true;
+					}
 					continue;
 				}
 				else
