@@ -682,7 +682,10 @@ class RealJSFormatter extends JSParser.JSParser {
             (this.m_tokenA.code == "case" || this.m_tokenA.code == "default")) {
             // minus indent for case, default
             --this.m_nIndents;
-            var rightDeco = this.m_tokenA.code != "default" ? " " : "";
+            var rightDeco = " ";
+            if (this.m_tokenA.code == "default" && this.m_tokenB.code == ":") {
+                rightDeco = "";
+            }
             this.PutToken(this.m_tokenA, "", rightDeco);
             ++this.m_nIndents;
             this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
