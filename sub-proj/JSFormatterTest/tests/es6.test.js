@@ -207,7 +207,7 @@ console.log("2π = " + sum(pi, pi));
 //  lib/mathplusplus.js
 export * from "lib/math";
 export var e = 2.71828182846;
-export default(x) => Math.exp(x);
+export default (x) => Math.exp(x);
 //  someApp.js
 import exp, {
 	pi,
@@ -657,3 +657,11 @@ vddd = 0;
 message = `Hello ${customer.name},
     want to buy ${card.amount} ${card.product} for
             a total of ${card.amount * card.unitprice} bucks?`;
+
+export default {
+	data() {
+		return {
+			focusState: false,
+		}
+	},
+}

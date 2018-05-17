@@ -556,3 +556,13 @@ vddd = 0;
     want to buy ${card.amount} ${card.product} for
             a total of ${card.amount * card.unitprice} bucks?`;
 
+			
+			
+			
+export default {
+     data(){
+        return{
+            focusState:false,
+        }
+     },
+}
