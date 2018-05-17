@@ -836,7 +836,11 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	{
 		// case, default 往里面缩一格
 		--m_nIndents;
-		string rightDeco = m_tokenA.code != "default" ? string(" ") : string();
+		string rightDeco = string(" ");
+		if(m_tokenA.code == "default" && m_tokenB.code == ":")
+		{
+			rightDeco = string("");
+		}
 		PutToken(m_tokenA, string(""), rightDeco);
 		++m_nIndents;
 		m_blockStack.push(m_blockMap[m_tokenA.code]);
