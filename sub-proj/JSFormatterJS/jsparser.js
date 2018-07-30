@@ -428,7 +428,7 @@ class JSParser {
 
                 if (this.IsShebang()) {
                     bShebang = true;
-                    this.m_tokenB.type = STRING_TYPE;
+                    this.m_tokenB.type = COMMENT_TYPE_1;
                     this.m_tokenB.code += this.m_charA;
                     continue;
                 }
