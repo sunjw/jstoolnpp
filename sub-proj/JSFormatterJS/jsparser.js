@@ -149,6 +149,12 @@ class JSParser {
         return token.inlineComment;
     }
 
+    IsComment() {
+        // Need read charA, charB to recognize comment
+        return (this.m_charA == '/' &&
+            (this.m_charB == '/' || this.m_charB == '*'));
+    }
+
     GetToken() {
         // Recognized negative number and regular
         if (!this.m_bGetTokenInit) {
@@ -192,12 +198,6 @@ class JSParser {
     GetChar() {
         // virtual
         // JUST get next char from input
-    }
-
-    IsComment() {
-        // Need read charA, charB to recognize comment
-        return (this.m_charA == '/' &&
-            (this.m_charB == '/' || this.m_charB == '*'));
     }
 
     GetTokenRaw() {
