@@ -340,9 +340,9 @@ void RealJSFormatter::Go()
 	m_blockStack.push(JS_STUB);
 	m_brcNeedStack.push(true);
 
-	bool bHaveNewLine;
-	char tokenAFirst;
-	char tokenBFirst;
+	bool bHaveNewLine = false;
+	char tokenAFirst = 0;
+	char tokenBFirst = 0;
 
 	StartParse();
 
