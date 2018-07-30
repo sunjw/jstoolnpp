@@ -184,6 +184,7 @@ private:
 	virtual int GetChar() = 0; // JUST get next char from input
 
 	bool inline IsComment(); // ÒªÁªºÏÅÐ¶Ï charA, charB
+	bool inline IsShebang(); // Unix Shebang
 
 	void GetTokenRaw();
 

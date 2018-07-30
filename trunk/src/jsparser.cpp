@@ -78,6 +78,13 @@ bool JSParser::IsInlineComment(const Token& token)
 	return token.inlineComment;
 }
 
+bool JSParser::IsShebang()
+{
+	if(m_tokenCount == 0 && m_charA == '#' && m_charB == '!')
+		return true;
+	return false;
+}
+
 void JSParser::GetTokenRaw()
 {
 	if(!m_bGetTokenInit)
@@ -105,6 +112,7 @@ void JSParser::GetTokenRaw()
 	bool bQuote = false;
 	bool bComment = false;
 	bool bRegularFlags = false;
+	bool bShebang = false; // Unix Shebang
 	bool bFirst = true;
 	bool bNum = false; // 是不是数字
 	bool bLineBegin = false;
@@ -221,7 +229,7 @@ void JSParser::GetTokenRaw()
 
 		if(bComment)
 		{
-			// 注释状态，全部输出
+			// 注释状态, 全部输出
 			if(m_tokenB.type == COMMENT_TYPE_2)
 			{
 				// /*...*/每行前面的\t, ' '都要删掉
@@ -260,6 +268,17 @@ void JSParser::GetTokenRaw()
 				if(m_charA == '\n')
 					return;
 			}
+
+			continue;
+		}
+
+		if(bShebang)
+		{
+			// Shebang 状态, 直到换行
+			m_tokenB.code.push_back(m_charA);
+
+			if(m_charA == '\n')
+				return;
 
 			continue;
 		}
@@ -317,6 +336,14 @@ void JSParser::GetTokenRaw()
 				chComment = m_charB;
 
 				//m_tokenBType = COMMENT_TYPE;
+				m_tokenB.code.push_back(m_charA);
+				continue;
+			}
+
+			if(IsShebang())
+			{
+				bShebang = true;
+				m_tokenB.type = STRING_TYPE; // Shebang 作为 STRING 来处理
 				m_tokenB.code.push_back(m_charA);
 				continue;
 			}
