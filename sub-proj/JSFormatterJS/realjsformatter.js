@@ -195,9 +195,9 @@ class RealJSFormatter extends JSParser.JSParser {
         this.m_blockStack.push(JSParser.JS_STUB);
         this.m_brcNeedStack.push(true);
 
-        var bHaveNewLine;
-        var tokenAFirst;
-        var tokenBFirst;
+        var bHaveNewLine = false;
+        var tokenAFirst = '';
+        var tokenBFirst = '';
 
         this.StartParse();
         while (this.GetToken()) {
