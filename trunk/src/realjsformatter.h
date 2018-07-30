@@ -81,32 +81,32 @@ private:
 	IntVector m_lineFormattedVec;
 	IntVector m_lineWaitVec;
 
-	StrSet m_specKeywordSet; // ºóÃæÒª¸ú×ÅÀ¨ºÅµÄ¹Ø¼ü×Ö¼¯ºÏ
+	StrSet m_specKeywordSet; // åé¢è¦è·Ÿç€æ‹¬å·çš„å…³é”®å­—é›†åˆ
 	StrCharMap m_blockMap;
 	CharStack m_blockStack;
-	int m_nIndents; // Ëõ½øÊıÁ¿£¬²»ÓÃ¼ÆËã blockStack£¬Ğ§¹û²»ºÃ
+	int m_nIndents; // ç¼©è¿›æ•°é‡, ä¸ç”¨è®¡ç®— blockStack, æ•ˆæœä¸å¥½
 
-	// Ê¹ÓÃÕ»ÊÇÎªÁË½â¾öÔÚÅĞ¶ÏÌõ¼şÖĞ³öÏÖÑ­»·µÄÎÊÌâ
-	BoolStack m_brcNeedStack; // if Ö®ÀàµÄºóÃæµÄÀ¨ºÅ
+	// ä½¿ç”¨æ ˆæ˜¯ä¸ºäº†è§£å†³åœ¨åˆ¤æ–­æ¡ä»¶ä¸­å‡ºç°å¾ªç¯çš„é—®é¢˜
+	BoolStack m_brcNeedStack; // if ä¹‹ç±»çš„åé¢çš„æ‹¬å·
 
-	bool m_bNewLine; // ×¼±¸»»ĞĞµÄ±êÖ¾
-	bool m_bBlockStmt; // block ÕæÕı¿ªÊ¼ÁË
+	bool m_bNewLine; // å‡†å¤‡æ¢è¡Œçš„æ ‡å¿—
+	bool m_bBlockStmt; // block çœŸæ­£å¼€å§‹äº†
 	bool m_bAssign;
-	bool m_bEmptyBracket; // ¿Õ {}
+	bool m_bEmptyBracket; // ç©º {}
 
-	bool m_bCommentPut; // ¸Õ¸ÕÊä³öÁË×¢ÊÍ
+	bool m_bCommentPut; // åˆšåˆšè¾“å‡ºäº†æ³¨é‡Š
 	bool m_bTemplatePut; // Template String
 
 	int m_nQuestOperCount;
 	SizeStack m_QuestOperStackCount;
 
-	string m_initIndent; // ÆğÊ¼Ëõ½ø
+	string m_initIndent; // èµ·å§‹ç¼©è¿›
 
-	// ÒÔÏÂÎªÅäÖÃÏî
+	// ä»¥ä¸‹ä¸ºé…ç½®é¡¹
 	FormatterOption m_struOption;
 
 private:
-	// ×èÖ¹¿½±´
+	// é˜»æ­¢æ‹·è´
 	RealJSFormatter(const RealJSFormatter&);
 	RealJSFormatter& operator=(const RealJSFormatter&);
 };

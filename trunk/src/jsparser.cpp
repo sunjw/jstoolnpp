@@ -32,7 +32,7 @@ void JSParser::Init()
 {
 	m_debug = false;
 
-	m_lineCount = 1; // ĞĞºÅ´Ó 1 ¿ªÊ¼
+	m_lineCount = 1; // è¡Œå·ä» 1 å¼€å§‹
 	m_tokenCount = 0;
 
 	m_strBeforeReg = "(,=:[!&|?+{};\n";
@@ -66,7 +66,7 @@ void JSParser::PrintDebug()
 
 bool JSParser::IsComment()
 {
-	// ×¢ÊÍ
+	// æ³¨é‡Š
 	return (m_charA == '/' && (m_charB == '/' || m_charB == '*'));
 }
 
@@ -102,11 +102,11 @@ void JSParser::GetTokenRaw()
 	else if(m_bRegular)
 	{
 		//m_tokenB.push_back('/');
-		m_tokenB.type = REGULAR_TYPE; // ÕıÔò
+		m_tokenB.type = REGULAR_TYPE; // æ­£åˆ™
 	}
 	else
 	{
-		m_tokenB.type = STRING_TYPE; // Õı¸ºÊı
+		m_tokenB.type = STRING_TYPE; // æ­£è´Ÿæ•°
 	}
 
 	bool bQuote = false;
@@ -114,10 +114,10 @@ void JSParser::GetTokenRaw()
 	bool bRegularFlags = false;
 	bool bShebang = false; // Unix Shebang
 	bool bFirst = true;
-	bool bNum = false; // ÊÇ²»ÊÇÊı×Ö
+	bool bNum = false; // æ˜¯ä¸æ˜¯æ•°å­—
 	bool bLineBegin = false;
-	char chQuote = 0; // ¼ÇÂ¼ÒıºÅÀàĞÍ ' »ò "
-	char chComment = 0; // ×¢ÊÍÀàĞÍ / »ò *
+	char chQuote = 0; // è®°å½•å¼•å·ç±»å‹ ' æˆ– "
+	char chComment = 0; // æ³¨é‡Šç±»å‹ / æˆ– *
 
 	while(1)
 	{
@@ -145,20 +145,20 @@ void JSParser::GetTokenRaw()
 			++m_lineCount;
 
 		/*
-		 * ²Î¿¼ m_charB À´´¦Àí m_charA
-		 * Êä³ö»ò²»Êä³ö m_charA
-		 * ÏÂÒ»´ÎÑ­»·Ê±×Ô¶¯»áÓÃ m_charB ¸²¸Ç m_charA
+		 * å‚è€ƒ m_charB æ¥å¤„ç† m_charA
+		 * è¾“å‡ºæˆ–ä¸è¾“å‡º m_charA
+		 * ä¸‹ä¸€æ¬¡å¾ªç¯æ—¶è‡ªåŠ¨ä¼šç”¨ m_charB è¦†ç›– m_charA
 		 */
 
-		// ÕıÔòĞèÒªÔÚ token ¼¶±ğÅĞ¶Ï
+		// æ­£åˆ™éœ€è¦åœ¨ token çº§åˆ«åˆ¤æ–­
 		if(m_bRegular)
 		{
-			// ÕıÔò×´Ì¬È«²¿Êä³ö£¬Ö±µ½ /
+			// æ­£åˆ™çŠ¶æ€å…¨éƒ¨è¾“å‡º, ç›´åˆ° /
 			m_tokenB.code.push_back(m_charA);
 
 			if(m_charA == '\\' && 
 				(m_charB == '/' || m_charB == '\\' ||
-				m_charB == '[' || m_charB == ']')) // ×ªÒå×Ö·û
+				m_charB == '[' || m_charB == ']')) // è½¬ä¹‰å­—ç¬¦
 			{
 				m_tokenB.code.push_back(m_charB);
 				m_charB = GetChar();
@@ -177,23 +177,23 @@ void JSParser::GetTokenRaw()
 			}
 
 			if(m_charA == '/' && 
-				(m_charB != '*' && m_charB != '|' && m_charB != '?')) // ÕıÔò¿ÉÄÜ½áÊø
+				(m_charB != '*' && m_charB != '|' && m_charB != '?')) // æ­£åˆ™å¯èƒ½ç»“æŸ
 			{
 				if(!bRegularFlags && 
 					(IsNormalChar(m_charB) || m_iRegBracket > 0))
 				{
 					if(m_iRegBracket == 0)
 					{
-						// ÕıÔòµÄ flags ²¿·Ö
+						// æ­£åˆ™çš„ flags éƒ¨åˆ†
 						// /g /i /ig...
-						// ·ñÔò [] ÖĞ / ²»ĞèÒª×ªÒÆ
+						// å¦åˆ™ [] ä¸­ / ä¸éœ€è¦è½¬ç§»
 						bRegularFlags = true;
 					}
 					continue;
 				}
 				else
 				{
-					// ÕıÔò½áÊø
+					// æ­£åˆ™ç»“æŸ
 					m_bRegular = false;
 					return;
 				}
@@ -201,7 +201,7 @@ void JSParser::GetTokenRaw()
 
 			if(bRegularFlags && !IsNormalChar(m_charB))
 			{
-				// ÕıÔò½áÊø
+				// æ­£åˆ™ç»“æŸ
 				bRegularFlags = false;
 				m_bRegular = false;
 				return;
@@ -212,16 +212,16 @@ void JSParser::GetTokenRaw()
 
 		if(bQuote)
 		{
-			// ÒıºÅ×´Ì¬£¬È«²¿Êä³ö£¬Ö±µ½ÒıºÅ½áÊø
+			// å¼•å·çŠ¶æ€, å…¨éƒ¨è¾“å‡º, ç›´åˆ°å¼•å·ç»“æŸ
 			m_tokenB.code.push_back(m_charA);
 
-			if(m_charA == '\\' && (m_charB == chQuote || m_charB == '\\')) // ×ªÒå×Ö·û
+			if(m_charA == '\\' && (m_charB == chQuote || m_charB == '\\')) // è½¬ä¹‰å­—ç¬¦
 			{
 				m_tokenB.code.push_back(m_charB);
 				m_charB = GetChar();
 			}
 
-			if(m_charA == chQuote) // ÒıºÅ½áÊø
+			if(m_charA == chQuote) // å¼•å·ç»“æŸ
 				return;
 
 			continue;
@@ -229,10 +229,10 @@ void JSParser::GetTokenRaw()
 
 		if(bComment)
 		{
-			// ×¢ÊÍ×´Ì¬, È«²¿Êä³ö
+			// æ³¨é‡ŠçŠ¶æ€, å…¨éƒ¨è¾“å‡º
 			if(m_tokenB.type == COMMENT_TYPE_2)
 			{
-				// /*...*/Ã¿ĞĞÇ°ÃæµÄ\t, ' '¶¼ÒªÉ¾µô
+				// /*...*/æ¯è¡Œå‰é¢çš„\t, ' 'éƒ½è¦åˆ æ‰
 				if(bLineBegin && (m_charA == '\t' || m_charA == ' '))
 					continue;
 				else if(bLineBegin && m_charA == '*')
@@ -247,7 +247,7 @@ void JSParser::GetTokenRaw()
 
 			if(chComment == '*')
 			{
-				// Ö±µ½ */
+				// ç›´åˆ° */
 				m_tokenB.type = COMMENT_TYPE_2;
 				m_tokenB.inlineComment = false;
 				if(m_charA == '*' && m_charB == '/')
@@ -262,7 +262,7 @@ void JSParser::GetTokenRaw()
 			}
 			else
 			{
-				// Ö±µ½»»ĞĞ
+				// ç›´åˆ°æ¢è¡Œ
 				m_tokenB.type = COMMENT_TYPE_1;
 				m_tokenB.inlineComment = false;
 				if(m_charA == '\n')
@@ -274,7 +274,7 @@ void JSParser::GetTokenRaw()
 
 		if(bShebang)
 		{
-			// Shebang ×´Ì¬, Ö±µ½»»ĞĞ
+			// Shebang çŠ¶æ€, ç›´åˆ°æ¢è¡Œ
 			m_tokenB.code.push_back(m_charA);
 
 			if(m_charA == '\n')
@@ -288,10 +288,10 @@ void JSParser::GetTokenRaw()
 			m_tokenB.type = STRING_TYPE;
 			m_tokenB.code.push_back(m_charA);
 
-			// ½â¾öÀàËÆ 82e-2, 442e+6, 555E-6 µÄÎÊÌâ
-			// ÒòÎªÕâÊÇÁ¢¼´Êı£¬ËùÒÔÖ»ÄÜ·ûºÏÒÔÏÂµÄ±í´ïĞÎÊ½
+			// è§£å†³ç±»ä¼¼ 82e-2, 442e+6, 555E-6 çš„é—®é¢˜
+			// å› ä¸ºè¿™æ˜¯ç«‹å³æ•°, æ‰€ä»¥åªèƒ½ç¬¦åˆä»¥ä¸‹çš„è¡¨è¾¾å½¢å¼
 			bool bNumOld = bNum;
-			if(bFirst || bNumOld) // Ö»ÓĞÖ®Ç°ÊÇÊı×Ö²Å¸Ä±ä×´Ì¬
+			if(bFirst || bNumOld) // åªæœ‰ä¹‹å‰æ˜¯æ•°å­—æ‰æ”¹å˜çŠ¶æ€
 			{
 				bNum = IsNumChar(m_charA);
 				bFirst = false;
@@ -316,11 +316,11 @@ void JSParser::GetTokenRaw()
 		else
 		{
 			if(IsBlankChar(m_charA))
-				continue; // ºöÂÔ¿Õ°××Ö·û
+				continue; // å¿½ç•¥ç©ºç™½å­—ç¬¦
 
 			if(IsQuote(m_charA))
 			{
-				// ÒıºÅ
+				// å¼•å·
 				bQuote = true;
 				chQuote = m_charA;
 
@@ -331,7 +331,7 @@ void JSParser::GetTokenRaw()
 
 			if(IsComment())
 			{
-				// ×¢ÊÍ
+				// æ³¨é‡Š
 				bComment = true;
 				chComment = m_charB;
 
@@ -343,7 +343,7 @@ void JSParser::GetTokenRaw()
 			if(IsShebang())
 			{
 				bShebang = true;
-				m_tokenB.type = STRING_TYPE; // Shebang ×÷Îª STRING À´´¦Àí
+				m_tokenB.type = STRING_TYPE; // Shebang ä½œä¸º STRING æ¥å¤„ç†
 				m_tokenB.code.push_back(m_charA);
 				continue;
 			}
@@ -352,15 +352,15 @@ void JSParser::GetTokenRaw()
 				IsNormalChar(m_charB) || IsBlankChar(m_charB) || IsQuote(m_charB))
 			{
 				m_tokenB.type = OPER_TYPE;
-				m_tokenB.code = m_charA; // µ¥×Ö·û·ûºÅ
+				m_tokenB.code = m_charA; // å•å­—ç¬¦ç¬¦å·
 				return;
 			}
 
-			// ¶à×Ö·û·ûºÅ
+			// å¤šå­—ç¬¦ç¬¦å·
 			if((m_charB == '=' || m_charB == m_charA) || 
 				((m_charA == '-' || m_charA == '=') && m_charB == '>'))
 			{
-				// µÄÈ·ÊÇ¶à×Ö·û·ûºÅ
+				// çš„ç¡®æ˜¯å¤šå­—ç¬¦ç¬¦å·
 				m_tokenB.type = OPER_TYPE;
 				m_tokenB.code.push_back(m_charA);
 				m_tokenB.code.push_back(m_charB);
@@ -368,7 +368,7 @@ void JSParser::GetTokenRaw()
 				if((m_tokenB.code == "==" || m_tokenB.code == "!=" ||
 					m_tokenB.code == "<<" || m_tokenB.code == ">>") && m_charB == '=')
 				{
-					// Èı×Ö·û ===, !==, <<=, >>=
+					// ä¸‰å­—ç¬¦ ===, !==, <<=, >>=
 					m_tokenB.code.push_back(m_charB);
 					m_charB = GetChar();
 				}
@@ -387,9 +387,9 @@ void JSParser::GetTokenRaw()
 			}
 			else
 			{
-				// »¹ÊÇµ¥×Ö·ûµÄ
+				// è¿˜æ˜¯å•å­—ç¬¦çš„
 				m_tokenB.type = OPER_TYPE;
-				m_tokenB.code = m_charA; // µ¥×Ö·û·ûºÅ
+				m_tokenB.code = m_charA; // å•å­—ç¬¦ç¬¦å·
 				return;
 			}
 
@@ -404,13 +404,13 @@ bool JSParser::GetToken()
 {
 	if(!m_bGetTokenInit)
 	{
-		// µÚÒ»´Î¶àµ÷ÓÃÒ»´Î GetTokenRaw
+		// ç¬¬ä¸€æ¬¡å¤šè°ƒç”¨ä¸€æ¬¡ GetTokenRaw
 		GetTokenRaw();
 		m_bGetTokenInit = true;
 	}
 
-	PrepareRegular(); // ÅĞ¶ÏÕıÔò
-	PreparePosNeg(); // ÅĞ¶ÏÕı¸ºÊı
+	PrepareRegular(); // åˆ¤æ–­æ­£åˆ™
+	PreparePosNeg(); // åˆ¤æ–­æ­£è´Ÿæ•°
 
 	++m_tokenCount;
 	m_tokenPreA = m_tokenA;
@@ -419,11 +419,11 @@ bool JSParser::GetToken()
 	if(m_tokenBQueue.size() == 0)
 	{
 		GetTokenRaw();
-		PrepareTokenB(); // ¿´¿´ÊÇ²»ÊÇÒªÌø¹ı»»ĞĞ
+		PrepareTokenB(); // çœ‹çœ‹æ˜¯ä¸æ˜¯è¦è·³è¿‡æ¢è¡Œ
 	}
 	else
 	{
-		// ÓĞÅÅ¶ÓµÄ»»ĞĞ
+		// æœ‰æ’é˜Ÿçš„æ¢è¡Œ
 		m_tokenB = m_tokenBQueue.front();
 		m_tokenBQueue.pop();
 	}
@@ -434,10 +434,10 @@ bool JSParser::GetToken()
 void JSParser::PrepareRegular()
 {
 	/*
-	 * ÏÈ´¦ÀíÒ»ÏÂÕıÔò
-	 * m_tokenB[0] == /£¬ÇÒ m_tokenB ²»ÊÇ×¢ÊÍ
-	 * m_tokenA ²»ÊÇ STRING (³ıÁË m_tokenA == return)
-	 * ¶øÇÒ m_tokenA µÄ×îºóÒ»¸ö×Ö·ûÊÇÏÂÃæÕâĞ©
+	 * å…ˆå¤„ç†ä¸€ä¸‹æ­£åˆ™
+	 * m_tokenB[0] == /, ä¸” m_tokenB ä¸æ˜¯æ³¨é‡Š
+	 * m_tokenA ä¸æ˜¯ STRING (é™¤äº† m_tokenA == return)
+	 * è€Œä¸” m_tokenA çš„æœ€åä¸€ä¸ªå­—ç¬¦æ˜¯ä¸‹é¢è¿™äº›
 	*/
 	//size_t last = m_tokenA.size() > 0 ? m_tokenA.size() - 1 : 0;
 	char tokenALast = m_tokenA.code.size() > 0 ? m_tokenA.code[m_tokenA.code.size() - 1] : 0;
@@ -448,18 +448,18 @@ void JSParser::PrepareRegular()
 			m_tokenA.code == "return"))
 	{
 		m_bRegular = true;
-		GetTokenRaw(); // °ÑÕıÔòÄÚÈİ¼Óµ½ m_tokenB
+		GetTokenRaw(); // æŠŠæ­£åˆ™å†…å®¹åŠ åˆ° m_tokenB
 	}
 }
 
 void JSParser::PreparePosNeg()
 {
 	/*
-	 * Èç¹û m_tokenB ÊÇ -,+ ºÅ
-	 * ¶øÇÒ m_tokenA ²»ÊÇ×Ö·û´®ĞÍÒ²²»ÊÇÕıÔò±í´ïÊ½
-	 * ¶øÇÒ m_tokenA ²»ÊÇ ++, --, ], )
-	 * ¶øÇÒ m_charB ÊÇÒ»¸ö NormalChar
-	 * ÄÇÃ´ m_tokenB Êµ¼ÊÉÏÊÇÒ»¸öÕı¸ºÊı
+	 * å¦‚æœ m_tokenB æ˜¯ -,+ å·
+	 * è€Œä¸” m_tokenA ä¸æ˜¯å­—ç¬¦ä¸²å‹ä¹Ÿä¸æ˜¯æ­£åˆ™è¡¨è¾¾å¼
+	 * è€Œä¸” m_tokenA ä¸æ˜¯ ++, --, ], )
+	 * è€Œä¸” m_charB æ˜¯ä¸€ä¸ª NormalChar
+	 * é‚£ä¹ˆ m_tokenB å®é™…ä¸Šæ˜¯ä¸€ä¸ªæ­£è´Ÿæ•°
 	 */
 	Token tokenRealPre = m_tokenA;
 	if(m_tokenA.type == COMMENT_TYPE_2)
@@ -474,7 +474,7 @@ void JSParser::PreparePosNeg()
 		tokenRealPre.code != "]" && tokenRealPre.code != ")" &&
 		IsNormalChar(m_charB))
 	{
-		// m_tokenB Êµ¼ÊÉÏÊÇÕı¸ºÊı
+		// m_tokenB å®é™…ä¸Šæ˜¯æ­£è´Ÿæ•°
 		m_bPosNeg = true;
 		GetTokenRaw();
 	}
@@ -485,8 +485,8 @@ void JSParser::PrepareTokenB()
 	//char stackTop = m_blockStack.top();
 
 	/*
-	 * Ìø¹ı else, while, catch, ',', ';', ')', { Ö®Ç°µÄ»»ĞĞ
-	 * Èç¹û×îºó¶Áµ½µÄ²»ÊÇÉÏÃæÄÇ¼¸¸ö£¬ÔÙ°ÑÈ¥µôµÄ»»ĞĞ²¹ÉÏ
+	 * è·³è¿‡ else, while, catch, ',', ';', ')', { ä¹‹å‰çš„æ¢è¡Œ
+	 * å¦‚æœæœ€åè¯»åˆ°çš„ä¸æ˜¯ä¸Šé¢é‚£å‡ ä¸ª, å†æŠŠå»æ‰çš„æ¢è¡Œè¡¥ä¸Š
 	 */
 	int c = 0;
 	while(m_tokenB.code == "\n" || m_tokenB.code == "\r\n")
@@ -501,16 +501,16 @@ void JSParser::PrepareTokenB()
 		m_tokenB.code.find("\r") == string::npos &&
 		m_tokenB.code.find("\n") == string::npos)
 	{
-		// COMMENT_TYPE_2 Ö®Ç°Ã»ÓĞ»»ĞĞ, ×Ô¼ºÒ²Ã»ÓĞ»»ĞĞ
+		// COMMENT_TYPE_2 ä¹‹å‰æ²¡æœ‰æ¢è¡Œ, è‡ªå·±ä¹Ÿæ²¡æœ‰æ¢è¡Œ
 		m_tokenB.inlineComment = true;
 	}
 
 	if(m_tokenB.code != "else" && m_tokenB.code != "while" && m_tokenB.code != "catch" &&
 		m_tokenB.code != "," && m_tokenB.code != ";" && m_tokenB.code != ")")
 	{
-		// ½«È¥µôµÄ»»ĞĞÑ¹Èë¶ÓÁĞ£¬ÏÈ´¦Àí
+		// å°†å»æ‰çš„æ¢è¡Œå‹å…¥é˜Ÿåˆ—, å…ˆå¤„ç†
 		if(m_tokenA.code == "{" && m_tokenB.code == "}")
-			return; // ¿Õ {}
+			return; // ç©º {}
 
 		Token temp;
 		c = c > 2 ? 2 : c;

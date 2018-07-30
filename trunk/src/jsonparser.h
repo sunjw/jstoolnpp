@@ -34,7 +34,7 @@ public:
 	{ RecursiveProc(jsonValue); }
 
 private:
-	int m_nRecuLevel; // ¿éµİ¹é²ã´Î
+	int m_nRecuLevel; // å—é€’å½’å±‚æ¬¡
 	JSParser::CharStack m_blockStack;
 
 	// performance info

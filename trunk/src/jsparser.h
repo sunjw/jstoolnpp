@@ -57,8 +57,8 @@ bool StackTopEq(const stack<T>& stk, T eq)
 #define STRING_TYPE 0
 #define OPER_TYPE 1
 #define REGULAR_TYPE 2
-#define COMMENT_TYPE_1 9 // µ¥ÐÐ×¢ÊÍ
-#define COMMENT_TYPE_2 10 // ¶àÐÐ×¢ÊÍ
+#define COMMENT_TYPE_1 9 // å•è¡Œæ³¨é‡Š
+#define COMMENT_TYPE_2 10 // å¤šè¡Œæ³¨é‡Š
 
 /*
  * if-i, else-e, else if-i,
@@ -92,10 +92,10 @@ class JSParser
 protected:
 	struct Token
 	{
-		string code; // ´úÂëÄÚÈÝ
-		int type; // Token ÀàÐÍ
-		bool inlineComment; // COMMENT_TYPE_2 µÄ inline Ä£Ê½
-		long line; // ÐÐºÅ
+		string code; // ä»£ç å†…å®¹
+		int type; // Token ç±»åž‹
+		bool inlineComment; // COMMENT_TYPE_2 çš„ inline æ¨¡å¼
+		long line; // è¡Œå·
 	};
 
 public:
@@ -130,7 +130,7 @@ protected:
 
 	bool inline IsNormalChar(int ch)
 	{
-		// Ò»°ã×Ö·û
+		// ä¸€èˆ¬å­—ç¬¦
 		return ((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') ||
 				(ch >= 'A' && ch <= 'Z') || ch == '_' || ch == '$' ||
 				ch > 126 || ch < 0);
@@ -138,19 +138,19 @@ protected:
 
 	bool inline IsNumChar(int ch)
 	{
-		// Êý×ÖºÍ.
+		// æ•°å­—å’Œ.
 		return ((ch >= '0' && ch <= '9') || ch == '.');
 	}
 
 	bool inline IsBlankChar(int ch)
 	{
-		// ¿Õ°××Ö·û
+		// ç©ºç™½å­—ç¬¦
 		return (ch == ' ' || ch == '\t' || ch == '\r');
 	}
 
 	bool inline IsSingleOper(int ch)
 	{
-		// µ¥×Ö·û·ûºÅ
+		// å•å­—ç¬¦ç¬¦å·
 		return (ch == '.' || ch == '(' || ch == ')' ||
 				ch == '[' || ch == ']' || ch == '{' || ch == '}' ||
 				ch == ',' || ch == ';' || ch == '~' ||
@@ -159,13 +159,13 @@ protected:
 
 	bool inline IsQuote(int ch)
 	{
-		// ÒýºÅ
+		// å¼•å·
 		return (ch == '\'' || ch == '\"' || ch == '`');
 	}
 
 	bool IsInlineComment(const Token& token);
 
-	bool GetToken(); // ´¦Àí¹ý¸ºÊý, ÕýÔòµÈµÈµÄ GetToken º¯Êý
+	bool GetToken(); // å¤„ç†è¿‡è´Ÿæ•°, æ­£åˆ™ç­‰ç­‰çš„ GetToken å‡½æ•°
 
 	void inline StartParse()
 	{ m_startClock = clock(); }
@@ -183,28 +183,28 @@ private:
 	// Should be implemented in derived class
 	virtual int GetChar() = 0; // JUST get next char from input
 
-	bool inline IsComment(); // ÒªÁªºÏÅÐ¶Ï charA, charB
+	bool inline IsComment(); // è¦è”åˆåˆ¤æ–­ charA, charB
 	bool inline IsShebang(); // Unix Shebang
 
 	void GetTokenRaw();
 
-	void PrepareRegular(); // Í¨¹ý´Ê·¨ÅÐ¶Ï tokenB ÕýÔò
-	void PreparePosNeg(); // Í¨¹ý´Ê·¨ÅÐ¶Ï tokenB Õý¸ºÊý
+	void PrepareRegular(); // é€šè¿‡è¯æ³•åˆ¤æ–­ tokenB æ­£åˆ™
+	void PreparePosNeg(); // é€šè¿‡è¯æ³•åˆ¤æ–­ tokenB æ­£è´Ÿæ•°
 	void PrepareTokenB();
 
 	void PrintDebug();
 	virtual void PrintAdditionalDebug(string& strDebugOutput) {}
 
-	string m_strBeforeReg; // ÅÐ¶ÏÕýÔòÊ±£¬ÕýÔòÇ°Ãæ¿ÉÒÔ³öÏÖµÄ×Ö·û
+	string m_strBeforeReg; // åˆ¤æ–­æ­£åˆ™æ—¶, æ­£åˆ™å‰é¢å¯ä»¥å‡ºçŽ°çš„å­—ç¬¦
 
 	TokenQueue m_tokenBQueue;
 
-	bool m_bRegular; // tokenB Êµ¼ÊÊÇÕýÔò GetToken ÓÃµ½µÄÁ½¸ö³ÉÔ±×´Ì¬
-	int m_iRegBracket; // ÕýÔò±í´ïÊ½ÖÐ³öÏÖµÄ [] Éî¶È
+	bool m_bRegular; // tokenB å®žé™…æ˜¯æ­£åˆ™ GetToken ç”¨åˆ°çš„ä¸¤ä¸ªæˆå‘˜çŠ¶æ€
+	int m_iRegBracket; // æ­£åˆ™è¡¨è¾¾å¼ä¸­å‡ºçŽ°çš„ [] æ·±åº¦
 
-	bool m_bPosNeg; // tokenB Êµ¼ÊÊÇÕý¸ºÊý
+	bool m_bPosNeg; // tokenB å®žé™…æ˜¯æ­£è´Ÿæ•°
 
-	bool m_bGetTokenInit; // ÊÇ·ñÊÇµÚÒ»´ÎÖ´ÐÐ GetToken
+	bool m_bGetTokenInit; // æ˜¯å¦æ˜¯ç¬¬ä¸€æ¬¡æ‰§è¡Œ GetToken
 
 	clock_t m_startClock;
 	clock_t m_endClock;
@@ -212,7 +212,7 @@ private:
 	string m_strDebugOutput;
 
 private:
-	// ×èÖ¹¿½±´
+	// é˜»æ­¢æ‹·è´
 	JSParser(const JSParser&);
 	JSParser& operator=(const JSParser&);
 };

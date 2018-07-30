@@ -163,7 +163,7 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 extern "C" __declspec(dllexport) void setInfo(NppData notpadPlusData)
 {
 	g_nppData = notpadPlusData;
-	// ÔØÈëÉèÖÃ
+	// è½½å…¥è®¾ç½®
 	LoadOption(g_nppData._nppHandle, g_struOptions);
 }
 
@@ -398,7 +398,7 @@ void jsFormat()
 
 	if(!bFormatSel)
 	{
-		// ¸ñÊ½»¯È«²¿
+		// æ ¼å¼åŒ–å…¨éƒ¨
 		pJS = new char[jsLen+1];
 		::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
 
@@ -407,9 +407,9 @@ void jsFormat()
 	}
 	else
 	{
-		// ¸ñÊ½»¯Ñ¡ÖÐ²¿·Ö
+		// æ ¼å¼åŒ–é€‰ä¸­éƒ¨åˆ†
 		char testChar;
-		// ÕÒÐÐÍ·
+		// æ‰¾è¡Œå¤´
 		while(selStart > 0)
 		{
 			testChar = (char)::SendMessage(hCurrScintilla, SCI_GETCHARAT, selStart - 1, 0);
@@ -418,7 +418,7 @@ void jsFormat()
 
 			--selStart;
 		}
-		// ÕÒÐÐÎ²
+		// æ‰¾è¡Œå°¾
 		while(selEnd < jsLen)
 		{
 			testChar = (char)::SendMessage(hCurrScintilla, SCI_GETCHARAT, selEnd, 0);
@@ -428,16 +428,16 @@ void jsFormat()
 			++selEnd;
 		}
 
-		// ÖØÐÂÑ¡ÔñÕûÐÐ
+		// é‡æ–°é€‰æ‹©æ•´è¡Œ
 		::SendMessage(hCurrScintilla, SCI_SETSELECTIONSTART, selStart, 0);
 		::SendMessage(hCurrScintilla, SCI_SETSELECTIONEND, selEnd, 0);
 
-		// »ñµÃ Sel
+		// èŽ·å¾— Sel
 		jsLenSel = ::SendMessage(hCurrScintilla, SCI_GETSELTEXT, 0, 0);
 		pJS = new char[jsLenSel];
 		::SendMessage(hCurrScintilla, SCI_GETSELTEXT, jsLen, (LPARAM)pJS);
 
-		// µÃµ½ Initial Indent
+		// å¾—åˆ° Initial Indent
 		for(size_t i = 0; i < jsLenSel; ++i)
 		{
 			testChar = pJS[i];
@@ -475,7 +475,7 @@ void jsFormat()
 		}
 		else
 		{
-			// ÇåÀí¶à³öÀ´µÄ»»ÐÐ
+			// æ¸…ç†å¤šå‡ºæ¥çš„æ¢è¡Œ
 			if((strJSFormat.length() >= 2) && strJSFormat[strJSFormat.length() - 2] == '\r')
 				strJSFormat = strJSFormat.substr(0, strJSFormat.length() - 2);
 			else

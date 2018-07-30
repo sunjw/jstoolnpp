@@ -49,7 +49,7 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 			value.append(line);
 			if(value.length() > 0 && value[value.length() - 1] == '\\')
 			{
-				// value ½áÎ²ÊÇ \ ±íÊ¾¶àÐÐ
+				// value ç»“å°¾æ˜¯ \ è¡¨ç¤ºå¤šè¡Œ
 				value[value.length() - 1] = '\n';
 				bMultiLine = true;
 			}
@@ -74,7 +74,7 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 			line[0] == ';' ||
 			line[0] == '#' ||
 			(line[0] == '/' && line[1] == '/'))
-			continue; // ×¢ÊÍÐÐ
+			continue; // æ³¨é‡Šè¡Œ
 
 		if(bProcSection && 
 			line[0] == '[' &&
@@ -103,7 +103,7 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 			value = strtrim(value);
 			if(value.length() > 0 && value[value.length() - 1] == '\\')
 			{
-				// value ½áÎ²ÊÇ \ ±íÊ¾¶àÐÐ
+				// value ç»“å°¾æ˜¯ \ è¡¨ç¤ºå¤šè¡Œ
 				value[value.length() - 1] = '\n';
 				bMultiLine = true;
 				continue;

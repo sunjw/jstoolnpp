@@ -8,7 +8,7 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 	switch (message) 
 	{
 	case WM_INITDIALOG:
-		// ³õÊ¼»¯
+		// åˆå§‹åŒ–
 		switch (g_struOptions.nPutCR)
 		{
 		case EOL_AUTO:
@@ -50,12 +50,12 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		{
         case IDCLOSE:
 		case IDCANCEL:
-			// ÖØĞÂ¶ÁÈ¡ÅäÖÃ
+			// é‡æ–°è¯»å–é…ç½®
 			LoadOption(g_nppData._nppHandle, g_struOptions);
 			::EndDialog(hwnd, 0);
 			return TRUE;
 		case IDOK:
-			// ±£´æÉèÖÃ
+			// ä¿å­˜è®¾ç½®
 			if (IsDlgButtonChecked(hwnd, IDC_AUTORADIO))
 				g_struOptions.nPutCR = EOL_AUTO;
 			else if (IsDlgButtonChecked(hwnd, IDC_WINRADIO))
@@ -80,7 +80,7 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 
 			SaveOption(g_nppData._nppHandle, g_struOptions);
 
-			// ÖØĞÂ¶ÁÈ¡ÅäÖÃ
+			// é‡æ–°è¯»å–é…ç½®
 			LoadOption(g_nppData._nppHandle, g_struOptions);
 
 			::EndDialog(hwnd, 0);
