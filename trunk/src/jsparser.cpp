@@ -78,6 +78,13 @@ bool JSParser::IsInlineComment(const Token& token)
 	return token.inlineComment;
 }
 
+bool JSParser::IsShebang()
+{
+	if(m_tokenCount == 0 && m_charA == '#' && m_charB == '!')
+		return true;
+	return false;
+}
+
 void JSParser::GetTokenRaw()
 {
 	if(!m_bGetTokenInit)
@@ -105,6 +112,7 @@ void JSParser::GetTokenRaw()
 	bool bQuote = false;
 	bool bComment = false;
 	bool bRegularFlags = false;
+	bool bShebang = false; // Unix Shebang
 	bool bFirst = true;
 	bool bNum = false; // 是不是数字
 	bool bLineBegin = false;
@@ -145,7 +153,7 @@ void JSParser::GetTokenRaw()
 		// 正则需要在 token 级别判断
 		if(m_bRegular)
 		{
-			// 正则状态全部输出，直到 /
+			// 正则状态全部输出, 直到 /
 			m_tokenB.code.push_back(m_charA);
 
 			if(m_charA == '\\' && 
@@ -204,7 +212,7 @@ void JSParser::GetTokenRaw()
 
 		if(bQuote)
 		{
-			// 引号状态，全部输出，直到引号结束
+			// 引号状态, 全部输出, 直到引号结束
 			m_tokenB.code.push_back(m_charA);
 
 			if(m_charA == '\\' && (m_charB == chQuote || m_charB == '\\')) // 转义字符
@@ -221,7 +229,7 @@ void JSParser::GetTokenRaw()
 
 		if(bComment)
 		{
-			// 注释状态，全部输出
+			// 注释状态, 全部输出
 			if(m_tokenB.type == COMMENT_TYPE_2)
 			{
 				// /*...*/每行前面的\t, ' '都要删掉
@@ -264,13 +272,24 @@ void JSParser::GetTokenRaw()
 			continue;
 		}
 
+		if(bShebang)
+		{
+			// Shebang 状态, 直到换行
+			m_tokenB.code.push_back(m_charA);
+
+			if(m_charA == '\n')
+				return;
+
+			continue;
+		}
+
 		if(IsNormalChar(m_charA))
 		{
 			m_tokenB.type = STRING_TYPE;
 			m_tokenB.code.push_back(m_charA);
 
 			// 解决类似 82e-2, 442e+6, 555E-6 的问题
-			// 因为这是立即数，所以只能符合以下的表达形式
+			// 因为这是立即数, 所以只能符合以下的表达形式
 			bool bNumOld = bNum;
 			if(bFirst || bNumOld) // 只有之前是数字才改变状态
 			{
@@ -321,7 +340,15 @@ void JSParser::GetTokenRaw()
 				continue;
 			}
 
-			if( IsSingleOper(m_charA) ||
+			if(IsShebang())
+			{
+				bShebang = true;
+				m_tokenB.type = STRING_TYPE; // Shebang 作为 STRING 来处理
+				m_tokenB.code.push_back(m_charA);
+				continue;
+			}
+
+			if(IsSingleOper(m_charA) ||
 				IsNormalChar(m_charB) || IsBlankChar(m_charB) || IsQuote(m_charB))
 			{
 				m_tokenB.type = OPER_TYPE;
@@ -408,7 +435,7 @@ void JSParser::PrepareRegular()
 {
 	/*
 	 * 先处理一下正则
-	 * m_tokenB[0] == /，且 m_tokenB 不是注释
+	 * m_tokenB[0] == /, 且 m_tokenB 不是注释
 	 * m_tokenA 不是 STRING (除了 m_tokenA == return)
 	 * 而且 m_tokenA 的最后一个字符是下面这些
 	*/
@@ -459,7 +486,7 @@ void JSParser::PrepareTokenB()
 
 	/*
 	 * 跳过 else, while, catch, ',', ';', ')', { 之前的换行
-	 * 如果最后读到的不是上面那几个，再把去掉的换行补上
+	 * 如果最后读到的不是上面那几个, 再把去掉的换行补上
 	 */
 	int c = 0;
 	while(m_tokenB.code == "\n" || m_tokenB.code == "\r\n")
@@ -481,7 +508,7 @@ void JSParser::PrepareTokenB()
 	if(m_tokenB.code != "else" && m_tokenB.code != "while" && m_tokenB.code != "catch" &&
 		m_tokenB.code != "," && m_tokenB.code != ";" && m_tokenB.code != ")")
 	{
-		// 将去掉的换行压入队列，先处理
+		// 将去掉的换行压入队列, 先处理
 		if(m_tokenA.code == "{" && m_tokenB.code == "}")
 			return; // 空 {}
 

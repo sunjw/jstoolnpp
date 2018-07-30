@@ -204,7 +204,7 @@ void RealJSFormatter::PutString(const Token& token)
 			m_bNewLine = false;
 			m_nIndents = m_nIndents < 0 ? 0 : m_nIndents; // 出错修正
 			m_nLineIndents = m_nIndents;
-			if(token.code[i] == '{' || token.code[i] == ',' || token.code[i] == ';') // 行结尾是注释，使得{,;不得不换行
+			if(token.code[i] == '{' || token.code[i] == ',' || token.code[i] == ';') // 行结尾是注释, 使得{,;不得不换行
 				--m_nLineIndents;
 		}
 
@@ -299,7 +299,7 @@ void RealJSFormatter::PutLineBuffer()
 
 void RealJSFormatter::PopMultiBlock(char previousStackTop)
 {
-	if(m_tokenB.code == ";") // 如果 m_tokenB 是 ;，弹出多个块的任务留给它
+	if(m_tokenB.code == ";") // 如果 m_tokenB 是 ;, 弹出多个块的任务留给它
 		return;
 
 	if(!((previousStackTop == JS_IF && m_tokenB.code == "else") ||
@@ -340,15 +340,15 @@ void RealJSFormatter::Go()
 	m_blockStack.push(JS_STUB);
 	m_brcNeedStack.push(true);
 
-	bool bHaveNewLine;
-	char tokenAFirst;
-	char tokenBFirst;
+	bool bHaveNewLine = false;
+	char tokenAFirst = 0;
+	char tokenBFirst = 0;
 
 	StartParse();
 
 	while(GetToken())
 	{
-		bHaveNewLine = false; // bHaveNewLine 表示后面将要换行，m_bNewLine 表示已经换行了
+		bHaveNewLine = false; // bHaveNewLine 表示后面将要换行, m_bNewLine 表示已经换行了
 		tokenAFirst = m_tokenA.code[0];
 		tokenBFirst = m_tokenB.code.size() ? m_tokenB.code[0] : 0;
 		if(tokenBFirst == '\r')
@@ -371,7 +371,7 @@ void RealJSFormatter::Go()
 		switch(m_tokenA.type)
 		{
 		case REGULAR_TYPE:
-			PutToken(m_tokenA); // 正则表达式直接输出，前后没有任何样式
+			PutToken(m_tokenA); // 正则表达式直接输出, 前后没有任何样式
 			break;
 		case COMMENT_TYPE_1:
 		case COMMENT_TYPE_2:
@@ -453,7 +453,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if((m_tokenA.code == ")" && topStack == JS_BRACKET) ||
 			(m_tokenA.code == "]" && topStack == JS_SQUARE))
 		{
-			// )] 需要弹栈，减少缩进
+			// )] 需要弹栈, 减少缩进
 			m_blockStack.pop();
 			--m_nIndents;
 			GetStackTop(m_blockStack, topStack);
@@ -466,8 +466,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			(topStack == JS_IF || topStack == JS_FOR || topStack == JS_WHILE ||
 			topStack == JS_SWITCH || topStack == JS_CATCH))
 		{
-			// 栈顶的 if, for, while, switch, catch 正在等待 )，之后换行增加缩进
-			// 这里的空格和下面的空格是留给 { 的，m_bNLBracket 为 true 则不需要空格了
+			// 栈顶的 if, for, while, switch, catch 正在等待 ), 之后换行增加缩进
+			// 这里的空格和下面的空格是留给 { 的, m_bNLBracket 为 true 则不需要空格了
 			string rightDeco = m_tokenB.code != ";" ? strRight : "";
 			if(!bHaveNewLine)
 				rightDeco.append("\n");
@@ -502,7 +502,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 		if(m_tokenA.code == "(" || m_tokenA.code == "[")
 		{
-			// ([ 入栈，增加缩进
+			// ([ 入栈, 增加缩进
 			GetStackTop(m_blockStack, topStack);
 			if(topStack == JS_ASSIGN)
 			{
@@ -590,7 +590,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		{
 			if(!m_bBlockStmt || topStack == JS_ASSIGN)//(topStack == JS_ASSIGN && !m_bAssign))
 			{
-				//m_blockStack.pop(); // 不把那个弹出来，遇到 } 时一起弹
+				//m_blockStack.pop(); // 不把那个弹出来, 遇到 } 时一起弹
 				--m_nIndents;
 				m_bBlockStmt = true;
 			}
@@ -620,13 +620,13 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 		// 修正({...}) 中多一次缩进 end
 
-		m_blockStack.push(m_blockMap[m_tokenA.code]); // 入栈，增加缩进
+		m_blockStack.push(m_blockMap[m_tokenA.code]); // 入栈, 增加缩进
 		++m_nIndents;
 
 		/*
 		 * { 之间的空格都是由之前的符号准备好的
-		 * 这是为了解决 { 在新行时，前面会多一个空格的问题
-		 * 因为算法只能向后，不能向前看
+		 * 这是为了解决 { 在新行时, 前面会多一个空格的问题
+		 * 因为算法只能向后, 不能向前看
 		 */
 		if(m_tokenB.code == "}")
 		{
@@ -637,7 +637,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				topStack == JS_WHILE || topStack == JS_SWITCH ||
 				topStack == JS_CATCH || topStack == JS_FUNCTION))
 			{
-				PutToken(m_tokenA, string(" ")); // 这些情况下，前面补一个空格
+				PutToken(m_tokenA, string(" ")); // 这些情况下, 前面补一个空格
 			}
 			else
 			{
@@ -658,7 +658,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 	if(m_tokenA.code == "}")
 	{
-		// 激进的策略，} 一直弹到 {
+		// 激进的策略, } 一直弹到 {
 		// 这样做至少可以使得 {} 之后是正确的
 		while(GetStackTop(m_blockStack, topStack))
 		{
@@ -690,7 +690,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 		if(topStack == JS_BLOCK)
 		{
-			// 弹栈，减小缩进
+			// 弹栈, 减小缩进
 			m_blockStack.pop();
 			--m_nIndents;
 			bool bGetTop = GetStackTop(m_blockStack, topStack);
@@ -712,7 +712,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 					m_blockStack.pop();
 					break;
 				case JS_DO:
-					// 缩进已经处理，do 留给 while
+					// 缩进已经处理, do 留给 while
 					break;
 				}
 			}
@@ -856,7 +856,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		PutToken(m_tokenA);
 
 		m_blockStack.push(m_blockMap[m_tokenA.code]);
-		++m_nIndents; // 无需 ()，直接缩进
+		++m_nIndents; // 无需 (), 直接缩进
 		m_bBlockStmt = false; // 等待 block 内部的 statment
 
 		PutString(string(" "));
@@ -873,7 +873,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 			--m_nIndents;
 			m_blockStack.pop();
 		}
-		m_blockStack.push(m_blockMap[m_tokenA.code]); // 把 function 也压入栈，遇到 } 弹掉
+		m_blockStack.push(m_blockMap[m_tokenA.code]); // 把 function 也压入栈, 遇到 } 弹掉
 	}
 
 	if(StackTopEq(m_blockStack, JS_ASSIGN))
@@ -913,7 +913,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		(m_tokenA.code == "if" || m_tokenA.code == "for" ||
 		m_tokenA.code == "while" || m_tokenA.code == "catch"))
 	{
-		// 等待 ()，() 到来后才能加缩进
+		// 等待 (), () 到来后才能加缩进
 		m_brcNeedStack.push(false);
 		m_blockStack.push(m_blockMap[m_tokenA.code]);
 

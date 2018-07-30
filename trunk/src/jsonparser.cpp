@@ -57,7 +57,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		}
 
 		/*
-		 * 至此，读取完成 m_tokenA 和 m_tokenB
+		 * 至此, 读取完成 m_tokenA 和 m_tokenB
 		 * 已经合并多个换行
 		 * 已经识别负数
 		 * 已经识别正则表达式

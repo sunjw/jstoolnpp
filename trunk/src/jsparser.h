@@ -184,6 +184,7 @@ private:
 	virtual int GetChar() = 0; // JUST get next char from input
 
 	bool inline IsComment(); // 要联合判断 charA, charB
+	bool inline IsShebang(); // Unix Shebang
 
 	void GetTokenRaw();
 
@@ -194,7 +195,7 @@ private:
 	void PrintDebug();
 	virtual void PrintAdditionalDebug(string& strDebugOutput) {}
 
-	string m_strBeforeReg; // 判断正则时，正则前面可以出现的字符
+	string m_strBeforeReg; // 判断正则时, 正则前面可以出现的字符
 
 	TokenQueue m_tokenBQueue;
 
