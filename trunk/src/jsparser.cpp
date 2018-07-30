@@ -343,7 +343,7 @@ void JSParser::GetTokenRaw()
 			if(IsShebang())
 			{
 				bShebang = true;
-				m_tokenB.type = STRING_TYPE; // Shebang 作为 STRING 来处理
+				m_tokenB.type = COMMENT_TYPE_1; // Shebang 作为单行注释来处理
 				m_tokenB.code.push_back(m_charA);
 				continue;
 			}
