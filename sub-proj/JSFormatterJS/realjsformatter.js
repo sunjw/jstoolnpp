@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 const JSParser = require('./jsparser.js');
 
-const VERSION = "1.22.1.0";
+const VERSION = "1.22.2.0";
 
 function Trim(str) {
     return str.trim();
@@ -682,7 +682,10 @@ class RealJSFormatter extends JSParser.JSParser {
             (this.m_tokenA.code == "case" || this.m_tokenA.code == "default")) {
             // minus indent for case, default
             --this.m_nIndents;
-            var rightDeco = this.m_tokenA.code != "default" ? " " : "";
+            var rightDeco = " ";
+            if (this.m_tokenA.code == "default" && this.m_tokenB.code == ":") {
+                rightDeco = "";
+            }
             this.PutToken(this.m_tokenA, "", rightDeco);
             ++this.m_nIndents;
             this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
