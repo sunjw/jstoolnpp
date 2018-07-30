@@ -5,7 +5,7 @@
 Copyright (c) 2012- SUN Junwen
 
 对 std::list<std::pair<_Key, _Tp> > 的封装
-努力实现 std::map 的特性，并提供 FIFO 迭代器
+努力实现 std::map 的特性, 并提供 FIFO 迭代器
 对于元素的搜索 插入 删除 操作都是 O(n) 的
 时间复杂度
 性能基本是一个 std::list 

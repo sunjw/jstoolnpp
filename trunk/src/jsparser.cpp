@@ -153,7 +153,7 @@ void JSParser::GetTokenRaw()
 		// 正则需要在 token 级别判断
 		if(m_bRegular)
 		{
-			// 正则状态全部输出，直到 /
+			// 正则状态全部输出, 直到 /
 			m_tokenB.code.push_back(m_charA);
 
 			if(m_charA == '\\' && 
@@ -212,7 +212,7 @@ void JSParser::GetTokenRaw()
 
 		if(bQuote)
 		{
-			// 引号状态，全部输出，直到引号结束
+			// 引号状态, 全部输出, 直到引号结束
 			m_tokenB.code.push_back(m_charA);
 
 			if(m_charA == '\\' && (m_charB == chQuote || m_charB == '\\')) // 转义字符
@@ -289,7 +289,7 @@ void JSParser::GetTokenRaw()
 			m_tokenB.code.push_back(m_charA);
 
 			// 解决类似 82e-2, 442e+6, 555E-6 的问题
-			// 因为这是立即数，所以只能符合以下的表达形式
+			// 因为这是立即数, 所以只能符合以下的表达形式
 			bool bNumOld = bNum;
 			if(bFirst || bNumOld) // 只有之前是数字才改变状态
 			{
@@ -435,7 +435,7 @@ void JSParser::PrepareRegular()
 {
 	/*
 	 * 先处理一下正则
-	 * m_tokenB[0] == /，且 m_tokenB 不是注释
+	 * m_tokenB[0] == /, 且 m_tokenB 不是注释
 	 * m_tokenA 不是 STRING (除了 m_tokenA == return)
 	 * 而且 m_tokenA 的最后一个字符是下面这些
 	*/
@@ -486,7 +486,7 @@ void JSParser::PrepareTokenB()
 
 	/*
 	 * 跳过 else, while, catch, ',', ';', ')', { 之前的换行
-	 * 如果最后读到的不是上面那几个，再把去掉的换行补上
+	 * 如果最后读到的不是上面那几个, 再把去掉的换行补上
 	 */
 	int c = 0;
 	while(m_tokenB.code == "\n" || m_tokenB.code == "\r\n")
@@ -508,7 +508,7 @@ void JSParser::PrepareTokenB()
 	if(m_tokenB.code != "else" && m_tokenB.code != "while" && m_tokenB.code != "catch" &&
 		m_tokenB.code != "," && m_tokenB.code != ";" && m_tokenB.code != ")")
 	{
-		// 将去掉的换行压入队列，先处理
+		// 将去掉的换行压入队列, 先处理
 		if(m_tokenA.code == "{" && m_tokenB.code == "}")
 			return; // 空 {}
 
