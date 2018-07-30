@@ -4,12 +4,12 @@
 
 Copyright (c) 2012- SUN Junwen
 
-å¯¹ std::list<std::pair<_Key, _Tp> > çš„å°è£…
-åŠªåŠ›å®ç° std::map çš„ç‰¹æ€§, å¹¶æä¾› FIFO è¿­ä»£å™¨
-å¯¹äºå…ƒç´ çš„æœç´¢ æ’å…¥ åˆ é™¤ æ“ä½œéƒ½æ˜¯ O(n) çš„
-æ—¶é—´å¤æ‚åº¦
-æ€§èƒ½åŸºæœ¬æ˜¯ä¸€ä¸ª std::list 
-æ“ä½œç‰¹æ€§ç±»ä¼¼ std::map
+¶Ô std::list<std::pair<_Key, _Tp> > µÄ·â×°
+Å¬Á¦ÊµÏÖ std::map µÄÌØĞÔ£¬²¢Ìá¹© FIFO µü´úÆ÷
+¶ÔÓÚÔªËØµÄËÑË÷ ²åÈë É¾³ı ²Ù×÷¶¼ÊÇ O(n) µÄ
+Ê±¼ä¸´ÔÓ¶È
+ĞÔÄÜ»ù±¾ÊÇÒ»¸ö std::list 
+²Ù×÷ÌØĞÔÀàËÆ std::map
 */
 #ifndef _UNSORTED_MAP_H_
 #define _UNSORTED_MAP_H_
@@ -34,7 +34,7 @@ public:
 	virtual ~UnsortedMap()
 	{}
 
-	// æ“ä½œæ¥å£éƒ½æ˜¯å¯¹ std::list çš„å°è£…
+	// ²Ù×÷½Ó¿Ú¶¼ÊÇ¶Ô std::list µÄ·â×°
 	inline size_type size()
 	{ return m_list.size(); }
 
@@ -104,13 +104,13 @@ public:
         return m_list.end();
 	}
 
-	// åªèƒ½æä¾› O(n) çš„æ€§èƒ½
+	// Ö»ÄÜÌá¹© O(n) µÄĞÔÄÜ
 	mapped_type& operator[](const key_type& key)
 	{
 		typename unsorted_map::iterator itr = find(key);
 		if(itr == m_list.end())
 		{
-			// æ²¡æœ‰, æ’å…¥ä¸€ä¸ª
+			// Ã»ÓĞ, ²åÈëÒ»¸ö
 			m_list.push_back(pair_type(key, mapped_type()));
 			itr = m_list.end();
 			--itr;

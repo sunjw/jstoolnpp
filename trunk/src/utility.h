@@ -13,13 +13,13 @@ const int EOL_AUTO = 3;
 
 struct StruOptions
 {
-	int nPutCR; // æ˜¯å¦è¾“å‡º \r\n
-	char chIndent; // ç¼©è¿›ç”¨çš„å­—ç¬¦
-	int nChPerInd; // æ¯ä¸ªç¼©è¿›ä½¿ç”¨å‡ ä¸ªå­—ç¬¦
-	bool bNLBracket; // { ä¹‹å‰æ˜¯å¦æ¢è¡Œ
-	bool bKeepTopComt; // æ˜¯å¦ä¿ç•™å¤´éƒ¨çš„æ³¨é‡Š
-	bool bIndentInEmpty; // æ˜¯å¦ä¿ç•™ç©ºè¡Œä¸­çš„ç¼©è¿›
-	bool bDisableVersionCheck; // æ˜¯å¦å…³é—­è‡ªåŠ¨ç‰ˆæœ¬æ£€æŸ¥
+	int nPutCR; // ÊÇ·ñÊä³ö \r\n
+	char chIndent; // Ëõ½øÓÃµÄ×Ö·û
+	int nChPerInd; // Ã¿¸öËõ½øÊ¹ÓÃ¼¸¸ö×Ö·û
+	bool bNLBracket; // { Ö®Ç°ÊÇ·ñ»»ĞĞ
+	bool bKeepTopComt; // ÊÇ·ñ±£ÁôÍ·²¿µÄ×¢ÊÍ
+	bool bIndentInEmpty; // ÊÇ·ñ±£Áô¿ÕĞĞÖĞµÄËõ½ø
+	bool bDisableVersionCheck; // ÊÇ·ñ¹Ø±Õ×Ô¶¯°æ±¾¼ì²é
 };
 
 const string keyPutCR("Put CR");

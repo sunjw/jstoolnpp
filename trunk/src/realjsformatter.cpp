@@ -100,7 +100,7 @@ void RealJSFormatter::Init()
 	m_blockMap[string("case")] = JS_CASE;
 	m_blockMap[string("default")] = JS_CASE;
 	m_blockMap[string("try")] = JS_TRY;
-	m_blockMap[string("finally")] = JS_TRY; // ç­‰åŒäº try
+	m_blockMap[string("finally")] = JS_TRY; // µÈÍ¬ÓÚ try
 	m_blockMap[string("catch")] = JS_CATCH;
 	m_blockMap[string("function")] = JS_FUNCTION;
 	m_blockMap[string("{")] = JS_BLOCK;
@@ -183,7 +183,7 @@ void RealJSFormatter::PutToken(const Token& token,
 	PutString(token);
 	PutString(rightStyle);
 	if(!(m_bCommentPut && m_bNewLine))
-		m_bCommentPut = false; // è¿™ä¸ªä¸€å®šä¼šå‘ç”Ÿåœ¨æ³¨é‡Šä¹‹åçš„ä»»ä½•è¾“å‡ºåé¢
+		m_bCommentPut = false; // Õâ¸öÒ»¶¨»á·¢ÉúÔÚ×¢ÊÍÖ®ºóµÄÈÎºÎÊä³öºóÃæ
 }
 
 void RealJSFormatter::PutString(const Token& token)
@@ -196,15 +196,15 @@ void RealJSFormatter::PutString(const Token& token)
 			((m_struOption.eBracNL == NEWLINE_BRAC || token.code[i] != '{') && 
 			token.code[i] != ',' && token.code[i] != ';' && !IsInlineComment(token))))
 		{
-			// æ¢è¡Œåé¢ä¸æ˜¯ç´§è·Ÿç€ {,; æ‰çœŸæ­£æ¢
-			PutLineBuffer(); // è¾“å‡ºè¡Œç¼“å†²
+			// »»ĞĞºóÃæ²»ÊÇ½ô¸ú×Å {,; ²ÅÕæÕı»»
+			PutLineBuffer(); // Êä³öĞĞ»º³å
 
 			m_lineBuffer = "";
 			m_bLineTemplate = false;
 			m_bNewLine = false;
-			m_nIndents = m_nIndents < 0 ? 0 : m_nIndents; // å‡ºé”™ä¿®æ­£
+			m_nIndents = m_nIndents < 0 ? 0 : m_nIndents; // ³ö´íĞŞÕı
 			m_nLineIndents = m_nIndents;
-			if(token.code[i] == '{' || token.code[i] == ',' || token.code[i] == ';') // è¡Œç»“å°¾æ˜¯æ³¨é‡Š, ä½¿å¾—{,;ä¸å¾—ä¸æ¢è¡Œ
+			if(token.code[i] == '{' || token.code[i] == ',' || token.code[i] == ';') // ĞĞ½áÎ²ÊÇ×¢ÊÍ£¬Ê¹µÃ{,;²»µÃ²»»»ĞĞ
 				--m_nLineIndents;
 		}
 
@@ -269,25 +269,25 @@ void RealJSFormatter::PutLineBuffer()
 	if(!m_bLineTemplate)
 		line.append(TrimRightSpace(m_lineBuffer));
 	else
-		line.append(m_lineBuffer); // åŸæ ·è¾“å‡º Template String
+		line.append(m_lineBuffer); // Ô­ÑùÊä³ö Template String
 	
 	if((!m_bLineTemplate || m_lineBuffer[0] == '`') && 
 		(line != "" || m_struOption.eEmpytIndent == INDENT_IN_EMPTYLINE)) // Fix "JSLint unexpect space" bug
 	{
 		for(size_t i = 0; i < m_initIndent.length(); ++i)
-			PutChar(m_initIndent[i]); // å…ˆè¾“å‡ºé¢„ç¼©è¿›
+			PutChar(m_initIndent[i]); // ÏÈÊä³öÔ¤Ëõ½ø
 
 		for(int c = 0; c < m_nLineIndents; ++c)
 			for(int c2 = 0; c2 < m_struOption.nChPerInd; ++c2)
-				PutChar(m_struOption.chIndent); // è¾“å‡ºç¼©è¿›
+				PutChar(m_struOption.chIndent); // Êä³öËõ½ø
 	}
 	
-	// åŠ ä¸Šæ¢è¡Œ
+	// ¼ÓÉÏ»»ĞĞ
 	if(m_struOption.eCRPut == PUT_CR)
 		line.append("\r"); //PutChar('\r');
 	line.append("\n"); //PutChar('\n');
 
-	// è¾“å‡º line
+	// Êä³ö line
 	for(size_t i = 0; i < line.length(); ++i)
 	{
 		int ch = line[i];
@@ -299,7 +299,7 @@ void RealJSFormatter::PutLineBuffer()
 
 void RealJSFormatter::PopMultiBlock(char previousStackTop)
 {
-	if(m_tokenB.code == ";") // å¦‚æœ m_tokenB æ˜¯ ;, å¼¹å‡ºå¤šä¸ªå—çš„ä»»åŠ¡ç•™ç»™å®ƒ
+	if(m_tokenB.code == ";") // Èç¹û m_tokenB ÊÇ ;£¬µ¯³ö¶à¸ö¿éµÄÈÎÎñÁô¸øËü
 		return;
 
 	if(!((previousStackTop == JS_IF && m_tokenB.code == "else") ||
@@ -309,7 +309,7 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 		char topStack;
 		if(!GetStackTop(m_blockStack, topStack))
 			return;
-		// ; è¿˜å¯èƒ½å¯èƒ½ç»“æŸå¤šä¸ª if, do, while, for, try, catch
+		// ; »¹¿ÉÄÜ¿ÉÄÜ½áÊø¶à¸ö if, do, while, for, try, catch
 		while(topStack == JS_IF || topStack == JS_FOR || topStack == JS_WHILE ||
 			topStack == JS_DO || topStack == JS_ELSE || topStack == JS_TRY || topStack == JS_CATCH)
 		{
@@ -328,7 +328,7 @@ void RealJSFormatter::PopMultiBlock(char previousStackTop)
 			if((topStack == JS_IF && m_tokenB.code == "else") ||
 				(topStack == JS_DO /*&& m_tokenB.code == "while"*/) ||
 				(topStack == JS_TRY && m_tokenB.code == "catch"))
-				break; // ç›´åˆ°åˆšåˆšç»“æŸä¸€ä¸ª if...else, do..., try...catch
+				break; // Ö±µ½¸Õ¸Õ½áÊøÒ»¸ö if...else, do..., try...catch
 			if(!GetStackTop(m_blockStack, topStack))
 				break;
 		}
@@ -348,7 +348,7 @@ void RealJSFormatter::Go()
 
 	while(GetToken())
 	{
-		bHaveNewLine = false; // bHaveNewLine è¡¨ç¤ºåé¢å°†è¦æ¢è¡Œ, m_bNewLine è¡¨ç¤ºå·²ç»æ¢è¡Œäº†
+		bHaveNewLine = false; // bHaveNewLine ±íÊ¾ºóÃæ½«Òª»»ĞĞ£¬m_bNewLine ±íÊ¾ÒÑ¾­»»ĞĞÁË
 		tokenAFirst = m_tokenA.code[0];
 		tokenBFirst = m_tokenB.code.size() ? m_tokenB.code[0] : 0;
 		if(tokenBFirst == '\r')
@@ -363,21 +363,21 @@ void RealJSFormatter::Go()
 		bool bCommentInline = false;
 
 		/*
-		 * å‚è€ƒ m_tokenB æ¥å¤„ç† m_tokenA
-		 * è¾“å‡ºæˆ–ä¸è¾“å‡º m_tokenA
-		 * ä¸‹ä¸€æ¬¡å¾ªç¯æ—¶è‡ªåŠ¨ä¼šç”¨ m_tokenB è¦†ç›– m_tokenA
+		 * ²Î¿¼ m_tokenB À´´¦Àí m_tokenA
+		 * Êä³ö»ò²»Êä³ö m_tokenA
+		 * ÏÂÒ»´ÎÑ­»·Ê±×Ô¶¯»áÓÃ m_tokenB ¸²¸Ç m_tokenA
 		 */
 		//PutToken(m_tokenA);
 		switch(m_tokenA.type)
 		{
 		case REGULAR_TYPE:
-			PutToken(m_tokenA); // æ­£åˆ™è¡¨è¾¾å¼ç›´æ¥è¾“å‡º, å‰åæ²¡æœ‰ä»»ä½•æ ·å¼
+			PutToken(m_tokenA); // ÕıÔò±í´ïÊ½Ö±½ÓÊä³ö£¬Ç°ºóÃ»ÓĞÈÎºÎÑùÊ½
 			break;
 		case COMMENT_TYPE_1:
 		case COMMENT_TYPE_2:
 			if(m_tokenA.code[1] == '*')
 			{
-				// å¤šè¡Œæ³¨é‡Š
+				// ¶àĞĞ×¢ÊÍ
 				if(!bHaveNewLine)
 				{
 					if(IsInlineComment(m_tokenA))
@@ -385,15 +385,15 @@ void RealJSFormatter::Go()
 
 					if(!bCommentInline)
 					{
-						PutToken(m_tokenA, string(""), string("\n")); // éœ€è¦æ¢è¡Œ
+						PutToken(m_tokenA, string(""), string("\n")); // ĞèÒª»»ĞĞ
 					}
-					else if(m_tokenB.type != OPER_TYPE || m_tokenB.code == "{") // { ä¾é å‰ä¸€ä¸ª token æä¾›ç©ºæ ¼
+					else if(m_tokenB.type != OPER_TYPE || m_tokenB.code == "{") // { ÒÀ¿¿Ç°Ò»¸ö token Ìá¹©¿Õ¸ñ
 					{
-						PutToken(m_tokenA, string(""), string(" ")); // ä¸éœ€è¦æ¢è¡Œ
+						PutToken(m_tokenA, string(""), string(" ")); // ²»ĞèÒª»»ĞĞ
 					}
 					else
 					{
-						PutToken(m_tokenA); // ä¸éœ€è¦æ¢è¡Œ, ä¹Ÿä¸è¦ç©ºæ ¼
+						PutToken(m_tokenA); // ²»ĞèÒª»»ĞĞ, Ò²²»Òª¿Õ¸ñ
 					}
 				}
 				else
@@ -403,11 +403,11 @@ void RealJSFormatter::Go()
 			}
 			else
 			{
-				// å•è¡Œæ³¨é‡Š
-				PutToken(m_tokenA); // è‚¯å®šä¼šæ¢è¡Œçš„
+				// µ¥ĞĞ×¢ÊÍ
+				PutToken(m_tokenA); // ¿Ï¶¨»á»»ĞĞµÄ
 			}
 
-			// å†…è”æ³¨é‡Šå°±å½“ä½œæ²¡æœ‰æ³¨é‡Š, é€æ˜çš„
+			// ÄÚÁª×¢ÊÍ¾Íµ±×÷Ã»ÓĞ×¢ÊÍ, Í¸Ã÷µÄ
 			if(!bCommentInline)
 				m_bCommentPut = true;
 
@@ -441,7 +441,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		m_tokenA.code == "!" || m_tokenA.code == "!!" ||
 		m_tokenA.code == "~" || m_tokenA.code == ".")
 	{
-		// ()[]!. éƒ½æ˜¯å‰åæ²¡æœ‰æ ·å¼çš„è¿ç®—ç¬¦
+		// ()[]!. ¶¼ÊÇÇ°ºóÃ»ÓĞÑùÊ½µÄÔËËã·û
 		if((m_tokenA.code == ")" || m_tokenA.code == "]") &&
 			(topStack == JS_ASSIGN || topStack == JS_HELPER))
 		{
@@ -453,7 +453,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if((m_tokenA.code == ")" && topStack == JS_BRACKET) ||
 			(m_tokenA.code == "]" && topStack == JS_SQUARE))
 		{
-			// )] éœ€è¦å¼¹æ ˆ, å‡å°‘ç¼©è¿›
+			// )] ĞèÒªµ¯Õ»£¬¼õÉÙËõ½ø
 			m_blockStack.pop();
 			--m_nIndents;
 			GetStackTop(m_blockStack, topStack);
@@ -466,21 +466,21 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			(topStack == JS_IF || topStack == JS_FOR || topStack == JS_WHILE ||
 			topStack == JS_SWITCH || topStack == JS_CATCH))
 		{
-			// æ ˆé¡¶çš„ if, for, while, switch, catch æ­£åœ¨ç­‰å¾… ), ä¹‹åæ¢è¡Œå¢åŠ ç¼©è¿›
-			// è¿™é‡Œçš„ç©ºæ ¼å’Œä¸‹é¢çš„ç©ºæ ¼æ˜¯ç•™ç»™ { çš„, m_bNLBracket ä¸º true åˆ™ä¸éœ€è¦ç©ºæ ¼äº†
+			// Õ»¶¥µÄ if, for, while, switch, catch ÕıÔÚµÈ´ı )£¬Ö®ºó»»ĞĞÔö¼ÓËõ½ø
+			// ÕâÀïµÄ¿Õ¸ñºÍÏÂÃæµÄ¿Õ¸ñÊÇÁô¸ø { µÄ£¬m_bNLBracket Îª true Ôò²»ĞèÒª¿Õ¸ñÁË
 			string rightDeco = m_tokenB.code != ";" ? strRight : "";
 			if(!bHaveNewLine)
 				rightDeco.append("\n");
 			PutToken(m_tokenA, string(""), rightDeco);
 			//bBracket = true;
 			m_brcNeedStack.pop();
-			m_bBlockStmt = false; // ç­‰å¾… statment
+			m_bBlockStmt = false; // µÈ´ı statment
 			if(StackTopEq(m_blockStack, JS_WHILE))
 			{
 				m_blockStack.pop();
 				if(StackTopEq(m_blockStack, JS_DO))
 				{
-					// ç»“æŸ do...while
+					// ½áÊø do...while
 					m_blockStack.pop();
 
 					PopMultiBlock(JS_WHILE);
@@ -496,13 +496,13 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 		else if(m_tokenA.code == ")" && 
 			(m_tokenB.code == "{" || IsInlineComment(m_tokenB) || bHaveNewLine))
-			PutToken(m_tokenA, string(""), strRight); // { æˆ–è€…/**/æˆ–è€…æ¢è¡Œä¹‹å‰ç•™ä¸ªç©ºæ ¼
+			PutToken(m_tokenA, string(""), strRight); // { »òÕß/**/»òÕß»»ĞĞÖ®Ç°Áô¸ö¿Õ¸ñ
 		else
-			PutToken(m_tokenA); // æ­£å¸¸è¾“å‡º
+			PutToken(m_tokenA); // Õı³£Êä³ö
 
 		if(m_tokenA.code == "(" || m_tokenA.code == "[")
 		{
-			// ([ å…¥æ ˆ, å¢åŠ ç¼©è¿›
+			// ([ ÈëÕ»£¬Ôö¼ÓËõ½ø
 			GetStackTop(m_blockStack, topStack);
 			if(topStack == JS_ASSIGN)
 			{
@@ -529,13 +529,13 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 		GetStackTop(m_blockStack, topStack);
 
-		// ; ç»“æŸ if, else, while, for, try, catch
+		// ; ½áÊø if, else, while, for, try, catch
 		if(topStack == JS_IF || topStack == JS_FOR ||
 			topStack == JS_WHILE || topStack == JS_CATCH)
 		{
 			m_blockStack.pop();
 			--m_nIndents;
-			// ä¸‹é¢çš„ } æœ‰åŒæ ·çš„å¤„ç†
+			// ÏÂÃæµÄ } ÓĞÍ¬ÑùµÄ´¦Àí
 			PopMultiBlock(topStack);
 		}
 		if(topStack == JS_ELSE || topStack == JS_TRY)
@@ -549,15 +549,15 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			--m_nIndents;
 			PopMultiBlock(topStack);
 		}
-		// do åœ¨è¯»å–åˆ° while åæ‰ä¿®æ”¹è®¡æ•°
-		// å¯¹äº do{} ä¹Ÿä¸€æ ·
+		// do ÔÚ¶ÁÈ¡µ½ while ºó²ÅĞŞ¸Ä¼ÆÊı
+		// ¶ÔÓÚ do{} Ò²Ò»Ñù
 
 		GetStackTop(m_blockStack, topStack);
 		if(topStack != JS_BRACKET && !bHaveNewLine && !IsInlineComment(m_tokenB))
-			PutToken(m_tokenA, string(""), strRight.append("\n")); // å¦‚æœä¸æ˜¯ () é‡Œçš„ ; å°±æ¢è¡Œ
+			PutToken(m_tokenA, string(""), strRight.append("\n")); // Èç¹û²»ÊÇ () ÀïµÄ ; ¾Í»»ĞĞ
 		else if(topStack == JS_BRACKET || m_tokenB.type == COMMENT_TYPE_1 ||
 			IsInlineComment(m_tokenB))
-			PutToken(m_tokenA, string(""), strRight); // (; ) ç©ºæ ¼
+			PutToken(m_tokenA, string(""), strRight); // (; ) ¿Õ¸ñ
 		else
 			PutToken(m_tokenA);
 
@@ -572,7 +572,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			m_blockStack.pop();
 		}
 		if(StackTopEq(m_blockStack, JS_BLOCK) && !bHaveNewLine)
-			PutToken(m_tokenA, string(""), strRight.append("\n")); // å¦‚æœæ˜¯ {} é‡Œçš„
+			PutToken(m_tokenA, string(""), strRight.append("\n")); // Èç¹ûÊÇ {} ÀïµÄ
 		else
 			PutToken(m_tokenA, string(""), strRight);
 
@@ -590,54 +590,54 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		{
 			if(!m_bBlockStmt || topStack == JS_ASSIGN)//(topStack == JS_ASSIGN && !m_bAssign))
 			{
-				//m_blockStack.pop(); // ä¸æŠŠé‚£ä¸ªå¼¹å‡ºæ¥, é‡åˆ° } æ—¶ä¸€èµ·å¼¹
+				//m_blockStack.pop(); // ²»°ÑÄÇ¸öµ¯³öÀ´£¬Óöµ½ } Ê±Ò»Æğµ¯
 				--m_nIndents;
 				m_bBlockStmt = true;
 			}
 			else
 			{
-				m_blockStack.push(JS_HELPER); // å‹å…¥ä¸€ä¸ª JS_HELPER ç»Ÿä¸€çŠ¶æ€
+				m_blockStack.push(JS_HELPER); // Ñ¹ÈëÒ»¸ö JS_HELPER Í³Ò»×´Ì¬
 			}
 		}
 
-		// ä¿®æ­£({...}) ä¸­å¤šä¸€æ¬¡ç¼©è¿›
+		// ĞŞÕı({...}) ÖĞ¶àÒ»´ÎËõ½ø
 		bool bPrevFunc = (topStack == JS_FUNCTION);
 		char fixTopStack = topStack;
 		if(bPrevFunc)
 		{
-			m_blockStack.pop(); // å¼¹æ‰ JS_FUNCTION
+			m_blockStack.pop(); // µ¯µô JS_FUNCTION
 			GetStackTop(m_blockStack, fixTopStack);
 		}
 
 		if(fixTopStack == JS_BRACKET)
 		{
-			--m_nIndents; // ({ å‡æ‰ä¸€ä¸ªç¼©è¿›
+			--m_nIndents; // ({ ¼õµôÒ»¸öËõ½ø
 		}
 
 		if(bPrevFunc)
 		{
-			m_blockStack.push(JS_FUNCTION); // å‹å› JS_FUNCTION
+			m_blockStack.push(JS_FUNCTION); // Ñ¹»Ø JS_FUNCTION
 		}
-		// ä¿®æ­£({...}) ä¸­å¤šä¸€æ¬¡ç¼©è¿› end
+		// ĞŞÕı({...}) ÖĞ¶àÒ»´ÎËõ½ø end
 
-		m_blockStack.push(m_blockMap[m_tokenA.code]); // å…¥æ ˆ, å¢åŠ ç¼©è¿›
+		m_blockStack.push(m_blockMap[m_tokenA.code]); // ÈëÕ»£¬Ôö¼ÓËõ½ø
 		++m_nIndents;
 
 		/*
-		 * { ä¹‹é—´çš„ç©ºæ ¼éƒ½æ˜¯ç”±ä¹‹å‰çš„ç¬¦å·å‡†å¤‡å¥½çš„
-		 * è¿™æ˜¯ä¸ºäº†è§£å†³ { åœ¨æ–°è¡Œæ—¶, å‰é¢ä¼šå¤šä¸€ä¸ªç©ºæ ¼çš„é—®é¢˜
-		 * å› ä¸ºç®—æ³•åªèƒ½å‘å, ä¸èƒ½å‘å‰çœ‹
+		 * { Ö®¼äµÄ¿Õ¸ñ¶¼ÊÇÓÉÖ®Ç°µÄ·ûºÅ×¼±¸ºÃµÄ
+		 * ÕâÊÇÎªÁË½â¾ö { ÔÚĞÂĞĞÊ±£¬Ç°Ãæ»á¶àÒ»¸ö¿Õ¸ñµÄÎÊÌâ
+		 * ÒòÎªËã·¨Ö»ÄÜÏòºó£¬²»ÄÜÏòÇ°¿´
 		 */
 		if(m_tokenB.code == "}")
 		{
-			// ç©º {}
+			// ¿Õ {}
 			m_bEmptyBracket = true;
 			if(m_bNewLine == false && m_struOption.eBracNL == NEWLINE_BRAC &&
 				(topStack == JS_IF || topStack == JS_FOR ||
 				topStack == JS_WHILE || topStack == JS_SWITCH ||
 				topStack == JS_CATCH || topStack == JS_FUNCTION))
 			{
-				PutToken(m_tokenA, string(" ")); // è¿™äº›æƒ…å†µä¸‹, å‰é¢è¡¥ä¸€ä¸ªç©ºæ ¼
+				PutToken(m_tokenA, string(" ")); // ÕâĞ©Çé¿öÏÂ£¬Ç°Ãæ²¹Ò»¸ö¿Õ¸ñ
 			}
 			else
 			{
@@ -647,7 +647,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		else
 		{
 			string strLeft = (m_struOption.eBracNL == NEWLINE_BRAC && !m_bNewLine) ? string("\n") : string("");
-			if(!bHaveNewLine && !IsInlineComment(m_tokenB)) // éœ€è¦æ¢è¡Œ
+			if(!bHaveNewLine && !IsInlineComment(m_tokenB)) // ĞèÒª»»ĞĞ
 				PutToken(m_tokenA, strLeft, strRight.append("\n"));
 			else
 				PutToken(m_tokenA, strLeft, strRight);
@@ -658,8 +658,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 	if(m_tokenA.code == "}")
 	{
-		// æ¿€è¿›çš„ç­–ç•¥, } ä¸€ç›´å¼¹åˆ° {
-		// è¿™æ ·åšè‡³å°‘å¯ä»¥ä½¿å¾— {} ä¹‹åæ˜¯æ­£ç¡®çš„
+		// ¼¤½øµÄ²ßÂÔ£¬} Ò»Ö±µ¯µ½ {
+		// ÕâÑù×öÖÁÉÙ¿ÉÒÔÊ¹µÃ {} Ö®ºóÊÇÕıÈ·µÄ
 		while(GetStackTop(m_blockStack, topStack))
 		{
 			if(topStack == JS_BLOCK)
@@ -690,7 +690,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 		if(topStack == JS_BLOCK)
 		{
-			// å¼¹æ ˆ, å‡å°ç¼©è¿›
+			// µ¯Õ»£¬¼õĞ¡Ëõ½ø
 			m_blockStack.pop();
 			--m_nIndents;
 			bool bGetTop = GetStackTop(m_blockStack, topStack);
@@ -712,7 +712,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 					m_blockStack.pop();
 					break;
 				case JS_DO:
-					// ç¼©è¿›å·²ç»å¤„ç†, do ç•™ç»™ while
+					// Ëõ½øÒÑ¾­´¦Àí£¬do Áô¸ø while
 					break;
 				}
 			}
@@ -738,7 +738,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			m_tokenB.code == ")")))
 		{
 			if(strRight.length() == 0 || strRight[strRight.length() - 1] != '\n')
-				strRight.append("\n"); // ä¸€äº›æƒ…å†µæ¢è¡Œ, ä¸è¦é‡å¤æ¢è¡Œ
+				strRight.append("\n"); // Ò»Ğ©Çé¿ö»»ĞĞ, ²»ÒªÖØ¸´»»ĞĞ
 
 			PutToken(m_tokenA, leftStyle, strRight);
 		}
@@ -746,20 +746,20 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			m_tokenB.type == COMMENT_TYPE_1 ||
 			IsInlineComment(m_tokenB))
 		{
-			PutToken(m_tokenA, leftStyle, strRight); // ä¸º else å‡†å¤‡çš„ç©ºæ ¼
+			PutToken(m_tokenA, leftStyle, strRight); // Îª else ×¼±¸µÄ¿Õ¸ñ
 		}
 		else
 		{
 			PutToken(m_tokenA, leftStyle); // }, }; })
 		}
-		// æ³¨æ„ ) ä¸è¦åœ¨è¾“å‡ºæ—¶ä»¿ç…§ ,; å–æ¶ˆå‰é¢çš„æ¢è¡Œ
+		// ×¢Òâ ) ²»ÒªÔÚÊä³öÊ±·ÂÕÕ ,; È¡ÏûÇ°ÃæµÄ»»ĞĞ
 
 		//char tmpTopStack;
 		//GetStackTop(m_blockStack, tmpTopStack);
-		// ä¿®æ­£({...}) ä¸­å¤šä¸€æ¬¡ç¼©è¿›
+		// ĞŞÕı({...}) ÖĞ¶àÒ»´ÎËõ½ø
 		if(topStack != JS_ASSIGN && StackTopEq(m_blockStack, JS_BRACKET))
 			++m_nIndents;
-		// ä¿®æ­£({...}) ä¸­å¤šä¸€æ¬¡ç¼©è¿› end
+		// ĞŞÕı({...}) ÖĞ¶àÒ»´ÎËõ½ø end
 
 		PopMultiBlock(topStack);
 
@@ -822,7 +822,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 	}
 
-	PutToken(m_tokenA, string(" "), string(" ")); // å‰©ä½™çš„æ“ä½œç¬¦éƒ½æ˜¯ ç©ºæ ¼operç©ºæ ¼
+	PutToken(m_tokenA, string(" "), string(" ")); // Ê£ÓàµÄ²Ù×÷·û¶¼ÊÇ ¿Õ¸ñoper¿Õ¸ñ
 }
 
 void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char tokenBFirst)
@@ -834,7 +834,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	if(!bTokenAPropName && 
 		(m_tokenA.code == "case" || m_tokenA.code == "default"))
 	{
-		// case, default å¾€é‡Œé¢ç¼©ä¸€æ ¼
+		// case, default ÍùÀïÃæËõÒ»¸ñ
 		--m_nIndents;
 		string rightDeco = string(" ");
 		if(m_tokenA.code == "default" && m_tokenB.code == ":")
@@ -856,8 +856,8 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		PutToken(m_tokenA);
 
 		m_blockStack.push(m_blockMap[m_tokenA.code]);
-		++m_nIndents; // æ— éœ€ (), ç›´æ¥ç¼©è¿›
-		m_bBlockStmt = false; // ç­‰å¾… block å†…éƒ¨çš„ statment
+		++m_nIndents; // ÎŞĞè ()£¬Ö±½ÓËõ½ø
+		m_bBlockStmt = false; // µÈ´ı block ÄÚ²¿µÄ statment
 
 		PutString(string(" "));
 		if((m_tokenB.type == STRING_TYPE || m_struOption.eBracNL == NEWLINE_BRAC) && !bHaveNewLine)
@@ -873,7 +873,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 			--m_nIndents;
 			m_blockStack.pop();
 		}
-		m_blockStack.push(m_blockMap[m_tokenA.code]); // æŠŠ function ä¹Ÿå‹å…¥æ ˆ, é‡åˆ° } å¼¹æ‰
+		m_blockStack.push(m_blockMap[m_tokenA.code]); // °Ñ function Ò²Ñ¹ÈëÕ»£¬Óöµ½ } µ¯µô
 	}
 
 	if(StackTopEq(m_blockStack, JS_ASSIGN))
@@ -887,7 +887,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		PutToken(m_tokenA, string(""), string(" "));
 
 		//if(m_blockStack.top() != 't' && IsType(m_tokenA))
-			//m_blockStack.push('t'); // å£°æ˜å˜é‡
+			//m_blockStack.push('t'); // ÉùÃ÷±äÁ¿
 		return;
 	}
 
@@ -913,7 +913,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		(m_tokenA.code == "if" || m_tokenA.code == "for" ||
 		m_tokenA.code == "while" || m_tokenA.code == "catch"))
 	{
-		// ç­‰å¾… (), () åˆ°æ¥åæ‰èƒ½åŠ ç¼©è¿›
+		// µÈ´ı ()£¬() µ½À´ºó²ÅÄÜ¼ÓËõ½ø
 		m_brcNeedStack.push(false);
 		m_blockStack.push(m_blockMap[m_tokenA.code]);
 

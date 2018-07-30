@@ -45,9 +45,9 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 	bool bGetKey = false;
 	bool bGetSplitor = false;
 
-	while(GetToken()) // è·å¾—ä¸‹ä¸€ä¸ª m_tokenA å’Œ m_tokenB
+	while(GetToken()) // »ñµÃÏÂÒ»¸ö m_tokenA ºÍ m_tokenB
 	{
-		// JsonParser å¿½ç•¥æ¢è¡Œ, å…¶å®ƒçš„è§£æå™¨å¯èƒ½ä¸è¦å¿½ç•¥
+		// JsonParser ºöÂÔ»»ĞĞ, ÆäËüµÄ½âÎöÆ÷¿ÉÄÜ²»ÒªºöÂÔ
 		if(m_tokenA.code == "\r\n" || 
 			m_tokenA.code == "\n" ||
 			m_tokenA.type == COMMENT_TYPE_1 || 
@@ -57,10 +57,10 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		}
 
 		/*
-		 * è‡³æ­¤, è¯»å–å®Œæˆ m_tokenA å’Œ m_tokenB
-		 * å·²ç»åˆå¹¶å¤šä¸ªæ¢è¡Œ
-		 * å·²ç»è¯†åˆ«è´Ÿæ•°
-		 * å·²ç»è¯†åˆ«æ­£åˆ™è¡¨è¾¾å¼
+		 * ÖÁ´Ë£¬¶ÁÈ¡Íê³É m_tokenA ºÍ m_tokenB
+		 * ÒÑ¾­ºÏ²¢¶à¸ö»»ĞĞ
+		 * ÒÑ¾­Ê¶±ğ¸ºÊı
+		 * ÒÑ¾­Ê¶±ğÕıÔò±í´ïÊ½
 		 */
 		if(m_tokenA.code == "{")
 		{
@@ -261,9 +261,9 @@ void JsonParser::GenStrJsonValue(JsonValue& jsonValue, string value)
 			value = strtrim(value, string("\""));
 
 		/*
-		 * STRING_VALUE å­˜å…¥çš„æ—¶å€™ä¼šæŠŠå‘¨å›´çš„å¼•å·å»æ‰
-		 * è¾“å‡ºçš„æ—¶å€™ç»Ÿä¸€æˆ "..."
-		 * æ‰€ä»¥è¦æŠŠé‡Œé¢çš„å¼•å·è½¬ä¹‰
+		 * STRING_VALUE ´æÈëµÄÊ±ºò»á°ÑÖÜÎ§µÄÒıºÅÈ¥µô
+		 * Êä³öµÄÊ±ºòÍ³Ò»³É "..."
+		 * ËùÒÔÒª°ÑÀïÃæµÄÒıºÅ×ªÒå
 		 */
 		value = strreplace(value, "\\'", "'");
 		value = strreplace(value, "\\\"", "\"");
