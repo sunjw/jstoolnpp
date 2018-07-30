@@ -155,6 +155,12 @@ class JSParser {
             (this.m_charB == '/' || this.m_charB == '*'));
     }
 
+    IsShebang() {
+        if (this.m_tokenCount == 0 && this.m_charA == '#' && this.m_charB == '!')
+            return true;
+        return false;
+    }
+
     GetToken() {
         // Recognized negative number and regular
         if (!this.m_bGetTokenInit) {
@@ -220,6 +226,7 @@ class JSParser {
         var bQuote = false;
         var bComment = false;
         var bRegularFlags = false;
+        var bShebang = false; // Unix Shebang
         var bFirst = true;
         var bNum = false; // is number or not
         var bLineBegin = false;
@@ -359,6 +366,16 @@ class JSParser {
                 continue;
             }
 
+            if (bShebang) {
+                // is Shebang, until newline
+                this.m_tokenB.code += this.m_charA;
+
+                if (this.m_charA == '\n')
+                    return;
+
+                continue;
+            }
+
             if (this.IsNormalChar(this.m_charA)) {
                 this.m_tokenB.type = STRING_TYPE;
                 this.m_tokenB.code += this.m_charA;
@@ -405,6 +422,13 @@ class JSParser {
                     chComment = this.m_charB;
 
                     //m_tokenBType = COMMENT_TYPE;
+                    this.m_tokenB.code += this.m_charA;
+                    continue;
+                }
+
+                if (this.IsShebang()) {
+                    bShebang = true;
+                    this.m_tokenB.type = STRING_TYPE;
                     this.m_tokenB.code += this.m_charA;
                     continue;
                 }
