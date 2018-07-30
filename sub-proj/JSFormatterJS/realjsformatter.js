@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 const JSParser = require('./jsparser.js');
 
-const VERSION = "1.22.2.0";
+const VERSION = "1.22.3.0";
 
 function Trim(str) {
     return str.trim();
@@ -195,9 +195,9 @@ class RealJSFormatter extends JSParser.JSParser {
         this.m_blockStack.push(JSParser.JS_STUB);
         this.m_brcNeedStack.push(true);
 
-        var bHaveNewLine;
-        var tokenAFirst;
-        var tokenBFirst;
+        var bHaveNewLine = false;
+        var tokenAFirst = '';
+        var tokenBFirst = '';
 
         this.StartParse();
         while (this.GetToken()) {
