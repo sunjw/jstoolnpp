@@ -321,7 +321,7 @@ void JSParser::GetTokenRaw()
 				continue;
 			}
 
-			if( IsSingleOper(m_charA) ||
+			if(IsSingleOper(m_charA) ||
 				IsNormalChar(m_charB) || IsBlankChar(m_charB) || IsQuote(m_charB))
 			{
 				m_tokenB.type = OPER_TYPE;
