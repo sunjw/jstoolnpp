@@ -176,10 +176,9 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 				key = m_tokenA.code;
 				keyLine = m_tokenA.line;
 
-				if(key[0] == '\'')
-					key = strtrim(key, string("'"));
-				else if(key[0] == '"')
-					key = strtrim(key, string("\""));
+				if((key[0] == '\'' && key[key.length() - 1] == '\'') ||
+					key[0] == '"' && key[key.length() - 1] == '"')
+					key = key.substr(1, key.length() - 2);
 
 				bGetKey = true;
 				continue;
@@ -255,10 +254,9 @@ void JsonParser::GenStrJsonValue(JsonValue& jsonValue, string value)
 {
 	if(value[0] == '\'' || value[0] == '"')
 	{
-		if(value[0] == '\'')
-			value = strtrim(value, string("'"));
-		else if(value[0] == '"')
-			value = strtrim(value, string("\""));
+		if((value[0] == '\'' && value[value.length() - 1] == '\'') ||
+			value[0] == '"' && value[value.length() - 1] == '"')
+			value = value.substr(1, value.length() - 2);
 
 		/*
 		 * STRING_VALUE 存入的时候会把周围的引号去掉
