@@ -11,6 +11,7 @@ Project site: http://www.sunjw.us/jstoolnpp
 #### FEATURES
  * JavaScript minify.
  * JavaScript/JSON format.
+ * Sort JSON data alphabetically.
  * JSON viwer with:
    - Search
    - Node expand/collapse
