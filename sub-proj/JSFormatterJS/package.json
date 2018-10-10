@@ -1,7 +1,7 @@
 {
     "name": "jstool",
     "displayName": "JSTool",
-    "description": "JS (Json) Tool for VSC",
+    "description": "JS (JSON) Tool for VSC",
     "version": "0.1.0",
     "publisher": "sunjw",
     "engines": {
