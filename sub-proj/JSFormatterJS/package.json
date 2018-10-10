@@ -1,14 +1,14 @@
 {
-    "name": "testhello",
-    "displayName": "TestHello",
-    "description": "Test hello",
-    "version": "0.0.1",
-    "publisher": "test",
+    "name": "jstool",
+    "displayName": "JSTool",
+    "description": "JS (Json) Tool for VSC",
+    "version": "0.1.0",
+    "publisher": "sunjw",
     "engines": {
-        "vscode": "^1.28.0"
+        "vscode": "^1.0.0"
     },
     "categories": [
-        "Other"
+        "Formatters"
     ],
     "activationEvents": [
         "onCommand:extension.sayHello"
