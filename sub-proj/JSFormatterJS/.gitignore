@@ -13,3 +13,7 @@ vsproj/typings/*
 *.user
 *.VC.db
 UpgradeLog*
+
+node_modules
+.vscode-test/
+*.vsix
