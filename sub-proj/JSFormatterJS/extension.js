@@ -18,14 +18,13 @@ function activate(context) {
 
         let editor = vscode.window.activeTextEditor;
         if (!editor) {
+            vscode.window.showInformationMessage('No editor opened.');
             return; // No open text editor
         }
 
-        let selection = editor.selection;
-        let text = editor.document.getText(selection);
+        let text = editor.document.getText();
 
-        // Display a message box to the user
-        vscode.window.showInformationMessage('Selected characters: ' + text.length);
+        
     });
 
     context.subscriptions.push(disposable);
