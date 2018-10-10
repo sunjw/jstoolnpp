@@ -1,0 +1,15 @@
+*~
+.DS_Store
+.vs
+
+in.js
+out*.js
+vsproj/typings/*
+
+*.aps
+*.ncb
+*.old
+*.suo
+*.user
+*.VC.db
+UpgradeLog*
