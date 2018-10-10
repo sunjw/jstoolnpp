@@ -11,13 +11,13 @@
         "Formatters"
     ],
     "activationEvents": [
-        "onCommand:extension.sayHello"
+        "onCommand:extension.formatJS"
     ],
     "main": "./extension",
     "contributes": {
         "commands": [{
-            "command": "extension.sayHello",
-            "title": "Hello World"
+            "command": "extension.formatJS",
+            "title": "Format JS"
         }]
     },
     "scripts": {
