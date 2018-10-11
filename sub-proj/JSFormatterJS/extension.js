@@ -53,6 +53,7 @@ function formatJS() {
 
     let document = editor.document;
     let docEol = document.eol;
+    let docLangId = document.languageId;
 
     let inputJS = editor.document.getText();
 
@@ -76,6 +77,9 @@ function formatJS() {
         let allRange = getJSAllRange(inputJS);
         editBuilder.delete(allRange);
         editBuilder.insert(new vscode.Position(0, 0), resultJS);
+        if (docLangId != "javascript" && docLangId != "json") {
+            vscode.languages.setTextDocumentLanguage(document, "javascript");
+        }
     });
 }
 
