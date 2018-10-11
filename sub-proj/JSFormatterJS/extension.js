@@ -48,14 +48,20 @@ function formatJS() {
         return; // No open text editor
     }
 
+    let editorTabSize = editor.options.tabSize;
+    let editorIndentSpace = editor.options.insertSpaces;
+
+    let document = editor.document;
+    let docEol = document.eol;
+
     let inputJS = editor.document.getText();
 
     //log("inputJS:\n" + inputJS);
 
     var formatOption = new RealJSFormatter.FormatterOption();
-    formatOption.chIndent = '\t';
-    formatOption.nChPerInd = 1;
-    formatOption.eCRPut = RealJSFormatter.CR_PUT.PUT_CR;
+    formatOption.chIndent = editorIndentSpace ? ' ' : '\t';
+    formatOption.nChPerInd = editorIndentSpace ? editorTabSize : 1;
+    formatOption.eCRPut = (docEol == vscode.EndOfLine.CRLF) ? RealJSFormatter.CR_PUT.PUT_CR : RealJSFormatter.CR_PUT.NOT_PUT_CR;
     formatOption.eBracNL = RealJSFormatter.BRAC_NEWLINE.NO_NEWLINE_BRAC;
     formatOption.eEmpytIndent = RealJSFormatter.EMPTYLINE_INDENT.NO_INDENT_IN_EMPTYLINE;
 
