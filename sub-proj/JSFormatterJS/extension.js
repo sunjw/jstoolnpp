@@ -59,11 +59,22 @@ function formatJS() {
     var formatAllText = true;
     var inputJS;
     var currentLine;
+    var newSelRange;
     if (editorSelection.isEmpty) {
         inputJS = editor.document.getText();
         currentLine = editorSelection.active.line;
     } else {
         formatAllText = false;
+
+        // Re-select full line.
+        let selStart = editorSelection.start;
+        let selEnd = editorSelection.end;
+        let selLine = document.lineAt(selEnd.line);
+        let newSelStart = new vscode.Position(selStart.line, 0);
+        let newSelEnd = selLine.range.end;
+        newSelRange = new vscode.Range(newSelStart, newSelEnd);
+        inputJS = editor.document.getText(newSelRange);
+        currentLine = selStart.line;
     }
 
     //log("inputJS:\n" + inputJS);
@@ -80,7 +91,7 @@ function formatJS() {
     var jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
     //jsfStrIO.m_debug = true;
     jsfStrIO.Go();
-    let resultJS = jsfStrIO.outputJS;
+    var resultJS = jsfStrIO.outputJS;
     let currentLineJSF = currentLine + 1;
     let formattedLineJSF = jsfStrIO.GetFormattedLine(currentLineJSF);
 
@@ -92,6 +103,16 @@ function formatJS() {
             let allRange = getJSAllRange(inputJS);
             editBuilder.delete(allRange);
             editBuilder.insert(new vscode.Position(0, 0), resultJS);
+        } else {
+            // Clean one more new line.
+            if (resultJS.length >= 2 && resultJS.charAt(resultJS.length - 2) == '\r') {
+                resultJS = resultJS.substring(0, resultJS.length - 2);
+            } else {
+                resultJS = resultJS.substring(0, resultJS.length - 1);
+            }
+
+            editBuilder.delete(newSelRange);
+            editBuilder.insert(newSelRange.start, resultJS);
         }
 
         if (docLangId != "javascript" && docLangId != "json") {
@@ -99,10 +120,12 @@ function formatJS() {
         }
     });
 
-    // Move selection and viewport.
-    let formattedLinePosition = new vscode.Position(formattedLineJSF - 1, 0);
-    editor.selection = new vscode.Selection(formattedLinePosition, formattedLinePosition);
-    editor.revealRange(new vscode.Range(formattedLinePosition, formattedLinePosition), vscode.TextEditorRevealType.InCenter);
+    if (formatAllText) {
+        // Move selection and viewport.
+        let formattedLinePosition = new vscode.Position(formattedLineJSF - 1, 0);
+        editor.selection = new vscode.Selection(formattedLinePosition, formattedLinePosition);
+        editor.revealRange(new vscode.Range(formattedLinePosition, formattedLinePosition), vscode.TextEditorRevealType.InCenter);
+    }
 }
 
 // this method is called when your extension is activated
