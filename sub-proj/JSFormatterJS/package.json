@@ -12,6 +12,7 @@
     ],
     "activationEvents": [
         "onCommand:extension.minJS",
+        "onCommand:extension.minJSNewFile",
         "onCommand:extension.formatJS"
     ],
     "main": "./extension",
@@ -19,6 +20,9 @@
         "commands": [{
             "command": "extension.minJS",
             "title": "Minimize JavaScript"
+        }, {
+            "command": "extension.minJSNewFile",
+            "title": "Minimize JavaScript (New file)"
         }, {
             "command": "extension.formatJS",
             "title": "Format JavaScript (JSON)"

@@ -41,7 +41,7 @@ function getJSAllRange(inputJS) {
     return allRange;
 }
 
-function minJS() {
+function minJS(inNewDoc) {
     let editor = vscode.window.activeTextEditor;
     if (!editor) {
         vscode.window.showInformationMessage('No editor opened.');
@@ -51,13 +51,22 @@ function minJS() {
     let document = editor.document;
 
     let inputJS = document.getText();
-    let resultJS = JSMin.jsmin(inputJS);
+    let resultJS = JSMin.jsmin(inputJS).trim();
 
-    editor.edit(function (editBuilder) {
-        let allRange = getJSAllRange(inputJS);
-        editBuilder.delete(allRange);
-        editBuilder.insert(new vscode.Position(0, 0), resultJS);
-    });
+    if (!inNewDoc) {
+        editor.edit(function (editBuilder) {
+            let allRange = getJSAllRange(inputJS);
+            editBuilder.delete(allRange);
+            editBuilder.insert(new vscode.Position(0, 0), resultJS);
+        });
+    } else {
+        vscode.workspace.openTextDocument({
+            language: "javascript",
+            content: resultJS
+        }).then(function (document) {
+            vscode.window.showTextDocument(document);
+        });
+    }
 }
 
 function formatJS() {
@@ -178,7 +187,12 @@ function activate(context) {
     // The commandId parameter must match the command field in package.json
     let disposableMinJS = vscode.commands.registerCommand('extension.minJS', function () {
         // The code you place here will be executed every time your command is executed
-        minJS();
+        minJS(false);
+    });
+
+    let disposableMinJSNewFile = vscode.commands.registerCommand('extension.minJSNewFile', function () {
+        // The code you place here will be executed every time your command is executed
+        minJS(true);
     });
 
     let disposableFormatJS = vscode.commands.registerCommand('extension.formatJS', function () {
@@ -187,6 +201,7 @@ function activate(context) {
     });
 
     context.subscriptions.push(disposableMinJS);
+    context.subscriptions.push(disposableMinJSNewFile);
     context.subscriptions.push(disposableFormatJS);
 }
 exports.activate = activate;
