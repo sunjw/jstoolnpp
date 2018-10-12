@@ -164,14 +164,18 @@ function formatJS() {
         if (docLangId != "javascript" && docLangId != "json") {
             vscode.languages.setTextDocumentLanguage(document, "javascript");
         }
-    });
+    }).then(function (applied) {
+        if (!applied) {
+            return;
+        }
 
-    if (formatAllText) {
-        // Move selection and viewport.
-        let formattedLinePosition = new vscode.Position(formattedLineJSF - 1, 0);
-        editor.selection = new vscode.Selection(formattedLinePosition, formattedLinePosition);
-        editor.revealRange(new vscode.Range(formattedLinePosition, formattedLinePosition), vscode.TextEditorRevealType.InCenter);
-    }
+        if (formatAllText) {
+            // Move selection and viewport.
+            let formattedLinePosition = new vscode.Position(formattedLineJSF - 1, 0);
+            editor.selection = new vscode.Selection(formattedLinePosition, formattedLinePosition);
+            editor.revealRange(new vscode.Range(formattedLinePosition, formattedLinePosition), vscode.TextEditorRevealType.InCenter);
+        }
+    });
 }
 
 // this method is called when your extension is activated
