@@ -17,7 +17,7 @@
     "contributes": {
         "commands": [{
             "command": "extension.formatJS",
-            "title": "Format JS"
+            "title": "Format JavaScript (JSON)"
         }]
     },
     "scripts": {
