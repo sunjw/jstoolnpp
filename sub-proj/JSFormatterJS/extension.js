@@ -60,6 +60,7 @@ function formatJS() {
     var inputJS;
     var currentLine;
     var newSelRange;
+    var initIndent;
     if (editorSelection.isEmpty) {
         inputJS = editor.document.getText();
         currentLine = editorSelection.active.line;
@@ -75,6 +76,16 @@ function formatJS() {
         newSelRange = new vscode.Range(newSelStart, newSelEnd);
         inputJS = editor.document.getText(newSelRange);
         currentLine = selStart.line;
+
+        initIndent = "";
+        let inputJSLen = inputJS.length;
+        for (var i = 0; i < inputJSLen; ++i) {
+            let ch = inputJS.charAt(i);
+            if (ch != ' ' && ch != '\t') {
+                break;
+            }
+            initIndent += ch;
+        }
     }
 
     //log("inputJS:\n" + inputJS);
@@ -89,6 +100,9 @@ function formatJS() {
 
     // Format
     var jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
+    if (!formatAllText) {
+        jsfStrIO.SetInitIndent(initIndent);
+    }
     //jsfStrIO.m_debug = true;
     jsfStrIO.Go();
     var resultJS = jsfStrIO.outputJS;
