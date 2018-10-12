@@ -892,7 +892,7 @@ class RealJSFormatter extends JSParser.JSParser {
             (line != "" || this.m_struOption.eEmpytIndent == EMPTYLINE_INDENT.INDENT_IN_EMPTYLINE)) // Fix "JSLint unexpect space" bug
         {
             for (var i = 0; i < this.m_initIndent.length; ++i)
-                this.PutChar(m_initIndent.charAt(i)); // first, output init indent
+                this.PutChar(this.m_initIndent.charAt(i)); // first, output init indent
 
             for (var c = 0; c < this.m_nLineIndents; ++c)
                 for (var c2 = 0; c2 < this.m_struOption.nChPerInd; ++c2)
