@@ -108,6 +108,9 @@ function formatJS() {
     var resultJS = jsfStrIO.outputJS;
     let currentLineJSF = currentLine + 1;
     let formattedLineJSF = jsfStrIO.GetFormattedLine(currentLineJSF);
+    if (formattedLineJSF < 1) {
+        formattedLineJSF = 1;
+    }
 
     //log(resultJS);
 
