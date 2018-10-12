@@ -11,11 +11,15 @@
         "Formatters"
     ],
     "activationEvents": [
+        "onCommand:extension.minJS",
         "onCommand:extension.formatJS"
     ],
     "main": "./extension",
     "contributes": {
         "commands": [{
+            "command": "extension.minJS",
+            "title": "Minimize JavaScript"
+        }, {
             "command": "extension.formatJS",
             "title": "Format JavaScript (JSON)"
         }]

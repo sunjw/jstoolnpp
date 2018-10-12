@@ -2,7 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 
-const JSParser = require("./jsparser.js");
+const JSMin = require("./jsmin.js");
 const RealJSFormatter = require("./realjsformatter.js");
 
 const LineSeperator = /\r\n|\n|\r/;
@@ -41,6 +41,25 @@ function getJSAllRange(inputJS) {
     return allRange;
 }
 
+function minJS() {
+    let editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        vscode.window.showInformationMessage('No editor opened.');
+        return; // No open text editor
+    }
+
+    let document = editor.document;
+
+    let inputJS = document.getText();
+    let resultJS = JSMin.jsmin(inputJS);
+
+    editor.edit(function (editBuilder) {
+        let allRange = getJSAllRange(inputJS);
+        editBuilder.delete(allRange);
+        editBuilder.insert(new vscode.Position(0, 0), resultJS);
+    });
+}
+
 function formatJS() {
     let editor = vscode.window.activeTextEditor;
     if (!editor) {
@@ -48,11 +67,12 @@ function formatJS() {
         return; // No open text editor
     }
 
+    let document = editor.document;
+
     let editorTabSize = editor.options.tabSize;
     let editorIndentSpace = editor.options.insertSpaces;
     let editorSelection = editor.selection;
 
-    let document = editor.document;
     let docEol = document.eol;
     let docLangId = document.languageId;
 
@@ -62,7 +82,7 @@ function formatJS() {
     var newSelRange;
     var initIndent;
     if (editorSelection.isEmpty) {
-        inputJS = editor.document.getText();
+        inputJS = document.getText();
         currentLine = editorSelection.active.line;
     } else {
         formatAllText = false;
@@ -74,7 +94,7 @@ function formatJS() {
         let newSelStart = new vscode.Position(selStart.line, 0);
         let newSelEnd = selLine.range.end;
         newSelRange = new vscode.Range(newSelStart, newSelEnd);
-        inputJS = editor.document.getText(newSelRange);
+        inputJS = document.getText(newSelRange);
         currentLine = selStart.line;
 
         initIndent = "";
@@ -156,12 +176,18 @@ function activate(context) {
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.formatJS', function () {
+    let disposableMinJS = vscode.commands.registerCommand('extension.minJS', function () {
+        // The code you place here will be executed every time your command is executed
+        minJS();
+    });
+
+    let disposableFormatJS = vscode.commands.registerCommand('extension.formatJS', function () {
         // The code you place here will be executed every time your command is executed
         formatJS();
     });
 
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(disposableMinJS);
+    context.subscriptions.push(disposableFormatJS);
 }
 exports.activate = activate;
 
