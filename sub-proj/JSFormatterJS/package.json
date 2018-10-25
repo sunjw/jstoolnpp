@@ -10,6 +10,7 @@
     "categories": [
         "Formatters"
     ],
+    "icon": "icon_128.png",
     "activationEvents": [
         "onCommand:extension.minJS",
         "onCommand:extension.minJSNewFile",
