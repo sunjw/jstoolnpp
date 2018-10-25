@@ -1,3 +1,10 @@
+1.1810.0  
+[Common] Fix "export default" format.  
+[Common] Fix '/' in [] within regular expression format.  
+[Common] Not to format Unix Shebang at begining of a script.  
+[NPP] Fix json parser remove escaped ' or " at the end of string.  
+[VSC] JSTool for Visual Studio Code.
+
 1.22.0  
 Add JSON Sort function.  
 Fix blocking Notepad++ startup in some environment.  
