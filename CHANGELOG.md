@@ -2,6 +2,7 @@
 [Common] Fix "export default" format.  
 [Common] Fix '/' in [] within regular expression format.  
 [Common] Not to format Unix Shebang at begining of a script.  
+[Common] Change version naming to MAJOR.YEAR-MONTH.BUILD.  
 [NPP] Fix json parser remove escaped ' or " at the end of string.  
 [VSC] JSTool for Visual Studio Code.
 
