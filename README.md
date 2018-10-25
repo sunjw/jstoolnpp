@@ -24,8 +24,9 @@ Or you can just install "JSTool" from Plugin Manager in Notepad++.
 #### FEATURES (for Visual Studio Code)
  * JavaScript minify.
  * JavaScript/JSON format.
+ * More to come...
 
-#### INSTALL (for Notepad++)
+#### INSTALL (for Visual Studio Code)
 
 
 #### LICENSE

@@ -7,12 +7,12 @@ Really helpful to JavaScript coder on Visual Studio Code. Easy to use it.
 Made in China.  
 Project site: http://www.sunjw.us/jstoolnpp
 
-#### FEATURES (for Visual Studio Code)
+#### FEATURES
  * JavaScript minify.
  * JavaScript/JSON format.
  * More to come...
 
-#### INSTALL (for Notepad++)
+#### INSTALL
 
 
 #### LICENSE
