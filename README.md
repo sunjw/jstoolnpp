@@ -18,8 +18,7 @@ Project site: http://www.sunjw.us/jstoolnpp
    - Node data copy
 
 #### INSTALL (for Notepad++)
-Download it from http://sourceforge.net/projects/jsminnpp/ and copy JSMinNpp.dll to plugin directory of Notepad++.
-Or you can just install "JSTool" from Plugin Manager in Notepad++.
+Install "JSTool" from Plugin Manager in Notepad++. Or download it from http://sourceforge.net/projects/jsminnpp/ and copy JSMinNpp.dll to plugin directory of Notepad++.
 
 #### FEATURES (for Visual Studio Code)
  * JavaScript minify.
@@ -27,7 +26,7 @@ Or you can just install "JSTool" from Plugin Manager in Notepad++.
  * More to come...
 
 #### INSTALL (for Visual Studio Code)
-
+Install "JSTool" (sunjw.jstool) from Visual Studio Code Extensions. Or "Download Extension" from https://marketplace.visualstudio.com/items?itemName=sunjw.jstool then using the Install from VSIX... command in the Extensions view command drop-down, or the Extensions: Install from VSIX... command in the Command Palette, point to the .vsix file.
 
 #### LICENSE
 GPL 2.0

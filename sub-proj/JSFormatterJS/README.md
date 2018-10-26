@@ -13,7 +13,7 @@ Project site: http://www.sunjw.us/jstoolnpp
  * More to come...
 
 #### INSTALL
-
+Install "JSTool" (sunjw.jstool) from Visual Studio Code Extensions. Or "Download Extension" from https://marketplace.visualstudio.com/items?itemName=sunjw.jstool then using the Install from VSIX... command in the Extensions view command drop-down, or the Extensions: Install from VSIX... command in the Command Palette, point to the .vsix file.
 
 #### LICENSE
 GPL 2.0
