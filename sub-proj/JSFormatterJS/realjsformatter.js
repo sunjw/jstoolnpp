@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 const JSParser = require('./jsparser.js');
 
-const VERSION = "1.1810.0.0";
+const VERSION = "1.1810.1.0";
 
 function Trim(str) {
     return str.trim();
