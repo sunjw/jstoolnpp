@@ -161,7 +161,7 @@ function formatJS() {
             editBuilder.insert(newSelRange.start, resultJS);
         }
 
-        if (docLangId != "javascript" && docLangId != "json") {
+        if (formatAllText && docLangId != "javascript" && docLangId != "json") {
             vscode.languages.setTextDocumentLanguage(document, "javascript");
         }
     }).then(function (applied) {
