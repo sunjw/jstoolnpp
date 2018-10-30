@@ -1,3 +1,6 @@
+1.1810.3  
+[VSC] Fix publish.  
+
 1.1810.2  
 [VSC] Only set file type to "javascript" when format whole document.  
 
