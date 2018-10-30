@@ -1,3 +1,6 @@
+1.1810.2  
+[VSC] Only set file type to "javascript" when format whole document.  
+
 1.1810.1  
 [VSC] Update package, remove useless files.  
 
