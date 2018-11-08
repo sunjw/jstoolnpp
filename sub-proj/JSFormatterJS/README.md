@@ -3,7 +3,7 @@
  * Douglas Crockford's JSMin algorithm to minimize JavaScript code.
  * My own algorithm to format JavaScript code.
 
-Really helpful to JavaScript coder on Visual Studio Code. Easy to use it.
+Really helpful to JavaScript coder on Visual Studio Code. Easy to use it.  
 Made in China.  
 Project site: http://www.sunjw.us/jstoolnpp
 

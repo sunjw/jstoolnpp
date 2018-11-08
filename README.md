@@ -4,7 +4,7 @@
  * A JSON data viewer for Notepad++. This JSON data viewer can handle >10MB JSON file easily.
  * Support 64bit Notepad++ (from version 1.20.0, ".64.zip" package).
 
-Really helpful to JavaScript coder on Notepad++ and Visual Studio Code. Easy to use it.
+Really helpful to JavaScript coder on Notepad++ and Visual Studio Code. Easy to use it.  
 Made in China.  
 Project site: http://www.sunjw.us/jstoolnpp
 
