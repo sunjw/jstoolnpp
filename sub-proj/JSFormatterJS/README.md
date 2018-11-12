@@ -5,7 +5,7 @@
 
 Really helpful to JavaScript coder on Visual Studio Code. Easy to use it.  
 Made in China.  
-Project site: http://www.sunjw.us/jstoolnpp
+Project site: http://www.sunjw.us/jstool/vsc
 
 #### FEATURES
  * JavaScript minify.

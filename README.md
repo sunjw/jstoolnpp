@@ -6,7 +6,7 @@
 
 Really helpful to JavaScript coder on Notepad++ and Visual Studio Code. Easy to use it.  
 Made in China.  
-Project site: http://www.sunjw.us/jstoolnpp
+Project site: http://www.sunjw.us/jstool
 
 #### FEATURES (for Notepad++)
  * JavaScript minify.
