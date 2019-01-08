@@ -21,7 +21,7 @@ JSFORMATTER_LIB_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Deb
 JSFORMATTER_LIB_REL_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release"
 JSFORMATTER_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Debug/JSFormatterTest"
 JSFORMATTER_REL_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release/JSFormatterTest"
-JSFORMATTER_NODEJS_SCRIPT_PATH = "../../JSFormatterJS/jsfjsnode.js"
+JSFORMATTER_NODEJS_SCRIPT_PATH = "../../JSToolJS/jsfjsnode.js"
 
 def is_windows_sys():
 	return (platform.system() == "Windows")
