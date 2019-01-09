@@ -3,6 +3,7 @@
 # Author: Sun Junwen
 # Date: 2019-01-09
 #
+import collections
 import hashlib
 import os
 from subprocess import call
@@ -15,6 +16,47 @@ class TestCase:
     case_dir = ""
     source = ""
     result = ""
+
+class CaseGenerator(object):
+    def __init__(self, case_dir):
+        self.case_dir = case_dir
+
+    def _make_test_case(self, files):
+        test_cases = {}
+
+        for file in files:
+            file = os.path.join(self.case_dir, file)
+            # base name
+            fname = os.path.splitext(file)[0]
+            #print fname
+            fname_part = fname.split('.')
+            if fname_part[len(fname_part) - 1] == "test":
+                # case result
+                case_name = fname[:-5] # remove .test
+
+                if not (case_name in test_cases):
+                    test_cases[case_name] = TestCase()
+
+                test_cases[case_name].result = file
+            else:
+                if not (fname in test_cases):
+                    test_cases[fname] = TestCase()
+
+                test_cases[fname].source = file
+
+        for name, case in test_cases.items():
+            if case.source == "" or case.result == "":
+                test_cases.pop(name, 0)
+            else:
+                case.case_dir = self.case_dir
+
+        test_cases_ordered = collections.OrderedDict(sorted(test_cases.items()))
+
+        return test_cases_ordered
+
+    def generate(self):
+        files = list_file(self.case_dir)
+        return self._make_test_case(files)
 
 class CaseRuntime(object):
     def __init__(self, runtime_path):

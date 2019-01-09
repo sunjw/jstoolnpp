@@ -6,7 +6,6 @@
 import hashlib
 import os
 import sys
-import collections
 from subprocess import call
 
 from util import *
@@ -82,39 +81,6 @@ class ValidateCaseRuntime(CaseRuntime):
         call(["node", self.nodejs_script_path, "--version"])
         print "node version: "
         call(["node", "--version"])
-
-def make_test_case(test_case_dir, files):
-    test_cases = {}
-
-    for file in files:
-        file = os.path.join(test_case_dir, file)
-        # base name
-        fname = os.path.splitext(file)[0]
-        #print fname
-        fname_part = fname.split('.')
-        if fname_part[len(fname_part) - 1] == "test":
-            # case result
-            case_name = fname[:-5] # remove .test
-
-            if not (case_name in test_cases):
-                test_cases[case_name] = TestCase()
-
-            test_cases[case_name].result = file
-        else:
-            if not (fname in test_cases):
-                test_cases[fname] = TestCase()
-
-            test_cases[fname].source = file
-
-    for name, case in test_cases.items():
-        if case.source == "" or case.result == "":
-            test_cases.pop(name, 0)
-        else:
-            case.case_dir = test_case_dir
-
-    test_cases_ordered = collections.OrderedDict(sorted(test_cases.items()))
-
-    return test_cases_ordered
 
 def main():
     x64 = False
@@ -200,8 +166,8 @@ def main():
         case_runtime = ValidateCaseRuntime(jsformatter_path_sel, jsformatter_nodejs_script_sel)
 
     # prepare cases
-    files = list_file(TEST_CASE_DIR)
-    test_cases = make_test_case(TEST_CASE_DIR, files)
+    case_generator = CaseGenerator(TEST_CASE_DIR)
+    test_cases = case_generator.generate()
 
     # run cases
     start_time = current_millis()
