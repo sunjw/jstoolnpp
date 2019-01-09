@@ -1,5 +1,5 @@
 #
-# Auto test for JSFormatter
+# JSFormatter test
 # Author: Sun Junwen
 # Date: 2014-01-04
 #
