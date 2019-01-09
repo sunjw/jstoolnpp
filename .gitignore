@@ -12,7 +12,6 @@ sub-proj/JSFormatterTest/Release/*
 sub-proj/JSFormatterTest/x64/*
 sub-proj/JSFormatterTest/JSFormatterTest.xcodeproj/xcuserdata/*
 sub-proj/JSFormatterTest/JSFormatterTest.xcodeproj/xcshareddata/*
-sub-proj/JSFormatterTest/tests/out*.js
 
 sub-proj/JsonPP/Debug/*
 sub-proj/JsonPP/Release/*
