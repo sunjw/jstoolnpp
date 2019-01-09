@@ -23,8 +23,7 @@ class CaseGenerator(object):
 
     def _is_result_file(self, file):
         filename_no_ext = os.path.splitext(file)[0]
-        filename_no_ext_part = filename_no_ext.split('.')
-        if filename_no_ext_part[len(filename_no_ext_part) - 1] == "test":
+        if filename_no_ext.endswith(".test"):
             return True
         return False
 

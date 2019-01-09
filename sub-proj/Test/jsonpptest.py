@@ -30,45 +30,24 @@ class JSONPPCaseGenerator(CaseGenerator):
         super(JSONPPCaseGenerator, self).__init__(case_dir)
         self.sort_json = sort_json
 
-
-
-def make_test_case(files, sort_json):
-    test_cases = {}
-
-    for file in files:
-        # base name
-        fname = os.path.splitext(file)[0]
-        #print fname
-        fname_part = fname.split('.')
-        if fname_part[len(fname_part) - 1] == "test":
-            # case result
-            case_name = fname[:-5] # remove .test
-
-            if not (case_name in test_cases):
-                test_cases[case_name] = TestCase()
-
-            test_cases[case_name].result = file
+    def _is_result_file(self, file):
+        filename_no_ext = os.path.splitext(file)[0]
+        if not self.sort_json:
+            if filename_no_ext.endswith(".test") and not filename_no_ext.endswith(".sort.test"):
+                return True
         else:
-            if not (fname in test_cases):
-                test_cases[fname] = TestCase()
+            if filename_no_ext.endswith(".sort.test"):
+                return True
+        return False
 
-            test_cases[fname].source = file
-
-    for name, case in test_cases.items():
-        if case.source == "" or case.result == "":
-            test_cases.pop(name, 0)
-        # filter test case by sort_json
-        if not sort_json:
-            if ".sort" in name:
-                test_cases.pop(name, 0)
+    def _result_file_to_case_name(self, file):
+        filename_no_ext = os.path.splitext(file)[0]
+        case_name = ""
+        if not self.sort_json:
+            case_name = filename_no_ext[:-5] # remove .test
         else:
-            # test ToStringSorted
-            if ".sort" not in name:
-                test_cases.pop(name, 0)
-
-    test_cases_ordered = collections.OrderedDict(sorted(test_cases.items()))
-
-    return test_cases_ordered
+            case_name = filename_no_ext[:-10] # remove .sort.test
+        return case_name
 
 def main():
     release = False
