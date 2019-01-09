@@ -1,6 +1,7 @@
 *~
 .DS_Store
 .vs
+*.pyc
 
 sub-proj/JSFormatter/Debug/*
 sub-proj/JSFormatter/Release/*

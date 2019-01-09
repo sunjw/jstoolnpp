@@ -5,11 +5,11 @@
 #
 import hashlib
 import os
-import platform
 import sys
-import time
 import collections
 from subprocess import call
+
+from util import *
 
 TEST_CASE_DIR = "jsformat"
 OUTPUT_FILE_NAME = "out.js"
@@ -23,22 +23,6 @@ JSFORMATTER_LIB_REL_PATH_MAC = "../../trunk/DerivedData/JSTool/Build/Products/Re
 JSFORMATTER_PATH_MAC = "../../trunk/DerivedData/JSTool/Build/Products/Debug/JSFormatterTest"
 JSFORMATTER_REL_PATH_MAC = "../../trunk/DerivedData/JSTool/Build/Products/Release/JSFormatterTest"
 JSFORMATTER_NODEJS_SCRIPT_PATH = "../JSToolJS/jsfjsnode.js"
-
-def is_windows_sys():
-	return (platform.system() == "Windows")
-
-def is_osx_sys():
-	return (platform.system() == "Darwin")
-
-def is_linux_sys():
-	return (platform.system() == "Linux")
-
-def current_millis():
-	return int(round(time.time() * 1000))
-
-def list_file(dir_path):
-	files = [f for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f))]
-	return files
 
 class TestCase:
 	source = ""
