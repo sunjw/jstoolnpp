@@ -1,70 +1,20 @@
 #
-# Auto test for JSFormatter
+# JSONPP test
 # Author: Sun Junwen
 # Date: 2014-01-04
 #
 import hashlib
 import os
-import platform
 import sys
-import time
-import collections
 from subprocess import call
+
+from util import *
+from testbase import *
 
 OUTPUT_FILE_NAME = "out.json"
 
 JSONPP_PATH_WIN = "../../../trunk/debug/JsonPP.exe"
 JSONPP_REL_PATH_WIN = "../../../trunk/release/JsonPP.exe"
-
-def is_windows_sys():
-	return (platform.system() == "Windows")
-
-def is_osx_sys():
-	return (platform.system() == "Darwin")
-
-def is_linux_sys():
-	return (platform.system() == "Linux")
-
-def current_millis():
-	return int(round(time.time() * 1000));
-
-def list_file():
-	files = [f for f in os.listdir('.') if os.path.isfile(f)]
-	return files
-
-class TestCase:
-	source = ""
-	result = ""
-
-class CaseRuntime(object):
-	def __init__(self, runtime_path):
-		self.runtime_path = runtime_path
-
-	def _case_execute(self, test_case):
-		call([self.runtime_path, test_case.source, OUTPUT_FILE_NAME])
-
-	def _case_result(self, test_case):
-		result = "ERROR"
-		out_md5 = hashlib.md5(open(OUTPUT_FILE_NAME, "rb").read()).hexdigest()
-		result_md5 = hashlib.md5(open(test_case.result, "rb").read()).hexdigest()
-		if out_md5 == result_md5:
-			result = "PASS"
-
-		print result
-		return result
-
-	def run_case(self, test_case):
-		self._case_execute(test_case)
-		return self._case_result(test_case)
-
-	def dump_name(self):
-		print "CaseRuntime"
-
-	def dump_info(self):
-		print "Using %s" % (self.runtime_path)
-
-	def dump_version(self):
-		call([self.runtime_path, "--version"])
 
 class SortCaseRuntime(CaseRuntime):
 	def _case_execute(self, test_case):
