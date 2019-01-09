@@ -11,14 +11,19 @@ from subprocess import call
 from util import *
 from testbase import *
 
+TEST_CASE_DIR = "jsonpp"
 OUTPUT_FILE_NAME = "out.json"
 
-JSONPP_PATH_WIN = "../../../trunk/debug/JsonPP.exe"
-JSONPP_REL_PATH_WIN = "../../../trunk/release/JsonPP.exe"
+JSONPP_PATH_WIN = "../../trunk/debug/JsonPP.exe"
+JSONPP_REL_PATH_WIN = "../../trunk/release/JsonPP.exe"
 
 class SortCaseRuntime(CaseRuntime):
+    def __init__(self, runtime_path):
+        super(SortCaseRuntime, self).__init__(runtime_path)
+        self.out_file = OUTPUT_FILE_NAME
+
     def _case_execute(self, test_case):
-        call([self.runtime_path, "--sort", test_case.source, OUTPUT_FILE_NAME])
+        call([self.runtime_path, "--sort", test_case.source, self.get_out_path_from_case(test_case)])
 
 def make_test_case(files, sort_json):
     test_cases = {}
@@ -90,8 +95,8 @@ def main():
         case_runtime = SortCaseRuntime(jsonpp_path_sel)
 
     # prepare cases
-    files = list_file()
-    test_cases = make_test_case(files, sort_json)
+    case_generator = CaseGenerator(TEST_CASE_DIR)
+    test_cases = case_generator.generate()
 
     # run cases
     start_time = current_millis()
