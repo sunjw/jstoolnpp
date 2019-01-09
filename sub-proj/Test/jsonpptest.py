@@ -81,7 +81,7 @@ def main():
         case_runtime = SortCaseRuntime(jsonpp_path_sel)
 
     # prepare cases
-    case_generator = CaseGenerator(TEST_CASE_DIR)
+    case_generator = JSONPPCaseGenerator(TEST_CASE_DIR, sort_json)
     test_cases = case_generator.generate()
 
     # run cases
