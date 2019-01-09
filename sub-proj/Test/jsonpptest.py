@@ -3,7 +3,6 @@
 # Author: Sun Junwen
 # Date: 2014-01-04
 #
-import hashlib
 import os
 import sys
 from subprocess import call
