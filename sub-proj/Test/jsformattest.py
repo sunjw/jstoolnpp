@@ -38,7 +38,7 @@ class MacOSCaseRuntime(CaseRuntime):
 
 class NodeCaseRuntime(CaseRuntime):
     def _case_execute(self, test_case):
-        call(["node", self.runtime_path, test_case.source, self.out_file])
+        call(["node", self.runtime_path, test_case.source, self.get_out_path_from_case(test_case)])
 
     def dump_name(self):
         print "NodeCaseRuntime"
