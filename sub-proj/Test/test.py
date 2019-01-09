@@ -12,7 +12,7 @@ import collections
 from subprocess import call
 
 TEST_CASE_DIR = "jsformat"
-OUTPUT_FILE_NAME = os.path.join(TEST_CASE_DIR, "out.js")
+OUTPUT_FILE_NAME = "out.js"
 
 JSFORMATTER_PATH_WIN = "../../trunk/debug/JSFormatterTest.exe"
 JSFORMATTER_REL_PATH_WIN = "../../trunk/release/JSFormatterTest.exe"
@@ -34,7 +34,7 @@ def is_linux_sys():
 	return (platform.system() == "Linux")
 
 def current_millis():
-	return int(round(time.time() * 1000));
+	return int(round(time.time() * 1000))
 
 def list_file(dir_path):
 	files = [f for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f))]
@@ -47,13 +47,14 @@ class TestCase:
 class CaseRuntime(object):
 	def __init__(self, runtime_path):
 		self.runtime_path = runtime_path
+		self.out_file = os.path.join(TEST_CASE_DIR, OUTPUT_FILE_NAME)
 
 	def _case_execute(self, test_case):
-		call([self.runtime_path, test_case.source, OUTPUT_FILE_NAME])
+		call([self.runtime_path, test_case.source, self.out_file])
 
 	def _case_result(self, test_case):
 		result = "ERROR"
-		out_md5 = hashlib.md5(open(OUTPUT_FILE_NAME, "rb").read()).hexdigest()
+		out_md5 = hashlib.md5(open(self.out_file, "rb").read()).hexdigest()
 		result_md5 = hashlib.md5(open(test_case.result, "rb").read()).hexdigest()
 		if out_md5 == result_md5:
 			result = "PASS"
@@ -88,7 +89,7 @@ class MacOSCaseRuntime(CaseRuntime):
 
 class NodeCaseRuntime(CaseRuntime):
 	def _case_execute(self, test_case):
-		call(["node", self.runtime_path, test_case.source, OUTPUT_FILE_NAME])
+		call(["node", self.runtime_path, test_case.source, self.out_file])
 
 	def dump_name(self):
 		print "NodeCaseRuntime"
@@ -268,7 +269,7 @@ def main():
 
 		if result == "ERROR":
 			allpass = False
-			break;
+			break
 
 		print ""
 		idx += 1
