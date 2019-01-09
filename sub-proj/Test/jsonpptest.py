@@ -25,6 +25,13 @@ class SortCaseRuntime(CaseRuntime):
     def _case_execute(self, test_case):
         call([self.runtime_path, "--sort", test_case.source, self.get_out_path_from_case(test_case)])
 
+class JSONPPCaseGenerator(CaseGenerator):
+    def __init__(self, case_dir, sort_json):
+        super(JSONPPCaseGenerator, self).__init__(case_dir)
+        self.sort_json = sort_json
+
+
+
 def make_test_case(files, sort_json):
     test_cases = {}
 

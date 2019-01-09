@@ -21,31 +21,46 @@ class CaseGenerator(object):
     def __init__(self, case_dir):
         self.case_dir = case_dir
 
+    def _is_result_file(self, file):
+        filename_no_ext = os.path.splitext(file)[0]
+        filename_no_ext_part = filename_no_ext.split('.')
+        if filename_no_ext_part[len(filename_no_ext_part) - 1] == "test":
+            return True
+        return False
+
+    def _file_to_case_name(self, file):
+        filename_no_ext = os.path.splitext(file)[0]
+        return filename_no_ext
+
+    def _result_file_to_case_name(self, file):
+        filename_no_ext = os.path.splitext(file)[0]
+        case_name = filename_no_ext[:-5] # remove .test
+        return case_name
+
+    def _filter_out_case(self, case):
+        return (case.source == "" or case.result == "")
+
     def _make_test_case(self, files):
         test_cases = {}
 
         for file in files:
             file = os.path.join(self.case_dir, file)
-            # base name
-            fname = os.path.splitext(file)[0]
-            #print fname
-            fname_part = fname.split('.')
-            if fname_part[len(fname_part) - 1] == "test":
+            if self._is_result_file(file):
                 # case result
-                case_name = fname[:-5] # remove .test
-
+                case_name = self._result_file_to_case_name(file)
                 if not (case_name in test_cases):
                     test_cases[case_name] = TestCase()
 
                 test_cases[case_name].result = file
             else:
-                if not (fname in test_cases):
-                    test_cases[fname] = TestCase()
+                case_name = self._file_to_case_name(file)
+                if not (case_name in test_cases):
+                    test_cases[case_name] = TestCase()
 
-                test_cases[fname].source = file
+                test_cases[case_name].source = file
 
         for name, case in test_cases.items():
-            if case.source == "" or case.result == "":
+            if self._filter_out_case(case):
                 test_cases.pop(name, 0)
             else:
                 case.case_dir = self.case_dir
