@@ -100,12 +100,12 @@ def main():
 
         result = case_runtime.run_case(case)
         print "[%d/%d]" % (idx, len(test_cases))
+        print ""
 
         if result == "ERROR":
             allpass = False
-            break;
+            break
 
-        print ""
         idx += 1
 
     end_time = current_millis()
