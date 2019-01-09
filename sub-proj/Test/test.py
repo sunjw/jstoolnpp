@@ -102,17 +102,19 @@ class ValidateCaseRuntime(CaseRuntime):
 	def __init__(self, runtime_path, nodejs_script_path):
 		super(ValidateCaseRuntime, self).__init__(runtime_path)
 		self.nodejs_script_path = nodejs_script_path
+		self.out_cpp = os.path.join(TEST_CASE_DIR, "outcpp.js")
+		self.out_js = os.path.join(TEST_CASE_DIR, "outjs.js")
 
 	def _case_execute(self, test_case):
 		print "Call cpp..."
-		call([self.runtime_path, test_case.source, "outcpp.js"])
+		call([self.runtime_path, test_case.source, self.out_cpp])
 		print "Call node..."
-		call(["node", self.nodejs_script_path, test_case.source, "outjs.js"])
+		call(["node", self.nodejs_script_path, test_case.source, self.out_js])
 
 	def _case_result(self, test_case):
 		result = "ERROR"
-		outcpp_md5 = hashlib.md5(open("outcpp.js", "rb").read()).hexdigest()
-		outjs_md5 = hashlib.md5(open("outjs.js", "rb").read()).hexdigest()
+		outcpp_md5 = hashlib.md5(open(self.out_cpp, "rb").read()).hexdigest()
+		outjs_md5 = hashlib.md5(open(self.out_js, "rb").read()).hexdigest()
 		if outcpp_md5 == outjs_md5:
 			result = "PASS"
 
