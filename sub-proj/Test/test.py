@@ -11,17 +11,18 @@ import time
 import collections
 from subprocess import call
 
-OUTPUT_FILE_NAME = "out.js"
+TEST_CASE_DIR = "jsformat"
+OUTPUT_FILE_NAME = os.path.join(TEST_CASE_DIR, "out.js")
 
-JSFORMATTER_PATH_WIN = "../../../trunk/debug/JSFormatterTest.exe"
-JSFORMATTER_REL_PATH_WIN = "../../../trunk/release/JSFormatterTest.exe"
-JSFORMATTER_PATH_WIN_64 = "../../../trunk/x64/debug/JSFormatterTest.exe"
-JSFORMATTER_REL_PATH_WIN_64 = "../../../trunk/x64/release/JSFormatterTest.exe"
-JSFORMATTER_LIB_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Debug"
-JSFORMATTER_LIB_REL_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release"
-JSFORMATTER_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Debug/JSFormatterTest"
-JSFORMATTER_REL_PATH_MAC = "../../../trunk/DerivedData/JSTool/Build/Products/Release/JSFormatterTest"
-JSFORMATTER_NODEJS_SCRIPT_PATH = "../../JSToolJS/jsfjsnode.js"
+JSFORMATTER_PATH_WIN = "../../trunk/debug/JSFormatterTest.exe"
+JSFORMATTER_REL_PATH_WIN = "../../trunk/release/JSFormatterTest.exe"
+JSFORMATTER_PATH_WIN_64 = "../../trunk/x64/debug/JSFormatterTest.exe"
+JSFORMATTER_REL_PATH_WIN_64 = "../../trunk/x64/release/JSFormatterTest.exe"
+JSFORMATTER_LIB_PATH_MAC = "../../trunk/DerivedData/JSTool/Build/Products/Debug"
+JSFORMATTER_LIB_REL_PATH_MAC = "../../trunk/DerivedData/JSTool/Build/Products/Release"
+JSFORMATTER_PATH_MAC = "../../trunk/DerivedData/JSTool/Build/Products/Debug/JSFormatterTest"
+JSFORMATTER_REL_PATH_MAC = "../../trunk/DerivedData/JSTool/Build/Products/Release/JSFormatterTest"
+JSFORMATTER_NODEJS_SCRIPT_PATH = "../JSToolJS/jsfjsnode.js"
 
 def is_windows_sys():
 	return (platform.system() == "Windows")
@@ -35,8 +36,8 @@ def is_linux_sys():
 def current_millis():
 	return int(round(time.time() * 1000));
 
-def list_file():
-	files = [f for f in os.listdir('.') if os.path.isfile(f)]
+def list_file(dir_path):
+	files = [f for f in os.listdir(dir_path) if os.path.isfile(os.path.join(dir_path, f))]
 	return files
 
 class TestCase:
@@ -244,7 +245,10 @@ def main():
 		case_runtime = ValidateCaseRuntime(jsformatter_path_sel, jsformatter_nodejs_script_sel)
 
 	# prepare cases
-	files = list_file()
+	files = list_file(TEST_CASE_DIR)
+	files_count = len(files)
+	for i in range(0, files_count):
+		files[i] = os.path.join(TEST_CASE_DIR, files[i])
 	test_cases = make_test_case(files)
 
 	# run cases
