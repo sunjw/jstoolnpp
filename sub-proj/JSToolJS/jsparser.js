@@ -20,6 +20,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 'use strict';
 
+const VERSION = "1.1810.4.0";
+
 function CopyObject(source) {
     return Object.assign({}, source);
 }
@@ -598,6 +600,8 @@ class JSParser {
 }
 
 // exports
+exports.VERSION = VERSION;
+
 exports.CopyObject = CopyObject;
 exports.GetStackTop = GetStackTop;
 exports.StackTopEq = StackTopEq;
