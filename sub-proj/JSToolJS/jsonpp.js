@@ -357,7 +357,7 @@ class JsonParser extends JSParser.JSParser {
 
                     if ((key.charAt(0) == '\'' && key.charAt(key.length - 1) == '\'') ||
                         key.charAt(0) == '"' && key.charAt(key.length - 1) == '"')
-                        key = key.substring(1, key.length - 2);
+                        key = key.substring(1, key.length - 1);
 
                     bGetKey = true;
                     continue;
@@ -425,8 +425,9 @@ class JsonParser extends JSParser.JSParser {
     GenStrJsonValue(jsonValue, value) {
         if (value.charAt(0) == '\'' || value.charAt(0) == '"') {
             if ((value.charAt(0) == '\'' && value.charAt(value.length - 1) == '\'') ||
-                value.charAt(0) == '"' && value.charAt(value.length - 1) == '"')
-                value = value.substring(1, value.length - 2);
+                value.charAt(0) == '"' && value.charAt(value.length - 1) == '"') {
+                value = value.substring(1, value.length - 1);
+            }
 
             /*
              * STRING_VALUE store without quote
