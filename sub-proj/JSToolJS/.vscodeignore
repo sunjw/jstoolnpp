@@ -6,6 +6,7 @@ test/**
 jsconfig.json
 vsc-extension-quickstart.md
 .eslintrc.json
+package-lock.json
 vsproj
 jsfjsnode.js
 in.js
