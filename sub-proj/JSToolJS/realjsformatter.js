@@ -183,10 +183,6 @@ class RealJSFormatter extends JSParser.JSParser {
 
     }
 
-    StringReplace(strBase, strSrc, strDes) {
-        return strBase.replace(strSrc, strDes);
-    }
-
     SetInitIndent(initIndent) {
         this.m_initIndent = initIndent;
     }
