@@ -7,5 +7,6 @@ jsconfig.json
 vsc-extension-quickstart.md
 .eslintrc.json
 vsproj
+jsfjsnode.js
 in.js
 outjs.js
