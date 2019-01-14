@@ -908,7 +908,6 @@ class RealJSFormatter extends JSParser.JSParser {
                 ++this.m_nFormattedLineCount;
         }
     }
-
 }
 
 // exports

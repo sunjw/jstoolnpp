@@ -9,11 +9,10 @@ function log(logString) {
     console.log(logString);
 }
 
-/*
-class JSFormatStringIO extends RealJSFormatter.RealJSFormatter {
+class JsonPPStringIO extends JsonPP.JsonParser {
 
-    constructor(inputJS, formatOption) {
-        super(formatOption);
+    constructor(inputJS) {
+        super();
         this.inputJS = inputJS;
         this.inputIdx = 0;
         this.outputJS = "";
@@ -31,12 +30,10 @@ class JSFormatStringIO extends RealJSFormatter.RealJSFormatter {
         this.outputJS += ch;
     }
 }
-*/
 
 function Main() {
     //prepareEnv();
 
-    /*
     var printVersion = false;
     var inputJSFile = "";
     var outputJSFile = "";
@@ -50,36 +47,30 @@ function Main() {
     }
 
     if (!printVersion && (inputJSFile == "" || outputJSFile == "")) {
-        log("Usage: node jsfjsnode.js [input file] [output file]");
+        log("Usage: node jsonppjsnode.js [input file] [output file]");
         log("");
         log("  --version: print version.");
         return;
     }
 
     if (printVersion) {
-        log("JSFormatterJS version: " + RealJSFormatter.VERSION);
+        log("JSFormatterJS version: " + JsonPP.VERSION);
     } else {
         var inputJS = FileSystem.readFileSync(inputJSFile, "binary");
         inputJS = inputJS.toString();
         //log("inputJS:\n" + inputJS);
 
-        var formatOption = new RealJSFormatter.FormatterOption();
-        formatOption.chIndent = '\t';
-        formatOption.nChPerInd = 1;
-        formatOption.eCRPut = RealJSFormatter.CR_PUT.PUT_CR;
-        formatOption.eBracNL = RealJSFormatter.BRAC_NEWLINE.NO_NEWLINE_BRAC;
-        formatOption.eEmpytIndent = RealJSFormatter.EMPTYLINE_INDENT.NO_INDENT_IN_EMPTYLINE;
-
-        var jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
-        jsfStrIO.m_debug = true;
-        jsfStrIO.Go();
-        var resultJS = jsfStrIO.outputJS;
+        var jsonppStrIO = new JsonPPStringIO(inputJS);
+        jsonppStrIO.m_debug = true;
+        var jsonValue = new JsonPP.JsonValue();
+        jsonppStrIO.Go(jsonValue);
+        var resultJS = jsonppStrIO.outputJS;
 
         FileSystem.writeFileSync(outputJSFile, resultJS, "binary");
         log("Done");
     }
-    */
 
+    /*
     var jsonValue = new JsonPP.JsonValue();
 
     var jsonMap = new Map();
@@ -107,6 +98,7 @@ function Main() {
     log(jsonValue.ToStringSorted());
 
     log(JsonPP.VERSION);
+    */
 }
 
 Main();

@@ -209,7 +209,249 @@ JsonValue.UNKNOWN_VALUE = 0x04;
 JsonValue.ARRAY_VALUE = 0x10;
 JsonValue.MAP_VALUE = 0x20;
 
+class JsonParser extends JSParser.JSParser {
+    constructor() {
+        super();
+
+        this.m_nRecuLevel = 0;
+        this.m_blockStack = [];
+    }
+
+    Go(jsonValue) {
+        this.RecursiveProc(jsonValue);
+    }
+
+    RecursiveProc(jsonValue) {
+        // initial job
+        if (this.m_nRecuLevel == 0) {
+            this.StartParse();
+
+            jsonValue.SetValueType(JsonValue.UNKNOWN_VALUE);
+        }
+
+        ++this.m_nRecuLevel;
+        // initial job
+
+        var stackTop = JSParser.JS_EMPTY;
+        stackTop = JSParser.GetStackTop(this.m_blockStack);
+
+        var key,
+        strValue;
+        var keyLine,
+        valLine;
+        var bGetKey = false;
+        var bGetSplitor = false;
+        while (this.GetToken()) // Get next m_tokenA, m_tokenB
+        {
+            // JsonParser ignore newline, other parser may not
+            if (this.m_tokenA.code == "\r\n" ||
+                this.m_tokenA.code == "\n" ||
+                this.m_tokenA.type == JSParser.COMMENT_TYPE_1 ||
+                this.m_tokenA.type == JSParser.COMMENT_TYPE_2) {
+                continue;
+            }
+
+            /*
+             * until here, finish reading m_tokenA, m_tokenB
+             * merged multiple newline
+             * already recognized positive/negative
+             * already recognized regex
+             */
+            if (this.m_tokenA.code == "{") {
+                this.m_blockStack.push(JSParser.JS_BLOCK);
+                var blockLine = this.m_tokenA.line;
+
+                if (stackTop == JSParser.JS_EMPTY) {
+                    jsonValue.SetValueType(JsonValue.MAP_VALUE);
+                    this.RecursiveProc(jsonValue);
+                } else {
+                    if (stackTop == JSParser.JS_SQUARE) {
+                        jsonValue.ArrayPut(new JsonValue());
+
+                        var curArray = jsonValue.GetValue();
+                        var innerValue = curArray[curArray.length - 1];
+                        innerValue.SetValueType(JsonValue.MAP_VALUE);
+
+                        this.RecursiveProc(innerValue);
+
+                        innerValue.line = blockLine;
+                    } else if (stackTop == JSParser.JS_BLOCK) {
+                        jsonValue.MapPut(key, new JsonValue());
+
+                        var innerValue = jsonValue.GetValue().get(key);
+                        innerValue.SetValueType(JsonValue.MAP_VALUE);
+
+                        this.RecursiveProc(innerValue);
+
+                        bGetKey = false;
+                        bGetSplitor = false;
+                        innerValue.line = keyLine;
+                    }
+                }
+
+                continue;
+            }
+
+            if (this.m_tokenA.code == "}") {
+                bGetKey = false;
+                bGetSplitor = false;
+
+                if (this.m_blockStack.length > 0) {
+                    this.m_blockStack.pop();
+                    --this.m_nRecuLevel;
+                }
+
+                return;
+            }
+
+            if (this.m_tokenA.code == "[") {
+                this.m_blockStack.push(JSParser.JS_SQUARE);
+                var squareLine = this.m_tokenA.line;
+
+                if (stackTop == JSParser.JS_EMPTY) {
+                    jsonValue.SetValueType(JsonValue.ARRAY_VALUE);
+                    this.RecursiveProc(jsonValue);
+                } else {
+                    if (stackTop == JSParser.JS_SQUARE) {
+                        jsonValue.ArrayPut(new JsonValue());
+
+                        var curArray = jsonValue.GetValue();
+                        var innerValue = curArray[curArray.length - 1];
+                        innerValue.SetValueType(JsonValue.ARRAY_VALUE);
+
+                        this.RecursiveProc(innerValue);
+
+                        innerValue.line = squareLine;
+                    } else if (stackTop == JSParser.JS_BLOCK) {
+                        jsonValue.MapPut(key, new JsonValue());
+
+                        var innerValue = jsonValue.GetValue().get(key);
+                        innerValue.SetValueType(JsonValue.ARRAY_VALUE);
+
+                        this.RecursiveProc(innerValue);
+
+                        bGetKey = false;
+                        bGetSplitor = false;
+                        innerValue.line = keyLine;
+                    }
+                }
+
+                continue;
+            }
+
+            if (this.m_tokenA.code == "]") {
+                if (this.m_blockStack.length > 0) {
+                    this.m_blockStack.pop();
+                    --this.m_nRecuLevel;
+                }
+
+                return;
+            }
+
+            if (stackTop == JSParser.JS_BLOCK) {
+                if (!bGetKey && this.m_tokenA.code != ",") {
+                    key = this.m_tokenA.code;
+                    keyLine = this.m_tokenA.line;
+
+                    if ((key.charAt(0) == '\'' && key.charAt(key.length - 1) == '\'') ||
+                        key.charAt(0) == '"' && key.charAt(key.length - 1) == '"')
+                        key = key.substring(1, key.length - 2);
+
+                    bGetKey = true;
+                    continue;
+                }
+
+                if (bGetKey && !bGetSplitor && this.m_tokenA.code == ":") {
+                    bGetSplitor = true;
+                    continue;
+                }
+
+                if (bGetKey && bGetSplitor) {
+                    strValue = this.ReadStrValue();
+                    valLine = this.m_tokenA.line;
+
+                    jsonValue.MapPut(key, new JsonValue());
+                    var jValue = jsonValue.GetValue().get(key);
+                    this.GenStrJsonValue(jValue, strValue);
+
+                    jValue.line = keyLine;
+
+                    bGetKey = false;
+                    bGetSplitor = false;
+                }
+            }
+
+            if (stackTop == JSParser.JS_SQUARE) {
+                if (this.m_tokenA.code != ",") {
+                    strValue = this.ReadStrValue();
+                    valLine = this.m_tokenA.line;
+
+                    var jValue = new JsonValue();
+                    GenStrJsonValue(jValue, strValue);
+                    jValue.line = valLine;
+
+                    jsonValue.ArrayPut(jValue);
+                }
+            }
+        }
+
+        // finished job
+        if (this.m_nRecuLevel == 1) {
+            //FlushLineBuffer();
+
+            this.EndParse();
+        }
+        // finished job
+    }
+
+    ReadStrValue() {
+        var ret = this.m_tokenA.code;
+        // fix decimal number value bug
+        if (this.m_tokenB.code == ".") {
+            // maybe it's a decimal
+            var strDec = m_tokenA.code;
+            this.GetToken();
+            strDec += ".";
+            strDec += this.m_tokenB.code;
+            ret = strDec;
+            this.GetToken();
+        }
+
+        return ret;
+    }
+
+    GenStrJsonValue(jsonValue, value) {
+        if (value.charAt(0) == '\'' || value.charAt(0) == '"') {
+            if ((value.charAt(0) == '\'' && value.charAt(value.length - 1) == '\'') ||
+                value.charAt(0) == '"' && value.charAt(value.length - 1) == '"')
+                value = value.substring(1, value.length - 2);
+
+            /*
+             * STRING_VALUE store without quote
+             * it will output with "..."
+             * so escape quote in STRING_VALUE
+             */
+            value = value.replace("\\'", "'");
+            value = value.replace("\\\"", "\"");
+            value = value.replace("\"", "\\\"");
+
+            jsonValue.SetValueType(JsonValue.STRING_VALUE);
+        } else if (this.IsNumChar(value.charAt(0)) || value.charAt(0) == '-' || value.charAt(0) == '+') {
+            jsonValue.SetValueType(JsonValue.NUMBER_VALUE);
+        } else if (value == "true" || value == "false") {
+            jsonValue.SetValueType(JsonValue.BOOL_VALUE);
+        } else if (value.charAt(0) == '/') {
+            jsonValue.SetValueType(JsonValue.REGULAR_VALUE);
+        } else {
+            jsonValue.SetValueType(JsonValue.UNKNOWN_VALUE);
+        }
+
+        jsonValue.SetStrValue(value);
+    }
+}
+
 // exports
 exports.VERSION = VERSION;
 
 exports.JsonValue = JsonValue;
+exports.JsonParser = JsonParser;
