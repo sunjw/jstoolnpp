@@ -4,9 +4,9 @@
 
 in.js
 out*.js
-vsproj/typings/*
-vsproj/bin/*
-vsproj/obj/*
+vsproj/*/typings/*
+vsproj/*/bin/*
+vsproj/*/obj/*
 
 *.aps
 *.ncb
