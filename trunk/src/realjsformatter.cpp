@@ -54,19 +54,6 @@ string RealJSFormatter::TrimRightSpace(const string& str)
 	return ret.erase(ret.find_last_not_of(" \t") + 1);
 }
 
-void RealJSFormatter::StringReplace(string& strBase, const string& strSrc, const string& strDes)
-{
-	string::size_type pos = 0;
-	string::size_type srcLen = strSrc.size();
-	string::size_type desLen = strDes.size();
-	pos = strBase.find(strSrc, pos);
-	while((pos != string::npos))
-	{
-		strBase.replace(pos, srcLen, strDes);
-		pos = strBase.find(strSrc, pos + desLen);
-	}
-}
-
 void RealJSFormatter::Init()
 {
 	m_tokenCount = 0;

@@ -44,7 +44,6 @@ public:
 	static string Trim(const string& str);
 	static string TrimSpace(const string& str);
 	static string TrimRightSpace(const string& str);
-	void StringReplace(string& strBase, const string& strSrc, const string& strDes);
 
 	inline void SetInitIndent(const string& initIndent)
 	{ m_initIndent = initIndent; }
