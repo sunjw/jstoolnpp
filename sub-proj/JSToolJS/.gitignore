@@ -5,6 +5,8 @@
 in.js
 out*.js
 vsproj/typings/*
+vsproj/bin/*
+vsproj/obj/*
 
 *.aps
 *.ncb
