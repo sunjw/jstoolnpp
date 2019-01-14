@@ -34,6 +34,7 @@
   <ItemGroup>
     <Compile Include="..\..\jsonppjsnode.js" />
     <Compile Include="..\..\jsparser.js" />
+    <Compile Include="..\..\jsonpp.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="typings\" />
