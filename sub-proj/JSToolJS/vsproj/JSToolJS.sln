@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "JSFormatterJS", "JSFormatterJS.njsproj", "{99441EBB-F0AC-44F3-B1D6-3860ACB55300}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "JsonPPJS", "JsonPPJS\JsonPPJS.njsproj", "{5EA2C9A9-C3C0-46CA-BB3E-DF2A120B658F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{99441EBB-F0AC-44F3-B1D6-3860ACB55300}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99441EBB-F0AC-44F3-B1D6-3860ACB55300}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99441EBB-F0AC-44F3-B1D6-3860ACB55300}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EA2C9A9-C3C0-46CA-BB3E-DF2A120B658F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EA2C9A9-C3C0-46CA-BB3E-DF2A120B658F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EA2C9A9-C3C0-46CA-BB3E-DF2A120B658F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EA2C9A9-C3C0-46CA-BB3E-DF2A120B658F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
