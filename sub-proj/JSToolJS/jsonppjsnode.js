@@ -69,36 +69,6 @@ function Main() {
         FileSystem.writeFileSync(outputJSFile, resultJS, "binary");
         log("Done");
     }
-
-    /*
-    var jsonValue = new JsonPP.JsonValue();
-
-    var jsonMap = new Map();
-
-    jsonMap.set("sfdasfsaf", new JsonPP.JsonValue("4654154"));
-
-    var jsonMap2 = new Map();
-    jsonMap2.set("mcyeurn", new JsonPP.JsonValue(true, JsonPP.JsonValue.BOOL_VALUE));
-    jsonMap2.set("eetrffv", new JsonPP.JsonValue(5000, JsonPP.JsonValue.NUMBER_VALUE));
-    jsonMap2.set("jrtythgb", new JsonPP.JsonValue("ncg646769jhg"));
-    jsonMap.set("agyedjfj", new JsonPP.JsonValue(jsonMap2, JsonPP.JsonValue.MAP_VALUE));
-
-    var jsonValue1 = new JsonPP.JsonValue();
-    var jsonArray = [];
-    jsonArray.push(new JsonPP.JsonValue("njhbfgmnb"));
-    jsonArray.push(new JsonPP.JsonValue(false, JsonPP.JsonValue.BOOL_VALUE));
-    jsonArray.push(new JsonPP.JsonValue(jsonMap2, JsonPP.JsonValue.MAP_VALUE));
-    jsonArray.push(new JsonPP.JsonValue(2, JsonPP.JsonValue.NUMBER_VALUE));
-    jsonValue1.SetArrayValue(jsonArray);
-    jsonMap.set("pyiyhmhnj", jsonValue1);
-
-    jsonValue.SetMapValue(jsonMap);
-
-    log(jsonValue.ToString());
-    log(jsonValue.ToStringSorted());
-
-    log(JsonPP.VERSION);
-    */
 }
 
 Main();
