@@ -595,6 +595,7 @@ class JSParser {
 
     PrintAdditionalDebug(strDebugOutput) {
         // virtual
+        return strDebugOutput;
     }
 
 }

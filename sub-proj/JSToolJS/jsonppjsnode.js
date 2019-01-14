@@ -64,8 +64,8 @@ function Main() {
         jsonppStrIO.m_debug = true;
         var jsonValue = new JsonPP.JsonValue();
         jsonppStrIO.Go(jsonValue);
-        var resultJS = jsonppStrIO.outputJS;
 
+        var resultJS = jsonValue.ToString();
         FileSystem.writeFileSync(outputJSFile, resultJS, "binary");
         log("Done");
     }

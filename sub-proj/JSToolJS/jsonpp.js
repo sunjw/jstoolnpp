@@ -232,8 +232,10 @@ class JsonParser extends JSParser.JSParser {
         ++this.m_nRecuLevel;
         // initial job
 
-        var stackTop = JSParser.JS_EMPTY;
-        stackTop = JSParser.GetStackTop(this.m_blockStack);
+        var stackTop = JSParser.GetStackTop(this.m_blockStack);
+        if (stackTop == undefined) {
+            stackTop = JSParser.JS_EMPTY;
+        }
 
         var key,
         strValue;
@@ -387,7 +389,7 @@ class JsonParser extends JSParser.JSParser {
                     valLine = this.m_tokenA.line;
 
                     var jValue = new JsonValue();
-                    GenStrJsonValue(jValue, strValue);
+                    this.GenStrJsonValue(jValue, strValue);
                     jValue.line = valLine;
 
                     jsonValue.ArrayPut(jValue);
