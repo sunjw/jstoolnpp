@@ -23,16 +23,20 @@
     ],
     "main": "./extension",
     "contributes": {
-        "commands": [{
-            "command": "extension.minJS",
-            "title": "Minimize JavaScript"
-        }, {
-            "command": "extension.minJSNewFile",
-            "title": "Minimize JavaScript (New file)"
-        }, {
-            "command": "extension.formatJS",
-            "title": "Format JavaScript (JSON)"
-        }]
+        "commands": [
+            {
+                "command": "extension.minJS",
+                "title": "Minimize JavaScript"
+            },
+            {
+                "command": "extension.minJSNewFile",
+                "title": "Minimize JavaScript (New file)"
+            },
+            {
+                "command": "extension.formatJS",
+                "title": "Format JavaScript (JSON)"
+            }
+        ]
     },
     "scripts": {
         "postinstall": "node ./node_modules/vscode/bin/install"
