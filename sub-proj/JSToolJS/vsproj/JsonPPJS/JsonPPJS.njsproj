@@ -12,7 +12,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>5ea2c9a9-c3c0-46ca-bb3e-df2a120b658f</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>app.js</StartupFile>
+    <StartupFile>..\..\jsonppjsnode.js</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -29,8 +29,11 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="app.js" />
     <Content Include="package.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\jsonppjsnode.js" />
+    <Compile Include="..\..\jsparser.js" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="typings\" />
