@@ -2,14 +2,9 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
 
+const VSCUtils = require("./vscutils.js");
 const JSMin = require("./jsmin.js");
 const RealJSFormatter = require("./realjsformatter.js");
-
-const LineSeperator = /\r\n|\n|\r/;
-
-function log(logString) {
-    console.log(logString);
-}
 
 class JSFormatStringIO extends RealJSFormatter.RealJSFormatter {
 
@@ -33,14 +28,6 @@ class JSFormatStringIO extends RealJSFormatter.RealJSFormatter {
     }
 }
 
-function getJSAllRange(inputJS) {
-    var start = new vscode.Position(0, 0);
-    var lines = inputJS.split(LineSeperator);
-    var end = new vscode.Position(lines.length - 1, lines[lines.length - 1].length);
-    var allRange = new vscode.Range(start, end);
-    return allRange;
-}
-
 function minJS(inNewDoc) {
     let editor = vscode.window.activeTextEditor;
     if (!editor) {
@@ -55,17 +42,11 @@ function minJS(inNewDoc) {
 
     if (!inNewDoc) {
         editor.edit(function (editBuilder) {
-            let allRange = getJSAllRange(inputJS);
-            editBuilder.delete(allRange);
-            editBuilder.insert(new vscode.Position(0, 0), resultJS);
+            let allRange = VSCUtils.getAllRange(editor);
+            VSCUtils.replaceWithRange(editBuilder, allRange, resultJS);
         });
     } else {
-        vscode.workspace.openTextDocument({
-            language: "javascript",
-            content: resultJS
-        }).then(function (document) {
-            vscode.window.showTextDocument(document);
-        });
+        VSCUtils.newDocument(vscode.workspace, vscode.window, "javascript", resultJS);
     }
 }
 
@@ -117,7 +98,7 @@ function formatJS() {
         }
     }
 
-    //log("inputJS:\n" + inputJS);
+    //VSCUtils.log("inputJS:\n" + inputJS);
 
     // Make format options
     var formatOption = new RealJSFormatter.FormatterOption();
@@ -141,14 +122,13 @@ function formatJS() {
         formattedLineJSF = 1;
     }
 
-    //log(resultJS);
+    //VSCUtils.log(resultJS);
 
     // Change content
     editor.edit(function (editBuilder) {
         if (formatAllText) {
-            let allRange = getJSAllRange(inputJS);
-            editBuilder.delete(allRange);
-            editBuilder.insert(new vscode.Position(0, 0), resultJS);
+            let allRange = VSCUtils.getAllRange(editor);
+            VSCUtils.replaceWithRange(editBuilder, allRange, resultJS);
         } else {
             // Clean one more new line.
             if (resultJS.length >= 2 && resultJS.charAt(resultJS.length - 2) == '\r') {
@@ -157,8 +137,7 @@ function formatJS() {
                 resultJS = resultJS.substring(0, resultJS.length - 1);
             }
 
-            editBuilder.delete(newSelRange);
-            editBuilder.insert(newSelRange.start, resultJS);
+            VSCUtils.replaceWithRange(editBuilder, newSelRange, resultJS);
         }
 
         if (formatAllText && docLangId != "javascript" && docLangId != "json") {
@@ -171,9 +150,7 @@ function formatJS() {
 
         if (formatAllText) {
             // Move selection and viewport.
-            let formattedLinePosition = new vscode.Position(formattedLineJSF - 1, 0);
-            editor.selection = new vscode.Selection(formattedLinePosition, formattedLinePosition);
-            editor.revealRange(new vscode.Range(formattedLinePosition, formattedLinePosition), vscode.TextEditorRevealType.InCenter);
+            VSCUtils.moveToLine(editor, formattedLineJSF - 1);
         }
     });
 }
@@ -184,7 +161,7 @@ function activate(context) {
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
-    log('Congratulations, your extension "jstool ' + RealJSFormatter.VERSION + '" is now active!');
+    VSCUtils.log('Congratulations, your extension "jstool ' + RealJSFormatter.VERSION + '" is now active!');
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
@@ -212,5 +189,6 @@ exports.activate = activate;
 
 // this method is called when your extension is deactivated
 function deactivate() {
+
 }
 exports.deactivate = deactivate;
