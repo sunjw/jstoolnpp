@@ -19,7 +19,6 @@ class JsonPPStringIO extends JsonPP.JsonParser {
         super();
         this.inputJS = inputJS;
         this.inputIdx = 0;
-        this.outputJS = "";
     }
 
     GetChar() {
@@ -28,10 +27,6 @@ class JsonPPStringIO extends JsonPP.JsonParser {
         } else {
             return '\0';
         }
-    }
-
-    PutChar(ch) {
-        this.outputJS += ch;
     }
 }
 
