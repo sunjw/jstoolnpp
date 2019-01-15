@@ -41,6 +41,7 @@ function Main() {
     var printVersion = false;
     var inputJSFile = "";
     var outputJSFile = "";
+    var sortJS = false;
 
     var argvLen = process.argv.length;
     if (argvLen == 3 && process.argv[2] == "--version") {
@@ -48,11 +49,16 @@ function Main() {
     } else if (argvLen == 4) {
         inputJSFile = process.argv[argvLen - 2];
         outputJSFile = process.argv[argvLen - 1];
+    } else if (argvLen == 5 && process.argv[2] == "--sort") {
+        inputJSFile = process.argv[argvLen - 2];
+        outputJSFile = process.argv[argvLen - 1];
+        sortJS = true;
     }
 
     if (!printVersion && (inputJSFile == "" || outputJSFile == "")) {
         log("Usage: node jsonppjsnode.js [input file] [output file]");
         log("");
+        log("  --sort: test JSON sort.");
         log("  --version: print version.");
         return;
     }
@@ -69,7 +75,13 @@ function Main() {
         var jsonValue = new JsonPP.JsonValue();
         jsonppStrIO.Go(jsonValue);
 
-        var resultJS = jsonValue.ToString();
+        var resultJS = "";
+        if (!sortJS) {
+            resultJS = jsonValue.ToString();
+        } else {
+            resultJS = jsonValue.ToStringSorted();
+        }
+
         resultJS = replaceAll(resultJS, "\n", "\r\n");
         FileSystem.writeFileSync(outputJSFile, resultJS, "binary");
         log("Done");
