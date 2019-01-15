@@ -28,6 +28,23 @@ class JSFormatStringIO extends RealJSFormatter.RealJSFormatter {
     }
 }
 
+function makeFormatOption(textEditor) {
+    let editorIndentSpace = textEditor.options.insertSpaces;
+    let editorTabSize = textEditor.options.tabSize;
+
+    let document = textEditor.document;
+    let docEol = document.eol;
+
+    var formatOption = new RealJSFormatter.FormatterOption();
+    formatOption.chIndent = editorIndentSpace ? ' ' : '\t';
+    formatOption.nChPerInd = editorIndentSpace ? editorTabSize : 1;
+    formatOption.eCRPut = (docEol == vscode.EndOfLine.CRLF) ? RealJSFormatter.CR_PUT.PUT_CR : RealJSFormatter.CR_PUT.NOT_PUT_CR;
+    formatOption.eBracNL = RealJSFormatter.BRAC_NEWLINE.NO_NEWLINE_BRAC;
+    formatOption.eEmpytIndent = RealJSFormatter.EMPTYLINE_INDENT.NO_INDENT_IN_EMPTYLINE;
+
+    return formatOption;
+}
+
 function minJS(inNewDoc) {
     let editor = vscode.window.activeTextEditor;
     if (!editor) {
@@ -57,13 +74,8 @@ function formatJS() {
         return; // No open text editor
     }
 
-    let document = editor.document;
-
-    let editorTabSize = editor.options.tabSize;
-    let editorIndentSpace = editor.options.insertSpaces;
     let editorSelection = editor.selection;
-
-    let docEol = document.eol;
+    let document = editor.document;
     let docLangId = document.languageId;
 
     var formatAllText = true;
@@ -100,13 +112,8 @@ function formatJS() {
 
     //VSCUtils.log("inputJS:\n" + inputJS);
 
-    // Make format options
-    var formatOption = new RealJSFormatter.FormatterOption();
-    formatOption.chIndent = editorIndentSpace ? ' ' : '\t';
-    formatOption.nChPerInd = editorIndentSpace ? editorTabSize : 1;
-    formatOption.eCRPut = (docEol == vscode.EndOfLine.CRLF) ? RealJSFormatter.CR_PUT.PUT_CR : RealJSFormatter.CR_PUT.NOT_PUT_CR;
-    formatOption.eBracNL = RealJSFormatter.BRAC_NEWLINE.NO_NEWLINE_BRAC;
-    formatOption.eEmpytIndent = RealJSFormatter.EMPTYLINE_INDENT.NO_INDENT_IN_EMPTYLINE;
+    // Make format option
+    var formatOption = makeFormatOption(editor);
 
     // Format
     var jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
