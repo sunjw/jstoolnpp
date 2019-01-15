@@ -9,6 +9,10 @@ function log(logString) {
     console.log(logString);
 }
 
+function replaceAll(string, target, replace) {
+    return string.replace(new RegExp(target, 'g'), replace);
+}
+
 class JsonPPStringIO extends JsonPP.JsonParser {
 
     constructor(inputJS) {
@@ -66,6 +70,7 @@ function Main() {
         jsonppStrIO.Go(jsonValue);
 
         var resultJS = jsonValue.ToString();
+        resultJS = replaceAll(resultJS, "\n", "\r\n");
         FileSystem.writeFileSync(outputJSFile, resultJS, "binary");
         log("Done");
     }

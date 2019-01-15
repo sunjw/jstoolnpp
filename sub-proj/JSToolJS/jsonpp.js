@@ -435,9 +435,9 @@ class JsonParser extends JSParser.JSParser {
              * it will output with "..."
              * so escape quote in STRING_VALUE
              */
-            value = value.replace("\\'", "'");
-            value = value.replace("\\\"", "\"");
-            value = value.replace("\"", "\\\"");
+            value = JSParser.StringReplaceAll(value, "\\'", "'");
+            value = JSParser.StringReplaceAll(value, "\\\"", "\"");
+            value = JSParser.StringReplaceAll(value, "\"", "\\\"");
 
             jsonValue.SetValueType(JsonValue.STRING_VALUE);
         } else if (this.IsNumChar(value.charAt(0)) || value.charAt(0) == '-' || value.charAt(0) == '+') {

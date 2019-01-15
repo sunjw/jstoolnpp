@@ -22,6 +22,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 const VERSION = "1.1901.0.0";
 
+function StringReplaceAll(string, target, replace) {
+    return string.replace(new RegExp(target, 'g'), replace);
+}
+
 function CopyObject(source) {
     return Object.assign({}, source);
 }
@@ -603,6 +607,7 @@ class JSParser {
 // exports
 exports.VERSION = VERSION;
 
+exports.StringReplaceAll = StringReplaceAll;
 exports.CopyObject = CopyObject;
 exports.GetStackTop = GetStackTop;
 exports.StackTopEq = StackTopEq;
