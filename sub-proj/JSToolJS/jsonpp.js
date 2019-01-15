@@ -412,7 +412,7 @@ class JsonParser extends JSParser.JSParser {
         // fix decimal number value bug
         if (this.m_tokenB.code == ".") {
             // maybe it's a decimal
-            var strDec = m_tokenA.code;
+            var strDec = this.m_tokenA.code;
             this.GetToken();
             strDec += ".";
             strDec += this.m_tokenB.code;
