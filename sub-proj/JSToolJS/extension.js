@@ -188,6 +188,7 @@ function JSONSort(inNewDoc) {
     }
 
     let document = editor.document;
+    let docLangId = document.languageId;
 
     let inputJSON = document.getText();
     var jsonppStrIO = new JsonPPStringIO(inputJSON);
@@ -207,6 +208,10 @@ function JSONSort(inNewDoc) {
         editor.edit(function (editBuilder) {
             let allRange = VSCUtils.getAllRange(editor);
             VSCUtils.replaceWithRange(editBuilder, allRange, sortedJSON);
+
+            if (docLangId != "javascript" && docLangId != "json") {
+                vscode.languages.setTextDocumentLanguage(document, "json");
+            }
         });
     } else {
         VSCUtils.newDocument(vscode.workspace, vscode.window, "json", sortedJSON);
