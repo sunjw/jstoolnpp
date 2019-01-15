@@ -15,6 +15,7 @@ OUTPUT_FILE_NAME = "out.json"
 
 JSONPP_PATH_WIN = "../../trunk/debug/JsonPP.exe"
 JSONPP_REL_PATH_WIN = "../../trunk/release/JsonPP.exe"
+JSONPP_NODEJS_SCRIPT_PATH = "../JSToolJS/jsonppjsnode.js"
 
 class NativeCaseRuntime(CaseRuntime):
     def __init__(self, runtime_path, sort):
@@ -27,6 +28,29 @@ class NativeCaseRuntime(CaseRuntime):
             call([self.runtime_path, test_case.source, self.get_out_path_from_case(test_case)])
         else:
             call([self.runtime_path, "--sort", test_case.source, self.get_out_path_from_case(test_case)])
+
+    def dump_name(self):
+        print "NativeCaseRuntime"
+
+class NodeCaseRuntime(CaseRuntime):
+    def __init__(self, runtime_path, sort):
+        super(NodeCaseRuntime, self).__init__(runtime_path)
+        self.out_file = OUTPUT_FILE_NAME
+        self.sort = sort
+
+    def _case_execute(self, test_case):
+        if not self.sort:
+            call(["node", self.runtime_path, test_case.source, self.get_out_path_from_case(test_case)])
+        else:
+            call(["node", self.runtime_path, "--sort", test_case.source, self.get_out_path_from_case(test_case)])
+
+    def dump_name(self):
+        print "NodeCaseRuntime"
+
+    def dump_version(self):
+        call(["node", self.runtime_path, "--version"])
+        print "node version: "
+        call(["node", "--version"])
 
 class JSONPPCaseGenerator(CaseGenerator):
     def __init__(self, case_dir, sort_json):
@@ -55,29 +79,42 @@ class JSONPPCaseGenerator(CaseGenerator):
 def main():
     release = False
     sort_json = False
+    nodejs = False
 
     for argv in sys.argv:
         argv = argv.lower()
+        if argv == "node" or argv == "nodejs":
+            nodejs = True
         if argv == "release":
             release = True
         if argv == "sort" or argv == "sorted":
             sort_json = True
 
+    if nodejs:
+        release = False
+
     # system check
-    if not is_windows_sys():
-        print "JsonPP test only supports Windows."
+    if not nodejs and not is_windows_sys():
+        print "JsonPP native test only supports Windows."
         return
 
     # prepare path
     jsonpp_path_sel = ""
+    jsonpp_nodejs_script_sel = ""
 
-    if is_windows_sys():
+    if not nodejs:
         jsonpp_path_sel = JSONPP_PATH_WIN
         if release:
             jsonpp_path_sel = JSONPP_REL_PATH_WIN
+    else:
+        jsonpp_nodejs_script_sel = JSONPP_NODEJS_SCRIPT_PATH
 
     # make runtime
-    case_runtime = NativeCaseRuntime(jsonpp_path_sel, sort_json)
+    case_runtime = 0
+    if not nodejs:
+        case_runtime = NativeCaseRuntime(jsonpp_path_sel, sort_json)
+    else:
+        case_runtime = NodeCaseRuntime(jsonpp_nodejs_script_sel, sort_json)
 
     # prepare cases
     case_generator = JSONPPCaseGenerator(TEST_CASE_DIR, sort_json)
