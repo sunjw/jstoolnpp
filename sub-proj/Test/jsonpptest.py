@@ -16,18 +16,17 @@ OUTPUT_FILE_NAME = "out.json"
 JSONPP_PATH_WIN = "../../trunk/debug/JsonPP.exe"
 JSONPP_REL_PATH_WIN = "../../trunk/release/JsonPP.exe"
 
-class SimpleCaseRuntime(CaseRuntime):
-    def __init__(self, runtime_path):
-        super(SimpleCaseRuntime, self).__init__(runtime_path)
+class NativeCaseRuntime(CaseRuntime):
+    def __init__(self, runtime_path, sort):
+        super(NativeCaseRuntime, self).__init__(runtime_path)
         self.out_file = OUTPUT_FILE_NAME
-
-class SortCaseRuntime(CaseRuntime):
-    def __init__(self, runtime_path):
-        super(SortCaseRuntime, self).__init__(runtime_path)
-        self.out_file = OUTPUT_FILE_NAME
+        self.sort = sort
 
     def _case_execute(self, test_case):
-        call([self.runtime_path, "--sort", test_case.source, self.get_out_path_from_case(test_case)])
+        if not self.sort:
+            call([self.runtime_path, test_case.source, self.get_out_path_from_case(test_case)])
+        else:
+            call([self.runtime_path, "--sort", test_case.source, self.get_out_path_from_case(test_case)])
 
 class JSONPPCaseGenerator(CaseGenerator):
     def __init__(self, case_dir, sort_json):
@@ -78,11 +77,7 @@ def main():
             jsonpp_path_sel = JSONPP_REL_PATH_WIN
 
     # make runtime
-    case_runtime = 0
-    if not sort_json:
-        case_runtime = SimpleCaseRuntime(jsonpp_path_sel)
-    else:
-        case_runtime = SortCaseRuntime(jsonpp_path_sel)
+    case_runtime = NativeCaseRuntime(jsonpp_path_sel, sort_json)
 
     # prepare cases
     case_generator = JSONPPCaseGenerator(TEST_CASE_DIR, sort_json)
