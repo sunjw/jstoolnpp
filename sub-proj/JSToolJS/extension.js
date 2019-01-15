@@ -5,6 +5,7 @@ const vscode = require('vscode');
 const VSCUtils = require("./vscutils.js");
 const JSMin = require("./jsmin.js");
 const RealJSFormatter = require("./realjsformatter.js");
+const JsonPP = require("./jsonpp.js");
 
 class JSFormatStringIO extends RealJSFormatter.RealJSFormatter {
 
@@ -25,6 +26,23 @@ class JSFormatStringIO extends RealJSFormatter.RealJSFormatter {
 
     PutChar(ch) {
         this.outputJS += ch;
+    }
+}
+
+class JsonPPStringIO extends JsonPP.JsonParser {
+
+    constructor(inputJS) {
+        super();
+        this.inputJS = inputJS;
+        this.inputIdx = 0;
+    }
+
+    GetChar() {
+        if (this.inputIdx <= this.inputJS.length) {
+            return this.inputJS.charAt(this.inputIdx++);
+        } else {
+            return '\0';
+        }
     }
 }
 
@@ -162,6 +180,39 @@ function formatJS() {
     });
 }
 
+function JSONSort(inNewDoc) {
+    let editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        vscode.window.showInformationMessage('No editor opened.');
+        return; // No open text editor
+    }
+
+    let document = editor.document;
+
+    let inputJSON = document.getText();
+    var jsonppStrIO = new JsonPPStringIO(inputJSON);
+    //jsonppStrIO.m_debug = true;
+    var jsonValue = new JsonPP.JsonValue();
+    jsonppStrIO.Go(jsonValue);
+    let sortedJSON = jsonValue.ToStringSorted();
+
+    // format
+    var formatOption = makeFormatOption(editor);
+    var jsfStrIO = new JSFormatStringIO(sortedJSON, formatOption);
+    //jsfStrIO.m_debug = true;
+    jsfStrIO.Go();
+    sortedJSON = jsfStrIO.outputJS;
+
+    if (!inNewDoc) {
+        editor.edit(function (editBuilder) {
+            let allRange = VSCUtils.getAllRange(editor);
+            VSCUtils.replaceWithRange(editBuilder, allRange, sortedJSON);
+        });
+    } else {
+        VSCUtils.newDocument(vscode.workspace, vscode.window, "json", sortedJSON);
+    }
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -188,9 +239,21 @@ function activate(context) {
         formatJS();
     });
 
+    let disposableJSONSort = vscode.commands.registerCommand('extension.JSONSort', function () {
+        // The code you place here will be executed every time your command is executed
+        JSONSort(false);
+    });
+
+    let disposableJSONSortNewFile = vscode.commands.registerCommand('extension.JSONSortNewFile', function () {
+        // The code you place here will be executed every time your command is executed
+        JSONSort(true);
+    });
+
     context.subscriptions.push(disposableMinJS);
     context.subscriptions.push(disposableMinJSNewFile);
     context.subscriptions.push(disposableFormatJS);
+    context.subscriptions.push(disposableJSONSort);
+    context.subscriptions.push(disposableJSONSortNewFile);
 }
 exports.activate = activate;
 

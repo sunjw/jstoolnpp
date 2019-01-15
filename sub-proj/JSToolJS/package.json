@@ -19,7 +19,9 @@
     "activationEvents": [
         "onCommand:extension.minJS",
         "onCommand:extension.minJSNewFile",
-        "onCommand:extension.formatJS"
+        "onCommand:extension.formatJS",
+        "onCommand:extension.JSONSort",
+        "onCommand:extension.JSONSortNewFile"
     ],
     "main": "./extension",
     "contributes": {
@@ -35,6 +37,14 @@
             {
                 "command": "extension.formatJS",
                 "title": "Format JavaScript (JSON)"
+            },
+            {
+                "command": "extension.JSONSort",
+                "title": "JSON Sort"
+            },
+            {
+                "command": "extension.JSONSortNewFile",
+                "title": "JSON Sort (New file)"
             }
         ]
     },
