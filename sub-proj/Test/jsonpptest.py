@@ -146,7 +146,7 @@ def main():
     if allpass:
         print "%d cases ALL PASS, took %.2fs." % (len(test_cases), duration_time)
 
-    print "Test args: release=%r, sort=%r" % (release, sort_json)
+    print "Test args: release=%r, nodejs=%r, sort=%r" % (release, nodejs, sort_json)
     print ""
 
     case_runtime.dump_name()
