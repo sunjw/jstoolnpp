@@ -16,9 +16,9 @@ OUTPUT_FILE_NAME = "out.json"
 JSONPP_PATH_WIN = "../../trunk/debug/JsonPP.exe"
 JSONPP_REL_PATH_WIN = "../../trunk/release/JsonPP.exe"
 
-class SimpleSortCaseRuntime(CaseRuntime):
+class SimpleCaseRuntime(CaseRuntime):
     def __init__(self, runtime_path):
-        super(SimpleSortCaseRuntime, self).__init__(runtime_path)
+        super(SimpleCaseRuntime, self).__init__(runtime_path)
         self.out_file = OUTPUT_FILE_NAME
 
 class SortCaseRuntime(CaseRuntime):
@@ -80,7 +80,7 @@ def main():
     # make runtime
     case_runtime = 0
     if not sort_json:
-        case_runtime = SimpleSortCaseRuntime(jsonpp_path_sel)
+        case_runtime = SimpleCaseRuntime(jsonpp_path_sel)
     else:
         case_runtime = SortCaseRuntime(jsonpp_path_sel)
 
