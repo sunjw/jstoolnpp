@@ -3,6 +3,5 @@ writeOut = function (start) {
 	do {
 		console.log(self.parentWidget);
 		self = self.parentWidget;
-	}
-until(!self.parentWidget)
+	} while (!self.parentWidget)
 };
