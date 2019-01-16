@@ -12,8 +12,11 @@
         "Other"
     ],
     "keywords": [
-        "jsformatter",
-        "jsmin"
+        "javascript",
+        "js formatter",
+        "jsmin",
+        "json",
+        "json sort"
     ],
     "icon": "icon_128.png",
     "activationEvents": [
