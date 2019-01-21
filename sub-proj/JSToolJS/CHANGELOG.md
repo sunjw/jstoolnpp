@@ -1,3 +1,7 @@
+1.1901.2  
+[NPP] UI tweak.  
+[VSC] Add JSON Sort function.  
+
 1.1810.3  
 [VSC] Fix publish.  
 

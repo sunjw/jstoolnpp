@@ -10,6 +10,7 @@ Project site: http://www.sunjw.us/jstool/vsc
 #### FEATURES
  * JavaScript minify.
  * JavaScript/JSON format.
+ * Sort JSON data alphabetically.
  * More to come...
 
 #### INSTALL

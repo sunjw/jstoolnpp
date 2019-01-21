@@ -23,6 +23,7 @@ Install "JSTool" from Plugin Manager in Notepad++. Or download it from http://so
 #### FEATURES (for Visual Studio Code)
  * JavaScript minify.
  * JavaScript/JSON format.
+ * Sort JSON data alphabetically.
  * More to come...
 
 #### INSTALL (for Visual Studio Code)
