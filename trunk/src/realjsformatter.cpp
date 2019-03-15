@@ -253,12 +253,12 @@ void RealJSFormatter::PutLineBuffer()
 	}
 
 	string line;
-	if(!m_bLineTemplate)
-		line.append(TrimRightSpace(m_lineBuffer));
-	else
+	if(m_bLineTemplate && m_bTemplatePut)
 		line.append(m_lineBuffer); // Ô­ÑùÊä³ö Template String
+	else
+		line.append(TrimRightSpace(m_lineBuffer));
 	
-	if((!m_bLineTemplate || m_lineBuffer[0] == '`') && 
+	if((!m_bLineTemplate || (m_bTemplatePut && m_lineBuffer[0] == '`')) && 
 		(line != "" || m_struOption.eEmpytIndent == INDENT_IN_EMPTYLINE)) // Fix "JSLint unexpect space" bug
 	{
 		for(size_t i = 0; i < m_initIndent.length(); ++i)
