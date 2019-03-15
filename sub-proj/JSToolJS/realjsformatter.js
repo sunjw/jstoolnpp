@@ -879,12 +879,12 @@ class RealJSFormatter extends JSParser.JSParser {
         }
 
         var line = "";
-        if (!this.m_bLineTemplate)
-            line += TrimRightSpace(this.m_lineBuffer);
-        else
+        if (this.m_bLineTemplate && this.m_bTemplatePut)
             line += this.m_lineBuffer; // output Template String directly
+        else
+            line += TrimRightSpace(this.m_lineBuffer);
 
-        if ((!this.m_bLineTemplate || this.m_lineBuffer.charAt(0) == '`') &&
+        if ((!this.m_bLineTemplate || (this.m_bTemplatePut && this.m_lineBuffer.charAt(0) == '`')) &&
             (line != "" || this.m_struOption.eEmpytIndent == EMPTYLINE_INDENT.INDENT_IN_EMPTYLINE)) // Fix "JSLint unexpect space" bug
         {
             for (var i = 0; i < this.m_initIndent.length; ++i)
