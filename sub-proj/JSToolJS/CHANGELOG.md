@@ -1,3 +1,6 @@
+1.1903.0  
+[Common] Fix template output in some senario.  
+
 1.1901.2  
 [NPP] UI tweak.  
 [VSC] Add JSON Sort function.  
