@@ -4,14 +4,15 @@ JSFormatString::JSFormatString(const char *input,
 								string *output,
 								const FormatterOption& option):
 				RealJSFormatter(option), 
-				in(), out(output), getPos(0), putPos(0)
+				in(), inLen(0), out(output), getPos(0), putPos(0)
 {
 	in.append(input);
+	inLen = in.length();
 }
 
 int JSFormatString::GetChar()
 {
-	if(getPos <= in.length())
+	if (getPos <= inLen)
 		return in[getPos++];
 	else
 		return 0;

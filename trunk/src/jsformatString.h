@@ -16,6 +16,7 @@ public:
 
 private:
 	string in;
+	size_t inLen;
 	string *out;
 
 	size_t getPos;

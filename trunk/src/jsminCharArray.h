@@ -12,6 +12,7 @@ public:
 
 private:
 	const unsigned char *in;
+	size_t inLen;
 	unsigned char *out;
 
 	bool bPutCR;

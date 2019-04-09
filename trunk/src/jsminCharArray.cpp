@@ -2,11 +2,13 @@
 
 JSMinCharArray::JSMinCharArray(const unsigned char *input, unsigned char *output, bool bPutCR, bool bKeepTopComt)
 		:JSMin(bKeepTopComt), in(input), out(output), getPos(0), putPos(0), bPutCR(bPutCR)
-{}
+{
+	inLen = strlen(reinterpret_cast<const char*>(in));
+}
 
 int JSMinCharArray::getChar()
 {
-	if(getPos <= strlen(reinterpret_cast<const char*>(in)))
+	if (getPos <= inLen)
 		return in[getPos++];
 	else
 		return EOF;
@@ -14,7 +16,7 @@ int JSMinCharArray::getChar()
 
 void JSMinCharArray::put(int _Ch)
 {
-	if(_Ch == '\n' && bPutCR)
+	if (_Ch == '\n' && bPutCR)
 		out[putPos++] = '\r';
 	out[putPos++] = _Ch;
 }

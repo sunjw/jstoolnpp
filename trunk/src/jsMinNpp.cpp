@@ -245,6 +245,45 @@ static void trim(char *source)
 #endif
 }
 
+static bool guessJson(const string& jsCode)
+{
+	bool maybeJson = false;
+	char charJson = 0;
+	size_t jsCodeLen = jsCode.length();
+	for (size_t i = 0; i < jsCodeLen; ++i)
+	{
+		char ch = jsCode[i];
+		if (ch == ' ' || ch == '\t' ||
+			ch == '\r' || ch == '\n')
+			continue; // Skip over whitespaces at beginning
+		if (ch == '{' || ch == '[')
+		{
+			maybeJson = true;
+			charJson = ch;
+		}
+		break;
+	}
+
+	if (!maybeJson)
+		return false;
+
+	long long llCodeLen = jsCodeLen;
+	for (long long i = llCodeLen - 1; i >= 0; --i)
+	{
+		char ch = jsCode[i];
+		if (ch == ' ' || ch == '\t' ||
+			ch == '\r' || ch == '\n')
+			continue; // Skip over whitespaces at the end
+		if ((charJson == '{' && ch == '}') ||
+			(charJson == '[' && ch == ']'))
+			return true;
+
+		break;
+	}
+
+	return false;
+}
+
 static bool getScintillaEolCR(HWND hScintilla)
 {
 	int eolMode = (int)::SendMessage(hScintilla, SCI_GETEOLMODE, 0, 0);
@@ -312,17 +351,15 @@ static void jsMin(bool bNewFile)
 
 			// ReGet the current scintilla
 			hCurrScintilla = getCurrentScintillaHandle();
-
-			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJSMin);
-
-			// Set file's language
-			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
 		}
-		else
-		{
-			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJSMin);
-		}
+
+		::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJSMin);
 		
+		// Set file's language
+		int newIdmLang = IDM_LANG_JS;
+		if (guessJson(string((char *)pJSMin)))
+			newIdmLang = IDM_LANG_JSON;
+		::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, newIdmLang);
 	}
 	catch(runtime_error ex)
 	{
@@ -461,7 +498,10 @@ void jsFormat()
 		if(!bFormatSel)
 		{
 			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)(strJSFormat.c_str()));
-			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JS);
+			int newIdmLang = IDM_LANG_JS;
+			if (guessJson(strJSFormat))
+				newIdmLang = IDM_LANG_JSON;
+			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, newIdmLang);
 
 			// line starts from 0, lineFixed starts from 1
 			int lineJSF = line + 1;
@@ -538,16 +578,12 @@ static void jsonSort(bool bNewFile)
 
 			// ReGet the current scintilla
 			hCurrScintilla = getCurrentScintillaHandle();
-
-			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJsonSortedFormat);
-
-			// Set file's language
-			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JSON);
 		}
-		else
-		{
-			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJsonSortedFormat);
-		}
+
+		::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)pJsonSortedFormat);
+
+		// Set file's language
+		::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JSON);
 	}
 	catch(runtime_error ex)
 	{
