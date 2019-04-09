@@ -46,6 +46,43 @@ class JsonPPStringIO extends JsonPP.JsonParser {
     }
 }
 
+function guessJSON(jsCode) {
+    var maybeJSON = false;
+    var charJSON = 0;
+    var jsCodeLen = jsCode.length;
+    for (var i = 0; i < jsCodeLen; ++i) {
+        var ch = jsCode.charAt(i);
+        if (ch == ' ' || ch == '\t' ||
+            ch == '\r' || ch == '\n') {
+            continue; // Skip over whitespaces at beginning
+        }
+        if (ch == '{' || ch == '[') {
+            maybeJSON = true;
+            charJSON = ch;
+        }
+        break;
+    }
+
+    if (!maybeJSON) {
+        return false;
+    }
+
+    for (var i = (jsCodeLen - 1); i >= 0; --i) {
+        var ch = jsCode.charAt(i);
+        if (ch == ' ' || ch == '\t' ||
+            ch == '\r' || ch == '\n') {
+            continue; // Skip over whitespaces at the end
+        }
+        if ((charJSON == '{' && ch == '}') ||
+            (charJSON == '[' && ch == ']')) {
+            return true;
+        }
+        break;
+    }
+
+    return false;
+}
+
 function makeFormatOption(textEditor) {
     let editorIndentSpace = textEditor.options.insertSpaces;
     let editorTabSize = textEditor.options.tabSize;
@@ -71,6 +108,7 @@ function minJS(inNewDoc) {
     }
 
     let document = editor.document;
+    let docLangId = document.languageId;
 
     let inputJS = document.getText();
     let resultJS = JSMin.jsmin(inputJS).trim();
@@ -79,9 +117,21 @@ function minJS(inNewDoc) {
         editor.edit(function (editBuilder) {
             let allRange = VSCUtils.getAllRange(editor);
             VSCUtils.replaceWithRange(editBuilder, allRange, resultJS);
+
+            if (docLangId != "javascript" && docLangId != "json") {
+                var newDocLangId = "javascript";
+                if (guessJSON(resultJS)) {
+                    newDocLangId = "json";
+                }
+                vscode.languages.setTextDocumentLanguage(document, newDocLangId);
+            }
         });
     } else {
-        VSCUtils.newDocument(vscode.workspace, vscode.window, "javascript", resultJS);
+        var newDocLangId = "javascript";
+        if (guessJSON(resultJS)) {
+            newDocLangId = "json";
+        }
+        VSCUtils.newDocument(vscode.workspace, vscode.window, newDocLangId, resultJS);
     }
 }
 
@@ -166,7 +216,11 @@ function formatJS() {
         }
 
         if (formatAllText && docLangId != "javascript" && docLangId != "json") {
-            vscode.languages.setTextDocumentLanguage(document, "javascript");
+            var newDocLangId = "javascript";
+            if (guessJSON(resultJS)) {
+                newDocLangId = "json";
+            }
+            vscode.languages.setTextDocumentLanguage(document, newDocLangId);
         }
     }).then(function (applied) {
         if (!applied) {
