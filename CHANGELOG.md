@@ -1,3 +1,8 @@
+1.1904.0  
+[NPP] Guess JSON content, set document languange type according to it.  
+[NPP] Performance tweak.  
+[VSC] Guess JSON content, set document languange type according to it.  
+
 1.1903.0  
 [Common] Fix template output in some senario.  
 
