@@ -15,14 +15,18 @@ function newDocument(workspace, window, language, text) {
     });
 }
 
-function getAllRange(textEditor) {
-    let document = textEditor.document;
-    let allText = document.getText();
+function getAllRangeFromTextDocument(textDocument) {
+    let allText = textDocument.getText();
     var start = new vscode.Position(0, 0);
     var lines = allText.split(LineSeperator);
     var end = new vscode.Position(lines.length - 1, lines[lines.length - 1].length);
     var allRange = new vscode.Range(start, end);
     return allRange;
+}
+
+function getAllRangeFromTextEditor(textEditor) {
+    let textDocument = textEditor.document;
+    return getAllRangeFromTextDocument(textDocument);
 }
 
 function replaceWithRange(textEditorEdit, range, text) {
@@ -38,6 +42,7 @@ function moveToLine(textEditor, line) {
 // exports
 exports.log = log;
 exports.newDocument = newDocument;
-exports.getAllRange = getAllRange;
+exports.getAllRangeFromTextDocument = getAllRangeFromTextDocument;
+exports.getAllRangeFromTextEditor = getAllRangeFromTextEditor;
 exports.replaceWithRange = replaceWithRange;
 exports.moveToLine = moveToLine;

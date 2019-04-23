@@ -115,7 +115,7 @@ function minJS(inNewDoc) {
 
     if (!inNewDoc) {
         editor.edit(function (editBuilder) {
-            let allRange = VSCUtils.getAllRange(editor);
+            let allRange = VSCUtils.getAllRangeFromTextEditor(editor);
             VSCUtils.replaceWithRange(editBuilder, allRange, resultJS);
 
             if (docLangId != "javascript" && docLangId != "json") {
@@ -202,7 +202,7 @@ function formatJS() {
     // Change content
     editor.edit(function (editBuilder) {
         if (formatAllText) {
-            let allRange = VSCUtils.getAllRange(editor);
+            let allRange = VSCUtils.getAllRangeFromTextEditor(editor);
             VSCUtils.replaceWithRange(editBuilder, allRange, resultJS);
         } else {
             // Clean one more new line.
@@ -234,6 +234,28 @@ function formatJS() {
     });
 }
 
+function formatJSAsRegisterFormatter(document) {
+    var inputJS = document.getText();
+    //VSCUtils.log("inputJS:\n" + inputJS);
+
+    // Make format option
+    var formatOption = new RealJSFormatter.FormatterOption();
+
+    // Format
+    var jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
+    //jsfStrIO.m_debug = true;
+    jsfStrIO.Go();
+    var resultJS = jsfStrIO.outputJS;
+    //VSCUtils.log(resultJS);
+
+    let allRange = VSCUtils.getAllRangeFromTextDocument(document);
+
+    var resultEdit = [];
+    resultEdit.push(vscode.TextEdit.replace(allRange, resultJS));
+
+    return resultEdit;
+}
+
 function JSONSort(inNewDoc) {
     let editor = vscode.window.activeTextEditor;
     if (!editor) {
@@ -260,7 +282,7 @@ function JSONSort(inNewDoc) {
 
     if (!inNewDoc) {
         editor.edit(function (editBuilder) {
-            let allRange = VSCUtils.getAllRange(editor);
+            let allRange = VSCUtils.getAllRangeFromTextEditor(editor);
             VSCUtils.replaceWithRange(editBuilder, allRange, sortedJSON);
 
             if (docLangId != "javascript" && docLangId != "json") {
@@ -308,11 +330,18 @@ function activate(context) {
         JSONSort(true);
     });
 
+    let disposableFormatting = vscode.languages.registerDocumentFormattingEditProvider('javascript', {
+        provideDocumentFormattingEdits(document) {
+            return formatJSAsRegisterFormatter(document);
+        }
+    });
+
     context.subscriptions.push(disposableMinJS);
     context.subscriptions.push(disposableMinJSNewFile);
     context.subscriptions.push(disposableFormatJS);
     context.subscriptions.push(disposableJSONSort);
     context.subscriptions.push(disposableJSONSortNewFile);
+    context.subscriptions.push(disposableFormatting);
 }
 exports.activate = activate;
 
