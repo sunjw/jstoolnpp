@@ -346,7 +346,13 @@ function activate(context) {
         JSONSort(true);
     });
 
-    let disposableFormatting = vscode.languages.registerDocumentFormattingEditProvider('javascript', {
+    let disposableFormattingJS = vscode.languages.registerDocumentFormattingEditProvider('javascript', {
+        provideDocumentFormattingEdits(document, options) {
+            return formatJSAsRegisterFormatter(document, options);
+        }
+    });
+
+    let disposableFormattingJSON = vscode.languages.registerDocumentFormattingEditProvider('json', {
         provideDocumentFormattingEdits(document, options) {
             return formatJSAsRegisterFormatter(document, options);
         }
@@ -357,7 +363,8 @@ function activate(context) {
     context.subscriptions.push(disposableFormatJS);
     context.subscriptions.push(disposableJSONSort);
     context.subscriptions.push(disposableJSONSortNewFile);
-    context.subscriptions.push(disposableFormatting);
+    context.subscriptions.push(disposableFormattingJS);
+    context.subscriptions.push(disposableFormattingJSON);
 }
 exports.activate = activate;
 

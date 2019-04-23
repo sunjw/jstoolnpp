@@ -25,7 +25,8 @@
         "onCommand:extension.formatJS",
         "onCommand:extension.JSONSort",
         "onCommand:extension.JSONSortNewFile",
-        "onLanguage:javascript"
+        "onLanguage:javascript",
+        "onLanguage:json"
     ],
     "main": "./extension",
     "contributes": {
