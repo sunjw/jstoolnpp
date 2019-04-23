@@ -24,7 +24,8 @@
         "onCommand:extension.minJSNewFile",
         "onCommand:extension.formatJS",
         "onCommand:extension.JSONSort",
-        "onCommand:extension.JSONSortNewFile"
+        "onCommand:extension.JSONSortNewFile",
+        "onLanguage:javascript"
     ],
     "main": "./extension",
     "contributes": {
