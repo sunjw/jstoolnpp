@@ -83,12 +83,28 @@ function guessJSON(jsCode) {
     return false;
 }
 
-function makeFormatOption(textEditor) {
+function makeFormatOptionFromTextEditor(textEditor) {
     let editorIndentSpace = textEditor.options.insertSpaces;
     let editorTabSize = textEditor.options.tabSize;
 
     let document = textEditor.document;
     let docEol = document.eol;
+
+    var formatOption = new RealJSFormatter.FormatterOption();
+    formatOption.chIndent = editorIndentSpace ? ' ' : '\t';
+    formatOption.nChPerInd = editorIndentSpace ? editorTabSize : 1;
+    formatOption.eCRPut = (docEol == vscode.EndOfLine.CRLF) ? RealJSFormatter.CR_PUT.PUT_CR : RealJSFormatter.CR_PUT.NOT_PUT_CR;
+    formatOption.eBracNL = RealJSFormatter.BRAC_NEWLINE.NO_NEWLINE_BRAC;
+    formatOption.eEmpytIndent = RealJSFormatter.EMPTYLINE_INDENT.NO_INDENT_IN_EMPTYLINE;
+
+    return formatOption;
+}
+
+function makeFormatOptionFromFormattingOptions(formatOptions, textDocument) {
+    let editorIndentSpace = formatOptions.insertSpaces;
+    let editorTabSize = formatOptions.tabSize;
+
+    let docEol = textDocument.eol;
 
     var formatOption = new RealJSFormatter.FormatterOption();
     formatOption.chIndent = editorIndentSpace ? ' ' : '\t';
@@ -181,7 +197,7 @@ function formatJS() {
     //VSCUtils.log("inputJS:\n" + inputJS);
 
     // Make format option
-    var formatOption = makeFormatOption(editor);
+    var formatOption = makeFormatOptionFromTextEditor(editor);
 
     // Format
     var jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
@@ -234,12 +250,12 @@ function formatJS() {
     });
 }
 
-function formatJSAsRegisterFormatter(document) {
+function formatJSAsRegisterFormatter(document, options) {
     var inputJS = document.getText();
     //VSCUtils.log("inputJS:\n" + inputJS);
 
     // Make format option
-    var formatOption = new RealJSFormatter.FormatterOption();
+    var formatOption = makeFormatOptionFromFormattingOptions(options, document);
 
     // Format
     var jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
@@ -274,7 +290,7 @@ function JSONSort(inNewDoc) {
     let sortedJSON = jsonValue.ToStringSorted();
 
     // format
-    var formatOption = makeFormatOption(editor);
+    var formatOption = makeFormatOptionFromTextEditor(editor);
     var jsfStrIO = new JSFormatStringIO(sortedJSON, formatOption);
     //jsfStrIO.m_debug = true;
     jsfStrIO.Go();
@@ -331,8 +347,8 @@ function activate(context) {
     });
 
     let disposableFormatting = vscode.languages.registerDocumentFormattingEditProvider('javascript', {
-        provideDocumentFormattingEdits(document) {
-            return formatJSAsRegisterFormatter(document);
+        provideDocumentFormattingEdits(document, options) {
+            return formatJSAsRegisterFormatter(document, options);
         }
     });
 
