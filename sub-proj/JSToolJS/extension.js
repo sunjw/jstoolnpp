@@ -312,7 +312,21 @@ function JSONSort(inNewDoc) {
 }
 
 function JSONTreeView() {
-    vscode.window.registerTreeDataProvider("JSONTreeView", new JsonTreeView.JsonTreeView());
+    let editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        vscode.window.showInformationMessage('No editor opened.');
+        return; // No open text editor
+    }
+
+    let document = editor.document;
+    let inputJSON = document.getText();
+    var jsonppStrIO = new JsonPPStringIO(inputJSON);
+    //jsonppStrIO.m_debug = true;
+    var jsonValue = new JsonPP.JsonValue();
+    jsonppStrIO.Go(jsonValue);
+
+    jsonTreeView = new JsonTreeView.JsonTreeView(jsonValue);
+    vscode.window.registerTreeDataProvider("JSONTreeView", jsonTreeView);
 }
 
 // this method is called when your extension is activated
