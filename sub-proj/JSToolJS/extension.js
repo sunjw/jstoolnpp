@@ -329,7 +329,7 @@ function JSONTreeView() {
     vscode.window.registerTreeDataProvider("JSONTreeView", jsonTreeView);
 
     vscode.commands.executeCommand("setContext", "showJsonTreeView", true);
-    vscode.commands.executeCommand("workbench.view.extension.JSTool");
+    vscode.commands.executeCommand("JSONTreeView.focus");
 }
 
 // this method is called when your extension is activated
