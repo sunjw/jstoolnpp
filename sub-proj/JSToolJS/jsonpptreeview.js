@@ -33,7 +33,7 @@ class JsonTreeView {
     getTreeItem(element) {
         var collapState = vscode.TreeItemCollapsibleState.NONE;
 
-        var itemLabel = element.getKey() + ": ";
+        var itemLabel = element.getKey();
         var jsonValue = element.getValue();
 
         var valueType = jsonValue.GetValueType();
@@ -52,11 +52,16 @@ class JsonTreeView {
             break;
         }
 
+        var isRoot = false;
         if (element == this.rootNode) {
-            collapState = vscode.TreeItemCollapsibleState.Expanded;
+            isRoot = true;
         }
 
-        itemLabel = itemLabel + valueLabel;
+        if (isRoot) {
+            collapState = vscode.TreeItemCollapsibleState.Expanded;
+        } else {
+            itemLabel = itemLabel + ": " + valueLabel;
+        }
         return new vscode.TreeItem(itemLabel, collapState);
     }
 
