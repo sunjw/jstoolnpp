@@ -72,7 +72,7 @@
             },
             {
                 "command": "extension.JSONTreeView",
-                "title": "JSON Tree View"
+                "title": "Refresh JSON Tree View"
             }
         ]
     },
