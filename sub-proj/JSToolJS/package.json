@@ -44,7 +44,8 @@
             "JSTool": [
                 {
                     "id": "JSONTreeView",
-                    "name": "JSON Tree View"
+                    "name": "JSON Tree",
+                    "when": "showJsonTreeView"
                 }
             ]
         },
