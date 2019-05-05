@@ -6,6 +6,7 @@ const VSCUtils = require("./vscutils.js");
 const JSMin = require("./jsmin.js");
 const RealJSFormatter = require("./realjsformatter.js");
 const JsonPP = require("./jsonpp.js");
+const JsonTreeView = require("./jsonpptreeview.js");
 
 class JSFormatStringIO extends RealJSFormatter.RealJSFormatter {
 
@@ -310,6 +311,10 @@ function JSONSort(inNewDoc) {
     }
 }
 
+function JSONTreeView() {
+    vscode.window.registerTreeDataProvider("JSONTreeView", new JsonTreeView.JsonTreeView());
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -346,6 +351,11 @@ function activate(context) {
         JSONSort(true);
     });
 
+    let disposableJSONTreeView = vscode.commands.registerCommand('extension.JSONTreeView', function () {
+        // The code you place here will be executed every time your command is executed
+        JSONTreeView();
+    });
+
     let disposableFormattingJS = vscode.languages.registerDocumentFormattingEditProvider('javascript', {
         provideDocumentFormattingEdits(document, options) {
             return formatJSAsRegisterFormatter(document, options);
@@ -363,6 +373,8 @@ function activate(context) {
     context.subscriptions.push(disposableFormatJS);
     context.subscriptions.push(disposableJSONSort);
     context.subscriptions.push(disposableJSONSortNewFile);
+    context.subscriptions.push(disposableJSONTreeView);
+
     context.subscriptions.push(disposableFormattingJS);
     context.subscriptions.push(disposableFormattingJSON);
 }

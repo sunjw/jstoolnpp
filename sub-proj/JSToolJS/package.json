@@ -25,11 +25,29 @@
         "onCommand:extension.formatJS",
         "onCommand:extension.JSONSort",
         "onCommand:extension.JSONSortNewFile",
+        "onCommand:extension.JSONTreeView",
         "onLanguage:javascript",
         "onLanguage:json"
     ],
     "main": "./extension",
     "contributes": {
+        "viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "JSTool",
+                    "title": "JSTool",
+                    "icon": "dep.svg"
+                }
+            ]
+        },
+        "views": {
+            "JSTool": [
+                {
+                    "id": "JSONTreeView",
+                    "name": "JSON Tree View"
+                }
+            ]
+        },
         "commands": [
             {
                 "command": "extension.minJS",
@@ -50,6 +68,10 @@
             {
                 "command": "extension.JSONSortNewFile",
                 "title": "JSON Sort (New file)"
+            },
+            {
+                "command": "extension.JSONTreeView",
+                "title": "JSON Tree View"
             }
         ]
     },
