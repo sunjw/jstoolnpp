@@ -6,6 +6,10 @@ function log(logString) {
     console.log(logString);
 }
 
+function setContext(prop, value) {
+    vscode.commands.executeCommand('setContext', prop, value);
+}
+
 function newDocument(workspace, window, language, text) {
     workspace.openTextDocument({
         language: language,
@@ -41,6 +45,7 @@ function moveToLine(textEditor, line) {
 
 // exports
 exports.log = log;
+exports.setContext = setContext;
 exports.newDocument = newDocument;
 exports.getAllRangeFromTextDocument = getAllRangeFromTextDocument;
 exports.getAllRangeFromTextEditor = getAllRangeFromTextEditor;

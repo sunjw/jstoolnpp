@@ -330,7 +330,7 @@ function JSONTreeView() {
     jsonTreeProvider = new JsonTreeView.JsonTreeProvider(jsonValue);
     vscode.window.registerTreeDataProvider("JSONTreeView", jsonTreeProvider);
 
-    vscode.commands.executeCommand("setContext", "showJsonTreeView", true);
+    VSCUtils.setContext("showJsonTreeView", true);
     vscode.commands.executeCommand("JSONTreeView.focus");
 }
 
