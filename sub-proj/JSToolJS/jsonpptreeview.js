@@ -19,7 +19,8 @@ class JsonTreeNode {
         this.value = value;
         this.parent = parent;
         this.children = 0;
-        this.treeitem = 0;
+        this.treeItem = 0;
+        this.valueLabel = "";
     }
 }
 
@@ -39,9 +40,9 @@ class JsonTreeProvider {
     }
 
     getTreeItem(element) {
-        var treeitem = element.treeitem;
-        if (treeitem != 0) {
-            return treeitem;
+        var treeItem = element.treeItem;
+        if (treeItem != 0) {
+            return treeItem;
         }
 
         var collapState = vscode.TreeItemCollapsibleState.NONE;
@@ -72,22 +73,22 @@ class JsonTreeProvider {
             itemLabel = itemLabel + ": " + valueLabel;
         }
 
-        treeitem = new vscode.TreeItem(itemLabel, collapState);
-        treeitem.command = {
+        treeItem = new vscode.TreeItem(itemLabel, collapState);
+        treeItem.command = {
             command: "extension.JSONTreeViewClickItem",
             title: "Select JSON Tree View Item",
             arguments: [element]
         };
         if (collapState == vscode.TreeItemCollapsibleState.NONE) {
-            treeitem.contextValue = CTX_LEAF_NODE;
+            treeItem.contextValue = CTX_LEAF_NODE;
         } else if (isRoot) {
-            treeitem.contextValue = CTX_ROOT_NODE;
+            treeItem.contextValue = CTX_ROOT_NODE;
         } else {
-            treeitem.contextValue = CTX_COLLAP_NODE;
+            treeItem.contextValue = CTX_COLLAP_NODE;
         }
 
-        element.treeitem = treeitem;
-        return element.treeitem;
+        element.treeItem = treeItem;
+        return element.treeItem;
     }
 
     getParent(element) {
@@ -149,7 +150,7 @@ class JsonTreeProvider {
         if (!element) {
             return;
         }
-        var treeItem = element.treeitem;
+        var treeItem = element.treeItem;
         VSCUtils.copyToClipboard(treeItem.label);
     }
 
