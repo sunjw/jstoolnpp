@@ -2,6 +2,7 @@
  * Porting from 2M+ downloads JavaScript (JSON) tool for Notepad++ (JSToolNpp).
  * Douglas Crockford's JSMin algorithm to minimize JavaScript code.
  * My own algorithm to format JavaScript code.
+ * A JSON tree viewer.
 
 Really helpful to JavaScript coder on Visual Studio Code. Easy to use it.  
 Made in China.  
@@ -11,7 +12,7 @@ Project site: http://www.sunjw.us/jstool/vsc
  * JavaScript minify.
  * JavaScript/JSON format.
  * Sort JSON data alphabetically.
- * More to come...
+ * JSON tree viwer.
 
 #### INSTALL
 Install "JSTool" (sunjw.jstool) from Visual Studio Code Extensions. Or "Download Extension" from https://marketplace.visualstudio.com/items?itemName=sunjw.jstool then using the Install from VSIX... command in the Extensions view command drop-down, or the Extensions: Install from VSIX... command in the Command Palette, point to the .vsix file.
