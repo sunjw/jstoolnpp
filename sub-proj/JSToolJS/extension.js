@@ -353,9 +353,9 @@ function copyJSONTreeViewItemName(element) {
     }
 }
 
-function copyJSONTreeViewItemValue(element) {
+function copyJSONTreeViewItemValue(element, raw) {
     if (jsonTreeProvider != 0) {
-        jsonTreeProvider.copyElemValue(element);
+        jsonTreeProvider.copyElemValue(element, raw);
     }
 }
 
@@ -403,7 +403,10 @@ function activate(context) {
         copyJSONTreeViewItemName(element);
     }));
     context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeViewCopyItemValue', function (element) {
-        copyJSONTreeViewItemValue(element);
+        copyJSONTreeViewItemValue(element, false);
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeViewCopyItemRawValue', function (element) {
+        copyJSONTreeViewItemValue(element, true);
     }));
     // JSON tree view
 

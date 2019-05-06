@@ -164,11 +164,15 @@ class JsonTreeProvider {
         VSCUtils.copyToClipboard(keyString);
     }
 
-    copyElemValue(element) {
+    copyElemValue(element, raw) {
         if (!element) {
             return;
         }
         var valueLabel = element.valueLabel;
+        if (raw) {
+            VSCUtils.copyToClipboard(valueLabel);
+            return;
+        }
         if (valueLabel == "undefined") {
             VSCUtils.copyToClipboard(valueLabel);
             return;
