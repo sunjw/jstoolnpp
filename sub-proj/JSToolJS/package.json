@@ -93,6 +93,10 @@
             {
                 "command": "extension.JSONTreeViewCopyItemRawValue",
                 "title": "Copy Raw Value"
+            },
+            {
+                "command": "extension.JSONTreeViewCopyItemPath",
+                "title": "Copy Path"
             }
         ],
         "menus": {
@@ -115,22 +119,32 @@
                 {
                     "command": "extension.JSONTreeViewCopyItemName",
                     "when": "view == JSONTreeView && viewItem == collapNode",
-                    "group": "group2"
+                    "group": "group2@1"
                 },
                 {
                     "command": "extension.JSONTreeViewCopyItemName",
                     "when": "view == JSONTreeView && viewItem == leafNode",
-                    "group": "group2"
+                    "group": "group2@1"
                 },
                 {
                     "command": "extension.JSONTreeViewCopyItemValue",
                     "when": "view == JSONTreeView && viewItem == leafNode",
-                    "group": "group2"
+                    "group": "group2@2"
                 },
                 {
                     "command": "extension.JSONTreeViewCopyItemRawValue",
                     "when": "view == JSONTreeView && viewItem == leafNode",
-                    "group": "group2"
+                    "group": "group2@3"
+                },
+                {
+                    "command": "extension.JSONTreeViewCopyItemPath",
+                    "when": "view == JSONTreeView && viewItem == collapNode",
+                    "group": "group2@4"
+                },
+                {
+                    "command": "extension.JSONTreeViewCopyItemPath",
+                    "when": "view == JSONTreeView && viewItem == leafNode",
+                    "group": "group2@4"
                 }
             ]
         }

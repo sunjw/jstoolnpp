@@ -185,6 +185,33 @@ class JsonTreeProvider {
         }
         VSCUtils.copyToClipboard(valueEscaped);
     }
+
+    copyElemPath(element) {
+        var jsonPath = "";
+        while (element) {
+            var elemKey = element.key;
+            var elemValue = element.value;
+            var elemParent = this.getParent(element);
+            if (elemParent) {
+                var elementParentType = elemParent.value.GetValueType();
+                if (elementParentType == JsonPP.JsonValue.ARRAY_VALUE) {
+                    elemKey = "[" + elemKey + "]";
+                }
+            }
+            if (jsonPath == "") {
+                jsonPath = jsonPath + elemKey;
+            } else {
+                var elementValueType = elemValue.GetValueType();
+                if (elementValueType == JsonPP.JsonValue.ARRAY_VALUE) {
+                    jsonPath = elemKey + jsonPath;
+                } else {
+                    jsonPath = elemKey + "." + jsonPath;
+                }
+            }
+            element = elemParent;
+        }
+        VSCUtils.copyToClipboard(jsonPath);
+    }
 }
 
 exports.JsonTreeProvider = JsonTreeProvider

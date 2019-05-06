@@ -359,6 +359,12 @@ function copyJSONTreeViewItemValue(element, raw) {
     }
 }
 
+function copyJSONTreeViewItemPath(element) {
+    if (jsonTreeProvider != 0) {
+        jsonTreeProvider.copyElemPath(element);
+    }
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -407,6 +413,9 @@ function activate(context) {
     }));
     context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeViewCopyItemRawValue', function (element) {
         copyJSONTreeViewItemValue(element, true);
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeViewCopyItemPath', function (element) {
+        copyJSONTreeViewItemPath(element);
     }));
     // JSON tree view
 
