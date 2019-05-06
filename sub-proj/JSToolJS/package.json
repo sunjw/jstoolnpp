@@ -18,7 +18,7 @@
         "json",
         "json sort"
     ],
-    "icon": "icon_128.png",
+    "icon": "resource/icon_128.png",
     "activationEvents": [
         "onCommand:extension.minJS",
         "onCommand:extension.minJSNewFile",
@@ -36,7 +36,7 @@
                 {
                     "id": "JSTool",
                     "title": "JSTool",
-                    "icon": "outline-code-24px.svg"
+                    "icon": "resource/outline-code-24px.svg"
                 }
             ]
         },
