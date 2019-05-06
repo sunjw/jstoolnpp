@@ -343,57 +343,48 @@ function activate(context) {
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with  registerCommand
     // The commandId parameter must match the command field in package.json
-    let disposableMinJS = vscode.commands.registerCommand('extension.minJS', function () {
-        // The code you place here will be executed every time your command is executed
+
+    // Function
+    context.subscriptions.push(vscode.commands.registerCommand('extension.minJS', function () {
         minJS(false);
-    });
+    }));
 
-    let disposableMinJSNewFile = vscode.commands.registerCommand('extension.minJSNewFile', function () {
-        // The code you place here will be executed every time your command is executed
+    context.subscriptions.push(vscode.commands.registerCommand('extension.minJSNewFile', function () {
         minJS(true);
-    });
+    }));
 
-    let disposableFormatJS = vscode.commands.registerCommand('extension.formatJS', function () {
-        // The code you place here will be executed every time your command is executed
+    context.subscriptions.push(vscode.commands.registerCommand('extension.formatJS', function () {
         formatJS();
-    });
+    }));
 
-    let disposableJSONSort = vscode.commands.registerCommand('extension.JSONSort', function () {
-        // The code you place here will be executed every time your command is executed
+    context.subscriptions.push(vscode.commands.registerCommand('extension.JSONSort', function () {
         JSONSort(false);
-    });
+    }));
 
-    let disposableJSONSortNewFile = vscode.commands.registerCommand('extension.JSONSortNewFile', function () {
-        // The code you place here will be executed every time your command is executed
+    context.subscriptions.push(vscode.commands.registerCommand('extension.JSONSortNewFile', function () {
         JSONSort(true);
-    });
+    }));
+    // Function
 
-    let disposableJSONTreeView = vscode.commands.registerCommand('extension.JSONTreeView', function () {
-        // The code you place here will be executed every time your command is executed
+    // JSON tree view
+    context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeView', function () {
         JSONTreeView();
-    });
+    }));
+    // JSON tree view
 
-    let disposableFormattingJS = vscode.languages.registerDocumentFormattingEditProvider('javascript', {
+    // Document formatter
+    context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('javascript', {
         provideDocumentFormattingEdits(document, options) {
             return formatJSAsRegisterFormatter(document, options);
         }
-    });
+    }));
 
-    let disposableFormattingJSON = vscode.languages.registerDocumentFormattingEditProvider('json', {
+    context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('json', {
         provideDocumentFormattingEdits(document, options) {
             return formatJSAsRegisterFormatter(document, options);
         }
-    });
-
-    context.subscriptions.push(disposableMinJS);
-    context.subscriptions.push(disposableMinJSNewFile);
-    context.subscriptions.push(disposableFormatJS);
-    context.subscriptions.push(disposableJSONSort);
-    context.subscriptions.push(disposableJSONSortNewFile);
-    context.subscriptions.push(disposableJSONTreeView);
-
-    context.subscriptions.push(disposableFormattingJS);
-    context.subscriptions.push(disposableFormattingJSON);
+    }));
+    // Document formatter
 }
 exports.activate = activate;
 
