@@ -73,6 +73,10 @@
             {
                 "command": "extension.JSONTreeView",
                 "title": "Refresh JSON Tree View"
+            },
+            {
+                "command": "extension.JSONTreeViewClickItem",
+                "title": "Click JSON Tree View Item"
             }
         ]
     },

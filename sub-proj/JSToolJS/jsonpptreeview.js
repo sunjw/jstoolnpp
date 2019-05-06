@@ -1,5 +1,5 @@
 const vscode = require('vscode');
-
+const VSCUtils = require("./vscutils.js");
 const JsonPP = require("./jsonpp.js");
 
 class JsonTreeNode {
@@ -59,6 +59,12 @@ class JsonTreeProvider {
         }
 
         treeitem = new vscode.TreeItem(itemLabel, collapState);
+        treeitem.command = {
+            command: "extension.JSONTreeViewClickItem",
+            title: "",
+            arguments: [element]
+        };
+
         element.treeitem = treeitem;
         return element.treeitem;
     }
@@ -102,6 +108,13 @@ class JsonTreeProvider {
         } else {
             // Root
             return [this.rootNode];
+        }
+    }
+
+    clickElem(textEditor, element) {
+        var line = element.value.line - 1;
+        if (line >= 0) {
+            VSCUtils.moveToLine(textEditor, line);
         }
     }
 }
