@@ -3,26 +3,16 @@ const vscode = require('vscode');
 const JsonPP = require("./jsonpp.js");
 
 class JsonTreeNode {
-    constructor(nodeKey, nodeValue, nodeParent) {
-        this.nodeKey = nodeKey;
-        this.nodeValue = nodeValue;
-        this.nodeParent = nodeParent;
-    }
-
-    getKey() {
-        return this.nodeKey;
-    }
-
-    getValue() {
-        return this.nodeValue;
-    }
-
-    getParent() {
-        return this.nodeParent;
+    constructor(key, value, parent) {
+        this.key = key;
+        this.value = value;
+        this.parent = parent;
+        this.children = 0;
+        this.treeitem = 0;
     }
 }
 
-class JsonTreeView {
+class JsonTreeProvider {
     /*
      * A implementation of TreeDataProvider
      */
@@ -33,8 +23,8 @@ class JsonTreeView {
     getTreeItem(element) {
         var collapState = vscode.TreeItemCollapsibleState.NONE;
 
-        var itemLabel = element.getKey();
-        var jsonValue = element.getValue();
+        var itemLabel = element.key;
+        var jsonValue = element.value;
 
         var valueType = jsonValue.GetValueType();
         var valueLabel = "";
@@ -68,7 +58,7 @@ class JsonTreeView {
     getChildren(element) {
         if (element) {
             var childrenElem = [];
-            var jsonValue = element.getValue();
+            var jsonValue = element.value
             var valueType = jsonValue.GetValueType();
             switch (valueType) {
             case JsonPP.JsonValue.MAP_VALUE:
@@ -97,4 +87,4 @@ class JsonTreeView {
     }
 }
 
-exports.JsonTreeView = JsonTreeView
+exports.JsonTreeProvider = JsonTreeProvider

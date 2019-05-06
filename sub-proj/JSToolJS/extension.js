@@ -8,6 +8,8 @@ const RealJSFormatter = require("./realjsformatter.js");
 const JsonPP = require("./jsonpp.js");
 const JsonTreeView = require("./jsonpptreeview.js");
 
+var jsonTreeProvider = 0;
+
 class JSFormatStringIO extends RealJSFormatter.RealJSFormatter {
 
     constructor(inputJS, formatOption) {
@@ -325,8 +327,8 @@ function JSONTreeView() {
     var jsonValue = new JsonPP.JsonValue();
     jsonppStrIO.Go(jsonValue);
 
-    jsonTreeView = new JsonTreeView.JsonTreeView(jsonValue);
-    vscode.window.registerTreeDataProvider("JSONTreeView", jsonTreeView);
+    jsonTreeProvider = new JsonTreeView.JsonTreeProvider(jsonValue);
+    vscode.window.registerTreeDataProvider("JSONTreeView", jsonTreeProvider);
 
     vscode.commands.executeCommand("setContext", "showJsonTreeView", true);
     vscode.commands.executeCommand("JSONTreeView.focus");
