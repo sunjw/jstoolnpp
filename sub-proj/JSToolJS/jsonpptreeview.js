@@ -2,6 +2,17 @@ const vscode = require('vscode');
 const VSCUtils = require("./vscutils.js");
 const JsonPP = require("./jsonpp.js");
 
+const CTX_ROOT_NODE = "rootNode";
+const CTX_COLLAP_NODE = "collapNode";
+const CTX_LEAF_NODE = "leafNode";
+
+function convertJsonValueToString(value) {
+    if (typeof value !== 'string' && !(value instanceof String)) {
+        return value.toString();
+    }
+    return value;
+}
+
 class JsonTreeNode {
     constructor(key, value, parent) {
         this.key = key;
@@ -68,9 +79,11 @@ class JsonTreeProvider {
             arguments: [element]
         };
         if (collapState == vscode.TreeItemCollapsibleState.NONE) {
-            treeitem.contextValue = "leafNode";
+            treeitem.contextValue = CTX_LEAF_NODE;
+        } else if (isRoot) {
+            treeitem.contextValue = CTX_ROOT_NODE;
         } else {
-            treeitem.contextValue = "collapNode";
+            treeitem.contextValue = CTX_COLLAP_NODE;
         }
 
         element.treeitem = treeitem;
@@ -138,6 +151,14 @@ class JsonTreeProvider {
         }
         var treeItem = element.treeitem;
         VSCUtils.copyToClipboard(treeItem.label);
+    }
+
+    copyElemName(element) {
+        if (!element) {
+            return;
+        }
+        var keyString = convertJsonValueToString(element.key);
+        VSCUtils.copyToClipboard(keyString);
     }
 }
 

@@ -347,6 +347,12 @@ function copyJSONTreeViewItem(element) {
     }
 }
 
+function copyJSONTreeViewItemName(element) {
+    if (jsonTreeProvider != 0) {
+        jsonTreeProvider.copyElemName(element);
+    }
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -386,6 +392,9 @@ function activate(context) {
     }));
     context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeViewCopyItem', function (element) {
         copyJSONTreeViewItem(element);
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeViewCopyItemName', function (element) {
+        copyJSONTreeViewItemName(element);
     }));
     // JSON tree view
 

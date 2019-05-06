@@ -81,17 +81,38 @@
             {
                 "command": "extension.JSONTreeViewCopyItem",
                 "title": "Copy"
+            },
+            {
+                "command": "extension.JSONTreeViewCopyItemName",
+                "title": "Copy Name"
             }
         ],
         "menus": {
             "view/item/context": [
                 {
                     "command": "extension.JSONTreeViewCopyItem",
-                    "when": "view == JSONTreeView && viewItem == collapNode"
+                    "when": "view == JSONTreeView && viewItem == rootNode",
+                    "group": "group1"
                 },
                 {
                     "command": "extension.JSONTreeViewCopyItem",
-                    "when": "view == JSONTreeView && viewItem == leafNode"
+                    "when": "view == JSONTreeView && viewItem == collapNode",
+                    "group": "group1"
+                },
+                {
+                    "command": "extension.JSONTreeViewCopyItem",
+                    "when": "view == JSONTreeView && viewItem == leafNode",
+                    "group": "group1"
+                },
+                {
+                    "command": "extension.JSONTreeViewCopyItemName",
+                    "when": "view == JSONTreeView && viewItem == collapNode",
+                    "group": "group2"
+                },
+                {
+                    "command": "extension.JSONTreeViewCopyItemName",
+                    "when": "view == JSONTreeView && viewItem == leafNode",
+                    "group": "group2"
                 }
             ]
         }
