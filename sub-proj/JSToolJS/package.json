@@ -76,9 +76,25 @@
             },
             {
                 "command": "extension.JSONTreeViewClickItem",
-                "title": "Click JSON Tree View Item"
+                "title": "Select JSON Tree View Item"
+            },
+            {
+                "command": "extension.JSONTreeViewCopyItem",
+                "title": "Copy"
             }
-        ]
+        ],
+        "menus": {
+            "view/item/context": [
+                {
+                    "command": "extension.JSONTreeViewCopyItem",
+                    "when": "view == JSONTreeView && viewItem == collapNode"
+                },
+                {
+                    "command": "extension.JSONTreeViewCopyItem",
+                    "when": "view == JSONTreeView && viewItem == leafNode"
+                }
+            ]
+        }
     },
     "scripts": {
         "postinstall": "node ./node_modules/vscode/bin/install"

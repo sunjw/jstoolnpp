@@ -341,6 +341,12 @@ function clickJSONTreeViewItem(element) {
     }
 }
 
+function copyJSONTreeViewItem(element) {
+    if (jsonTreeProvider != 0) {
+        jsonTreeProvider.copyElem(element);
+    }
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -357,19 +363,15 @@ function activate(context) {
     context.subscriptions.push(vscode.commands.registerCommand('extension.minJS', function () {
         minJS(false);
     }));
-
     context.subscriptions.push(vscode.commands.registerCommand('extension.minJSNewFile', function () {
         minJS(true);
     }));
-
     context.subscriptions.push(vscode.commands.registerCommand('extension.formatJS', function () {
         formatJS();
     }));
-
     context.subscriptions.push(vscode.commands.registerCommand('extension.JSONSort', function () {
         JSONSort(false);
     }));
-
     context.subscriptions.push(vscode.commands.registerCommand('extension.JSONSortNewFile', function () {
         JSONSort(true);
     }));
@@ -382,6 +384,9 @@ function activate(context) {
     context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeViewClickItem', function (element) {
         clickJSONTreeViewItem(element);
     }));
+    context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeViewCopyItem', function (element) {
+        copyJSONTreeViewItem(element);
+    }));
     // JSON tree view
 
     // Document formatter
@@ -390,7 +395,6 @@ function activate(context) {
             return formatJSAsRegisterFormatter(document, options);
         }
     }));
-
     context.subscriptions.push(vscode.languages.registerDocumentFormattingEditProvider('json', {
         provideDocumentFormattingEdits(document, options) {
             return formatJSAsRegisterFormatter(document, options);

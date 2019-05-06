@@ -21,6 +21,9 @@ class JsonTreeProvider {
     }
 
     isRootNode(element) {
+        if (!element) {
+            return false;
+        }
         return (element.parent == 0);
     }
 
@@ -61,15 +64,23 @@ class JsonTreeProvider {
         treeitem = new vscode.TreeItem(itemLabel, collapState);
         treeitem.command = {
             command: "extension.JSONTreeViewClickItem",
-            title: "",
+            title: "Select JSON Tree View Item",
             arguments: [element]
         };
+        if (collapState == vscode.TreeItemCollapsibleState.NONE) {
+            treeitem.contextValue = "leafNode";
+        } else {
+            treeitem.contextValue = "collapNode";
+        }
 
         element.treeitem = treeitem;
         return element.treeitem;
     }
 
     getParent(element) {
+        if (!element) {
+            return undefined;
+        }
         return element.parent;
     }
 
@@ -112,10 +123,21 @@ class JsonTreeProvider {
     }
 
     clickElem(textEditor, element) {
+        if (!textEditor || !element) {
+            return;
+        }
         var line = element.value.line - 1;
         if (line >= 0) {
             VSCUtils.moveToLine(textEditor, line);
         }
+    }
+
+    copyElem(element) {
+        if (!element) {
+            return;
+        }
+        var treeItem = element.treeitem;
+        VSCUtils.copyToClipboard(treeItem.label);
     }
 }
 
