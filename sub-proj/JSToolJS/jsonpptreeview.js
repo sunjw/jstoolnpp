@@ -20,7 +20,16 @@ class JsonTreeProvider {
         this.rootNode = new JsonTreeNode("ROOT", rootJsonValue, 0);
     }
 
+    isRootNode(element) {
+        return (element.parent == 0);
+    }
+
     getTreeItem(element) {
+        var treeitem = element.treeitem;
+        if (treeitem != 0) {
+            return treeitem;
+        }
+
         var collapState = vscode.TreeItemCollapsibleState.NONE;
 
         var itemLabel = element.key;
@@ -42,23 +51,31 @@ class JsonTreeProvider {
             break;
         }
 
-        var isRoot = false;
-        if (element == this.rootNode) {
-            isRoot = true;
-        }
-
+        var isRoot = this.isRootNode(element);
         if (isRoot) {
             collapState = vscode.TreeItemCollapsibleState.Expanded;
         } else {
             itemLabel = itemLabel + ": " + valueLabel;
         }
-        return new vscode.TreeItem(itemLabel, collapState);
+
+        treeitem = new vscode.TreeItem(itemLabel, collapState);
+        element.treeitem = treeitem;
+        return element.treeitem;
+    }
+
+    getParent(element) {
+        return element.parent;
     }
 
     getChildren(element) {
         if (element) {
-            var childrenElem = [];
-            var jsonValue = element.value
+            var children = element.children;
+            if (children != 0) {
+                return children;
+            }
+
+            children = [];
+            var jsonValue = element.value;
             var valueType = jsonValue.GetValueType();
             switch (valueType) {
             case JsonPP.JsonValue.MAP_VALUE:
@@ -68,18 +85,20 @@ class JsonTreeProvider {
                 for (var i = 0; i < keysArray.length; ++i) {
                     var key = keysArray[i];
                     var value = mapValue.get(key);
-                    childrenElem.push(new JsonTreeNode(key, value, element));
+                    children.push(new JsonTreeNode(key, value, element));
                 }
                 break;
             case JsonPP.JsonValue.ARRAY_VALUE:
                 var arrayValue = jsonValue.GetValue();
                 for (var i = 0; i < arrayValue.length; ++i) {
                     var value = arrayValue[i];
-                    childrenElem.push(new JsonTreeNode(i, value, element));
+                    children.push(new JsonTreeNode(i, value, element));
                 }
                 break;
             }
-            return childrenElem;
+
+            element.children = children;
+            return children;
         } else {
             // Root
             return [this.rootNode];
