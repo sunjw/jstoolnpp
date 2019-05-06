@@ -10,6 +10,10 @@ using namespace sunjwbase;
 const int EOL_LF = 0; // \n
 const int EOL_CRLF = 1; // \r\n
 const int EOL_AUTO = 3;
+const char INDENT_TAB = '\t';
+const char INDENT_SPACE = ' ';
+const string OPT_INDENT_TAB = string("tab");
+const string OPT_INDENT_SPACE = string("space");
 
 struct StruOptions
 {

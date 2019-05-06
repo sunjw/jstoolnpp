@@ -44,10 +44,10 @@ void LoadOption(HWND nppHandle, StruOptions& struOptions)
 	if (map.find(keyChIndent) != itrEnd)
 	{
 		string strIndent = map[keyChIndent].GetStrValue();
-		if (!strIndent.compare("tab"))
-			struOptions.chIndent = '\t';
-		else if (!strIndent.compare("space"))
-			struOptions.chIndent = ' ';
+		if (!strIndent.compare(OPT_INDENT_TAB))
+			struOptions.chIndent = INDENT_TAB;
+		else if (!strIndent.compare(OPT_INDENT_SPACE))
+			struOptions.chIndent = INDENT_SPACE;
 	}
 
 	if (map.find(keyChPerInd) != itrEnd)
@@ -83,8 +83,8 @@ void LoadOption(HWND nppHandle, StruOptions& struOptions)
 void LoadDefaultOption(StruOptions& struOptions)
 {
 	struOptions.nPutCR = EOL_AUTO;
-	struOptions.chIndent = '\t';
-	struOptions.nChPerInd = 1;
+	struOptions.chIndent = INDENT_SPACE;
+	struOptions.nChPerInd = 4;
 	struOptions.bNLBracket = false;
 	struOptions.bKeepTopComt = false;
 	struOptions.bIndentInEmpty = false;
@@ -102,7 +102,7 @@ void SaveOption(HWND nppHandle, StruOptions struOptions)
 
 	_itoa_s(struOptions.nPutCR, buffer, 250, 10);
 	map[keyPutCR] = IniValue(string(buffer));
-	map[keyChIndent] = IniValue(struOptions.chIndent == '\t' ? string("tab") : string("space"));
+	map[keyChIndent] = IniValue(struOptions.chIndent == INDENT_TAB ? OPT_INDENT_TAB : OPT_INDENT_SPACE);
 	_itoa_s(struOptions.nChPerInd, buffer, 250, 10);
 	map[keyChPerInd] = IniValue(string(buffer));
 	map[keyNLBracket] = IniValue(struOptions.bNLBracket ? string("1") : string("0"));

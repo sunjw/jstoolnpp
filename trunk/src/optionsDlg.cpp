@@ -32,7 +32,7 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		else
 			CheckDlgButton(hwnd, IDC_KEEPCOMTCHECK, FALSE);
 
-		setIndent(hwnd, (g_struOptions.chIndent == ' ' ? TRUE : FALSE));
+		setIndent(hwnd, (g_struOptions.chIndent == INDENT_SPACE ? TRUE : FALSE));
 
 		if (g_struOptions.bIndentInEmpty)
 			CheckDlgButton(hwnd, IDC_EMPTYINDENT, TRUE);
@@ -62,7 +62,7 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 				g_struOptions.nPutCR = EOL_CRLF;
 			else if (IsDlgButtonChecked(hwnd, IDC_UNIXRADIO))
 				g_struOptions.nPutCR = EOL_LF;
-			g_struOptions.chIndent = IsDlgButtonChecked(hwnd, IDC_SPACECHECK) ? ' ' : '\t';
+			g_struOptions.chIndent = IsDlgButtonChecked(hwnd, IDC_SPACECHECK) ? INDENT_SPACE : INDENT_TAB;
 			g_struOptions.bKeepTopComt = 
 				IsDlgButtonChecked(hwnd, IDC_KEEPCOMTCHECK) ? true : false;
 			g_struOptions.bIndentInEmpty = 
