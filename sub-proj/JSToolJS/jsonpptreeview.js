@@ -73,6 +73,8 @@ class JsonTreeProvider {
             itemLabel = itemLabel + ": " + valueLabel;
         }
 
+        element.valueLabel = valueLabel;
+
         treeItem = new vscode.TreeItem(itemLabel, collapState);
         treeItem.command = {
             command: "extension.JSONTreeViewClickItem",
@@ -160,6 +162,24 @@ class JsonTreeProvider {
         }
         var keyString = convertJsonValueToString(element.key);
         VSCUtils.copyToClipboard(keyString);
+    }
+
+    copyElemValue(element) {
+        if (!element) {
+            return;
+        }
+        var valueLabel = element.valueLabel;
+        if (valueLabel == "undefined") {
+            VSCUtils.copyToClipboard(valueLabel);
+            return;
+        }
+        var valueToEscape = "{\"value\":" + valueLabel + "}";
+        var valueJson = JSON.parse(valueToEscape);
+        var valueEscaped = valueJson.value;
+        if (typeof valueEscaped !== 'string' && !(valueEscaped instanceof String)) {
+            valueEscaped = JSON.stringify(valueEscaped);
+        }
+        VSCUtils.copyToClipboard(valueEscaped);
     }
 }
 

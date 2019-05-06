@@ -85,6 +85,10 @@
             {
                 "command": "extension.JSONTreeViewCopyItemName",
                 "title": "Copy Name"
+            },
+            {
+                "command": "extension.JSONTreeViewCopyItemValue",
+                "title": "Copy Value"
             }
         ],
         "menus": {
@@ -111,6 +115,11 @@
                 },
                 {
                     "command": "extension.JSONTreeViewCopyItemName",
+                    "when": "view == JSONTreeView && viewItem == leafNode",
+                    "group": "group2"
+                },
+                {
+                    "command": "extension.JSONTreeViewCopyItemValue",
                     "when": "view == JSONTreeView && viewItem == leafNode",
                     "group": "group2"
                 }
