@@ -382,13 +382,13 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 		valType == JsonValue::BOOL_VALUE ||
 		valType == JsonValue::REGULAR_VALUE)
 	{
-		tstr.append(TEXT(" : "));
+		tstr.append(TEXT(JSON_TREE_SPLITOR));
 		tstr.append(convertJsonStrToDialogTstr(jsonValue.GetStrValue()));
 		insertTree(tstr.c_str(), jsonValue.line, node);
 	}
 	else if(valType == JsonValue::STRING_VALUE)
 	{
-		tstr.append(TEXT(" : "));
+		tstr.append(TEXT(JSON_TREE_SPLITOR));
 		tstr.append(TEXT("\""));
 		tstr.append(convertJsonStrToDialogTstr(jsonValue.GetStrValue()));
 		tstr.append(TEXT("\""));

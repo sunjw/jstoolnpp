@@ -136,11 +136,11 @@ void JsonTree::splitNodeText(const tstring& tstrText,
 	tstring::size_type splitPos = 0;
 	while (1)
 	{
-		tstring::size_type pos = tstrText.find(tstring(TEXT(" : ")), beginPos);
+		tstring::size_type pos = tstrText.find(tstring(TEXT(JSON_TREE_SPLITOR)), beginPos);
 		if (pos == tstring::npos)
 		{
 			// fallback, the first
-			pos = tstrText.find(tstring(TEXT(" : ")), 0);
+			pos = tstrText.find(tstring(TEXT(JSON_TREE_SPLITOR)), 0);
 			if (pos == tstring::npos)
 				return; // still not able to find
 
