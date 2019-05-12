@@ -398,9 +398,15 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 		valType == JsonValue::ARRAY_VALUE)
 	{
 		if(valType == JsonValue::MAP_VALUE)
-			tstr.append(TEXT(" : [Object]"));
+		{
+			tstr.append(TEXT(JSON_TREE_SPLITOR));
+			tstr.append(TEXT("[Object]"));
+		}
 		if(valType == JsonValue::ARRAY_VALUE)
-			tstr.append(TEXT(" : [Array]"));
+		{
+			tstr.append(TEXT(JSON_TREE_SPLITOR));
+			tstr.append(TEXT("[Array]"));
+		}
 
 		HTREEITEM newNode = insertTree(tstr.c_str(), jsonValue.line, node);
 		insertJsonValue(jsonValue, newNode);

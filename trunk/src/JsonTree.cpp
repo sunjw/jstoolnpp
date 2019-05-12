@@ -148,7 +148,7 @@ void JsonTree::splitNodeText(const tstring& tstrText,
 			break;
 		}
 
-		TCHAR cTest = tstrText[pos + 3];
+		TCHAR cTest = tstrText[pos + tstring(TEXT(JSON_TREE_SPLITOR)).length()];
 		if (cTest == TEXT('\"') || cTest == TEXT('[') || 
 			cTest == TEXT('/') || // regex
 			cTest == TEXT('-') || (cTest >= TEXT('0') && cTest <= TEXT('9')) ||
@@ -162,7 +162,7 @@ void JsonTree::splitNodeText(const tstring& tstrText,
 		beginPos = pos + 1;
 	}
 
-	tstrKey = tstrText.substr(0, splitPos);
+	tstrKey = tstrText.substr(0, splitPos - 1);
 	tstrKey = strtrim(tstrKey);
 	tstrValue = tstrText.substr(splitPos + 1, tstrText.size() - splitPos);
 	tstrValue = strtrim(tstrValue);
