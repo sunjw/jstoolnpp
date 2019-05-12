@@ -79,6 +79,10 @@
                 "title": "Select JSON Tree View Item"
             },
             {
+                "command": "extension.JSONTreeViewItemRefresh",
+                "title": "Refresh"
+            },
+            {
                 "command": "extension.JSONTreeViewCopyItem",
                 "title": "Copy"
             },
@@ -101,6 +105,11 @@
         ],
         "menus": {
             "view/item/context": [
+                {
+                    "command": "extension.JSONTreeViewItemRefresh",
+                    "when": "view == JSONTreeView && viewItem == rootNode",
+                    "group": "group0"
+                },
                 {
                     "command": "extension.JSONTreeViewCopyItem",
                     "when": "view == JSONTreeView && viewItem == rootNode",

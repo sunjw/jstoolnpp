@@ -313,7 +313,7 @@ function JSONSort(inNewDoc) {
     }
 }
 
-function openJSONTreeView() {
+function refreshJSONTreeView() {
     let editor = vscode.window.activeTextEditor;
     if (!editor) {
         vscode.window.showInformationMessage('No editor opened.');
@@ -397,10 +397,13 @@ function activate(context) {
 
     // JSON tree view
     context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeView', function () {
-        openJSONTreeView();
+        refreshJSONTreeView();
     }));
     context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeViewClickItem', function (element) {
         clickJSONTreeViewItem(element);
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeViewItemRefresh', function (element) {
+        refreshJSONTreeView();
     }));
     context.subscriptions.push(vscode.commands.registerCommand('extension.JSONTreeViewCopyItem', function (element) {
         copyJSONTreeViewItem(element);
