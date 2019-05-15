@@ -8,7 +8,7 @@ Really helpful to JavaScript coder on Notepad++ and Visual Studio Code. Easy to 
 Made in China.  
 Project site: http://www.sunjw.us/jstool
 
-#### FEATURES (for Notepad++)
+#### FEATURES
  * JavaScript minify.
  * JavaScript/JSON format.
  * Sort JSON data alphabetically.
@@ -16,12 +16,6 @@ Project site: http://www.sunjw.us/jstool
 
 #### INSTALL (for Notepad++)
 Install "JSTool" from Plugin Manager in Notepad++. Or download it from http://sourceforge.net/projects/jsminnpp/ and copy JSMinNpp.dll to plugin directory of Notepad++.
-
-#### FEATURES (for Visual Studio Code)
- * JavaScript minify.
- * JavaScript/JSON format.
- * Sort JSON data alphabetically.
- * JSON tree viewer.
 
 #### INSTALL (for Visual Studio Code)
 Install "JSTool" (sunjw.jstool) from Visual Studio Code Extensions. Or "Download Extension" from https://marketplace.visualstudio.com/items?itemName=sunjw.jstool then using the Install from VSIX... command in the Extensions view command drop-down, or the Extensions: Install from VSIX... command in the Command Palette, point to the .vsix file.
