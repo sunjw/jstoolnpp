@@ -1,3 +1,8 @@
+1.1905.1  
+[NPP] Change default settings.  
+[VSC] Register JSTool as JavaScript and JSON formatter.  
+[VSC] Add JSON tree viewer.  
+
 1.1904.0  
 [NPP] Guess JSON content, set document languange type according to it.  
 [NPP] Performance tweak.  
