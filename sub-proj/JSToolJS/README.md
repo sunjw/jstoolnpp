@@ -12,7 +12,7 @@ Project site: http://www.sunjw.us/jstool/vsc
  * JavaScript minify.
  * JavaScript/JSON format.
  * Sort JSON data alphabetically.
- * JSON tree viwer.
+ * JSON tree viewer.
 
 #### INSTALL
 Install "JSTool" (sunjw.jstool) from Visual Studio Code Extensions. Or "Download Extension" from https://marketplace.visualstudio.com/items?itemName=sunjw.jstool then using the Install from VSIX... command in the Extensions view command drop-down, or the Extensions: Install from VSIX... command in the Command Palette, point to the .vsix file.

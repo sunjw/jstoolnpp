@@ -12,7 +12,7 @@ Project site: http://www.sunjw.us/jstool
  * JavaScript minify.
  * JavaScript/JSON format.
  * Sort JSON data alphabetically.
- * JSON tree viwer.
+ * JSON tree viewer.
 
 #### INSTALL (for Notepad++)
 Install "JSTool" from Plugin Manager in Notepad++. Or download it from http://sourceforge.net/projects/jsminnpp/ and copy JSMinNpp.dll to plugin directory of Notepad++.
@@ -21,7 +21,7 @@ Install "JSTool" from Plugin Manager in Notepad++. Or download it from http://so
  * JavaScript minify.
  * JavaScript/JSON format.
  * Sort JSON data alphabetically.
- * JSON tree viwer.
+ * JSON tree viewer.
 
 #### INSTALL (for Visual Studio Code)
 Install "JSTool" (sunjw.jstool) from Visual Studio Code Extensions. Or "Download Extension" from https://marketplace.visualstudio.com/items?itemName=sunjw.jstool then using the Install from VSIX... command in the Extensions view command drop-down, or the Extensions: Install from VSIX... command in the Command Palette, point to the .vsix file.
