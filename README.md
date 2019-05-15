@@ -12,10 +12,7 @@ Project site: http://www.sunjw.us/jstool
  * JavaScript minify.
  * JavaScript/JSON format.
  * Sort JSON data alphabetically.
- * JSON tree viwer with:
-   - Search
-   - Node expand/collapse
-   - Node data copy
+ * JSON tree viwer.
 
 #### INSTALL (for Notepad++)
 Install "JSTool" from Plugin Manager in Notepad++. Or download it from http://sourceforge.net/projects/jsminnpp/ and copy JSMinNpp.dll to plugin directory of Notepad++.
