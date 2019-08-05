@@ -1,0 +1,227 @@
+/* Common */
+* {
+    padding: 0;
+    margin: 0;
+}
+body {
+    line-height: 1.3em;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+}
+.clear {
+    clear: both;
+}
+.center {
+    text-align: center;
+}
+.floatLeft {
+    float: left;
+}
+.floatRight {
+    float: right;
+}
+
+.shown {
+    display: block;    
+}
+.hidden {
+    display: none;
+}
+
+a {
+    
+}
+img {
+    border: 0;
+}
+ul {
+    list-style-type: none;
+}
+
+input[type="submit"],input[type="button"] {
+    padding: 1px 4px;
+}
+
+:root {
+    --npp-color: #6aba60;
+    --vsc-color: #007acc;
+}
+/* Common */
+
+/* Wrapper */
+.pageWrapper {
+    width: 1000px;
+    padding-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#divPk.pageWrapper {
+    width: 1050px;
+}
+.pageWrapper * {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 15px;
+}
+.pageWrapper * * {
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+}
+.pageWrapper a {
+    color: black;
+}
+.pageWrapper a:hover {
+    text-decoration: underline;
+}
+/* Wrapper */
+
+/* Header */
+.headerContent {
+    width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}
+#headerTitle {
+    height: 48px;
+    line-height: 48px;
+    background-color: black;
+}
+#headerTitle,#headerTitle a {
+    font-size: 16px;
+    color: white;
+}
+.npp #headerTitle {
+    background-color: var(--npp-color);
+}
+.vsc #headerTitle {
+    background-color: var(--vsc-color);
+}
+#headerTitle #logo {
+    float: left;
+    width: 42px;
+    height: 42px;
+    padding-top: 4px;
+    padding-left: 6px;
+}
+#headerTitle #title {
+    padding-left: 58px;
+}
+#navWrapper {
+    height: 56px;
+    line-height: 56px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-top: 1px solid white;
+    border-bottom: 1px solid #e6e6e6;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    z-index: 1000;
+}
+.npp #navWrapper.appBorder {
+    border-top-color: var(--npp-color);
+}
+.vsc #navWrapper.appBorder {
+    border-top-color: var(--vsc-color);
+}
+#navWrapper #navLeft {
+    float: left;
+    height: 56px;
+}
+#navWrapper #navLeft #logo {
+    width: 48px;
+    height: 48px;
+    padding-top: 5px;
+    padding-left: 5px;
+    display: none;
+}
+#navWrapper #navRight,#navWrapper #navRight li {
+    float: right;
+}
+#navWrapper #navRight li {
+    padding: 0 20px;
+}
+#navWrapper #navRight li a {
+    font-size: 12px;
+    font-weight: 400;
+    color: #333;
+    text-decoration: none;
+}
+#navWrapper #navRight li a:hover {
+    text-decoration: none;
+}
+.npp #navWrapper #navRight li a:hover {
+    color: var(--npp-color);
+}
+.vsc #navWrapper #navRight li a:hover {
+    color: var(--vsc-color);
+}
+.npp #navWrapper #navRight li a.switchApp:hover {
+    color: var(--vsc-color);
+}
+.vsc #navWrapper #navRight li a.switchApp:hover {
+    color: var(--npp-color);
+}
+/* Header */
+
+/* List with header */
+.divListwHeader .listHeader {
+    height: 42px;
+} 
+.divListwHeader .listHeader .listHeaderTitle {
+    height: 38px;
+    line-height: 38px;
+    font-size: 32px;
+} 
+.divListwHeader .listHeader .listHeaderTitle {
+    float: left;
+    width: 480px;
+    border-bottom: 3px solid black;
+}
+.npp .divListwHeader .listHeader .listHeaderTitle {
+    border-bottom-color: var(--npp-color);
+}
+.vsc .divListwHeader .listHeader .listHeaderTitle {
+    border-bottom-color: var(--vsc-color);
+}
+.divListwHeader .listContainer {
+    margin: 20px;
+    line-height: 1.6em;
+}
+/* List with header */
+
+/* Footer */
+#divFooter {
+    margin-top: 60px;
+    font-size: x-small;
+    color: #666;
+}
+/* Footer */
+
+/* Others */
+ul.indentList {
+    margin-left: 16px;
+}
+ol.indentList {
+    margin-left: 18px;
+}
+ul.discList {
+    list-style-position: outside;
+    list-style-type: disc;
+}
+ul.circleList {
+    list-style-position: outside;
+    list-style-type: circle;
+}
+
+.npp #checkMsg {
+    padding: 6px;
+    margin-top: 2px;
+    background-color: var(--npp-color);
+    border-radius: 4px;
+    float: right;
+}
+#checkMsg,#checkMsg a {
+    color: white;
+}
+/* Others */
