@@ -39,10 +39,10 @@ private:
 char StreamIOContext::ReadCharFromStream(void *ioContext)
 {
 	StreamIOContext *streamIOCtx = (StreamIOContext *)ioContext;
-	int ret = streamIOCtx->in.get();
-	if (ret == EOF)
-		return 0;
-	return ret;
+	char ch = 0;
+	if (streamIOCtx->in.read(&ch, 1))
+		return ch;
+	return 0;
 }
 
 void StreamIOContext::WriteCharToStream(void *ioContext, const char ch)
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 		char *inputFile = argv[1];
 		char *outputFile = argv[2];
 
-		ifstream inFileStream1(inputFile);
+		ifstream inFileStream1(inputFile, ios::in | ios::binary);
 		ofstream outFileStream1(outputFile);
 
 		clock_t startClock = clock();
@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
 		double duration = (double)(endClock - startClock) / CLOCKS_PER_SEC;
 		cout << "Read file time used: " << duration << "s" << endl;
 
-		ifstream inFileStream2(inputFile);
+		ifstream inFileStream2(inputFile, ios::in | ios::binary);
 		ofstream outFileStream2(outputFile);
 		ostringstream outStrStream;
 
