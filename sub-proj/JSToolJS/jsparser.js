@@ -489,7 +489,7 @@ class JSParser {
         /*
          * regular first
          * m_tokenB[0] == / and m_tokenB is not comment
-         * m_tokenA is not STRING (except m_tokenA == return)
+         * m_tokenA is not STRING (except m_tokenA is one of some keywords)
          * and last char in m_tokenA is following rules below
          */
         //size_t last = m_tokenA.size() > 0 ? m_tokenA.size() - 1 : 0;
@@ -498,7 +498,7 @@ class JSParser {
         if (tokenBFirst == '/' && this.m_tokenB.type != COMMENT_TYPE_1 &&
             this.m_tokenB.type != COMMENT_TYPE_2 &&
             ((this.m_tokenA.type != STRING_TYPE && this.m_strBeforeReg.indexOf(tokenALast) != -1) ||
-                this.m_tokenA.code == "return")) {
+                (this.m_tokenA.code == "return" || this.m_tokenA.code == "throw"))) {
             this.m_bRegular = true;
             this.GetTokenRaw(); // put regular into m_tokenB
         }
