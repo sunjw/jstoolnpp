@@ -436,7 +436,7 @@ void JSParser::PrepareRegular()
 	/*
 	 * 先处理一下正则
 	 * m_tokenB[0] == /, 且 m_tokenB 不是注释
-	 * m_tokenA 不是 STRING (除了 m_tokenA == return)
+	 * m_tokenA 不是 STRING (除了 m_tokenA 是一些关键字)
 	 * 而且 m_tokenA 的最后一个字符是下面这些
 	*/
 	//size_t last = m_tokenA.size() > 0 ? m_tokenA.size() - 1 : 0;
@@ -445,7 +445,7 @@ void JSParser::PrepareRegular()
 	if(tokenBFirst == '/' && m_tokenB.type != COMMENT_TYPE_1 &&
 		m_tokenB.type != COMMENT_TYPE_2 &&
 		((m_tokenA.type != STRING_TYPE && m_strBeforeReg.find(tokenALast) != string::npos) ||
-			m_tokenA.code == "return"))
+			(m_tokenA.code == "return" || m_tokenA.code == "throw")))
 	{
 		m_bRegular = true;
 		GetTokenRaw(); // 把正则内容加到 m_tokenB
