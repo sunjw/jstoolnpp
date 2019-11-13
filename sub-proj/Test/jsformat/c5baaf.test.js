@@ -1644,7 +1644,7 @@
 					}
 				}
 				function I(e) {
-					return e.split("\n").filter(e => !!e).map(e =>  /  ^ ( \ S + ) \ s + ( \ S + ) \ s + ( \ S + ) \ s + ( \ S + ) \ s + (. * )$ / .exec(e)).filter(e => !!e).map(([, e, t, r, n, o]) => ({
+					return e.split("\n").filter(e => !!e).map(e => /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(.*)$/.exec(e)).filter(e => !!e).map(([, e, t, r, n, o]) => ({
 							mode: e,
 							type: t,
 							object: r,
@@ -1653,7 +1653,7 @@
 						}))
 				}
 				function D(e) {
-					return e.split("\n").filter(e => !!e).map(e =>  /  ^ ( \ S + ) \ s + ( \ S + ) \ s + ( \ S + ) \ s + (. * )$ / .exec(e)).filter(e => !!e).map(([, e, t, r, n]) => ({
+					return e.split("\n").filter(e => !!e).map(e => /^(\S+)\s+(\S+)\s+(\S+)\s+(.*)$/.exec(e)).filter(e => !!e).map(([, e, t, r, n]) => ({
 							mode: e,
 							object: t,
 							stage: r,
@@ -3228,7 +3228,7 @@
 							this.disposables.push(e)
 						} catch (e) {
 							s.env.logLevel <= s.LogLevel.Error && r.appendLine(`Failed to watch '${this.dotGit}', reverting to legacy API file watched. Some events might be lost.\n${e.stack||e}`),
-							u = d.filterEvent(i, e =>  /  \  /  \ .git($ |  \  / ) / .test(e.path))
+							u = d.filterEvent(i, e => /\/\.git($|\/)/.test(e.path))
 						}
 						d.anyEvent(a, u)(this.onFileChange, this, this.disposables),
 						u(this._onDidChangeRepository.fire, this._onDidChangeRepository, this.disposables),
