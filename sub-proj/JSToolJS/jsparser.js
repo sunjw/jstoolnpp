@@ -107,7 +107,7 @@ class JSParser {
         this.m_debug = false;
         this.m_lineCount = 1;
         this.m_tokenCount = 0;
-        this.m_strBeforeReg = "(,=:[!&|?+{};\n";
+        this.m_strBeforeReg = "(,=:[!&|?+{};>\n";
         this.m_bRegular = false;
         this.m_iRegBracket = 0;
         this.m_bPosNeg = false;
