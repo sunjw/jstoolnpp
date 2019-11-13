@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 	char *inputFile = argv[1];
 	char *outputFile = argv[2];
 
-	ifstream inFileStream(inputFile);
+	ifstream inFileStream(inputFile, ios::in | ios::binary);
 	ofstream outFileStream(outputFile);
 
 	JSTokenDump jsTokenDump(inFileStream, outFileStream);
