@@ -2,7 +2,7 @@
     "name": "jstool",
     "displayName": "JSTool",
     "description": "JS (JSON) Tool for VSC",
-    "version": "1.1905.1",
+    "version": "1.1911.0",
     "publisher": "sunjw",
     "engines": {
         "vscode": "^1.20.0"
