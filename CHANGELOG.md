@@ -1,3 +1,7 @@
+1.1911.0
+[Common] Fix some bugs related to regular expression.
+[VSC] Fix some node module security alerts.
+
 1.1905.1  
 [NPP] Change default settings.  
 [VSC] Register JSTool as JavaScript and JSON formatter.  
