@@ -7,6 +7,9 @@ import os
 import platform
 import time
 
+def log(message):
+    print(message)
+
 def is_windows_sys():
     return (platform.system() == "Windows")
 

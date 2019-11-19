@@ -30,21 +30,21 @@ class MacOSCaseRuntime(CaseRuntime):
         os.environ["DYLD_LIBRARY_PATH"] = self.lib_path
 
     def dump_name(self):
-        print "macOSCaseRuntime"
+        log("macOSCaseRuntime")
 
     def dump_info(self):
-        print "DYLD_LIBRARY_PATH=%s" % (os.environ["DYLD_LIBRARY_PATH"])
+        log("DYLD_LIBRARY_PATH=%s" % (os.environ["DYLD_LIBRARY_PATH"]))
 
 class NodeCaseRuntime(CaseRuntime):
     def _case_execute(self, test_case):
         call(["node", self.runtime_path, test_case.source, self.get_out_path_from_case(test_case)])
 
     def dump_name(self):
-        print "NodeCaseRuntime"
+        log("NodeCaseRuntime")
 
     def dump_version(self):
         call(["node", self.runtime_path, "--version"])
-        print "node version: "
+        log("node version: ")
         call(["node", "--version"])
 
 class ValidateCaseRuntime(CaseRuntime):
@@ -55,9 +55,9 @@ class ValidateCaseRuntime(CaseRuntime):
         self.out_js = "outjs.js"
 
     def _case_execute(self, test_case):
-        print "Call cpp..."
+        log("Call cpp...")
         call([self.runtime_path, test_case.source, os.path.join(test_case.case_dir, self.out_cpp)])
-        print "Call node..."
+        log("Call node...")
         call(["node", self.nodejs_script_path, test_case.source, os.path.join(test_case.case_dir, self.out_js)])
 
     def _case_result(self, test_case):
@@ -67,19 +67,19 @@ class ValidateCaseRuntime(CaseRuntime):
         if outcpp_md5 == outjs_md5:
             result = "PASS"
 
-        print result
+        log(result)
         return result
 
     def dump_name(self):
-        print "ValidateCaseRuntime"
+        log("ValidateCaseRuntime")
 
     def dump_info(self):
-        print "%s vs. %s" % (self.runtime_path, self.nodejs_script_path)
+        log("%s vs. %s" % (self.runtime_path, self.nodejs_script_path))
 
     def dump_version(self):
         call([self.runtime_path, "--version"])
         call(["node", self.nodejs_script_path, "--version"])
-        print "node version: "
+        log("node version: ")
         call(["node", "--version"])
 
 def main():
@@ -111,13 +111,13 @@ def main():
     if nodejs == False:
         if not is_windows_sys() and not is_osx_sys():
             if is_linux_sys():
-                print "Only node support Linux."
+                log("Only node support Linux.")
             else:
-                print "Unknown operating system."
+                log("Unknown operating system.")
             return
     else:
         if not is_windows_sys() and not is_osx_sys() and not is_linux_sys():
-            print "Unknown operating system."
+            log("Unknown operating system.")
             return
 
     # prepare path
@@ -161,7 +161,7 @@ def main():
         case_runtime = NodeCaseRuntime(jsformatter_nodejs_script_sel)
     if validate:
         if is_osx_sys():
-            print "Validate only support Windows."
+            log("Validate only support Windows.")
             return
         case_runtime = ValidateCaseRuntime(jsformatter_path_sel, jsformatter_nodejs_script_sel)
 
@@ -174,14 +174,14 @@ def main():
     allpass = True
     idx = 1
     for name, case in test_cases.items():
-        print "name: " + name
-        print "source: " + case.source
-        print "result: " + case.result
-        print "running..."
+        log("name: " + name)
+        log("source: " + case.source)
+        log("result: " + case.result)
+        log("running...")
 
         result = case_runtime.run_case(case)
-        print "[%d/%d]" % (idx, len(test_cases))
-        print ""
+        log("[%d/%d]" % (idx, len(test_cases)))
+        log("")
 
         if result == "ERROR":
             allpass = False
@@ -193,10 +193,10 @@ def main():
     duration_time = (end_time - start_time) / 1000.0
 
     if allpass:
-        print "%d cases ALL PASS, took %.2fs." % (len(test_cases), duration_time)
+        log("%d cases ALL PASS, took %.2fs." % (len(test_cases), duration_time))
 
-    print "Test args: x64=%r, release=%r, nodejs=%r, validate=%r" % (x64, release, nodejs, validate)
-    print ""
+    log("Test args: x64=%r, release=%r, nodejs=%r, validate=%r" % (x64, release, nodejs, validate))
+    log("")
 
     case_runtime.dump_name()
     case_runtime.dump_info()
