@@ -195,7 +195,7 @@ def main():
     if allpass:
         print "%d cases ALL PASS, took %.2fs." % (len(test_cases), duration_time)
 
-    print "Test args: x64=%r, release=%r, nodejs=%r, validat=%r" % (x64, release, nodejs, validate)
+    print "Test args: x64=%r, release=%r, nodejs=%r, validate=%r" % (x64, release, nodejs, validate)
     print ""
 
     case_runtime.dump_name()
