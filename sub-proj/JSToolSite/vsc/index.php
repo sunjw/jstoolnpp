@@ -44,8 +44,8 @@ $cur_version = $download_array["JSMinNpp"]["version"];
                     <p>&nbsp;</p>
                     <p>What's New in <a class="smoothAnchor" href="#install"><?php echo $cur_version; ?></a>:</p>
                     <ul class="indentList discList">
-                        <li>Register JSTool as JavaScript and JSON formatter.</li>
-                        <li>Add JSON tree viewer.</li>
+                        <li>Fix some bugs related to regular expression.  </li>
+                        <li>Fix some node module security alerts.</li>
                     </ul>
                 </div>
             </div>
