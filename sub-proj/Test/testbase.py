@@ -58,7 +58,8 @@ class CaseGenerator(object):
 
                 test_cases[case_name].source = file
 
-        for name, case in test_cases.items():
+        for name in list(test_cases):
+            case = test_cases[name]
             if self._filter_out_case(case):
                 test_cases.pop(name, 0)
             else:
