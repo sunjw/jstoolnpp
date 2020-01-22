@@ -601,9 +601,19 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			--m_nIndents; // ({ 减掉一个缩进
 			m_blockStack.pop();
 			GetStackTop(m_blockStack, fixTopStack);
-			if (fixTopStack == JS_ASSIGN || fixTopStack == JS_HELPER)
+			if (m_nIndents > 0 && 
+				(fixTopStack == JS_ASSIGN || fixTopStack == JS_HELPER))
 			{
-				--m_nIndents; // ({ 减掉一个缩进
+				--m_nIndents; // =({ 减掉一个缩进
+			}
+			if (m_nIndents == 0 && 
+				(fixTopStack == JS_ASSIGN || fixTopStack == JS_HELPER))
+			{
+				m_blockStack.pop();
+				if (fixTopStack == JS_HELPER)
+				{
+					m_blockStack.pop();
+				}
 			}
 			m_blockStack.push(JS_BRACKET);
 			GetStackTop(m_blockStack, fixTopStack);
