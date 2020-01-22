@@ -599,6 +599,14 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if(fixTopStack == JS_BRACKET)
 		{
 			--m_nIndents; // ({ 减掉一个缩进
+			m_blockStack.pop();
+			GetStackTop(m_blockStack, fixTopStack);
+			if (fixTopStack == JS_ASSIGN || fixTopStack == JS_HELPER)
+			{
+				--m_nIndents; // ({ 减掉一个缩进
+			}
+			m_blockStack.push(JS_BRACKET);
+			GetStackTop(m_blockStack, fixTopStack);
 		}
 
 		if(bPrevFunc)
@@ -745,7 +753,16 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		//GetStackTop(m_blockStack, tmpTopStack);
 		// 修正({...}) 中多一次缩进
 		if(topStack != JS_ASSIGN && StackTopEq(m_blockStack, JS_BRACKET))
+		{
 			++m_nIndents;
+			m_blockStack.pop();
+			if (StackTopEq(m_blockStack, JS_ASSIGN) || StackTopEq(m_blockStack, JS_HELPER))
+			{
+				++m_nIndents;
+			}
+			m_blockStack.push(JS_BRACKET);
+			GetStackTop(m_blockStack, topStack);
+		}
 		// 修正({...}) 中多一次缩进 end
 
 		PopMultiBlock(topStack);
