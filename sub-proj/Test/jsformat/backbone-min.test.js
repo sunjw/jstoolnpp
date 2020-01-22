@@ -99,10 +99,10 @@
 	};
 	var d = function (t, e, i, r, n) {
 		t._events = f(v, t._events || {}, e, i, {
-				context: r,
-				ctx: t,
-				listening: n
-			});
+			context: r,
+			ctx: t,
+			listening: n
+		});
 		if (n) {
 			var s = t._listeners || (t._listeners = {});
 			s[n.id] = n
@@ -149,9 +149,9 @@
 		if (!this._events)
 			return this;
 		this._events = f(g, this._events, t, e, {
-				context: i,
-				listeners: this._listeners
-			});
+			context: i,
+			listeners: this._listeners
+		});
 		return this
 	};
 	u.stopListening = function (t, e, r) {
@@ -223,9 +223,9 @@
 	var p = function (t, e, r, n) {
 		if (r) {
 			var s = t[e] = i.once(function () {
-					n(e, s);
-					r.apply(this, arguments)
-				});
+				n(e, s);
+				r.apply(this, arguments)
+			});
 			s._callback = r
 		}
 		return t
@@ -424,8 +424,8 @@
 		},
 		fetch: function (t) {
 			t = i.extend({
-					parse: true
-				}, t);
+				parse: true
+			}, t);
 			var e = this;
 			var r = t.success;
 			t.success = function (i) {
@@ -448,9 +448,9 @@
 				(n = {})[t] = e
 			}
 			r = i.extend({
-					validate: true,
-					parse: true
-				}, r);
+				validate: true,
+				parse: true
+			}, r);
 			var s = r.wait;
 			if (n && !s) {
 				if (!this.set(n, r))
@@ -690,8 +690,8 @@
 			var x = !v && u && f;
 			if (s.length && x) {
 				b = this.length !== s.length || i.some(this.models, function (t, e) {
-						return t !== s[e]
-					});
+					return t !== s[e]
+				});
 				this.models.length = 0;
 				I(this.models, s, 0);
 				this.length = this.models.length
@@ -801,8 +801,8 @@
 		},
 		fetch: function (t) {
 			t = i.extend({
-					parse: true
-				}, t);
+				parse: true
+			}, t);
 			var e = t.success;
 			var r = this;
 			t.success = function (i) {
@@ -1174,8 +1174,8 @@
 		},
 		_routeToRegExp: function (t) {
 			t = t.replace(j, "\\$&").replace(A, "(?:$1)?").replace(C, function (t, e) {
-					return e ? t : "([^/?]+)"
-				}).replace(R, "([^?]*?)");
+				return e ? t : "([^/?]+)"
+			}).replace(R, "([^?]*?)");
 			return new RegExp("^" + t + "(?:\\?([\\s\\S]*))?$")
 		},
 		_extractParameters: function (t, e) {
@@ -1240,8 +1240,8 @@
 				throw new Error("Backbone.history has already been started");
 			N.started = true;
 			this.options = i.extend({
-					root: "/"
-				}, this.options, t);
+				root: "/"
+			}, this.options, t);
 			this.root = this.options.root;
 			this._wantsHashChange = this.options.hashChange !== false;
 			this._hasHashChange = "onhashchange" in window && (document.documentMode === void 0 || document.documentMode > 7);

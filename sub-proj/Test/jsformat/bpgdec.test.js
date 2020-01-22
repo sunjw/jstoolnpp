@@ -291,14 +291,14 @@ var ia, ja;
 		var e = e || [],
 		f = ha(c),
 		c = e.every(function (a) {
-				return "number" === a
-			}),
+			return "number" === a
+		}),
 		h = "string" !== d;
 		if (h && c)
 			return f;
 		var u = e.map(function (a, c) {
-				return "$" + c
-			}),
+			return "$" + c
+		}),
 		d = "(function(" + u.join(",") + ") {",
 		Q = e.length;
 		if (!c)
@@ -309,12 +309,12 @@ var ia, ja;
 				(R = g[R + "ToC"], d += "var " + R.arguments + " = " + Ca + ";", d += R.body + ";", d += Ca + "=" + R.returnValue + ";")
 			}
 		e = a(function () {
-				return f
-			}).returnValue;
+			return f
+		}).returnValue;
 		d += "var ret = " + e + "(" + u.join(",") + ");";
 		h || (e = a(function () {
-					return D
-				}).returnValue, d += "ret = " + e + "(ret);");
+				return D
+			}).returnValue, d += "ret = " + e + "(ret);");
 		c || (d += g.stackRestore.body + ";");
 		return eval(d + "return ret})")
 	}

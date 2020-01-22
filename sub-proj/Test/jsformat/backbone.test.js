@@ -182,10 +182,10 @@
 	// Guard the `listening` argument from the public API.
 	var internalOn = function (obj, name, callback, context, listening) {
 		obj._events = eventsApi(onApi, obj._events || {}, name, callback, {
-				context: context,
-				ctx: obj,
-				listening: listening
-			});
+			context: context,
+			ctx: obj,
+			listening: listening
+		});
 
 		if (listening) {
 			var listeners = obj._listeners || (obj._listeners = {});
@@ -251,9 +251,9 @@
 		if (!this._events)
 			return this;
 		this._events = eventsApi(offApi, this._events, name, callback, {
-				context: context,
-				listeners: this._listeners
-			});
+			context: context,
+			listeners: this._listeners
+		});
 		return this;
 	};
 
@@ -362,9 +362,9 @@
 	var onceMap = function (map, name, callback, offer) {
 		if (callback) {
 			var once = map[name] = _.once(function () {
-					offer(name, once);
-					callback.apply(this, arguments);
-				});
+				offer(name, once);
+				callback.apply(this, arguments);
+			});
 			once._callback = callback;
 		}
 		return map;
@@ -667,8 +667,8 @@
 		// local attributes. Any changed attributes will trigger a "change" event.
 		fetch: function (options) {
 			options = _.extend({
-					parse: true
-				}, options);
+				parse: true
+			}, options);
 			var model = this;
 			var success = options.success;
 			options.success = function (resp) {
@@ -697,9 +697,9 @@
 			}
 
 			options = _.extend({
-					validate: true,
-					parse: true
-				}, options);
+				validate: true,
+				parse: true
+			}, options);
 			var wait = options.wait;
 
 			// If we're not waiting and attributes exist, save acts as
@@ -1045,8 +1045,8 @@
 			var replace = !sortable && add && remove;
 			if (set.length && replace) {
 				orderChanged = this.length !== set.length || _.some(this.models, function (m, index) {
-						return m !== set[index];
-					});
+					return m !== set[index];
+				});
 				this.models.length = 0;
 				splice(this.models, set, 0);
 				this.length = this.models.length;
@@ -1205,8 +1205,8 @@
 		// data will be passed through the `reset` method instead of `set`.
 		fetch: function (options) {
 			options = _.extend({
-					parse: true
-				}, options);
+				parse: true
+			}, options);
 			var success = options.success;
 			var collection = this;
 			options.success = function (resp) {
@@ -1785,8 +1785,8 @@
 			route = route.replace(escapeRegExp, '\\$&')
 				.replace(optionalParam, '(?:$1)?')
 				.replace(namedParam, function (match, optional) {
-					return optional ? match : '([^/?]+)';
-				})
+				return optional ? match : '([^/?]+)';
+			})
 				.replace(splatParam, '([^?]*?)');
 			return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
 		},
@@ -1907,8 +1907,8 @@
 			// Figure out the initial configuration. Do we need an iframe?
 			// Is pushState desired ... is it available?
 			this.options = _.extend({
-					root: '/'
-				}, this.options, options);
+				root: '/'
+			}, this.options, options);
 			this.root = this.options.root;
 			this._wantsHashChange = this.options.hashChange !== false;
 			this._hasHashChange = 'onhashchange' in window && (document.documentMode === void 0 || document.documentMode > 7);

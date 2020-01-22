@@ -368,8 +368,8 @@
 				t.grep = async function (e, t) {
 					return new Promise((r, n) => {
 						const s = o.createReadStream(e, {
-								encoding: "utf8"
-							}),
+							encoding: "utf8"
+						}),
 						a = i(s);
 						a.on("data", e => {
 							t.test(e) && (s.close(), r(!0))
@@ -684,9 +684,9 @@
 									try {
 										var f = v(p, o);
 										l = y(o, f ? {
-												header: p,
-												nlsBundle: f
-											}
+											header: p,
+											nlsBundle: f
+										}
 												 : null)
 									} catch (e) {
 										console.error("Failed to load nls bundle", e),
@@ -708,26 +708,26 @@
 					if (s.messageFormat === n.both || s.messageFormat === n.file)
 						try {
 							var C = d(function (e) {
-									var t;
-									if (s.cacheLanguageResolution && t)
-										t = t;
-									else {
-										if (a || !s.locale)
-											t = ".nls.json";
-										else
-											for (var r = s.locale; r; ) {
-												var n = ".nls." + r + ".json";
-												if (u.existsSync(e + n)) {
-													t = n;
-													break
-												}
-												var o = r.lastIndexOf("-");
-												o > 0 ? r = r.substring(0, o) : (t = ".nls.json", r = null)
+								var t;
+								if (s.cacheLanguageResolution && t)
+									t = t;
+								else {
+									if (a || !s.locale)
+										t = ".nls.json";
+									else
+										for (var r = s.locale; r; ) {
+											var n = ".nls." + r + ".json";
+											if (u.existsSync(e + n)) {
+												t = n;
+												break
 											}
-										s.cacheLanguageResolution && (t = t)
-									}
-									return e + t
+											var o = r.lastIndexOf("-");
+											o > 0 ? r = r.substring(0, o) : (t = ".nls.json", r = null)
+										}
+									s.cacheLanguageResolution && (t = t)
 								}
+								return e + t
+							}
 									(e));
 							return Array.isArray(C) ? g(C) : h(C.messages) && h(C.keys) ? g(C.messages) : (console.error("String bundle '" + e + "' uses an unsupported format."), function () {
 								return "File bundle has unsupported format. See console for details"
@@ -830,8 +830,8 @@
 							return String.fromCharCode(e >> t & 255)
 						},
 						r = e.map(function (e) {
-								return t(e, 24) + t(e, 16) + t(e, 8) + t(e, 0)
-							}).join(""),
+							return t(e, 24) + t(e, 16) + t(e, 8) + t(e, 0)
+						}).join(""),
 						n = (Buffer.from ? Buffer.from(r, "binary") : new Buffer(r, "binary")).toString("base64");
 						return n.substr(0, n.indexOf("="))
 					},
@@ -934,22 +934,22 @@
 						r && 0 === r.indexOf("//") && (r = "https:" + r);
 						var l = s.parse(r),
 						h = n({}, a, {
-								host: l.hostname,
-								port: l.port,
-								path: l.pathname
-							}),
+							host: l.hostname,
+							port: l.port,
+							path: l.pathname
+						}),
 						p = void 0;
 						if ("https:" === l.protocol && (p = t.proxyHttpsUrl || void 0), "http:" === l.protocol && (p = t.proxyHttpUrl || void 0), p) {
 							0 === p.indexOf("//") && (p = "http:" + p);
 							var d = s.parse(p);
 							"https:" === d.protocol ? (c.info("Proxies that use HTTPS are not supported"), p = void 0) : h = n({}, h, {
-									host: d.hostname,
-									port: d.port || "80",
-									path: r,
-									headers: n({}, h.headers, {
-										Host: l.hostname
-									})
+								host: d.hostname,
+								port: d.port || "80",
+								path: r,
+								headers: n({}, h.headers, {
+									Host: l.hostname
 								})
+							})
 						}
 						var f = "https:" === l.protocol && !p;
 						return f && void 0 !== t.httpsAgent ? h.agent = t.httpsAgent : f || void 0 === t.httpAgent ? f && (h.agent = e.tlsRestrictedAgent) : h.agent = t.httpAgent,
@@ -957,8 +957,8 @@
 					},
 					e.MAX_PROPERTY_LENGTH = 8192,
 					e.tlsRestrictedAgent = new i.Agent({
-							secureOptions: a.SSL_OP_NO_SSLv2 | a.SSL_OP_NO_SSLv3 | a.SSL_OP_NO_TLSv1 | a.SSL_OP_NO_TLSv1_1
-						}),
+						secureOptions: a.SSL_OP_NO_SSLv2 | a.SSL_OP_NO_SSLv3 | a.SSL_OP_NO_TLSv1 | a.SSL_OP_NO_TLSv1_1
+					}),
 					e
 				}
 				();
@@ -1105,10 +1105,10 @@
 								var o = this.stack.split("\n");
 								o.length > 3 && (0 === o[2].trim().indexOf("at Error.AppInsightsAsyncCorrelatedErrorWrapper") ? o.splice(2, 1) : 0 === o[1].trim().indexOf("at AppInsightsAsyncCorrelatedErrorWrapper.ZoneAwareError") && 0 === o[2].trim().indexOf("at new AppInsightsAsyncCorrelatedErrorWrapper") && o.splice(1, 2)),
 								this.stack = o.map(function (e) {
-										var t = e.indexOf(") [");
-										return t > -1 && (e = e.substr(0, t + 1)),
-										e
-									}).join("\n")
+									var t = e.indexOf(") [");
+									return t > -1 && (e = e.substr(0, t + 1)),
+									e
+								}).join("\n")
 							}
 							for (var i = Object.getOwnPropertyNames(this).concat(Object.keys(this)), s = 0; s < i.length; s++) {
 								var a = i[s],
@@ -1144,12 +1144,12 @@
 					return e.prototype.addHeaderData = function (e) {
 						var t = e ? e.split(", ") : [];
 						this.props = t.map(function (e) {
-								var t = e.split("=");
-								return {
-									key: t[0],
-									value: t[1]
-								}
-							}).concat(this.props)
+							var t = e.split("=");
+							return {
+								key: t[0],
+								value: t[1]
+							}
+						}).concat(this.props)
 					},
 					e.prototype.serializeToHeader = function () {
 						return this.props.map(function (e) {
@@ -1209,41 +1209,41 @@
 					}
 				}
 				t.memoize = o(function (e, t) {
-						const r = `$memoize$${t}`;
-						return function (...t) {
-							return this.hasOwnProperty(r) || Object.defineProperty(this, r, {
-								configurable: !1,
-								enumerable: !1,
-								writable: !1,
-								value: e.apply(this, t)
-							}),
-							this[r]
-						}
-					}),
+					const r = `$memoize$${t}`;
+					return function (...t) {
+						return this.hasOwnProperty(r) || Object.defineProperty(this, r, {
+							configurable: !1,
+							enumerable: !1,
+							writable: !1,
+							value: e.apply(this, t)
+						}),
+						this[r]
+					}
+				}),
 				t.throttle = o(function (e, t) {
-						const r = `$throttle$current$${t}`,
-						o = `$throttle$next$${t}`,
-						i = function (...t) {
-							if (this[o])
-								return this[o];
-							if (this[r])
-								return this[o] = n.done(this[r]).then(() => (this[o] = void 0, i.apply(this, t))), this[o];
-							this[r] = e.apply(this, t);
-							const s = () => this[r] = void 0;
-							return n.done(this[r]).then(s, s),
-							this[r]
-						};
-						return i
-					}),
+					const r = `$throttle$current$${t}`,
+					o = `$throttle$next$${t}`,
+					i = function (...t) {
+						if (this[o])
+							return this[o];
+						if (this[r])
+							return this[o] = n.done(this[r]).then(() => (this[o] = void 0, i.apply(this, t))), this[o];
+						this[r] = e.apply(this, t);
+						const s = () => this[r] = void 0;
+						return n.done(this[r]).then(s, s),
+						this[r]
+					};
+					return i
+				}),
 				t.sequentialize = o(function (e, t) {
-						const r = `__$sequence$${t}`;
-						return function (...t) {
-							const n = this[r] || Promise.resolve(null),
-							o = async() => await e.apply(this, t);
-							return this[r] = n.then(o, o),
-							this[r]
-						}
-					}),
+					const r = `__$sequence$${t}`;
+					return function (...t) {
+						const n = this[r] || Promise.resolve(null),
+						o = async() => await e.apply(this, t);
+						return this[r] = n.then(o, o),
+						this[r]
+					}
+				}),
 				t.debounce = function (e) {
 					return o((t, r) => {
 						const n = `$debounce$${r}`;
@@ -1324,10 +1324,10 @@
 				function _(e) {
 					return t => {
 						/ENOENT/.test(t.message) && (t = new k({
-									error: t,
-									message: "Failed to execute git (ENOENT)",
-									gitErrorCode: "NotAGitRepository"
-								})),
+								error: t,
+								message: "Failed to execute git (ENOENT)",
+								gitErrorCode: "NotAGitRepository"
+							})),
 						e(t)
 					}
 				}
@@ -1363,15 +1363,15 @@
 								})]);
 					if (t) {
 						const r = new Promise((r, n) => {
-								h.onceEvent(t.onCancellationRequested)(() => {
-									try {
-										e.kill()
-									} catch (e) {}
-									n(new k({
-											message: "Cancelled"
-										}))
-								})
-							});
+							h.onceEvent(t.onCancellationRequested)(() => {
+								try {
+									e.kill()
+								} catch (e) {}
+								n(new k({
+										message: "Cancelled"
+									}))
+							})
+						});
 						i = Promise.race([i, r])
 					}
 					try {
@@ -1433,12 +1433,12 @@
 					}
 					toString() {
 						let e = this.message + " " + JSON.stringify({
-								exitCode: this.exitCode,
-								gitErrorCode: this.gitErrorCode,
-								gitCommand: this.gitCommand,
-								stdout: this.stdout,
-								stderr: this.stderr
-							}, null, 2);
+							exitCode: this.exitCode,
+							gitErrorCode: this.gitErrorCode,
+							gitCommand: this.gitCommand,
+							stdout: this.stdout,
+							stderr: this.stderr
+						}, null, 2);
 						return this.error && (e += this.error.stack),
 						e
 					}
@@ -1474,8 +1474,8 @@
 						const l = e => {
 							const t = new g.StringDecoder("utf8"),
 							n = new f.LineStream({
-									encoding: "utf8"
-								});
+								encoding: "utf8"
+							});
 							e.stderr.on("data", e => n.write(t.write(e)));
 							let o = 0,
 							i = 0;
@@ -1509,8 +1509,8 @@
 					}
 					async exec(e, t, r = {}) {
 						return r = h.assign({
-								cwd: e
-							}, r || {}),
+							cwd: e
+						}, r || {}),
 						await this._exec(t, r)
 					}
 					async exec2(e, t = {}) {
@@ -1518,8 +1518,8 @@
 					}
 					stream(e, t, r = {}) {
 						return r = h.assign({
-								cwd: e
-							}, r || {}),
+							cwd: e
+						}, r || {}),
 						this.spawn(t, r)
 					}
 					async _exec(e, t = {}) {
@@ -1550,10 +1550,10 @@
 						return t || (t = {}),
 						t.stdio || t.input || (t.stdio = ["ignore", null, null]),
 						t.env = h.assign({}, process.env, this.env, t.env || {}, {
-								VSCODE_GIT_COMMAND: e[0],
-								LC_ALL: "en_US.UTF-8",
-								LANG: "en_US.UTF-8"
-							}),
+							VSCODE_GIT_COMMAND: e[0],
+							LC_ALL: "en_US.UTF-8",
+							LANG: "en_US.UTF-8"
+						}),
 						!1 !== t.log && this.log(`> git ${e.join(" ")}\n`),
 						s.spawn(this.path, e, t)
 					}
@@ -1749,9 +1749,9 @@
 						} = await S(t);
 						if (r) {
 							const e = new k({
-									message: "Could not show object.",
-									exitCode: r
-								});
+								message: "Could not show object.",
+								exitCode: r
+							});
 							return /exists on disk, but not in/.test(o) && (e.gitErrorCode = "WrongCase"),
 							Promise.reject(e)
 						}
@@ -1971,8 +1971,8 @@
 					}
 					async stage(e, t) {
 						const r = this.stream(["hash-object", "--stdin", "-w", "--path", e], {
-								stdio: [null, null, null]
-							});
+							stdio: [null, null, null]
+						});
 						r.stdin.end(t, "utf8");
 						const {
 							exitCode: n,
@@ -2227,10 +2227,10 @@
 						return new Promise((t, r) => {
 							const n = new R,
 							o = this.stream(["status", "-z", "-u"], {
-									env: {
-										GIT_OPTIONAL_LOCKS: "0"
-									}
-								}),
+								env: {
+									GIT_OPTIONAL_LOCKS: "0"
+								}
+							}),
 							i = e => {
 								if (0 !== e) {
 									const t = a.join("");
@@ -2613,24 +2613,24 @@
 									};
 									o.info(e.TAG, r);
 									var a = n.makeRequest(t, i, r, function (r) {
-											if (200 === r.statusCode) {
-												var n = "";
-												r.setEncoding("utf-8"),
-												r.on("data", function (e) {
-													n += e
+										if (200 === r.statusCode) {
+											var n = "";
+											r.setEncoding("utf-8"),
+											r.on("data", function (e) {
+												n += e
+											}),
+											r.on("end", function () {
+												o.info(e.TAG, n);
+												var t = e.correlationIdPrefix + n;
+												e.completedLookups[i] = t,
+												e.pendingLookups[i] && e.pendingLookups[i].forEach(function (e) {
+													return e(t)
 												}),
-												r.on("end", function () {
-													o.info(e.TAG, n);
-													var t = e.correlationIdPrefix + n;
-													e.completedLookups[i] = t,
-													e.pendingLookups[i] && e.pendingLookups[i].forEach(function (e) {
-														return e(t)
-													}),
-													delete e.pendingLookups[i]
-												})
-											} else
-												r.statusCode >= 400 && r.statusCode < 500 ? (e.completedLookups[i] = void 0, delete e.pendingLookups[i]) : setTimeout(s, t.correlationIdRetryIntervalMs)
-										});
+												delete e.pendingLookups[i]
+											})
+										} else
+											r.statusCode >= 400 && r.statusCode < 500 ? (e.completedLookups[i] = void 0, delete e.pendingLookups[i]) : setTimeout(s, t.correlationIdRetryIntervalMs)
+									});
 									a && (a.on("error", function (t) {
 											o.warn(e.TAG, t)
 										}), a.end())
@@ -2643,8 +2643,8 @@
 						var n = t.profileQueryEndpoint + "/api/profiles/" + t.instrumentationKey + "/appId",
 						o = e.pendingLookups[n];
 						o && (e.pendingLookups[n] = o.filter(function (e) {
-									return e != r
-								}), 0 == e.pendingLookups[n].length && delete e.pendingLookups[n])
+								return e != r
+							}), 0 == e.pendingLookups[n].length && delete e.pendingLookups[n])
 					},
 					e.generateRequestId = function (t) {
 						if (t) {
@@ -3120,11 +3120,11 @@
 						t = d.onceEvent(d.filterEvent(d.debounceEvent(this.repository.onDidChangeOperations, 300), () => !this.repository.operations.shouldShowProgress())),
 						r = () => {
 							this.disposable = e(() => {
-									const e = d.eventToPromise(t).then(() => r());
-									s.window.withProgress({
-										location: s.ProgressLocation.SourceControl
-									}, () => e)
-								})
+								const e = d.eventToPromise(t).then(() => r());
+								s.window.withProgress({
+									location: s.ProgressLocation.SourceControl
+								}, () => e)
+							})
 						};
 						r(),
 						this.enabled = !0
@@ -3646,12 +3646,12 @@
 								a = e.get("pullTags"),
 								c = e.get("supportCancellation"),
 								u = i ? async e => await this.repository.pull(t, void 0, void 0, {
-										tags: a,
-										cancellationToken: e
-									}) : async e => await this.repository.pull(t, r, n, {
-										tags: a,
-										cancellationToken: e
-									});
+									tags: a,
+									cancellationToken: e
+								}) : async e => await this.repository.pull(t, r, n, {
+									tags: a,
+									cancellationToken: e
+								});
 								if (c) {
 									const e = {
 										location: s.ProgressLocation.Notification,
@@ -3740,8 +3740,8 @@
 								if (0 === (e = e.filter(e => d.isDescendant(this.root, e))).length)
 									return t(new Set);
 								const n = this.repository.stream(["check-ignore", "-v", "-z", "--stdin"], {
-										stdio: [null, null, null]
-									});
+									stdio: [null, null, null]
+								});
 								n.stdin.end(e.join("\0"), "utf8");
 								let o = "";
 								n.stdout.setEncoding("utf8"),
@@ -4177,8 +4177,8 @@
 								totalFailedRequestCount: e._totalFailedRequestCount,
 								time: +new Date
 							}, "function" == typeof process.cpuUsage && (this._lastAppCpuUsage = process.cpuUsage()), this._lastHrtime = process.hrtime(), this._handle = setInterval(function () {
-									return r.trackPerformance()
-								}, 6e4), this._handle.unref()) : this._handle && (clearInterval(this._handle), this._handle = void 0)
+								return r.trackPerformance()
+							}, 6e4), this._handle.unref()) : this._handle && (clearInterval(this._handle), this._handle = void 0)
 					},
 					e.countRequest = function (t, r) {
 						var n = this;
@@ -4490,10 +4490,10 @@
 					p.push(m);
 					const y = await m.getEnv(),
 					b = new i.Git({
-							gitPath: g.path,
-							version: g.version,
-							env: y
-						}),
+						gitPath: g.path,
+						version: g.version,
+						env: y
+					}),
 					w = new s.Model(b, e.globalState, t);
 					p.push(w);
 					const v = () => o.commands.executeCommand("setContext", "gitOpenRepositoryCount", `${w.repositories.length}`);
@@ -6247,10 +6247,10 @@
 					e._collect = s.prototype.collect
 				},
 				i.prototype = Object.create(o.prototype, {
-						constructor: {
-							value: i
-						}
-					}),
+					constructor: {
+						value: i
+					}
+				}),
 				i.prototype._transform = function (e, t, r) {
 					if ("string" != typeof e)
 						return r(new Error("Iconv encoding stream needs strings as its input."));
@@ -6283,10 +6283,10 @@
 					this
 				},
 				s.prototype = Object.create(o.prototype, {
-						constructor: {
-							value: s
-						}
-					}),
+					constructor: {
+						value: s
+					}
+				}),
 				s.prototype._transform = function (e, t, r) {
 					if (!n.isBuffer(e))
 						return r(new Error("Iconv decoding stream needs buffers as its input."));
@@ -6435,8 +6435,8 @@
 						return null;
 					const r = (e, r) => {
 						r = Object.assign({
-								offset: 0
-							}, r);
+							offset: 0
+						}, r);
 						for (let n = 0; n < e.length; n++)
 							if (r.mask) {
 								if (e[n] !== (r.mask[n] & t[n + r.offset]))
@@ -8637,8 +8637,8 @@
 						n > -1 && e.unshift(...e.splice(n, 1));
 						const i = p(3, null),
 						s = await o.window.showQuickPick(e, {
-								placeHolder: i
-							});
+							placeHolder: i
+						});
 						return s && s.repository
 					}
 					getRepository(e) {
@@ -8710,8 +8710,8 @@
 									operation: e,
 									error: t
 								}) => !t && function (e) {
-								return "Pull" === e || "Push" === e || "Sync" === e || "Fetch" === e
-							}
+							return "Pull" === e || "Push" === e || "Sync" === e || "Fetch" === e
+						}
 								(e));
 						o.onceEvent(r)(this.onFirstGoodRemoteOperation, this, this.disposables)
 					}
@@ -8800,8 +8800,8 @@
 					get command() {
 						const e = !!this.repository.rebaseCommit,
 						t = `$(git-branch) ${this.repository.headLabel}${e?`($ {
-								i(0, null)
-							})`:""}`;
+							i(0, null)
+						})`:""}`;
 						return {
 							command: "git.checkout",
 							tooltip: `${this.repository.headLabel}`,
@@ -9168,9 +9168,9 @@
 									method: r,
 									options: n
 								}) => {
-								const o = this.createCommand(e, t, r, n);
-								return n.diff ? a.commands.registerDiffInformationCommand(e, o) : a.commands.registerCommand(e, o)
-							})
+							const o = this.createCommand(e, t, r, n);
+							return n.diff ? a.commands.registerDiffInformationCommand(e, o) : a.commands.registerCommand(e, o)
+						})
 					}
 					async refresh(e) {
 						await e.status()
@@ -9189,8 +9189,8 @@
 						if (i && i.isDirectory()) {
 							const t = this.model.getRepositoryForSubmodule(e.resourceUri);
 							t && (c = p.toGitUri(e.resourceUri, 1 === e.resourceGroupType ? "index" : "wt", {
-										submoduleOf: t.root
-									}))
+									submoduleOf: t.root
+								}))
 						} else
 							13 !== e.type && (s = await this.getLeftResource(e)), c = await this.getRightResource(e);
 						const u = this.getTitle(e);
@@ -9299,9 +9299,9 @@
 					}
 					async clone(e) {
 						if (e || (e = await a.window.showInputBox({
-										prompt: f(5, null),
-										ignoreFocusOut: !0
-									})), !e)
+									prompt: f(5, null),
+									ignoreFocusOut: !0
+								})), !e)
 							return void this.telemetryReporter.sendTelemetryEvent("clone", {
 								outcome: "no_URL"
 							});
@@ -9309,12 +9309,12 @@
 						let t = a.workspace.getConfiguration("git").get("defaultCloneDirectory") || i.homedir();
 						t = t.replace(/^~/, i.homedir());
 						const r = await a.window.showOpenDialog({
-								canSelectFiles: !1,
-								canSelectFolders: !0,
-								canSelectMany: !1,
-								defaultUri: a.Uri.file(t),
-								openLabel: f(6, null)
-							});
+							canSelectFiles: !1,
+							canSelectFolders: !0,
+							canSelectMany: !1,
+							defaultUri: a.Uri.file(t),
+							openLabel: f(6, null)
+						});
 						if (!r || 0 === r.length)
 							return void this.telemetryReporter.sendTelemetryEvent("clone", {
 								outcome: "no_directory"
@@ -9373,9 +9373,9 @@
 										folder: e
 									})), n],
 							i = await a.window.showQuickPick(o, {
-									placeHolder: r,
-									ignoreFocusOut: !0
-								});
+								placeHolder: r,
+								ignoreFocusOut: !0
+							});
 							if (!i)
 								return;
 							i.folder && (e = i.folder.uri.fsPath, t = !1)
@@ -9384,12 +9384,12 @@
 							const r = a.Uri.file(i.homedir()),
 							n = a.workspace.workspaceFolders && a.workspace.workspaceFolders.length > 0 ? a.Uri.file(a.workspace.workspaceFolders[0].uri.fsPath) : r,
 							o = await a.window.showOpenDialog({
-									canSelectFiles: !1,
-									canSelectFolders: !0,
-									canSelectMany: !1,
-									defaultUri: n,
-									openLabel: f(15, null)
-								});
+								canSelectFiles: !1,
+								canSelectFolders: !0,
+								canSelectMany: !1,
+								defaultUri: n,
+								openLabel: f(15, null)
+							});
 							if (!o || 0 === o.length)
 								return;
 							const s = o[0];
@@ -9419,12 +9419,12 @@
 					async openRepository(e) {
 						if (!e) {
 							const t = await a.window.showOpenDialog({
-									canSelectFiles: !1,
-									canSelectFolders: !0,
-									canSelectMany: !1,
-									defaultUri: a.Uri.file(i.homedir()),
-									openLabel: f(23, null)
-								});
+								canSelectFiles: !1,
+								canSelectFolders: !0,
+								canSelectMany: !1,
+								defaultUri: a.Uri.file(i.homedir()),
+								openLabel: f(23, null)
+							});
 							if (!t || 0 === t.length)
 								return;
 							e = t[0].fsPath
@@ -9574,8 +9574,8 @@
 								const r = f(31, null),
 								n = f(32, null),
 								o = await a.window.showInformationMessage(f(33, null, s.basename(t.fsPath)), {
-										modal: !0
-									}, r, n);
+									modal: !0
+								}, r, n);
 								if (o === r)
 									await e.add([t]);
 								else {
@@ -9587,8 +9587,8 @@
 								const r = f(34, null),
 								n = f(35, null),
 								o = await a.window.showInformationMessage(f(36, null, s.basename(t.fsPath)), {
-										modal: !0
-									}, r, n);
+									modal: !0
+								}, r, n);
 								if (o === r)
 									await e.add([t]);
 								else {
@@ -9640,9 +9640,9 @@
 						const r = t.document,
 						n = t.selections,
 						o = e.filter(e => {
-								const t = h.getModifiedRange(r, e);
-								return n.every(e => !e.intersection(t))
-							});
+							const t = h.getModifiedRange(r, e);
+							return n.every(e => !e.intersection(t))
+						});
 						o.length !== e.length && await this._revertChanges(t, o)
 					}
 					async _revertChanges(e, t) {
@@ -9739,8 +9739,8 @@
 							c = 1 === r.length ? f(50, null, r.length) : f(51, null, r.length),
 							u = f(52, null, t.length),
 							l = await a.window.showWarningMessage(i, {
-									modal: !0
-								}, c, u);
+								modal: !0
+							}, c, u);
 							if (l === c)
 								t = r;
 							else if (l !== u)
@@ -9789,8 +9789,8 @@
 								n = f(63, null),
 								o = f(64, null),
 								i = await a.window.showWarningMessage(r, {
-										modal: !0
-									}, n, o);
+									modal: !0
+								}, n, o);
 								if (i === n)
 									await Promise.all(t.map(e => e.save())), await e.add([]);
 								else if (i !== o)
@@ -9808,8 +9808,8 @@
 							r = f(67, null),
 							o = f(68, null),
 							i = await a.window.showWarningMessage(e, {
-									modal: !0
-								}, t, r, o);
+								modal: !0
+							}, t, r, o);
 							if (i === r)
 								n.update("enableSmartCommit", !0, !0);
 							else {
@@ -9844,2604 +9844,2616 @@
 					async commitWithAnyInput(e, t) {
 						const r = e.inputBox.value,
 						n = await this.smartCommit(e, async() => {
-								let n = r;
-								if (!n) {
-									let r = void 0;
-									t && t.amend && e.HEAD && e.HEAD.commit && (r = (await e.getCommit(e.HEAD.commit)).message);
-									const o = e.headShortName;
-									let i;
-									i = o ? f(70, null, o) : f(71, null),
-									n = await a.window.showInputBox({
-											value: r,
-											placeHolder: i,
-											prompt: f(72, null),
-											ignoreFocusOut: !0
-										})
-								}
-								return n ? e.cleanUpCommitEditMessage(n) : n
-							}, t);
-						r && n && (e.inputBox.value = await e.getInputTemplate())
+							let n = r;
+							if (!n) {
+								let r = void 0;
+								t && t.amend && e.HEAD && e.HEAD.commit && (r = (await e.getCommit(e.HEAD.commit)).message);
+								const o = e.headShortName;
+								let i;
+								i = o ? f(70, null, o) : f(71, null),
+								n = await a.window.showInputBox({
+									value: r,
+									placeHolder: i,
+									prompt: f(72, null),
+									ignoreFocusOut: !0
+								})
+							}
+							return n ? e.cleanUpCommitEditMessage(n) : n
+						}, t);
+					r && n && (e.inputBox.value = await e.getInputTemplate())
+				}
+				async commit(e) {
+					await this.commitWithAnyInput(e)
+				}
+				async commitStaged(e) {
+					await this.commitWithAnyInput(e, {
+						all: !1
+					})
+				}
+				async commitStagedSigned(e) {
+					await this.commitWithAnyInput(e, {
+						all: !1,
+						signoff: !0
+					})
+				}
+				async commitStagedAmend(e) {
+					await this.commitWithAnyInput(e, {
+						all: !1,
+						amend: !0
+					})
+				}
+				async commitAll(e) {
+					await this.commitWithAnyInput(e, {
+						all: !0
+					})
+				}
+				async commitAllSigned(e) {
+					await this.commitWithAnyInput(e, {
+						all: !0,
+						signoff: !0
+					})
+				}
+				async commitAllAmend(e) {
+					await this.commitWithAnyInput(e, {
+						all: !0,
+						amend: !0
+					})
+				}
+				async commitEmpty(e) {
+					const t = a.Uri.file(e.root),
+					r = a.workspace.getConfiguration("git", t);
+					if (!0 === r.get("confirmEmptyCommits")) {
+						const e = f(73, null),
+						t = f(74, null),
+						n = f(75, null),
+						o = await a.window.showWarningMessage(e, {
+							modal: !0
+						}, t, n);
+						if (o === n)
+							await r.update("confirmEmptyCommits", !1, !0);
+						else if (o !== t)
+							return
 					}
-					async commit(e) {
-						await this.commitWithAnyInput(e)
-					}
-					async commitStaged(e) {
-						await this.commitWithAnyInput(e, {
-							all: !1
-						})
-					}
-					async commitStagedSigned(e) {
-						await this.commitWithAnyInput(e, {
-							all: !1,
-							signoff: !0
-						})
-					}
-					async commitStagedAmend(e) {
-						await this.commitWithAnyInput(e, {
-							all: !1,
-							amend: !0
-						})
-					}
-					async commitAll(e) {
-						await this.commitWithAnyInput(e, {
-							all: !0
-						})
-					}
-					async commitAllSigned(e) {
-						await this.commitWithAnyInput(e, {
-							all: !0,
-							signoff: !0
-						})
-					}
-					async commitAllAmend(e) {
-						await this.commitWithAnyInput(e, {
-							all: !0,
-							amend: !0
-						})
-					}
-					async commitEmpty(e) {
-						const t = a.Uri.file(e.root),
-						r = a.workspace.getConfiguration("git", t);
-						if (!0 === r.get("confirmEmptyCommits")) {
-							const e = f(73, null),
-							t = f(74, null),
-							n = f(75, null),
-							o = await a.window.showWarningMessage(e, {
-									modal: !0
-								}, t, n);
-							if (o === n)
-								await r.update("confirmEmptyCommits", !1, !0);
-							else if (o !== t)
-								return
-						}
-						await this.commitWithAnyInput(e, {
-							empty: !0
-						})
-					}
-					async restoreCommitTemplate(e) {
-						e.inputBox.value = await e.getCommitTemplate()
-					}
-					async undoCommit(e) {
-						const t = e.HEAD;
-						if (!t || !t.commit)
-							return void a.window.showWarningMessage(f(76, null));
-						const r = await e.getCommit("HEAD");
-						if (r.parents.length > 1) {
-							const e = f(77, null);
-							if (await a.window.showWarningMessage(f(78, null), {
-									modal: !0
-								}, e) !== e)
-								return
-						}
-						r.parents.length > 0 ? await e.reset("HEAD~") : (await e.deleteRef("HEAD"), await this.unstageAll(e)),
-						e.inputBox.value = r.message
-					}
-					async checkout(e, t) {
-						if ("string" == typeof t)
-							return await e.checkout(t), !0;
-						const r = new v(this),
-						n = new C(this),
-						o = [r, n, ...P(e)],
-						i = f(79, null),
-						s = a.window.createQuickPick();
-						s.items = o,
-						s.placeholder = i,
-						s.show();
-						const c = await new Promise(e => s.onDidAccept(() => e(s.activeItems[0])));
-						return s.hide(),
-						!!c && (c === r ? await this._branch(e, s.value) : c === n ? await this._branch(e, s.value, !0) : await c.run(e), !0)
-					}
-					async branch(e) {
-						await this._branch(e)
-					}
-					async branchFrom(e) {
-						await this._branch(e, void 0, !0)
-					}
-					async promptForBranchName(e) {
-						const t = a.workspace.getConfiguration("git"),
-						r = t.get("branchWhitespaceChar"),
-						n = t.get("branchValidationRegex"),
-						o = e => e ? e.trim().replace(/^-+/, "").replace(/^\.|\/\.|\.\.|~|\^|:|\/$|\.lock$|\.lock\/|\\|\*|\s|^\s*$|\.$|\[|\]$/g, r) : e,
-						i = e || await a.window.showInputBox({
-								placeHolder: f(80, null),
-								prompt: f(81, null),
-								ignoreFocusOut: !0,
-								validateInput: e => {
-									return new RegExp(n).test(o(e)) ? null : f(82, null, n)
-								}
-							});
-						return o(i || "")
-					}
-					async _branch(e, t, r = !1) {
-						const n = await this.promptForBranchName(t);
-						if (!n)
-							return;
-						let o = "HEAD";
-						if (r) {
-							const t = [new _(e), ...P(e)],
-							r = f(83, null, n),
-							i = await a.window.showQuickPick(t, {
-									placeHolder: r
-								});
-							if (!i)
-								return;
-							o = i.label
-						}
-						await e.branch(n, !0, o)
-					}
-					async deleteBranch(e, t, r) {
-						let n;
-						if ("string" == typeof t)
-							n = (r => e.deleteBranch(t, r));
-						else {
-							const r = e.HEAD && e.HEAD.name,
-							o = e.refs.filter(e => 0 === e.type && e.name !== r).map(e => new b(e)),
-							i = f(84, null),
-							s = await a.window.showQuickPick(o, {
-									placeHolder: i
-								});
-							if (!s || !s.branchName)
-								return;
-							t = s.branchName,
-							n = (t => s.run(e, t))
-						}
-						try {
-							await n(r)
-						} catch (e) {
-							if ("BranchNotFullyMerged" !== e.gitErrorCode)
-								throw e;
-							const r = f(85, null, t),
-							o = f(86, null);
-							await a.window.showWarningMessage(r, {
+					await this.commitWithAnyInput(e, {
+						empty: !0
+					})
+				}
+				async restoreCommitTemplate(e) {
+					e.inputBox.value = await e.getCommitTemplate()
+				}
+				async undoCommit(e) {
+					const t = e.HEAD;
+					if (!t || !t.commit)
+						return void a.window.showWarningMessage(f(76, null));
+					const r = await e.getCommit("HEAD");
+					if (r.parents.length > 1) {
+						const e = f(77, null);
+						if (await a.window.showWarningMessage(f(78, null), {
 								modal: !0
-							}, o) === o && await n(!0)
+							}, e) !== e)
+							return
+					}
+					r.parents.length > 0 ? await e.reset("HEAD~") : (await e.deleteRef("HEAD"), await this.unstageAll(e)),
+					e.inputBox.value = r.message
+				}
+				async checkout(e, t) {
+					if ("string" == typeof t)
+						return await e.checkout(t), !0;
+					const r = new v(this),
+					n = new C(this),
+					o = [r, n, ...P(e)],
+					i = f(79, null),
+					s = a.window.createQuickPick();
+					s.items = o,
+					s.placeholder = i,
+					s.show();
+					const c = await new Promise(e => s.onDidAccept(() => e(s.activeItems[0])));
+					return s.hide(),
+					!!c && (c === r ? await this._branch(e, s.value) : c === n ? await this._branch(e, s.value, !0) : await c.run(e), !0)
+				}
+				async branch(e) {
+					await this._branch(e)
+				}
+				async branchFrom(e) {
+					await this._branch(e, void 0, !0)
+				}
+				async promptForBranchName(e) {
+					const t = a.workspace.getConfiguration("git"),
+					r = t.get("branchWhitespaceChar"),
+					n = t.get("branchValidationRegex"),
+					o = e => e ? e.trim().replace(/^-+/, "").replace(/^\.|\/\.|\.\.|~|\^|:|\/$|\.lock$|\.lock\/|\\|\*|\s|^\s*$|\.$|\[|\]$/g, r) : e,
+					i = e || await a.window.showInputBox({
+						placeHolder: f(80, null),
+						prompt: f(81, null),
+						ignoreFocusOut: !0,
+						validateInput: e => {
+							return new RegExp(n).test(o(e)) ? null : f(82, null, n)
 						}
-					}
-					async renameBranch(e) {
-						const t = await this.promptForBranchName();
-						if (t)
-							try {
-								await e.renameBranch(t)
-							} catch (e) {
-								switch (e.gitErrorCode) {
-								case "InvalidBranchName":
-									return void a.window.showErrorMessage(f(87, null));
-								case "BranchAlreadyExists":
-									return void a.window.showErrorMessage(f(88, null, t));
-								default:
-									throw e
-								}
-							}
-					}
-					async merge(e) {
-						const t = a.workspace.getConfiguration("git").get("checkoutType") || "all",
-						r = "all" === t || "remote" === t,
-						n = e.refs.filter(e => 0 === e.type).filter(e => e.name || e.commit).map(e => new w(e)),
-						o = (r ? e.refs.filter(e => 1 === e.type) : []).filter(e => e.name || e.commit).map(e => new w(e)),
-						i = [...n, ...o],
-						s = f(89, null),
-						c = await a.window.showQuickPick(i, {
-								placeHolder: s
-							});
-						c && await c.run(e)
-					}
-					async createTag(e) {
-						const t = await a.window.showInputBox({
-								placeHolder: f(90, null),
-								prompt: f(91, null),
-								ignoreFocusOut: !0
-							});
-						if (!t)
+					});
+					return o(i || "")
+				}
+				async _branch(e, t, r = !1) {
+					const n = await this.promptForBranchName(t);
+					if (!n)
+						return;
+					let o = "HEAD";
+					if (r) {
+						const t = [new _(e), ...P(e)],
+						r = f(83, null, n),
+						i = await a.window.showQuickPick(t, {
+							placeHolder: r
+						});
+						if (!i)
 							return;
-						const r = await a.window.showInputBox({
-								placeHolder: f(92, null),
-								prompt: f(93, null),
-								ignoreFocusOut: !0
-							}),
-						n = t.replace(/^\.|\/\.|\.\.|~|\^|:|\/$|\.lock$|\.lock\/|\\|\*|\s|^\s*$|\.$/g, "-"),
-						o = r || n;
-						await e.tag(n, o)
+						o = i.label
 					}
-					async deleteTag(e) {
-						const t = e.refs.filter(e => 2 === e.type).map(e => new x(e));
-						if (0 === t.length)
-							return void a.window.showWarningMessage(f(94, null));
-						const r = f(95, null),
-						n = await a.window.showQuickPick(t, {
-								placeHolder: r
-							});
-						n && await e.deleteTag(n.label)
-					}
-					async fetch(e) {
-						0 !== e.remotes.length ? await e.fetchDefault() : a.window.showWarningMessage(f(96, null))
-					}
-					async fetchPrune(e) {
-						0 !== e.remotes.length ? await e.fetchPrune() : a.window.showWarningMessage(f(97, null))
-					}
-					async fetchAll(e) {
-						0 !== e.remotes.length ? await e.fetchAll() : a.window.showWarningMessage(f(98, null))
-					}
-					async pullFrom(e) {
-						const t = e.remotes;
-						if (0 === t.length)
-							return void a.window.showWarningMessage(f(99, null));
-						const r = t.filter(e => void 0 !== e.fetchUrl).map(e => ({
-									label: e.name,
-									description: e.fetchUrl
-								})),
-						n = f(100, null),
-						o = await a.window.showQuickPick(r, {
-								placeHolder: n
-							});
-						if (!o)
+					await e.branch(n, !0, o)
+				}
+				async deleteBranch(e, t, r) {
+					let n;
+					if ("string" == typeof t)
+						n = (r => e.deleteBranch(t, r));
+					else {
+						const r = e.HEAD && e.HEAD.name,
+						o = e.refs.filter(e => 0 === e.type && e.name !== r).map(e => new b(e)),
+						i = f(84, null),
+						s = await a.window.showQuickPick(o, {
+							placeHolder: i
+						});
+						if (!s || !s.branchName)
 							return;
-						const i = e.refs.filter(e => e.remote === o.label).map(e => ({
-									label: e.name
-								})),
-						s = f(101, null),
-						c = await a.window.showQuickPick(i, {
-								placeHolder: s
-							});
-						if (!c)
-							return;
-						const u = o.label.length;
-						await e.pullFrom(!1, o.label, c.label.slice(u + 1))
+						t = s.branchName,
+						n = (t => s.run(e, t))
 					}
-					async pull(e) {
-						0 !== e.remotes.length ? await e.pull(e.HEAD) : a.window.showWarningMessage(f(102, null))
+					try {
+						await n(r)
+					} catch (e) {
+						if ("BranchNotFullyMerged" !== e.gitErrorCode)
+							throw e;
+						const r = f(85, null, t),
+						o = f(86, null);
+						await a.window.showWarningMessage(r, {
+							modal: !0
+						}, o) === o && await n(!0)
 					}
-					async pullRebase(e) {
-						0 !== e.remotes.length ? await e.pullWithRebase(e.HEAD) : a.window.showWarningMessage(f(103, null))
-					}
-					async _push(e, t) {
-						const r = e.remotes;
-						if (0 === r.length)
-							return void(t.silent || a.window.showWarningMessage(f(104, null)));
-						const n = a.workspace.getConfiguration("git", a.Uri.file(e.root));
-						let o = void 0;
-						if (t.forcePush) {
-							if (!n.get("allowForcePush"))
-								return void await a.window.showErrorMessage(f(105, null));
-							if (o = !0 === n.get("useForcePushWithLease") ? u.ForcePushMode.ForceWithLease : u.ForcePushMode.Force, n.get("confirmForcePush")) {
-								const e = f(106, null),
-								t = f(107, null),
-								r = f(108, null),
-								o = await a.window.showWarningMessage(e, {
-										modal: !0
-									}, t, r);
-								if (o === r)
-									n.update("confirmForcePush", !1, !0);
-								else if (o !== t)
-									return
+				}
+				async renameBranch(e) {
+					const t = await this.promptForBranchName();
+					if (t)
+						try {
+							await e.renameBranch(t)
+						} catch (e) {
+							switch (e.gitErrorCode) {
+							case "InvalidBranchName":
+								return void a.window.showErrorMessage(f(87, null));
+							case "BranchAlreadyExists":
+								return void a.window.showErrorMessage(f(88, null, t));
+							default:
+								throw e
 							}
 						}
-						if (t.pushType !== I.PushFollowTags)
-							if (e.HEAD && e.HEAD.name)
-								if (t.pushType === I.Push)
-									try {
-										await e.push(e.HEAD, o)
-									} catch (r) {
-										if ("NoUpstreamBranch" !== r.gitErrorCode)
-											throw r;
-										if (t.silent)
-											return;
-										const n = e.HEAD.name,
-										o = f(110, null, n),
-										i = f(111, null);
-										await a.window.showWarningMessage(o, {
-											modal: !0
-										}, i) === i && await this.publish(e)
-									}
-								else {
-									const t = e.HEAD.name,
-									n = new S(this),
-									i = [...r.filter(e => void 0 !== e.pushUrl).map(e => ({
-												label: e.name,
-												description: e.pushUrl
-											})), n],
-									s = f(112, null, t),
-									c = await a.window.showQuickPick(i, {
-											placeHolder: s
-										});
-									if (!c)
-										return;
-									if (c === n) {
-										const r = await this.addRemote(e);
-										r && await e.pushTo(r, t, void 0, o)
-									} else
-										await e.pushTo(c.label, t, void 0, o)
-								}
-							else
-								t.silent || a.window.showWarningMessage(f(109, null));
-						else
-							await e.pushFollowTags(void 0, o)
-					}
-					async push(e) {
-						await this._push(e, {
-							pushType: I.Push
-						})
-					}
-					async pushForce(e) {
-						await this._push(e, {
-							pushType: I.Push,
-							forcePush: !0
-						})
-					}
-					async pushFollowTags(e) {
-						await this._push(e, {
-							pushType: I.PushFollowTags
-						})
-					}
-					async pushFollowTagsForce(e) {
-						await this._push(e, {
-							pushType: I.PushFollowTags,
-							forcePush: !0
-						})
-					}
-					async pushTo(e) {
-						await this._push(e, {
-							pushType: I.PushTo
-						})
-					}
-					async pushToForce(e) {
-						await this._push(e, {
-							pushType: I.PushTo,
-							forcePush: !0
-						})
-					}
-					async addRemote(e) {
-						const t = e.remotes,
-						r = e => (e = e.trim()) && e.replace(/^\.|\/\.|\.\.|~|\^|:|\/$|\.lock$|\.lock\/|\\|\*|\s|^\s*$|\.$|\[|\]$/g, "-"),
-						n = await a.window.showInputBox({
-								placeHolder: f(113, null),
-								prompt: f(114, null),
-								ignoreFocusOut: !0,
-								validateInput: e => r(e) ? null : f(115, null)
-							}),
-						o = r(n || "");
-						if (!o)
-							return;
-						if (t.find(e => e.name === o))
-							return void a.window.showErrorMessage(f(116, null, o));
-						const i = await a.window.showInputBox({
-								placeHolder: f(117, null),
-								prompt: f(118, null, o),
-								ignoreFocusOut: !0
-							});
-						return i ? (await e.addRemote(o, i), o) : void 0
-					}
-					async removeRemote(e) {
-						const t = e.remotes;
-						if (0 === t.length)
-							return void a.window.showErrorMessage(f(119, null));
-						const r = t.map(e => e.name),
-						n = f(120, null),
-						o = await a.window.showQuickPick(r, {
-								placeHolder: n
-							});
-						o && await e.removeRemote(o)
-					}
-					async _sync(e, t) {
-						const r = e.HEAD;
-						if (!r)
-							return;
-						if (!r.upstream) {
-							const t = r.name,
-							n = f(121, null, t),
-							o = f(122, null);
-							return void(await a.window.showWarningMessage(n, {
-									modal: !0
-								}, o) === o && await this.publish(e))
-						}
-						const n = r.remote || r.upstream.remote,
-						o = e.remotes.find(e => e.name === n),
-						i = o && o.isReadOnly,
-						s = a.workspace.getConfiguration("git");
-						if (!i && !0 === s.get("confirmSync")) {
-							const e = f(123, null, r.upstream.remote, r.upstream.name),
-							t = f(124, null),
-							n = f(125, null),
+				}
+				async merge(e) {
+					const t = a.workspace.getConfiguration("git").get("checkoutType") || "all",
+					r = "all" === t || "remote" === t,
+					n = e.refs.filter(e => 0 === e.type).filter(e => e.name || e.commit).map(e => new w(e)),
+					o = (r ? e.refs.filter(e => 1 === e.type) : []).filter(e => e.name || e.commit).map(e => new w(e)),
+					i = [...n, ...o],
+					s = f(89, null),
+					c = await a.window.showQuickPick(i, {
+						placeHolder: s
+					});
+					c && await c.run(e)
+				}
+				async createTag(e) {
+					const t = await a.window.showInputBox({
+						placeHolder: f(90, null),
+						prompt: f(91, null),
+						ignoreFocusOut: !0
+					});
+					if (!t)
+						return;
+					const r = await a.window.showInputBox({
+						placeHolder: f(92, null),
+						prompt: f(93, null),
+						ignoreFocusOut: !0
+					}),
+					n = t.replace(/^\.|\/\.|\.\.|~|\^|:|\/$|\.lock$|\.lock\/|\\|\*|\s|^\s*$|\.$/g, "-"),
+					o = r || n;
+					await e.tag(n, o)
+				}
+				async deleteTag(e) {
+					const t = e.refs.filter(e => 2 === e.type).map(e => new x(e));
+					if (0 === t.length)
+						return void a.window.showWarningMessage(f(94, null));
+					const r = f(95, null),
+					n = await a.window.showQuickPick(t, {
+						placeHolder: r
+					});
+					n && await e.deleteTag(n.label)
+				}
+				async fetch(e) {
+					0 !== e.remotes.length ? await e.fetchDefault() : a.window.showWarningMessage(f(96, null))
+				}
+				async fetchPrune(e) {
+					0 !== e.remotes.length ? await e.fetchPrune() : a.window.showWarningMessage(f(97, null))
+				}
+				async fetchAll(e) {
+					0 !== e.remotes.length ? await e.fetchAll() : a.window.showWarningMessage(f(98, null))
+				}
+				async pullFrom(e) {
+					const t = e.remotes;
+					if (0 === t.length)
+						return void a.window.showWarningMessage(f(99, null));
+					const r = t.filter(e => void 0 !== e.fetchUrl).map(e => ({
+								label: e.name,
+								description: e.fetchUrl
+							})),
+					n = f(100, null),
+					o = await a.window.showQuickPick(r, {
+						placeHolder: n
+					});
+					if (!o)
+						return;
+					const i = e.refs.filter(e => e.remote === o.label).map(e => ({
+								label: e.name
+							})),
+					s = f(101, null),
+					c = await a.window.showQuickPick(i, {
+						placeHolder: s
+					});
+					if (!c)
+						return;
+					const u = o.label.length;
+					await e.pullFrom(!1, o.label, c.label.slice(u + 1))
+				}
+				async pull(e) {
+					0 !== e.remotes.length ? await e.pull(e.HEAD) : a.window.showWarningMessage(f(102, null))
+				}
+				async pullRebase(e) {
+					0 !== e.remotes.length ? await e.pullWithRebase(e.HEAD) : a.window.showWarningMessage(f(103, null))
+				}
+				async _push(e, t) {
+					const r = e.remotes;
+					if (0 === r.length)
+						return void(t.silent || a.window.showWarningMessage(f(104, null)));
+					const n = a.workspace.getConfiguration("git", a.Uri.file(e.root));
+					let o = void 0;
+					if (t.forcePush) {
+						if (!n.get("allowForcePush"))
+							return void await a.window.showErrorMessage(f(105, null));
+						if (o = !0 === n.get("useForcePushWithLease") ? u.ForcePushMode.ForceWithLease : u.ForcePushMode.Force, n.get("confirmForcePush")) {
+							const e = f(106, null),
+							t = f(107, null),
+							r = f(108, null),
 							o = await a.window.showWarningMessage(e, {
-									modal: !0
-								}, t, n);
-							if (o === n)
-								await s.update("confirmSync", !1, !0);
+								modal: !0
+							}, t, r);
+							if (o === r)
+								n.update("confirmForcePush", !1, !0);
 							else if (o !== t)
 								return
 						}
-						t ? await e.syncRebase(r) : await e.sync(r)
 					}
-					async sync(e) {
-						try {
-							await this._sync(e, !1)
-						} catch (e) {
-							if (/Cancelled/i.test(e && (e.message || e.stderr || "")))
-								return;
-							throw e
-						}
-					}
-					async syncAll() {
-						await Promise.all(this.model.repositories.map(async e => {
-								const t = e.HEAD;
-								t && t.upstream && await e.sync(t)
-							}))
-					}
-					async syncRebase(e) {
-						try {
-							await this._sync(e, !0)
-						} catch (e) {
-							if (/Cancelled/i.test(e && (e.message || e.stderr || "")))
-								return;
-							throw e
-						}
-					}
-					async publish(e) {
-						if (0 === e.remotes.length)
-							return void a.window.showWarningMessage(f(126, null));
-						const t = new S(this),
-						r = [...e.remotes.map(e => ({
-									label: e.name,
-									description: e.pushUrl
-								})), t],
-						n = e.HEAD && e.HEAD.name || "",
-						o = f(127, null, n),
-						i = await a.window.showQuickPick(r, {
-								placeHolder: o
-							});
-						if (i)
-							if (i === t) {
-								const t = await this.addRemote(e);
-								t && await e.pushTo(t, n, !0)
-							} else
-								await e.pushTo(i.label, n, !0)
-					}
-					async ignore(...e) {
-						if (0 === (e = e.filter(e => !!e)).length || e[0] && !(e[0].resourceUri instanceof a.Uri)) {
-							const t = this.getSCMResource();
-							if (!t)
-								return;
-							e = [t]
-						}
-						const t = e.filter(e => e instanceof l.Resource).map(e => e.resourceUri);
-						t.length && await this.runByRepository(t, async(e, t) => e.ignore(t))
-					}
-					async revealInExplorer(e) {
-						e && e.resourceUri instanceof a.Uri && await a.commands.executeCommand("revealInExplorer", e.resourceUri)
-					}
-					async _stash(e, t = !1) {
-						const r = 0 === e.workingTreeGroup.resourceStates.length && (!t || 0 === e.untrackedGroup.resourceStates.length),
-						n = 0 === e.indexGroup.resourceStates.length;
-						if (r && n)
-							return void a.window.showInformationMessage(f(128, null));
-						const o = await this.getStashMessage();
-						void 0 !== o && await e.createStash(o, t)
-					}
-					async getStashMessage() {
-						return await a.window.showInputBox({
-							prompt: f(129, null),
-							placeHolder: f(130, null)
-						})
-					}
-					stash(e) {
-						return this._stash(e)
-					}
-					stashIncludeUntracked(e) {
-						return this._stash(e, !0)
-					}
-					async stashPop(e) {
-						const t = f(131, null),
-						r = await this.pickStash(e, t);
-						r && await e.popStash(r.index)
-					}
-					async stashPopLatest(e) {
-						0 !== (await e.getStashes()).length ? await e.popStash() : a.window.showInformationMessage(f(132, null))
-					}
-					async stashApply(e) {
-						const t = f(133, null),
-						r = await this.pickStash(e, t);
-						r && await e.applyStash(r.index)
-					}
-					async stashApplyLatest(e) {
-						0 !== (await e.getStashes()).length ? await e.applyStash() : a.window.showInformationMessage(f(134, null))
-					}
-					async stashDrop(e) {
-						const t = f(135, null),
-						r = await this.pickStash(e, t);
-						r && await e.dropStash(r.index)
-					}
-					async pickStash(e, t) {
-						const r = await e.getStashes();
-						if (0 === r.length)
-							return void a.window.showInformationMessage(f(136, null));
-						const n = r.map(e => ({
-									label: `#${e.index}:  ${e.description}`,
-									description: "",
-									details: "",
-									stash: e
-								})),
-						o = await a.window.showQuickPick(n, {
-								placeHolder: t
-							});
-						return o && o.stash
-					}
-					createCommand(e, t, r, n) {
-						const o = (...t) => {
-							let o;
-							if (n.repository) {
-								const e = this.model.getRepository(t[0]);
-								let n;
-								o = (n = e ? Promise.resolve(e) : 1 === this.model.repositories.length ? Promise.resolve(this.model.repositories[0]) : this.model.pickRepository()).then(e => e ? Promise.resolve(r.apply(this, [e, ...t])) : Promise.resolve())
-							} else
-								o = Promise.resolve(r.apply(this, t));
-							return this.telemetryReporter.sendTelemetryEvent("git.command", {
-								command: e
-							}),
-							o.catch(async e => {
-								const t = {
-									modal: !0
-								};
-								let r,
-								n = "error";
-								const o = new Map,
-								i = f(137, null),
-								s = this.outputChannel;
-								switch (o.set(i, () => s.show()), e.gitErrorCode) {
-								case "DirtyWorkTree":
-									r = f(138, null);
-									break;
-								case "PushRejected":
-									r = f(139, null);
-									break;
-								case "Conflict":
-									r = f(140, null),
-									n = "warning",
-									t.modal = !1;
-									break;
-								case "StashConflict":
-									r = f(141, null),
-									n = "warning",
-									t.modal = !1;
-									break;
-								case "NoUserNameConfigured":
-								case "NoUserEmailConfigured":
-									r = f(142, null),
-									o.set(f(143, null), () => a.commands.executeCommand("vscode.open", a.Uri.parse("https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup")));
-									break;
-								default:
-									const c = (e.stderr || e.message || String(e)).replace(/^error: /im, "").replace(/^> husky.*$/im, "").split(/[\r\n]/).filter(e => !!e)[0];
-									r = c ? f(144, null, c) : f(145, null)
+					if (t.pushType !== I.PushFollowTags)
+						if (e.HEAD && e.HEAD.name)
+							if (t.pushType === I.Push)
+								try {
+									await e.push(e.HEAD, o)
+								} catch (r) {
+									if ("NoUpstreamBranch" !== r.gitErrorCode)
+										throw r;
+									if (t.silent)
+										return;
+									const n = e.HEAD.name,
+									o = f(110, null, n),
+									i = f(111, null);
+									await a.window.showWarningMessage(o, {
+										modal: !0
+									}, i) === i && await this.publish(e)
 								}
-								if (!r)
-									return void console.error(e);
-								const c = Array.from(o.keys()),
-								u = "error" === n ? await a.window.showErrorMessage(r, t, ...c) : await a.window.showWarningMessage(r, t, ...c);
-								if (u) {
-									const e = o.get(u);
-									e && e()
-								}
-							})
-						};
-						return this[t] = o,
-						o
-					}
-					getSCMResource(e) {
-						e = e || a.window.activeTextEditor && a.window.activeTextEditor.document.uri,
-						this.outputChannel.appendLine(`git.getSCMResource.uri ${e&&e.toString()}`);
-						for (const e of this.model.repositories.map(e => e.root))
-							this.outputChannel.appendLine(`repo root ${e}`);
-						if (e) {
-							if ("git" === e.scheme) {
-								const {
-									path: t
-								} = p.fromGitUri(e);
-								e = a.Uri.file(t)
-							}
-							if ("file" === e.scheme) {
-								const t = e.toString(),
-								r = this.model.getRepository(e);
-								if (!r)
+							else {
+								const t = e.HEAD.name,
+								n = new S(this),
+								i = [...r.filter(e => void 0 !== e.pushUrl).map(e => ({
+											label: e.name,
+											description: e.pushUrl
+										})), n],
+								s = f(112, null, t),
+								c = await a.window.showQuickPick(i, {
+									placeHolder: s
+								});
+								if (!c)
 									return;
-								return r.workingTreeGroup.resourceStates.filter(e => e.resourceUri.toString() === t)[0] || r.indexGroup.resourceStates.filter(e => e.resourceUri.toString() === t)[0]
+								if (c === n) {
+									const r = await this.addRemote(e);
+									r && await e.pushTo(r, t, void 0, o)
+								} else
+									await e.pushTo(c.label, t, void 0, o)
 							}
-						}
-					}
-					async runByRepository(e, t) {
-						const r = e instanceof a.Uri ? [e] : e,
-						n = e instanceof a.Uri,
-						o = r.reduce((e, t) => {
-								let r = this.model.getRepository(t);
-								if (!r)
-									return console.warn("Could not find git repository for ", t), e;
-								d.pathEquals(t.fsPath, r.root) && (r = this.model.getRepositoryForSubmodule(t) || r);
-								const n = e.filter(e => e.repository === r)[0];
-								return n ? n.resources.push(t) : e.push({
-									repository: r,
-									resources: [t]
-								}),
-								e
-							}, []).map(({
-									repository: e,
-									resources: r
-								}) => t(e, n ? r[0] : r));
-						return Promise.all(o)
-					}
-					dispose() {
-						this.disposables.forEach(e => e.dispose())
-					}
-				}
-				n([T("git.refresh", {
-							repository: !0
-						})], D.prototype, "refresh", null),
-				n([T("git.openResource")], D.prototype, "openResource", null),
-				n([T("git.clone")], D.prototype, "clone", null),
-				n([T("git.init")], D.prototype, "init", null),
-				n([T("git.openRepository", {
-							repository: !1
-						})], D.prototype, "openRepository", null),
-				n([T("git.close", {
-							repository: !0
-						})], D.prototype, "close", null),
-				n([T("git.openFile")], D.prototype, "openFile", null),
-				n([T("git.openFile2")], D.prototype, "openFile2", null),
-				n([T("git.openHEADFile")], D.prototype, "openHEADFile", null),
-				n([T("git.openChange")], D.prototype, "openChange", null),
-				n([T("git.stage")], D.prototype, "stage", null),
-				n([T("git.stageAll", {
-							repository: !0
-						})], D.prototype, "stageAll", null),
-				n([T("git.stageAllTracked", {
-							repository: !0
-						})], D.prototype, "stageAllTracked", null),
-				n([T("git.stageAllUntracked", {
-							repository: !0
-						})], D.prototype, "stageAllUntracked", null),
-				n([T("git.stageChange")], D.prototype, "stageChange", null),
-				n([T("git.stageSelectedRanges", {
-							diff: !0
-						})], D.prototype, "stageSelectedChanges", null),
-				n([T("git.revertChange")], D.prototype, "revertChange", null),
-				n([T("git.revertSelectedRanges", {
-							diff: !0
-						})], D.prototype, "revertSelectedRanges", null),
-				n([T("git.unstage")], D.prototype, "unstage", null),
-				n([T("git.unstageAll", {
-							repository: !0
-						})], D.prototype, "unstageAll", null),
-				n([T("git.unstageSelectedRanges", {
-							diff: !0
-						})], D.prototype, "unstageSelectedRanges", null),
-				n([T("git.clean")], D.prototype, "clean", null),
-				n([T("git.cleanAll", {
-							repository: !0
-						})], D.prototype, "cleanAll", null),
-				n([T("git.cleanAllTracked", {
-							repository: !0
-						})], D.prototype, "cleanAllTracked", null),
-				n([T("git.cleanAllUntracked", {
-							repository: !0
-						})], D.prototype, "cleanAllUntracked", null),
-				n([T("git.commit", {
-							repository: !0
-						})], D.prototype, "commit", null),
-				n([T("git.commitStaged", {
-							repository: !0
-						})], D.prototype, "commitStaged", null),
-				n([T("git.commitStagedSigned", {
-							repository: !0
-						})], D.prototype, "commitStagedSigned", null),
-				n([T("git.commitStagedAmend", {
-							repository: !0
-						})], D.prototype, "commitStagedAmend", null),
-				n([T("git.commitAll", {
-							repository: !0
-						})], D.prototype, "commitAll", null),
-				n([T("git.commitAllSigned", {
-							repository: !0
-						})], D.prototype, "commitAllSigned", null),
-				n([T("git.commitAllAmend", {
-							repository: !0
-						})], D.prototype, "commitAllAmend", null),
-				n([T("git.commitEmpty", {
-							repository: !0
-						})], D.prototype, "commitEmpty", null),
-				n([T("git.restoreCommitTemplate", {
-							repository: !0
-						})], D.prototype, "restoreCommitTemplate", null),
-				n([T("git.undoCommit", {
-							repository: !0
-						})], D.prototype, "undoCommit", null),
-				n([T("git.checkout", {
-							repository: !0
-						})], D.prototype, "checkout", null),
-				n([T("git.branch", {
-							repository: !0
-						})], D.prototype, "branch", null),
-				n([T("git.branchFrom", {
-							repository: !0
-						})], D.prototype, "branchFrom", null),
-				n([T("git.deleteBranch", {
-							repository: !0
-						})], D.prototype, "deleteBranch", null),
-				n([T("git.renameBranch", {
-							repository: !0
-						})], D.prototype, "renameBranch", null),
-				n([T("git.merge", {
-							repository: !0
-						})], D.prototype, "merge", null),
-				n([T("git.createTag", {
-							repository: !0
-						})], D.prototype, "createTag", null),
-				n([T("git.deleteTag", {
-							repository: !0
-						})], D.prototype, "deleteTag", null),
-				n([T("git.fetch", {
-							repository: !0
-						})], D.prototype, "fetch", null),
-				n([T("git.fetchPrune", {
-							repository: !0
-						})], D.prototype, "fetchPrune", null),
-				n([T("git.fetchAll", {
-							repository: !0
-						})], D.prototype, "fetchAll", null),
-				n([T("git.pullFrom", {
-							repository: !0
-						})], D.prototype, "pullFrom", null),
-				n([T("git.pull", {
-							repository: !0
-						})], D.prototype, "pull", null),
-				n([T("git.pullRebase", {
-							repository: !0
-						})], D.prototype, "pullRebase", null),
-				n([T("git.push", {
-							repository: !0
-						})], D.prototype, "push", null),
-				n([T("git.pushForce", {
-							repository: !0
-						})], D.prototype, "pushForce", null),
-				n([T("git.pushWithTags", {
-							repository: !0
-						})], D.prototype, "pushFollowTags", null),
-				n([T("git.pushWithTagsForce", {
-							repository: !0
-						})], D.prototype, "pushFollowTagsForce", null),
-				n([T("git.pushTo", {
-							repository: !0
-						})], D.prototype, "pushTo", null),
-				n([T("git.pushToForce", {
-							repository: !0
-						})], D.prototype, "pushToForce", null),
-				n([T("git.addRemote", {
-							repository: !0
-						})], D.prototype, "addRemote", null),
-				n([T("git.removeRemote", {
-							repository: !0
-						})], D.prototype, "removeRemote", null),
-				n([T("git.sync", {
-							repository: !0
-						})], D.prototype, "sync", null),
-				n([T("git._syncAll")], D.prototype, "syncAll", null),
-				n([T("git.syncRebase", {
-							repository: !0
-						})], D.prototype, "syncRebase", null),
-				n([T("git.publish", {
-							repository: !0
-						})], D.prototype, "publish", null),
-				n([T("git.ignore")], D.prototype, "ignore", null),
-				n([T("git.revealInExplorer")], D.prototype, "revealInExplorer", null),
-				n([T("git.stash", {
-							repository: !0
-						})], D.prototype, "stash", null),
-				n([T("git.stashIncludeUntracked", {
-							repository: !0
-						})], D.prototype, "stashIncludeUntracked", null),
-				n([T("git.stashPop", {
-							repository: !0
-						})], D.prototype, "stashPop", null),
-				n([T("git.stashPopLatest", {
-							repository: !0
-						})], D.prototype, "stashPopLatest", null),
-				n([T("git.stashApply", {
-							repository: !0
-						})], D.prototype, "stashApply", null),
-				n([T("git.stashApplyLatest", {
-							repository: !0
-						})], D.prototype, "stashApplyLatest", null),
-				n([T("git.stashDrop", {
-							repository: !0
-						})], D.prototype, "stashDrop", null),
-				t.CommandCenter = D
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				const n = r(4);
-				function o(e, t) {
-					return 0 === t.modifiedEndLineNumber ? 0 === t.modifiedStartLineNumber ? new n.Range(e.lineAt(t.modifiedStartLineNumber).range.end, e.lineAt(t.modifiedStartLineNumber).range.start) : e.lineCount === t.modifiedStartLineNumber ? new n.Range(e.lineAt(t.modifiedStartLineNumber - 1).range.end, e.lineAt(t.modifiedStartLineNumber - 1).range.end) : new n.Range(e.lineAt(t.modifiedStartLineNumber - 1).range.end, e.lineAt(t.modifiedStartLineNumber).range.start) : new n.Range(e.lineAt(t.modifiedStartLineNumber - 1).range.start, e.lineAt(t.modifiedEndLineNumber - 1).range.end)
-				}
-				t.applyLineChanges = function (e, t, r) {
-					const o = [];
-					let i = 0;
-					for (let s of r) {
-						const r = 0 === s.originalEndLineNumber,
-						a = 0 === s.modifiedEndLineNumber;
-						let c = r ? s.originalStartLineNumber : s.originalStartLineNumber - 1,
-						u = 0;
-						if (a && s.originalStartLineNumber === e.lineCount && (c -= 1, u = e.lineAt(c).range.end.character), o.push(e.getText(new n.Range(i, 0, c, u))), !a) {
-							let i = s.modifiedStartLineNumber - 1,
-							a = 0;
-							r && s.originalStartLineNumber === e.lineCount && (i -= 1, a = t.lineAt(i).range.end.character),
-							o.push(t.getText(new n.Range(i, a, s.modifiedEndLineNumber, 0)))
-						}
-						i = r ? s.originalStartLineNumber : s.originalEndLineNumber
-					}
-					return o.push(e.getText(new n.Range(i, 0, e.lineCount, 0))),
-					o.join("")
-				},
-				t.toLineRanges = function (e, t) {
-					const r = e.map(e => {
-							const r = t.lineAt(e.start.line),
-							o = t.lineAt(e.end.line);
-							return new n.Range(r.range.start, o.range.end)
-						});
-					r.sort((e, t) => e.start.line - t.start.line);
-					const o = r.reduce((e, t) => {
-							if (0 === e.length)
-								return e.push(t), e;
-							const[r, ...o] = e,
-							i = t.intersection(r);
-							return i ? [i, ...o] : t.start.line === r.end.line + 1 ? [new n.Range(r.start, t.end), ...o] : [t, ...e]
-						}, []);
-					return o.reverse(),
-					o
-				},
-				t.getModifiedRange = o,
-				t.intersectDiffWithRange = function (e, t, r) {
-					const n = o(e, t),
-					i = r.intersection(n);
-					return i ? 0 === t.modifiedEndLineNumber ? t : {
-						originalStartLineNumber: t.originalStartLineNumber,
-						originalEndLineNumber: t.originalEndLineNumber,
-						modifiedStartLineNumber: i.start.line + 1,
-						modifiedEndLineNumber: i.end.line + 1
-					}
-					 : null
-				},
-				t.invertLineChange = function (e) {
-					return {
-						modifiedStartLineNumber: e.originalStartLineNumber,
-						modifiedEndLineNumber: e.originalEndLineNumber,
-						originalStartLineNumber: e.modifiedStartLineNumber,
-						originalEndLineNumber: e.modifiedEndLineNumber
-					}
-				}
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__decorate || function (e, t, r, n) {
-					var o,
-					i = arguments.length,
-					s = i < 3 ? t : null === n ? n = Object.getOwnPropertyDescriptor(t, r) : n;
-					if ("object" == typeof Reflect && "function" == typeof Reflect.decorate)
-						s = Reflect.decorate(e, t, r, n);
+						else
+							t.silent || a.window.showWarningMessage(f(109, null));
 					else
-						for (var a = e.length - 1; a >= 0; a--)
-							(o = e[a]) && (s = (i < 3 ? o(s) : i > 3 ? o(t, r, s) : o(t, r)) || s);
-					return i > 3 && s && Object.defineProperty(t, r, s),
-					s
-				};
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				const o = r(4),
-				i = r(18),
-				s = r(19),
-				a = r(5),
-				c = 18e4,
-				u = 3e5;
-				class l {
-					constructor(e) {
-						this.model = e,
-						this._onDidChange = new o.EventEmitter,
-						this.changedRepositoryRoots = new Set,
-						this.cache = Object.create(null),
-						this.disposables = [],
-						this.disposables.push(e.onDidChangeRepository(this.onDidChangeRepository, this), e.onDidChangeOriginalResource(this.onDidChangeOriginalResource, this), o.workspace.registerTextDocumentContentProvider("git", this)),
-						setInterval(() => this.cleanup(), u)
+						await e.pushFollowTags(void 0, o)
+				}
+				async push(e) {
+					await this._push(e, {
+						pushType: I.Push
+					})
+				}
+				async pushForce(e) {
+					await this._push(e, {
+						pushType: I.Push,
+						forcePush: !0
+					})
+				}
+				async pushFollowTags(e) {
+					await this._push(e, {
+						pushType: I.PushFollowTags
+					})
+				}
+				async pushFollowTagsForce(e) {
+					await this._push(e, {
+						pushType: I.PushFollowTags,
+						forcePush: !0
+					})
+				}
+				async pushTo(e) {
+					await this._push(e, {
+						pushType: I.PushTo
+					})
+				}
+				async pushToForce(e) {
+					await this._push(e, {
+						pushType: I.PushTo,
+						forcePush: !0
+					})
+				}
+				async addRemote(e) {
+					const t = e.remotes,
+					r = e => (e = e.trim()) && e.replace(/^\.|\/\.|\.\.|~|\^|:|\/$|\.lock$|\.lock\/|\\|\*|\s|^\s*$|\.$|\[|\]$/g, "-"),
+					n = await a.window.showInputBox({
+						placeHolder: f(113, null),
+						prompt: f(114, null),
+						ignoreFocusOut: !0,
+						validateInput: e => r(e) ? null : f(115, null)
+					}),
+					o = r(n || "");
+					if (!o)
+						return;
+					if (t.find(e => e.name === o))
+						return void a.window.showErrorMessage(f(116, null, o));
+					const i = await a.window.showInputBox({
+						placeHolder: f(117, null),
+						prompt: f(118, null, o),
+						ignoreFocusOut: !0
+					});
+					return i ? (await e.addRemote(o, i), o) : void 0
+				}
+				async removeRemote(e) {
+					const t = e.remotes;
+					if (0 === t.length)
+						return void a.window.showErrorMessage(f(119, null));
+					const r = t.map(e => e.name),
+					n = f(120, null),
+					o = await a.window.showQuickPick(r, {
+						placeHolder: n
+					});
+					o && await e.removeRemote(o)
+				}
+				async _sync(e, t) {
+					const r = e.HEAD;
+					if (!r)
+						return;
+					if (!r.upstream) {
+						const t = r.name,
+						n = f(121, null, t),
+						o = f(122, null);
+						return void(await a.window.showWarningMessage(n, {
+								modal: !0
+							}, o) === o && await this.publish(e))
 					}
-					get onDidChange() {
-						return this._onDidChange.event
+					const n = r.remote || r.upstream.remote,
+					o = e.remotes.find(e => e.name === n),
+					i = o && o.isReadOnly,
+					s = a.workspace.getConfiguration("git");
+					if (!i && !0 === s.get("confirmSync")) {
+						const e = f(123, null, r.upstream.remote, r.upstream.name),
+						t = f(124, null),
+						n = f(125, null),
+						o = await a.window.showWarningMessage(e, {
+							modal: !0
+						}, t, n);
+						if (o === n)
+							await s.update("confirmSync", !1, !0);
+						else if (o !== t)
+							return
 					}
-					onDidChangeRepository({
-						repository: e
-					}) {
-						this.changedRepositoryRoots.add(e.root),
-						this.eventuallyFireChangeEvents()
-					}
-					onDidChangeOriginalResource({
-						uri: e
-					}) {
-						"file" === e.scheme && this._onDidChange.fire(s.toGitUri(e, "", {
-								replaceFileExtension: !0
-							}))
-					}
-					eventuallyFireChangeEvents() {
-						this.fireChangeEvents()
-					}
-					async fireChangeEvents() {
-						if (!o.window.state.focused) {
-							const e = a.filterEvent(o.window.onDidChangeWindowState, e => e.focused);
-							await a.eventToPromise(e)
-						}
-						Object.keys(this.cache).forEach(e => {
-							const t = this.cache[e].uri,
-							r = t.fsPath;
-							for (const e of this.changedRepositoryRoots)
-								if (a.isDescendant(e, r))
-									return void this._onDidChange.fire(t)
-						}),
-						this.changedRepositoryRoots.clear()
-					}
-					async provideTextDocumentContent(e) {
-						let {
-							path: t,
-							ref: r,
-							submoduleOf: n
-						} = s.fromGitUri(e);
-						if (n) {
-							const e = this.model.getRepository(n);
-							return e ? "index" === r ? await e.diffIndexWithHEAD(t) : await e.diffWithHEAD(t) : ""
-						}
-						const i = this.model.getRepository(e);
-						if (!i)
-							return "";
-						const a = e.toString(),
-						c = {
-							uri: e,
-							timestamp: (new Date).getTime()
-						};
-						if (this.cache[a] = c, "~" === r) {
-							const e = o.Uri.file(t).toString(),
-							[n] = i.indexGroup.resourceStates.filter(t => t.resourceUri.toString() === e);
-							r = n ? "" : "HEAD"
-						} else  /  ^ ~ \ d$ / .test(r) && (r = `:${r[1]}`);
-						try {
-							return await i.show(r, t)
-						} catch (e) {
-							return ""
-						}
-					}
-					cleanup() {
-						const e = (new Date).getTime(),
-						t = Object.create(null);
-						Object.keys(this.cache).forEach(r => {
-							const n = this.cache[r], {
-								path: i
-							} = s.fromGitUri(n.uri);
-							(o.workspace.textDocuments.filter(e => "file" === e.uri.scheme).some(e => a.pathEquals(e.uri.fsPath, i)) || e - n.timestamp < c) && (t[n.uri.toString()] = n)
-						}),
-						this.cache = t
-					}
-					dispose() {
-						this.disposables.forEach(e => e.dispose())
+					t ? await e.syncRebase(r) : await e.sync(r)
+				}
+				async sync(e) {
+					try {
+						await this._sync(e, !1)
+					} catch (e) {
+						if (/Cancelled/i.test(e && (e.message || e.stderr || "")))
+							return;
+						throw e
 					}
 				}
-				n([i.debounce(1100)], l.prototype, "eventuallyFireChangeEvents", null),
-				n([i.throttle], l.prototype, "fireChangeEvents", null),
-				t.GitContentProvider = l
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__decorate || function (e, t, r, n) {
-					var o,
-					i = arguments.length,
-					s = i < 3 ? t : null === n ? n = Object.getOwnPropertyDescriptor(t, r) : n;
-					if ("object" == typeof Reflect && "function" == typeof Reflect.decorate)
-						s = Reflect.decorate(e, t, r, n);
-					else
-						for (var a = e.length - 1; a >= 0; a--)
-							(o = e[a]) && (s = (i < 3 ? o(s) : i > 3 ? o(t, r, s) : o(t, r)) || s);
-					return i > 3 && s && Object.defineProperty(t, r, s),
-					s
-				};
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				const o = r(4),
-				i = r(1),
-				s = r(18),
-				a = r(5);
-				class c {
-					constructor(e) {
-						this.model = e,
-						this.queue = new Map,
-						this.disposables = [],
-						this.onDidChangeDecorations = a.fireEvent(a.anyEvent(a.filterEvent(o.workspace.onDidSaveTextDocument, e => e.fileName.endsWith(".gitignore")), e.onDidOpenRepository, e.onDidCloseRepository)),
-						this.disposables.push(o.window.registerDecorationProvider(this))
+				async syncAll() {
+					await Promise.all(this.model.repositories.map(async e => {
+							const t = e.HEAD;
+							t && t.upstream && await e.sync(t)
+						}))
+				}
+				async syncRebase(e) {
+					try {
+						await this._sync(e, !0)
+					} catch (e) {
+						if (/Cancelled/i.test(e && (e.message || e.stderr || "")))
+							return;
+						throw e
 					}
-					provideDecoration(e) {
-						const t = this.model.getRepository(e);
+				}
+				async publish(e) {
+					if (0 === e.remotes.length)
+						return void a.window.showWarningMessage(f(126, null));
+					const t = new S(this),
+					r = [...e.remotes.map(e => ({
+								label: e.name,
+								description: e.pushUrl
+							})), t],
+					n = e.HEAD && e.HEAD.name || "",
+					o = f(127, null, n),
+					i = await a.window.showQuickPick(r, {
+						placeHolder: o
+					});
+					if (i)
+						if (i === t) {
+							const t = await this.addRemote(e);
+							t && await e.pushTo(t, n, !0)
+						} else
+							await e.pushTo(i.label, n, !0)
+				}
+				async ignore(...e) {
+					if (0 === (e = e.filter(e => !!e)).length || e[0] && !(e[0].resourceUri instanceof a.Uri)) {
+						const t = this.getSCMResource();
 						if (!t)
-							return Promise.resolve(void 0);
-						let r = this.queue.get(t.root);
-						return r || (r = {
-								repository: t,
-								queue: new Map
-							}, this.queue.set(t.root, r)),
-						new Promise((t, n) => {
-							r.queue.set(e.fsPath, {
-								resolve: t,
-								reject: n
-							}),
-							this.checkIgnoreSoon()
-						}).then(e => {
-							if (e)
-								return {
-									priority: 3,
-									color: new o.ThemeColor("gitDecoration.ignoredResourceForeground")
-								}
+							return;
+						e = [t]
+					}
+					const t = e.filter(e => e instanceof l.Resource).map(e => e.resourceUri);
+					t.length && await this.runByRepository(t, async(e, t) => e.ignore(t))
+				}
+				async revealInExplorer(e) {
+					e && e.resourceUri instanceof a.Uri && await a.commands.executeCommand("revealInExplorer", e.resourceUri)
+				}
+				async _stash(e, t = !1) {
+					const r = 0 === e.workingTreeGroup.resourceStates.length && (!t || 0 === e.untrackedGroup.resourceStates.length),
+					n = 0 === e.indexGroup.resourceStates.length;
+					if (r && n)
+						return void a.window.showInformationMessage(f(128, null));
+					const o = await this.getStashMessage();
+					void 0 !== o && await e.createStash(o, t)
+				}
+				async getStashMessage() {
+					return await a.window.showInputBox({
+						prompt: f(129, null),
+						placeHolder: f(130, null)
+					})
+				}
+				stash(e) {
+					return this._stash(e)
+				}
+				stashIncludeUntracked(e) {
+					return this._stash(e, !0)
+				}
+				async stashPop(e) {
+					const t = f(131, null),
+					r = await this.pickStash(e, t);
+					r && await e.popStash(r.index)
+				}
+				async stashPopLatest(e) {
+					0 !== (await e.getStashes()).length ? await e.popStash() : a.window.showInformationMessage(f(132, null))
+				}
+				async stashApply(e) {
+					const t = f(133, null),
+					r = await this.pickStash(e, t);
+					r && await e.applyStash(r.index)
+				}
+				async stashApplyLatest(e) {
+					0 !== (await e.getStashes()).length ? await e.applyStash() : a.window.showInformationMessage(f(134, null))
+				}
+				async stashDrop(e) {
+					const t = f(135, null),
+					r = await this.pickStash(e, t);
+					r && await e.dropStash(r.index)
+				}
+				async pickStash(e, t) {
+					const r = await e.getStashes();
+					if (0 === r.length)
+						return void a.window.showInformationMessage(f(136, null));
+					const n = r.map(e => ({
+								label: `#${e.index}:  ${e.description}`,
+								description: "",
+								details: "",
+								stash: e
+							})),
+					o = await a.window.showQuickPick(n, {
+						placeHolder: t
+					});
+					return o && o.stash
+				}
+				createCommand(e, t, r, n) {
+					const o = (...t) => {
+						let o;
+						if (n.repository) {
+							const e = this.model.getRepository(t[0]);
+							let n;
+							o = (n = e ? Promise.resolve(e) : 1 === this.model.repositories.length ? Promise.resolve(this.model.repositories[0]) : this.model.pickRepository()).then(e => e ? Promise.resolve(r.apply(this, [e, ...t])) : Promise.resolve())
+						} else
+							o = Promise.resolve(r.apply(this, t));
+						return this.telemetryReporter.sendTelemetryEvent("git.command", {
+							command: e
+						}),
+						o.catch(async e => {
+							const t = {
+								modal: !0
+							};
+							let r,
+							n = "error";
+							const o = new Map,
+							i = f(137, null),
+							s = this.outputChannel;
+							switch (o.set(i, () => s.show()), e.gitErrorCode) {
+							case "DirtyWorkTree":
+								r = f(138, null);
+								break;
+							case "PushRejected":
+								r = f(139, null);
+								break;
+							case "Conflict":
+								r = f(140, null),
+								n = "warning",
+								t.modal = !1;
+								break;
+							case "StashConflict":
+								r = f(141, null),
+								n = "warning",
+								t.modal = !1;
+								break;
+							case "NoUserNameConfigured":
+							case "NoUserEmailConfigured":
+								r = f(142, null),
+								o.set(f(143, null), () => a.commands.executeCommand("vscode.open", a.Uri.parse("https://git-scm.com/book/en/v2/Getting-Started-First-Time-Git-Setup")));
+								break;
+							default:
+								const c = (e.stderr || e.message || String(e)).replace(/^error: /im, "").replace(/^> husky.*$/im, "").split(/[\r\n]/).filter(e => !!e)[0];
+								r = c ? f(144, null, c) : f(145, null)
+							}
+							if (!r)
+								return void console.error(e);
+							const c = Array.from(o.keys()),
+							u = "error" === n ? await a.window.showErrorMessage(r, t, ...c) : await a.window.showWarningMessage(r, t, ...c);
+							if (u) {
+								const e = o.get(u);
+								e && e()
+							}
 						})
-					}
-					checkIgnoreSoon() {
-						const e = new Map(this.queue.entries());
-						this.queue.clear();
-						for (const[, t]of e) {
-							const e = [...t.queue.keys()];
-							t.repository.checkIgnore(e).then(e => {
-								for (const[r, n]of t.queue.entries())
-									n.resolve(e.has(r))
-							}, e => {
-								"IsInSubmodule" !== e.gitErrorCode && console.error(e);
-								for (const[, r]of t.queue.entries())
-									r.reject(e)
-							})
-						}
-					}
-					dispose() {
-						this.disposables.forEach(e => e.dispose()),
-						this.queue.clear()
-					}
+					};
+					return this[t] = o,
+					o
 				}
-				n([s.debounce(500)], c.prototype, "checkIgnoreSoon", null);
-				class u {
-					constructor(e) {
-						this.repository = e,
-						this._onDidChangeDecorations = new o.EventEmitter,
-						this.onDidChangeDecorations = this._onDidChangeDecorations.event,
-						this.disposables = [],
-						this.decorations = new Map,
-						this.disposables.push(o.window.registerDecorationProvider(this), e.onDidRunGitStatus(this.onDidRunGitStatus, this))
-					}
-					onDidRunGitStatus() {
-						let e = new Map;
-						this.collectSubmoduleDecorationData(e),
-						this.collectDecorationData(this.repository.indexGroup, e),
-						this.collectDecorationData(this.repository.untrackedGroup, e),
-						this.collectDecorationData(this.repository.workingTreeGroup, e),
-						this.collectDecorationData(this.repository.mergeGroup, e);
-						const t = new Set([...this.decorations.keys()].concat([...e.keys()]));
-						this.decorations = e,
-						this._onDidChangeDecorations.fire([...t.values()].map(e => o.Uri.parse(e, !0)))
-					}
-					collectDecorationData(e, t) {
-						for (const r of e.resourceStates) {
-							const e = r.resourceDecoration;
-							e && (t.set(r.original.toString(), e), 3 === r.type && t.set(r.resourceUri.toString(), e))
-						}
-					}
-					collectSubmoduleDecorationData(e) {
-						for (const t of this.repository.submodules)
-							e.set(o.Uri.file(i.join(this.repository.root, t.path)).toString(), u.SubmoduleDecorationData)
-					}
-					provideDecoration(e) {
-						return this.decorations.get(e.toString())
-					}
-					dispose() {
-						this.disposables.forEach(e => e.dispose())
-					}
-				}
-				u.SubmoduleDecorationData = {
-					title: "Submodule",
-					letter: "S",
-					color: new o.ThemeColor("gitDecoration.submoduleResourceForeground")
-				};
-				t.GitDecorations = class {
-					constructor(e) {
-						this.model = e,
-						this.disposables = [],
-						this.modelDisposables = [],
-						this.providers = new Map,
-						this.disposables.push(new c(e)),
-						a.filterEvent(o.workspace.onDidChangeConfiguration, e => e.affectsConfiguration("git.decorations.enabled"))(this.update, this, this.disposables),
-						this.update()
-					}
-					update() {
-						o.workspace.getConfiguration("git").get("decorations.enabled") ? this.enable() : this.disable()
-					}
-					enable() {
-						this.model.onDidOpenRepository(this.onDidOpenRepository, this, this.modelDisposables),
-						this.model.onDidCloseRepository(this.onDidCloseRepository, this, this.modelDisposables),
-						this.model.repositories.forEach(this.onDidOpenRepository, this)
-					}
-					disable() {
-						this.modelDisposables = a.dispose(this.modelDisposables),
-						this.providers.forEach(e => e.dispose()),
-						this.providers.clear()
-					}
-					onDidOpenRepository(e) {
-						const t = new u(e);
-						this.providers.set(e, t)
-					}
-					onDidCloseRepository(e) {
-						const t = this.providers.get(e);
-						t && (t.dispose(), this.providers.delete(e))
-					}
-					dispose() {
-						this.disable(),
-						this.disposables = a.dispose(this.disposables)
-					}
-				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				const n = r(4),
-				o = r(5),
-				i = r(1),
-				s = r(13),
-				a = r(11),
-				c = r(2),
-				u = r(35),
-				l = o.denodeify(u.randomBytes);
-				t.Askpass = class {
-					constructor() {
-						this.enabled = !0,
-						this.server = s.createServer((e, t) => this.onRequest(e, t)),
-						this.ipcHandlePathPromise = this.setup().catch(e => (console.error(e), ""))
-					}
-					async setup() {
-						const e = function (e) {
-							return "win32" === process.platform ? `\\\\.\\pipe\\vscode-git-askpass-${e}-sock` : process.env.XDG_RUNTIME_DIR ? i.join(process.env.XDG_RUNTIME_DIR, `vscode-git-askpass-${e}.sock`) : i.join(a.tmpdir(), `vscode-git-askpass-${e}.sock`)
-						}
-						((await l(20)).toString("hex"));
-						this.ipcHandlePath = e;
-						try {
-							this.server.listen(e),
-							this.server.on("error", e => console.error(e))
-						} catch (e) {
-							console.error("Could not launch git askpass helper."),
-							this.enabled = !1
-						}
-						return e
-					}
-					onRequest(e, t) {
-						const r = [];
-						e.setEncoding("utf8"),
-						e.on("data", e => r.push(e)),
-						e.on("end", () => {
+				getSCMResource(e) {
+					e = e || a.window.activeTextEditor && a.window.activeTextEditor.document.uri,
+					this.outputChannel.appendLine(`git.getSCMResource.uri ${e&&e.toString()}`);
+					for (const e of this.model.repositories.map(e => e.root))
+						this.outputChannel.appendLine(`repo root ${e}`);
+					if (e) {
+						if ("git" === e.scheme) {
 							const {
-								request: e,
-								host: n
-							} = JSON.parse(r.join(""));
-							this.prompt(n, e).then(e => {
-								t.writeHead(200),
-								t.end(JSON.stringify(e))
-							}, () => {
-								t.writeHead(500),
-								t.end()
-							})
-						})
-					}
-					async prompt(e, t) {
-						const r = {
-							password: /password/i.test(t),
-							placeHolder: t,
-							prompt: `Git: ${e}`,
-							ignoreFocusOut: !0
-						};
-						return await n.window.showInputBox(r) || ""
-					}
-					async getEnv() {
-						return this.enabled ? {
-							ELECTRON_RUN_AS_NODE: "1",
-							GIT_ASKPASS: i.join(__dirname, "askpass.sh"),
-							VSCODE_GIT_ASKPASS_NODE: process.execPath,
-							VSCODE_GIT_ASKPASS_MAIN: i.join(__dirname, "askpass-main.js"),
-							VSCODE_GIT_ASKPASS_HANDLE: await this.ipcHandlePathPromise
+								path: t
+							} = p.fromGitUri(e);
+							e = a.Uri.file(t)
 						}
-						 : {
-							GIT_ASKPASS: i.join(__dirname, "askpass-empty.sh")
+						if ("file" === e.scheme) {
+							const t = e.toString(),
+							r = this.model.getRepository(e);
+							if (!r)
+								return;
+							return r.workingTreeGroup.resourceStates.filter(e => e.resourceUri.toString() === t)[0] || r.indexGroup.resourceStates.filter(e => e.resourceUri.toString() === t)[0]
 						}
-					}
-					dispose() {
-						this.server.close(),
-						this.ipcHandlePath && "win32" !== process.platform && c.unlinkSync(this.ipcHandlePath)
 					}
 				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				}),
-				process.env.APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = !0;
-				var n = r(2),
-				o = r(11),
-				i = r(1),
-				s = r(4),
-				a = r(116),
-				c = function () {
-					function e(e, t, r) {
-						var o = this;
-						this.extensionId = e,
-						this.extensionVersion = t,
-						this.userOptIn = !1;
-						var a = process.env.VSCODE_LOGS || "";
-						a && e && "trace" === process.env.VSCODE_LOG_LEVEL && (a = i.join(a, e + ".txt"), this.logStream = n.createWriteStream(a, {
-									flags: "a",
-									encoding: "utf8",
-									autoClose: !0
-								})),
-						this.updateUserOptIn(r),
-						this.configListener = s.workspace.onDidChangeConfiguration(function () {
-								return o.updateUserOptIn(r)
-							})
-					}
-					return e.prototype.updateUserOptIn = function (t) {
-						var r = s.workspace.getConfiguration(e.TELEMETRY_CONFIG_ID);
-						this.userOptIn !== r.get(e.TELEMETRY_CONFIG_ENABLED_ID, !0) && (this.userOptIn = r.get(e.TELEMETRY_CONFIG_ENABLED_ID, !0), this.userOptIn ? this.createAppInsightsClient(t) : this.dispose())
-					},
-					e.prototype.createAppInsightsClient = function (e) {
-						a.defaultClient ? (this.appInsightsClient = new a.TelemetryClient(e), this.appInsightsClient.channel.setUseDiskRetryCaching(!0)) : (a.setup(e).setAutoCollectRequests(!1).setAutoCollectPerformance(!1).setAutoCollectExceptions(!1).setAutoCollectDependencies(!1).setAutoDependencyCorrelation(!1).setAutoCollectConsole(!1).setUseDiskRetryCaching(!0).start(), this.appInsightsClient = a.defaultClient),
-						this.appInsightsClient.commonProperties = this.getCommonProperties(),
-						s && s.env && (this.appInsightsClient.context.tags[this.appInsightsClient.context.keys.userId] = s.env.machineId, this.appInsightsClient.context.tags[this.appInsightsClient.context.keys.sessionId] = s.env.sessionId),
-						e && 0 === e.indexOf("AIF-") && (this.appInsightsClient.config.endpointUrl = "https://vortex.data.microsoft.com/collect/v1")
-					},
-					e.prototype.getCommonProperties = function () {
-						var e = Object.create(null);
-						return e["common.os"] = o.platform(),
-						e["common.platformversion"] = (o.release() || "").replace(/^(\d+)(\.\d+)?(\.\d+)?(.*)/, "$1$2$3"),
-						e["common.extname"] = this.extensionId,
-						e["common.extversion"] = this.extensionVersion,
-						s && s.env && (e["common.vscodemachineid"] = s.env.machineId, e["common.vscodesessionid"] = s.env.sessionId, e["common.vscodeversion"] = s.version),
+				async runByRepository(e, t) {
+					const r = e instanceof a.Uri ? [e] : e,
+					n = e instanceof a.Uri,
+					o = r.reduce((e, t) => {
+						let r = this.model.getRepository(t);
+						if (!r)
+							return console.warn("Could not find git repository for ", t), e;
+						d.pathEquals(t.fsPath, r.root) && (r = this.model.getRepositoryForSubmodule(t) || r);
+						const n = e.filter(e => e.repository === r)[0];
+						return n ? n.resources.push(t) : e.push({
+							repository: r,
+							resources: [t]
+						}),
 						e
-					},
-					e.prototype.sendTelemetryEvent = function (e, t, r) {
-						this.userOptIn && e && this.appInsightsClient && (this.appInsightsClient.trackEvent({
-								name: this.extensionId + "/" + e,
+					}, []).map(({
+								repository: e,
+								resources: r
+							}) => t(e, n ? r[0] : r));
+					return Promise.all(o)
+				}
+				dispose() {
+					this.disposables.forEach(e => e.dispose())
+				}
+			}
+			n([T("git.refresh", {
+						repository: !0
+					})], D.prototype, "refresh", null),
+			n([T("git.openResource")], D.prototype, "openResource", null),
+			n([T("git.clone")], D.prototype, "clone", null),
+			n([T("git.init")], D.prototype, "init", null),
+			n([T("git.openRepository", {
+						repository: !1
+					})], D.prototype, "openRepository", null),
+			n([T("git.close", {
+						repository: !0
+					})], D.prototype, "close", null),
+			n([T("git.openFile")], D.prototype, "openFile", null),
+			n([T("git.openFile2")], D.prototype, "openFile2", null),
+			n([T("git.openHEADFile")], D.prototype, "openHEADFile", null),
+			n([T("git.openChange")], D.prototype, "openChange", null),
+			n([T("git.stage")], D.prototype, "stage", null),
+			n([T("git.stageAll", {
+						repository: !0
+					})], D.prototype, "stageAll", null),
+			n([T("git.stageAllTracked", {
+						repository: !0
+					})], D.prototype, "stageAllTracked", null),
+			n([T("git.stageAllUntracked", {
+						repository: !0
+					})], D.prototype, "stageAllUntracked", null),
+			n([T("git.stageChange")], D.prototype, "stageChange", null),
+			n([T("git.stageSelectedRanges", {
+						diff: !0
+					})], D.prototype, "stageSelectedChanges", null),
+			n([T("git.revertChange")], D.prototype, "revertChange", null),
+			n([T("git.revertSelectedRanges", {
+						diff: !0
+					})], D.prototype, "revertSelectedRanges", null),
+			n([T("git.unstage")], D.prototype, "unstage", null),
+			n([T("git.unstageAll", {
+						repository: !0
+					})], D.prototype, "unstageAll", null),
+			n([T("git.unstageSelectedRanges", {
+						diff: !0
+					})], D.prototype, "unstageSelectedRanges", null),
+			n([T("git.clean")], D.prototype, "clean", null),
+			n([T("git.cleanAll", {
+						repository: !0
+					})], D.prototype, "cleanAll", null),
+			n([T("git.cleanAllTracked", {
+						repository: !0
+					})], D.prototype, "cleanAllTracked", null),
+			n([T("git.cleanAllUntracked", {
+						repository: !0
+					})], D.prototype, "cleanAllUntracked", null),
+			n([T("git.commit", {
+						repository: !0
+					})], D.prototype, "commit", null),
+			n([T("git.commitStaged", {
+						repository: !0
+					})], D.prototype, "commitStaged", null),
+			n([T("git.commitStagedSigned", {
+						repository: !0
+					})], D.prototype, "commitStagedSigned", null),
+			n([T("git.commitStagedAmend", {
+						repository: !0
+					})], D.prototype, "commitStagedAmend", null),
+			n([T("git.commitAll", {
+						repository: !0
+					})], D.prototype, "commitAll", null),
+			n([T("git.commitAllSigned", {
+						repository: !0
+					})], D.prototype, "commitAllSigned", null),
+			n([T("git.commitAllAmend", {
+						repository: !0
+					})], D.prototype, "commitAllAmend", null),
+			n([T("git.commitEmpty", {
+						repository: !0
+					})], D.prototype, "commitEmpty", null),
+			n([T("git.restoreCommitTemplate", {
+						repository: !0
+					})], D.prototype, "restoreCommitTemplate", null),
+			n([T("git.undoCommit", {
+						repository: !0
+					})], D.prototype, "undoCommit", null),
+			n([T("git.checkout", {
+						repository: !0
+					})], D.prototype, "checkout", null),
+			n([T("git.branch", {
+						repository: !0
+					})], D.prototype, "branch", null),
+			n([T("git.branchFrom", {
+						repository: !0
+					})], D.prototype, "branchFrom", null),
+			n([T("git.deleteBranch", {
+						repository: !0
+					})], D.prototype, "deleteBranch", null),
+			n([T("git.renameBranch", {
+						repository: !0
+					})], D.prototype, "renameBranch", null),
+			n([T("git.merge", {
+						repository: !0
+					})], D.prototype, "merge", null),
+			n([T("git.createTag", {
+						repository: !0
+					})], D.prototype, "createTag", null),
+			n([T("git.deleteTag", {
+						repository: !0
+					})], D.prototype, "deleteTag", null),
+			n([T("git.fetch", {
+						repository: !0
+					})], D.prototype, "fetch", null),
+			n([T("git.fetchPrune", {
+						repository: !0
+					})], D.prototype, "fetchPrune", null),
+			n([T("git.fetchAll", {
+						repository: !0
+					})], D.prototype, "fetchAll", null),
+			n([T("git.pullFrom", {
+						repository: !0
+					})], D.prototype, "pullFrom", null),
+			n([T("git.pull", {
+						repository: !0
+					})], D.prototype, "pull", null),
+			n([T("git.pullRebase", {
+						repository: !0
+					})], D.prototype, "pullRebase", null),
+			n([T("git.push", {
+						repository: !0
+					})], D.prototype, "push", null),
+			n([T("git.pushForce", {
+						repository: !0
+					})], D.prototype, "pushForce", null),
+			n([T("git.pushWithTags", {
+						repository: !0
+					})], D.prototype, "pushFollowTags", null),
+			n([T("git.pushWithTagsForce", {
+						repository: !0
+					})], D.prototype, "pushFollowTagsForce", null),
+			n([T("git.pushTo", {
+						repository: !0
+					})], D.prototype, "pushTo", null),
+			n([T("git.pushToForce", {
+						repository: !0
+					})], D.prototype, "pushToForce", null),
+			n([T("git.addRemote", {
+						repository: !0
+					})], D.prototype, "addRemote", null),
+			n([T("git.removeRemote", {
+						repository: !0
+					})], D.prototype, "removeRemote", null),
+			n([T("git.sync", {
+						repository: !0
+					})], D.prototype, "sync", null),
+			n([T("git._syncAll")], D.prototype, "syncAll", null),
+			n([T("git.syncRebase", {
+						repository: !0
+					})], D.prototype, "syncRebase", null),
+			n([T("git.publish", {
+						repository: !0
+					})], D.prototype, "publish", null),
+			n([T("git.ignore")], D.prototype, "ignore", null),
+			n([T("git.revealInExplorer")], D.prototype, "revealInExplorer", null),
+			n([T("git.stash", {
+						repository: !0
+					})], D.prototype, "stash", null),
+			n([T("git.stashIncludeUntracked", {
+						repository: !0
+					})], D.prototype, "stashIncludeUntracked", null),
+			n([T("git.stashPop", {
+						repository: !0
+					})], D.prototype, "stashPop", null),
+			n([T("git.stashPopLatest", {
+						repository: !0
+					})], D.prototype, "stashPopLatest", null),
+			n([T("git.stashApply", {
+						repository: !0
+					})], D.prototype, "stashApply", null),
+			n([T("git.stashApplyLatest", {
+						repository: !0
+					})], D.prototype, "stashApplyLatest", null),
+			n([T("git.stashDrop", {
+						repository: !0
+					})], D.prototype, "stashDrop", null),
+			t.CommandCenter = D
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			const n = r(4);
+			function o(e, t) {
+				return 0 === t.modifiedEndLineNumber ? 0 === t.modifiedStartLineNumber ? new n.Range(e.lineAt(t.modifiedStartLineNumber).range.end, e.lineAt(t.modifiedStartLineNumber).range.start) : e.lineCount === t.modifiedStartLineNumber ? new n.Range(e.lineAt(t.modifiedStartLineNumber - 1).range.end, e.lineAt(t.modifiedStartLineNumber - 1).range.end) : new n.Range(e.lineAt(t.modifiedStartLineNumber - 1).range.end, e.lineAt(t.modifiedStartLineNumber).range.start) : new n.Range(e.lineAt(t.modifiedStartLineNumber - 1).range.start, e.lineAt(t.modifiedEndLineNumber - 1).range.end)
+			}
+			t.applyLineChanges = function (e, t, r) {
+				const o = [];
+				let i = 0;
+				for (let s of r) {
+					const r = 0 === s.originalEndLineNumber,
+					a = 0 === s.modifiedEndLineNumber;
+					let c = r ? s.originalStartLineNumber : s.originalStartLineNumber - 1,
+					u = 0;
+					if (a && s.originalStartLineNumber === e.lineCount && (c -= 1, u = e.lineAt(c).range.end.character), o.push(e.getText(new n.Range(i, 0, c, u))), !a) {
+						let i = s.modifiedStartLineNumber - 1,
+						a = 0;
+						r && s.originalStartLineNumber === e.lineCount && (i -= 1, a = t.lineAt(i).range.end.character),
+						o.push(t.getText(new n.Range(i, a, s.modifiedEndLineNumber, 0)))
+					}
+					i = r ? s.originalStartLineNumber : s.originalEndLineNumber
+				}
+				return o.push(e.getText(new n.Range(i, 0, e.lineCount, 0))),
+				o.join("")
+			},
+			t.toLineRanges = function (e, t) {
+				const r = e.map(e => {
+					const r = t.lineAt(e.start.line),
+					o = t.lineAt(e.end.line);
+					return new n.Range(r.range.start, o.range.end)
+				});
+				r.sort((e, t) => e.start.line - t.start.line);
+				const o = r.reduce((e, t) => {
+					if (0 === e.length)
+						return e.push(t), e;
+					const[r, ...o] = e,
+					i = t.intersection(r);
+					return i ? [i, ...o] : t.start.line === r.end.line + 1 ? [new n.Range(r.start, t.end), ...o] : [t, ...e]
+				}, []);
+				return o.reverse(),
+				o
+			},
+			t.getModifiedRange = o,
+			t.intersectDiffWithRange = function (e, t, r) {
+				const n = o(e, t),
+				i = r.intersection(n);
+				return i ? 0 === t.modifiedEndLineNumber ? t : {
+					originalStartLineNumber: t.originalStartLineNumber,
+					originalEndLineNumber: t.originalEndLineNumber,
+					modifiedStartLineNumber: i.start.line + 1,
+					modifiedEndLineNumber: i.end.line + 1
+				}
+				 : null
+			},
+			t.invertLineChange = function (e) {
+				return {
+					modifiedStartLineNumber: e.originalStartLineNumber,
+					modifiedEndLineNumber: e.originalEndLineNumber,
+					originalStartLineNumber: e.modifiedStartLineNumber,
+					originalEndLineNumber: e.modifiedEndLineNumber
+				}
+			}
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__decorate || function (e, t, r, n) {
+				var o,
+				i = arguments.length,
+				s = i < 3 ? t : null === n ? n = Object.getOwnPropertyDescriptor(t, r) : n;
+				if ("object" == typeof Reflect && "function" == typeof Reflect.decorate)
+					s = Reflect.decorate(e, t, r, n);
+				else
+					for (var a = e.length - 1; a >= 0; a--)
+						(o = e[a]) && (s = (i < 3 ? o(s) : i > 3 ? o(t, r, s) : o(t, r)) || s);
+				return i > 3 && s && Object.defineProperty(t, r, s),
+				s
+			};
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			const o = r(4),
+			i = r(18),
+			s = r(19),
+			a = r(5),
+			c = 18e4,
+			u = 3e5;
+			class l {
+				constructor(e) {
+					this.model = e,
+					this._onDidChange = new o.EventEmitter,
+					this.changedRepositoryRoots = new Set,
+					this.cache = Object.create(null),
+					this.disposables = [],
+					this.disposables.push(e.onDidChangeRepository(this.onDidChangeRepository, this), e.onDidChangeOriginalResource(this.onDidChangeOriginalResource, this), o.workspace.registerTextDocumentContentProvider("git", this)),
+					setInterval(() => this.cleanup(), u)
+				}
+				get onDidChange() {
+					return this._onDidChange.event
+				}
+				onDidChangeRepository({
+					repository: e
+				}) {
+					this.changedRepositoryRoots.add(e.root),
+					this.eventuallyFireChangeEvents()
+				}
+				onDidChangeOriginalResource({
+					uri: e
+				}) {
+					"file" === e.scheme && this._onDidChange.fire(s.toGitUri(e, "", {
+							replaceFileExtension: !0
+						}))
+				}
+				eventuallyFireChangeEvents() {
+					this.fireChangeEvents()
+				}
+				async fireChangeEvents() {
+					if (!o.window.state.focused) {
+						const e = a.filterEvent(o.window.onDidChangeWindowState, e => e.focused);
+						await a.eventToPromise(e)
+					}
+					Object.keys(this.cache).forEach(e => {
+						const t = this.cache[e].uri,
+						r = t.fsPath;
+						for (const e of this.changedRepositoryRoots)
+							if (a.isDescendant(e, r))
+								return void this._onDidChange.fire(t)
+					}),
+					this.changedRepositoryRoots.clear()
+				}
+				async provideTextDocumentContent(e) {
+					let {
+						path: t,
+						ref: r,
+						submoduleOf: n
+					} = s.fromGitUri(e);
+					if (n) {
+						const e = this.model.getRepository(n);
+						return e ? "index" === r ? await e.diffIndexWithHEAD(t) : await e.diffWithHEAD(t) : ""
+					}
+					const i = this.model.getRepository(e);
+					if (!i)
+						return "";
+					const a = e.toString(),
+					c = {
+						uri: e,
+						timestamp: (new Date).getTime()
+					};
+					if (this.cache[a] = c, "~" === r) {
+						const e = o.Uri.file(t).toString(),
+						[n] = i.indexGroup.resourceStates.filter(t => t.resourceUri.toString() === e);
+						r = n ? "" : "HEAD"
+					} else  /  ^ ~ \ d$ / .test(r) && (r = `:${r[1]}`);
+					try {
+						return await i.show(r, t)
+					} catch (e) {
+						return ""
+					}
+				}
+				cleanup() {
+					const e = (new Date).getTime(),
+					t = Object.create(null);
+					Object.keys(this.cache).forEach(r => {
+						const n = this.cache[r], {
+							path: i
+						} = s.fromGitUri(n.uri);
+						(o.workspace.textDocuments.filter(e => "file" === e.uri.scheme).some(e => a.pathEquals(e.uri.fsPath, i)) || e - n.timestamp < c) && (t[n.uri.toString()] = n)
+					}),
+					this.cache = t
+				}
+				dispose() {
+					this.disposables.forEach(e => e.dispose())
+				}
+			}
+			n([i.debounce(1100)], l.prototype, "eventuallyFireChangeEvents", null),
+			n([i.throttle], l.prototype, "fireChangeEvents", null),
+			t.GitContentProvider = l
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__decorate || function (e, t, r, n) {
+				var o,
+				i = arguments.length,
+				s = i < 3 ? t : null === n ? n = Object.getOwnPropertyDescriptor(t, r) : n;
+				if ("object" == typeof Reflect && "function" == typeof Reflect.decorate)
+					s = Reflect.decorate(e, t, r, n);
+				else
+					for (var a = e.length - 1; a >= 0; a--)
+						(o = e[a]) && (s = (i < 3 ? o(s) : i > 3 ? o(t, r, s) : o(t, r)) || s);
+				return i > 3 && s && Object.defineProperty(t, r, s),
+				s
+			};
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			const o = r(4),
+			i = r(1),
+			s = r(18),
+			a = r(5);
+			class c {
+				constructor(e) {
+					this.model = e,
+					this.queue = new Map,
+					this.disposables = [],
+					this.onDidChangeDecorations = a.fireEvent(a.anyEvent(a.filterEvent(o.workspace.onDidSaveTextDocument, e => e.fileName.endsWith(".gitignore")), e.onDidOpenRepository, e.onDidCloseRepository)),
+					this.disposables.push(o.window.registerDecorationProvider(this))
+				}
+				provideDecoration(e) {
+					const t = this.model.getRepository(e);
+					if (!t)
+						return Promise.resolve(void 0);
+					let r = this.queue.get(t.root);
+					return r || (r = {
+							repository: t,
+							queue: new Map
+						}, this.queue.set(t.root, r)),
+					new Promise((t, n) => {
+						r.queue.set(e.fsPath, {
+							resolve: t,
+							reject: n
+						}),
+						this.checkIgnoreSoon()
+					}).then(e => {
+						if (e)
+							return {
+								priority: 3,
+								color: new o.ThemeColor("gitDecoration.ignoredResourceForeground")
+							}
+					})
+				}
+				checkIgnoreSoon() {
+					const e = new Map(this.queue.entries());
+					this.queue.clear();
+					for (const[, t]of e) {
+						const e = [...t.queue.keys()];
+						t.repository.checkIgnore(e).then(e => {
+							for (const[r, n]of t.queue.entries())
+								n.resolve(e.has(r))
+						}, e => {
+							"IsInSubmodule" !== e.gitErrorCode && console.error(e);
+							for (const[, r]of t.queue.entries())
+								r.reject(e)
+						})
+					}
+				}
+				dispose() {
+					this.disposables.forEach(e => e.dispose()),
+					this.queue.clear()
+				}
+			}
+			n([s.debounce(500)], c.prototype, "checkIgnoreSoon", null);
+			class u {
+				constructor(e) {
+					this.repository = e,
+					this._onDidChangeDecorations = new o.EventEmitter,
+					this.onDidChangeDecorations = this._onDidChangeDecorations.event,
+					this.disposables = [],
+					this.decorations = new Map,
+					this.disposables.push(o.window.registerDecorationProvider(this), e.onDidRunGitStatus(this.onDidRunGitStatus, this))
+				}
+				onDidRunGitStatus() {
+					let e = new Map;
+					this.collectSubmoduleDecorationData(e),
+					this.collectDecorationData(this.repository.indexGroup, e),
+					this.collectDecorationData(this.repository.untrackedGroup, e),
+					this.collectDecorationData(this.repository.workingTreeGroup, e),
+					this.collectDecorationData(this.repository.mergeGroup, e);
+					const t = new Set([...this.decorations.keys()].concat([...e.keys()]));
+					this.decorations = e,
+					this._onDidChangeDecorations.fire([...t.values()].map(e => o.Uri.parse(e, !0)))
+				}
+				collectDecorationData(e, t) {
+					for (const r of e.resourceStates) {
+						const e = r.resourceDecoration;
+						e && (t.set(r.original.toString(), e), 3 === r.type && t.set(r.resourceUri.toString(), e))
+					}
+				}
+				collectSubmoduleDecorationData(e) {
+					for (const t of this.repository.submodules)
+						e.set(o.Uri.file(i.join(this.repository.root, t.path)).toString(), u.SubmoduleDecorationData)
+				}
+				provideDecoration(e) {
+					return this.decorations.get(e.toString())
+				}
+				dispose() {
+					this.disposables.forEach(e => e.dispose())
+				}
+			}
+			u.SubmoduleDecorationData = {
+				title: "Submodule",
+				letter: "S",
+				color: new o.ThemeColor("gitDecoration.submoduleResourceForeground")
+			};
+			t.GitDecorations = class {
+				constructor(e) {
+					this.model = e,
+					this.disposables = [],
+					this.modelDisposables = [],
+					this.providers = new Map,
+					this.disposables.push(new c(e)),
+					a.filterEvent(o.workspace.onDidChangeConfiguration, e => e.affectsConfiguration("git.decorations.enabled"))(this.update, this, this.disposables),
+					this.update()
+				}
+				update() {
+					o.workspace.getConfiguration("git").get("decorations.enabled") ? this.enable() : this.disable()
+				}
+				enable() {
+					this.model.onDidOpenRepository(this.onDidOpenRepository, this, this.modelDisposables),
+					this.model.onDidCloseRepository(this.onDidCloseRepository, this, this.modelDisposables),
+					this.model.repositories.forEach(this.onDidOpenRepository, this)
+				}
+				disable() {
+					this.modelDisposables = a.dispose(this.modelDisposables),
+					this.providers.forEach(e => e.dispose()),
+					this.providers.clear()
+				}
+				onDidOpenRepository(e) {
+					const t = new u(e);
+					this.providers.set(e, t)
+				}
+				onDidCloseRepository(e) {
+					const t = this.providers.get(e);
+					t && (t.dispose(), this.providers.delete(e))
+				}
+				dispose() {
+					this.disable(),
+					this.disposables = a.dispose(this.disposables)
+				}
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			const n = r(4),
+			o = r(5),
+			i = r(1),
+			s = r(13),
+			a = r(11),
+			c = r(2),
+			u = r(35),
+			l = o.denodeify(u.randomBytes);
+			t.Askpass = class {
+				constructor() {
+					this.enabled = !0,
+					this.server = s.createServer((e, t) => this.onRequest(e, t)),
+					this.ipcHandlePathPromise = this.setup().catch(e => (console.error(e), ""))
+				}
+				async setup() {
+					const e = function (e) {
+						return "win32" === process.platform ? `\\\\.\\pipe\\vscode-git-askpass-${e}-sock` : process.env.XDG_RUNTIME_DIR ? i.join(process.env.XDG_RUNTIME_DIR, `vscode-git-askpass-${e}.sock`) : i.join(a.tmpdir(), `vscode-git-askpass-${e}.sock`)
+					}
+					((await l(20)).toString("hex"));
+					this.ipcHandlePath = e;
+					try {
+						this.server.listen(e),
+						this.server.on("error", e => console.error(e))
+					} catch (e) {
+						console.error("Could not launch git askpass helper."),
+						this.enabled = !1
+					}
+					return e
+				}
+				onRequest(e, t) {
+					const r = [];
+					e.setEncoding("utf8"),
+					e.on("data", e => r.push(e)),
+					e.on("end", () => {
+						const {
+							request: e,
+							host: n
+						} = JSON.parse(r.join(""));
+						this.prompt(n, e).then(e => {
+							t.writeHead(200),
+							t.end(JSON.stringify(e))
+						}, () => {
+							t.writeHead(500),
+							t.end()
+						})
+					})
+				}
+				async prompt(e, t) {
+					const r = {
+						password: /password/i.test(t),
+						placeHolder: t,
+						prompt: `Git: ${e}`,
+						ignoreFocusOut: !0
+					};
+					return await n.window.showInputBox(r) || ""
+				}
+				async getEnv() {
+					return this.enabled ? {
+						ELECTRON_RUN_AS_NODE: "1",
+						GIT_ASKPASS: i.join(__dirname, "askpass.sh"),
+						VSCODE_GIT_ASKPASS_NODE: process.execPath,
+						VSCODE_GIT_ASKPASS_MAIN: i.join(__dirname, "askpass-main.js"),
+						VSCODE_GIT_ASKPASS_HANDLE: await this.ipcHandlePathPromise
+					}
+					 : {
+						GIT_ASKPASS: i.join(__dirname, "askpass-empty.sh")
+					}
+				}
+				dispose() {
+					this.server.close(),
+					this.ipcHandlePath && "win32" !== process.platform && c.unlinkSync(this.ipcHandlePath)
+				}
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			}),
+			process.env.APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = !0;
+			var n = r(2),
+			o = r(11),
+			i = r(1),
+			s = r(4),
+			a = r(116),
+			c = function () {
+				function e(e, t, r) {
+					var o = this;
+					this.extensionId = e,
+					this.extensionVersion = t,
+					this.userOptIn = !1;
+					var a = process.env.VSCODE_LOGS || "";
+					a && e && "trace" === process.env.VSCODE_LOG_LEVEL && (a = i.join(a, e + ".txt"), this.logStream = n.createWriteStream(a, {
+							flags: "a",
+							encoding: "utf8",
+							autoClose: !0
+						})),
+					this.updateUserOptIn(r),
+					this.configListener = s.workspace.onDidChangeConfiguration(function () {
+						return o.updateUserOptIn(r)
+					})
+				}
+				return e.prototype.updateUserOptIn = function (t) {
+					var r = s.workspace.getConfiguration(e.TELEMETRY_CONFIG_ID);
+					this.userOptIn !== r.get(e.TELEMETRY_CONFIG_ENABLED_ID, !0) && (this.userOptIn = r.get(e.TELEMETRY_CONFIG_ENABLED_ID, !0), this.userOptIn ? this.createAppInsightsClient(t) : this.dispose())
+				},
+				e.prototype.createAppInsightsClient = function (e) {
+					a.defaultClient ? (this.appInsightsClient = new a.TelemetryClient(e), this.appInsightsClient.channel.setUseDiskRetryCaching(!0)) : (a.setup(e).setAutoCollectRequests(!1).setAutoCollectPerformance(!1).setAutoCollectExceptions(!1).setAutoCollectDependencies(!1).setAutoDependencyCorrelation(!1).setAutoCollectConsole(!1).setUseDiskRetryCaching(!0).start(), this.appInsightsClient = a.defaultClient),
+					this.appInsightsClient.commonProperties = this.getCommonProperties(),
+					s && s.env && (this.appInsightsClient.context.tags[this.appInsightsClient.context.keys.userId] = s.env.machineId, this.appInsightsClient.context.tags[this.appInsightsClient.context.keys.sessionId] = s.env.sessionId),
+					e && 0 === e.indexOf("AIF-") && (this.appInsightsClient.config.endpointUrl = "https://vortex.data.microsoft.com/collect/v1")
+				},
+				e.prototype.getCommonProperties = function () {
+					var e = Object.create(null);
+					return e["common.os"] = o.platform(),
+					e["common.platformversion"] = (o.release() || "").replace(/^(\d+)(\.\d+)?(\.\d+)?(.*)/, "$1$2$3"),
+					e["common.extname"] = this.extensionId,
+					e["common.extversion"] = this.extensionVersion,
+					s && s.env && (e["common.vscodemachineid"] = s.env.machineId, e["common.vscodesessionid"] = s.env.sessionId, e["common.vscodeversion"] = s.version),
+					e
+				},
+				e.prototype.sendTelemetryEvent = function (e, t, r) {
+					this.userOptIn && e && this.appInsightsClient && (this.appInsightsClient.trackEvent({
+							name: this.extensionId + "/" + e,
+							properties: t,
+							measurements: r
+						}), this.logStream && this.logStream.write("telemetry/" + e + " " + JSON.stringify({
 								properties: t,
 								measurements: r
-							}), this.logStream && this.logStream.write("telemetry/" + e + " " + JSON.stringify({
-									properties: t,
-									measurements: r
-								}) + "\n"))
-					},
-					e.prototype.dispose = function () {
-						var e = this;
-						this.configListener.dispose();
-						var t = new Promise(function (t) {
-								if (!e.logStream)
-									return t(void 0);
-								e.logStream.on("finish", t),
-								e.logStream.end()
-							}),
-						r = new Promise(function (t) {
-								e.appInsightsClient ? e.appInsightsClient.flush({
-									callback: function () {
-										e.appInsightsClient = void 0,
-										t(void 0)
-									}
-								}) : t(void 0)
-							});
-						return Promise.all([r, t])
-					},
-					e.TELEMETRY_CONFIG_ID = "telemetry",
-					e.TELEMETRY_CONFIG_ENABLED_ID = "enableTelemetry",
-					e
-				}
-				();
-				t.default = c
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(16),
-				o = r(134),
-				i = r(155),
-				s = r(42),
-				a = r(25),
-				c = r(44),
-				u = r(6);
-				t.TelemetryClient = r(163),
-				t.Contracts = r(7);
-				var l,
-				h,
-				p,
-				d,
-				f,
-				g = !0,
-				m = !1,
-				y = !0,
-				b = !0,
-				w = !0,
-				v = !0,
-				C = !0,
-				_ = !0,
-				S = void 0,
-				k = void 0,
-				T = !1;
-				function E() {
-					return t.defaultClient ? (T = !0, l.enable(g, m), h.enable(y), p.enable(b), d.useAutoCorrelation(_), d.enable(w), f.enable(v)) : u.warn("Start cannot be called before setup"),
-					R
-				}
-				t.setup = function (e) {
-					return t.defaultClient ? u.info("The default client is already setup") : (t.defaultClient = new t.TelemetryClient(e), l = new o(t.defaultClient), h = new i(t.defaultClient), p = new s(t.defaultClient), d = new c(t.defaultClient), f = new a(t.defaultClient)),
-					t.defaultClient && t.defaultClient.channel && t.defaultClient.channel.setUseDiskRetryCaching(C, S, k),
-					R
+							}) + "\n"))
 				},
-				t.start = E,
-				t.getCorrelationContext = function () {
-					return _ ? n.CorrelationContextManager.getCurrentContext() : null
-				},
-				t.wrapWithCorrelationContext = function (e) {
-					return n.CorrelationContextManager.wrapCallback(e)
-				};
-				var R = function () {
-					function e() {}
-					return e.setAutoCollectConsole = function (t, r) {
-						return void 0 === r && (r = !1),
-						g = t,
-						m = r,
-						T && l.enable(t, r),
-						e
-					},
-					e.setAutoCollectExceptions = function (t) {
-						return y = t,
-						T && h.enable(t),
-						e
-					},
-					e.setAutoCollectPerformance = function (t) {
-						return b = t,
-						T && p.enable(t),
-						e
-					},
-					e.setAutoCollectRequests = function (t) {
-						return w = t,
-						T && d.enable(t),
-						e
-					},
-					e.setAutoCollectDependencies = function (t) {
-						return v = t,
-						T && f.enable(t),
-						e
-					},
-					e.setAutoDependencyCorrelation = function (t) {
-						return _ = t,
-						T && d.useAutoCorrelation(t),
-						e
-					},
-					e.setUseDiskRetryCaching = function (r, n, o) {
-						return C = r,
-						S = n,
-						k = o,
-						t.defaultClient && t.defaultClient.channel && t.defaultClient.channel.setUseDiskRetryCaching(r, n, o),
-						e
-					},
-					e.setInternalLogging = function (t, r) {
-						return void 0 === t && (t = !1),
-						void 0 === r && (r = !0),
-						u.enableDebug = t,
-						u.disableWarnings = !r,
-						e
-					},
-					e.start = E,
-					e
-				}
-				();
-				t.Configuration = R,
-				t.dispose = function () {
-					t.defaultClient = null,
-					T = !1,
-					l && l.dispose(),
-					h && h.dispose(),
-					p && p.dispose(),
-					d && d.dispose(),
-					f && f.dispose()
-				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(118);
-				t.bunyan = n;
-				var o = r(121);
-				t.console = o;
-				var i = r(123);
-				t.mongodbCore = i;
-				var s = r(124);
-				t.mongodb = s;
-				var a = r(125);
-				t.mysql = a;
-				var c = r(128);
-				t.pgPool = c;
-				var u = r(129);
-				t.pg = u;
-				var l = r(130);
-				t.redis = l;
-				var h = r(131);
-				t.winston = h,
-				t.enable = function () {
-					n.enable(),
-					o.enable(),
-					i.enable(),
-					s.enable(),
-					a.enable(),
-					u.enable(),
-					c.enable(),
-					l.enable(),
-					h.enable()
-				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3);
-				t.bunyan = {
-					versionSpecifier: ">= 1.0.0 < 2.0.0",
-					patch: function (e) {
-						var t = e.prototype._emit;
-						return e.prototype._emit = function (e, r) {
-							var o = t.apply(this, arguments);
-							if (!r) {
-								var i = o;
-								i || (i = t.call(this, e, !0)),
-								n.channel.publish("bunyan", {
-									level: e.level,
-									result: i
-								})
+				e.prototype.dispose = function () {
+					var e = this;
+					this.configListener.dispose();
+					var t = new Promise(function (t) {
+						if (!e.logStream)
+							return t(void 0);
+						e.logStream.on("finish", t),
+						e.logStream.end()
+					}),
+					r = new Promise(function (t) {
+						e.appInsightsClient ? e.appInsightsClient.flush({
+							callback: function () {
+								e.appInsightsClient = void 0,
+								t(void 0)
 							}
-							return o
-						},
-						e
-					}
+						}) : t(void 0)
+					});
+					return Promise.all([r, t])
 				},
-				t.enable = function () {
-					n.channel.registerMonkeyPatch("bunyan", t.bunyan)
-				}
-			}, function (e, t) {
-				var r;
-				t = e.exports = V,
-				r = "object" == typeof process && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? function () {
-					var e = Array.prototype.slice.call(arguments, 0);
-					e.unshift("SEMVER"),
-					console.log.apply(console, e)
-				}
-				 : function () {},
-				t.SEMVER_SPEC_VERSION = "2.0.0";
-				var n = 256,
-				o = Number.MAX_SAFE_INTEGER || 9007199254740991,
-				i = t.re = [],
-				s = t.src = [],
-				a = 0,
-				c = a++;
-				s[c] = "0|[1-9]\\d*";
-				var u = a++;
-				s[u] = "[0-9]+";
-				var l = a++;
-				s[l] = "\\d*[a-zA-Z-][a-zA-Z0-9-]*";
-				var h = a++;
-				s[h] = "(" + s[c] + ")\\.(" + s[c] + ")\\.(" + s[c] + ")";
-				var p = a++;
-				s[p] = "(" + s[u] + ")\\.(" + s[u] + ")\\.(" + s[u] + ")";
-				var d = a++;
-				s[d] = "(?:" + s[c] + "|" + s[l] + ")";
-				var f = a++;
-				s[f] = "(?:" + s[u] + "|" + s[l] + ")";
-				var g = a++;
-				s[g] = "(?:-(" + s[d] + "(?:\\." + s[d] + ")*))";
-				var m = a++;
-				s[m] = "(?:-?(" + s[f] + "(?:\\." + s[f] + ")*))";
-				var y = a++;
-				s[y] = "[0-9A-Za-z-]+";
-				var b = a++;
-				s[b] = "(?:\\+(" + s[y] + "(?:\\." + s[y] + ")*))";
-				var w = a++,
-				v = "v?" + s[h] + s[g] + "?" + s[b] + "?";
-				s[w] = "^" + v + "$";
-				var C = "[v=\\s]*" + s[p] + s[m] + "?" + s[b] + "?",
-				_ = a++;
-				s[_] = "^" + C + "$";
-				var S = a++;
-				s[S] = "((?:<|>)?=?)";
-				var k = a++;
-				s[k] = s[u] + "|x|X|\\*";
-				var T = a++;
-				s[T] = s[c] + "|x|X|\\*";
-				var E = a++;
-				s[E] = "[v=\\s]*(" + s[T] + ")(?:\\.(" + s[T] + ")(?:\\.(" + s[T] + ")(?:" + s[g] + ")?" + s[b] + "?)?)?";
-				var R = a++;
-				s[R] = "[v=\\s]*(" + s[k] + ")(?:\\.(" + s[k] + ")(?:\\.(" + s[k] + ")(?:" + s[m] + ")?" + s[b] + "?)?)?";
-				var P = a++;
-				s[P] = "^" + s[S] + "\\s*" + s[E] + "$";
-				var x = a++;
-				s[x] = "^" + s[S] + "\\s*" + s[R] + "$";
-				var I = a++;
-				s[I] = "(?:^|[^\\d])(\\d{1,16})(?:\\.(\\d{1,16}))?(?:\\.(\\d{1,16}))?(?:$|[^\\d])";
-				var D = a++;
-				s[D] = "(?:~>?)";
-				var A = a++;
-				s[A] = "(\\s*)" + s[D] + "\\s+",
-				i[A] = new RegExp(s[A], "g");
-				var O = a++;
-				s[O] = "^" + s[D] + s[E] + "$";
-				var M = a++;
-				s[M] = "^" + s[D] + s[R] + "$";
-				var L = a++;
-				s[L] = "(?:\\^)";
-				var N = a++;
-				s[N] = "(\\s*)" + s[L] + "\\s+",
-				i[N] = new RegExp(s[N], "g");
-				var B = a++;
-				s[B] = "^" + s[L] + s[E] + "$";
-				var U = a++;
-				s[U] = "^" + s[L] + s[R] + "$";
-				var F = a++;
-				s[F] = "^" + s[S] + "\\s*(" + C + ")$|^$";
-				var j = a++;
-				s[j] = "^" + s[S] + "\\s*(" + v + ")$|^$";
-				var G = a++;
-				s[G] = "(\\s*)" + s[S] + "\\s*(" + C + "|" + s[E] + ")",
-				i[G] = new RegExp(s[G], "g");
-				var q = a++;
-				s[q] = "^\\s*(" + s[E] + ")\\s+-\\s+(" + s[E] + ")\\s*$";
-				var H = a++;
-				s[H] = "^\\s*(" + s[R] + ")\\s+-\\s+(" + s[R] + ")\\s*$";
-				var W = a++;
-				s[W] = "(<|>)?=?\\s*\\*";
-				for (var z = 0; z < a; z++)
-					r(z, s[z]), i[z] || (i[z] = new RegExp(s[z]));
-				function $(e, t) {
-					if (e instanceof V)
-						return e;
-					if ("string" != typeof e)
-						return null;
-					if (e.length > n)
-						return null;
-					if (!(t ? i[_] : i[w]).test(e))
-						return null;
-					try {
-						return new V(e, t)
-					} catch (e) {
-						return null
-					}
-				}
-				function V(e, t) {
-					if (e instanceof V) {
-						if (e.loose === t)
-							return e;
-						e = e.version
-					} else if ("string" != typeof e)
-						throw new TypeError("Invalid Version: " + e);
-					if (e.length > n)
-						throw new TypeError("version is longer than " + n + " characters");
-					if (!(this instanceof V))
-						return new V(e, t);
-					r("SemVer", e, t),
-					this.loose = t;
-					var s = e.trim().match(t ? i[_] : i[w]);
-					if (!s)
-						throw new TypeError("Invalid Version: " + e);
-					if (this.raw = e, this.major = +s[1], this.minor = +s[2], this.patch = +s[3], this.major > o || this.major < 0)
-						throw new TypeError("Invalid major version");
-					if (this.minor > o || this.minor < 0)
-						throw new TypeError("Invalid minor version");
-					if (this.patch > o || this.patch < 0)
-						throw new TypeError("Invalid patch version");
-					s[4] ? this.prerelease = s[4].split(".").map(function (e) {
-							if (/^[0-9]+$/.test(e)) {
-								var t = +e;
-								if (t >= 0 && t < o)
-									return t
-							}
-							return e
-						}) : this.prerelease = [],
-					this.build = s[5] ? s[5].split(".") : [],
-					this.format()
-				}
-				t.parse = $,
-				t.valid = function (e, t) {
-					var r = $(e, t);
-					return r ? r.version : null
+				e.TELEMETRY_CONFIG_ID = "telemetry",
+				e.TELEMETRY_CONFIG_ENABLED_ID = "enableTelemetry",
+				e
+			}
+			();
+			t.default = c
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(16),
+			o = r(134),
+			i = r(155),
+			s = r(42),
+			a = r(25),
+			c = r(44),
+			u = r(6);
+			t.TelemetryClient = r(163),
+			t.Contracts = r(7);
+			var l,
+			h,
+			p,
+			d,
+			f,
+			g = !0,
+			m = !1,
+			y = !0,
+			b = !0,
+			w = !0,
+			v = !0,
+			C = !0,
+			_ = !0,
+			S = void 0,
+			k = void 0,
+			T = !1;
+			function E() {
+				return t.defaultClient ? (T = !0, l.enable(g, m), h.enable(y), p.enable(b), d.useAutoCorrelation(_), d.enable(w), f.enable(v)) : u.warn("Start cannot be called before setup"),
+				R
+			}
+			t.setup = function (e) {
+				return t.defaultClient ? u.info("The default client is already setup") : (t.defaultClient = new t.TelemetryClient(e), l = new o(t.defaultClient), h = new i(t.defaultClient), p = new s(t.defaultClient), d = new c(t.defaultClient), f = new a(t.defaultClient)),
+				t.defaultClient && t.defaultClient.channel && t.defaultClient.channel.setUseDiskRetryCaching(C, S, k),
+				R
+			},
+			t.start = E,
+			t.getCorrelationContext = function () {
+				return _ ? n.CorrelationContextManager.getCurrentContext() : null
+			},
+			t.wrapWithCorrelationContext = function (e) {
+				return n.CorrelationContextManager.wrapCallback(e)
+			};
+			var R = function () {
+				function e() {}
+				return e.setAutoCollectConsole = function (t, r) {
+					return void 0 === r && (r = !1),
+					g = t,
+					m = r,
+					T && l.enable(t, r),
+					e
 				},
-				t.clean = function (e, t) {
-					var r = $(e.trim().replace(/^[=v]+/, ""), t);
-					return r ? r.version : null
+				e.setAutoCollectExceptions = function (t) {
+					return y = t,
+					T && h.enable(t),
+					e
 				},
-				t.SemVer = V,
-				V.prototype.format = function () {
-					return this.version = this.major + "." + this.minor + "." + this.patch,
-					this.prerelease.length && (this.version += "-" + this.prerelease.join(".")),
-					this.version
+				e.setAutoCollectPerformance = function (t) {
+					return b = t,
+					T && p.enable(t),
+					e
 				},
-				V.prototype.toString = function () {
-					return this.version
+				e.setAutoCollectRequests = function (t) {
+					return w = t,
+					T && d.enable(t),
+					e
 				},
-				V.prototype.compare = function (e) {
-					return r("SemVer.compare", this.version, this.loose, e),
-					e instanceof V || (e = new V(e, this.loose)),
-					this.compareMain(e) || this.comparePre(e)
+				e.setAutoCollectDependencies = function (t) {
+					return v = t,
+					T && f.enable(t),
+					e
 				},
-				V.prototype.compareMain = function (e) {
-					return e instanceof V || (e = new V(e, this.loose)),
-					J(this.major, e.major) || J(this.minor, e.minor) || J(this.patch, e.patch)
+				e.setAutoDependencyCorrelation = function (t) {
+					return _ = t,
+					T && d.useAutoCorrelation(t),
+					e
 				},
-				V.prototype.comparePre = function (e) {
-					if (e instanceof V || (e = new V(e, this.loose)), this.prerelease.length && !e.prerelease.length)
-						return -1;
-					if (!this.prerelease.length && e.prerelease.length)
-						return 1;
-					if (!this.prerelease.length && !e.prerelease.length)
-						return 0;
-					var t = 0;
-					do {
-						var n = this.prerelease[t],
-						o = e.prerelease[t];
-						if (r("prerelease compare", t, n, o), void 0 === n && void 0 === o)
-							return 0;
-						if (void 0 === o)
-							return 1;
-						if (void 0 === n)
-							return -1;
-						if (n !== o)
-							return J(n, o)
-					} while (++t)
+				e.setUseDiskRetryCaching = function (r, n, o) {
+					return C = r,
+					S = n,
+					k = o,
+					t.defaultClient && t.defaultClient.channel && t.defaultClient.channel.setUseDiskRetryCaching(r, n, o),
+					e
 				},
-				V.prototype.inc = function (e, t) {
-					switch (e) {
-					case "premajor":
-						this.prerelease.length = 0,
-						this.patch = 0,
-						this.minor = 0,
-						this.major++,
-						this.inc("pre", t);
-						break;
-					case "preminor":
-						this.prerelease.length = 0,
-						this.patch = 0,
-						this.minor++,
-						this.inc("pre", t);
-						break;
-					case "prepatch":
-						this.prerelease.length = 0,
-						this.inc("patch", t),
-						this.inc("pre", t);
-						break;
-					case "prerelease":
-						0 === this.prerelease.length && this.inc("patch", t),
-						this.inc("pre", t);
-						break;
-					case "major":
-						0 === this.minor && 0 === this.patch && 0 !== this.prerelease.length || this.major++,
-						this.minor = 0,
-						this.patch = 0,
-						this.prerelease = [];
-						break;
-					case "minor":
-						0 === this.patch && 0 !== this.prerelease.length || this.minor++,
-						this.patch = 0,
-						this.prerelease = [];
-						break;
-					case "patch":
-						0 === this.prerelease.length && this.patch++,
-						this.prerelease = [];
-						break;
-					case "pre":
-						if (0 === this.prerelease.length)
-							this.prerelease = [0];
-						else {
-							for (var r = this.prerelease.length; --r >= 0; )
-								"number" == typeof this.prerelease[r] && (this.prerelease[r]++, r = -2);
-							-1 === r && this.prerelease.push(0)
+				e.setInternalLogging = function (t, r) {
+					return void 0 === t && (t = !1),
+					void 0 === r && (r = !0),
+					u.enableDebug = t,
+					u.disableWarnings = !r,
+					e
+				},
+				e.start = E,
+				e
+			}
+			();
+			t.Configuration = R,
+			t.dispose = function () {
+				t.defaultClient = null,
+				T = !1,
+				l && l.dispose(),
+				h && h.dispose(),
+				p && p.dispose(),
+				d && d.dispose(),
+				f && f.dispose()
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(118);
+			t.bunyan = n;
+			var o = r(121);
+			t.console = o;
+			var i = r(123);
+			t.mongodbCore = i;
+			var s = r(124);
+			t.mongodb = s;
+			var a = r(125);
+			t.mysql = a;
+			var c = r(128);
+			t.pgPool = c;
+			var u = r(129);
+			t.pg = u;
+			var l = r(130);
+			t.redis = l;
+			var h = r(131);
+			t.winston = h,
+			t.enable = function () {
+				n.enable(),
+				o.enable(),
+				i.enable(),
+				s.enable(),
+				a.enable(),
+				u.enable(),
+				c.enable(),
+				l.enable(),
+				h.enable()
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3);
+			t.bunyan = {
+				versionSpecifier: ">= 1.0.0 < 2.0.0",
+				patch: function (e) {
+					var t = e.prototype._emit;
+					return e.prototype._emit = function (e, r) {
+						var o = t.apply(this, arguments);
+						if (!r) {
+							var i = o;
+							i || (i = t.call(this, e, !0)),
+							n.channel.publish("bunyan", {
+								level: e.level,
+								result: i
+							})
 						}
-						t && (this.prerelease[0] === t ? isNaN(this.prerelease[1]) && (this.prerelease = [t, 0]) : this.prerelease = [t, 0]);
-						break;
-					default:
-						throw new Error("invalid increment argument: " + e)
+						return o
+					},
+					e
+				}
+			},
+			t.enable = function () {
+				n.channel.registerMonkeyPatch("bunyan", t.bunyan)
+			}
+		}, function (e, t) {
+			var r;
+			t = e.exports = V,
+			r = "object" == typeof process && process.env && process.env.NODE_DEBUG && /\bsemver\b/i.test(process.env.NODE_DEBUG) ? function () {
+				var e = Array.prototype.slice.call(arguments, 0);
+				e.unshift("SEMVER"),
+				console.log.apply(console, e)
+			}
+			 : function () {},
+			t.SEMVER_SPEC_VERSION = "2.0.0";
+			var n = 256,
+			o = Number.MAX_SAFE_INTEGER || 9007199254740991,
+			i = t.re = [],
+			s = t.src = [],
+			a = 0,
+			c = a++;
+			s[c] = "0|[1-9]\\d*";
+			var u = a++;
+			s[u] = "[0-9]+";
+			var l = a++;
+			s[l] = "\\d*[a-zA-Z-][a-zA-Z0-9-]*";
+			var h = a++;
+			s[h] = "(" + s[c] + ")\\.(" + s[c] + ")\\.(" + s[c] + ")";
+			var p = a++;
+			s[p] = "(" + s[u] + ")\\.(" + s[u] + ")\\.(" + s[u] + ")";
+			var d = a++;
+			s[d] = "(?:" + s[c] + "|" + s[l] + ")";
+			var f = a++;
+			s[f] = "(?:" + s[u] + "|" + s[l] + ")";
+			var g = a++;
+			s[g] = "(?:-(" + s[d] + "(?:\\." + s[d] + ")*))";
+			var m = a++;
+			s[m] = "(?:-?(" + s[f] + "(?:\\." + s[f] + ")*))";
+			var y = a++;
+			s[y] = "[0-9A-Za-z-]+";
+			var b = a++;
+			s[b] = "(?:\\+(" + s[y] + "(?:\\." + s[y] + ")*))";
+			var w = a++,
+			v = "v?" + s[h] + s[g] + "?" + s[b] + "?";
+			s[w] = "^" + v + "$";
+			var C = "[v=\\s]*" + s[p] + s[m] + "?" + s[b] + "?",
+			_ = a++;
+			s[_] = "^" + C + "$";
+			var S = a++;
+			s[S] = "((?:<|>)?=?)";
+			var k = a++;
+			s[k] = s[u] + "|x|X|\\*";
+			var T = a++;
+			s[T] = s[c] + "|x|X|\\*";
+			var E = a++;
+			s[E] = "[v=\\s]*(" + s[T] + ")(?:\\.(" + s[T] + ")(?:\\.(" + s[T] + ")(?:" + s[g] + ")?" + s[b] + "?)?)?";
+			var R = a++;
+			s[R] = "[v=\\s]*(" + s[k] + ")(?:\\.(" + s[k] + ")(?:\\.(" + s[k] + ")(?:" + s[m] + ")?" + s[b] + "?)?)?";
+			var P = a++;
+			s[P] = "^" + s[S] + "\\s*" + s[E] + "$";
+			var x = a++;
+			s[x] = "^" + s[S] + "\\s*" + s[R] + "$";
+			var I = a++;
+			s[I] = "(?:^|[^\\d])(\\d{1,16})(?:\\.(\\d{1,16}))?(?:\\.(\\d{1,16}))?(?:$|[^\\d])";
+			var D = a++;
+			s[D] = "(?:~>?)";
+			var A = a++;
+			s[A] = "(\\s*)" + s[D] + "\\s+",
+			i[A] = new RegExp(s[A], "g");
+			var O = a++;
+			s[O] = "^" + s[D] + s[E] + "$";
+			var M = a++;
+			s[M] = "^" + s[D] + s[R] + "$";
+			var L = a++;
+			s[L] = "(?:\\^)";
+			var N = a++;
+			s[N] = "(\\s*)" + s[L] + "\\s+",
+			i[N] = new RegExp(s[N], "g");
+			var B = a++;
+			s[B] = "^" + s[L] + s[E] + "$";
+			var U = a++;
+			s[U] = "^" + s[L] + s[R] + "$";
+			var F = a++;
+			s[F] = "^" + s[S] + "\\s*(" + C + ")$|^$";
+			var j = a++;
+			s[j] = "^" + s[S] + "\\s*(" + v + ")$|^$";
+			var G = a++;
+			s[G] = "(\\s*)" + s[S] + "\\s*(" + C + "|" + s[E] + ")",
+			i[G] = new RegExp(s[G], "g");
+			var q = a++;
+			s[q] = "^\\s*(" + s[E] + ")\\s+-\\s+(" + s[E] + ")\\s*$";
+			var H = a++;
+			s[H] = "^\\s*(" + s[R] + ")\\s+-\\s+(" + s[R] + ")\\s*$";
+			var W = a++;
+			s[W] = "(<|>)?=?\\s*\\*";
+			for (var z = 0; z < a; z++)
+				r(z, s[z]), i[z] || (i[z] = new RegExp(s[z]));
+			function $(e, t) {
+				if (e instanceof V)
+					return e;
+				if ("string" != typeof e)
+					return null;
+				if (e.length > n)
+					return null;
+				if (!(t ? i[_] : i[w]).test(e))
+					return null;
+				try {
+					return new V(e, t)
+				} catch (e) {
+					return null
+				}
+			}
+			function V(e, t) {
+				if (e instanceof V) {
+					if (e.loose === t)
+						return e;
+					e = e.version
+				} else if ("string" != typeof e)
+					throw new TypeError("Invalid Version: " + e);
+				if (e.length > n)
+					throw new TypeError("version is longer than " + n + " characters");
+				if (!(this instanceof V))
+					return new V(e, t);
+				r("SemVer", e, t),
+				this.loose = t;
+				var s = e.trim().match(t ? i[_] : i[w]);
+				if (!s)
+					throw new TypeError("Invalid Version: " + e);
+				if (this.raw = e, this.major = +s[1], this.minor = +s[2], this.patch = +s[3], this.major > o || this.major < 0)
+					throw new TypeError("Invalid major version");
+				if (this.minor > o || this.minor < 0)
+					throw new TypeError("Invalid minor version");
+				if (this.patch > o || this.patch < 0)
+					throw new TypeError("Invalid patch version");
+				s[4] ? this.prerelease = s[4].split(".").map(function (e) {
+					if (/^[0-9]+$/.test(e)) {
+						var t = +e;
+						if (t >= 0 && t < o)
+							return t
 					}
-					return this.format(),
-					this.raw = this.version,
-					this
-				},
-				t.inc = function (e, t, r, n) {
-					"string" == typeof r && (n = r, r = void 0);
-					try {
-						return new V(e, r).inc(t, n).version
-					} catch (e) {
-						return null
+					return e
+				}) : this.prerelease = [],
+				this.build = s[5] ? s[5].split(".") : [],
+				this.format()
+			}
+			t.parse = $,
+			t.valid = function (e, t) {
+				var r = $(e, t);
+				return r ? r.version : null
+			},
+			t.clean = function (e, t) {
+				var r = $(e.trim().replace(/^[=v]+/, ""), t);
+				return r ? r.version : null
+			},
+			t.SemVer = V,
+			V.prototype.format = function () {
+				return this.version = this.major + "." + this.minor + "." + this.patch,
+				this.prerelease.length && (this.version += "-" + this.prerelease.join(".")),
+				this.version
+			},
+			V.prototype.toString = function () {
+				return this.version
+			},
+			V.prototype.compare = function (e) {
+				return r("SemVer.compare", this.version, this.loose, e),
+				e instanceof V || (e = new V(e, this.loose)),
+				this.compareMain(e) || this.comparePre(e)
+			},
+			V.prototype.compareMain = function (e) {
+				return e instanceof V || (e = new V(e, this.loose)),
+				J(this.major, e.major) || J(this.minor, e.minor) || J(this.patch, e.patch)
+			},
+			V.prototype.comparePre = function (e) {
+				if (e instanceof V || (e = new V(e, this.loose)), this.prerelease.length && !e.prerelease.length)
+					return -1;
+				if (!this.prerelease.length && e.prerelease.length)
+					return 1;
+				if (!this.prerelease.length && !e.prerelease.length)
+					return 0;
+				var t = 0;
+				do {
+					var n = this.prerelease[t],
+					o = e.prerelease[t];
+					if (r("prerelease compare", t, n, o), void 0 === n && void 0 === o)
+						return 0;
+					if (void 0 === o)
+						return 1;
+					if (void 0 === n)
+						return -1;
+					if (n !== o)
+						return J(n, o)
+				} while (++t)
+			},
+			V.prototype.inc = function (e, t) {
+				switch (e) {
+				case "premajor":
+					this.prerelease.length = 0,
+					this.patch = 0,
+					this.minor = 0,
+					this.major++,
+					this.inc("pre", t);
+					break;
+				case "preminor":
+					this.prerelease.length = 0,
+					this.patch = 0,
+					this.minor++,
+					this.inc("pre", t);
+					break;
+				case "prepatch":
+					this.prerelease.length = 0,
+					this.inc("patch", t),
+					this.inc("pre", t);
+					break;
+				case "prerelease":
+					0 === this.prerelease.length && this.inc("patch", t),
+					this.inc("pre", t);
+					break;
+				case "major":
+					0 === this.minor && 0 === this.patch && 0 !== this.prerelease.length || this.major++,
+					this.minor = 0,
+					this.patch = 0,
+					this.prerelease = [];
+					break;
+				case "minor":
+					0 === this.patch && 0 !== this.prerelease.length || this.minor++,
+					this.patch = 0,
+					this.prerelease = [];
+					break;
+				case "patch":
+					0 === this.prerelease.length && this.patch++,
+					this.prerelease = [];
+					break;
+				case "pre":
+					if (0 === this.prerelease.length)
+						this.prerelease = [0];
+					else {
+						for (var r = this.prerelease.length; --r >= 0; )
+							"number" == typeof this.prerelease[r] && (this.prerelease[r]++, r = -2);
+						-1 === r && this.prerelease.push(0)
 					}
-				},
-				t.diff = function (e, t) {
-					if (Q(e, t))
-						return null;
-					var r = $(e),
-					n = $(t);
-					if (r.prerelease.length || n.prerelease.length) {
-						for (var o in r)
-							if (("major" === o || "minor" === o || "patch" === o) && r[o] !== n[o])
-								return "pre" + o;
-						return "prerelease"
-					}
+					t && (this.prerelease[0] === t ? isNaN(this.prerelease[1]) && (this.prerelease = [t, 0]) : this.prerelease = [t, 0]);
+					break;
+				default:
+					throw new Error("invalid increment argument: " + e)
+				}
+				return this.format(),
+				this.raw = this.version,
+				this
+			},
+			t.inc = function (e, t, r, n) {
+				"string" == typeof r && (n = r, r = void 0);
+				try {
+					return new V(e, r).inc(t, n).version
+				} catch (e) {
+					return null
+				}
+			},
+			t.diff = function (e, t) {
+				if (Q(e, t))
+					return null;
+				var r = $(e),
+				n = $(t);
+				if (r.prerelease.length || n.prerelease.length) {
 					for (var o in r)
 						if (("major" === o || "minor" === o || "patch" === o) && r[o] !== n[o])
-							return o
-				},
-				t.compareIdentifiers = J;
-				var Z = /^[0-9]+$/;
-				function J(e, t) {
-					var r = Z.test(e),
-					n = Z.test(t);
-					return r && n && (e = +e, t = +t),
-					r && !n ? -1 : n && !r ? 1 : e < t ? -1 : e > t ? 1 : 0
+							return "pre" + o;
+					return "prerelease"
 				}
-				function K(e, t, r) {
-					return new V(e, r).compare(new V(t, r))
+				for (var o in r)
+					if (("major" === o || "minor" === o || "patch" === o) && r[o] !== n[o])
+						return o
+			},
+			t.compareIdentifiers = J;
+			var Z = /^[0-9]+$/;
+			function J(e, t) {
+				var r = Z.test(e),
+				n = Z.test(t);
+				return r && n && (e = +e, t = +t),
+				r && !n ? -1 : n && !r ? 1 : e < t ? -1 : e > t ? 1 : 0
+			}
+			function K(e, t, r) {
+				return new V(e, r).compare(new V(t, r))
+			}
+			function Y(e, t, r) {
+				return K(e, t, r) > 0
+			}
+			function X(e, t, r) {
+				return K(e, t, r) < 0
+			}
+			function Q(e, t, r) {
+				return 0 === K(e, t, r)
+			}
+			function ee(e, t, r) {
+				return 0 !== K(e, t, r)
+			}
+			function te(e, t, r) {
+				return K(e, t, r) >= 0
+			}
+			function re(e, t, r) {
+				return K(e, t, r) <= 0
+			}
+			function ne(e, t, r, n) {
+				var o;
+				switch (t) {
+				case "===":
+					"object" == typeof e && (e = e.version),
+					"object" == typeof r && (r = r.version),
+					o = e === r;
+					break;
+				case "!==":
+					"object" == typeof e && (e = e.version),
+					"object" == typeof r && (r = r.version),
+					o = e !== r;
+					break;
+				case "":
+				case "=":
+				case "==":
+					o = Q(e, r, n);
+					break;
+				case "!=":
+					o = ee(e, r, n);
+					break;
+				case ">":
+					o = Y(e, r, n);
+					break;
+				case ">=":
+					o = te(e, r, n);
+					break;
+				case "<":
+					o = X(e, r, n);
+					break;
+				case "<=":
+					o = re(e, r, n);
+					break;
+				default:
+					throw new TypeError("Invalid operator: " + t)
 				}
-				function Y(e, t, r) {
-					return K(e, t, r) > 0
-				}
-				function X(e, t, r) {
-					return K(e, t, r) < 0
-				}
-				function Q(e, t, r) {
-					return 0 === K(e, t, r)
-				}
-				function ee(e, t, r) {
-					return 0 !== K(e, t, r)
-				}
-				function te(e, t, r) {
-					return K(e, t, r) >= 0
-				}
-				function re(e, t, r) {
-					return K(e, t, r) <= 0
-				}
-				function ne(e, t, r, n) {
-					var o;
-					switch (t) {
-					case "===":
-						"object" == typeof e && (e = e.version),
-						"object" == typeof r && (r = r.version),
-						o = e === r;
-						break;
-					case "!==":
-						"object" == typeof e && (e = e.version),
-						"object" == typeof r && (r = r.version),
-						o = e !== r;
-						break;
-					case "":
-					case "=":
-					case "==":
-						o = Q(e, r, n);
-						break;
-					case "!=":
-						o = ee(e, r, n);
-						break;
-					case ">":
-						o = Y(e, r, n);
-						break;
-					case ">=":
-						o = te(e, r, n);
-						break;
-					case "<":
-						o = X(e, r, n);
-						break;
-					case "<=":
-						o = re(e, r, n);
-						break;
-					default:
-						throw new TypeError("Invalid operator: " + t)
-					}
-					return o
-				}
-				function oe(e, t) {
-					if (e instanceof oe) {
-						if (e.loose === t)
-							return e;
-						e = e.value
-					}
-					if (!(this instanceof oe))
-						return new oe(e, t);
-					r("comparator", e, t),
-					this.loose = t,
-					this.parse(e),
-					this.semver === ie ? this.value = "" : this.value = this.operator + this.semver.version,
-					r("comp", this)
-				}
-				t.rcompareIdentifiers = function (e, t) {
-					return J(t, e)
-				},
-				t.major = function (e, t) {
-					return new V(e, t).major
-				},
-				t.minor = function (e, t) {
-					return new V(e, t).minor
-				},
-				t.patch = function (e, t) {
-					return new V(e, t).patch
-				},
-				t.compare = K,
-				t.compareLoose = function (e, t) {
-					return K(e, t, !0)
-				},
-				t.rcompare = function (e, t, r) {
-					return K(t, e, r)
-				},
-				t.sort = function (e, r) {
-					return e.sort(function (e, n) {
-						return t.compare(e, n, r)
-					})
-				},
-				t.rsort = function (e, r) {
-					return e.sort(function (e, n) {
-						return t.rcompare(e, n, r)
-					})
-				},
-				t.gt = Y,
-				t.lt = X,
-				t.eq = Q,
-				t.neq = ee,
-				t.gte = te,
-				t.lte = re,
-				t.cmp = ne,
-				t.Comparator = oe;
-				var ie = {};
-				function se(e, t) {
-					if (e instanceof se)
-						return e.loose === t ? e : new se(e.raw, t);
-					if (e instanceof oe)
-						return new se(e.value, t);
-					if (!(this instanceof se))
-						return new se(e, t);
-					if (this.loose = t, this.raw = e, this.set = e.split(/\s*\|\|\s*/).map(function (e) {
-								return this.parseRange(e.trim())
-							}, this).filter(function (e) {
-								return e.length
-							}), !this.set.length)
-						throw new TypeError("Invalid SemVer Range: " + e);
-					this.format()
-				}
-				function ae(e) {
-					return !e || "x" === e.toLowerCase() || "*" === e
-				}
-				function ce(e, t, r, n, o, i, s, a, c, u, l, h, p) {
-					return ((t = ae(r) ? "" : ae(n) ? ">=" + r + ".0.0" : ae(o) ? ">=" + r + "." + n + ".0" : ">=" + t) + " " + (a = ae(c) ? "" : ae(u) ? "<" + (+c + 1) + ".0.0" : ae(l) ? "<" + c + "." + (+u + 1) + ".0" : h ? "<=" + c + "." + u + "." + l + "-" + h : "<=" + a)).trim()
-				}
-				function ue(e, t) {
-					for (var n = 0; n < e.length; n++)
-						if (!e[n].test(t))
-							return !1;
-					if (t.prerelease.length) {
-						for (n = 0; n < e.length; n++)
-							if (r(e[n].semver), e[n].semver !== ie && e[n].semver.prerelease.length > 0) {
-								var o = e[n].semver;
-								if (o.major === t.major && o.minor === t.minor && o.patch === t.patch)
-									return !0
-							}
-						return !1
-					}
-					return !0
-				}
-				function le(e, t, r) {
-					try {
-						t = new se(t, r)
-					} catch (e) {
-						return !1
-					}
-					return t.test(e)
-				}
-				function he(e, t, r, n) {
-					var o,
-					i,
-					s,
-					a,
-					c;
-					switch (e = new V(e, n), t = new se(t, n), r) {
-					case ">":
-						o = Y,
-						i = re,
-						s = X,
-						a = ">",
-						c = ">=";
-						break;
-					case "<":
-						o = X,
-						i = te,
-						s = Y,
-						a = "<",
-						c = "<=";
-						break;
-					default:
-						throw new TypeError('Must provide a hilo val of "<" or ">"')
-					}
-					if (le(e, t, n))
-						return !1;
-					for (var u = 0; u < t.set.length; ++u) {
-						var l = null,
-						h = null;
-						if (t.set[u].forEach(function (e) {
-								e.semver === ie && (e = new oe(">=0.0.0")),
-								l = l || e,
-								h = h || e,
-								o(e.semver, l.semver, n) ? l = e : s(e.semver, h.semver, n) && (h = e)
-							}), l.operator === a || l.operator === c)
-							return !1;
-						if ((!h.operator || h.operator === a) && i(e, h.semver))
-							return !1;
-						if (h.operator === c && s(e, h.semver))
-							return !1
-					}
-					return !0
-				}
-				oe.prototype.parse = function (e) {
-					var t = this.loose ? i[F] : i[j],
-					r = e.match(t);
-					if (!r)
-						throw new TypeError("Invalid comparator: " + e);
-					this.operator = r[1],
-					"=" === this.operator && (this.operator = ""),
-					r[2] ? this.semver = new V(r[2], this.loose) : this.semver = ie
-				},
-				oe.prototype.toString = function () {
-					return this.value
-				},
-				oe.prototype.test = function (e) {
-					return r("Comparator.test", e, this.loose),
-					this.semver === ie || ("string" == typeof e && (e = new V(e, this.loose)), ne(e, this.operator, this.semver, this.loose))
-				},
-				oe.prototype.intersects = function (e, t) {
-					if (!(e instanceof oe))
-						throw new TypeError("a Comparator is required");
-					var r;
-					if ("" === this.operator)
-						return r = new se(e.value, t), le(this.value, r, t);
-					if ("" === e.operator)
-						return r = new se(this.value, t), le(e.semver, r, t);
-					var n = !(">=" !== this.operator && ">" !== this.operator || ">=" !== e.operator && ">" !== e.operator),
-					o = !("<=" !== this.operator && "<" !== this.operator || "<=" !== e.operator && "<" !== e.operator),
-					i = this.semver.version === e.semver.version,
-					s = !(">=" !== this.operator && "<=" !== this.operator || ">=" !== e.operator && "<=" !== e.operator),
-					a = ne(this.semver, "<", e.semver, t) && (">=" === this.operator || ">" === this.operator) && ("<=" === e.operator || "<" === e.operator),
-					c = ne(this.semver, ">", e.semver, t) && ("<=" === this.operator || "<" === this.operator) && (">=" === e.operator || ">" === e.operator);
-					return n || o || i && s || a || c
-				},
-				t.Range = se,
-				se.prototype.format = function () {
-					return this.range = this.set.map(function (e) {
-							return e.join(" ").trim()
-						}).join("||").trim(),
-					this.range
-				},
-				se.prototype.toString = function () {
-					return this.range
-				},
-				se.prototype.parseRange = function (e) {
-					var t = this.loose;
-					e = e.trim(),
-					r("range", e, t);
-					var n = t ? i[H] : i[q];
-					e = e.replace(n, ce),
-					r("hyphen replace", e),
-					e = e.replace(i[G], "$1$2$3"),
-					r("comparator trim", e, i[G]),
-					e = (e = (e = e.replace(i[A], "$1~")).replace(i[N], "$1^")).split(/\s+/).join(" ");
-					var o = t ? i[F] : i[j],
-					s = e.split(" ").map(function (e) {
-							return function (e, t) {
-								return r("comp", e),
-								e = function (e, t) {
-									return e.trim().split(/\s+/).map(function (e) {
-										return function (e, t) {
-											r("caret", e, t);
-											var n = t ? i[U] : i[B];
-											return e.replace(n, function (t, n, o, i, s) {
-												var a;
-												return r("caret", e, t, n, o, i, s),
-												ae(n) ? a = "" : ae(o) ? a = ">=" + n + ".0.0 <" + (+n + 1) + ".0.0" : ae(i) ? a = "0" === n ? ">=" + n + "." + o + ".0 <" + n + "." + (+o + 1) + ".0" : ">=" + n + "." + o + ".0 <" + (+n + 1) + ".0.0" : s ? (r("replaceCaret pr", s), "-" !== s.charAt(0) && (s = "-" + s), a = "0" === n ? "0" === o ? ">=" + n + "." + o + "." + i + s + " <" + n + "." + o + "." + (+i + 1) : ">=" + n + "." + o + "." + i + s + " <" + n + "." + (+o + 1) + ".0" : ">=" + n + "." + o + "." + i + s + " <" + (+n + 1) + ".0.0") : (r("no pr"), a = "0" === n ? "0" === o ? ">=" + n + "." + o + "." + i + " <" + n + "." + o + "." + (+i + 1) : ">=" + n + "." + o + "." + i + " <" + n + "." + (+o + 1) + ".0" : ">=" + n + "." + o + "." + i + " <" + (+n + 1) + ".0.0"),
-												r("caret return", a),
-												a
-											})
-										}
-										(e, t)
-									}).join(" ")
-								}
-								(e, t),
-								r("caret", e),
-								e = function (e, t) {
-									return e.trim().split(/\s+/).map(function (e) {
-										return function (e, t) {
-											var n = t ? i[M] : i[O];
-											return e.replace(n, function (t, n, o, i, s) {
-												var a;
-												return r("tilde", e, t, n, o, i, s),
-												ae(n) ? a = "" : ae(o) ? a = ">=" + n + ".0.0 <" + (+n + 1) + ".0.0" : ae(i) ? a = ">=" + n + "." + o + ".0 <" + n + "." + (+o + 1) + ".0" : s ? (r("replaceTilde pr", s), "-" !== s.charAt(0) && (s = "-" + s), a = ">=" + n + "." + o + "." + i + s + " <" + n + "." + (+o + 1) + ".0") : a = ">=" + n + "." + o + "." + i + " <" + n + "." + (+o + 1) + ".0",
-												r("tilde return", a),
-												a
-											})
-										}
-										(e, t)
-									}).join(" ")
-								}
-								(e, t),
-								r("tildes", e),
-								e = function (e, t) {
-									return r("replaceXRanges", e, t),
-									e.split(/\s+/).map(function (e) {
-										return function (e, t) {
-											e = e.trim();
-											var n = t ? i[x] : i[P];
-											return e.replace(n, function (t, n, o, i, s, a) {
-												r("xRange", e, t, n, o, i, s, a);
-												var c = ae(o),
-												u = c || ae(i),
-												l = u || ae(s),
-												h = l;
-												return "=" === n && h && (n = ""),
-												c ? t = ">" === n || "<" === n ? "<0.0.0" : "*" : n && h ? (u && (i = 0), l && (s = 0), ">" === n ? (n = ">=", u ? (o = +o + 1, i = 0, s = 0) : l && (i = +i + 1, s = 0)) : "<=" === n && (n = "<", u ? o = +o + 1 : i = +i + 1), t = n + o + "." + i + "." + s) : u ? t = ">=" + o + ".0.0 <" + (+o + 1) + ".0.0" : l && (t = ">=" + o + "." + i + ".0 <" + o + "." + (+i + 1) + ".0"),
-												r("xRange return", t),
-												t
-											})
-										}
-										(e, t)
-									}).join(" ")
-								}
-								(e, t),
-								r("xrange", e),
-								e = function (e, t) {
-									return r("replaceStars", e, t),
-									e.trim().replace(i[W], "")
-								}
-								(e, t),
-								r("stars", e),
-								e
-							}
-							(e, t)
-						}).join(" ").split(/\s+/);
-					return this.loose && (s = s.filter(function (e) {
-								return !!e.match(o)
-							})),
-					s = s.map(function (e) {
-							return new oe(e, t)
-						})
-				},
-				se.prototype.intersects = function (e, t) {
-					if (!(e instanceof se))
-						throw new TypeError("a Range is required");
-					return this.set.some(function (r) {
-						return r.every(function (r) {
-							return e.set.some(function (e) {
-								return e.every(function (e) {
-									return r.intersects(e, t)
-								})
-							})
-						})
-					})
-				},
-				t.toComparators = function (e, t) {
-					return new se(e, t).set.map(function (e) {
-						return e.map(function (e) {
-							return e.value
-						}).join(" ").trim().split(" ")
-					})
-				},
-				se.prototype.test = function (e) {
-					if (!e)
-						return !1;
-					"string" == typeof e && (e = new V(e, this.loose));
-					for (var t = 0; t < this.set.length; t++)
-						if (ue(this.set[t], e))
-							return !0;
-					return !1
-				},
-				t.satisfies = le,
-				t.maxSatisfying = function (e, t, r) {
-					var n = null,
-					o = null;
-					try {
-						var i = new se(t, r)
-					} catch (e) {
-						return null
-					}
-					return e.forEach(function (e) {
-						i.test(e) && (n && -1 !== o.compare(e) || (o = new V(n = e, r)))
-					}),
-					n
-				},
-				t.minSatisfying = function (e, t, r) {
-					var n = null,
-					o = null;
-					try {
-						var i = new se(t, r)
-					} catch (e) {
-						return null
-					}
-					return e.forEach(function (e) {
-						i.test(e) && (n && 1 !== o.compare(e) || (o = new V(n = e, r)))
-					}),
-					n
-				},
-				t.validRange = function (e, t) {
-					try {
-						return new se(e, t).range || "*"
-					} catch (e) {
-						return null
-					}
-				},
-				t.ltr = function (e, t, r) {
-					return he(e, t, "<", r)
-				},
-				t.gtr = function (e, t, r) {
-					return he(e, t, ">", r)
-				},
-				t.outside = he,
-				t.prerelease = function (e, t) {
-					var r = $(e, t);
-					return r && r.prerelease.length ? r.prerelease : null
-				},
-				t.intersects = function (e, t, r) {
-					return e = new se(e, r),
-					t = new se(t, r),
-					e.intersects(t)
-				},
-				t.coerce = function (e) {
-					if (e instanceof V)
+				return o
+			}
+			function oe(e, t) {
+				if (e instanceof oe) {
+					if (e.loose === t)
 						return e;
-					if ("string" != typeof e)
-						return null;
-					var t = e.match(i[I]);
-					return null == t ? null : $((t[1] || "0") + "." + (t[2] || "0") + "." + (t[3] || "0"))
+					e = e.value
 				}
-			}, function (e) {
-				e.exports = {
-					name: "diagnostic-channel",
-					version: "0.2.0",
-					main: "./dist/src/channel.js",
-					types: "./dist/src/channel.d.ts",
-					scripts: {
-						build: "tsc",
-						lint: "tslint -c tslint.json -p tsconfig.json",
-						clean: "rimraf ./dist",
-						test: "mocha ./dist/tests/**/*.js"
-					},
-					homepage: "https://github.com/Microsoft/node-diagnostic-channel",
-					bugs: {
-						url: "https://github.com/Microsoft/node-diagnostic-channel/issues"
-					},
-					repository: {
-						type: "git",
-						url: "https://github.com/Microsoft/node-diagnostic-channel.git"
-					},
-					description: "Provides a context-saving pub/sub channel to connect diagnostic event publishers and subscribers",
-					dependencies: {
-						semver: "^5.3.0"
-					},
-					devDependencies: {
-						"@types/mocha": "^2.2.40",
-						"@types/node": "^7.0.12",
-						mocha: "^3.2.0",
-						rimraf: "^2.6.1",
-						tslint: "^5.0.0",
-						typescript: "^2.2.1"
-					},
-					files: ["dist/src/**/*.d.ts", "dist/src/**/*.js", "LICENSE", "README.md", "package.json"],
-					license: "MIT"
+				if (!(this instanceof oe))
+					return new oe(e, t);
+				r("comparator", e, t),
+				this.loose = t,
+				this.parse(e),
+				this.semver === ie ? this.value = "" : this.value = this.operator + this.semver.version,
+				r("comp", this)
+			}
+			t.rcompareIdentifiers = function (e, t) {
+				return J(t, e)
+			},
+			t.major = function (e, t) {
+				return new V(e, t).major
+			},
+			t.minor = function (e, t) {
+				return new V(e, t).minor
+			},
+			t.patch = function (e, t) {
+				return new V(e, t).patch
+			},
+			t.compare = K,
+			t.compareLoose = function (e, t) {
+				return K(e, t, !0)
+			},
+			t.rcompare = function (e, t, r) {
+				return K(t, e, r)
+			},
+			t.sort = function (e, r) {
+				return e.sort(function (e, n) {
+					return t.compare(e, n, r)
+				})
+			},
+			t.rsort = function (e, r) {
+				return e.sort(function (e, n) {
+					return t.rcompare(e, n, r)
+				})
+			},
+			t.gt = Y,
+			t.lt = X,
+			t.eq = Q,
+			t.neq = ee,
+			t.gte = te,
+			t.lte = re,
+			t.cmp = ne,
+			t.Comparator = oe;
+			var ie = {};
+			function se(e, t) {
+				if (e instanceof se)
+					return e.loose === t ? e : new se(e.raw, t);
+				if (e instanceof oe)
+					return new se(e.value, t);
+				if (!(this instanceof se))
+					return new se(e, t);
+				if (this.loose = t, this.raw = e, this.set = e.split(/\s*\|\|\s*/).map(function (e) {
+						return this.parseRange(e.trim())
+					}, this).filter(function (e) {
+						return e.length
+					}), !this.set.length)
+					throw new TypeError("Invalid SemVer Range: " + e);
+				this.format()
+			}
+			function ae(e) {
+				return !e || "x" === e.toLowerCase() || "*" === e
+			}
+			function ce(e, t, r, n, o, i, s, a, c, u, l, h, p) {
+				return ((t = ae(r) ? "" : ae(n) ? ">=" + r + ".0.0" : ae(o) ? ">=" + r + "." + n + ".0" : ">=" + t) + " " + (a = ae(c) ? "" : ae(u) ? "<" + (+c + 1) + ".0.0" : ae(l) ? "<" + c + "." + (+u + 1) + ".0" : h ? "<=" + c + "." + u + "." + l + "-" + h : "<=" + a)).trim()
+			}
+			function ue(e, t) {
+				for (var n = 0; n < e.length; n++)
+					if (!e[n].test(t))
+						return !1;
+				if (t.prerelease.length) {
+					for (n = 0; n < e.length; n++)
+						if (r(e[n].semver), e[n].semver !== ie && e[n].semver.prerelease.length > 0) {
+							var o = e[n].semver;
+							if (o.major === t.major && o.minor === t.minor && o.patch === t.patch)
+								return !0
+						}
+					return !1
 				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3),
-				o = r(15);
-				t.console = {
-					versionSpecifier: ">= 4.0.0",
-					patch: function (e) {
-						var t = new o.Writable,
-						r = new o.Writable;
-						t.write = function (e) {
-							if (!e)
-								return !0;
-							var t = e.toString();
-							return n.channel.publish("console", {
-								message: t
-							}),
-							!0
-						},
-						r.write = function (e) {
-							if (!e)
-								return !0;
-							var t = e.toString();
-							return n.channel.publish("console", {
-								message: t,
-								stderr: !0
-							}),
-							!0
-						};
-						for (var i = new e.Console(t, r), s = function (t) {
-							var r = e[t];
-							r && (e[t] = function () {
-								if (i[t])
-									try {
-										i[t].apply(i, arguments)
-									} catch (e) {}
-								return r.apply(e, arguments)
-							})
-						}, a = 0, c = ["log", "info", "warn", "error", "dir", "time", "timeEnd", "trace", "assert"]; a < c.length; a++)
-							s(c[a]);
-						return e
-					}
-				},
-				t.enable = function () {
-					n.channel.registerMonkeyPatch("console", t.console),
-					r(122)
+				return !0
+			}
+			function le(e, t, r) {
+				try {
+					t = new se(t, r)
+				} catch (e) {
+					return !1
 				}
-			}, function (e, t) {
-				e.exports = require("console")
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3);
-				t.mongoCore2 = {
-					versionSpecifier: ">= 2.0.0 < 2.2.0",
-					patch: function (e) {
-						var t = e.Server.prototype.connect;
-						return e.Server.prototype.connect = function () {
-							var e = t.apply(this, arguments),
-							r = this.s.pool.write;
-							this.s.pool.write = function () {
-								var e = "function" == typeof arguments[1] ? 1 : 2;
-								return "function" == typeof arguments[e] && (arguments[e] = n.channel.bindToContext(arguments[e])),
-								r.apply(this, arguments)
-							};
-							var o = this.s.pool.logout;
-							return this.s.pool.logout = function () {
-								return "function" == typeof arguments[1] && (arguments[1] = n.channel.bindToContext(arguments[1])),
-								o.apply(this, arguments)
-							},
-							e
-						},
-						e
-					}
-				},
-				t.enable = function () {
-					n.channel.registerMonkeyPatch("mongodb-core", t.mongoCore2)
+				return t.test(e)
+			}
+			function he(e, t, r, n) {
+				var o,
+				i,
+				s,
+				a,
+				c;
+				switch (e = new V(e, n), t = new se(t, n), r) {
+				case ">":
+					o = Y,
+					i = re,
+					s = X,
+					a = ">",
+					c = ">=";
+					break;
+				case "<":
+					o = X,
+					i = te,
+					s = Y,
+					a = "<",
+					c = "<=";
+					break;
+				default:
+					throw new TypeError('Must provide a hilo val of "<" or ">"')
 				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3);
-				t.mongo2 = {
-					versionSpecifier: ">= 2.0.0 <= 2.2.x",
-					patch: function (e) {
-						var t = e.instrument({
-								operationIdGenerator: {
-									next: function () {
-										return n.channel.bindToContext(function (e) {
-											return e()
-										})
-									}
+				if (le(e, t, n))
+					return !1;
+				for (var u = 0; u < t.set.length; ++u) {
+					var l = null,
+					h = null;
+					if (t.set[u].forEach(function (e) {
+							e.semver === ie && (e = new oe(">=0.0.0")),
+							l = l || e,
+							h = h || e,
+							o(e.semver, l.semver, n) ? l = e : s(e.semver, h.semver, n) && (h = e)
+						}), l.operator === a || l.operator === c)
+						return !1;
+					if ((!h.operator || h.operator === a) && i(e, h.semver))
+						return !1;
+					if (h.operator === c && s(e, h.semver))
+						return !1
+				}
+				return !0
+			}
+			oe.prototype.parse = function (e) {
+				var t = this.loose ? i[F] : i[j],
+				r = e.match(t);
+				if (!r)
+					throw new TypeError("Invalid comparator: " + e);
+				this.operator = r[1],
+				"=" === this.operator && (this.operator = ""),
+				r[2] ? this.semver = new V(r[2], this.loose) : this.semver = ie
+			},
+			oe.prototype.toString = function () {
+				return this.value
+			},
+			oe.prototype.test = function (e) {
+				return r("Comparator.test", e, this.loose),
+				this.semver === ie || ("string" == typeof e && (e = new V(e, this.loose)), ne(e, this.operator, this.semver, this.loose))
+			},
+			oe.prototype.intersects = function (e, t) {
+				if (!(e instanceof oe))
+					throw new TypeError("a Comparator is required");
+				var r;
+				if ("" === this.operator)
+					return r = new se(e.value, t), le(this.value, r, t);
+				if ("" === e.operator)
+					return r = new se(this.value, t), le(e.semver, r, t);
+				var n = !(">=" !== this.operator && ">" !== this.operator || ">=" !== e.operator && ">" !== e.operator),
+				o = !("<=" !== this.operator && "<" !== this.operator || "<=" !== e.operator && "<" !== e.operator),
+				i = this.semver.version === e.semver.version,
+				s = !(">=" !== this.operator && "<=" !== this.operator || ">=" !== e.operator && "<=" !== e.operator),
+				a = ne(this.semver, "<", e.semver, t) && (">=" === this.operator || ">" === this.operator) && ("<=" === e.operator || "<" === e.operator),
+				c = ne(this.semver, ">", e.semver, t) && ("<=" === this.operator || "<" === this.operator) && (">=" === e.operator || ">" === e.operator);
+				return n || o || i && s || a || c
+			},
+			t.Range = se,
+			se.prototype.format = function () {
+				return this.range = this.set.map(function (e) {
+					return e.join(" ").trim()
+				}).join("||").trim(),
+				this.range
+			},
+			se.prototype.toString = function () {
+				return this.range
+			},
+			se.prototype.parseRange = function (e) {
+				var t = this.loose;
+				e = e.trim(),
+				r("range", e, t);
+				var n = t ? i[H] : i[q];
+				e = e.replace(n, ce),
+				r("hyphen replace", e),
+				e = e.replace(i[G], "$1$2$3"),
+				r("comparator trim", e, i[G]),
+				e = (e = (e = e.replace(i[A], "$1~")).replace(i[N], "$1^")).split(/\s+/).join(" ");
+				var o = t ? i[F] : i[j],
+				s = e.split(" ").map(function (e) {
+					return function (e, t) {
+						return r("comp", e),
+						e = function (e, t) {
+							return e.trim().split(/\s+/).map(function (e) {
+								return function (e, t) {
+									r("caret", e, t);
+									var n = t ? i[U] : i[B];
+									return e.replace(n, function (t, n, o, i, s) {
+										var a;
+										return r("caret", e, t, n, o, i, s),
+										ae(n) ? a = "" : ae(o) ? a = ">=" + n + ".0.0 <" + (+n + 1) + ".0.0" : ae(i) ? a = "0" === n ? ">=" + n + "." + o + ".0 <" + n + "." + (+o + 1) + ".0" : ">=" + n + "." + o + ".0 <" + (+n + 1) + ".0.0" : s ? (r("replaceCaret pr", s), "-" !== s.charAt(0) && (s = "-" + s), a = "0" === n ? "0" === o ? ">=" + n + "." + o + "." + i + s + " <" + n + "." + o + "." + (+i + 1) : ">=" + n + "." + o + "." + i + s + " <" + n + "." + (+o + 1) + ".0" : ">=" + n + "." + o + "." + i + s + " <" + (+n + 1) + ".0.0") : (r("no pr"), a = "0" === n ? "0" === o ? ">=" + n + "." + o + "." + i + " <" + n + "." + o + "." + (+i + 1) : ">=" + n + "." + o + "." + i + " <" + n + "." + (+o + 1) + ".0" : ">=" + n + "." + o + "." + i + " <" + (+n + 1) + ".0.0"),
+										r("caret return", a),
+										a
+									})
 								}
-							}),
-						r = {};
-						return t.on("started", function (e) {
-							r[e.requestId] || (r[e.requestId] = e)
-						}),
-						t.on("succeeded", function (e) {
-							var t = r[e.requestId];
-							t && delete r[e.requestId],
-							e.operationId(function () {
-								return n.channel.publish("mongodb", {
-									startedData: t,
-									event: e,
-									succeeded: !0
-								})
+								(e, t)
+							}).join(" ")
+						}
+						(e, t),
+						r("caret", e),
+						e = function (e, t) {
+							return e.trim().split(/\s+/).map(function (e) {
+								return function (e, t) {
+									var n = t ? i[M] : i[O];
+									return e.replace(n, function (t, n, o, i, s) {
+										var a;
+										return r("tilde", e, t, n, o, i, s),
+										ae(n) ? a = "" : ae(o) ? a = ">=" + n + ".0.0 <" + (+n + 1) + ".0.0" : ae(i) ? a = ">=" + n + "." + o + ".0 <" + n + "." + (+o + 1) + ".0" : s ? (r("replaceTilde pr", s), "-" !== s.charAt(0) && (s = "-" + s), a = ">=" + n + "." + o + "." + i + s + " <" + n + "." + (+o + 1) + ".0") : a = ">=" + n + "." + o + "." + i + " <" + n + "." + (+o + 1) + ".0",
+										r("tilde return", a),
+										a
+									})
+								}
+								(e, t)
+							}).join(" ")
+						}
+						(e, t),
+						r("tildes", e),
+						e = function (e, t) {
+							return r("replaceXRanges", e, t),
+							e.split(/\s+/).map(function (e) {
+								return function (e, t) {
+									e = e.trim();
+									var n = t ? i[x] : i[P];
+									return e.replace(n, function (t, n, o, i, s, a) {
+										r("xRange", e, t, n, o, i, s, a);
+										var c = ae(o),
+										u = c || ae(i),
+										l = u || ae(s),
+										h = l;
+										return "=" === n && h && (n = ""),
+										c ? t = ">" === n || "<" === n ? "<0.0.0" : "*" : n && h ? (u && (i = 0), l && (s = 0), ">" === n ? (n = ">=", u ? (o = +o + 1, i = 0, s = 0) : l && (i = +i + 1, s = 0)) : "<=" === n && (n = "<", u ? o = +o + 1 : i = +i + 1), t = n + o + "." + i + "." + s) : u ? t = ">=" + o + ".0.0 <" + (+o + 1) + ".0.0" : l && (t = ">=" + o + "." + i + ".0 <" + o + "." + (+i + 1) + ".0"),
+										r("xRange return", t),
+										t
+									})
+								}
+								(e, t)
+							}).join(" ")
+						}
+						(e, t),
+						r("xrange", e),
+						e = function (e, t) {
+							return r("replaceStars", e, t),
+							e.trim().replace(i[W], "")
+						}
+						(e, t),
+						r("stars", e),
+						e
+					}
+					(e, t)
+				}).join(" ").split(/\s+/);
+				return this.loose && (s = s.filter(function (e) {
+						return !!e.match(o)
+					})),
+				s = s.map(function (e) {
+					return new oe(e, t)
+				})
+			},
+			se.prototype.intersects = function (e, t) {
+				if (!(e instanceof se))
+					throw new TypeError("a Range is required");
+				return this.set.some(function (r) {
+					return r.every(function (r) {
+						return e.set.some(function (e) {
+							return e.every(function (e) {
+								return r.intersects(e, t)
 							})
+						})
+					})
+				})
+			},
+			t.toComparators = function (e, t) {
+				return new se(e, t).set.map(function (e) {
+					return e.map(function (e) {
+						return e.value
+					}).join(" ").trim().split(" ")
+				})
+			},
+			se.prototype.test = function (e) {
+				if (!e)
+					return !1;
+				"string" == typeof e && (e = new V(e, this.loose));
+				for (var t = 0; t < this.set.length; t++)
+					if (ue(this.set[t], e))
+						return !0;
+				return !1
+			},
+			t.satisfies = le,
+			t.maxSatisfying = function (e, t, r) {
+				var n = null,
+				o = null;
+				try {
+					var i = new se(t, r)
+				} catch (e) {
+					return null
+				}
+				return e.forEach(function (e) {
+					i.test(e) && (n && -1 !== o.compare(e) || (o = new V(n = e, r)))
+				}),
+				n
+			},
+			t.minSatisfying = function (e, t, r) {
+				var n = null,
+				o = null;
+				try {
+					var i = new se(t, r)
+				} catch (e) {
+					return null
+				}
+				return e.forEach(function (e) {
+					i.test(e) && (n && 1 !== o.compare(e) || (o = new V(n = e, r)))
+				}),
+				n
+			},
+			t.validRange = function (e, t) {
+				try {
+					return new se(e, t).range || "*"
+				} catch (e) {
+					return null
+				}
+			},
+			t.ltr = function (e, t, r) {
+				return he(e, t, "<", r)
+			},
+			t.gtr = function (e, t, r) {
+				return he(e, t, ">", r)
+			},
+			t.outside = he,
+			t.prerelease = function (e, t) {
+				var r = $(e, t);
+				return r && r.prerelease.length ? r.prerelease : null
+			},
+			t.intersects = function (e, t, r) {
+				return e = new se(e, r),
+				t = new se(t, r),
+				e.intersects(t)
+			},
+			t.coerce = function (e) {
+				if (e instanceof V)
+					return e;
+				if ("string" != typeof e)
+					return null;
+				var t = e.match(i[I]);
+				return null == t ? null : $((t[1] || "0") + "." + (t[2] || "0") + "." + (t[3] || "0"))
+			}
+		}, function (e) {
+			e.exports = {
+				name: "diagnostic-channel",
+				version: "0.2.0",
+				main: "./dist/src/channel.js",
+				types: "./dist/src/channel.d.ts",
+				scripts: {
+					build: "tsc",
+					lint: "tslint -c tslint.json -p tsconfig.json",
+					clean: "rimraf ./dist",
+					test: "mocha ./dist/tests/**/*.js"
+				},
+				homepage: "https://github.com/Microsoft/node-diagnostic-channel",
+				bugs: {
+					url: "https://github.com/Microsoft/node-diagnostic-channel/issues"
+				},
+				repository: {
+					type: "git",
+					url: "https://github.com/Microsoft/node-diagnostic-channel.git"
+				},
+				description: "Provides a context-saving pub/sub channel to connect diagnostic event publishers and subscribers",
+				dependencies: {
+					semver: "^5.3.0"
+				},
+				devDependencies: {
+					"@types/mocha": "^2.2.40",
+					"@types/node": "^7.0.12",
+					mocha: "^3.2.0",
+					rimraf: "^2.6.1",
+					tslint: "^5.0.0",
+					typescript: "^2.2.1"
+				},
+				files: ["dist/src/**/*.d.ts", "dist/src/**/*.js", "LICENSE", "README.md", "package.json"],
+				license: "MIT"
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3),
+			o = r(15);
+			t.console = {
+				versionSpecifier: ">= 4.0.0",
+				patch: function (e) {
+					var t = new o.Writable,
+					r = new o.Writable;
+					t.write = function (e) {
+						if (!e)
+							return !0;
+						var t = e.toString();
+						return n.channel.publish("console", {
+							message: t
 						}),
-						t.on("failed", function (e) {
-							var t = r[e.requestId];
-							t && delete r[e.requestId],
-							e.operationId(function () {
-								return n.channel.publish("mongodb", {
-									startedData: t,
-									event: e,
-									succeeded: !1
-								})
-							})
+						!0
+					},
+					r.write = function (e) {
+						if (!e)
+							return !0;
+						var t = e.toString();
+						return n.channel.publish("console", {
+							message: t,
+							stderr: !0
 						}),
-						e
-					}
-				},
-				t.enable = function () {
-					n.channel.registerMonkeyPatch("mongodb", t.mongo2)
-				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3),
-				o = r(1);
-				t.mysql = {
-					versionSpecifier: ">= 2.0.0 <= 2.14.x",
-					patch: function (e, t) {
-						var i = function (e, t) {
-							return function (t, r) {
-								var o = e[t];
-								o && (e[t] = function () {
-									for (var e = arguments.length - 1, t = arguments.length - 1; t >= 0; --t) {
-										if ("function" == typeof arguments[t]) {
-											e = t;
-											break
-										}
-										if (void 0 !== arguments[t])
-											break
-									}
-									var i = arguments[e],
-									s = {
-										result: null,
-										startTime: null
-									};
-									"function" == typeof i && (r ? (s.startTime = process.hrtime(), arguments[e] = n.channel.bindToContext(r(s, i))) : arguments[e] = n.channel.bindToContext(i));
-									var a = o.apply(this, arguments);
-									return s.result = a,
-									a
-								})
-							}
-						},
-						s = function (e, t) {
-							return i(e.prototype)
-						},
-						a = r(126)(o.dirname(t) + "/lib/Connection");
-						["connect", "changeUser", "ping", "statistics", "end"].forEach(function (e) {
-							return s(a)(e)
-						}),
-						i(a)("createQuery", function (e, t) {
-							return function (r) {
-								var o = process.hrtime(e.startTime),
-								i = 1e3 * o[0] + o[1] / 1e6 | 0;
-								n.channel.publish("mysql", {
-									query: e.result,
-									callbackArgs: arguments,
-									err: r,
-									duration: i
-								}),
-								t.apply(this, arguments)
-							}
-						});
-						var c = r(127)(o.dirname(t) + "/lib/Pool");
-						return ["_enqueueCallback"].forEach(function (e) {
-							return s(c)(e)
-						}),
-						e
-					}
-				},
-				t.enable = function () {
-					n.channel.registerMonkeyPatch("mysql", t.mysql)
-				}
-			}, function (e, t) {
-				function r(e) {
-					var t = new Error("Cannot find module '" + e + "'");
-					throw t.code = "MODULE_NOT_FOUND",
-					t
-				}
-				r.keys = function () {
-					return []
-				},
-				r.resolve = r,
-				e.exports = r,
-				r.id = 126
-			}, function (e, t) {
-				function r(e) {
-					var t = new Error("Cannot find module '" + e + "'");
-					throw t.code = "MODULE_NOT_FOUND",
-					t
-				}
-				r.keys = function () {
-					return []
-				},
-				r.resolve = r,
-				e.exports = r,
-				r.id = 127
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3);
-				t.postgresPool1 = {
-					versionSpecifier: "1.x",
-					patch: function (e) {
-						var t = e.prototype.connect;
-						return e.prototype.connect = function (e) {
-							e && (arguments[0] = n.channel.bindToContext(e)),
-							t.apply(this, arguments)
-						},
-						e
-					}
-				},
-				t.enable = function () {
-					n.channel.registerMonkeyPatch("pg-pool", t.postgresPool1)
-				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3),
-				o = r(22);
-				t.postgres6 = {
-					versionSpecifier: "6.x",
-					patch: function (e, t) {
-						var r = e.Client.prototype.query,
-						i = "__diagnosticOriginalFunc";
-						return e.Client.prototype.query = function (e, t, s) {
-							var a,
-							c = {
-								query: {},
-								database: {
-									host: this.connectionParameters.host,
-									port: this.connectionParameters.port
-								},
-								result: null,
-								error: null,
-								duration: 0
-							},
-							u = process.hrtime();
-							function l(e) {
-								e && e[i] && (e = e[i]);
-								var t = n.channel.bindToContext(function (t, r) {
-										var i = process.hrtime(u);
-										if (c.result = r && {
-												rowCount: r.rowCount,
-												command: r.command
-											}, c.error = t, c.duration = Math.ceil(1e3 * i[0] + i[1] / 1e6), n.channel.publish("postgres", c), t) {
-											if (e)
-												return e.apply(this, arguments);
-											a && a instanceof o.EventEmitter && a.emit("error", t)
-										} else
-											e && e.apply(this, arguments)
-									});
+						!0
+					};
+					for (var i = new e.Console(t, r), s = function (t) {
+						var r = e[t];
+						r && (e[t] = function () {
+							if (i[t])
 								try {
-									return Object.defineProperty(t, i, {
-										value: e
-									}),
-									t
-								} catch (t) {
-									return e
-								}
-							}
-							try {
-								"string" == typeof e ? t instanceof Array ? (c.query.preparable = {
-										text: e,
-										args: t
-									}, s = l(s)) : (c.query.text = e, s ? s = l(s) : t = l(t)) : ("string" == typeof e.name ? c.query.plan = e.name : e.values instanceof Array ? c.query.preparable = {
-										text: e.text,
-										args: e.values
-									}
-									 : c.query.text = e.text, s ? s = l(s) : t ? t = l(t) : e.callback = l(e.callback))
-							} catch (e) {
-								return r.apply(this, arguments)
-							}
-							return arguments[0] = e,
-							arguments[1] = t,
-							arguments[2] = s,
-							arguments.length = arguments.length > 3 ? arguments.length : 3,
-							a = r.apply(this, arguments)
-						},
-						e
-					}
-				},
-				t.enable = function () {
-					n.channel.registerMonkeyPatch("pg", t.postgres6)
+									i[t].apply(i, arguments)
+								} catch (e) {}
+							return r.apply(e, arguments)
+						})
+					}, a = 0, c = ["log", "info", "warn", "error", "dir", "time", "timeEnd", "trace", "assert"]; a < c.length; a++)
+						s(c[a]);
+					return e
 				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3);
-				t.redis = {
-					versionSpecifier: ">= 2.0.0 < 3.0.0",
-					patch: function (e) {
-						var t = e.RedisClient.prototype.internal_send_command;
-						return e.RedisClient.prototype.internal_send_command = function (e) {
-							if (e) {
-								var r = e.callback;
-								if (!r || !r.pubsubBound) {
-									var o = this.address,
-									i = process.hrtime();
-									e.callback = n.channel.bindToContext(function (t, s) {
-											var a = process.hrtime(i),
-											c = 1e3 * a[0] + a[1] / 1e6 | 0;
-											n.channel.publish("redis", {
-												duration: c,
-												address: o,
-												commandObj: e,
-												err: t,
-												result: s
-											}),
-											"function" == typeof r && r.apply(this, arguments)
-										}),
-									e.callback.pubsubBound = !0
-								}
-							}
-							return t.call(this, e)
-						},
-						e
-					}
-				},
-				t.enable = function () {
-					n.channel.registerMonkeyPatch("redis", t.redis)
-				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3);
-				t.winston = {
-					versionSpecifier: "2.x",
-					patch: function (e) {
-						var t,
-						r = e.Logger.prototype.log,
-						o = function (r, o, i) {
-							var s;
-							return s = t === e.config.npm.levels ? "npm" : t === e.config.syslog.levels ? "syslog" : "unknown",
-							n.channel.publish("winston", {
-								level: r,
-								message: o,
-								meta: i,
-								levelKind: s
-							}),
-							o
-						};
-						return e.Logger.prototype.log = function () {
-							return t = this.levels,
-							this.filters && 0 !== this.filters.length ? this.filters[this.filters.length - 1] !== o && (this.filters = this.filters.filter(function (e) {
-										return e !== o
-									}), this.filters.push(o)) : this.filters = [o],
+			},
+			t.enable = function () {
+				n.channel.registerMonkeyPatch("console", t.console),
+				r(122)
+			}
+		}, function (e, t) {
+			e.exports = require("console")
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3);
+			t.mongoCore2 = {
+				versionSpecifier: ">= 2.0.0 < 2.2.0",
+				patch: function (e) {
+					var t = e.Server.prototype.connect;
+					return e.Server.prototype.connect = function () {
+						var e = t.apply(this, arguments),
+						r = this.s.pool.write;
+						this.s.pool.write = function () {
+							var e = "function" == typeof arguments[1] ? 1 : 2;
+							return "function" == typeof arguments[e] && (arguments[e] = n.channel.bindToContext(arguments[e])),
 							r.apply(this, arguments)
+						};
+						var o = this.s.pool.logout;
+						return this.s.pool.logout = function () {
+							return "function" == typeof arguments[1] && (arguments[1] = n.channel.bindToContext(arguments[1])),
+							o.apply(this, arguments)
 						},
 						e
-					}
-				},
-				t.enable = function () {
-					n.channel.registerMonkeyPatch("winston", t.winston)
+					},
+					e
 				}
-			}, function (e, t, r) {
+			},
+			t.enable = function () {
+				n.channel.registerMonkeyPatch("mongodb-core", t.mongoCore2)
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3);
+			t.mongo2 = {
+				versionSpecifier: ">= 2.0.0 <= 2.2.x",
+				patch: function (e) {
+					var t = e.instrument({
+						operationIdGenerator: {
+							next: function () {
+								return n.channel.bindToContext(function (e) {
+									return e()
+								})
+							}
+						}
+					}),
+					r = {};
+					return t.on("started", function (e) {
+						r[e.requestId] || (r[e.requestId] = e)
+					}),
+					t.on("succeeded", function (e) {
+						var t = r[e.requestId];
+						t && delete r[e.requestId],
+						e.operationId(function () {
+							return n.channel.publish("mongodb", {
+								startedData: t,
+								event: e,
+								succeeded: !0
+							})
+						})
+					}),
+					t.on("failed", function (e) {
+						var t = r[e.requestId];
+						t && delete r[e.requestId],
+						e.operationId(function () {
+							return n.channel.publish("mongodb", {
+								startedData: t,
+								event: e,
+								succeeded: !1
+							})
+						})
+					}),
+					e
+				}
+			},
+			t.enable = function () {
+				n.channel.registerMonkeyPatch("mongodb", t.mongo2)
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3),
+			o = r(1);
+			t.mysql = {
+				versionSpecifier: ">= 2.0.0 <= 2.14.x",
+				patch: function (e, t) {
+					var i = function (e, t) {
+						return function (t, r) {
+							var o = e[t];
+							o && (e[t] = function () {
+								for (var e = arguments.length - 1, t = arguments.length - 1; t >= 0; --t) {
+									if ("function" == typeof arguments[t]) {
+										e = t;
+										break
+									}
+									if (void 0 !== arguments[t])
+										break
+								}
+								var i = arguments[e],
+								s = {
+									result: null,
+									startTime: null
+								};
+								"function" == typeof i && (r ? (s.startTime = process.hrtime(), arguments[e] = n.channel.bindToContext(r(s, i))) : arguments[e] = n.channel.bindToContext(i));
+								var a = o.apply(this, arguments);
+								return s.result = a,
+								a
+							})
+						}
+					},
+					s = function (e, t) {
+						return i(e.prototype)
+					},
+					a = r(126)(o.dirname(t) + "/lib/Connection");
+					["connect", "changeUser", "ping", "statistics", "end"].forEach(function (e) {
+						return s(a)(e)
+					}),
+					i(a)("createQuery", function (e, t) {
+						return function (r) {
+							var o = process.hrtime(e.startTime),
+							i = 1e3 * o[0] + o[1] / 1e6 | 0;
+							n.channel.publish("mysql", {
+								query: e.result,
+								callbackArgs: arguments,
+								err: r,
+								duration: i
+							}),
+							t.apply(this, arguments)
+						}
+					});
+					var c = r(127)(o.dirname(t) + "/lib/Pool");
+					return ["_enqueueCallback"].forEach(function (e) {
+						return s(c)(e)
+					}),
+					e
+				}
+			},
+			t.enable = function () {
+				n.channel.registerMonkeyPatch("mysql", t.mysql)
+			}
+		}, function (e, t) {
+			function r(e) {
+				var t = new Error("Cannot find module '" + e + "'");
+				throw t.code = "MODULE_NOT_FOUND",
+				t
+			}
+			r.keys = function () {
+				return []
+			},
+			r.resolve = r,
+			e.exports = r,
+			r.id = 126
+		}, function (e, t) {
+			function r(e) {
+				var t = new Error("Cannot find module '" + e + "'");
+				throw t.code = "MODULE_NOT_FOUND",
+				t
+			}
+			r.keys = function () {
+				return []
+			},
+			r.resolve = r,
+			e.exports = r,
+			r.id = 127
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3);
+			t.postgresPool1 = {
+				versionSpecifier: "1.x",
+				patch: function (e) {
+					var t = e.prototype.connect;
+					return e.prototype.connect = function (e) {
+						e && (arguments[0] = n.channel.bindToContext(e)),
+						t.apply(this, arguments)
+					},
+					e
+				}
+			},
+			t.enable = function () {
+				n.channel.registerMonkeyPatch("pg-pool", t.postgresPool1)
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3),
+			o = r(22);
+			t.postgres6 = {
+				versionSpecifier: "6.x",
+				patch: function (e, t) {
+					var r = e.Client.prototype.query,
+					i = "__diagnosticOriginalFunc";
+					return e.Client.prototype.query = function (e, t, s) {
+						var a,
+						c = {
+							query: {},
+							database: {
+								host: this.connectionParameters.host,
+								port: this.connectionParameters.port
+							},
+							result: null,
+							error: null,
+							duration: 0
+						},
+						u = process.hrtime();
+						function l(e) {
+							e && e[i] && (e = e[i]);
+							var t = n.channel.bindToContext(function (t, r) {
+								var i = process.hrtime(u);
+								if (c.result = r && {
+										rowCount: r.rowCount,
+										command: r.command
+									}, c.error = t, c.duration = Math.ceil(1e3 * i[0] + i[1] / 1e6), n.channel.publish("postgres", c), t) {
+									if (e)
+										return e.apply(this, arguments);
+									a && a instanceof o.EventEmitter && a.emit("error", t)
+								} else
+									e && e.apply(this, arguments)
+							});
+							try {
+								return Object.defineProperty(t, i, {
+									value: e
+								}),
+								t
+							} catch (t) {
+								return e
+							}
+						}
+						try {
+							"string" == typeof e ? t instanceof Array ? (c.query.preparable = {
+									text: e,
+									args: t
+								}, s = l(s)) : (c.query.text = e, s ? s = l(s) : t = l(t)) : ("string" == typeof e.name ? c.query.plan = e.name : e.values instanceof Array ? c.query.preparable = {
+									text: e.text,
+									args: e.values
+								}
+								 : c.query.text = e.text, s ? s = l(s) : t ? t = l(t) : e.callback = l(e.callback))
+						} catch (e) {
+							return r.apply(this, arguments)
+						}
+						return arguments[0] = e,
+						arguments[1] = t,
+						arguments[2] = s,
+						arguments.length = arguments.length > 3 ? arguments.length : 3,
+						a = r.apply(this, arguments)
+					},
+					e
+				}
+			},
+			t.enable = function () {
+				n.channel.registerMonkeyPatch("pg", t.postgres6)
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3);
+			t.redis = {
+				versionSpecifier: ">= 2.0.0 < 3.0.0",
+				patch: function (e) {
+					var t = e.RedisClient.prototype.internal_send_command;
+					return e.RedisClient.prototype.internal_send_command = function (e) {
+						if (e) {
+							var r = e.callback;
+							if (!r || !r.pubsubBound) {
+								var o = this.address,
+								i = process.hrtime();
+								e.callback = n.channel.bindToContext(function (t, s) {
+									var a = process.hrtime(i),
+									c = 1e3 * a[0] + a[1] / 1e6 | 0;
+									n.channel.publish("redis", {
+										duration: c,
+										address: o,
+										commandObj: e,
+										err: t,
+										result: s
+									}),
+									"function" == typeof r && r.apply(this, arguments)
+								}),
+								e.callback.pubsubBound = !0
+							}
+						}
+						return t.call(this, e)
+					},
+					e
+				}
+			},
+			t.enable = function () {
+				n.channel.registerMonkeyPatch("redis", t.redis)
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3);
+			t.winston = {
+				versionSpecifier: "2.x",
+				patch: function (e) {
+					var t,
+					r = e.Logger.prototype.log,
+					o = function (r, o, i) {
+						var s;
+						return s = t === e.config.npm.levels ? "npm" : t === e.config.syslog.levels ? "syslog" : "unknown",
+						n.channel.publish("winston", {
+							level: r,
+							message: o,
+							meta: i,
+							levelKind: s
+						}),
+						o
+					};
+					return e.Logger.prototype.log = function () {
+						return t = this.levels,
+						this.filters && 0 !== this.filters.length ? this.filters[this.filters.length - 1] !== o && (this.filters = this.filters.filter(function (e) {
+								return e !== o
+							}), this.filters.push(o)) : this.filters = [o],
+						r.apply(this, arguments)
+					},
+					e
+				}
+			},
+			t.enable = function () {
+				n.channel.registerMonkeyPatch("winston", t.winston)
+			}
+		}, function (e, t, r) {
+			/**
+			 * @license
+			 * Copyright Google Inc. All Rights Reserved.
+			 *
+			 * Use of this source code is governed by an MIT-style license that can be
+			 * found in the LICENSE file at https://angular.io/license
+			 */
+			!function (e, t) {
+				t()
+			}
+			(0, function () {
+				"use strict";
 				/**
 				 * @license
 				 * Copyright Google Inc. All Rights Reserved.
@@ -12449,4630 +12461,4618 @@
 				 * Use of this source code is governed by an MIT-style license that can be
 				 * found in the LICENSE file at https://angular.io/license
 				 */
-				!function (e, t) {
-					t()
-				}
-				(0, function () {
-					"use strict";
-					/**
-					 * @license
-					 * Copyright Google Inc. All Rights Reserved.
-					 *
-					 * Use of this source code is governed by an MIT-style license that can be
-					 * found in the LICENSE file at https://angular.io/license
-					 */
-					!function (e) {
-						if (e.Zone)
-							throw new Error("Zone already loaded.");
-						var t = function () {
-							function t(e, t) {
-								this._properties = null,
-								this._parent = e,
-								this._name = t ? t.name || "unnamed" : "<root>",
-								this._properties = t && t.properties || {},
-								this._zoneDelegate = new r(this, this._parent && this._parent._zoneDelegate, t)
+				!function (e) {
+					if (e.Zone)
+						throw new Error("Zone already loaded.");
+					var t = function () {
+						function t(e, t) {
+							this._properties = null,
+							this._parent = e,
+							this._name = t ? t.name || "unnamed" : "<root>",
+							this._properties = t && t.properties || {},
+							this._zoneDelegate = new r(this, this._parent && this._parent._zoneDelegate, t)
+						}
+						return t.assertZonePatched = function () {
+							if (e.Promise !== A)
+								throw new Error("Zone.js has detected that ZoneAwarePromise `(window|global).Promise` has been overwritten.\nMost likely cause is that a Promise polyfill has been loaded after Zone.js (Polyfilling Promise api is not necessary when zone.js is loaded. If you must load one, do so before loading zone.js.)")
+						},
+						Object.defineProperty(t, "current", {
+							get: function () {
+								return u.zone
+							},
+							enumerable: !0,
+							configurable: !0
+						}),
+						Object.defineProperty(t, "currentTask", {
+							get: function () {
+								return l
+							},
+							enumerable: !0,
+							configurable: !0
+						}),
+						Object.defineProperty(t.prototype, "parent", {
+							get: function () {
+								return this._parent
+							},
+							enumerable: !0,
+							configurable: !0
+						}),
+						Object.defineProperty(t.prototype, "name", {
+							get: function () {
+								return this._name
+							},
+							enumerable: !0,
+							configurable: !0
+						}),
+						t.prototype.get = function (e) {
+							var t = this.getZoneWith(e);
+							if (t)
+								return t._properties[e]
+						},
+						t.prototype.getZoneWith = function (e) {
+							for (var t = this; t; ) {
+								if (t._properties.hasOwnProperty(e))
+									return t;
+								t = t._parent
 							}
-							return t.assertZonePatched = function () {
-								if (e.Promise !== A)
-									throw new Error("Zone.js has detected that ZoneAwarePromise `(window|global).Promise` has been overwritten.\nMost likely cause is that a Promise polyfill has been loaded after Zone.js (Polyfilling Promise api is not necessary when zone.js is loaded. If you must load one, do so before loading zone.js.)")
-							},
-							Object.defineProperty(t, "current", {
-								get: function () {
-									return u.zone
-								},
-								enumerable: !0,
-								configurable: !0
-							}),
-							Object.defineProperty(t, "currentTask", {
-								get: function () {
-									return l
-								},
-								enumerable: !0,
-								configurable: !0
-							}),
-							Object.defineProperty(t.prototype, "parent", {
-								get: function () {
-									return this._parent
-								},
-								enumerable: !0,
-								configurable: !0
-							}),
-							Object.defineProperty(t.prototype, "name", {
-								get: function () {
-									return this._name
-								},
-								enumerable: !0,
-								configurable: !0
-							}),
-							t.prototype.get = function (e) {
-								var t = this.getZoneWith(e);
-								if (t)
-									return t._properties[e]
-							},
-							t.prototype.getZoneWith = function (e) {
-								for (var t = this; t; ) {
-									if (t._properties.hasOwnProperty(e))
-										return t;
-									t = t._parent
-								}
-								return null
-							},
-							t.prototype.fork = function (e) {
-								if (!e)
-									throw new Error("ZoneSpec required!");
-								return this._zoneDelegate.fork(this, e)
-							},
-							t.prototype.wrap = function (e, t) {
-								if ("function" != typeof e)
-									throw new Error("Expecting function got: " + e);
-								var r = this._zoneDelegate.intercept(this, e, t),
-								n = this;
-								return function () {
-									return n.runGuarded(r, this, arguments, t)
-								}
-							},
-							t.prototype.run = function (e, t, r, n) {
-								void 0 === t && (t = null),
-								void 0 === r && (r = null),
-								void 0 === n && (n = null),
-								u = new o(u, this);
+							return null
+						},
+						t.prototype.fork = function (e) {
+							if (!e)
+								throw new Error("ZoneSpec required!");
+							return this._zoneDelegate.fork(this, e)
+						},
+						t.prototype.wrap = function (e, t) {
+							if ("function" != typeof e)
+								throw new Error("Expecting function got: " + e);
+							var r = this._zoneDelegate.intercept(this, e, t),
+							n = this;
+							return function () {
+								return n.runGuarded(r, this, arguments, t)
+							}
+						},
+						t.prototype.run = function (e, t, r, n) {
+							void 0 === t && (t = null),
+							void 0 === r && (r = null),
+							void 0 === n && (n = null),
+							u = new o(u, this);
+							try {
+								return this._zoneDelegate.invoke(this, e, t, r, n)
+							}
+							finally {
+								u = u.parent
+							}
+						},
+						t.prototype.runGuarded = function (e, t, r, n) {
+							void 0 === t && (t = null),
+							void 0 === r && (r = null),
+							void 0 === n && (n = null),
+							u = new o(u, this);
+							try {
 								try {
 									return this._zoneDelegate.invoke(this, e, t, r, n)
-								}
-								finally {
-									u = u.parent
-								}
-							},
-							t.prototype.runGuarded = function (e, t, r, n) {
-								void 0 === t && (t = null),
-								void 0 === r && (r = null),
-								void 0 === n && (n = null),
-								u = new o(u, this);
-								try {
-									try {
-										return this._zoneDelegate.invoke(this, e, t, r, n)
-									} catch (e) {
-										if (this._zoneDelegate.handleError(this, e))
-											throw e
-									}
-								}
-								finally {
-									u = u.parent
-								}
-							},
-							t.prototype.runTask = function (e, t, r) {
-								if (e.runCount++, e.zone != this)
-									throw new Error("A task can only be run in the zone which created it! (Creation: " + e.zone.name + "; Execution: " + this.name + ")");
-								var n = l;
-								l = e,
-								u = new o(u, this);
-								try {
-									"macroTask" == e.type && e.data && !e.data.isPeriodic && (e.cancelFn = null);
-									try {
-										return this._zoneDelegate.invokeTask(this, e, t, r)
-									} catch (e) {
-										if (this._zoneDelegate.handleError(this, e))
-											throw e
-									}
-								}
-								finally {
-									u = u.parent,
-									l = n
-								}
-							},
-							t.prototype.scheduleMicroTask = function (e, t, r, o) {
-								return this._zoneDelegate.scheduleTask(this, new n("microTask", this, e, t, r, o, null))
-							},
-							t.prototype.scheduleMacroTask = function (e, t, r, o, i) {
-								return this._zoneDelegate.scheduleTask(this, new n("macroTask", this, e, t, r, o, i))
-							},
-							t.prototype.scheduleEventTask = function (e, t, r, o, i) {
-								return this._zoneDelegate.scheduleTask(this, new n("eventTask", this, e, t, r, o, i))
-							},
-							t.prototype.cancelTask = function (e) {
-								var t = this._zoneDelegate.cancelTask(this, e);
-								return e.runCount = -1,
-								e.cancelFn = null,
-								t
-							},
-							t
-						}
-						();
-						t.__symbol__ = i;
-						var r = function () {
-							function e(e, t, r) {
-								this._taskCounts = {
-									microTask: 0,
-									macroTask: 0,
-									eventTask: 0
-								},
-								this.zone = e,
-								this._parentDelegate = t,
-								this._forkZS = r && (r && r.onFork ? r : t._forkZS),
-								this._forkDlgt = r && (r.onFork ? t : t._forkDlgt),
-								this._forkCurrZone = r && (r.onFork ? this.zone : t.zone),
-								this._interceptZS = r && (r.onIntercept ? r : t._interceptZS),
-								this._interceptDlgt = r && (r.onIntercept ? t : t._interceptDlgt),
-								this._interceptCurrZone = r && (r.onIntercept ? this.zone : t.zone),
-								this._invokeZS = r && (r.onInvoke ? r : t._invokeZS),
-								this._invokeDlgt = r && (r.onInvoke ? t : t._invokeDlgt),
-								this._invokeCurrZone = r && (r.onInvoke ? this.zone : t.zone),
-								this._handleErrorZS = r && (r.onHandleError ? r : t._handleErrorZS),
-								this._handleErrorDlgt = r && (r.onHandleError ? t : t._handleErrorDlgt),
-								this._handleErrorCurrZone = r && (r.onHandleError ? this.zone : t.zone),
-								this._scheduleTaskZS = r && (r.onScheduleTask ? r : t._scheduleTaskZS),
-								this._scheduleTaskDlgt = r && (r.onScheduleTask ? t : t._scheduleTaskDlgt),
-								this._scheduleTaskCurrZone = r && (r.onScheduleTask ? this.zone : t.zone),
-								this._invokeTaskZS = r && (r.onInvokeTask ? r : t._invokeTaskZS),
-								this._invokeTaskDlgt = r && (r.onInvokeTask ? t : t._invokeTaskDlgt),
-								this._invokeTaskCurrZone = r && (r.onInvokeTask ? this.zone : t.zone),
-								this._cancelTaskZS = r && (r.onCancelTask ? r : t._cancelTaskZS),
-								this._cancelTaskDlgt = r && (r.onCancelTask ? t : t._cancelTaskDlgt),
-								this._cancelTaskCurrZone = r && (r.onCancelTask ? this.zone : t.zone),
-								this._hasTaskZS = r && (r.onHasTask ? r : t._hasTaskZS),
-								this._hasTaskDlgt = r && (r.onHasTask ? t : t._hasTaskDlgt),
-								this._hasTaskCurrZone = r && (r.onHasTask ? this.zone : t.zone)
-							}
-							return e.prototype.fork = function (e, r) {
-								return this._forkZS ? this._forkZS.onFork(this._forkDlgt, this.zone, e, r) : new t(e, r)
-							},
-							e.prototype.intercept = function (e, t, r) {
-								return this._interceptZS ? this._interceptZS.onIntercept(this._interceptDlgt, this._interceptCurrZone, e, t, r) : t
-							},
-							e.prototype.invoke = function (e, t, r, n, o) {
-								return this._invokeZS ? this._invokeZS.onInvoke(this._invokeDlgt, this._invokeCurrZone, e, t, r, n, o) : t.apply(r, n)
-							},
-							e.prototype.handleError = function (e, t) {
-								return !this._handleErrorZS || this._handleErrorZS.onHandleError(this._handleErrorDlgt, this._handleErrorCurrZone, e, t)
-							},
-							e.prototype.scheduleTask = function (e, t) {
-								try {
-									if (this._scheduleTaskZS)
-										return this._scheduleTaskZS.onScheduleTask(this._scheduleTaskDlgt, this._scheduleTaskCurrZone, e, t);
-									if (t.scheduleFn)
-										t.scheduleFn(t);
-									else {
-										if ("microTask" != t.type)
-											throw new Error("Task is missing scheduleFn.");
-										!function (e) {
-											g(),
-											h.push(e)
-										}
-										(t)
-									}
-									return t
-								}
-								finally {
-									e == this.zone && this._updateTaskCount(t.type, 1)
-								}
-							},
-							e.prototype.invokeTask = function (e, t, r, n) {
-								try {
-									return this._invokeTaskZS ? this._invokeTaskZS.onInvokeTask(this._invokeTaskDlgt, this._invokeTaskCurrZone, e, t, r, n) : t.callback.apply(r, n)
-								}
-								finally {
-									e != this.zone || "eventTask" == t.type || t.data && t.data.isPeriodic || this._updateTaskCount(t.type, -1)
-								}
-							},
-							e.prototype.cancelTask = function (e, t) {
-								var r;
-								if (this._cancelTaskZS)
-									r = this._cancelTaskZS.onCancelTask(this._cancelTaskDlgt, this._cancelTaskCurrZone, e, t);
-								else {
-									if (!t.cancelFn)
-										throw new Error("Task does not support cancellation, or is already canceled.");
-									r = t.cancelFn(t)
-								}
-								return e == this.zone && this._updateTaskCount(t.type, -1),
-								r
-							},
-							e.prototype.hasTask = function (e, t) {
-								return this._hasTaskZS && this._hasTaskZS.onHasTask(this._hasTaskDlgt, this._hasTaskCurrZone, e, t)
-							},
-							e.prototype._updateTaskCount = function (e, t) {
-								var r = this._taskCounts,
-								n = r[e],
-								o = r[e] = n + t;
-								if (o < 0)
-									throw new Error("More tasks executed then were scheduled.");
-								if (0 == n || 0 == o) {
-									var i = {
-										microTask: r.microTask > 0,
-										macroTask: r.macroTask > 0,
-										eventTask: r.eventTask > 0,
-										change: e
-									};
-									try {
-										this.hasTask(this.zone, i)
-									}
-									finally {
-										this._parentDelegate && this._parentDelegate._updateTaskCount(e, t)
-									}
-								}
-							},
-							e
-						}
-						(),
-						n = function () {
-							function e(e, t, r, n, o, i, s) {
-								this.runCount = 0,
-								this.type = e,
-								this.zone = t,
-								this.source = r,
-								this.data = o,
-								this.scheduleFn = i,
-								this.cancelFn = s,
-								this.callback = n;
-								var a = this;
-								this.invoke = function () {
-									f++;
-									try {
-										return t.runTask(a, this, arguments)
-									}
-									finally {
-										1 == f && y(),
-										f--
-									}
-								}
-							}
-							return e.prototype.toString = function () {
-								return this.data && void 0 !== this.data.handleId ? this.data.handleId : Object.prototype.toString.call(this)
-							},
-							e.prototype.toJSON = function () {
-								return {
-									type: this.type,
-									source: this.source,
-									data: this.data,
-									zone: this.zone.name,
-									invoke: this.invoke,
-									scheduleFn: this.scheduleFn,
-									cancelFn: this.cancelFn,
-									runCount: this.runCount,
-									callback: this.callback
-								}
-							},
-							e
-						}
-						(),
-						o = function () {
-							return function (e, t) {
-								this.parent = e,
-								this.zone = t
-							}
-						}
-						();
-						function i(e) {
-							return "__zone_symbol__" + e
-						}
-						var s = i("setTimeout"),
-						a = i("Promise"),
-						c = i("then"),
-						u = new o(null, new t(null, null)),
-						l = null,
-						h = [],
-						p = !1,
-						d = [],
-						f = 0;
-						function g() {
-							0 === f && 0 === h.length && (e[a] ? e[a].resolve(0)[c](y) : e[s](y, 0))
-						}
-						function m(e) {
-							var t = e && e.rejection;
-							t && console.error("Unhandled Promise rejection:", t instanceof Error ? t.message : t, "; Zone:", e.zone.name, "; Task:", e.task && e.task.source, "; Value:", t, t instanceof Error ? t.stack : void 0),
-							console.error(e)
-						}
-						function y() {
-							if (!p) {
-								for (p = !0; h.length; ) {
-									var e = h;
-									h = [];
-									for (var t = 0; t < e.length; t++) {
-										var r = e[t];
-										try {
-											r.zone.runTask(r, null, null)
-										} catch (e) {
-											m(e)
-										}
-									}
-								}
-								for (; d.length; )
-									for (var n = function () {
-										var e = d.shift();
-										try {
-											e.zone.runGuarded(function () {
-												throw e
-											})
-										} catch (e) {
-											m(e)
-										}
-									}; d.length; )
-										n();
-								p = !1
-							}
-						}
-						function b(e) {
-							return e && e.then
-						}
-						function w(e) {
-							return e
-						}
-						function v(e) {
-							return A.reject(e)
-						}
-						var C = i("state"),
-						_ = i("value"),
-						S = "Promise.then",
-						k = null,
-						T = !0,
-						E = !1,
-						R = 0;
-						function P(e, t) {
-							return function (r) {
-								x(e, t, r)
-							}
-						}
-						function x(e, r, n) {
-							if (e[C] === k)
-								if (n instanceof A && n.hasOwnProperty(C) && n.hasOwnProperty(_) && n[C] !== k)
-									I(n), x(e, n[C], n[_]);
-								else if (b(n))
-									n.then(P(e, r), P(e, !1));
-								else {
-									e[C] = r;
-									var o = e[_];
-									e[_] = n;
-									for (var i = 0; i < o.length; )
-										D(e, o[i++], o[i++], o[i++], o[i++]);
-									if (0 == o.length && r == E) {
-										e[C] = R;
-										try {
-											throw new Error("Uncaught (in promise): " + n + (n && n.stack ? "\n" + n.stack : ""))
-										} catch (r) {
-											var s = r;
-											s.rejection = n,
-											s.promise = e,
-											s.zone = t.current,
-											s.task = t.currentTask,
-											d.push(s),
-											g()
-										}
-									}
-								}
-							return e
-						}
-						function I(e) {
-							if (e[C] === R) {
-								e[C] = E;
-								for (var t = 0; t < d.length; t++)
-									if (e === d[t].promise) {
-										d.splice(t, 1);
-										break
-									}
-							}
-						}
-						function D(e, t, r, n, o) {
-							I(e);
-							var i = e[C] ? n || w : o || v;
-							t.scheduleMicroTask(S, function () {
-								try {
-									x(r, !0, t.run(i, null, [e[_]]))
 								} catch (e) {
-									x(r, !1, e)
-								}
-							})
-						}
-						var A = function () {
-							function e(t) {
-								if (!(this instanceof e))
-									throw new Error("Must be an instanceof Promise.");
-								this[C] = k,
-								this[_] = [];
-								try {
-									t && t(P(this, T), P(this, E))
-								} catch (e) {
-									x(this, !1, e)
+									if (this._zoneDelegate.handleError(this, e))
+										throw e
 								}
 							}
-							return e.toString = function () {
-								return "function ZoneAwarePromise() { [native code] }"
-							},
-							e.resolve = function (e) {
-								return x(new this(null), T, e)
-							},
-							e.reject = function (e) {
-								return x(new this(null), E, e)
-							},
-							e.race = function (e) {
-								var t,
-								r,
-								n = new this(function (e, n) {
-										var o;
-										t = (o = [e, n])[0],
-										r = o[1]
-									});
-								function o(e) {
-									n && (n = t(e))
-								}
-								function i(e) {
-									n && (n = r(e))
-								}
-								for (var s = 0, a = e; s < a.length; s++) {
-									var c = a[s];
-									b(c) || (c = this.resolve(c)),
-									c.then(o, i)
-								}
-								return n
-							},
-							e.all = function (e) {
-								for (var t, r, n = new this(function (e, n) {
-											t = e,
-											r = n
-										}), o = 0, i = [], s = 0, a = e; s < a.length; s++) {
-									var c = a[s];
-									b(c) || (c = this.resolve(c)),
-									c.then(function (e) {
-										return function (r) {
-											i[e] = r,
-											--o || t(i)
-										}
-									}
-										(o), r),
-									o++
-								}
-								return o || t(i),
-								n
-							},
-							e.prototype.then = function (e, r) {
-								var n = new this.constructor(null),
-								o = t.current;
-								return this[C] == k ? this[_].push(o, n, e, r) : D(this, o, n, e, r),
-								n
-							},
-							e.prototype.catch = function (e) {
-								return this.then(null, e)
-							},
-							e
-						}
-						();
-						A.resolve = A.resolve,
-						A.reject = A.reject,
-						A.race = A.race,
-						A.all = A.all;
-						var O,
-						M = e[i("Promise")] = e.Promise;
-						function L(e) {
-							var t = e.prototype,
-							r = t[i("then")] = t.then;
-							t.then = function (e, t) {
-								var n = this;
-								return new A(function (e, t) {
-									r.call(n, e, t)
-								}).then(e, t)
-							}
-						}
-						if (e.Promise = A, M && (L(M), void 0 !== e.fetch)) {
-							var N = void 0;
-							try {
-								N = e.fetch()
-							} catch (t) {
-								N = e.fetch("about:blank")
-							}
-							N.then(function () {
-								return null
-							}, function () {
-								return null
-							}),
-							N.constructor != M && N.constructor != A && L(N.constructor)
-						}
-						Promise[t.__symbol__("uncaughtPromiseErrors")] = d,
-						function (e) {
-							e[e.blackList = 0] = "blackList",
-							e[e.transition = 1] = "transition"
-						}
-						(O || (O = {}));
-						var B,
-						U = e[i("Error")] = e.Error,
-						F = {};
-						e.Error = z;
-						var j = "stackRewrite",
-						G = function (e, t) {
-							if (!e[t]) {
-								var r = i(t);
-								e[t] = {
-									configurable: !0,
-									enumerable: !0,
-									get: function () {
-										if (!this[r]) {
-											var e = this[i("error")];
-											e && (this[r] = e[t])
-										}
-										return this[r]
-									},
-									set: function (e) {
-										this[r] = e
-									}
-								}
+							finally {
+								u = u.parent
 							}
 						},
-						q = function (e, t) {
-							e[t] || (e[t] = {
-									configurable: !0,
-									enumerable: !0,
-									writable: !0,
-									value: function () {
-										var e = this[i("error")],
-										r = e && e[t] || this[t];
-										if (r)
-											return r.apply(e, arguments)
-									}
-								})
+						t.prototype.runTask = function (e, t, r) {
+							if (e.runCount++, e.zone != this)
+								throw new Error("A task can only be run in the zone which created it! (Creation: " + e.zone.name + "; Execution: " + this.name + ")");
+							var n = l;
+							l = e,
+							u = new o(u, this);
+							try {
+								"macroTask" == e.type && e.data && !e.data.isPeriodic && (e.cancelFn = null);
+								try {
+									return this._zoneDelegate.invokeTask(this, e, t, r)
+								} catch (e) {
+									if (this._zoneDelegate.handleError(this, e))
+										throw e
+								}
+							}
+							finally {
+								u = u.parent,
+								l = n
+							}
 						},
-						H = function () {
-							for (var e = Object.create(null), t = new U, r = Object.getOwnPropertyNames(t), n = 0; n < r.length; n++) {
-								var o = r[n];
-								Object.prototype.hasOwnProperty.call(t, o) && G(e, o)
-							}
-							var i = U.prototype;
-							if (i) {
-								var s = Object.getOwnPropertyNames(i);
-								for (n = 0; n < s.length; n++)
-									"constructor" !== (o = s[n]) && "toString" !== o && "toSource" !== o && G(e, o)
-							}
-							return G(e, "originalStack"),
-							G(e, "zoneAwareStack"),
-							q(e, "toString"),
-							q(e, "toSource"),
-							e
-						}
-						(),
-						W = function (e) {
-							if (e === z.prototype)
-								return H;
-							var t = Object.create(null),
-							r = Object.getOwnPropertyNames(H),
-							n = Object.getOwnPropertyNames(e);
-							return r.forEach(function (e) {
-								0 === n.filter(function (t) {
-									return t === e
-								}).length && (t[e] = H[e])
-							}),
+						t.prototype.scheduleMicroTask = function (e, t, r, o) {
+							return this._zoneDelegate.scheduleTask(this, new n("microTask", this, e, t, r, o, null))
+						},
+						t.prototype.scheduleMacroTask = function (e, t, r, o, i) {
+							return this._zoneDelegate.scheduleTask(this, new n("macroTask", this, e, t, r, o, i))
+						},
+						t.prototype.scheduleEventTask = function (e, t, r, o, i) {
+							return this._zoneDelegate.scheduleTask(this, new n("eventTask", this, e, t, r, o, i))
+						},
+						t.prototype.cancelTask = function (e) {
+							var t = this._zoneDelegate.cancelTask(this, e);
+							return e.runCount = -1,
+							e.cancelFn = null,
 							t
-						};
-						function z() {
-							if (!(this instanceof z))
-								return z.apply(Object.create(z.prototype), arguments);
-							var e = U.apply(this, arguments);
-							if (this[i("error")] = e, e.originalStack = e.stack, z[j] && e.originalStack) {
-								for (var t = e.originalStack.split("\n"), r = u, n = 0; t[n] !== B && n < t.length; )
-									n++;
-								for (; n < t.length && r; n++) {
-									var o = t[n];
-									if (o.trim()) {
-										var s = F.hasOwnProperty(o) && F[o];
-										s === O.blackList ? (t.splice(n, 1), n--) : s === O.transition ? r.parent ? (t[n] += " [" + r.parent.zone.name + " => " + r.zone.name + "]", r = r.parent) : r = null : t[n] += " [" + r.zone.name + "]"
-									}
-								}
-								e.stack = e.zoneAwareStack = t.join("\n")
-							}
-							return Object.defineProperties(this, W(Object.getPrototypeOf(this))),
-							this
-						}
-						z.prototype = U.prototype,
-						z[t.__symbol__("blacklistedStackFrames")] = F,
-						z[j] = !1,
-						U.hasOwnProperty("stackTraceLimit") && (U.stackTraceLimit = Math.max(U.stackTraceLimit, 15), Object.defineProperty(z, "stackTraceLimit", {
-								get: function () {
-									return U.stackTraceLimit
-								},
-								set: function (e) {
-									return U.stackTraceLimit = e
-								}
-							})),
-						U.hasOwnProperty("captureStackTrace") && Object.defineProperty(z, "captureStackTrace", {
-							value: function (e, t) {
-								U.captureStackTrace(e, t)
-							}
-						}),
-						Object.defineProperty(z, "prepareStackTrace", {
-							get: function () {
-								return U.prepareStackTrace
-							},
-							set: function (e) {
-								return U.prepareStackTrace = e && "function" == typeof e ? function (t, r) {
-									if (r)
-										for (var n = 0; n < r.length; n++) {
-											if ("zoneCaptureStackTrace" === r[n].getFunctionName()) {
-												r.splice(n, 1);
-												break
-											}
-										}
-									return e.apply(this, [t, r])
-								}
-								 : e
-							}
-						});
-						var $ = t.current.fork({
-								name: "detect",
-								onInvoke: function (e, t, r, n, o, i, s) {
-									return e.invoke(r, n, o, i, s)
-								},
-								onHandleError: function (e, t, r, n) {
-									if (n.originalStack && Error === z)
-										for (var o = n.originalStack.split(/\n/), i = !1, s = !1, a = !1; o.length; ) {
-											var c = o.shift();
-											if (/:\d+:\d+/.test(c)) {
-												var u = c.split("(")[0].split("@")[0],
-												l = O.transition;
-												if (-1 !== u.indexOf("ZoneAwareError") && (B = c), -1 !== u.indexOf("runGuarded") ? s = !0 : -1 !== u.indexOf("runTask") ? a = !0 : -1 !== u.indexOf("run") ? i = !0 : l = O.blackList, F[c] = l, i && s && a) {
-													z[j] = !0;
-													break
-												}
-											}
-										}
-									return !1
-								}
-							});
-						$.runTask($.scheduleMacroTask("detect", function () {
-								$.run(function () {
-									$.runGuarded(function () {
-										throw new Error("blacklistStackFrames")
-									})
-								})
-							}, null, function () {
-								return null
-							}, null)),
-						e.Zone = t
-					}
-					("object" == typeof window && window || "object" == typeof self && self || global);
-					/**
-					 * @license
-					 * Copyright Google Inc. All Rights Reserved.
-					 *
-					 * Use of this source code is governed by an MIT-style license that can be
-					 * found in the LICENSE file at https://angular.io/license
-					 */
-					var e = function (e) {
-						return "__zone_symbol__" + e
-					},
-					t = "object" == typeof window && window || "object" == typeof self && self || global;
-					!("nw" in t) && "undefined" != typeof process && {}
-					.toString.call(process);
-					var n = e("eventTasks");
-					function o(e, t, r, o, i) {
-						var s = e[n];
-						if (s)
-							for (var a = 0; a < s.length; a++) {
-								var c = s[a],
-								u = c.data,
-								l = u.handler;
-								if ((u.handler === t || l.listener === t) && u.useCapturing === o && u.eventName === r)
-									return i && s.splice(a, 1), c
-							}
-						return null
-					}
-					var i = function (e, r) {
-						return {
-							useCapturing: r[2],
-							eventName: r[0],
-							handler: r[1],
-							target: e || t,
-							name: r[0],
-							invokeAddFunc: function (e, t) {
-								return t && t.invoke ? this.target[e](this.eventName, t.invoke, this.useCapturing) : this.target[e](this.eventName, t, this.useCapturing)
-							},
-							invokeRemoveFunc: function (e, t) {
-								return t && t.invoke ? this.target[e](this.eventName, t.invoke, this.useCapturing) : this.target[e](this.eventName, t, this.useCapturing)
-							}
-						}
-					};
-					function s(t, r, s, a, c, u) {
-						void 0 === s && (s = !0),
-						void 0 === a && (a = !1),
-						void 0 === c && (c = !1),
-						void 0 === u && (u = i);
-						var l = e(t),
-						h = e(r),
-						p = !s && void 0;
-						function d(e) {
-							var t = e.data;
-							return function (e, t, r) {
-								var o = e[n];
-								o || (o = e[n] = []),
-								r ? o.unshift(t) : o.push(t)
-							}
-							(t.target, e, c),
-							t.invokeAddFunc(l, e)
-						}
-						function f(e) {
-							var t = e.data;
-							return o(t.target, e.invoke, t.eventName, t.useCapturing, !0),
-							t.invokeRemoveFunc(h, e)
-						}
-						return function (e, r) {
-							var n = u(e, r);
-							n.useCapturing = n.useCapturing || p;
-							var i = null;
-							"function" == typeof n.handler ? i = n.handler : n.handler && n.handler.handleEvent && (i = function (e) {
-									return n.handler.handleEvent(e)
-								});
-							var s = !1;
-							try {
-								s = n.handler && "[object FunctionWrapper]" === n.handler.toString()
-							} catch (e) {
-								return
-							}
-							if (!i || s)
-								return n.invokeAddFunc(l, n.handler);
-							if (!a) {
-								var c = o(n.target, n.handler, n.eventName, n.useCapturing, !1);
-								if (c)
-									return n.invokeAddFunc(l, c)
-							}
-							var h = Zone.current,
-							g = n.target.constructor.name + "." + t + ":" + n.eventName;
-							h.scheduleEventTask(g, i, n, d, f)
-						}
-					}
-					function a(t, r, n) {
-						void 0 === r && (r = !0),
-						void 0 === n && (n = i);
-						var s = e(t),
-						a = !r && void 0;
-						return function (e, t) {
-							var r = n(e, t);
-							r.useCapturing = r.useCapturing || a;
-							var i = o(r.target, r.handler, r.eventName, r.useCapturing, !0);
-							i ? i.zone.cancelTask(i) : r.invokeRemoveFunc(s, r.handler)
-						}
-					}
-					s("addEventListener", "removeEventListener"),
-					a("removeEventListener"),
-					e("originalInstance");
-					function c(t, r, n) {
-						for (var o = t; o && -1 === Object.getOwnPropertyNames(o).indexOf(r); )
-							o = Object.getPrototypeOf(o);
-						!o && t[r] && (o = t);
-						var i,
-						s = e(r);
-						return o && !(i = o[s]) && (i = o[s] = o[r], o[r] = function (e, t) {
-							try {
-								return Function("f", "return function " + e + "(){return f(this, arguments)}")(t)
-							} catch (e) {
-								return function () {
-									return t(this, arguments)
-								}
-							}
-						}
-							(r, n(i, s, r))),
-						i
-					}
-					/**
-					 * @license
-					 * Copyright Google Inc. All Rights Reserved.
-					 *
-					 * Use of this source code is governed by an MIT-style license that can be
-					 * found in the LICENSE file at https://angular.io/license
-					 */
-					var u,
-					l,
-					h = function (e) {
-						return function (t, r) {
-							return e(t, r),
-							t
-						}
-					},
-					p = "addListener",
-					d = "prependListener",
-					f = "removeListener",
-					g = "removeAllListeners",
-					m = "listeners",
-					y = "on",
-					b = h(s(p, f, !1, !0, !1)),
-					w = h(s(d, f, !1, !0, !0)),
-					v = h(a(f, !1)),
-					C = h(function (r, o) {
-							void 0 === o && (o = !0);
-							var i = e(r),
-							s = !o && void 0;
-							return function (e, r) {
-								var o = e || t;
-								if (0 === r.length)
-									return o[n] = [], void o[i]();
-								var a = r[0];
-								!function (e, t, r, o) {
-									var i = e[n];
-									if (i) {
-										for (var s = [], a = i.length - 1; a >= 0; a--) {
-											var c = i[a],
-											u = c.data;
-											u.eventName === t && u.useCapturing === r && (s.push(c), o && i.splice(a, 1))
-										}
-									}
-								}
-								(o, a, r[1] || s, !0),
-								o[i](a)
-							}
-						}
-							(g, !1)),
-					_ = function (r) {
-						return e(r),
-						function (e, r) {
-							var o = r[0],
-							i = e || t;
-							return i[n] ? i[n].filter(function (e) {
-								return e.data.eventName === o
-							}).map(function (e) {
-								return e.data.handler
-							}) : []
-						}
-					}
-					(m);
-					try {
-						u = r(22)
-					} catch (e) {}
-					u && u.EventEmitter && function (e) {
-						!e || !e.addListener || (c(e, p, function () {
-								return b
-							}), c(e, d, function () {
-								return w
-							}), c(e, f, function () {
-								return v
-							}), c(e, g, function () {
-								return C
-							}), c(e, m, function () {
-								return _
-							}), e[y] = e[p])
-					}
-					(u.EventEmitter.prototype)
-					/**
-					 * @license
-					 * Copyright Google Inc. All Rights Reserved.
-					 *
-					 * Use of this source code is governed by an MIT-style license that can be
-					 * found in the LICENSE file at https://angular.io/license
-					 */
-				;
-					try {
-						l = r(2)
-					} catch (e) {}
-					/**
-					 * @license
-					 * Copyright Google Inc. All Rights Reserved.
-					 *
-					 * Use of this source code is governed by an MIT-style license that can be
-					 * found in the LICENSE file at https://angular.io/license
-					 */
-					function S(e, t, r, n) {
-						var o = null,
-						i = null;
-						r += n;
-						var s = {};
-						function a(t) {
-							var r = t.data;
-							return r.args[0] = function () {
-								t.invoke.apply(this, arguments),
-								delete s[r.handleId]
-							},
-							r.handleId = o.apply(e, r.args),
-							s[r.handleId] = t,
-							t
-						}
-						function u(e) {
-							return delete s[e.data.handleId],
-							i(e.data.handleId)
-						}
-						o = c(e, t += n, function (r) {
-								return function (o, i) {
-									if ("function" == typeof i[0]) {
-										var s = Zone.current,
-										c = {
-											handleId: null,
-											isPeriodic: "Interval" === n,
-											delay: "Timeout" === n || "Interval" === n ? i[1] || 0 : null,
-											args: i
-										},
-										l = s.scheduleMacroTask(t, i[0], c, a, u);
-										if (!l)
-											return l;
-										var h = l.data.handleId;
-										return h.ref && h.unref && (l.ref = h.ref.bind(h), l.unref = h.unref.bind(h)),
-										l
-									}
-									return r.apply(e, i)
-								}
-							}),
-						i = c(e, r, function (t) {
-								return function (r, n) {
-									var o = "number" == typeof n[0] ? s[n[0]] : n[0];
-									o && "string" == typeof o.type ? (o.cancelFn && o.data.isPeriodic || 0 === o.runCount) && o.zone.cancelTask(o) : t.apply(e, n)
-								}
-							})
-					}
-					/**
-					 * @license
-					 * Copyright Google Inc. All Rights Reserved.
-					 *
-					 * Use of this source code is governed by an MIT-style license that can be
-					 * found in the LICENSE file at https://angular.io/license
-					 */
-					l && ["access", "appendFile", "chmod", "chown", "close", "exists", "fchmod", "fchown", "fdatasync", "fstat", "fsync", "ftruncate", "futimes", "lchmod", "lchown", "link", "lstat", "mkdir", "mkdtemp", "open", "read", "readdir", "readFile", "readlink", "realpath", "rename", "rmdir", "stat", "symlink", "truncate", "unlink", "utimes", "write", "writeFile"].filter(function (e) {
-						return !!l[e] && "function" == typeof l[e]
-					}).forEach(function (e) {
-						!function (e, t, r) {
-							var n = null;
-							function o(e) {
-								var t = e.data;
-								return t.args[t.callbackIndex] = function () {
-									e.invoke.apply(this, arguments)
-								},
-								n.apply(t.target, t.args),
-								e
-							}
-							n = c(e, t, function (e) {
-									return function (t, n) {
-										var i = r(t, n);
-										return i.callbackIndex >= 0 && "function" == typeof n[i.callbackIndex] ? Zone.current.scheduleMacroTask(i.name, n[i.callbackIndex], i, o, null) : e.apply(t, n)
-									}
-								})
-						}
-						(l, e, function (t, r) {
-							return {
-								name: "fs." + e,
-								args: r,
-								callbackIndex: r.length > 0 ? r.length - 1 : -1,
-								target: t
-							}
-						})
-					});
-					var k,
-					T,
-					E = "set",
-					R = "object" == typeof window && window || "object" == typeof self && self || global,
-					P = r(33);
-					S(P, E, "clear", "Timeout"),
-					S(P, E, "clear", "Interval"),
-					S(P, E, "clear", "Immediate"),
-					global.setTimeout !== P.setTimeout && (S(R, E, "clear", "Timeout"), S(R, E, "clear", "Interval"), S(R, E, "clear", "Immediate")),
-					function () {
-						var e = null;
-						function t(t) {
-							var r = t.data;
-							return r[0] = function () {
-								t.invoke.apply(this, arguments)
-							},
-							e.apply(process, r),
-							t
-						}
-						e = c(process, "nextTick", function (e) {
-								return function (r, n) {
-									if ("function" == typeof n[0]) {
-										var o = Zone.current,
-										i = o.scheduleMicroTask("nextTick", n[0], n, t);
-										return i
-									}
-									return e.apply(process, n)
-								}
-							})
+						},
+						t
 					}
 					();
-					try {
-						k = r(35)
-					} catch (e) {}
-					if (k) {
-						var x = k.randomBytes;
-						k.randomBytes = function (e, t) {
-							if (t) {
-								var r = Zone.current,
-								n = k.constructor.name + ".randomBytes";
-								return x(e, r.wrap(t, n))
-							}
-							return x(e)
+					t.__symbol__ = i;
+					var r = function () {
+						function e(e, t, r) {
+							this._taskCounts = {
+								microTask: 0,
+								macroTask: 0,
+								eventTask: 0
+							},
+							this.zone = e,
+							this._parentDelegate = t,
+							this._forkZS = r && (r && r.onFork ? r : t._forkZS),
+							this._forkDlgt = r && (r.onFork ? t : t._forkDlgt),
+							this._forkCurrZone = r && (r.onFork ? this.zone : t.zone),
+							this._interceptZS = r && (r.onIntercept ? r : t._interceptZS),
+							this._interceptDlgt = r && (r.onIntercept ? t : t._interceptDlgt),
+							this._interceptCurrZone = r && (r.onIntercept ? this.zone : t.zone),
+							this._invokeZS = r && (r.onInvoke ? r : t._invokeZS),
+							this._invokeDlgt = r && (r.onInvoke ? t : t._invokeDlgt),
+							this._invokeCurrZone = r && (r.onInvoke ? this.zone : t.zone),
+							this._handleErrorZS = r && (r.onHandleError ? r : t._handleErrorZS),
+							this._handleErrorDlgt = r && (r.onHandleError ? t : t._handleErrorDlgt),
+							this._handleErrorCurrZone = r && (r.onHandleError ? this.zone : t.zone),
+							this._scheduleTaskZS = r && (r.onScheduleTask ? r : t._scheduleTaskZS),
+							this._scheduleTaskDlgt = r && (r.onScheduleTask ? t : t._scheduleTaskDlgt),
+							this._scheduleTaskCurrZone = r && (r.onScheduleTask ? this.zone : t.zone),
+							this._invokeTaskZS = r && (r.onInvokeTask ? r : t._invokeTaskZS),
+							this._invokeTaskDlgt = r && (r.onInvokeTask ? t : t._invokeTaskDlgt),
+							this._invokeTaskCurrZone = r && (r.onInvokeTask ? this.zone : t.zone),
+							this._cancelTaskZS = r && (r.onCancelTask ? r : t._cancelTaskZS),
+							this._cancelTaskDlgt = r && (r.onCancelTask ? t : t._cancelTaskDlgt),
+							this._cancelTaskCurrZone = r && (r.onCancelTask ? this.zone : t.zone),
+							this._hasTaskZS = r && (r.onHasTask ? r : t._hasTaskZS),
+							this._hasTaskDlgt = r && (r.onHasTask ? t : t._hasTaskDlgt),
+							this._hasTaskCurrZone = r && (r.onHasTask ? this.zone : t.zone)
 						}
-						.bind(k);
-						var I = k.pbkdf2;
-						k.pbkdf2 = function () {
-							for (var e = [], t = 0; t < arguments.length; t++)
-								e[t] = arguments[t];
-							var r = e[e.length - 1];
-							if ("function" == typeof r) {
-								var n = Zone.current,
-								o = k.constructor.name + ".pbkdf2";
-								return e[e.length - 1] = n.wrap(r, o),
-								I.apply(void 0, e)
-							}
-							return I.apply(void 0, e)
-						}
-						.bind(k)
-					}
-					try {
-						T = r(133)
-					} catch (e) {}
-					if (T && T.ClientRequest) {
-						var D = T.ClientRequest.bind(T);
-						T.ClientRequest = function (e, t) {
-							if (t) {
-								var r = Zone.current;
-								return new D(e, r.wrap(t, "http.ClientRequest"))
-							}
-							return new D(e)
-						}
-					}
-				})
-			}, function (e, t) {
-				e.exports = require("_http_client")
-			}, function (e, t, r) {
-				"use strict";
-				var n = r(24),
-				o = function () {
-					function e(t) {
-						if (e.INSTANCE)
-							throw new Error("Console logging adapter tracking should be configured from the applicationInsights object");
-						this._client = t,
-						e.INSTANCE = this
-					}
-					return e.prototype.enable = function (e, t) {
-						n.IsInitialized && (r(135).enable(e && t, this._client), r(153).enable(e, this._client), r(154).enable(e, this._client))
-					},
-					e.prototype.isInitialized = function () {
-						return this._isInitialized
-					},
-					e.prototype.dispose = function () {
-						e.INSTANCE = null,
-						this.enable(!1, !1)
-					},
-					e._methodNames = ["debug", "info", "log", "warn", "error"],
-					e
-				}
-				();
-				e.exports = o
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(7),
-				o = r(3),
-				i = [],
-				s = function (e) {
-					i.forEach(function (t) {
-						var r = e.data.message;
-						r.lastIndexOf("\n") == r.length - 1 && (r = r.substring(0, r.length - 1)),
-						t.trackTrace({
-							message: r,
-							severity: e.data.stderr ? n.SeverityLevel.Warning : n.SeverityLevel.Information
-						})
-					})
-				};
-				t.enable = function (e, t) {
-					e ? (0 === i.length && o.channel.subscribe("console", s), i.push(t)) : 0 === (i = i.filter(function (e) {
-								return e != t
-							})).length && o.channel.unsubscribe("console", s)
-				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(38),
-				o = function () {
-					function e() {}
-					return e.TYPE_HTTP = "Http",
-					e.TYPE_AI = "Http (tracked component)",
-					e
-				}
-				();
-				t.RemoteDependencyDataConstants = o,
-				t.domainSupportsProperties = function (e) {
-					return "properties" in e || e instanceof n.EventData || e instanceof n.ExceptionData || e instanceof n.MessageData || e instanceof n.MetricData || e instanceof n.PageViewData || e instanceof n.RemoteDependencyData || e instanceof n.RequestData
-				}
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__extends || function () {
-					var e = Object.setPrototypeOf || {
-						__proto__: []
-					}
-					instanceof Array && function (e, t) {
-						e.__proto__ = t
-					}
-					 || function (e, t) {
-						for (var r in t)
-							t.hasOwnProperty(r) && (e[r] = t[r])
-					};
-					return function (t, r) {
-						function n() {
-							this.constructor = t
-						}
-						e(t, r),
-						t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
-					}
-				}
-				(),
-				o = function (e) {
-					function t() {
-						var t = e.call(this) || this;
-						return t.ver = 2,
-						t.properties = {},
-						t.measurements = {},
-						t
-					}
-					return n(t, e),
-					t
-				}
-				(r(9));
-				e.exports = o
-			}, function (e, t, r) {
-				"use strict";
-				var n = function () {
-					return function () {
-						this.applicationVersion = "ai.application.ver",
-						this.deviceId = "ai.device.id",
-						this.deviceLocale = "ai.device.locale",
-						this.deviceModel = "ai.device.model",
-						this.deviceOEMName = "ai.device.oemName",
-						this.deviceOSVersion = "ai.device.osVersion",
-						this.deviceType = "ai.device.type",
-						this.locationIp = "ai.location.ip",
-						this.operationId = "ai.operation.id",
-						this.operationName = "ai.operation.name",
-						this.operationParentId = "ai.operation.parentId",
-						this.operationSyntheticSource = "ai.operation.syntheticSource",
-						this.operationCorrelationVector = "ai.operation.correlationVector",
-						this.sessionId = "ai.session.id",
-						this.sessionIsFirst = "ai.session.isFirst",
-						this.userAccountId = "ai.user.accountId",
-						this.userId = "ai.user.id",
-						this.userAuthUserId = "ai.user.authUserId",
-						this.cloudRole = "ai.cloud.role",
-						this.cloudRoleInstance = "ai.cloud.roleInstance",
-						this.internalSdkVersion = "ai.internal.sdkVersion",
-						this.internalAgentVersion = "ai.internal.agentVersion",
-						this.internalNodeName = "ai.internal.nodeName"
-					}
-				}
-				();
-				e.exports = n
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__extends || function () {
-					var e = Object.setPrototypeOf || {
-						__proto__: []
-					}
-					instanceof Array && function (e, t) {
-						e.__proto__ = t
-					}
-					 || function (e, t) {
-						for (var r in t)
-							t.hasOwnProperty(r) && (e[r] = t[r])
-					};
-					return function (t, r) {
-						function n() {
-							this.constructor = t
-						}
-						e(t, r),
-						t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
-					}
-				}
-				(),
-				o = function (e) {
-					function t() {
-						return e.call(this) || this
-					}
-					return n(t, e),
-					t
-				}
-				(r(39));
-				e.exports = o
-			}, function (e, t, r) {
-				"use strict";
-				var n = r(40),
-				o = function () {
-					return function () {
-						this.kind = n.Measurement
-					}
-				}
-				();
-				e.exports = o
-			}, function (e, t, r) {
-				"use strict";
-				var n = function () {
-					return function () {
-						this.ver = 1,
-						this.sampleRate = 100,
-						this.tags = {}
-					}
-				}
-				();
-				e.exports = n
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__extends || function () {
-					var e = Object.setPrototypeOf || {
-						__proto__: []
-					}
-					instanceof Array && function (e, t) {
-						e.__proto__ = t
-					}
-					 || function (e, t) {
-						for (var r in t)
-							t.hasOwnProperty(r) && (e[r] = t[r])
-					};
-					return function (t, r) {
-						function n() {
-							this.constructor = t
-						}
-						e(t, r),
-						t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
-					}
-				}
-				(),
-				o = function (e) {
-					function t() {
-						var t = e.call(this) || this;
-						return t.ver = 2,
-						t.exceptions = [],
-						t.properties = {},
-						t.measurements = {},
-						t
-					}
-					return n(t, e),
-					t
-				}
-				(r(9));
-				e.exports = o
-			}, function (e, t, r) {
-				"use strict";
-				var n = function () {
-					return function () {
-						this.hasFullStack = !0,
-						this.parsedStack = []
-					}
-				}
-				();
-				e.exports = n
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__extends || function () {
-					var e = Object.setPrototypeOf || {
-						__proto__: []
-					}
-					instanceof Array && function (e, t) {
-						e.__proto__ = t
-					}
-					 || function (e, t) {
-						for (var r in t)
-							t.hasOwnProperty(r) && (e[r] = t[r])
-					};
-					return function (t, r) {
-						function n() {
-							this.constructor = t
-						}
-						e(t, r),
-						t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
-					}
-				}
-				(),
-				o = function (e) {
-					function t() {
-						var t = e.call(this) || this;
-						return t.ver = 2,
-						t.properties = {},
-						t
-					}
-					return n(t, e),
-					t
-				}
-				(r(9));
-				e.exports = o
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__extends || function () {
-					var e = Object.setPrototypeOf || {
-						__proto__: []
-					}
-					instanceof Array && function (e, t) {
-						e.__proto__ = t
-					}
-					 || function (e, t) {
-						for (var r in t)
-							t.hasOwnProperty(r) && (e[r] = t[r])
-					};
-					return function (t, r) {
-						function n() {
-							this.constructor = t
-						}
-						e(t, r),
-						t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
-					}
-				}
-				(),
-				o = function (e) {
-					function t() {
-						var t = e.call(this) || this;
-						return t.ver = 2,
-						t.metrics = [],
-						t.properties = {},
-						t
-					}
-					return n(t, e),
-					t
-				}
-				(r(9));
-				e.exports = o
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__extends || function () {
-					var e = Object.setPrototypeOf || {
-						__proto__: []
-					}
-					instanceof Array && function (e, t) {
-						e.__proto__ = t
-					}
-					 || function (e, t) {
-						for (var r in t)
-							t.hasOwnProperty(r) && (e[r] = t[r])
-					};
-					return function (t, r) {
-						function n() {
-							this.constructor = t
-						}
-						e(t, r),
-						t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
-					}
-				}
-				(),
-				o = function (e) {
-					function t() {
-						var t = e.call(this) || this;
-						return t.ver = 2,
-						t.properties = {},
-						t.measurements = {},
-						t
-					}
-					return n(t, e),
-					t
-				}
-				(r(41));
-				e.exports = o
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__extends || function () {
-					var e = Object.setPrototypeOf || {
-						__proto__: []
-					}
-					instanceof Array && function (e, t) {
-						e.__proto__ = t
-					}
-					 || function (e, t) {
-						for (var r in t)
-							t.hasOwnProperty(r) && (e[r] = t[r])
-					};
-					return function (t, r) {
-						function n() {
-							this.constructor = t
-						}
-						e(t, r),
-						t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
-					}
-				}
-				(),
-				o = function (e) {
-					function t() {
-						var t = e.call(this) || this;
-						return t.ver = 2,
-						t.success = !0,
-						t.properties = {},
-						t.measurements = {},
-						t
-					}
-					return n(t, e),
-					t
-				}
-				(r(9));
-				e.exports = o
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__extends || function () {
-					var e = Object.setPrototypeOf || {
-						__proto__: []
-					}
-					instanceof Array && function (e, t) {
-						e.__proto__ = t
-					}
-					 || function (e, t) {
-						for (var r in t)
-							t.hasOwnProperty(r) && (e[r] = t[r])
-					};
-					return function (t, r) {
-						function n() {
-							this.constructor = t
-						}
-						e(t, r),
-						t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
-					}
-				}
-				(),
-				o = function (e) {
-					function t() {
-						var t = e.call(this) || this;
-						return t.ver = 2,
-						t.properties = {},
-						t.measurements = {},
-						t
-					}
-					return n(t, e),
-					t
-				}
-				(r(9));
-				e.exports = o
-			}, function (e, t, r) {
-				"use strict";
-				var n;
-				!function (e) {
-					e[e.Verbose = 0] = "Verbose",
-					e[e.Information = 1] = "Information",
-					e[e.Warning = 2] = "Warning",
-					e[e.Error = 3] = "Error",
-					e[e.Critical = 4] = "Critical"
-				}
-				(n || (n = {})),
-				e.exports = n
-			}, function (e, t, r) {
-				"use strict";
-				var n = function () {
-					return function () {}
-				}
-				();
-				e.exports = n
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				}),
-				function (e) {
-					for (var r in e)
-						t.hasOwnProperty(r) || (t[r] = e[r])
-				}
-				(r(152))
-			}, function (e, t, r) {
-				"use strict";
-				var n;
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				}),
-				t.telemetryTypeToBaseType = function (e) {
-					switch (e) {
-					case n.Event:
-						return "EventData";
-					case n.Exception:
-						return "ExceptionData";
-					case n.Trace:
-						return "MessageData";
-					case n.Metric:
-						return "MetricData";
-					case n.Request:
-						return "RequestData";
-					case n.Dependency:
-						return "RemoteDependencyData"
-					}
-				},
-				t.baseTypeToTelemetryType = function (e) {
-					switch (e) {
-					case "EventData":
-						return n.Event;
-					case "ExceptionData":
-						return n.Exception;
-					case "MessageData":
-						return n.Trace;
-					case "MetricData":
-						return n.Metric;
-					case "RequestData":
-						return n.Request;
-					case "RemoteDependencyData":
-						return n.Dependency
-					}
-				},
-				function (e) {
-					e[e.Event = 0] = "Event",
-					e[e.Exception = 1] = "Exception",
-					e[e.Trace = 2] = "Trace",
-					e[e.Metric = 3] = "Metric",
-					e[e.Request = 4] = "Request",
-					e[e.Dependency = 5] = "Dependency"
-				}
-				(n = t.TelemetryType || (t.TelemetryType = {}))
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(7),
-				o = r(3),
-				i = [],
-				s = {
-					10: n.SeverityLevel.Verbose,
-					20: n.SeverityLevel.Verbose,
-					30: n.SeverityLevel.Information,
-					40: n.SeverityLevel.Warning,
-					50: n.SeverityLevel.Error,
-					60: n.SeverityLevel.Critical
-				},
-				a = function (e) {
-					i.forEach(function (t) {
-						var r = s[e.data.level];
-						t.trackTrace({
-							message: e.data.result,
-							severity: r
-						})
-					})
-				};
-				t.enable = function (e, t) {
-					e ? (0 === i.length && o.channel.subscribe("bunyan", a), i.push(t)) : 0 === (i = i.filter(function (e) {
-								return e != t
-							})).length && o.channel.unsubscribe("bunyan", a)
-				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(7),
-				o = r(3),
-				i = [],
-				s = {
-					syslog: function (e) {
-						var t = {
-							emerg: n.SeverityLevel.Critical,
-							alert: n.SeverityLevel.Critical,
-							crit: n.SeverityLevel.Critical,
-							error: n.SeverityLevel.Error,
-							warning: n.SeverityLevel.Warning,
-							notice: n.SeverityLevel.Information,
-							info: n.SeverityLevel.Information,
-							debug: n.SeverityLevel.Verbose
-						};
-						return void 0 === t[e] ? n.SeverityLevel.Information : t[e]
-					},
-					npm: function (e) {
-						var t = {
-							error: n.SeverityLevel.Error,
-							warn: n.SeverityLevel.Warning,
-							info: n.SeverityLevel.Information,
-							verbose: n.SeverityLevel.Verbose,
-							debug: n.SeverityLevel.Verbose,
-							silly: n.SeverityLevel.Verbose
-						};
-						return void 0 === t[e] ? n.SeverityLevel.Information : t[e]
-					},
-					unknown: function (e) {
-						return n.SeverityLevel.Information
-					}
-				},
-				a = function (e) {
-					i.forEach(function (t) {
-						var r = s[e.data.levelKind](e.data.level);
-						t.trackTrace({
-							message: e.data.message,
-							severity: r,
-							properties: e.data.meta
-						})
-					})
-				};
-				t.enable = function (e, t) {
-					e ? (0 === i.length && o.channel.subscribe("winston", a), i.push(t)) : 0 === (i = i.filter(function (e) {
-								return e != t
-							})).length && o.channel.unsubscribe("winston", a)
-				}
-			}, function (e, t, r) {
-				"use strict";
-				var n = function () {
-					function e(t) {
-						if (e.INSTANCE)
-							throw new Error("Exception tracking should be configured from the applicationInsights object");
-						e.INSTANCE = this,
-						this._client = t
-					}
-					return Object.defineProperty(e, "UNCAUGHT_EXCEPTION_HANDLER_NAME", {
-						get: function () {
-							return "uncaughtException"
+						return e.prototype.fork = function (e, r) {
+							return this._forkZS ? this._forkZS.onFork(this._forkDlgt, this.zone, e, r) : new t(e, r)
 						},
-						enumerable: !0,
-						configurable: !0
-					}),
-					Object.defineProperty(e, "UNHANDLED_REJECTION_HANDLER_NAME", {
-						get: function () {
-							return "unhandledRejection"
+						e.prototype.intercept = function (e, t, r) {
+							return this._interceptZS ? this._interceptZS.onIntercept(this._interceptDlgt, this._interceptCurrZone, e, t, r) : t
 						},
-						enumerable: !0,
-						configurable: !0
-					}),
-					e.prototype.isInitialized = function () {
-						return this._isInitialized
-					},
-					e.prototype.enable = function (t) {
-						var r = this;
-						if (t) {
-							this._isInitialized = !0;
-							if (!this._exceptionListenerHandle) {
-								var n = function (e, t) {
-									if (r._client.trackException({
-											exception: t
-										}), r._client.flush({
-											isAppCrashing: !0
-										}), e)
-										throw t
-								};
-								this._exceptionListenerHandle = n.bind(this, !0),
-								this._rejectionListenerHandle = n.bind(this, !1),
-								process.on(e.UNCAUGHT_EXCEPTION_HANDLER_NAME, this._exceptionListenerHandle),
-								process.on(e.UNHANDLED_REJECTION_HANDLER_NAME, this._rejectionListenerHandle)
-							}
-						} else
-							this._exceptionListenerHandle && (process.removeListener(e.UNCAUGHT_EXCEPTION_HANDLER_NAME, this._exceptionListenerHandle), process.removeListener(e.UNHANDLED_REJECTION_HANDLER_NAME, this._rejectionListenerHandle), this._exceptionListenerHandle = void 0, this._rejectionListenerHandle = void 0, delete this._exceptionListenerHandle, delete this._rejectionListenerHandle)
-					},
-					e.prototype.dispose = function () {
-						e.INSTANCE = null,
-						this.enable(!1),
-						this._isInitialized = !1
-					},
-					e.INSTANCE = null,
-					e
-				}
-				();
-				e.exports = n
-			}, function (e, t) {
-				e.exports = require("constants")
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__extends || function () {
-					var e = Object.setPrototypeOf || {
-						__proto__: []
-					}
-					instanceof Array && function (e, t) {
-						e.__proto__ = t
-					}
-					 || function (e, t) {
-						for (var r in t)
-							t.hasOwnProperty(r) && (e[r] = t[r])
-					};
-					return function (t, r) {
-						function n() {
-							this.constructor = t
-						}
-						e(t, r),
-						t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
-					}
-				}
-				(),
-				o = r(20),
-				i = r(7),
-				s = r(10),
-				a = r(17),
-				c = r(43),
-				u = r(27),
-				l = function (e) {
-					function t(r, n) {
-						var o = e.call(this) || this;
-						return n && n.method && r && (o.method = n.method, o.url = t._getUrlFromRequestOptions(r, n), o.startTime = +new Date),
-						o
-					}
-					return n(t, e),
-					t.prototype.onError = function (e) {
-						this._setStatus(void 0, e)
-					},
-					t.prototype.onResponse = function (e) {
-						this._setStatus(e.statusCode, void 0),
-						this.correlationId = s.getCorrelationContextTarget(e, a.requestContextTargetKey)
-					},
-					t.prototype.getDependencyTelemetry = function (e, t) {
-						var r = o.parse(this.url);
-						r.search = void 0,
-						r.hash = void 0;
-						var n = this.method.toUpperCase() + " " + r.pathname,
-						s = i.RemoteDependencyDataConstants.TYPE_HTTP,
-						a = r.hostname;
-						this.correlationId ? (s = i.RemoteDependencyDataConstants.TYPE_AI, this.correlationId !== u.correlationIdPrefix && (a = r.hostname + " | " + this.correlationId)) : s = i.RemoteDependencyDataConstants.TYPE_HTTP;
-						var c = {
-							id: t,
-							name: n,
-							data: this.url,
-							duration: this.duration,
-							success: this._isSuccess(),
-							resultCode: this.statusCode ? this.statusCode.toString() : null,
-							properties: this.properties || {},
-							dependencyTypeName: s,
-							target: a
-						};
-						if (e) {
-							for (var l in e)
-								c[l] || (c[l] = e[l]);
-							if (e.properties)
-								for (var l in e.properties)
-									c.properties[l] = e.properties[l]
-						}
-						return c
-					},
-					t._getUrlFromRequestOptions = function (e, t) {
-						if ("string" == typeof e)
-							e = o.parse(e);
-						else {
-							var r = e;
-							e = {},
-							r && Object.keys(r).forEach(function (t) {
-								e[t] = r[t]
-							})
-						}
-						if (e.path) {
-							var n = o.parse(e.path);
-							e.pathname = n.pathname,
-							e.search = n.search
-						}
-						e.host && e.port && (!o.parse("http://" + e.host).port && e.port && (e.hostname = e.host, delete e.host));
-						return e.protocol = e.protocol || t.agent && t.agent.protocol || void 0,
-						e.hostname = e.hostname || "localhost",
-						o.format(e)
-					},
-					t
-				}
-				(c);
-				e.exports = l
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3),
-				o = [];
-				t.subscriber = function (e) {
-					o.forEach(function (t) {
-						var r = e.data.startedData && e.data.startedData.databaseName || "Unknown database";
-						t.trackDependency({
-							target: r,
-							data: e.data.event.commandName,
-							name: e.data.event.commandName,
-							duration: e.data.event.duration,
-							success: e.data.succeeded,
-							resultCode: e.data.succeeded ? "0" : "1",
-							dependencyTypeName: "mongodb"
-						})
-					})
-				},
-				t.enable = function (e, r) {
-					e ? (0 === o.length && n.channel.subscribe("mongodb", t.subscriber), o.push(r)) : 0 === (o = o.filter(function (e) {
-								return e != r
-							})).length && n.channel.unsubscribe("mongodb", t.subscriber)
-				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3),
-				o = [];
-				t.subscriber = function (e) {
-					o.forEach(function (t) {
-						var r = e.data.query || {},
-						n = r.sql || "Unknown query",
-						o = !e.data.err,
-						i = (r._connection || {}).config || {},
-						s = i.socketPath ? i.socketPath : (i.host || "localhost") + ":" + i.port;
-						t.trackDependency({
-							target: s,
-							data: n,
-							name: n,
-							duration: e.data.duration,
-							success: o,
-							resultCode: o ? "0" : "1",
-							dependencyTypeName: "mysql"
-						})
-					})
-				},
-				t.enable = function (e, r) {
-					e ? (0 === o.length && n.channel.subscribe("mysql", t.subscriber), o.push(r)) : 0 === (o = o.filter(function (e) {
-								return e != r
-							})).length && n.channel.unsubscribe("mysql", t.subscriber)
-				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3),
-				o = [];
-				t.subscriber = function (e) {
-					o.forEach(function (t) {
-						"info" !== e.data.commandObj.command && t.trackDependency({
-							target: e.data.address,
-							name: e.data.commandObj.command,
-							data: e.data.commandObj.command,
-							duration: e.data.duration,
-							success: !e.data.err,
-							resultCode: e.data.err ? "1" : "0",
-							dependencyTypeName: "redis"
-						})
-					})
-				},
-				t.enable = function (e, r) {
-					e ? (0 === o.length && n.channel.subscribe("redis", t.subscriber), o.push(r)) : 0 === (o = o.filter(function (e) {
-								return e != r
-							})).length && n.channel.unsubscribe("redis", t.subscriber)
-				}
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(3),
-				o = [];
-				t.subscriber = function (e) {
-					o.forEach(function (t) {
-						var r = e.data.query,
-						n = r.preparable && r.preparable.text || r.plan || r.text || "unknown query",
-						o = !e.data.error,
-						i = e.data.database.host + ":" + e.data.database.port;
-						t.trackDependency({
-							target: i,
-							data: n,
-							name: n,
-							duration: e.data.duration,
-							success: o,
-							resultCode: o ? "0" : "1",
-							dependencyTypeName: "postgres"
-						})
-					})
-				},
-				t.enable = function (e, r) {
-					e ? (0 === o.length && n.channel.subscribe("postgres", t.subscriber), o.push(r)) : 0 === (o = o.filter(function (e) {
-								return e != r
-							})).length && n.channel.unsubscribe("postgres", t.subscriber)
-				}
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__extends || function () {
-					var e = Object.setPrototypeOf || {
-						__proto__: []
-					}
-					instanceof Array && function (e, t) {
-						e.__proto__ = t
-					}
-					 || function (e, t) {
-						for (var r in t)
-							t.hasOwnProperty(r) && (e[r] = t[r])
-					};
-					return function (t, r) {
-						function n() {
-							this.constructor = t
-						}
-						e(t, r),
-						t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
-					}
-				}
-				(),
-				o = r(20),
-				i = r(7),
-				s = r(10),
-				a = r(17),
-				c = r(43),
-				u = r(27),
-				l = function (e) {
-					function t(t, r) {
-						var n = e.call(this) || this;
-						return t && (n.method = t.method, n.url = n._getAbsoluteUrl(t), n.startTime = +new Date, n.socketRemoteAddress = t.socket && t.socket.remoteAddress, n.parseHeaders(t, r), t.connection && (n.connectionRemoteAddress = t.connection.remoteAddress, n.legacySocketRemoteAddress = t.connection.socket && t.connection.socket.remoteAddress)),
-						n
-					}
-					return n(t, e),
-					t.prototype.onError = function (e, t) {
-						this._setStatus(void 0, e),
-						t && (this.duration = t)
-					},
-					t.prototype.onResponse = function (e, t) {
-						this._setStatus(e.statusCode, void 0),
-						t && (this.duration = t)
-					},
-					t.prototype.getRequestTelemetry = function (e) {
-						var t = {
-							id: this.requestId,
-							name: this.method + " " + o.parse(this.url).pathname,
-							url: this.url,
-							source: this.sourceCorrelationId,
-							duration: this.duration,
-							resultCode: this.statusCode ? this.statusCode.toString() : null,
-							success: this._isSuccess(),
-							properties: this.properties
-						};
-						if (e) {
-							for (var r in e)
-								t[r] || (t[r] = e[r]);
-							if (e.properties)
-								for (var r in e.properties)
-									t.properties[r] = e.properties[r]
-						}
-						return t
-					},
-					t.prototype.getRequestTags = function (e) {
-						var r = {};
-						for (var n in e)
-							r[n] = e[n];
-						return r[t.keys.locationIp] = e[t.keys.locationIp] || this._getIp(),
-						r[t.keys.sessionId] = e[t.keys.sessionId] || this._getId("ai_session"),
-						r[t.keys.userId] = e[t.keys.userId] || this._getId("ai_user"),
-						r[t.keys.userAuthUserId] = e[t.keys.userAuthUserId] || this._getId("ai_authUser"),
-						r[t.keys.operationName] = this.getOperationName(e),
-						r[t.keys.operationParentId] = this.getOperationParentId(e),
-						r[t.keys.operationId] = this.getOperationId(e),
-						r
-					},
-					t.prototype.getOperationId = function (e) {
-						return e[t.keys.operationId] || this.operationId
-					},
-					t.prototype.getOperationParentId = function (e) {
-						return e[t.keys.operationParentId] || this.parentId || this.getOperationId(e)
-					},
-					t.prototype.getOperationName = function (e) {
-						return e[t.keys.operationName] || this.method + " " + o.parse(this.url).pathname
-					},
-					t.prototype.getRequestId = function () {
-						return this.requestId
-					},
-					t.prototype.getCorrelationContextHeader = function () {
-						return this.correlationContextHeader
-					},
-					t.prototype._getAbsoluteUrl = function (e) {
-						if (!e.headers)
-							return e.url;
-						var t = e.connection ? e.connection.encrypted : null,
-						r = o.parse(e.url),
-						n = r.pathname,
-						i = r.search;
-						return o.format({
-							protocol: t ? "https" : "http",
-							host: e.headers.host,
-							pathname: n,
-							search: i
-						})
-					},
-					t.prototype._getIp = function () {
-						var e = /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/,
-						t = function (t) {
-							var r = e.exec(t);
-							if (r)
-								return r[0]
+						e.prototype.invoke = function (e, t, r, n, o) {
+							return this._invokeZS ? this._invokeZS.onInvoke(this._invokeDlgt, this._invokeCurrZone, e, t, r, n, o) : t.apply(r, n)
 						},
-						r = t(this.rawHeaders["x-forwarded-for"]) || t(this.rawHeaders["x-client-ip"]) || t(this.rawHeaders["x-real-ip"]) || t(this.connectionRemoteAddress) || t(this.socketRemoteAddress) || t(this.legacySocketRemoteAddress);
-						return !r && this.connectionRemoteAddress && this.connectionRemoteAddress.substr && "::" === this.connectionRemoteAddress.substr(0, 2) && (r = "127.0.0.1"),
-						r
-					},
-					t.prototype._getId = function (e) {
-						var r = this.rawHeaders && this.rawHeaders.cookie && "string" == typeof this.rawHeaders.cookie && this.rawHeaders.cookie || "";
-						return t.parseId(s.getCookie(e, r))
-					},
-					t.prototype.parseHeaders = function (e, t) {
-						if (this.rawHeaders = e.headers || e.rawHeaders, this.userAgent = e.headers && e.headers["user-agent"], this.sourceCorrelationId = s.getCorrelationContextTarget(e, a.requestContextSourceKey), e.headers) {
-							if (this.correlationContextHeader = e.headers[a.correlationContextHeader], e.headers[a.requestIdHeader])
-								this.parentId = e.headers[a.requestIdHeader], this.requestId = u.generateRequestId(this.parentId), this.correlationContextHeader = e.headers[a.correlationContextHeader];
-							else {
-								var r = e.headers[a.rootIdHeader];
-								this.parentId = e.headers[a.parentIdHeader],
-								this.requestId = u.generateRequestId(r || this.parentId),
-								this.correlationContextHeader = null
-							}
-							t && (this.requestId = t),
-							this.operationId = u.getRootId(this.requestId)
-						}
-					},
-					t.parseId = function (e) {
-						return e.substr(0, e.indexOf("|"))
-					},
-					t.keys = new i.ContextTagKeys,
-					t
-				}
-				(c);
-				e.exports = l
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__extends || function () {
-					var e = Object.setPrototypeOf || {
-						__proto__: []
-					}
-					instanceof Array && function (e, t) {
-						e.__proto__ = t
-					}
-					 || function (e, t) {
-						for (var r in t)
-							t.hasOwnProperty(r) && (e[r] = t[r])
-					};
-					return function (t, r) {
-						function n() {
-							this.constructor = t
-						}
-						e(t, r),
-						t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
-					}
-				}
-				(),
-				o = r(164),
-				i = r(44),
-				s = r(25),
-				a = r(6),
-				c = function (e) {
-					function t() {
-						return null !== e && e.apply(this, arguments) || this
-					}
-					return n(t, e),
-					t.prototype.trackNodeHttpRequestSync = function (e) {
-						e && e.request && e.response && e.duration ? i.trackRequestSync(this, e) : a.warn("trackNodeHttpRequestSync requires NodeHttpRequestTelemetry object with request, response and duration specified.")
-					},
-					t.prototype.trackNodeHttpRequest = function (e) {
-						(e.duration || e.error) && a.warn("trackNodeHttpRequest will ignore supplied duration and error parameters. These values are collected from the request and response objects."),
-						e && e.request && e.response ? i.trackRequest(this, e) : a.warn("trackNodeHttpRequest requires NodeHttpRequestTelemetry object with request and response specified.")
-					},
-					t.prototype.trackNodeHttpDependency = function (e) {
-						e && e.request ? s.trackRequest(this, e) : a.warn("trackNodeHttpDependency requires NodeHttpDependencyTelemetry object with request specified.")
-					},
-					t
-				}
-				(o);
-				e.exports = c
-			}, function (e, t, r) {
-				"use strict";
-				var n = r(20),
-				o = r(165),
-				i = r(166),
-				s = r(7),
-				a = r(167),
-				c = r(168),
-				u = r(16),
-				l = r(170),
-				h = r(10),
-				p = r(6),
-				d = r(172),
-				f = function () {
-					function e(e) {
-						this._telemetryProcessors = [];
-						var t = new o(e);
-						this.config = t,
-						this.context = new i,
-						this.commonProperties = {};
-						var r = new l(this.config);
-						this.channel = new a(function () {
-								return t.disableAppInsights
-							}, function () {
-								return t.maxBatchSize
-							}, function () {
-								return t.maxBatchIntervalMs
-							}, r)
-					}
-					return e.prototype.trackTrace = function (e) {
-						this.track(e, s.TelemetryType.Trace)
-					},
-					e.prototype.trackMetric = function (e) {
-						this.track(e, s.TelemetryType.Metric)
-					},
-					e.prototype.trackException = function (e) {
-						e && e.exception && !h.isError(e.exception) && (e.exception = new Error(e.exception.toString())),
-						this.track(e, s.TelemetryType.Exception)
-					},
-					e.prototype.trackEvent = function (e) {
-						this.track(e, s.TelemetryType.Event)
-					},
-					e.prototype.trackRequest = function (e) {
-						this.track(e, s.TelemetryType.Request)
-					},
-					e.prototype.trackDependency = function (e) {
-						e && !e.target && e.data && (e.target = n.parse(e.data).host),
-						this.track(e, s.TelemetryType.Dependency)
-					},
-					e.prototype.flush = function (e) {
-						this.channel.triggerSend(!!e && !!e.isAppCrashing, e ? e.callback : void 0)
-					},
-					e.prototype.track = function (e, t) {
-						if (e && s.telemetryTypeToBaseType(t)) {
-							var r = d.createEnvelope(e, t, this.commonProperties, this.context, this.config);
-							e.time && (r.time = e.time.toISOString());
-							var n = this.runTelemetryProcessors(r, e.contextObjects);
-							(n = n && c.samplingTelemetryProcessor(r, {
-										correlationContext: u.CorrelationContextManager.getCurrentContext()
-									})) && this.channel.send(r)
-						} else
-							p.warn("track() requires telemetry object and telemetryType to be specified.")
-					},
-					e.prototype.addTelemetryProcessor = function (e) {
-						this._telemetryProcessors.push(e)
-					},
-					e.prototype.clearTelemetryProcessors = function () {
-						this._telemetryProcessors = []
-					},
-					e.prototype.runTelemetryProcessors = function (e, t) {
-						var r = !0,
-						n = this._telemetryProcessors.length;
-						if (0 === n)
-							return r;
-						(t = t || {}).correlationContext = u.CorrelationContextManager.getCurrentContext();
-						for (var o = 0; o < n; ++o)
+						e.prototype.handleError = function (e, t) {
+							return !this._handleErrorZS || this._handleErrorZS.onHandleError(this._handleErrorDlgt, this._handleErrorCurrZone, e, t)
+						},
+						e.prototype.scheduleTask = function (e, t) {
 							try {
-								var i = this._telemetryProcessors[o];
-								if (i && !1 === i.apply(null, [e, t])) {
-									r = !1;
+								if (this._scheduleTaskZS)
+									return this._scheduleTaskZS.onScheduleTask(this._scheduleTaskDlgt, this._scheduleTaskCurrZone, e, t);
+								if (t.scheduleFn)
+									t.scheduleFn(t);
+								else {
+									if ("microTask" != t.type)
+										throw new Error("Task is missing scheduleFn.");
+									!function (e) {
+										g(),
+										h.push(e)
+									}
+									(t)
+								}
+								return t
+							}
+							finally {
+								e == this.zone && this._updateTaskCount(t.type, 1)
+							}
+						},
+						e.prototype.invokeTask = function (e, t, r, n) {
+							try {
+								return this._invokeTaskZS ? this._invokeTaskZS.onInvokeTask(this._invokeTaskDlgt, this._invokeTaskCurrZone, e, t, r, n) : t.callback.apply(r, n)
+							}
+							finally {
+								e != this.zone || "eventTask" == t.type || t.data && t.data.isPeriodic || this._updateTaskCount(t.type, -1)
+							}
+						},
+						e.prototype.cancelTask = function (e, t) {
+							var r;
+							if (this._cancelTaskZS)
+								r = this._cancelTaskZS.onCancelTask(this._cancelTaskDlgt, this._cancelTaskCurrZone, e, t);
+							else {
+								if (!t.cancelFn)
+									throw new Error("Task does not support cancellation, or is already canceled.");
+								r = t.cancelFn(t)
+							}
+							return e == this.zone && this._updateTaskCount(t.type, -1),
+							r
+						},
+						e.prototype.hasTask = function (e, t) {
+							return this._hasTaskZS && this._hasTaskZS.onHasTask(this._hasTaskDlgt, this._hasTaskCurrZone, e, t)
+						},
+						e.prototype._updateTaskCount = function (e, t) {
+							var r = this._taskCounts,
+							n = r[e],
+							o = r[e] = n + t;
+							if (o < 0)
+								throw new Error("More tasks executed then were scheduled.");
+							if (0 == n || 0 == o) {
+								var i = {
+									microTask: r.microTask > 0,
+									macroTask: r.macroTask > 0,
+									eventTask: r.eventTask > 0,
+									change: e
+								};
+								try {
+									this.hasTask(this.zone, i)
+								}
+								finally {
+									this._parentDelegate && this._parentDelegate._updateTaskCount(e, t)
+								}
+							}
+						},
+						e
+					}
+					(),
+					n = function () {
+						function e(e, t, r, n, o, i, s) {
+							this.runCount = 0,
+							this.type = e,
+							this.zone = t,
+							this.source = r,
+							this.data = o,
+							this.scheduleFn = i,
+							this.cancelFn = s,
+							this.callback = n;
+							var a = this;
+							this.invoke = function () {
+								f++;
+								try {
+									return t.runTask(a, this, arguments)
+								}
+								finally {
+									1 == f && y(),
+									f--
+								}
+							}
+						}
+						return e.prototype.toString = function () {
+							return this.data && void 0 !== this.data.handleId ? this.data.handleId : Object.prototype.toString.call(this)
+						},
+						e.prototype.toJSON = function () {
+							return {
+								type: this.type,
+								source: this.source,
+								data: this.data,
+								zone: this.zone.name,
+								invoke: this.invoke,
+								scheduleFn: this.scheduleFn,
+								cancelFn: this.cancelFn,
+								runCount: this.runCount,
+								callback: this.callback
+							}
+						},
+						e
+					}
+					(),
+					o = function () {
+						return function (e, t) {
+							this.parent = e,
+							this.zone = t
+						}
+					}
+					();
+					function i(e) {
+						return "__zone_symbol__" + e
+					}
+					var s = i("setTimeout"),
+					a = i("Promise"),
+					c = i("then"),
+					u = new o(null, new t(null, null)),
+					l = null,
+					h = [],
+					p = !1,
+					d = [],
+					f = 0;
+					function g() {
+						0 === f && 0 === h.length && (e[a] ? e[a].resolve(0)[c](y) : e[s](y, 0))
+					}
+					function m(e) {
+						var t = e && e.rejection;
+						t && console.error("Unhandled Promise rejection:", t instanceof Error ? t.message : t, "; Zone:", e.zone.name, "; Task:", e.task && e.task.source, "; Value:", t, t instanceof Error ? t.stack : void 0),
+						console.error(e)
+					}
+					function y() {
+						if (!p) {
+							for (p = !0; h.length; ) {
+								var e = h;
+								h = [];
+								for (var t = 0; t < e.length; t++) {
+									var r = e[t];
+									try {
+										r.zone.runTask(r, null, null)
+									} catch (e) {
+										m(e)
+									}
+								}
+							}
+							for (; d.length; )
+								for (var n = function () {
+									var e = d.shift();
+									try {
+										e.zone.runGuarded(function () {
+											throw e
+										})
+									} catch (e) {
+										m(e)
+									}
+								}; d.length; )
+									n();
+							p = !1
+						}
+					}
+					function b(e) {
+						return e && e.then
+					}
+					function w(e) {
+						return e
+					}
+					function v(e) {
+						return A.reject(e)
+					}
+					var C = i("state"),
+					_ = i("value"),
+					S = "Promise.then",
+					k = null,
+					T = !0,
+					E = !1,
+					R = 0;
+					function P(e, t) {
+						return function (r) {
+							x(e, t, r)
+						}
+					}
+					function x(e, r, n) {
+						if (e[C] === k)
+							if (n instanceof A && n.hasOwnProperty(C) && n.hasOwnProperty(_) && n[C] !== k)
+								I(n), x(e, n[C], n[_]);
+							else if (b(n))
+								n.then(P(e, r), P(e, !1));
+							else {
+								e[C] = r;
+								var o = e[_];
+								e[_] = n;
+								for (var i = 0; i < o.length; )
+									D(e, o[i++], o[i++], o[i++], o[i++]);
+								if (0 == o.length && r == E) {
+									e[C] = R;
+									try {
+										throw new Error("Uncaught (in promise): " + n + (n && n.stack ? "\n" + n.stack : ""))
+									} catch (r) {
+										var s = r;
+										s.rejection = n,
+										s.promise = e,
+										s.zone = t.current,
+										s.task = t.currentTask,
+										d.push(s),
+										g()
+									}
+								}
+							}
+						return e
+					}
+					function I(e) {
+						if (e[C] === R) {
+							e[C] = E;
+							for (var t = 0; t < d.length; t++)
+								if (e === d[t].promise) {
+									d.splice(t, 1);
 									break
 								}
-							} catch (t) {
-								r = !0,
-								p.warn("One of telemetry processors failed, telemetry item will be sent.", t, e)
-							}
-						return r
-					},
-					e
-				}
-				();
-				e.exports = f
-			}, function (e, t, r) {
-				"use strict";
-				var n = r(27),
-				o = function () {
-					function e(t) {
-						var r = this;
-						this.endpointBase = "https://dc.services.visualstudio.com",
-						this.instrumentationKey = t || e._getInstrumentationKey(),
-						this.endpointUrl = this.endpointBase + "/v2/track",
-						this.maxBatchSize = 250,
-						this.maxBatchIntervalMs = 15e3,
-						this.disableAppInsights = !1,
-						this.samplingPercentage = 100,
-						this.correlationIdRetryIntervalMs = 3e4,
-						this.correlationHeaderExcludedDomains = ["*.core.windows.net", "*.core.chinacloudapi.cn", "*.core.cloudapi.de", "*.core.usgovcloudapi.net"],
-						this.setCorrelationId = function (e) {
-							return r.correlationId = e
-						},
-						this.profileQueryEndpoint = process.env[e.ENV_profileQueryEndpoint] || this.endpointBase,
-						this.proxyHttpUrl = process.env[e.ENV_http_proxy] || void 0,
-						this.proxyHttpsUrl = process.env[e.ENV_https_proxy] || void 0,
-						this.httpAgent = void 0,
-						this.httpsAgent = void 0
+						}
 					}
-					return Object.defineProperty(e.prototype, "profileQueryEndpoint", {
+					function D(e, t, r, n, o) {
+						I(e);
+						var i = e[C] ? n || w : o || v;
+						t.scheduleMicroTask(S, function () {
+							try {
+								x(r, !0, t.run(i, null, [e[_]]))
+							} catch (e) {
+								x(r, !1, e)
+							}
+						})
+					}
+					var A = function () {
+						function e(t) {
+							if (!(this instanceof e))
+								throw new Error("Must be an instanceof Promise.");
+							this[C] = k,
+							this[_] = [];
+							try {
+								t && t(P(this, T), P(this, E))
+							} catch (e) {
+								x(this, !1, e)
+							}
+						}
+						return e.toString = function () {
+							return "function ZoneAwarePromise() { [native code] }"
+						},
+						e.resolve = function (e) {
+							return x(new this(null), T, e)
+						},
+						e.reject = function (e) {
+							return x(new this(null), E, e)
+						},
+						e.race = function (e) {
+							var t,
+							r,
+							n = new this(function (e, n) {
+								var o;
+								t = (o = [e, n])[0],
+								r = o[1]
+							});
+							function o(e) {
+								n && (n = t(e))
+							}
+							function i(e) {
+								n && (n = r(e))
+							}
+							for (var s = 0, a = e; s < a.length; s++) {
+								var c = a[s];
+								b(c) || (c = this.resolve(c)),
+								c.then(o, i)
+							}
+							return n
+						},
+						e.all = function (e) {
+							for (var t, r, n = new this(function (e, n) {
+									t = e,
+									r = n
+								}), o = 0, i = [], s = 0, a = e; s < a.length; s++) {
+								var c = a[s];
+								b(c) || (c = this.resolve(c)),
+								c.then(function (e) {
+									return function (r) {
+										i[e] = r,
+										--o || t(i)
+									}
+								}
+									(o), r),
+								o++
+							}
+							return o || t(i),
+							n
+						},
+						e.prototype.then = function (e, r) {
+							var n = new this.constructor(null),
+							o = t.current;
+							return this[C] == k ? this[_].push(o, n, e, r) : D(this, o, n, e, r),
+							n
+						},
+						e.prototype.catch = function (e) {
+							return this.then(null, e)
+						},
+						e
+					}
+					();
+					A.resolve = A.resolve,
+					A.reject = A.reject,
+					A.race = A.race,
+					A.all = A.all;
+					var O,
+					M = e[i("Promise")] = e.Promise;
+					function L(e) {
+						var t = e.prototype,
+						r = t[i("then")] = t.then;
+						t.then = function (e, t) {
+							var n = this;
+							return new A(function (e, t) {
+								r.call(n, e, t)
+							}).then(e, t)
+						}
+					}
+					if (e.Promise = A, M && (L(M), void 0 !== e.fetch)) {
+						var N = void 0;
+						try {
+							N = e.fetch()
+						} catch (t) {
+							N = e.fetch("about:blank")
+						}
+						N.then(function () {
+							return null
+						}, function () {
+							return null
+						}),
+						N.constructor != M && N.constructor != A && L(N.constructor)
+					}
+					Promise[t.__symbol__("uncaughtPromiseErrors")] = d,
+					function (e) {
+						e[e.blackList = 0] = "blackList",
+						e[e.transition = 1] = "transition"
+					}
+					(O || (O = {}));
+					var B,
+					U = e[i("Error")] = e.Error,
+					F = {};
+					e.Error = z;
+					var j = "stackRewrite",
+					G = function (e, t) {
+						if (!e[t]) {
+							var r = i(t);
+							e[t] = {
+								configurable: !0,
+								enumerable: !0,
+								get: function () {
+									if (!this[r]) {
+										var e = this[i("error")];
+										e && (this[r] = e[t])
+									}
+									return this[r]
+								},
+								set: function (e) {
+									this[r] = e
+								}
+							}
+						}
+					},
+					q = function (e, t) {
+						e[t] || (e[t] = {
+								configurable: !0,
+								enumerable: !0,
+								writable: !0,
+								value: function () {
+									var e = this[i("error")],
+									r = e && e[t] || this[t];
+									if (r)
+										return r.apply(e, arguments)
+								}
+							})
+					},
+					H = function () {
+						for (var e = Object.create(null), t = new U, r = Object.getOwnPropertyNames(t), n = 0; n < r.length; n++) {
+							var o = r[n];
+							Object.prototype.hasOwnProperty.call(t, o) && G(e, o)
+						}
+						var i = U.prototype;
+						if (i) {
+							var s = Object.getOwnPropertyNames(i);
+							for (n = 0; n < s.length; n++)
+								"constructor" !== (o = s[n]) && "toString" !== o && "toSource" !== o && G(e, o)
+						}
+						return G(e, "originalStack"),
+						G(e, "zoneAwareStack"),
+						q(e, "toString"),
+						q(e, "toSource"),
+						e
+					}
+					(),
+					W = function (e) {
+						if (e === z.prototype)
+							return H;
+						var t = Object.create(null),
+						r = Object.getOwnPropertyNames(H),
+						n = Object.getOwnPropertyNames(e);
+						return r.forEach(function (e) {
+							0 === n.filter(function (t) {
+								return t === e
+							}).length && (t[e] = H[e])
+						}),
+						t
+					};
+					function z() {
+						if (!(this instanceof z))
+							return z.apply(Object.create(z.prototype), arguments);
+						var e = U.apply(this, arguments);
+						if (this[i("error")] = e, e.originalStack = e.stack, z[j] && e.originalStack) {
+							for (var t = e.originalStack.split("\n"), r = u, n = 0; t[n] !== B && n < t.length; )
+								n++;
+							for (; n < t.length && r; n++) {
+								var o = t[n];
+								if (o.trim()) {
+									var s = F.hasOwnProperty(o) && F[o];
+									s === O.blackList ? (t.splice(n, 1), n--) : s === O.transition ? r.parent ? (t[n] += " [" + r.parent.zone.name + " => " + r.zone.name + "]", r = r.parent) : r = null : t[n] += " [" + r.zone.name + "]"
+								}
+							}
+							e.stack = e.zoneAwareStack = t.join("\n")
+						}
+						return Object.defineProperties(this, W(Object.getPrototypeOf(this))),
+						this
+					}
+					z.prototype = U.prototype,
+					z[t.__symbol__("blacklistedStackFrames")] = F,
+					z[j] = !1,
+					U.hasOwnProperty("stackTraceLimit") && (U.stackTraceLimit = Math.max(U.stackTraceLimit, 15), Object.defineProperty(z, "stackTraceLimit", {
+							get: function () {
+								return U.stackTraceLimit
+							},
+							set: function (e) {
+								return U.stackTraceLimit = e
+							}
+						})),
+					U.hasOwnProperty("captureStackTrace") && Object.defineProperty(z, "captureStackTrace", {
+						value: function (e, t) {
+							U.captureStackTrace(e, t)
+						}
+					}),
+					Object.defineProperty(z, "prepareStackTrace", {
 						get: function () {
-							return this._profileQueryEndpoint
+							return U.prepareStackTrace
 						},
 						set: function (e) {
-							n.cancelCorrelationIdQuery(this, this.setCorrelationId),
-							this._profileQueryEndpoint = e,
-							this.correlationId = n.correlationIdPrefix,
-							n.queryCorrelationId(this, this.setCorrelationId)
-						},
-						enumerable: !0,
-						configurable: !0
-					}),
-					e._getInstrumentationKey = function () {
-						var t = process.env[e.ENV_iKey] || process.env[e.ENV_azurePrefix + e.ENV_iKey] || process.env[e.legacy_ENV_iKey] || process.env[e.ENV_azurePrefix + e.legacy_ENV_iKey];
-						if (!t || "" == t)
-							throw new Error("Instrumentation key not found, pass the key in the config to this method or set the key in the environment variable APPINSIGHTS_INSTRUMENTATIONKEY before starting the server");
-						return t
-					},
-					e.ENV_azurePrefix = "APPSETTING_",
-					e.ENV_iKey = "APPINSIGHTS_INSTRUMENTATIONKEY",
-					e.legacy_ENV_iKey = "APPINSIGHTS_INSTRUMENTATION_KEY",
-					e.ENV_profileQueryEndpoint = "APPINSIGHTS_PROFILE_QUERY_ENDPOINT",
-					e.ENV_http_proxy = "http_proxy",
-					e.ENV_https_proxy = "https_proxy",
-					e
-				}
-				();
-				e.exports = o
-			}, function (e, t, r) {
-				"use strict";
-				var n = r(11),
-				o = r(2),
-				i = r(1),
-				s = r(7),
-				a = r(6),
-				c = function () {
-					function e(e) {
-						this.keys = new s.ContextTagKeys,
-						this.tags = {},
-						this._loadApplicationContext(),
-						this._loadDeviceContext(),
-						this._loadInternalContext()
-					}
-					return e.prototype._loadApplicationContext = function (t) {
-						if (t = t || i.resolve(__dirname, "../../../../package.json"), !e.appVersion[t]) {
-							e.appVersion[t] = "unknown";
-							try {
-								var r = JSON.parse(o.readFileSync(t, "utf8"));
-								r && "string" == typeof r.version && (e.appVersion[t] = r.version)
-							} catch (e) {
-								a.info("unable to read app version: ", e)
-							}
-						}
-						this.tags[this.keys.applicationVersion] = e.appVersion[t]
-					},
-					e.prototype._loadDeviceContext = function () {
-						this.tags[this.keys.deviceId] = "",
-						this.tags[this.keys.cloudRoleInstance] = n && n.hostname(),
-						this.tags[this.keys.deviceOSVersion] = n && n.type() + " " + n.release(),
-						this.tags[this.keys.cloudRole] = e.DefaultRoleName,
-						this.tags["ai.device.osArchitecture"] = n && n.arch(),
-						this.tags["ai.device.osPlatform"] = n && n.platform()
-					},
-					e.prototype._loadInternalContext = function () {
-						var t = i.resolve(__dirname, "../../package.json");
-						if (!e.sdkVersion) {
-							e.sdkVersion = "unknown";
-							try {
-								var r = JSON.parse(o.readFileSync(t, "utf8"));
-								r && "string" == typeof r.version && (e.sdkVersion = r.version)
-							} catch (e) {
-								a.info("unable to read app version: ", e)
-							}
-						}
-						this.tags[this.keys.internalSdkVersion] = "node:" + e.sdkVersion
-					},
-					e.DefaultRoleName = "Web",
-					e.appVersion = {},
-					e.sdkVersion = null,
-					e
-				}
-				();
-				e.exports = c
-			}, function (e, t, r) {
-				"use strict";
-				var n = r(6),
-				o = function () {
-					function e(e, t, r, n) {
-						this._buffer = [],
-						this._lastSend = 0,
-						this._isDisabled = e,
-						this._getBatchSize = t,
-						this._getBatchIntervalMs = r,
-						this._sender = n
-					}
-					return e.prototype.setUseDiskRetryCaching = function (e, t, r) {
-						this._sender.setDiskRetryMode(e, t, r)
-					},
-					e.prototype.send = function (e) {
-						var t = this;
-						if (!this._isDisabled())
-							if (e) {
-								var r = this._stringify(e);
-								"string" == typeof r && (this._buffer.push(r), this._buffer.length >= this._getBatchSize() ? this.triggerSend(!1) : !this._timeoutHandle && this._buffer.length > 0 && (this._timeoutHandle = setTimeout(function () {
-												t._timeoutHandle = null,
-												t.triggerSend(!1)
-											}, this._getBatchIntervalMs())))
-							} else
-								n.warn("Cannot send null/undefined telemetry")
-					},
-					e.prototype.triggerSend = function (e, t) {
-						var r = this._buffer.length < 1;
-						if (!r) {
-							var n = this._buffer.join("\n");
-							e ? (this._sender.saveOnCrash(n), "function" == typeof t && t("data saved on crash")) : this._sender.send(Buffer.from ? Buffer.from(n) : new Buffer(n), t)
-						}
-						this._lastSend = +new Date,
-						this._buffer.length = 0,
-						clearTimeout(this._timeoutHandle),
-						this._timeoutHandle = null,
-						r && "function" == typeof t && t("no data to send")
-					},
-					e.prototype._stringify = function (e) {
-						try {
-							return JSON.stringify(e)
-						} catch (t) {
-							n.warn("Failed to serialize payload", t, e)
-						}
-					},
-					e
-				}
-				();
-				e.exports = o
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				}),
-				function (e) {
-					for (var r in e)
-						t.hasOwnProperty(r) || (t[r] = e[r])
-				}
-				(r(169))
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				var n = r(7);
-				function o(e) {
-					var t = 5381;
-					if (!e)
-						return 0;
-					for (; e.length < 8; )
-						e += e;
-					for (var r = 0; r < e.length; r++)
-						t = ((t << 5) + t | 0) + e.charCodeAt(r) | 0;
-					return (t = t <= -2147483648 ? 2147483647 : Math.abs(t)) / 2147483647 * 100
-				}
-				t.samplingTelemetryProcessor = function (e, t) {
-					var r = e.sampleRate;
-					return null === r || void 0 === r || r >= 100 || !(!e.data || n.TelemetryType.Metric !== n.baseTypeToTelemetryType(e.data.baseType)) || (t.correlationContext && t.correlationContext.operation ? o(t.correlationContext.operation.id) < r : 100 * Math.random() < r)
-				},
-				t.getSamplingHashCode = o
-			}, function (e, t, r) {
-				"use strict";
-				var n = r(2),
-				o = r(11),
-				i = r(1),
-				s = r(171),
-				a = r(28),
-				c = r(6),
-				u = r(25),
-				l = r(10),
-				h = function () {
-					function e(t, r, o) {
-						if (this._config = t, this._onSuccess = r, this._onError = o, this._enableDiskRetryMode = !1, this._resendInterval = e.WAIT_BETWEEN_RESEND, this._maxBytesOnDisk = e.MAX_BYTES_ON_DISK, this._numConsecutiveFailures = 0, !e.OS_PROVIDES_FILE_PROTECTION)
-							if (e.USE_ICACLS) {
-								try {
-									e.OS_PROVIDES_FILE_PROTECTION = n.existsSync(e.ICACLS_PATH)
-								} catch (e) {}
-								e.OS_PROVIDES_FILE_PROTECTION || c.warn(e.TAG, "Could not find ICACLS in expected location! This is necessary to use disk retry mode on Windows.")
-							} else
-								e.OS_PROVIDES_FILE_PROTECTION = !0
-					}
-					return e.prototype.setDiskRetryMode = function (t, r, n) {
-						this._enableDiskRetryMode = e.OS_PROVIDES_FILE_PROTECTION && t,
-						"number" == typeof r && r >= 0 && (this._resendInterval = Math.floor(r)),
-						"number" == typeof n && n >= 0 && (this._maxBytesOnDisk = Math.floor(n)),
-						t && !e.OS_PROVIDES_FILE_PROTECTION && (this._enableDiskRetryMode = !1, c.warn(e.TAG, "Ignoring request to enable disk retry mode. Sufficient file protection capabilities were not detected."))
-					},
-					e.prototype.send = function (t, r) {
-						var n = this,
-						o = this._config.endpointUrl,
-						i = {
-							method: "POST",
-							withCredentials: !1,
-							headers: {
-								"Content-Type": "application/x-json-stream"
-							}
-						};
-						s.gzip(t, function (s, a) {
-							var h = a;
-							s ? (c.warn(s), h = t, i.headers["Content-Length"] = t.length.toString()) : (i.headers["Content-Encoding"] = "gzip", i.headers["Content-Length"] = a.length),
-							c.info(e.TAG, i),
-							i[u.disableCollectionRequestOption] = !0;
-							var p = l.makeRequest(n._config, o, i, function (o) {
-									o.setEncoding("utf-8");
-									var i = "";
-									o.on("data", function (e) {
-										i += e
-									}),
-									o.on("end", function () {
-										n._numConsecutiveFailures = 0,
-										c.info(e.TAG, i),
-										"function" == typeof n._onSuccess && n._onSuccess(i),
-										"function" == typeof r && r(i),
-										n._enableDiskRetryMode && (200 === o.statusCode ? setTimeout(function () {
-												return n._sendFirstFileOnDisk()
-											}, n._resendInterval) : 408 !== o.statusCode && 429 !== o.statusCode && 439 !== o.statusCode && 500 !== o.statusCode && 503 !== o.statusCode || n._storeToDisk(t))
-									})
-								});
-							p.on("error", function (o) {
-								if (n._numConsecutiveFailures++, !n._enableDiskRetryMode || n._numConsecutiveFailures > 0 && n._numConsecutiveFailures % e.MAX_CONNECTION_FAILURES_BEFORE_WARN == 0) {
-									var i = "Ingestion endpoint could not be reached. This batch of telemetry items has been lost. Use Disk Retry Caching to enable resending of failed telemetry. Error:";
-									n._enableDiskRetryMode && (i = "Ingestion endpoint could not be reached " + n._numConsecutiveFailures + " consecutive times. There may be resulting telemetry loss. Most recent error:"),
-									c.warn(e.TAG, i, o)
-								} else {
-									i = "Transient failure to reach ingestion endpoint. This batch of telemetry items will be retried. Error:";
-									c.info(e.TAG, i, o)
-								}
-								if (n._onErrorHelper(o), "function" == typeof r) {
-									var s = "error sending telemetry";
-									o && "function" == typeof o.toString && (s = o.toString()),
-									r(s)
-								}
-								n._enableDiskRetryMode && n._storeToDisk(t)
-							}),
-							p.write(h),
-							p.end()
-						})
-					},
-					e.prototype.saveOnCrash = function (e) {
-						this._enableDiskRetryMode && this._storeToDiskSync(e)
-					},
-					e.prototype._runICACLS = function (t, r) {
-						var n = a.spawn(e.ICACLS_PATH, t, {
-								windowsHide: !0
-							});
-						n.on("error", function (e) {
-							return r(e)
-						}),
-						n.on("close", function (e, t) {
-							return r(0 === e ? null : new Error("Setting ACL restrictions did not succeed (ICACLS returned code " + e + ")"))
-						})
-					},
-					e.prototype._runICACLSSync = function (t) {
-						if (!a.spawnSync)
-							throw new Error("Could not synchronously call ICACLS under current version of Node.js");
-						var r = a.spawnSync(e.ICACLS_PATH, t, {
-								windowsHide: !0
-							});
-						if (r.error)
-							throw r.error;
-						if (0 !== r.status)
-							throw new Error("Setting ACL restrictions did not succeed (ICACLS returned code " + r.status + ")")
-					},
-					e.prototype._getACLIdentity = function (t) {
-						if (e.ACL_IDENTITY)
-							return t(null, e.ACL_IDENTITY);
-						var r = a.spawn(e.POWERSHELL_PATH, ["-Command", "[System.Security.Principal.WindowsIdentity]::GetCurrent().Name"], {
-								windowsHide: !0,
-								stdio: ["ignore", "pipe", "pipe"]
-							}),
-						n = "";
-						r.stdout.on("data", function (e) {
-							return n += e
-						}),
-						r.on("error", function (e) {
-							return t(e, null)
-						}),
-						r.on("close", function (r, o) {
-							return e.ACL_IDENTITY = n && n.trim(),
-							t(0 === r ? null : new Error("Getting ACL identity did not succeed (PS returned code " + r + ")"), e.ACL_IDENTITY)
-						})
-					},
-					e.prototype._getACLIdentitySync = function () {
-						if (e.ACL_IDENTITY)
-							return e.ACL_IDENTITY;
-						if (a.spawnSync) {
-							var t = a.spawnSync(e.POWERSHELL_PATH, ["-Command", "[System.Security.Principal.WindowsIdentity]::GetCurrent().Name"], {
-									windowsHide: !0,
-									stdio: ["ignore", "pipe", "pipe"]
-								});
-							if (t.error)
-								throw t.error;
-							if (0 !== t.status)
-								throw new Error("Getting ACL identity did not succeed (PS returned code " + t.status + ")");
-							return e.ACL_IDENTITY = t.stdout && t.stdout.toString().trim(),
-							e.ACL_IDENTITY
-						}
-						throw new Error("Could not synchronously get ACL identity under current version of Node.js")
-					},
-					e.prototype._getACLArguments = function (e, t) {
-						return [e, "/grant", "*S-1-5-32-544:(OI)(CI)F", "/grant", t + ":(OI)(CI)F", "/inheritance:r"]
-					},
-					e.prototype._applyACLRules = function (t, r) {
-						var n = this;
-						return e.USE_ICACLS ? void 0 !== e.ACLED_DIRECTORIES[t] ? r(e.ACLED_DIRECTORIES[t] ? null : new Error("Setting ACL restrictions did not succeed (cached result)")) : (e.ACLED_DIRECTORIES[t] = !1, void this._getACLIdentity(function (o, i) {
-								if (o)
-									return e.ACLED_DIRECTORIES[t] = !1, r(o);
-								n._runICACLS(n._getACLArguments(t, i), function (n) {
-									return e.ACLED_DIRECTORIES[t] = !n,
-									r(n)
-								})
-							})) : r(null)
-					},
-					e.prototype._applyACLRulesSync = function (t) {
-						if (e.USE_ICACLS) {
-							if (void 0 === e.ACLED_DIRECTORIES[t])
-								return this._runICACLSSync(this._getACLArguments(t, this._getACLIdentitySync())), void(e.ACLED_DIRECTORIES[t] = !0);
-							if (!e.ACLED_DIRECTORIES[t])
-								throw new Error("Setting ACL restrictions did not succeed (cached result)")
-						}
-					},
-					e.prototype._confirmDirExists = function (e, t) {
-						var r = this;
-						n.lstat(e, function (o, i) {
-							o && "ENOENT" === o.code ? n.mkdir(e, function (n) {
-								n && "EEXIST" !== n.code ? t(n) : r._applyACLRules(e, t)
-							}) : !o && i.isDirectory() ? r._applyACLRules(e, t) : t(o || new Error("Path existed but was not a directory"))
-						})
-					},
-					e.prototype._getShallowDirectorySize = function (e, t) {
-						n.readdir(e, function (r, o) {
-							if (r)
-								return t(r, -1);
-							var s = null,
-							a = 0,
-							c = 0;
-							if (0 !== o.length)
-								for (var u = 0; u < o.length; u++)
-									n.stat(i.join(e, o[u]), function (e, r) {
-										c++,
-										e ? s = e : r.isFile() && (a += r.size),
-										c === o.length && t(s, s ? -1 : a)
-									});
-							else
-								t(null, 0)
-						})
-					},
-					e.prototype._getShallowDirectorySizeSync = function (e) {
-						for (var t = n.readdirSync(e), r = 0, o = 0; o < t.length; o++)
-							r += n.statSync(i.join(e, t[o])).size;
-						return r
-					},
-					e.prototype._storeToDisk = function (t) {
-						var r = this,
-						s = i.join(o.tmpdir(), e.TEMPDIR_PREFIX + this._config.instrumentationKey);
-						c.info(e.TAG, "Checking existance of data storage directory: " + s),
-						this._confirmDirExists(s, function (o) {
-							if (o)
-								return c.warn(e.TAG, "Error while checking/creating directory: " + (o && o.message)), void r._onErrorHelper(o);
-							r._getShallowDirectorySize(s, function (o, a) {
-								if (o || a < 0)
-									return c.warn(e.TAG, "Error while checking directory size: " + (o && o.message)), void r._onErrorHelper(o);
-								if (a > r._maxBytesOnDisk)
-									c.warn(e.TAG, "Not saving data due to max size limit being met. Directory size in bytes is: " + a);
-								else {
-									var u = (new Date).getTime() + ".ai.json",
-									l = i.join(s, u);
-									c.info(e.TAG, "saving data to disk at: " + l),
-									n.writeFile(l, t, {
-										mode: 384
-									}, function (e) {
-										return r._onErrorHelper(e)
-									})
-								}
-							})
-						})
-					},
-					e.prototype._storeToDiskSync = function (t) {
-						var r = i.join(o.tmpdir(), e.TEMPDIR_PREFIX + this._config.instrumentationKey);
-						try {
-							c.info(e.TAG, "Checking existance of data storage directory: " + r),
-							n.existsSync(r) || n.mkdirSync(r),
-							this._applyACLRulesSync(r);
-							var s = this._getShallowDirectorySizeSync(r);
-							if (s > this._maxBytesOnDisk)
-								return void c.info(e.TAG, "Not saving data due to max size limit being met. Directory size in bytes is: " + s);
-							var a = (new Date).getTime() + ".ai.json",
-							u = i.join(r, a);
-							c.info(e.TAG, "saving data before crash to disk at: " + u),
-							n.writeFileSync(u, t, {
-								mode: 384
-							})
-						} catch (t) {
-							c.warn(e.TAG, "Error while saving data to disk: " + (t && t.message)),
-							this._onErrorHelper(t)
-						}
-					},
-					e.prototype._sendFirstFileOnDisk = function () {
-						var t = this,
-						r = i.join(o.tmpdir(), e.TEMPDIR_PREFIX + this._config.instrumentationKey);
-						n.exists(r, function (e) {
-							e && n.readdir(r, function (e, o) {
-								if (e)
-									t._onErrorHelper(e);
-								else if ((o = o.filter(function (e) {
-												return i.basename(e).indexOf(".ai.json") > -1
-											})).length > 0) {
-									var s = o[0],
-									a = i.join(r, s);
-									n.readFile(a, function (e, r) {
-										e ? t._onErrorHelper(e) : n.unlink(a, function (e) {
-											e ? t._onErrorHelper(e) : t.send(r)
-										})
-									})
-								}
-							})
-						})
-					},
-					e.prototype._onErrorHelper = function (e) {
-						"function" == typeof this._onError && this._onError(e)
-					},
-					e.TAG = "Sender",
-					e.ICACLS_PATH = process.env.systemdrive + "/windows/system32/icacls.exe",
-					e.POWERSHELL_PATH = process.env.systemdrive + "/windows/system32/windowspowershell/v1.0/powershell.exe",
-					e.ACLED_DIRECTORIES = {},
-					e.ACL_IDENTITY = null,
-					e.WAIT_BETWEEN_RESEND = 6e4,
-					e.MAX_BYTES_ON_DISK = 5e7,
-					e.MAX_CONNECTION_FAILURES_BEFORE_WARN = 5,
-					e.TEMPDIR_PREFIX = "appInsights-node",
-					e.OS_PROVIDES_FILE_PROTECTION = !1,
-					e.USE_ICACLS = "Windows_NT" === o.type(),
-					e
-				}
-				();
-				e.exports = h
-			}, function (e, t) {
-				e.exports = require("zlib")
-			}, function (e, t, r) {
-				"use strict";
-				var n = r(7),
-				o = r(10),
-				i = r(16),
-				s = function () {
-					function e() {}
-					return e.createEnvelope = function (t, r, i, s, a) {
-						var c = null;
-						switch (r) {
-						case n.TelemetryType.Trace:
-							c = e.createTraceData(t);
-							break;
-						case n.TelemetryType.Dependency:
-							c = e.createDependencyData(t);
-							break;
-						case n.TelemetryType.Event:
-							c = e.createEventData(t);
-							break;
-						case n.TelemetryType.Exception:
-							c = e.createExceptionData(t);
-							break;
-						case n.TelemetryType.Request:
-							c = e.createRequestData(t);
-							break;
-						case n.TelemetryType.Metric:
-							c = e.createMetricData(t)
-						}
-						if (i && n.domainSupportsProperties(c.baseData)) {
-							if (c && c.baseData)
-								if (c.baseData.properties)
-									for (var u in i)
-										c.baseData.properties[u] || (c.baseData.properties[u] = i[u]);
-								else
-									c.baseData.properties = i;
-							c.baseData.properties = o.validateStringMap(c.baseData.properties)
-						}
-						var l = a && a.instrumentationKey || "",
-						h = new n.Envelope;
-						return h.data = c,
-						h.iKey = l,
-						h.name = "Microsoft.ApplicationInsights." + l.replace(/-/g, "") + "." + c.baseType.substr(0, c.baseType.length - 4),
-						h.tags = this.getTags(s, t.tagOverrides),
-						h.time = (new Date).toISOString(),
-						h.ver = 1,
-						h.sampleRate = a ? a.samplingPercentage : 100,
-						r === n.TelemetryType.Metric && (h.sampleRate = 100),
-						h
-					},
-					e.createTraceData = function (e) {
-						var t = new n.MessageData;
-						t.message = e.message,
-						t.properties = e.properties,
-						isNaN(e.severity) ? t.severityLevel = n.SeverityLevel.Information : t.severityLevel = e.severity;
-						var r = new n.Data;
-						return r.baseType = n.telemetryTypeToBaseType(n.TelemetryType.Trace),
-						r.baseData = t,
-						r
-					},
-					e.createDependencyData = function (e) {
-						var t = new n.RemoteDependencyData;
-						t.name = e.name,
-						t.data = e.data,
-						t.target = e.target,
-						t.duration = o.msToTimeSpan(e.duration),
-						t.success = e.success,
-						t.type = e.dependencyTypeName,
-						t.properties = e.properties,
-						t.resultCode = e.resultCode ? e.resultCode + "" : "",
-						e.id ? t.id = e.id : t.id = o.w3cTraceId();
-						var r = new n.Data;
-						return r.baseType = n.telemetryTypeToBaseType(n.TelemetryType.Dependency),
-						r.baseData = t,
-						r
-					},
-					e.createEventData = function (e) {
-						var t = new n.EventData;
-						t.name = e.name,
-						t.properties = e.properties,
-						t.measurements = e.measurements;
-						var r = new n.Data;
-						return r.baseType = n.telemetryTypeToBaseType(n.TelemetryType.Event),
-						r.baseData = t,
-						r
-					},
-					e.createExceptionData = function (e) {
-						var t = new n.ExceptionData;
-						t.properties = e.properties,
-						t.severityLevel = n.SeverityLevel.Error,
-						t.measurements = e.measurements,
-						t.exceptions = [];
-						var r = e.exception.stack,
-						i = new n.ExceptionDetails;
-						i.message = e.exception.message,
-						i.typeName = e.exception.name,
-						i.parsedStack = this.parseStack(r),
-						i.hasFullStack = o.isArray(i.parsedStack) && i.parsedStack.length > 0,
-						t.exceptions.push(i);
-						var s = new n.Data;
-						return s.baseType = n.telemetryTypeToBaseType(n.TelemetryType.Exception),
-						s.baseData = t,
-						s
-					},
-					e.createRequestData = function (e) {
-						var t = new n.RequestData;
-						e.id ? t.id = e.id : t.id = o.w3cTraceId(),
-						t.name = e.name,
-						t.url = e.url,
-						t.source = e.source,
-						t.duration = o.msToTimeSpan(e.duration),
-						t.responseCode = e.resultCode ? e.resultCode + "" : "",
-						t.success = e.success,
-						t.properties = e.properties;
-						var r = new n.Data;
-						return r.baseType = n.telemetryTypeToBaseType(n.TelemetryType.Request),
-						r.baseData = t,
-						r
-					},
-					e.createMetricData = function (e) {
-						var t = new n.MetricData;
-						t.metrics = [];
-						var r = new n.DataPoint;
-						r.count = isNaN(e.count) ? 1 : e.count,
-						r.kind = n.DataPointType.Aggregation,
-						r.max = isNaN(e.max) ? e.value : e.max,
-						r.min = isNaN(e.min) ? e.value : e.min,
-						r.name = e.name,
-						r.stdDev = isNaN(e.stdDev) ? 0 : e.stdDev,
-						r.value = e.value,
-						t.metrics.push(r),
-						t.properties = e.properties;
-						var o = new n.Data;
-						return o.baseType = n.telemetryTypeToBaseType(n.TelemetryType.Metric),
-						o.baseData = t,
-						o
-					},
-					e.getTags = function (e, t) {
-						var r = i.CorrelationContextManager.getCurrentContext(),
-						n = {};
-						if (e && e.tags)
-							for (var o in e.tags)
-								n[o] = e.tags[o];
-						if (t)
-							for (var o in t)
-								n[o] = t[o];
-						return r && (n[e.keys.operationId] = n[e.keys.operationId] || r.operation.id, n[e.keys.operationName] = n[e.keys.operationName] || r.operation.name, n[e.keys.operationParentId] = n[e.keys.operationParentId] || r.operation.parentId),
-						n
-					},
-					e.parseStack = function (e) {
-						var t = void 0;
-						if ("string" == typeof e) {
-							var r = e.split("\n");
-							t = [];
-							for (var n = 0, o = 0, i = 0; i <= r.length; i++) {
-								var s = r[i];
-								if (a.regex.test(s)) {
-									var c = new a(r[i], n++);
-									o += c.sizeInBytes,
-									t.push(c)
-								}
-							}
-							if (o > 32768)
-								for (var u = 0, l = t.length - 1, h = 0, p = u, d = l; u < l; ) {
-									if ((h += t[u].sizeInBytes + t[l].sizeInBytes) > 32768) {
-										var f = d - p + 1;
-										t.splice(p, f);
-										break
+							return U.prepareStackTrace = e && "function" == typeof e ? function (t, r) {
+								if (r)
+									for (var n = 0; n < r.length; n++) {
+										if ("zoneCaptureStackTrace" === r[n].getFunctionName()) {
+											r.splice(n, 1);
+											break
+										}
 									}
-									p = u,
-									d = l,
-									u++,
-									l--
-								}
+								return e.apply(this, [t, r])
+							}
+							 : e
 						}
-						return t
-					},
-					e
+					});
+					var $ = t.current.fork({
+						name: "detect",
+						onInvoke: function (e, t, r, n, o, i, s) {
+							return e.invoke(r, n, o, i, s)
+						},
+						onHandleError: function (e, t, r, n) {
+							if (n.originalStack && Error === z)
+								for (var o = n.originalStack.split(/\n/), i = !1, s = !1, a = !1; o.length; ) {
+									var c = o.shift();
+									if (/:\d+:\d+/.test(c)) {
+										var u = c.split("(")[0].split("@")[0],
+										l = O.transition;
+										if (-1 !== u.indexOf("ZoneAwareError") && (B = c), -1 !== u.indexOf("runGuarded") ? s = !0 : -1 !== u.indexOf("runTask") ? a = !0 : -1 !== u.indexOf("run") ? i = !0 : l = O.blackList, F[c] = l, i && s && a) {
+											z[j] = !0;
+											break
+										}
+									}
+								}
+							return !1
+						}
+					});
+					$.runTask($.scheduleMacroTask("detect", function () {
+							$.run(function () {
+								$.runGuarded(function () {
+									throw new Error("blacklistStackFrames")
+								})
+							})
+						}, null, function () {
+							return null
+						}, null)),
+					e.Zone = t
 				}
-				(),
-				a = function () {
-					function e(t, r) {
-						this.sizeInBytes = 0,
-						this.level = r,
-						this.method = "<no_method>",
-						this.assembly = o.trim(t);
-						var n = t.match(e.regex);
-						n && n.length >= 5 && (this.method = o.trim(n[2]) || this.method, this.fileName = o.trim(n[4]) || "<no_filename>", this.line = parseInt(n[5]) || 0),
-						this.sizeInBytes += this.method.length,
-						this.sizeInBytes += this.fileName.length,
-						this.sizeInBytes += this.assembly.length,
-						this.sizeInBytes += e.baseSize,
-						this.sizeInBytes += this.level.toString().length,
-						this.sizeInBytes += this.line.toString().length
+				("object" == typeof window && window || "object" == typeof self && self || global);
+				/**
+				 * @license
+				 * Copyright Google Inc. All Rights Reserved.
+				 *
+				 * Use of this source code is governed by an MIT-style license that can be
+				 * found in the LICENSE file at https://angular.io/license
+				 */
+				var e = function (e) {
+					return "__zone_symbol__" + e
+				},
+				t = "object" == typeof window && window || "object" == typeof self && self || global;
+				!("nw" in t) && "undefined" != typeof process && {}
+				.toString.call(process);
+				var n = e("eventTasks");
+				function o(e, t, r, o, i) {
+					var s = e[n];
+					if (s)
+						for (var a = 0; a < s.length; a++) {
+							var c = s[a],
+							u = c.data,
+							l = u.handler;
+							if ((u.handler === t || l.listener === t) && u.useCapturing === o && u.eventName === r)
+								return i && s.splice(a, 1), c
+						}
+					return null
+				}
+				var i = function (e, r) {
+					return {
+						useCapturing: r[2],
+						eventName: r[0],
+						handler: r[1],
+						target: e || t,
+						name: r[0],
+						invokeAddFunc: function (e, t) {
+							return t && t.invoke ? this.target[e](this.eventName, t.invoke, this.useCapturing) : this.target[e](this.eventName, t, this.useCapturing)
+						},
+						invokeRemoveFunc: function (e, t) {
+							return t && t.invoke ? this.target[e](this.eventName, t.invoke, this.useCapturing) : this.target[e](this.eventName, t, this.useCapturing)
+						}
 					}
-					return e.regex = /^([\s]+at)?(.*?)(\@|\s\(|\s)([^\(\@\n]+):([0-9]+):([0-9]+)(\)?)$/,
-					e.baseSize = 58,
-					e
+				};
+				function s(t, r, s, a, c, u) {
+					void 0 === s && (s = !0),
+					void 0 === a && (a = !1),
+					void 0 === c && (c = !1),
+					void 0 === u && (u = i);
+					var l = e(t),
+					h = e(r),
+					p = !s && void 0;
+					function d(e) {
+						var t = e.data;
+						return function (e, t, r) {
+							var o = e[n];
+							o || (o = e[n] = []),
+							r ? o.unshift(t) : o.push(t)
+						}
+						(t.target, e, c),
+						t.invokeAddFunc(l, e)
+					}
+					function f(e) {
+						var t = e.data;
+						return o(t.target, e.invoke, t.eventName, t.useCapturing, !0),
+						t.invokeRemoveFunc(h, e)
+					}
+					return function (e, r) {
+						var n = u(e, r);
+						n.useCapturing = n.useCapturing || p;
+						var i = null;
+						"function" == typeof n.handler ? i = n.handler : n.handler && n.handler.handleEvent && (i = function (e) {
+								return n.handler.handleEvent(e)
+							});
+						var s = !1;
+						try {
+							s = n.handler && "[object FunctionWrapper]" === n.handler.toString()
+						} catch (e) {
+							return
+						}
+						if (!i || s)
+							return n.invokeAddFunc(l, n.handler);
+						if (!a) {
+							var c = o(n.target, n.handler, n.eventName, n.useCapturing, !1);
+							if (c)
+								return n.invokeAddFunc(l, c)
+						}
+						var h = Zone.current,
+						g = n.target.constructor.name + "." + t + ":" + n.eventName;
+						h.scheduleEventTask(g, i, n, d, f)
+					}
+				}
+				function a(t, r, n) {
+					void 0 === r && (r = !0),
+					void 0 === n && (n = i);
+					var s = e(t),
+					a = !r && void 0;
+					return function (e, t) {
+						var r = n(e, t);
+						r.useCapturing = r.useCapturing || a;
+						var i = o(r.target, r.handler, r.eventName, r.useCapturing, !0);
+						i ? i.zone.cancelTask(i) : r.invokeRemoveFunc(s, r.handler)
+					}
+				}
+				s("addEventListener", "removeEventListener"),
+				a("removeEventListener"),
+				e("originalInstance");
+				function c(t, r, n) {
+					for (var o = t; o && -1 === Object.getOwnPropertyNames(o).indexOf(r); )
+						o = Object.getPrototypeOf(o);
+					!o && t[r] && (o = t);
+					var i,
+					s = e(r);
+					return o && !(i = o[s]) && (i = o[s] = o[r], o[r] = function (e, t) {
+						try {
+							return Function("f", "return function " + e + "(){return f(this, arguments)}")(t)
+						} catch (e) {
+							return function () {
+								return t(this, arguments)
+							}
+						}
+					}
+						(r, n(i, s, r))),
+					i
+				}
+				/**
+				 * @license
+				 * Copyright Google Inc. All Rights Reserved.
+				 *
+				 * Use of this source code is governed by an MIT-style license that can be
+				 * found in the LICENSE file at https://angular.io/license
+				 */
+				var u,
+				l,
+				h = function (e) {
+					return function (t, r) {
+						return e(t, r),
+						t
+					}
+				},
+				p = "addListener",
+				d = "prependListener",
+				f = "removeListener",
+				g = "removeAllListeners",
+				m = "listeners",
+				y = "on",
+				b = h(s(p, f, !1, !0, !1)),
+				w = h(s(d, f, !1, !0, !0)),
+				v = h(a(f, !1)),
+				C = h(function (r, o) {
+					void 0 === o && (o = !0);
+					var i = e(r),
+					s = !o && void 0;
+					return function (e, r) {
+						var o = e || t;
+						if (0 === r.length)
+							return o[n] = [], void o[i]();
+						var a = r[0];
+						!function (e, t, r, o) {
+							var i = e[n];
+							if (i) {
+								for (var s = [], a = i.length - 1; a >= 0; a--) {
+									var c = i[a],
+									u = c.data;
+									u.eventName === t && u.useCapturing === r && (s.push(c), o && i.splice(a, 1))
+								}
+							}
+						}
+						(o, a, r[1] || s, !0),
+						o[i](a)
+					}
+				}
+						(g, !1)),
+				_ = function (r) {
+					return e(r),
+					function (e, r) {
+						var o = r[0],
+						i = e || t;
+						return i[n] ? i[n].filter(function (e) {
+							return e.data.eventName === o
+						}).map(function (e) {
+							return e.data.handler
+						}) : []
+					}
+				}
+				(m);
+				try {
+					u = r(22)
+				} catch (e) {}
+				u && u.EventEmitter && function (e) {
+					!e || !e.addListener || (c(e, p, function () {
+							return b
+						}), c(e, d, function () {
+							return w
+						}), c(e, f, function () {
+							return v
+						}), c(e, g, function () {
+							return C
+						}), c(e, m, function () {
+							return _
+						}), e[y] = e[p])
+				}
+				(u.EventEmitter.prototype)
+				/**
+				 * @license
+				 * Copyright Google Inc. All Rights Reserved.
+				 *
+				 * Use of this source code is governed by an MIT-style license that can be
+				 * found in the LICENSE file at https://angular.io/license
+				 */
+			;
+				try {
+					l = r(2)
+				} catch (e) {}
+				/**
+				 * @license
+				 * Copyright Google Inc. All Rights Reserved.
+				 *
+				 * Use of this source code is governed by an MIT-style license that can be
+				 * found in the LICENSE file at https://angular.io/license
+				 */
+				function S(e, t, r, n) {
+					var o = null,
+					i = null;
+					r += n;
+					var s = {};
+					function a(t) {
+						var r = t.data;
+						return r.args[0] = function () {
+							t.invoke.apply(this, arguments),
+							delete s[r.handleId]
+						},
+						r.handleId = o.apply(e, r.args),
+						s[r.handleId] = t,
+						t
+					}
+					function u(e) {
+						return delete s[e.data.handleId],
+						i(e.data.handleId)
+					}
+					o = c(e, t += n, function (r) {
+						return function (o, i) {
+							if ("function" == typeof i[0]) {
+								var s = Zone.current,
+								c = {
+									handleId: null,
+									isPeriodic: "Interval" === n,
+									delay: "Timeout" === n || "Interval" === n ? i[1] || 0 : null,
+									args: i
+								},
+								l = s.scheduleMacroTask(t, i[0], c, a, u);
+								if (!l)
+									return l;
+								var h = l.data.handleId;
+								return h.ref && h.unref && (l.ref = h.ref.bind(h), l.unref = h.unref.bind(h)),
+								l
+							}
+							return r.apply(e, i)
+						}
+					}),
+					i = c(e, r, function (t) {
+						return function (r, n) {
+							var o = "number" == typeof n[0] ? s[n[0]] : n[0];
+							o && "string" == typeof o.type ? (o.cancelFn && o.data.isPeriodic || 0 === o.runCount) && o.zone.cancelTask(o) : t.apply(e, n)
+						}
+					})
+				}
+				/**
+				 * @license
+				 * Copyright Google Inc. All Rights Reserved.
+				 *
+				 * Use of this source code is governed by an MIT-style license that can be
+				 * found in the LICENSE file at https://angular.io/license
+				 */
+				l && ["access", "appendFile", "chmod", "chown", "close", "exists", "fchmod", "fchown", "fdatasync", "fstat", "fsync", "ftruncate", "futimes", "lchmod", "lchown", "link", "lstat", "mkdir", "mkdtemp", "open", "read", "readdir", "readFile", "readlink", "realpath", "rename", "rmdir", "stat", "symlink", "truncate", "unlink", "utimes", "write", "writeFile"].filter(function (e) {
+					return !!l[e] && "function" == typeof l[e]
+				}).forEach(function (e) {
+					!function (e, t, r) {
+						var n = null;
+						function o(e) {
+							var t = e.data;
+							return t.args[t.callbackIndex] = function () {
+								e.invoke.apply(this, arguments)
+							},
+							n.apply(t.target, t.args),
+							e
+						}
+						n = c(e, t, function (e) {
+							return function (t, n) {
+								var i = r(t, n);
+								return i.callbackIndex >= 0 && "function" == typeof n[i.callbackIndex] ? Zone.current.scheduleMacroTask(i.name, n[i.callbackIndex], i, o, null) : e.apply(t, n)
+							}
+						})
+					}
+					(l, e, function (t, r) {
+						return {
+							name: "fs." + e,
+							args: r,
+							callbackIndex: r.length > 0 ? r.length - 1 : -1,
+							target: t
+						}
+					})
+				});
+				var k,
+				T,
+				E = "set",
+				R = "object" == typeof window && window || "object" == typeof self && self || global,
+				P = r(33);
+				S(P, E, "clear", "Timeout"),
+				S(P, E, "clear", "Interval"),
+				S(P, E, "clear", "Immediate"),
+				global.setTimeout !== P.setTimeout && (S(R, E, "clear", "Timeout"), S(R, E, "clear", "Interval"), S(R, E, "clear", "Immediate")),
+				function () {
+					var e = null;
+					function t(t) {
+						var r = t.data;
+						return r[0] = function () {
+							t.invoke.apply(this, arguments)
+						},
+						e.apply(process, r),
+						t
+					}
+					e = c(process, "nextTick", function (e) {
+						return function (r, n) {
+							if ("function" == typeof n[0]) {
+								var o = Zone.current,
+								i = o.scheduleMicroTask("nextTick", n[0], n, t);
+								return i
+							}
+							return e.apply(process, n)
+						}
+					})
 				}
 				();
-				e.exports = s
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				const n = r(4),
-				o = r(5),
-				i = r(174);
-				t.GitProtocolHandler = class {
-					constructor() {
-						this.disposables = [],
-						this.disposables.push(n.window.registerUriHandler(this))
-					}
-					handleUri(e) {
-						switch (e.path) {
-						case "/clone":
-							this.clone(e)
+				try {
+					k = r(35)
+				} catch (e) {}
+				if (k) {
+					var x = k.randomBytes;
+					k.randomBytes = function (e, t) {
+						if (t) {
+							var r = Zone.current,
+							n = k.constructor.name + ".randomBytes";
+							return x(e, r.wrap(t, n))
 						}
+						return x(e)
 					}
-					clone(e) {
-						const t = i.parse(e.query);
-						t.url || console.warn("Failed to open URI:", e),
-						n.commands.executeCommand("git.clone", t.url)
+					.bind(k);
+					var I = k.pbkdf2;
+					k.pbkdf2 = function () {
+						for (var e = [], t = 0; t < arguments.length; t++)
+							e[t] = arguments[t];
+						var r = e[e.length - 1];
+						if ("function" == typeof r) {
+							var n = Zone.current,
+							o = k.constructor.name + ".pbkdf2";
+							return e[e.length - 1] = n.wrap(r, o),
+							I.apply(void 0, e)
+						}
+						return I.apply(void 0, e)
 					}
-					dispose() {
-						this.disposables = o.dispose(this.disposables)
+					.bind(k)
+				}
+				try {
+					T = r(133)
+				} catch (e) {}
+				if (T && T.ClientRequest) {
+					var D = T.ClientRequest.bind(T);
+					T.ClientRequest = function (e, t) {
+						if (t) {
+							var r = Zone.current;
+							return new D(e, r.wrap(t, "http.ClientRequest"))
+						}
+						return new D(e)
 					}
 				}
-			}, function (e, t) {
-				e.exports = require("querystring")
-			}, function (e, t, r) {
-				"use strict";
-				var n = this && this.__decorate || function (e, t, r, n) {
-					var o,
-					i = arguments.length,
-					s = i < 3 ? t : null === n ? n = Object.getOwnPropertyDescriptor(t, r) : n;
-					if ("object" == typeof Reflect && "function" == typeof Reflect.decorate)
-						s = Reflect.decorate(e, t, r, n);
-					else
-						for (var a = e.length - 1; a >= 0; a--)
-							(o = e[a]) && (s = (i < 3 ? o(s) : i > 3 ? o(t, r, s) : o(t, r)) || s);
-					return i > 3 && s && Object.defineProperty(t, r, s),
-					s
+			})
+		}, function (e, t) {
+			e.exports = require("_http_client")
+		}, function (e, t, r) {
+			"use strict";
+			var n = r(24),
+			o = function () {
+				function e(t) {
+					if (e.INSTANCE)
+						throw new Error("Console logging adapter tracking should be configured from the applicationInsights object");
+					this._client = t,
+					e.INSTANCE = this
+				}
+				return e.prototype.enable = function (e, t) {
+					n.IsInitialized && (r(135).enable(e && t, this._client), r(153).enable(e, this._client), r(154).enable(e, this._client))
+				},
+				e.prototype.isInitialized = function () {
+					return this._isInitialized
+				},
+				e.prototype.dispose = function () {
+					e.INSTANCE = null,
+					this.enable(!1, !1)
+				},
+				e._methodNames = ["debug", "info", "log", "warn", "error"],
+				e
+			}
+			();
+			e.exports = o
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(7),
+			o = r(3),
+			i = [],
+			s = function (e) {
+				i.forEach(function (t) {
+					var r = e.data.message;
+					r.lastIndexOf("\n") == r.length - 1 && (r = r.substring(0, r.length - 1)),
+					t.trackTrace({
+						message: r,
+						severity: e.data.stderr ? n.SeverityLevel.Warning : n.SeverityLevel.Information
+					})
+				})
+			};
+			t.enable = function (e, t) {
+				e ? (0 === i.length && o.channel.subscribe("console", s), i.push(t)) : 0 === (i = i.filter(function (e) {
+						return e != t
+					})).length && o.channel.unsubscribe("console", s)
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(38),
+			o = function () {
+				function e() {}
+				return e.TYPE_HTTP = "Http",
+				e.TYPE_AI = "Http (tracked component)",
+				e
+			}
+			();
+			t.RemoteDependencyDataConstants = o,
+			t.domainSupportsProperties = function (e) {
+				return "properties" in e || e instanceof n.EventData || e instanceof n.ExceptionData || e instanceof n.MessageData || e instanceof n.MetricData || e instanceof n.PageViewData || e instanceof n.RemoteDependencyData || e instanceof n.RequestData
+			}
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__extends || function () {
+				var e = Object.setPrototypeOf || {
+					__proto__: []
+				}
+				instanceof Array && function (e, t) {
+					e.__proto__ = t
+				}
+				 || function (e, t) {
+					for (var r in t)
+						t.hasOwnProperty(r) && (e[r] = t[r])
 				};
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				const o = r(176),
-				i = r(4),
-				s = r(5);
-				function a(e, t, r) {
-					if ("function" != typeof r.value)
-						throw new Error("not supported");
-					const n = r.value;
-					r.value = function () {
-						return console.warn(`Git extension API method '${t}' is deprecated.`),
-						n.apply(this, arguments)
-					}
-				}
-				t.deprecated = a;
-				class c {
-					constructor(e) {
-						this.enabled = !1,
-						this._onDidChangeEnablement = new i.EventEmitter,
-						this.onDidChangeEnablement = s.latchEvent(this._onDidChangeEnablement.event),
-						this._model = void 0,
-						e && (this.enabled = !0, this._model = e)
-					}
-					set model(e) {
-						this._model = e,
-						this.enabled = !!e,
-						this._onDidChangeEnablement.fire(this.enabled)
-					}
-					async getGitPath() {
-						if (!this._model)
-							throw new Error("Git model not found");
-						return this._model.git.path
-					}
-					async getRepositories() {
-						if (!this._model)
-							throw new Error("Git model not found");
-						return this._model.repositories.map(e => new o.ApiRepository(e))
-					}
-					getAPI(e) {
-						if (!this._model)
-							throw new Error("Git model not found");
-						if (1 !== e)
-							throw new Error(`No API version ${e} found.`);
-						return new o.ApiImpl(this._model)
-					}
-				}
-				n([a], c.prototype, "getGitPath", null),
-				n([a], c.prototype, "getRepositories", null),
-				t.GitExtensionImpl = c
-			}, function (e, t, r) {
-				"use strict";
-				Object.defineProperty(t, "__esModule", {
-					value: !0
-				});
-				const n = r(4),
-				o = r(5);
-				class i {
-					constructor(e) {
-						this._inputBox = e
-					}
-					set value(e) {
-						this._inputBox.value = e
-					}
-					get value() {
-						return this._inputBox.value
-					}
-				}
-				class s {
-					constructor(e) {
-						this.resource = e
-					}
-					get uri() {
-						return this.resource.resourceUri
-					}
-					get originalUri() {
-						return this.resource.original
-					}
-					get renameUri() {
-						return this.resource.renameResourceUri
-					}
-					get status() {
-						return this.resource.type
-					}
-				}
-				t.ApiChange = s;
-				class a {
-					constructor(e) {
-						this._repository = e,
-						this.onDidChange = this._repository.onDidRunGitStatus
-					}
-					get HEAD() {
-						return this._repository.HEAD
-					}
-					get refs() {
-						return [...this._repository.refs]
-					}
-					get remotes() {
-						return [...this._repository.remotes]
-					}
-					get submodules() {
-						return [...this._repository.submodules]
-					}
-					get rebaseCommit() {
-						return this._repository.rebaseCommit
-					}
-					get mergeChanges() {
-						return this._repository.mergeGroup.resourceStates.map(e => new s(e))
-					}
-					get indexChanges() {
-						return this._repository.indexGroup.resourceStates.map(e => new s(e))
-					}
-					get workingTreeChanges() {
-						return this._repository.workingTreeGroup.resourceStates.map(e => new s(e))
-					}
-				}
-				t.ApiRepositoryState = a;
-				class c {
-					constructor(e) {
-						this._sourceControl = e,
-						this.onDidChange = o.mapEvent(this._sourceControl.onDidChangeSelection, () => null)
-					}
-					get selected() {
-						return this._sourceControl.selected
-					}
-				}
-				t.ApiRepositoryUIState = c;
-				class u {
-					constructor(e) {
-						this._repository = e,
-						this.rootUri = n.Uri.file(this._repository.root),
-						this.inputBox = new i(this._repository.inputBox),
-						this.state = new a(this._repository),
-						this.ui = new c(this._repository.sourceControl)
-					}
-					apply(e, t) {
-						return this._repository.apply(e, t)
-					}
-					getConfigs() {
-						return this._repository.getConfigs()
-					}
-					getConfig(e) {
-						return this._repository.getConfig(e)
-					}
-					setConfig(e, t) {
-						return this._repository.setConfig(e, t)
-					}
-					getGlobalConfig(e) {
-						return this._repository.getGlobalConfig(e)
-					}
-					getObjectDetails(e, t) {
-						return this._repository.getObjectDetails(e, t)
-					}
-					detectObjectType(e) {
-						return this._repository.detectObjectType(e)
-					}
-					buffer(e, t) {
-						return this._repository.buffer(e, t)
-					}
-					show(e, t) {
-						return this._repository.show(e, t)
-					}
-					getCommit(e) {
-						return this._repository.getCommit(e)
-					}
-					clean(e) {
-						return this._repository.clean(e.map(e => n.Uri.file(e)))
-					}
-					diff(e) {
-						return this._repository.diff(e)
-					}
-					diffWithHEAD(e) {
-						return this._repository.diffWithHEAD(e)
-					}
-					diffWith(e, t) {
-						return this._repository.diffWith(e, t)
-					}
-					diffIndexWithHEAD(e) {
-						return this._repository.diffIndexWithHEAD(e)
-					}
-					diffIndexWith(e, t) {
-						return this._repository.diffIndexWith(e, t)
-					}
-					diffBlobs(e, t) {
-						return this._repository.diffBlobs(e, t)
-					}
-					diffBetween(e, t, r) {
-						return this._repository.diffBetween(e, t, r)
-					}
-					hashObject(e) {
-						return this._repository.hashObject(e)
-					}
-					createBranch(e, t, r) {
-						return this._repository.branch(e, t, r)
-					}
-					deleteBranch(e, t) {
-						return this._repository.deleteBranch(e, t)
-					}
-					getBranch(e) {
-						return this._repository.getBranch(e)
-					}
-					setBranchUpstream(e, t) {
-						return this._repository.setBranchUpstream(e, t)
-					}
-					getMergeBase(e, t) {
-						return this._repository.getMergeBase(e, t)
-					}
-					status() {
-						return this._repository.status()
-					}
-					checkout(e) {
-						return this._repository.checkout(e)
-					}
-					addRemote(e, t) {
-						return this._repository.addRemote(e, t)
-					}
-					removeRemote(e) {
-						return this._repository.removeRemote(e)
-					}
-					fetch(e, t, r) {
-						return this._repository.fetch(e, t, r)
-					}
-					pull(e) {
-						return this._repository.pull(void 0, e)
-					}
-					push(e, t, r = !1) {
-						return this._repository.pushTo(e, t, r)
-					}
-					blame(e) {
-						return this._repository.blame(e)
-					}
-					log(e) {
-						return this._repository.log(e)
-					}
-				}
-				t.ApiRepository = u;
-				class l {
-					constructor(e) {
-						this._model = e
-					}
-					get path() {
-						return this._model.git.path
-					}
-				}
-				t.ApiGit = l;
-				t.ApiImpl = class {
-					constructor(e) {
-						this._model = e,
-						this.git = new l(this._model)
-					}
-					get state() {
-						return this._model.state
-					}
-					get onDidChangeState() {
-						return this._model.onDidChangeState
-					}
-					get onDidOpenRepository() {
-						return o.mapEvent(this._model.onDidOpenRepository, e => new u(e))
-					}
-					get onDidCloseRepository() {
-						return o.mapEvent(this._model.onDidCloseRepository, e => new u(e))
-					}
-					get repositories() {
-						return this._model.repositories.map(e => new u(e))
-					}
-				}
-			}, function (e) {
-				e.exports = {
-					name: "git",
-					displayName: "%displayName%",
-					description: "%description%",
-					publisher: "vscode",
-					license: "MIT",
-					version: "1.0.0",
-					engines: {
-						vscode: "^1.5.0"
-					},
-					aiKey: "AIF-d9b70cd4-b9f9-4d70-929b-a071c400b217",
-					enableProposedApi: !0,
-					categories: ["Other"],
-					activationEvents: ["*"],
-					main: "./out/main",
-					icon: "resources/icons/git.png",
-					scripts: {
-						compile: "gulp compile-extension:git",
-						watch: "gulp watch-extension:git",
-						"update-grammar": "node ./build/update-grammars.js",
-						test: "mocha"
-					},
-					contributes: {
-						commands: [{
-								command: "git.clone",
-								title: "%command.clone%",
-								category: "Git"
-							}, {
-								command: "git.init",
-								title: "%command.init%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/git.svg",
-									dark: "resources/icons/dark/git.svg"
-								}
-							}, {
-								command: "git.openRepository",
-								title: "%command.openRepository%",
-								category: "Git"
-							}, {
-								command: "git.close",
-								title: "%command.close%",
-								category: "Git"
-							}, {
-								command: "git.refresh",
-								title: "%command.refresh%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/refresh.svg",
-									dark: "resources/icons/dark/refresh.svg"
-								}
-							}, {
-								command: "git.openChange",
-								title: "%command.openChange%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/open-change.svg",
-									dark: "resources/icons/dark/open-change.svg"
-								}
-							}, {
-								command: "git.openFile",
-								title: "%command.openFile%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/open-file.svg",
-									dark: "resources/icons/dark/open-file.svg"
-								}
-							}, {
-								command: "git.openFile2",
-								title: "%command.openFile%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/open-file.svg",
-									dark: "resources/icons/dark/open-file.svg"
-								}
-							}, {
-								command: "git.openHEADFile",
-								title: "%command.openHEADFile%",
-								category: "Git"
-							}, {
-								command: "git.stage",
-								title: "%command.stage%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/stage.svg",
-									dark: "resources/icons/dark/stage.svg"
-								}
-							}, {
-								command: "git.stageAll",
-								title: "%command.stageAll%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/stage.svg",
-									dark: "resources/icons/dark/stage.svg"
-								}
-							}, {
-								command: "git.stageAllTracked",
-								title: "%command.stageAllTracked%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/stage.svg",
-									dark: "resources/icons/dark/stage.svg"
-								}
-							}, {
-								command: "git.stageAllUntracked",
-								title: "%command.stageAllUntracked%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/stage.svg",
-									dark: "resources/icons/dark/stage.svg"
-								}
-							}, {
-								command: "git.stageSelectedRanges",
-								title: "%command.stageSelectedRanges%",
-								category: "Git"
-							}, {
-								command: "git.revertSelectedRanges",
-								title: "%command.revertSelectedRanges%",
-								category: "Git"
-							}, {
-								command: "git.stageChange",
-								title: "%command.stageChange%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/stage.svg",
-									dark: "resources/icons/dark/stage.svg"
-								}
-							}, {
-								command: "git.revertChange",
-								title: "%command.revertChange%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/clean.svg",
-									dark: "resources/icons/dark/clean.svg"
-								}
-							}, {
-								command: "git.unstage",
-								title: "%command.unstage%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/unstage.svg",
-									dark: "resources/icons/dark/unstage.svg"
-								}
-							}, {
-								command: "git.unstageAll",
-								title: "%command.unstageAll%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/unstage.svg",
-									dark: "resources/icons/dark/unstage.svg"
-								}
-							}, {
-								command: "git.unstageSelectedRanges",
-								title: "%command.unstageSelectedRanges%",
-								category: "Git"
-							}, {
-								command: "git.clean",
-								title: "%command.clean%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/clean.svg",
-									dark: "resources/icons/dark/clean.svg"
-								}
-							}, {
-								command: "git.cleanAll",
-								title: "%command.cleanAll%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/clean.svg",
-									dark: "resources/icons/dark/clean.svg"
-								}
-							}, {
-								command: "git.cleanAllTracked",
-								title: "%command.cleanAllTracked%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/clean.svg",
-									dark: "resources/icons/dark/clean.svg"
-								}
-							}, {
-								command: "git.cleanAllUntracked",
-								title: "%command.cleanAllUntracked%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/clean.svg",
-									dark: "resources/icons/dark/clean.svg"
-								}
-							}, {
-								command: "git.commit",
-								title: "%command.commit%",
-								category: "Git",
-								icon: {
-									light: "resources/icons/light/check.svg",
-									dark: "resources/icons/dark/check.svg"
-								}
-							}, {
-								command: "git.commitStaged",
-								title: "%command.commitStaged%",
-								category: "Git"
-							}, {
-								command: "git.commitEmpty",
-								title: "%command.commitEmpty%",
-								category: "Git"
-							}, {
-								command: "git.commitStagedSigned",
-								title: "%command.commitStagedSigned%",
-								category: "Git"
-							}, {
-								command: "git.commitStagedAmend",
-								title: "%command.commitStagedAmend%",
-								category: "Git"
-							}, {
-								command: "git.commitAll",
-								title: "%command.commitAll%",
-								category: "Git"
-							}, {
-								command: "git.commitAllSigned",
-								title: "%command.commitAllSigned%",
-								category: "Git"
-							}, {
-								command: "git.commitAllAmend",
-								title: "%command.commitAllAmend%",
-								category: "Git"
-							}, {
-								command: "git.restoreCommitTemplate",
-								title: "%command.restoreCommitTemplate%",
-								category: "Git"
-							}, {
-								command: "git.undoCommit",
-								title: "%command.undoCommit%",
-								category: "Git"
-							}, {
-								command: "git.checkout",
-								title: "%command.checkout%",
-								category: "Git"
-							}, {
-								command: "git.branch",
-								title: "%command.branch%",
-								category: "Git"
-							}, {
-								command: "git.branchFrom",
-								title: "%command.branchFrom%",
-								category: "Git"
-							}, {
-								command: "git.deleteBranch",
-								title: "%command.deleteBranch%",
-								category: "Git"
-							}, {
-								command: "git.renameBranch",
-								title: "%command.renameBranch%",
-								category: "Git"
-							}, {
-								command: "git.merge",
-								title: "%command.merge%",
-								category: "Git"
-							}, {
-								command: "git.createTag",
-								title: "%command.createTag%",
-								category: "Git"
-							}, {
-								command: "git.deleteTag",
-								title: "%command.deleteTag%",
-								category: "Git"
-							}, {
-								command: "git.fetch",
-								title: "%command.fetch%",
-								category: "Git"
-							}, {
-								command: "git.fetchPrune",
-								title: "%command.fetchPrune%",
-								category: "Git"
-							}, {
-								command: "git.fetchAll",
-								title: "%command.fetchAll%",
-								category: "Git"
-							}, {
-								command: "git.pull",
-								title: "%command.pull%",
-								category: "Git"
-							}, {
-								command: "git.pullRebase",
-								title: "%command.pullRebase%",
-								category: "Git"
-							}, {
-								command: "git.pullFrom",
-								title: "%command.pullFrom%",
-								category: "Git"
-							}, {
-								command: "git.push",
-								title: "%command.push%",
-								category: "Git"
-							}, {
-								command: "git.pushForce",
-								title: "%command.pushForce%",
-								category: "Git"
-							}, {
-								command: "git.pushTo",
-								title: "%command.pushTo%",
-								category: "Git"
-							}, {
-								command: "git.pushToForce",
-								title: "%command.pushToForce%",
-								category: "Git"
-							}, {
-								command: "git.pushWithTags",
-								title: "%command.pushFollowTags%",
-								category: "Git"
-							}, {
-								command: "git.pushWithTagsForce",
-								title: "%command.pushFollowTagsForce%",
-								category: "Git"
-							}, {
-								command: "git.addRemote",
-								title: "%command.addRemote%",
-								category: "Git"
-							}, {
-								command: "git.removeRemote",
-								title: "%command.removeRemote%",
-								category: "Git"
-							}, {
-								command: "git.sync",
-								title: "%command.sync%",
-								category: "Git"
-							}, {
-								command: "git.syncRebase",
-								title: "%command.syncRebase%",
-								category: "Git"
-							}, {
-								command: "git.publish",
-								title: "%command.publish%",
-								category: "Git"
-							}, {
-								command: "git.showOutput",
-								title: "%command.showOutput%",
-								category: "Git"
-							}, {
-								command: "git.ignore",
-								title: "%command.ignore%",
-								category: "Git"
-							}, {
-								command: "git.revealInExplorer",
-								title: "%command.revealInExplorer%",
-								category: "Git"
-							}, {
-								command: "git.stashIncludeUntracked",
-								title: "%command.stashIncludeUntracked%",
-								category: "Git"
-							}, {
-								command: "git.stash",
-								title: "%command.stash%",
-								category: "Git"
-							}, {
-								command: "git.stashPop",
-								title: "%command.stashPop%",
-								category: "Git"
-							}, {
-								command: "git.stashPopLatest",
-								title: "%command.stashPopLatest%",
-								category: "Git"
-							}, {
-								command: "git.stashApply",
-								title: "%command.stashApply%",
-								category: "Git"
-							}, {
-								command: "git.stashApplyLatest",
-								title: "%command.stashApplyLatest%",
-								category: "Git"
-							}, {
-								command: "git.stashDrop",
-								title: "%command.stashDrop%",
-								category: "Git"
-							}
-						],
-						menus: {
-							commandPalette: [{
-									command: "git.clone",
-									when: "config.git.enabled"
-								}, {
-									command: "git.init",
-									when: "config.git.enabled"
-								}, {
-									command: "git.openRepository",
-									when: "config.git.enabled"
-								}, {
-									command: "git.close",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.refresh",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.openFile",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.openHEADFile",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.openChange",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stage",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stageAll",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stageAllTracked",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stageAllUntracked",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stageSelectedRanges",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stageChange",
-									when: "false"
-								}, {
-									command: "git.revertSelectedRanges",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.revertChange",
-									when: "false"
-								}, {
-									command: "git.openFile2",
-									when: "false"
-								}, {
-									command: "git.unstage",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.unstageAll",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.unstageSelectedRanges",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.clean",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.cleanAll",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.commit",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.commitStaged",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.commitStagedSigned",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.commitStagedAmend",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.commitAll",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.commitAllSigned",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.commitAllAmend",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.restoreCommitTemplate",
-									when: "false"
-								}, {
-									command: "git.revealInExplorer",
-									when: "false"
-								}, {
-									command: "git.undoCommit",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.checkout",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.branch",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.branchFrom",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.deleteBranch",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.renameBranch",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.pull",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.pullFrom",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.pullRebase",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.pullFrom",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.merge",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.createTag",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.deleteTag",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.fetch",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.fetchPrune",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.fetchAll",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.push",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.pushForce",
-									when: "config.git.enabled && config.git.allowForcePush && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.pushTo",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.pushToForce",
-									when: "config.git.enabled && config.git.allowForcePush && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.pushWithTags",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.pushWithTagsForce",
-									when: "config.git.enabled && config.git.allowForcePush && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.addRemote",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.removeRemote",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.sync",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.syncRebase",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.publish",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.showOutput",
-									when: "config.git.enabled"
-								}, {
-									command: "git.ignore",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stashIncludeUntracked",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stash",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stashPop",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stashPopLatest",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stashApply",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stashApplyLatest",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}, {
-									command: "git.stashDrop",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0"
-								}
-							],
-							"scm/title": [{
-									command: "git.init",
-									group: "navigation",
-									when: "config.git.enabled && !scmProvider && gitOpenRepositoryCount == 0 && workspaceFolderCount != 0"
-								}, {
-									command: "git.commit",
-									group: "navigation",
-									when: "scmProvider == git"
-								}, {
-									command: "git.refresh",
-									group: "navigation",
-									when: "scmProvider == git"
-								}, {
-									command: "git.sync",
-									group: "1_sync",
-									when: "scmProvider == git"
-								}, {
-									command: "git.syncRebase",
-									group: "1_sync",
-									when: "scmProvider == git && gitState == idle"
-								}, {
-									command: "git.pull",
-									group: "1_sync",
-									when: "scmProvider == git"
-								}, {
-									command: "git.pullRebase",
-									group: "1_sync",
-									when: "scmProvider == git"
-								}, {
-									command: "git.pullFrom",
-									group: "1_sync",
-									when: "scmProvider == git"
-								}, {
-									command: "git.push",
-									group: "1_sync",
-									when: "scmProvider == git"
-								}, {
-									command: "git.pushForce",
-									group: "1_sync",
-									when: "scmProvider == git && config.git.allowForcePush"
-								}, {
-									command: "git.pushTo",
-									group: "1_sync",
-									when: "scmProvider == git"
-								}, {
-									command: "git.pushToForce",
-									group: "1_sync",
-									when: "scmProvider == git && config.git.allowForcePush"
-								}, {
-									command: "git.checkout",
-									group: "2_branch",
-									when: "scmProvider == git"
-								}, {
-									command: "git.publish",
-									group: "2_branch",
-									when: "scmProvider == git"
-								}, {
-									command: "git.commitStaged",
-									group: "4_commit",
-									when: "scmProvider == git"
-								}, {
-									command: "git.commitStagedSigned",
-									group: "4_commit",
-									when: "scmProvider == git"
-								}, {
-									command: "git.commitStagedAmend",
-									group: "4_commit",
-									when: "scmProvider == git"
-								}, {
-									command: "git.commitAll",
-									group: "4_commit",
-									when: "scmProvider == git"
-								}, {
-									command: "git.commitAllSigned",
-									group: "4_commit",
-									when: "scmProvider == git"
-								}, {
-									command: "git.commitAllAmend",
-									group: "4_commit",
-									when: "scmProvider == git"
-								}, {
-									command: "git.undoCommit",
-									group: "4_commit",
-									when: "scmProvider == git"
-								}, {
-									command: "git.stageAll",
-									group: "5_stage",
-									when: "scmProvider == git"
-								}, {
-									command: "git.unstageAll",
-									group: "5_stage",
-									when: "scmProvider == git"
-								}, {
-									command: "git.cleanAll",
-									group: "5_stage",
-									when: "scmProvider == git"
-								}, {
-									command: "git.stashIncludeUntracked",
-									group: "6_stash",
-									when: "scmProvider == git"
-								}, {
-									command: "git.stash",
-									group: "6_stash",
-									when: "scmProvider == git"
-								}, {
-									command: "git.stashPop",
-									group: "6_stash",
-									when: "scmProvider == git"
-								}, {
-									command: "git.stashPopLatest",
-									group: "6_stash",
-									when: "scmProvider == git"
-								}, {
-									command: "git.stashApply",
-									group: "6_stash",
-									when: "scmProvider == git"
-								}, {
-									command: "git.stashApplyLatest",
-									group: "6_stash",
-									when: "scmProvider == git"
-								}, {
-									command: "git.stashDrop",
-									group: "6_stash",
-									when: "scmProvider == git"
-								}, {
-									command: "git.showOutput",
-									group: "7_repository",
-									when: "scmProvider == git"
-								}
-							],
-							"scm/sourceControl": [{
-									command: "git.close",
-									group: "navigation",
-									when: "scmProvider == git"
-								}
-							],
-							"scm/resourceGroup/context": [{
-									command: "git.stageAll",
-									when: "scmProvider == git && scmResourceGroup == merge",
-									group: "1_modification"
-								}, {
-									command: "git.stageAll",
-									when: "scmProvider == git && scmResourceGroup == merge",
-									group: "inline"
-								}, {
-									command: "git.unstageAll",
-									when: "scmProvider == git && scmResourceGroup == index",
-									group: "1_modification"
-								}, {
-									command: "git.unstageAll",
-									when: "scmProvider == git && scmResourceGroup == index",
-									group: "inline"
-								}, {
-									command: "git.cleanAll",
-									when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges == mixed",
-									group: "1_modification"
-								}, {
-									command: "git.stageAll",
-									when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges == mixed",
-									group: "1_modification"
-								}, {
-									command: "git.cleanAll",
-									when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges == mixed",
-									group: "inline"
-								}, {
-									command: "git.stageAll",
-									when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges == mixed",
-									group: "inline"
-								}, {
-									command: "git.cleanAllTracked",
-									when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges != mixed",
-									group: "1_modification"
-								}, {
-									command: "git.stageAllTracked",
-									when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges != mixed",
-									group: "1_modification"
-								}, {
-									command: "git.cleanAllTracked",
-									when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges != mixed",
-									group: "inline"
-								}, {
-									command: "git.stageAllTracked",
-									when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges != mixed",
-									group: "inline"
-								}, {
-									command: "git.cleanAllUntracked",
-									when: "scmProvider == git && scmResourceGroup == untracked",
-									group: "1_modification"
-								}, {
-									command: "git.stageAllUntracked",
-									when: "scmProvider == git && scmResourceGroup == untracked",
-									group: "1_modification"
-								}, {
-									command: "git.cleanAllUntracked",
-									when: "scmProvider == git && scmResourceGroup == untracked",
-									group: "inline"
-								}, {
-									command: "git.stageAllUntracked",
-									when: "scmProvider == git && scmResourceGroup == untracked",
-									group: "inline"
-								}
-							],
-							"scm/resourceFolder/context": [{
-									command: "git.stage",
-									when: "scmProvider == git && scmResourceGroup == merge",
-									group: "1_modification"
-								}, {
-									command: "git.stage",
-									when: "scmProvider == git && scmResourceGroup == merge",
-									group: "inline"
-								}, {
-									command: "git.unstage",
-									when: "scmProvider == git && scmResourceGroup == index",
-									group: "1_modification"
-								}, {
-									command: "git.unstage",
-									when: "scmProvider == git && scmResourceGroup == index",
-									group: "inline"
-								}, {
-									command: "git.stage",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "1_modification"
-								}, {
-									command: "git.clean",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "1_modification"
-								}, {
-									command: "git.clean",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "inline"
-								}, {
-									command: "git.stage",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "inline"
-								}, {
-									command: "git.ignore",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "1_modification@3"
-								}
-							],
-							"scm/resourceState/context": [{
-									command: "git.stage",
-									when: "scmProvider == git && scmResourceGroup == merge",
-									group: "1_modification"
-								}, {
-									command: "git.openFile",
-									when: "scmProvider == git && scmResourceGroup == merge",
-									group: "navigation"
-								}, {
-									command: "git.stage",
-									when: "scmProvider == git && scmResourceGroup == merge",
-									group: "inline"
-								}, {
-									command: "git.revealInExplorer",
-									when: "scmProvider == git && scmResourceGroup == merge",
-									group: "2_view"
-								}, {
-									command: "git.openFile2",
-									when: "scmProvider == git && scmResourceGroup == merge && config.git.showInlineOpenFileAction && config.git.openDiffOnClick",
-									group: "inline0"
-								}, {
-									command: "git.openChange",
-									when: "scmProvider == git && scmResourceGroup == merge && config.git.showInlineOpenFileAction && !config.git.openDiffOnClick",
-									group: "inline0"
-								}, {
-									command: "git.openChange",
-									when: "scmProvider == git && scmResourceGroup == index",
-									group: "navigation"
-								}, {
-									command: "git.openFile",
-									when: "scmProvider == git && scmResourceGroup == index",
-									group: "navigation"
-								}, {
-									command: "git.openHEADFile",
-									when: "scmProvider == git && scmResourceGroup == index",
-									group: "navigation"
-								}, {
-									command: "git.unstage",
-									when: "scmProvider == git && scmResourceGroup == index",
-									group: "1_modification"
-								}, {
-									command: "git.unstage",
-									when: "scmProvider == git && scmResourceGroup == index",
-									group: "inline"
-								}, {
-									command: "git.revealInExplorer",
-									when: "scmProvider == git && scmResourceGroup == index",
-									group: "2_view"
-								}, {
-									command: "git.openFile2",
-									when: "scmProvider == git && scmResourceGroup == index && config.git.showInlineOpenFileAction && config.git.openDiffOnClick",
-									group: "inline0"
-								}, {
-									command: "git.openChange",
-									when: "scmProvider == git && scmResourceGroup == index && config.git.showInlineOpenFileAction && !config.git.openDiffOnClick",
-									group: "inline0"
-								}, {
-									command: "git.openChange",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "navigation"
-								}, {
-									command: "git.openHEADFile",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "navigation"
-								}, {
-									command: "git.openFile",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "navigation"
-								}, {
-									command: "git.stage",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "1_modification"
-								}, {
-									command: "git.clean",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "1_modification"
-								}, {
-									command: "git.clean",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "inline"
-								}, {
-									command: "git.stage",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "inline"
-								}, {
-									command: "git.openFile2",
-									when: "scmProvider == git && scmResourceGroup == workingTree && config.git.showInlineOpenFileAction && config.git.openDiffOnClick",
-									group: "inline0"
-								}, {
-									command: "git.openChange",
-									when: "scmProvider == git && scmResourceGroup == workingTree && config.git.showInlineOpenFileAction && !config.git.openDiffOnClick",
-									group: "inline0"
-								}, {
-									command: "git.ignore",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "1_modification@3"
-								}, {
-									command: "git.revealInExplorer",
-									when: "scmProvider == git && scmResourceGroup == workingTree",
-									group: "2_view"
-								}, {
-									command: "git.openChange",
-									when: "scmProvider == git && scmResourceGroup == untracked",
-									group: "navigation"
-								}, {
-									command: "git.openHEADFile",
-									when: "scmProvider == git && scmResourceGroup == untracked",
-									group: "navigation"
-								}, {
-									command: "git.openFile",
-									when: "scmProvider == git && scmResourceGroup == untracked",
-									group: "navigation"
-								}, {
-									command: "git.stage",
-									when: "scmProvider == git && scmResourceGroup == untracked",
-									group: "1_modification"
-								}, {
-									command: "git.clean",
-									when: "scmProvider == git && scmResourceGroup == untracked && !gitFreshRepository",
-									group: "1_modification"
-								}, {
-									command: "git.clean",
-									when: "scmProvider == git && scmResourceGroup == untracked && !gitFreshRepository",
-									group: "inline"
-								}, {
-									command: "git.stage",
-									when: "scmProvider == git && scmResourceGroup == untracked",
-									group: "inline"
-								}, {
-									command: "git.openFile2",
-									when: "scmProvider == git && scmResourceGroup == untracked && config.git.showInlineOpenFileAction && config.git.openDiffOnClick",
-									group: "inline0"
-								}, {
-									command: "git.openChange",
-									when: "scmProvider == git && scmResourceGroup == untracked && config.git.showInlineOpenFileAction && !config.git.openDiffOnClick",
-									group: "inline0"
-								}, {
-									command: "git.ignore",
-									when: "scmProvider == git && scmResourceGroup == untracked",
-									group: "1_modification@3"
-								}
-							],
-							"editor/title": [{
-									command: "git.openFile",
-									group: "navigation",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
-								}, {
-									command: "git.openChange",
-									group: "navigation",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0 && !isInDiffEditor && resourceScheme == file"
-								}, {
-									command: "git.stageSelectedRanges",
-									group: "2_git@1",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
-								}, {
-									command: "git.unstageSelectedRanges",
-									group: "2_git@2",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
-								}, {
-									command: "git.revertSelectedRanges",
-									group: "2_git@3",
-									when: "config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
-								}
-							],
-							"editor/context": [{
-									command: "git.stageSelectedRanges",
-									group: "2_git@1",
-									when: "isInDiffRightEditor && config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
-								}, {
-									command: "git.unstageSelectedRanges",
-									group: "2_git@2",
-									when: "isInDiffRightEditor && config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
-								}, {
-									command: "git.revertSelectedRanges",
-									group: "2_git@3",
-									when: "isInDiffRightEditor && config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
-								}
-							],
-							"scm/change/title": [{
-									command: "git.stageChange",
-									when: "originalResourceScheme == git"
-								}, {
-									command: "git.revertChange",
-									when: "originalResourceScheme == git"
-								}
-							]
-						},
-						configuration: {
-							title: "Git",
-							properties: {
-								"git.enabled": {
-									type: "boolean",
-									scope: "resource",
-									description: "%config.enabled%",
-								default:
-									!0
-								},
-								"git.path": {
-									type: ["string", "null"],
-									markdownDescription: "%config.path%",
-								default:
-									null,
-									scope: "machine"
-								},
-								"git.autoRepositoryDetection": {
-									type: ["boolean", "string"],
-									enum: [!0, !1, "subFolders", "openEditors"],
-									enumDescriptions: ["%config.autoRepositoryDetection.true%", "%config.autoRepositoryDetection.false%", "%config.autoRepositoryDetection.subFolders%", "%config.autoRepositoryDetection.openEditors%"],
-									description: "%config.autoRepositoryDetection%",
-								default:
-									!0
-								},
-								"git.autorefresh": {
-									type: "boolean",
-									description: "%config.autorefresh%",
-								default:
-									!0
-								},
-								"git.autofetch": {
-									type: "boolean",
-									scope: "resource",
-									description: "%config.autofetch%",
-								default:
-									!1,
-									tags: ["usesOnlineServices"]
-								},
-								"git.autofetchPeriod": {
-									type: "number",
-									scope: "resource",
-									description: "%config.autofetchPeriod%",
-								default:
-									180
-								},
-								"git.branchValidationRegex": {
-									type: "string",
-									description: "%config.branchValidationRegex%",
-								default:
-									""
-								},
-								"git.branchWhitespaceChar": {
-									type: "string",
-									description: "%config.branchWhitespaceChar%",
-								default:
-									"-"
-								},
-								"git.confirmSync": {
-									type: "boolean",
-									description: "%config.confirmSync%",
-								default:
-									!0
-								},
-								"git.countBadge": {
-									type: "string",
-									enum: ["all", "tracked", "off"],
-									enumDescriptions: ["%config.countBadge.all%", "%config.countBadge.tracked%", "%config.countBadge.off%"],
-									description: "%config.countBadge%",
-								default:
-									"all",
-									scope: "resource"
-								},
-								"git.checkoutType": {
-									type: "string",
-									enum: ["all", "local", "tags", "remote"],
-									enumDescriptions: ["%config.checkoutType.all%", "%config.checkoutType.local%", "%config.checkoutType.tags%", "%config.checkoutType.remote%"],
-									markdownDescription: "%config.checkoutType%",
-								default:
-									"all"
-								},
-								"git.ignoreLegacyWarning": {
-									type: "boolean",
-									description: "%config.ignoreLegacyWarning%",
-								default:
-									!1
-								},
-								"git.ignoreMissingGitWarning": {
-									type: "boolean",
-									description: "%config.ignoreMissingGitWarning%",
-								default:
-									!1
-								},
-								"git.ignoreLimitWarning": {
-									type: "boolean",
-									description: "%config.ignoreLimitWarning%",
-								default:
-									!1
-								},
-								"git.defaultCloneDirectory": {
-									type: "string",
-								default:
-									null,
-									description: "%config.defaultCloneDirectory%"
-								},
-								"git.enableSmartCommit": {
-									type: "boolean",
-									scope: "resource",
-									description: "%config.enableSmartCommit%",
-								default:
-									!1
-								},
-								"git.smartCommitChanges": {
-									type: "string",
-									enum: ["all", "tracked"],
-									enumDescriptions: ["%config.smartCommitChanges.all%", "%config.smartCommitChanges.tracked%"],
-									scope: "resource",
-									description: "%config.smartCommitChanges%",
-								default:
-									"all"
-								},
-								"git.suggestSmartCommit": {
-									type: "boolean",
-									scope: "resource",
-									description: "%config.suggestSmartCommit%",
-								default:
-									!0
-								},
-								"git.enableCommitSigning": {
-									type: "boolean",
-									scope: "resource",
-									description: "%config.enableCommitSigning%",
-								default:
-									!1
-								},
-								"git.confirmEmptyCommits": {
-									type: "boolean",
-									scope: "resource",
-									description: "%config.confirmEmptyCommits%",
-								default:
-									!0
-								},
-								"git.decorations.enabled": {
-									type: "boolean",
-								default:
-									!0,
-									description: "%config.decorations.enabled%"
-								},
-								"git.enableStatusBarSync": {
-									type: "boolean",
-								default:
-									!0,
-									description: "%config.enableStatusBarSync%",
-									scope: "resource"
-								},
-								"git.promptToSaveFilesBeforeCommit": {
-									type: "string",
-									enum: ["always", "staged", "never"],
-									enumDescriptions: ["%config.promptToSaveFilesBeforeCommit.always%", "%config.promptToSaveFilesBeforeCommit.staged%", "%config.promptToSaveFilesBeforeCommit.never%"],
-									scope: "resource",
-								default:
-									"always",
-									description: "%config.promptToSaveFilesBeforeCommit%"
-								},
-								"git.postCommitCommand": {
-									type: "string",
-									enum: ["none", "push", "sync"],
-									enumDescriptions: ["%config.postCommitCommand.none%", "%config.postCommitCommand.push%", "%config.postCommitCommand.sync%"],
-									markdownDescription: "%config.postCommitCommand%",
-									scope: "resource",
-								default:
-									"none"
-								},
-								"git.showInlineOpenFileAction": {
-									type: "boolean",
-								default:
-									!0,
-									description: "%config.showInlineOpenFileAction%"
-								},
-								"git.showPushSuccessNotification": {
-									type: "boolean",
-									description: "%config.showPushSuccessNotification%",
-								default:
-									!1
-								},
-								"git.inputValidation": {
-									type: "string",
-									enum: ["always", "warn", "off"],
-								default:
-									"warn",
-									description: "%config.inputValidation%"
-								},
-								"git.inputValidationLength": {
-									type: "number",
-								default:
-									72,
-									description: "%config.inputValidationLength%"
-								},
-								"git.inputValidationSubjectLength": {
-									type: ["number", "null"],
-								default:
-									50,
-									description: "%config.inputValidationSubjectLength%"
-								},
-								"git.detectSubmodules": {
-									type: "boolean",
-									scope: "resource",
-								default:
-									!0,
-									description: "%config.detectSubmodules%"
-								},
-								"git.detectSubmodulesLimit": {
-									type: "number",
-									scope: "resource",
-								default:
-									10,
-									description: "%config.detectSubmodulesLimit%"
-								},
-								"git.alwaysShowStagedChangesResourceGroup": {
-									type: "boolean",
-									scope: "resource",
-								default:
-									!1,
-									description: "%config.alwaysShowStagedChangesResourceGroup%"
-								},
-								"git.alwaysSignOff": {
-									type: "boolean",
-									scope: "resource",
-								default:
-									!1,
-									description: "%config.alwaysSignOff%"
-								},
-								"git.ignoredRepositories": {
-									type: "array",
-									items: {
-										type: "string"
-									},
-								default:
-									[],
-									scope: "window",
-									description: "%config.ignoredRepositories%"
-								},
-								"git.scanRepositories": {
-									type: "array",
-									items: {
-										type: "string"
-									},
-								default:
-									[],
-									scope: "resource",
-									description: "%config.scanRepositories%"
-								},
-								"git.showProgress": {
-									type: "boolean",
-									description: "%config.showProgress%",
-								default:
-									!0,
-									scope: "resource"
-								},
-								"git.rebaseWhenSync": {
-									type: "boolean",
-									scope: "resource",
-								default:
-									!1,
-									description: "%config.rebaseWhenSync%"
-								},
-								"git.fetchOnPull": {
-									type: "boolean",
-									scope: "resource",
-								default:
-									!1,
-									description: "%config.fetchOnPull%"
-								},
-								"git.pullTags": {
-									type: "boolean",
-									scope: "resource",
-								default:
-									!0,
-									description: "%config.pullTags%"
-								},
-								"git.autoStash": {
-									type: "boolean",
-									scope: "resource",
-								default:
-									!1,
-									description: "%config.autoStash%"
-								},
-								"git.allowForcePush": {
-									type: "boolean",
-								default:
-									!1,
-									description: "%config.allowForcePush%"
-								},
-								"git.useForcePushWithLease": {
-									type: "boolean",
-								default:
-									!0,
-									description: "%config.useForcePushWithLease%"
-								},
-								"git.confirmForcePush": {
-									type: "boolean",
-								default:
-									!0,
-									description: "%config.confirmForcePush%"
-								},
-								"git.openDiffOnClick": {
-									type: "boolean",
-									scope: "resource",
-								default:
-									!0,
-									description: "%config.openDiffOnClick%"
-								},
-								"git.supportCancellation": {
-									type: "boolean",
-									scope: "resource",
-								default:
-									!1,
-									description: "%config.supportCancellation%"
-								},
-								"git.branchSortOrder": {
-									type: "string",
-									enum: ["committerdate", "alphabetically"],
-								default:
-									"committerdate",
-									description: "%config.branchSortOrder%"
-								},
-								"git.untrackedChanges": {
-									type: "string",
-									enum: ["mixed", "separate", "hidden"],
-									enumDescriptions: ["%config.untrackedChanges.mixed%", "%config.untrackedChanges.separate%", "%config.untrackedChanges.hidden%"],
-								default:
-									"mixed",
-									description: "%config.untrackedChanges%",
-									scope: "resource"
-								},
-								"git.restoreCommitTemplateComments": {
-									type: "boolean",
-									scope: "resource",
-								default:
-									!0,
-									description: "%config.restoreCommitTemplateComments%"
-								}
-							}
-						},
-						colors: [{
-								id: "gitDecoration.addedResourceForeground",
-								description: "%colors.added%",
-								defaults: {
-									light: "#587c0c",
-									dark: "#81b88b",
-									highContrast: "#1b5225"
-								}
-							}, {
-								id: "gitDecoration.modifiedResourceForeground",
-								description: "%colors.modified%",
-								defaults: {
-									light: "#895503",
-									dark: "#E2C08D",
-									highContrast: "#E2C08D"
-								}
-							}, {
-								id: "gitDecoration.deletedResourceForeground",
-								description: "%colors.deleted%",
-								defaults: {
-									light: "#ad0707",
-									dark: "#c74e39",
-									highContrast: "#c74e39"
-								}
-							}, {
-								id: "gitDecoration.untrackedResourceForeground",
-								description: "%colors.untracked%",
-								defaults: {
-									light: "#007100",
-									dark: "#73C991",
-									highContrast: "#73C991"
-								}
-							}, {
-								id: "gitDecoration.ignoredResourceForeground",
-								description: "%colors.ignored%",
-								defaults: {
-									light: "#8E8E90",
-									dark: "#8C8C8C",
-									highContrast: "#A7A8A9"
-								}
-							}, {
-								id: "gitDecoration.conflictingResourceForeground",
-								description: "%colors.conflict%",
-								defaults: {
-									light: "#6c6cc4",
-									dark: "#6c6cc4",
-									highContrast: "#6c6cc4"
-								}
-							}, {
-								id: "gitDecoration.submoduleResourceForeground",
-								description: "%colors.submodule%",
-								defaults: {
-									light: "#1258a7",
-									dark: "#8db9e2",
-									highContrast: "#8db9e2"
-								}
-							}
-						],
-						languages: [{
-								id: "git-commit",
-								aliases: ["Git Commit Message", "git-commit"],
-								filenames: ["COMMIT_EDITMSG", "MERGE_MSG"],
-								configuration: "./languages/git-commit.language-configuration.json"
-							}, {
-								id: "git-rebase",
-								aliases: ["Git Rebase Message", "git-rebase"],
-								filenames: ["git-rebase-todo"],
-								configuration: "./languages/git-rebase.language-configuration.json"
-							}, {
-								id: "diff",
-								aliases: ["Diff", "diff"],
-								extensions: [".patch", ".diff", ".rej"],
-								configuration: "./languages/diff.language-configuration.json"
-							}, {
-								id: "ignore",
-								aliases: ["Ignore", "ignore"],
-								filenames: [".gitignore"],
-								configuration: "./languages/ignore.language-configuration.json"
-							}
-						],
-						grammars: [{
-								language: "git-commit",
-								scopeName: "text.git-commit",
-								path: "./syntaxes/git-commit.tmLanguage.json"
-							}, {
-								language: "git-rebase",
-								scopeName: "text.git-rebase",
-								path: "./syntaxes/git-rebase.tmLanguage.json"
-							}, {
-								language: "diff",
-								scopeName: "source.diff",
-								path: "./syntaxes/diff.tmLanguage.json"
-							}, {
-								language: "ignore",
-								scopeName: "source.ignore",
-								path: "./syntaxes/ignore.tmLanguage.json"
-							}
-						],
-						configurationDefaults: {
-							"[git-commit]": {
-								"editor.rulers": [72]
-							}
-						}
-					},
-					dependencies: {
-						byline: "^5.0.0",
-						"file-type": "^7.2.0",
-						"iconv-lite": "^0.4.24",
-						jschardet: "^1.6.0",
-						"vscode-extension-telemetry": "0.1.1",
-						"vscode-nls": "^4.0.0",
-						"vscode-uri": "^2.0.0",
-						which: "^1.3.0"
-					},
-					devDependencies: {
-						"@types/byline": "4.2.31",
-						"@types/file-type": "^5.2.1",
-						"@types/mocha": "2.2.43",
-						"@types/node": "^12.11.7",
-						"@types/which": "^1.0.28",
-						mocha: "^3.2.0"
-					}
+				return function (t, r) {
+					function n() {
+						this.constructor = t
+					}
+					e(t, r),
+					t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
 				}
 			}
-		]));
+			(),
+			o = function (e) {
+				function t() {
+					var t = e.call(this) || this;
+					return t.ver = 2,
+					t.properties = {},
+					t.measurements = {},
+					t
+				}
+				return n(t, e),
+				t
+			}
+			(r(9));
+			e.exports = o
+		}, function (e, t, r) {
+			"use strict";
+			var n = function () {
+				return function () {
+					this.applicationVersion = "ai.application.ver",
+					this.deviceId = "ai.device.id",
+					this.deviceLocale = "ai.device.locale",
+					this.deviceModel = "ai.device.model",
+					this.deviceOEMName = "ai.device.oemName",
+					this.deviceOSVersion = "ai.device.osVersion",
+					this.deviceType = "ai.device.type",
+					this.locationIp = "ai.location.ip",
+					this.operationId = "ai.operation.id",
+					this.operationName = "ai.operation.name",
+					this.operationParentId = "ai.operation.parentId",
+					this.operationSyntheticSource = "ai.operation.syntheticSource",
+					this.operationCorrelationVector = "ai.operation.correlationVector",
+					this.sessionId = "ai.session.id",
+					this.sessionIsFirst = "ai.session.isFirst",
+					this.userAccountId = "ai.user.accountId",
+					this.userId = "ai.user.id",
+					this.userAuthUserId = "ai.user.authUserId",
+					this.cloudRole = "ai.cloud.role",
+					this.cloudRoleInstance = "ai.cloud.roleInstance",
+					this.internalSdkVersion = "ai.internal.sdkVersion",
+					this.internalAgentVersion = "ai.internal.agentVersion",
+					this.internalNodeName = "ai.internal.nodeName"
+				}
+			}
+			();
+			e.exports = n
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__extends || function () {
+				var e = Object.setPrototypeOf || {
+					__proto__: []
+				}
+				instanceof Array && function (e, t) {
+					e.__proto__ = t
+				}
+				 || function (e, t) {
+					for (var r in t)
+						t.hasOwnProperty(r) && (e[r] = t[r])
+				};
+				return function (t, r) {
+					function n() {
+						this.constructor = t
+					}
+					e(t, r),
+					t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
+				}
+			}
+			(),
+			o = function (e) {
+				function t() {
+					return e.call(this) || this
+				}
+				return n(t, e),
+				t
+			}
+			(r(39));
+			e.exports = o
+		}, function (e, t, r) {
+			"use strict";
+			var n = r(40),
+			o = function () {
+				return function () {
+					this.kind = n.Measurement
+				}
+			}
+			();
+			e.exports = o
+		}, function (e, t, r) {
+			"use strict";
+			var n = function () {
+				return function () {
+					this.ver = 1,
+					this.sampleRate = 100,
+					this.tags = {}
+				}
+			}
+			();
+			e.exports = n
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__extends || function () {
+				var e = Object.setPrototypeOf || {
+					__proto__: []
+				}
+				instanceof Array && function (e, t) {
+					e.__proto__ = t
+				}
+				 || function (e, t) {
+					for (var r in t)
+						t.hasOwnProperty(r) && (e[r] = t[r])
+				};
+				return function (t, r) {
+					function n() {
+						this.constructor = t
+					}
+					e(t, r),
+					t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
+				}
+			}
+			(),
+			o = function (e) {
+				function t() {
+					var t = e.call(this) || this;
+					return t.ver = 2,
+					t.exceptions = [],
+					t.properties = {},
+					t.measurements = {},
+					t
+				}
+				return n(t, e),
+				t
+			}
+			(r(9));
+			e.exports = o
+		}, function (e, t, r) {
+			"use strict";
+			var n = function () {
+				return function () {
+					this.hasFullStack = !0,
+					this.parsedStack = []
+				}
+			}
+			();
+			e.exports = n
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__extends || function () {
+				var e = Object.setPrototypeOf || {
+					__proto__: []
+				}
+				instanceof Array && function (e, t) {
+					e.__proto__ = t
+				}
+				 || function (e, t) {
+					for (var r in t)
+						t.hasOwnProperty(r) && (e[r] = t[r])
+				};
+				return function (t, r) {
+					function n() {
+						this.constructor = t
+					}
+					e(t, r),
+					t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
+				}
+			}
+			(),
+			o = function (e) {
+				function t() {
+					var t = e.call(this) || this;
+					return t.ver = 2,
+					t.properties = {},
+					t
+				}
+				return n(t, e),
+				t
+			}
+			(r(9));
+			e.exports = o
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__extends || function () {
+				var e = Object.setPrototypeOf || {
+					__proto__: []
+				}
+				instanceof Array && function (e, t) {
+					e.__proto__ = t
+				}
+				 || function (e, t) {
+					for (var r in t)
+						t.hasOwnProperty(r) && (e[r] = t[r])
+				};
+				return function (t, r) {
+					function n() {
+						this.constructor = t
+					}
+					e(t, r),
+					t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
+				}
+			}
+			(),
+			o = function (e) {
+				function t() {
+					var t = e.call(this) || this;
+					return t.ver = 2,
+					t.metrics = [],
+					t.properties = {},
+					t
+				}
+				return n(t, e),
+				t
+			}
+			(r(9));
+			e.exports = o
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__extends || function () {
+				var e = Object.setPrototypeOf || {
+					__proto__: []
+				}
+				instanceof Array && function (e, t) {
+					e.__proto__ = t
+				}
+				 || function (e, t) {
+					for (var r in t)
+						t.hasOwnProperty(r) && (e[r] = t[r])
+				};
+				return function (t, r) {
+					function n() {
+						this.constructor = t
+					}
+					e(t, r),
+					t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
+				}
+			}
+			(),
+			o = function (e) {
+				function t() {
+					var t = e.call(this) || this;
+					return t.ver = 2,
+					t.properties = {},
+					t.measurements = {},
+					t
+				}
+				return n(t, e),
+				t
+			}
+			(r(41));
+			e.exports = o
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__extends || function () {
+				var e = Object.setPrototypeOf || {
+					__proto__: []
+				}
+				instanceof Array && function (e, t) {
+					e.__proto__ = t
+				}
+				 || function (e, t) {
+					for (var r in t)
+						t.hasOwnProperty(r) && (e[r] = t[r])
+				};
+				return function (t, r) {
+					function n() {
+						this.constructor = t
+					}
+					e(t, r),
+					t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
+				}
+			}
+			(),
+			o = function (e) {
+				function t() {
+					var t = e.call(this) || this;
+					return t.ver = 2,
+					t.success = !0,
+					t.properties = {},
+					t.measurements = {},
+					t
+				}
+				return n(t, e),
+				t
+			}
+			(r(9));
+			e.exports = o
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__extends || function () {
+				var e = Object.setPrototypeOf || {
+					__proto__: []
+				}
+				instanceof Array && function (e, t) {
+					e.__proto__ = t
+				}
+				 || function (e, t) {
+					for (var r in t)
+						t.hasOwnProperty(r) && (e[r] = t[r])
+				};
+				return function (t, r) {
+					function n() {
+						this.constructor = t
+					}
+					e(t, r),
+					t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
+				}
+			}
+			(),
+			o = function (e) {
+				function t() {
+					var t = e.call(this) || this;
+					return t.ver = 2,
+					t.properties = {},
+					t.measurements = {},
+					t
+				}
+				return n(t, e),
+				t
+			}
+			(r(9));
+			e.exports = o
+		}, function (e, t, r) {
+			"use strict";
+			var n;
+			!function (e) {
+				e[e.Verbose = 0] = "Verbose",
+				e[e.Information = 1] = "Information",
+				e[e.Warning = 2] = "Warning",
+				e[e.Error = 3] = "Error",
+				e[e.Critical = 4] = "Critical"
+			}
+			(n || (n = {})),
+			e.exports = n
+		}, function (e, t, r) {
+			"use strict";
+			var n = function () {
+				return function () {}
+			}
+			();
+			e.exports = n
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			}),
+			function (e) {
+				for (var r in e)
+					t.hasOwnProperty(r) || (t[r] = e[r])
+			}
+			(r(152))
+		}, function (e, t, r) {
+			"use strict";
+			var n;
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			}),
+			t.telemetryTypeToBaseType = function (e) {
+				switch (e) {
+				case n.Event:
+					return "EventData";
+				case n.Exception:
+					return "ExceptionData";
+				case n.Trace:
+					return "MessageData";
+				case n.Metric:
+					return "MetricData";
+				case n.Request:
+					return "RequestData";
+				case n.Dependency:
+					return "RemoteDependencyData"
+				}
+			},
+			t.baseTypeToTelemetryType = function (e) {
+				switch (e) {
+				case "EventData":
+					return n.Event;
+				case "ExceptionData":
+					return n.Exception;
+				case "MessageData":
+					return n.Trace;
+				case "MetricData":
+					return n.Metric;
+				case "RequestData":
+					return n.Request;
+				case "RemoteDependencyData":
+					return n.Dependency
+				}
+			},
+			function (e) {
+				e[e.Event = 0] = "Event",
+				e[e.Exception = 1] = "Exception",
+				e[e.Trace = 2] = "Trace",
+				e[e.Metric = 3] = "Metric",
+				e[e.Request = 4] = "Request",
+				e[e.Dependency = 5] = "Dependency"
+			}
+			(n = t.TelemetryType || (t.TelemetryType = {}))
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(7),
+			o = r(3),
+			i = [],
+			s = {
+				10: n.SeverityLevel.Verbose,
+				20: n.SeverityLevel.Verbose,
+				30: n.SeverityLevel.Information,
+				40: n.SeverityLevel.Warning,
+				50: n.SeverityLevel.Error,
+				60: n.SeverityLevel.Critical
+			},
+			a = function (e) {
+				i.forEach(function (t) {
+					var r = s[e.data.level];
+					t.trackTrace({
+						message: e.data.result,
+						severity: r
+					})
+				})
+			};
+			t.enable = function (e, t) {
+				e ? (0 === i.length && o.channel.subscribe("bunyan", a), i.push(t)) : 0 === (i = i.filter(function (e) {
+						return e != t
+					})).length && o.channel.unsubscribe("bunyan", a)
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(7),
+			o = r(3),
+			i = [],
+			s = {
+				syslog: function (e) {
+					var t = {
+						emerg: n.SeverityLevel.Critical,
+						alert: n.SeverityLevel.Critical,
+						crit: n.SeverityLevel.Critical,
+						error: n.SeverityLevel.Error,
+						warning: n.SeverityLevel.Warning,
+						notice: n.SeverityLevel.Information,
+						info: n.SeverityLevel.Information,
+						debug: n.SeverityLevel.Verbose
+					};
+					return void 0 === t[e] ? n.SeverityLevel.Information : t[e]
+				},
+				npm: function (e) {
+					var t = {
+						error: n.SeverityLevel.Error,
+						warn: n.SeverityLevel.Warning,
+						info: n.SeverityLevel.Information,
+						verbose: n.SeverityLevel.Verbose,
+						debug: n.SeverityLevel.Verbose,
+						silly: n.SeverityLevel.Verbose
+					};
+					return void 0 === t[e] ? n.SeverityLevel.Information : t[e]
+				},
+				unknown: function (e) {
+					return n.SeverityLevel.Information
+				}
+			},
+			a = function (e) {
+				i.forEach(function (t) {
+					var r = s[e.data.levelKind](e.data.level);
+					t.trackTrace({
+						message: e.data.message,
+						severity: r,
+						properties: e.data.meta
+					})
+				})
+			};
+			t.enable = function (e, t) {
+				e ? (0 === i.length && o.channel.subscribe("winston", a), i.push(t)) : 0 === (i = i.filter(function (e) {
+						return e != t
+					})).length && o.channel.unsubscribe("winston", a)
+			}
+		}, function (e, t, r) {
+			"use strict";
+			var n = function () {
+				function e(t) {
+					if (e.INSTANCE)
+						throw new Error("Exception tracking should be configured from the applicationInsights object");
+					e.INSTANCE = this,
+					this._client = t
+				}
+				return Object.defineProperty(e, "UNCAUGHT_EXCEPTION_HANDLER_NAME", {
+					get: function () {
+						return "uncaughtException"
+					},
+					enumerable: !0,
+					configurable: !0
+				}),
+				Object.defineProperty(e, "UNHANDLED_REJECTION_HANDLER_NAME", {
+					get: function () {
+						return "unhandledRejection"
+					},
+					enumerable: !0,
+					configurable: !0
+				}),
+				e.prototype.isInitialized = function () {
+					return this._isInitialized
+				},
+				e.prototype.enable = function (t) {
+					var r = this;
+					if (t) {
+						this._isInitialized = !0;
+						if (!this._exceptionListenerHandle) {
+							var n = function (e, t) {
+								if (r._client.trackException({
+										exception: t
+									}), r._client.flush({
+										isAppCrashing: !0
+									}), e)
+									throw t
+							};
+							this._exceptionListenerHandle = n.bind(this, !0),
+							this._rejectionListenerHandle = n.bind(this, !1),
+							process.on(e.UNCAUGHT_EXCEPTION_HANDLER_NAME, this._exceptionListenerHandle),
+							process.on(e.UNHANDLED_REJECTION_HANDLER_NAME, this._rejectionListenerHandle)
+						}
+					} else
+						this._exceptionListenerHandle && (process.removeListener(e.UNCAUGHT_EXCEPTION_HANDLER_NAME, this._exceptionListenerHandle), process.removeListener(e.UNHANDLED_REJECTION_HANDLER_NAME, this._rejectionListenerHandle), this._exceptionListenerHandle = void 0, this._rejectionListenerHandle = void 0, delete this._exceptionListenerHandle, delete this._rejectionListenerHandle)
+				},
+				e.prototype.dispose = function () {
+					e.INSTANCE = null,
+					this.enable(!1),
+					this._isInitialized = !1
+				},
+				e.INSTANCE = null,
+				e
+			}
+			();
+			e.exports = n
+		}, function (e, t) {
+			e.exports = require("constants")
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__extends || function () {
+				var e = Object.setPrototypeOf || {
+					__proto__: []
+				}
+				instanceof Array && function (e, t) {
+					e.__proto__ = t
+				}
+				 || function (e, t) {
+					for (var r in t)
+						t.hasOwnProperty(r) && (e[r] = t[r])
+				};
+				return function (t, r) {
+					function n() {
+						this.constructor = t
+					}
+					e(t, r),
+					t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
+				}
+			}
+			(),
+			o = r(20),
+			i = r(7),
+			s = r(10),
+			a = r(17),
+			c = r(43),
+			u = r(27),
+			l = function (e) {
+				function t(r, n) {
+					var o = e.call(this) || this;
+					return n && n.method && r && (o.method = n.method, o.url = t._getUrlFromRequestOptions(r, n), o.startTime = +new Date),
+					o
+				}
+				return n(t, e),
+				t.prototype.onError = function (e) {
+					this._setStatus(void 0, e)
+				},
+				t.prototype.onResponse = function (e) {
+					this._setStatus(e.statusCode, void 0),
+					this.correlationId = s.getCorrelationContextTarget(e, a.requestContextTargetKey)
+				},
+				t.prototype.getDependencyTelemetry = function (e, t) {
+					var r = o.parse(this.url);
+					r.search = void 0,
+					r.hash = void 0;
+					var n = this.method.toUpperCase() + " " + r.pathname,
+					s = i.RemoteDependencyDataConstants.TYPE_HTTP,
+					a = r.hostname;
+					this.correlationId ? (s = i.RemoteDependencyDataConstants.TYPE_AI, this.correlationId !== u.correlationIdPrefix && (a = r.hostname + " | " + this.correlationId)) : s = i.RemoteDependencyDataConstants.TYPE_HTTP;
+					var c = {
+						id: t,
+						name: n,
+						data: this.url,
+						duration: this.duration,
+						success: this._isSuccess(),
+						resultCode: this.statusCode ? this.statusCode.toString() : null,
+						properties: this.properties || {},
+						dependencyTypeName: s,
+						target: a
+					};
+					if (e) {
+						for (var l in e)
+							c[l] || (c[l] = e[l]);
+						if (e.properties)
+							for (var l in e.properties)
+								c.properties[l] = e.properties[l]
+					}
+					return c
+				},
+				t._getUrlFromRequestOptions = function (e, t) {
+					if ("string" == typeof e)
+						e = o.parse(e);
+					else {
+						var r = e;
+						e = {},
+						r && Object.keys(r).forEach(function (t) {
+							e[t] = r[t]
+						})
+					}
+					if (e.path) {
+						var n = o.parse(e.path);
+						e.pathname = n.pathname,
+						e.search = n.search
+					}
+					e.host && e.port && (!o.parse("http://" + e.host).port && e.port && (e.hostname = e.host, delete e.host));
+					return e.protocol = e.protocol || t.agent && t.agent.protocol || void 0,
+					e.hostname = e.hostname || "localhost",
+					o.format(e)
+				},
+				t
+			}
+			(c);
+			e.exports = l
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3),
+			o = [];
+			t.subscriber = function (e) {
+				o.forEach(function (t) {
+					var r = e.data.startedData && e.data.startedData.databaseName || "Unknown database";
+					t.trackDependency({
+						target: r,
+						data: e.data.event.commandName,
+						name: e.data.event.commandName,
+						duration: e.data.event.duration,
+						success: e.data.succeeded,
+						resultCode: e.data.succeeded ? "0" : "1",
+						dependencyTypeName: "mongodb"
+					})
+				})
+			},
+			t.enable = function (e, r) {
+				e ? (0 === o.length && n.channel.subscribe("mongodb", t.subscriber), o.push(r)) : 0 === (o = o.filter(function (e) {
+						return e != r
+					})).length && n.channel.unsubscribe("mongodb", t.subscriber)
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3),
+			o = [];
+			t.subscriber = function (e) {
+				o.forEach(function (t) {
+					var r = e.data.query || {},
+					n = r.sql || "Unknown query",
+					o = !e.data.err,
+					i = (r._connection || {}).config || {},
+					s = i.socketPath ? i.socketPath : (i.host || "localhost") + ":" + i.port;
+					t.trackDependency({
+						target: s,
+						data: n,
+						name: n,
+						duration: e.data.duration,
+						success: o,
+						resultCode: o ? "0" : "1",
+						dependencyTypeName: "mysql"
+					})
+				})
+			},
+			t.enable = function (e, r) {
+				e ? (0 === o.length && n.channel.subscribe("mysql", t.subscriber), o.push(r)) : 0 === (o = o.filter(function (e) {
+						return e != r
+					})).length && n.channel.unsubscribe("mysql", t.subscriber)
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3),
+			o = [];
+			t.subscriber = function (e) {
+				o.forEach(function (t) {
+					"info" !== e.data.commandObj.command && t.trackDependency({
+						target: e.data.address,
+						name: e.data.commandObj.command,
+						data: e.data.commandObj.command,
+						duration: e.data.duration,
+						success: !e.data.err,
+						resultCode: e.data.err ? "1" : "0",
+						dependencyTypeName: "redis"
+					})
+				})
+			},
+			t.enable = function (e, r) {
+				e ? (0 === o.length && n.channel.subscribe("redis", t.subscriber), o.push(r)) : 0 === (o = o.filter(function (e) {
+						return e != r
+					})).length && n.channel.unsubscribe("redis", t.subscriber)
+			}
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(3),
+			o = [];
+			t.subscriber = function (e) {
+				o.forEach(function (t) {
+					var r = e.data.query,
+					n = r.preparable && r.preparable.text || r.plan || r.text || "unknown query",
+					o = !e.data.error,
+					i = e.data.database.host + ":" + e.data.database.port;
+					t.trackDependency({
+						target: i,
+						data: n,
+						name: n,
+						duration: e.data.duration,
+						success: o,
+						resultCode: o ? "0" : "1",
+						dependencyTypeName: "postgres"
+					})
+				})
+			},
+			t.enable = function (e, r) {
+				e ? (0 === o.length && n.channel.subscribe("postgres", t.subscriber), o.push(r)) : 0 === (o = o.filter(function (e) {
+						return e != r
+					})).length && n.channel.unsubscribe("postgres", t.subscriber)
+			}
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__extends || function () {
+				var e = Object.setPrototypeOf || {
+					__proto__: []
+				}
+				instanceof Array && function (e, t) {
+					e.__proto__ = t
+				}
+				 || function (e, t) {
+					for (var r in t)
+						t.hasOwnProperty(r) && (e[r] = t[r])
+				};
+				return function (t, r) {
+					function n() {
+						this.constructor = t
+					}
+					e(t, r),
+					t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
+				}
+			}
+			(),
+			o = r(20),
+			i = r(7),
+			s = r(10),
+			a = r(17),
+			c = r(43),
+			u = r(27),
+			l = function (e) {
+				function t(t, r) {
+					var n = e.call(this) || this;
+					return t && (n.method = t.method, n.url = n._getAbsoluteUrl(t), n.startTime = +new Date, n.socketRemoteAddress = t.socket && t.socket.remoteAddress, n.parseHeaders(t, r), t.connection && (n.connectionRemoteAddress = t.connection.remoteAddress, n.legacySocketRemoteAddress = t.connection.socket && t.connection.socket.remoteAddress)),
+					n
+				}
+				return n(t, e),
+				t.prototype.onError = function (e, t) {
+					this._setStatus(void 0, e),
+					t && (this.duration = t)
+				},
+				t.prototype.onResponse = function (e, t) {
+					this._setStatus(e.statusCode, void 0),
+					t && (this.duration = t)
+				},
+				t.prototype.getRequestTelemetry = function (e) {
+					var t = {
+						id: this.requestId,
+						name: this.method + " " + o.parse(this.url).pathname,
+						url: this.url,
+						source: this.sourceCorrelationId,
+						duration: this.duration,
+						resultCode: this.statusCode ? this.statusCode.toString() : null,
+						success: this._isSuccess(),
+						properties: this.properties
+					};
+					if (e) {
+						for (var r in e)
+							t[r] || (t[r] = e[r]);
+						if (e.properties)
+							for (var r in e.properties)
+								t.properties[r] = e.properties[r]
+					}
+					return t
+				},
+				t.prototype.getRequestTags = function (e) {
+					var r = {};
+					for (var n in e)
+						r[n] = e[n];
+					return r[t.keys.locationIp] = e[t.keys.locationIp] || this._getIp(),
+					r[t.keys.sessionId] = e[t.keys.sessionId] || this._getId("ai_session"),
+					r[t.keys.userId] = e[t.keys.userId] || this._getId("ai_user"),
+					r[t.keys.userAuthUserId] = e[t.keys.userAuthUserId] || this._getId("ai_authUser"),
+					r[t.keys.operationName] = this.getOperationName(e),
+					r[t.keys.operationParentId] = this.getOperationParentId(e),
+					r[t.keys.operationId] = this.getOperationId(e),
+					r
+				},
+				t.prototype.getOperationId = function (e) {
+					return e[t.keys.operationId] || this.operationId
+				},
+				t.prototype.getOperationParentId = function (e) {
+					return e[t.keys.operationParentId] || this.parentId || this.getOperationId(e)
+				},
+				t.prototype.getOperationName = function (e) {
+					return e[t.keys.operationName] || this.method + " " + o.parse(this.url).pathname
+				},
+				t.prototype.getRequestId = function () {
+					return this.requestId
+				},
+				t.prototype.getCorrelationContextHeader = function () {
+					return this.correlationContextHeader
+				},
+				t.prototype._getAbsoluteUrl = function (e) {
+					if (!e.headers)
+						return e.url;
+					var t = e.connection ? e.connection.encrypted : null,
+					r = o.parse(e.url),
+					n = r.pathname,
+					i = r.search;
+					return o.format({
+						protocol: t ? "https" : "http",
+						host: e.headers.host,
+						pathname: n,
+						search: i
+					})
+				},
+				t.prototype._getIp = function () {
+					var e = /[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/,
+					t = function (t) {
+						var r = e.exec(t);
+						if (r)
+							return r[0]
+					},
+					r = t(this.rawHeaders["x-forwarded-for"]) || t(this.rawHeaders["x-client-ip"]) || t(this.rawHeaders["x-real-ip"]) || t(this.connectionRemoteAddress) || t(this.socketRemoteAddress) || t(this.legacySocketRemoteAddress);
+					return !r && this.connectionRemoteAddress && this.connectionRemoteAddress.substr && "::" === this.connectionRemoteAddress.substr(0, 2) && (r = "127.0.0.1"),
+					r
+				},
+				t.prototype._getId = function (e) {
+					var r = this.rawHeaders && this.rawHeaders.cookie && "string" == typeof this.rawHeaders.cookie && this.rawHeaders.cookie || "";
+					return t.parseId(s.getCookie(e, r))
+				},
+				t.prototype.parseHeaders = function (e, t) {
+					if (this.rawHeaders = e.headers || e.rawHeaders, this.userAgent = e.headers && e.headers["user-agent"], this.sourceCorrelationId = s.getCorrelationContextTarget(e, a.requestContextSourceKey), e.headers) {
+						if (this.correlationContextHeader = e.headers[a.correlationContextHeader], e.headers[a.requestIdHeader])
+							this.parentId = e.headers[a.requestIdHeader], this.requestId = u.generateRequestId(this.parentId), this.correlationContextHeader = e.headers[a.correlationContextHeader];
+						else {
+							var r = e.headers[a.rootIdHeader];
+							this.parentId = e.headers[a.parentIdHeader],
+							this.requestId = u.generateRequestId(r || this.parentId),
+							this.correlationContextHeader = null
+						}
+						t && (this.requestId = t),
+						this.operationId = u.getRootId(this.requestId)
+					}
+				},
+				t.parseId = function (e) {
+					return e.substr(0, e.indexOf("|"))
+				},
+				t.keys = new i.ContextTagKeys,
+				t
+			}
+			(c);
+			e.exports = l
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__extends || function () {
+				var e = Object.setPrototypeOf || {
+					__proto__: []
+				}
+				instanceof Array && function (e, t) {
+					e.__proto__ = t
+				}
+				 || function (e, t) {
+					for (var r in t)
+						t.hasOwnProperty(r) && (e[r] = t[r])
+				};
+				return function (t, r) {
+					function n() {
+						this.constructor = t
+					}
+					e(t, r),
+					t.prototype = null === r ? Object.create(r) : (n.prototype = r.prototype, new n)
+				}
+			}
+			(),
+			o = r(164),
+			i = r(44),
+			s = r(25),
+			a = r(6),
+			c = function (e) {
+				function t() {
+					return null !== e && e.apply(this, arguments) || this
+				}
+				return n(t, e),
+				t.prototype.trackNodeHttpRequestSync = function (e) {
+					e && e.request && e.response && e.duration ? i.trackRequestSync(this, e) : a.warn("trackNodeHttpRequestSync requires NodeHttpRequestTelemetry object with request, response and duration specified.")
+				},
+				t.prototype.trackNodeHttpRequest = function (e) {
+					(e.duration || e.error) && a.warn("trackNodeHttpRequest will ignore supplied duration and error parameters. These values are collected from the request and response objects."),
+					e && e.request && e.response ? i.trackRequest(this, e) : a.warn("trackNodeHttpRequest requires NodeHttpRequestTelemetry object with request and response specified.")
+				},
+				t.prototype.trackNodeHttpDependency = function (e) {
+					e && e.request ? s.trackRequest(this, e) : a.warn("trackNodeHttpDependency requires NodeHttpDependencyTelemetry object with request specified.")
+				},
+				t
+			}
+			(o);
+			e.exports = c
+		}, function (e, t, r) {
+			"use strict";
+			var n = r(20),
+			o = r(165),
+			i = r(166),
+			s = r(7),
+			a = r(167),
+			c = r(168),
+			u = r(16),
+			l = r(170),
+			h = r(10),
+			p = r(6),
+			d = r(172),
+			f = function () {
+				function e(e) {
+					this._telemetryProcessors = [];
+					var t = new o(e);
+					this.config = t,
+					this.context = new i,
+					this.commonProperties = {};
+					var r = new l(this.config);
+					this.channel = new a(function () {
+						return t.disableAppInsights
+					}, function () {
+						return t.maxBatchSize
+					}, function () {
+						return t.maxBatchIntervalMs
+					}, r)
+				}
+				return e.prototype.trackTrace = function (e) {
+					this.track(e, s.TelemetryType.Trace)
+				},
+				e.prototype.trackMetric = function (e) {
+					this.track(e, s.TelemetryType.Metric)
+				},
+				e.prototype.trackException = function (e) {
+					e && e.exception && !h.isError(e.exception) && (e.exception = new Error(e.exception.toString())),
+					this.track(e, s.TelemetryType.Exception)
+				},
+				e.prototype.trackEvent = function (e) {
+					this.track(e, s.TelemetryType.Event)
+				},
+				e.prototype.trackRequest = function (e) {
+					this.track(e, s.TelemetryType.Request)
+				},
+				e.prototype.trackDependency = function (e) {
+					e && !e.target && e.data && (e.target = n.parse(e.data).host),
+					this.track(e, s.TelemetryType.Dependency)
+				},
+				e.prototype.flush = function (e) {
+					this.channel.triggerSend(!!e && !!e.isAppCrashing, e ? e.callback : void 0)
+				},
+				e.prototype.track = function (e, t) {
+					if (e && s.telemetryTypeToBaseType(t)) {
+						var r = d.createEnvelope(e, t, this.commonProperties, this.context, this.config);
+						e.time && (r.time = e.time.toISOString());
+						var n = this.runTelemetryProcessors(r, e.contextObjects);
+						(n = n && c.samplingTelemetryProcessor(r, {
+								correlationContext: u.CorrelationContextManager.getCurrentContext()
+							})) && this.channel.send(r)
+					} else
+						p.warn("track() requires telemetry object and telemetryType to be specified.")
+				},
+				e.prototype.addTelemetryProcessor = function (e) {
+					this._telemetryProcessors.push(e)
+				},
+				e.prototype.clearTelemetryProcessors = function () {
+					this._telemetryProcessors = []
+				},
+				e.prototype.runTelemetryProcessors = function (e, t) {
+					var r = !0,
+					n = this._telemetryProcessors.length;
+					if (0 === n)
+						return r;
+					(t = t || {}).correlationContext = u.CorrelationContextManager.getCurrentContext();
+					for (var o = 0; o < n; ++o)
+						try {
+							var i = this._telemetryProcessors[o];
+							if (i && !1 === i.apply(null, [e, t])) {
+								r = !1;
+								break
+							}
+						} catch (t) {
+							r = !0,
+							p.warn("One of telemetry processors failed, telemetry item will be sent.", t, e)
+						}
+					return r
+				},
+				e
+			}
+			();
+			e.exports = f
+		}, function (e, t, r) {
+			"use strict";
+			var n = r(27),
+			o = function () {
+				function e(t) {
+					var r = this;
+					this.endpointBase = "https://dc.services.visualstudio.com",
+					this.instrumentationKey = t || e._getInstrumentationKey(),
+					this.endpointUrl = this.endpointBase + "/v2/track",
+					this.maxBatchSize = 250,
+					this.maxBatchIntervalMs = 15e3,
+					this.disableAppInsights = !1,
+					this.samplingPercentage = 100,
+					this.correlationIdRetryIntervalMs = 3e4,
+					this.correlationHeaderExcludedDomains = ["*.core.windows.net", "*.core.chinacloudapi.cn", "*.core.cloudapi.de", "*.core.usgovcloudapi.net"],
+					this.setCorrelationId = function (e) {
+						return r.correlationId = e
+					},
+					this.profileQueryEndpoint = process.env[e.ENV_profileQueryEndpoint] || this.endpointBase,
+					this.proxyHttpUrl = process.env[e.ENV_http_proxy] || void 0,
+					this.proxyHttpsUrl = process.env[e.ENV_https_proxy] || void 0,
+					this.httpAgent = void 0,
+					this.httpsAgent = void 0
+				}
+				return Object.defineProperty(e.prototype, "profileQueryEndpoint", {
+					get: function () {
+						return this._profileQueryEndpoint
+					},
+					set: function (e) {
+						n.cancelCorrelationIdQuery(this, this.setCorrelationId),
+						this._profileQueryEndpoint = e,
+						this.correlationId = n.correlationIdPrefix,
+						n.queryCorrelationId(this, this.setCorrelationId)
+					},
+					enumerable: !0,
+					configurable: !0
+				}),
+				e._getInstrumentationKey = function () {
+					var t = process.env[e.ENV_iKey] || process.env[e.ENV_azurePrefix + e.ENV_iKey] || process.env[e.legacy_ENV_iKey] || process.env[e.ENV_azurePrefix + e.legacy_ENV_iKey];
+					if (!t || "" == t)
+						throw new Error("Instrumentation key not found, pass the key in the config to this method or set the key in the environment variable APPINSIGHTS_INSTRUMENTATIONKEY before starting the server");
+					return t
+				},
+				e.ENV_azurePrefix = "APPSETTING_",
+				e.ENV_iKey = "APPINSIGHTS_INSTRUMENTATIONKEY",
+				e.legacy_ENV_iKey = "APPINSIGHTS_INSTRUMENTATION_KEY",
+				e.ENV_profileQueryEndpoint = "APPINSIGHTS_PROFILE_QUERY_ENDPOINT",
+				e.ENV_http_proxy = "http_proxy",
+				e.ENV_https_proxy = "https_proxy",
+				e
+			}
+			();
+			e.exports = o
+		}, function (e, t, r) {
+			"use strict";
+			var n = r(11),
+			o = r(2),
+			i = r(1),
+			s = r(7),
+			a = r(6),
+			c = function () {
+				function e(e) {
+					this.keys = new s.ContextTagKeys,
+					this.tags = {},
+					this._loadApplicationContext(),
+					this._loadDeviceContext(),
+					this._loadInternalContext()
+				}
+				return e.prototype._loadApplicationContext = function (t) {
+					if (t = t || i.resolve(__dirname, "../../../../package.json"), !e.appVersion[t]) {
+						e.appVersion[t] = "unknown";
+						try {
+							var r = JSON.parse(o.readFileSync(t, "utf8"));
+							r && "string" == typeof r.version && (e.appVersion[t] = r.version)
+						} catch (e) {
+							a.info("unable to read app version: ", e)
+						}
+					}
+					this.tags[this.keys.applicationVersion] = e.appVersion[t]
+				},
+				e.prototype._loadDeviceContext = function () {
+					this.tags[this.keys.deviceId] = "",
+					this.tags[this.keys.cloudRoleInstance] = n && n.hostname(),
+					this.tags[this.keys.deviceOSVersion] = n && n.type() + " " + n.release(),
+					this.tags[this.keys.cloudRole] = e.DefaultRoleName,
+					this.tags["ai.device.osArchitecture"] = n && n.arch(),
+					this.tags["ai.device.osPlatform"] = n && n.platform()
+				},
+				e.prototype._loadInternalContext = function () {
+					var t = i.resolve(__dirname, "../../package.json");
+					if (!e.sdkVersion) {
+						e.sdkVersion = "unknown";
+						try {
+							var r = JSON.parse(o.readFileSync(t, "utf8"));
+							r && "string" == typeof r.version && (e.sdkVersion = r.version)
+						} catch (e) {
+							a.info("unable to read app version: ", e)
+						}
+					}
+					this.tags[this.keys.internalSdkVersion] = "node:" + e.sdkVersion
+				},
+				e.DefaultRoleName = "Web",
+				e.appVersion = {},
+				e.sdkVersion = null,
+				e
+			}
+			();
+			e.exports = c
+		}, function (e, t, r) {
+			"use strict";
+			var n = r(6),
+			o = function () {
+				function e(e, t, r, n) {
+					this._buffer = [],
+					this._lastSend = 0,
+					this._isDisabled = e,
+					this._getBatchSize = t,
+					this._getBatchIntervalMs = r,
+					this._sender = n
+				}
+				return e.prototype.setUseDiskRetryCaching = function (e, t, r) {
+					this._sender.setDiskRetryMode(e, t, r)
+				},
+				e.prototype.send = function (e) {
+					var t = this;
+					if (!this._isDisabled())
+						if (e) {
+							var r = this._stringify(e);
+							"string" == typeof r && (this._buffer.push(r), this._buffer.length >= this._getBatchSize() ? this.triggerSend(!1) : !this._timeoutHandle && this._buffer.length > 0 && (this._timeoutHandle = setTimeout(function () {
+										t._timeoutHandle = null,
+										t.triggerSend(!1)
+									}, this._getBatchIntervalMs())))
+						} else
+							n.warn("Cannot send null/undefined telemetry")
+				},
+				e.prototype.triggerSend = function (e, t) {
+					var r = this._buffer.length < 1;
+					if (!r) {
+						var n = this._buffer.join("\n");
+						e ? (this._sender.saveOnCrash(n), "function" == typeof t && t("data saved on crash")) : this._sender.send(Buffer.from ? Buffer.from(n) : new Buffer(n), t)
+					}
+					this._lastSend = +new Date,
+					this._buffer.length = 0,
+					clearTimeout(this._timeoutHandle),
+					this._timeoutHandle = null,
+					r && "function" == typeof t && t("no data to send")
+				},
+				e.prototype._stringify = function (e) {
+					try {
+						return JSON.stringify(e)
+					} catch (t) {
+						n.warn("Failed to serialize payload", t, e)
+					}
+				},
+				e
+			}
+			();
+			e.exports = o
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			}),
+			function (e) {
+				for (var r in e)
+					t.hasOwnProperty(r) || (t[r] = e[r])
+			}
+			(r(169))
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			var n = r(7);
+			function o(e) {
+				var t = 5381;
+				if (!e)
+					return 0;
+				for (; e.length < 8; )
+					e += e;
+				for (var r = 0; r < e.length; r++)
+					t = ((t << 5) + t | 0) + e.charCodeAt(r) | 0;
+				return (t = t <= -2147483648 ? 2147483647 : Math.abs(t)) / 2147483647 * 100
+			}
+			t.samplingTelemetryProcessor = function (e, t) {
+				var r = e.sampleRate;
+				return null === r || void 0 === r || r >= 100 || !(!e.data || n.TelemetryType.Metric !== n.baseTypeToTelemetryType(e.data.baseType)) || (t.correlationContext && t.correlationContext.operation ? o(t.correlationContext.operation.id) < r : 100 * Math.random() < r)
+			},
+			t.getSamplingHashCode = o
+		}, function (e, t, r) {
+			"use strict";
+			var n = r(2),
+			o = r(11),
+			i = r(1),
+			s = r(171),
+			a = r(28),
+			c = r(6),
+			u = r(25),
+			l = r(10),
+			h = function () {
+				function e(t, r, o) {
+					if (this._config = t, this._onSuccess = r, this._onError = o, this._enableDiskRetryMode = !1, this._resendInterval = e.WAIT_BETWEEN_RESEND, this._maxBytesOnDisk = e.MAX_BYTES_ON_DISK, this._numConsecutiveFailures = 0, !e.OS_PROVIDES_FILE_PROTECTION)
+						if (e.USE_ICACLS) {
+							try {
+								e.OS_PROVIDES_FILE_PROTECTION = n.existsSync(e.ICACLS_PATH)
+							} catch (e) {}
+							e.OS_PROVIDES_FILE_PROTECTION || c.warn(e.TAG, "Could not find ICACLS in expected location! This is necessary to use disk retry mode on Windows.")
+						} else
+							e.OS_PROVIDES_FILE_PROTECTION = !0
+				}
+				return e.prototype.setDiskRetryMode = function (t, r, n) {
+					this._enableDiskRetryMode = e.OS_PROVIDES_FILE_PROTECTION && t,
+					"number" == typeof r && r >= 0 && (this._resendInterval = Math.floor(r)),
+					"number" == typeof n && n >= 0 && (this._maxBytesOnDisk = Math.floor(n)),
+					t && !e.OS_PROVIDES_FILE_PROTECTION && (this._enableDiskRetryMode = !1, c.warn(e.TAG, "Ignoring request to enable disk retry mode. Sufficient file protection capabilities were not detected."))
+				},
+				e.prototype.send = function (t, r) {
+					var n = this,
+					o = this._config.endpointUrl,
+					i = {
+						method: "POST",
+						withCredentials: !1,
+						headers: {
+							"Content-Type": "application/x-json-stream"
+						}
+					};
+					s.gzip(t, function (s, a) {
+						var h = a;
+						s ? (c.warn(s), h = t, i.headers["Content-Length"] = t.length.toString()) : (i.headers["Content-Encoding"] = "gzip", i.headers["Content-Length"] = a.length),
+						c.info(e.TAG, i),
+						i[u.disableCollectionRequestOption] = !0;
+						var p = l.makeRequest(n._config, o, i, function (o) {
+							o.setEncoding("utf-8");
+							var i = "";
+							o.on("data", function (e) {
+								i += e
+							}),
+							o.on("end", function () {
+								n._numConsecutiveFailures = 0,
+								c.info(e.TAG, i),
+								"function" == typeof n._onSuccess && n._onSuccess(i),
+								"function" == typeof r && r(i),
+								n._enableDiskRetryMode && (200 === o.statusCode ? setTimeout(function () {
+										return n._sendFirstFileOnDisk()
+									}, n._resendInterval) : 408 !== o.statusCode && 429 !== o.statusCode && 439 !== o.statusCode && 500 !== o.statusCode && 503 !== o.statusCode || n._storeToDisk(t))
+							})
+						});
+						p.on("error", function (o) {
+							if (n._numConsecutiveFailures++, !n._enableDiskRetryMode || n._numConsecutiveFailures > 0 && n._numConsecutiveFailures % e.MAX_CONNECTION_FAILURES_BEFORE_WARN == 0) {
+								var i = "Ingestion endpoint could not be reached. This batch of telemetry items has been lost. Use Disk Retry Caching to enable resending of failed telemetry. Error:";
+								n._enableDiskRetryMode && (i = "Ingestion endpoint could not be reached " + n._numConsecutiveFailures + " consecutive times. There may be resulting telemetry loss. Most recent error:"),
+								c.warn(e.TAG, i, o)
+							} else {
+								i = "Transient failure to reach ingestion endpoint. This batch of telemetry items will be retried. Error:";
+								c.info(e.TAG, i, o)
+							}
+							if (n._onErrorHelper(o), "function" == typeof r) {
+								var s = "error sending telemetry";
+								o && "function" == typeof o.toString && (s = o.toString()),
+								r(s)
+							}
+							n._enableDiskRetryMode && n._storeToDisk(t)
+						}),
+						p.write(h),
+						p.end()
+					})
+				},
+				e.prototype.saveOnCrash = function (e) {
+					this._enableDiskRetryMode && this._storeToDiskSync(e)
+				},
+				e.prototype._runICACLS = function (t, r) {
+					var n = a.spawn(e.ICACLS_PATH, t, {
+						windowsHide: !0
+					});
+					n.on("error", function (e) {
+						return r(e)
+					}),
+					n.on("close", function (e, t) {
+						return r(0 === e ? null : new Error("Setting ACL restrictions did not succeed (ICACLS returned code " + e + ")"))
+					})
+				},
+				e.prototype._runICACLSSync = function (t) {
+					if (!a.spawnSync)
+						throw new Error("Could not synchronously call ICACLS under current version of Node.js");
+					var r = a.spawnSync(e.ICACLS_PATH, t, {
+						windowsHide: !0
+					});
+					if (r.error)
+						throw r.error;
+					if (0 !== r.status)
+						throw new Error("Setting ACL restrictions did not succeed (ICACLS returned code " + r.status + ")")
+				},
+				e.prototype._getACLIdentity = function (t) {
+					if (e.ACL_IDENTITY)
+						return t(null, e.ACL_IDENTITY);
+					var r = a.spawn(e.POWERSHELL_PATH, ["-Command", "[System.Security.Principal.WindowsIdentity]::GetCurrent().Name"], {
+						windowsHide: !0,
+						stdio: ["ignore", "pipe", "pipe"]
+					}),
+					n = "";
+					r.stdout.on("data", function (e) {
+						return n += e
+					}),
+					r.on("error", function (e) {
+						return t(e, null)
+					}),
+					r.on("close", function (r, o) {
+						return e.ACL_IDENTITY = n && n.trim(),
+						t(0 === r ? null : new Error("Getting ACL identity did not succeed (PS returned code " + r + ")"), e.ACL_IDENTITY)
+					})
+				},
+				e.prototype._getACLIdentitySync = function () {
+					if (e.ACL_IDENTITY)
+						return e.ACL_IDENTITY;
+					if (a.spawnSync) {
+						var t = a.spawnSync(e.POWERSHELL_PATH, ["-Command", "[System.Security.Principal.WindowsIdentity]::GetCurrent().Name"], {
+							windowsHide: !0,
+							stdio: ["ignore", "pipe", "pipe"]
+						});
+						if (t.error)
+							throw t.error;
+						if (0 !== t.status)
+							throw new Error("Getting ACL identity did not succeed (PS returned code " + t.status + ")");
+						return e.ACL_IDENTITY = t.stdout && t.stdout.toString().trim(),
+						e.ACL_IDENTITY
+					}
+					throw new Error("Could not synchronously get ACL identity under current version of Node.js")
+				},
+				e.prototype._getACLArguments = function (e, t) {
+					return [e, "/grant", "*S-1-5-32-544:(OI)(CI)F", "/grant", t + ":(OI)(CI)F", "/inheritance:r"]
+				},
+				e.prototype._applyACLRules = function (t, r) {
+					var n = this;
+					return e.USE_ICACLS ? void 0 !== e.ACLED_DIRECTORIES[t] ? r(e.ACLED_DIRECTORIES[t] ? null : new Error("Setting ACL restrictions did not succeed (cached result)")) : (e.ACLED_DIRECTORIES[t] = !1, void this._getACLIdentity(function (o, i) {
+							if (o)
+								return e.ACLED_DIRECTORIES[t] = !1, r(o);
+							n._runICACLS(n._getACLArguments(t, i), function (n) {
+								return e.ACLED_DIRECTORIES[t] = !n,
+								r(n)
+							})
+						})) : r(null)
+				},
+				e.prototype._applyACLRulesSync = function (t) {
+					if (e.USE_ICACLS) {
+						if (void 0 === e.ACLED_DIRECTORIES[t])
+							return this._runICACLSSync(this._getACLArguments(t, this._getACLIdentitySync())), void(e.ACLED_DIRECTORIES[t] = !0);
+						if (!e.ACLED_DIRECTORIES[t])
+							throw new Error("Setting ACL restrictions did not succeed (cached result)")
+					}
+				},
+				e.prototype._confirmDirExists = function (e, t) {
+					var r = this;
+					n.lstat(e, function (o, i) {
+						o && "ENOENT" === o.code ? n.mkdir(e, function (n) {
+							n && "EEXIST" !== n.code ? t(n) : r._applyACLRules(e, t)
+						}) : !o && i.isDirectory() ? r._applyACLRules(e, t) : t(o || new Error("Path existed but was not a directory"))
+					})
+				},
+				e.prototype._getShallowDirectorySize = function (e, t) {
+					n.readdir(e, function (r, o) {
+						if (r)
+							return t(r, -1);
+						var s = null,
+						a = 0,
+						c = 0;
+						if (0 !== o.length)
+							for (var u = 0; u < o.length; u++)
+								n.stat(i.join(e, o[u]), function (e, r) {
+									c++,
+									e ? s = e : r.isFile() && (a += r.size),
+									c === o.length && t(s, s ? -1 : a)
+								});
+						else
+							t(null, 0)
+					})
+				},
+				e.prototype._getShallowDirectorySizeSync = function (e) {
+					for (var t = n.readdirSync(e), r = 0, o = 0; o < t.length; o++)
+						r += n.statSync(i.join(e, t[o])).size;
+					return r
+				},
+				e.prototype._storeToDisk = function (t) {
+					var r = this,
+					s = i.join(o.tmpdir(), e.TEMPDIR_PREFIX + this._config.instrumentationKey);
+					c.info(e.TAG, "Checking existance of data storage directory: " + s),
+					this._confirmDirExists(s, function (o) {
+						if (o)
+							return c.warn(e.TAG, "Error while checking/creating directory: " + (o && o.message)), void r._onErrorHelper(o);
+						r._getShallowDirectorySize(s, function (o, a) {
+							if (o || a < 0)
+								return c.warn(e.TAG, "Error while checking directory size: " + (o && o.message)), void r._onErrorHelper(o);
+							if (a > r._maxBytesOnDisk)
+								c.warn(e.TAG, "Not saving data due to max size limit being met. Directory size in bytes is: " + a);
+							else {
+								var u = (new Date).getTime() + ".ai.json",
+								l = i.join(s, u);
+								c.info(e.TAG, "saving data to disk at: " + l),
+								n.writeFile(l, t, {
+									mode: 384
+								}, function (e) {
+									return r._onErrorHelper(e)
+								})
+							}
+						})
+					})
+				},
+				e.prototype._storeToDiskSync = function (t) {
+					var r = i.join(o.tmpdir(), e.TEMPDIR_PREFIX + this._config.instrumentationKey);
+					try {
+						c.info(e.TAG, "Checking existance of data storage directory: " + r),
+						n.existsSync(r) || n.mkdirSync(r),
+						this._applyACLRulesSync(r);
+						var s = this._getShallowDirectorySizeSync(r);
+						if (s > this._maxBytesOnDisk)
+							return void c.info(e.TAG, "Not saving data due to max size limit being met. Directory size in bytes is: " + s);
+						var a = (new Date).getTime() + ".ai.json",
+						u = i.join(r, a);
+						c.info(e.TAG, "saving data before crash to disk at: " + u),
+						n.writeFileSync(u, t, {
+							mode: 384
+						})
+					} catch (t) {
+						c.warn(e.TAG, "Error while saving data to disk: " + (t && t.message)),
+						this._onErrorHelper(t)
+					}
+				},
+				e.prototype._sendFirstFileOnDisk = function () {
+					var t = this,
+					r = i.join(o.tmpdir(), e.TEMPDIR_PREFIX + this._config.instrumentationKey);
+					n.exists(r, function (e) {
+						e && n.readdir(r, function (e, o) {
+							if (e)
+								t._onErrorHelper(e);
+							else if ((o = o.filter(function (e) {
+										return i.basename(e).indexOf(".ai.json") > -1
+									})).length > 0) {
+								var s = o[0],
+								a = i.join(r, s);
+								n.readFile(a, function (e, r) {
+									e ? t._onErrorHelper(e) : n.unlink(a, function (e) {
+										e ? t._onErrorHelper(e) : t.send(r)
+									})
+								})
+							}
+						})
+					})
+				},
+				e.prototype._onErrorHelper = function (e) {
+					"function" == typeof this._onError && this._onError(e)
+				},
+				e.TAG = "Sender",
+				e.ICACLS_PATH = process.env.systemdrive + "/windows/system32/icacls.exe",
+				e.POWERSHELL_PATH = process.env.systemdrive + "/windows/system32/windowspowershell/v1.0/powershell.exe",
+				e.ACLED_DIRECTORIES = {},
+				e.ACL_IDENTITY = null,
+				e.WAIT_BETWEEN_RESEND = 6e4,
+				e.MAX_BYTES_ON_DISK = 5e7,
+				e.MAX_CONNECTION_FAILURES_BEFORE_WARN = 5,
+				e.TEMPDIR_PREFIX = "appInsights-node",
+				e.OS_PROVIDES_FILE_PROTECTION = !1,
+				e.USE_ICACLS = "Windows_NT" === o.type(),
+				e
+			}
+			();
+			e.exports = h
+		}, function (e, t) {
+			e.exports = require("zlib")
+		}, function (e, t, r) {
+			"use strict";
+			var n = r(7),
+			o = r(10),
+			i = r(16),
+			s = function () {
+				function e() {}
+				return e.createEnvelope = function (t, r, i, s, a) {
+					var c = null;
+					switch (r) {
+					case n.TelemetryType.Trace:
+						c = e.createTraceData(t);
+						break;
+					case n.TelemetryType.Dependency:
+						c = e.createDependencyData(t);
+						break;
+					case n.TelemetryType.Event:
+						c = e.createEventData(t);
+						break;
+					case n.TelemetryType.Exception:
+						c = e.createExceptionData(t);
+						break;
+					case n.TelemetryType.Request:
+						c = e.createRequestData(t);
+						break;
+					case n.TelemetryType.Metric:
+						c = e.createMetricData(t)
+					}
+					if (i && n.domainSupportsProperties(c.baseData)) {
+						if (c && c.baseData)
+							if (c.baseData.properties)
+								for (var u in i)
+									c.baseData.properties[u] || (c.baseData.properties[u] = i[u]);
+							else
+								c.baseData.properties = i;
+						c.baseData.properties = o.validateStringMap(c.baseData.properties)
+					}
+					var l = a && a.instrumentationKey || "",
+					h = new n.Envelope;
+					return h.data = c,
+					h.iKey = l,
+					h.name = "Microsoft.ApplicationInsights." + l.replace(/-/g, "") + "." + c.baseType.substr(0, c.baseType.length - 4),
+					h.tags = this.getTags(s, t.tagOverrides),
+					h.time = (new Date).toISOString(),
+					h.ver = 1,
+					h.sampleRate = a ? a.samplingPercentage : 100,
+					r === n.TelemetryType.Metric && (h.sampleRate = 100),
+					h
+				},
+				e.createTraceData = function (e) {
+					var t = new n.MessageData;
+					t.message = e.message,
+					t.properties = e.properties,
+					isNaN(e.severity) ? t.severityLevel = n.SeverityLevel.Information : t.severityLevel = e.severity;
+					var r = new n.Data;
+					return r.baseType = n.telemetryTypeToBaseType(n.TelemetryType.Trace),
+					r.baseData = t,
+					r
+				},
+				e.createDependencyData = function (e) {
+					var t = new n.RemoteDependencyData;
+					t.name = e.name,
+					t.data = e.data,
+					t.target = e.target,
+					t.duration = o.msToTimeSpan(e.duration),
+					t.success = e.success,
+					t.type = e.dependencyTypeName,
+					t.properties = e.properties,
+					t.resultCode = e.resultCode ? e.resultCode + "" : "",
+					e.id ? t.id = e.id : t.id = o.w3cTraceId();
+					var r = new n.Data;
+					return r.baseType = n.telemetryTypeToBaseType(n.TelemetryType.Dependency),
+					r.baseData = t,
+					r
+				},
+				e.createEventData = function (e) {
+					var t = new n.EventData;
+					t.name = e.name,
+					t.properties = e.properties,
+					t.measurements = e.measurements;
+					var r = new n.Data;
+					return r.baseType = n.telemetryTypeToBaseType(n.TelemetryType.Event),
+					r.baseData = t,
+					r
+				},
+				e.createExceptionData = function (e) {
+					var t = new n.ExceptionData;
+					t.properties = e.properties,
+					t.severityLevel = n.SeverityLevel.Error,
+					t.measurements = e.measurements,
+					t.exceptions = [];
+					var r = e.exception.stack,
+					i = new n.ExceptionDetails;
+					i.message = e.exception.message,
+					i.typeName = e.exception.name,
+					i.parsedStack = this.parseStack(r),
+					i.hasFullStack = o.isArray(i.parsedStack) && i.parsedStack.length > 0,
+					t.exceptions.push(i);
+					var s = new n.Data;
+					return s.baseType = n.telemetryTypeToBaseType(n.TelemetryType.Exception),
+					s.baseData = t,
+					s
+				},
+				e.createRequestData = function (e) {
+					var t = new n.RequestData;
+					e.id ? t.id = e.id : t.id = o.w3cTraceId(),
+					t.name = e.name,
+					t.url = e.url,
+					t.source = e.source,
+					t.duration = o.msToTimeSpan(e.duration),
+					t.responseCode = e.resultCode ? e.resultCode + "" : "",
+					t.success = e.success,
+					t.properties = e.properties;
+					var r = new n.Data;
+					return r.baseType = n.telemetryTypeToBaseType(n.TelemetryType.Request),
+					r.baseData = t,
+					r
+				},
+				e.createMetricData = function (e) {
+					var t = new n.MetricData;
+					t.metrics = [];
+					var r = new n.DataPoint;
+					r.count = isNaN(e.count) ? 1 : e.count,
+					r.kind = n.DataPointType.Aggregation,
+					r.max = isNaN(e.max) ? e.value : e.max,
+					r.min = isNaN(e.min) ? e.value : e.min,
+					r.name = e.name,
+					r.stdDev = isNaN(e.stdDev) ? 0 : e.stdDev,
+					r.value = e.value,
+					t.metrics.push(r),
+					t.properties = e.properties;
+					var o = new n.Data;
+					return o.baseType = n.telemetryTypeToBaseType(n.TelemetryType.Metric),
+					o.baseData = t,
+					o
+				},
+				e.getTags = function (e, t) {
+					var r = i.CorrelationContextManager.getCurrentContext(),
+					n = {};
+					if (e && e.tags)
+						for (var o in e.tags)
+							n[o] = e.tags[o];
+					if (t)
+						for (var o in t)
+							n[o] = t[o];
+					return r && (n[e.keys.operationId] = n[e.keys.operationId] || r.operation.id, n[e.keys.operationName] = n[e.keys.operationName] || r.operation.name, n[e.keys.operationParentId] = n[e.keys.operationParentId] || r.operation.parentId),
+					n
+				},
+				e.parseStack = function (e) {
+					var t = void 0;
+					if ("string" == typeof e) {
+						var r = e.split("\n");
+						t = [];
+						for (var n = 0, o = 0, i = 0; i <= r.length; i++) {
+							var s = r[i];
+							if (a.regex.test(s)) {
+								var c = new a(r[i], n++);
+								o += c.sizeInBytes,
+								t.push(c)
+							}
+						}
+						if (o > 32768)
+							for (var u = 0, l = t.length - 1, h = 0, p = u, d = l; u < l; ) {
+								if ((h += t[u].sizeInBytes + t[l].sizeInBytes) > 32768) {
+									var f = d - p + 1;
+									t.splice(p, f);
+									break
+								}
+								p = u,
+								d = l,
+								u++,
+								l--
+							}
+					}
+					return t
+				},
+				e
+			}
+			(),
+			a = function () {
+				function e(t, r) {
+					this.sizeInBytes = 0,
+					this.level = r,
+					this.method = "<no_method>",
+					this.assembly = o.trim(t);
+					var n = t.match(e.regex);
+					n && n.length >= 5 && (this.method = o.trim(n[2]) || this.method, this.fileName = o.trim(n[4]) || "<no_filename>", this.line = parseInt(n[5]) || 0),
+					this.sizeInBytes += this.method.length,
+					this.sizeInBytes += this.fileName.length,
+					this.sizeInBytes += this.assembly.length,
+					this.sizeInBytes += e.baseSize,
+					this.sizeInBytes += this.level.toString().length,
+					this.sizeInBytes += this.line.toString().length
+				}
+				return e.regex = /^([\s]+at)?(.*?)(\@|\s\(|\s)([^\(\@\n]+):([0-9]+):([0-9]+)(\)?)$/,
+				e.baseSize = 58,
+				e
+			}
+			();
+			e.exports = s
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			const n = r(4),
+			o = r(5),
+			i = r(174);
+			t.GitProtocolHandler = class {
+				constructor() {
+					this.disposables = [],
+					this.disposables.push(n.window.registerUriHandler(this))
+				}
+				handleUri(e) {
+					switch (e.path) {
+					case "/clone":
+						this.clone(e)
+					}
+				}
+				clone(e) {
+					const t = i.parse(e.query);
+					t.url || console.warn("Failed to open URI:", e),
+					n.commands.executeCommand("git.clone", t.url)
+				}
+				dispose() {
+					this.disposables = o.dispose(this.disposables)
+				}
+			}
+		}, function (e, t) {
+			e.exports = require("querystring")
+		}, function (e, t, r) {
+			"use strict";
+			var n = this && this.__decorate || function (e, t, r, n) {
+				var o,
+				i = arguments.length,
+				s = i < 3 ? t : null === n ? n = Object.getOwnPropertyDescriptor(t, r) : n;
+				if ("object" == typeof Reflect && "function" == typeof Reflect.decorate)
+					s = Reflect.decorate(e, t, r, n);
+				else
+					for (var a = e.length - 1; a >= 0; a--)
+						(o = e[a]) && (s = (i < 3 ? o(s) : i > 3 ? o(t, r, s) : o(t, r)) || s);
+				return i > 3 && s && Object.defineProperty(t, r, s),
+				s
+			};
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			const o = r(176),
+			i = r(4),
+			s = r(5);
+			function a(e, t, r) {
+				if ("function" != typeof r.value)
+					throw new Error("not supported");
+				const n = r.value;
+				r.value = function () {
+					return console.warn(`Git extension API method '${t}' is deprecated.`),
+					n.apply(this, arguments)
+				}
+			}
+			t.deprecated = a;
+			class c {
+				constructor(e) {
+					this.enabled = !1,
+					this._onDidChangeEnablement = new i.EventEmitter,
+					this.onDidChangeEnablement = s.latchEvent(this._onDidChangeEnablement.event),
+					this._model = void 0,
+					e && (this.enabled = !0, this._model = e)
+				}
+				set model(e) {
+					this._model = e,
+					this.enabled = !!e,
+					this._onDidChangeEnablement.fire(this.enabled)
+				}
+				async getGitPath() {
+					if (!this._model)
+						throw new Error("Git model not found");
+					return this._model.git.path
+				}
+				async getRepositories() {
+					if (!this._model)
+						throw new Error("Git model not found");
+					return this._model.repositories.map(e => new o.ApiRepository(e))
+				}
+				getAPI(e) {
+					if (!this._model)
+						throw new Error("Git model not found");
+					if (1 !== e)
+						throw new Error(`No API version ${e} found.`);
+					return new o.ApiImpl(this._model)
+				}
+			}
+			n([a], c.prototype, "getGitPath", null),
+			n([a], c.prototype, "getRepositories", null),
+			t.GitExtensionImpl = c
+		}, function (e, t, r) {
+			"use strict";
+			Object.defineProperty(t, "__esModule", {
+				value: !0
+			});
+			const n = r(4),
+			o = r(5);
+			class i {
+				constructor(e) {
+					this._inputBox = e
+				}
+				set value(e) {
+					this._inputBox.value = e
+				}
+				get value() {
+					return this._inputBox.value
+				}
+			}
+			class s {
+				constructor(e) {
+					this.resource = e
+				}
+				get uri() {
+					return this.resource.resourceUri
+				}
+				get originalUri() {
+					return this.resource.original
+				}
+				get renameUri() {
+					return this.resource.renameResourceUri
+				}
+				get status() {
+					return this.resource.type
+				}
+			}
+			t.ApiChange = s;
+			class a {
+				constructor(e) {
+					this._repository = e,
+					this.onDidChange = this._repository.onDidRunGitStatus
+				}
+				get HEAD() {
+					return this._repository.HEAD
+				}
+				get refs() {
+					return [...this._repository.refs]
+				}
+				get remotes() {
+					return [...this._repository.remotes]
+				}
+				get submodules() {
+					return [...this._repository.submodules]
+				}
+				get rebaseCommit() {
+					return this._repository.rebaseCommit
+				}
+				get mergeChanges() {
+					return this._repository.mergeGroup.resourceStates.map(e => new s(e))
+				}
+				get indexChanges() {
+					return this._repository.indexGroup.resourceStates.map(e => new s(e))
+				}
+				get workingTreeChanges() {
+					return this._repository.workingTreeGroup.resourceStates.map(e => new s(e))
+				}
+			}
+			t.ApiRepositoryState = a;
+			class c {
+				constructor(e) {
+					this._sourceControl = e,
+					this.onDidChange = o.mapEvent(this._sourceControl.onDidChangeSelection, () => null)
+				}
+				get selected() {
+					return this._sourceControl.selected
+				}
+			}
+			t.ApiRepositoryUIState = c;
+			class u {
+				constructor(e) {
+					this._repository = e,
+					this.rootUri = n.Uri.file(this._repository.root),
+					this.inputBox = new i(this._repository.inputBox),
+					this.state = new a(this._repository),
+					this.ui = new c(this._repository.sourceControl)
+				}
+				apply(e, t) {
+					return this._repository.apply(e, t)
+				}
+				getConfigs() {
+					return this._repository.getConfigs()
+				}
+				getConfig(e) {
+					return this._repository.getConfig(e)
+				}
+				setConfig(e, t) {
+					return this._repository.setConfig(e, t)
+				}
+				getGlobalConfig(e) {
+					return this._repository.getGlobalConfig(e)
+				}
+				getObjectDetails(e, t) {
+					return this._repository.getObjectDetails(e, t)
+				}
+				detectObjectType(e) {
+					return this._repository.detectObjectType(e)
+				}
+				buffer(e, t) {
+					return this._repository.buffer(e, t)
+				}
+				show(e, t) {
+					return this._repository.show(e, t)
+				}
+				getCommit(e) {
+					return this._repository.getCommit(e)
+				}
+				clean(e) {
+					return this._repository.clean(e.map(e => n.Uri.file(e)))
+				}
+				diff(e) {
+					return this._repository.diff(e)
+				}
+				diffWithHEAD(e) {
+					return this._repository.diffWithHEAD(e)
+				}
+				diffWith(e, t) {
+					return this._repository.diffWith(e, t)
+				}
+				diffIndexWithHEAD(e) {
+					return this._repository.diffIndexWithHEAD(e)
+				}
+				diffIndexWith(e, t) {
+					return this._repository.diffIndexWith(e, t)
+				}
+				diffBlobs(e, t) {
+					return this._repository.diffBlobs(e, t)
+				}
+				diffBetween(e, t, r) {
+					return this._repository.diffBetween(e, t, r)
+				}
+				hashObject(e) {
+					return this._repository.hashObject(e)
+				}
+				createBranch(e, t, r) {
+					return this._repository.branch(e, t, r)
+				}
+				deleteBranch(e, t) {
+					return this._repository.deleteBranch(e, t)
+				}
+				getBranch(e) {
+					return this._repository.getBranch(e)
+				}
+				setBranchUpstream(e, t) {
+					return this._repository.setBranchUpstream(e, t)
+				}
+				getMergeBase(e, t) {
+					return this._repository.getMergeBase(e, t)
+				}
+				status() {
+					return this._repository.status()
+				}
+				checkout(e) {
+					return this._repository.checkout(e)
+				}
+				addRemote(e, t) {
+					return this._repository.addRemote(e, t)
+				}
+				removeRemote(e) {
+					return this._repository.removeRemote(e)
+				}
+				fetch(e, t, r) {
+					return this._repository.fetch(e, t, r)
+				}
+				pull(e) {
+					return this._repository.pull(void 0, e)
+				}
+				push(e, t, r = !1) {
+					return this._repository.pushTo(e, t, r)
+				}
+				blame(e) {
+					return this._repository.blame(e)
+				}
+				log(e) {
+					return this._repository.log(e)
+				}
+			}
+			t.ApiRepository = u;
+			class l {
+				constructor(e) {
+					this._model = e
+				}
+				get path() {
+					return this._model.git.path
+				}
+			}
+			t.ApiGit = l;
+			t.ApiImpl = class {
+				constructor(e) {
+					this._model = e,
+					this.git = new l(this._model)
+				}
+				get state() {
+					return this._model.state
+				}
+				get onDidChangeState() {
+					return this._model.onDidChangeState
+				}
+				get onDidOpenRepository() {
+					return o.mapEvent(this._model.onDidOpenRepository, e => new u(e))
+				}
+				get onDidCloseRepository() {
+					return o.mapEvent(this._model.onDidCloseRepository, e => new u(e))
+				}
+				get repositories() {
+					return this._model.repositories.map(e => new u(e))
+				}
+			}
+		}, function (e) {
+			e.exports = {
+				name: "git",
+				displayName: "%displayName%",
+				description: "%description%",
+				publisher: "vscode",
+				license: "MIT",
+				version: "1.0.0",
+				engines: {
+					vscode: "^1.5.0"
+				},
+				aiKey: "AIF-d9b70cd4-b9f9-4d70-929b-a071c400b217",
+				enableProposedApi: !0,
+				categories: ["Other"],
+				activationEvents: ["*"],
+				main: "./out/main",
+				icon: "resources/icons/git.png",
+				scripts: {
+					compile: "gulp compile-extension:git",
+					watch: "gulp watch-extension:git",
+					"update-grammar": "node ./build/update-grammars.js",
+					test: "mocha"
+				},
+				contributes: {
+					commands: [{
+							command: "git.clone",
+							title: "%command.clone%",
+							category: "Git"
+						}, {
+							command: "git.init",
+							title: "%command.init%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/git.svg",
+								dark: "resources/icons/dark/git.svg"
+							}
+						}, {
+							command: "git.openRepository",
+							title: "%command.openRepository%",
+							category: "Git"
+						}, {
+							command: "git.close",
+							title: "%command.close%",
+							category: "Git"
+						}, {
+							command: "git.refresh",
+							title: "%command.refresh%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/refresh.svg",
+								dark: "resources/icons/dark/refresh.svg"
+							}
+						}, {
+							command: "git.openChange",
+							title: "%command.openChange%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/open-change.svg",
+								dark: "resources/icons/dark/open-change.svg"
+							}
+						}, {
+							command: "git.openFile",
+							title: "%command.openFile%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/open-file.svg",
+								dark: "resources/icons/dark/open-file.svg"
+							}
+						}, {
+							command: "git.openFile2",
+							title: "%command.openFile%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/open-file.svg",
+								dark: "resources/icons/dark/open-file.svg"
+							}
+						}, {
+							command: "git.openHEADFile",
+							title: "%command.openHEADFile%",
+							category: "Git"
+						}, {
+							command: "git.stage",
+							title: "%command.stage%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/stage.svg",
+								dark: "resources/icons/dark/stage.svg"
+							}
+						}, {
+							command: "git.stageAll",
+							title: "%command.stageAll%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/stage.svg",
+								dark: "resources/icons/dark/stage.svg"
+							}
+						}, {
+							command: "git.stageAllTracked",
+							title: "%command.stageAllTracked%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/stage.svg",
+								dark: "resources/icons/dark/stage.svg"
+							}
+						}, {
+							command: "git.stageAllUntracked",
+							title: "%command.stageAllUntracked%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/stage.svg",
+								dark: "resources/icons/dark/stage.svg"
+							}
+						}, {
+							command: "git.stageSelectedRanges",
+							title: "%command.stageSelectedRanges%",
+							category: "Git"
+						}, {
+							command: "git.revertSelectedRanges",
+							title: "%command.revertSelectedRanges%",
+							category: "Git"
+						}, {
+							command: "git.stageChange",
+							title: "%command.stageChange%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/stage.svg",
+								dark: "resources/icons/dark/stage.svg"
+							}
+						}, {
+							command: "git.revertChange",
+							title: "%command.revertChange%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/clean.svg",
+								dark: "resources/icons/dark/clean.svg"
+							}
+						}, {
+							command: "git.unstage",
+							title: "%command.unstage%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/unstage.svg",
+								dark: "resources/icons/dark/unstage.svg"
+							}
+						}, {
+							command: "git.unstageAll",
+							title: "%command.unstageAll%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/unstage.svg",
+								dark: "resources/icons/dark/unstage.svg"
+							}
+						}, {
+							command: "git.unstageSelectedRanges",
+							title: "%command.unstageSelectedRanges%",
+							category: "Git"
+						}, {
+							command: "git.clean",
+							title: "%command.clean%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/clean.svg",
+								dark: "resources/icons/dark/clean.svg"
+							}
+						}, {
+							command: "git.cleanAll",
+							title: "%command.cleanAll%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/clean.svg",
+								dark: "resources/icons/dark/clean.svg"
+							}
+						}, {
+							command: "git.cleanAllTracked",
+							title: "%command.cleanAllTracked%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/clean.svg",
+								dark: "resources/icons/dark/clean.svg"
+							}
+						}, {
+							command: "git.cleanAllUntracked",
+							title: "%command.cleanAllUntracked%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/clean.svg",
+								dark: "resources/icons/dark/clean.svg"
+							}
+						}, {
+							command: "git.commit",
+							title: "%command.commit%",
+							category: "Git",
+							icon: {
+								light: "resources/icons/light/check.svg",
+								dark: "resources/icons/dark/check.svg"
+							}
+						}, {
+							command: "git.commitStaged",
+							title: "%command.commitStaged%",
+							category: "Git"
+						}, {
+							command: "git.commitEmpty",
+							title: "%command.commitEmpty%",
+							category: "Git"
+						}, {
+							command: "git.commitStagedSigned",
+							title: "%command.commitStagedSigned%",
+							category: "Git"
+						}, {
+							command: "git.commitStagedAmend",
+							title: "%command.commitStagedAmend%",
+							category: "Git"
+						}, {
+							command: "git.commitAll",
+							title: "%command.commitAll%",
+							category: "Git"
+						}, {
+							command: "git.commitAllSigned",
+							title: "%command.commitAllSigned%",
+							category: "Git"
+						}, {
+							command: "git.commitAllAmend",
+							title: "%command.commitAllAmend%",
+							category: "Git"
+						}, {
+							command: "git.restoreCommitTemplate",
+							title: "%command.restoreCommitTemplate%",
+							category: "Git"
+						}, {
+							command: "git.undoCommit",
+							title: "%command.undoCommit%",
+							category: "Git"
+						}, {
+							command: "git.checkout",
+							title: "%command.checkout%",
+							category: "Git"
+						}, {
+							command: "git.branch",
+							title: "%command.branch%",
+							category: "Git"
+						}, {
+							command: "git.branchFrom",
+							title: "%command.branchFrom%",
+							category: "Git"
+						}, {
+							command: "git.deleteBranch",
+							title: "%command.deleteBranch%",
+							category: "Git"
+						}, {
+							command: "git.renameBranch",
+							title: "%command.renameBranch%",
+							category: "Git"
+						}, {
+							command: "git.merge",
+							title: "%command.merge%",
+							category: "Git"
+						}, {
+							command: "git.createTag",
+							title: "%command.createTag%",
+							category: "Git"
+						}, {
+							command: "git.deleteTag",
+							title: "%command.deleteTag%",
+							category: "Git"
+						}, {
+							command: "git.fetch",
+							title: "%command.fetch%",
+							category: "Git"
+						}, {
+							command: "git.fetchPrune",
+							title: "%command.fetchPrune%",
+							category: "Git"
+						}, {
+							command: "git.fetchAll",
+							title: "%command.fetchAll%",
+							category: "Git"
+						}, {
+							command: "git.pull",
+							title: "%command.pull%",
+							category: "Git"
+						}, {
+							command: "git.pullRebase",
+							title: "%command.pullRebase%",
+							category: "Git"
+						}, {
+							command: "git.pullFrom",
+							title: "%command.pullFrom%",
+							category: "Git"
+						}, {
+							command: "git.push",
+							title: "%command.push%",
+							category: "Git"
+						}, {
+							command: "git.pushForce",
+							title: "%command.pushForce%",
+							category: "Git"
+						}, {
+							command: "git.pushTo",
+							title: "%command.pushTo%",
+							category: "Git"
+						}, {
+							command: "git.pushToForce",
+							title: "%command.pushToForce%",
+							category: "Git"
+						}, {
+							command: "git.pushWithTags",
+							title: "%command.pushFollowTags%",
+							category: "Git"
+						}, {
+							command: "git.pushWithTagsForce",
+							title: "%command.pushFollowTagsForce%",
+							category: "Git"
+						}, {
+							command: "git.addRemote",
+							title: "%command.addRemote%",
+							category: "Git"
+						}, {
+							command: "git.removeRemote",
+							title: "%command.removeRemote%",
+							category: "Git"
+						}, {
+							command: "git.sync",
+							title: "%command.sync%",
+							category: "Git"
+						}, {
+							command: "git.syncRebase",
+							title: "%command.syncRebase%",
+							category: "Git"
+						}, {
+							command: "git.publish",
+							title: "%command.publish%",
+							category: "Git"
+						}, {
+							command: "git.showOutput",
+							title: "%command.showOutput%",
+							category: "Git"
+						}, {
+							command: "git.ignore",
+							title: "%command.ignore%",
+							category: "Git"
+						}, {
+							command: "git.revealInExplorer",
+							title: "%command.revealInExplorer%",
+							category: "Git"
+						}, {
+							command: "git.stashIncludeUntracked",
+							title: "%command.stashIncludeUntracked%",
+							category: "Git"
+						}, {
+							command: "git.stash",
+							title: "%command.stash%",
+							category: "Git"
+						}, {
+							command: "git.stashPop",
+							title: "%command.stashPop%",
+							category: "Git"
+						}, {
+							command: "git.stashPopLatest",
+							title: "%command.stashPopLatest%",
+							category: "Git"
+						}, {
+							command: "git.stashApply",
+							title: "%command.stashApply%",
+							category: "Git"
+						}, {
+							command: "git.stashApplyLatest",
+							title: "%command.stashApplyLatest%",
+							category: "Git"
+						}, {
+							command: "git.stashDrop",
+							title: "%command.stashDrop%",
+							category: "Git"
+						}
+					],
+					menus: {
+						commandPalette: [{
+								command: "git.clone",
+								when: "config.git.enabled"
+							}, {
+								command: "git.init",
+								when: "config.git.enabled"
+							}, {
+								command: "git.openRepository",
+								when: "config.git.enabled"
+							}, {
+								command: "git.close",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.refresh",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.openFile",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.openHEADFile",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.openChange",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stage",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stageAll",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stageAllTracked",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stageAllUntracked",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stageSelectedRanges",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stageChange",
+								when: "false"
+							}, {
+								command: "git.revertSelectedRanges",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.revertChange",
+								when: "false"
+							}, {
+								command: "git.openFile2",
+								when: "false"
+							}, {
+								command: "git.unstage",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.unstageAll",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.unstageSelectedRanges",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.clean",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.cleanAll",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.commit",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.commitStaged",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.commitStagedSigned",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.commitStagedAmend",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.commitAll",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.commitAllSigned",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.commitAllAmend",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.restoreCommitTemplate",
+								when: "false"
+							}, {
+								command: "git.revealInExplorer",
+								when: "false"
+							}, {
+								command: "git.undoCommit",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.checkout",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.branch",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.branchFrom",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.deleteBranch",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.renameBranch",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.pull",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.pullFrom",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.pullRebase",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.pullFrom",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.merge",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.createTag",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.deleteTag",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.fetch",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.fetchPrune",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.fetchAll",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.push",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.pushForce",
+								when: "config.git.enabled && config.git.allowForcePush && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.pushTo",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.pushToForce",
+								when: "config.git.enabled && config.git.allowForcePush && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.pushWithTags",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.pushWithTagsForce",
+								when: "config.git.enabled && config.git.allowForcePush && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.addRemote",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.removeRemote",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.sync",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.syncRebase",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.publish",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.showOutput",
+								when: "config.git.enabled"
+							}, {
+								command: "git.ignore",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stashIncludeUntracked",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stash",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stashPop",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stashPopLatest",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stashApply",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stashApplyLatest",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}, {
+								command: "git.stashDrop",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0"
+							}
+						],
+						"scm/title": [{
+								command: "git.init",
+								group: "navigation",
+								when: "config.git.enabled && !scmProvider && gitOpenRepositoryCount == 0 && workspaceFolderCount != 0"
+							}, {
+								command: "git.commit",
+								group: "navigation",
+								when: "scmProvider == git"
+							}, {
+								command: "git.refresh",
+								group: "navigation",
+								when: "scmProvider == git"
+							}, {
+								command: "git.sync",
+								group: "1_sync",
+								when: "scmProvider == git"
+							}, {
+								command: "git.syncRebase",
+								group: "1_sync",
+								when: "scmProvider == git && gitState == idle"
+							}, {
+								command: "git.pull",
+								group: "1_sync",
+								when: "scmProvider == git"
+							}, {
+								command: "git.pullRebase",
+								group: "1_sync",
+								when: "scmProvider == git"
+							}, {
+								command: "git.pullFrom",
+								group: "1_sync",
+								when: "scmProvider == git"
+							}, {
+								command: "git.push",
+								group: "1_sync",
+								when: "scmProvider == git"
+							}, {
+								command: "git.pushForce",
+								group: "1_sync",
+								when: "scmProvider == git && config.git.allowForcePush"
+							}, {
+								command: "git.pushTo",
+								group: "1_sync",
+								when: "scmProvider == git"
+							}, {
+								command: "git.pushToForce",
+								group: "1_sync",
+								when: "scmProvider == git && config.git.allowForcePush"
+							}, {
+								command: "git.checkout",
+								group: "2_branch",
+								when: "scmProvider == git"
+							}, {
+								command: "git.publish",
+								group: "2_branch",
+								when: "scmProvider == git"
+							}, {
+								command: "git.commitStaged",
+								group: "4_commit",
+								when: "scmProvider == git"
+							}, {
+								command: "git.commitStagedSigned",
+								group: "4_commit",
+								when: "scmProvider == git"
+							}, {
+								command: "git.commitStagedAmend",
+								group: "4_commit",
+								when: "scmProvider == git"
+							}, {
+								command: "git.commitAll",
+								group: "4_commit",
+								when: "scmProvider == git"
+							}, {
+								command: "git.commitAllSigned",
+								group: "4_commit",
+								when: "scmProvider == git"
+							}, {
+								command: "git.commitAllAmend",
+								group: "4_commit",
+								when: "scmProvider == git"
+							}, {
+								command: "git.undoCommit",
+								group: "4_commit",
+								when: "scmProvider == git"
+							}, {
+								command: "git.stageAll",
+								group: "5_stage",
+								when: "scmProvider == git"
+							}, {
+								command: "git.unstageAll",
+								group: "5_stage",
+								when: "scmProvider == git"
+							}, {
+								command: "git.cleanAll",
+								group: "5_stage",
+								when: "scmProvider == git"
+							}, {
+								command: "git.stashIncludeUntracked",
+								group: "6_stash",
+								when: "scmProvider == git"
+							}, {
+								command: "git.stash",
+								group: "6_stash",
+								when: "scmProvider == git"
+							}, {
+								command: "git.stashPop",
+								group: "6_stash",
+								when: "scmProvider == git"
+							}, {
+								command: "git.stashPopLatest",
+								group: "6_stash",
+								when: "scmProvider == git"
+							}, {
+								command: "git.stashApply",
+								group: "6_stash",
+								when: "scmProvider == git"
+							}, {
+								command: "git.stashApplyLatest",
+								group: "6_stash",
+								when: "scmProvider == git"
+							}, {
+								command: "git.stashDrop",
+								group: "6_stash",
+								when: "scmProvider == git"
+							}, {
+								command: "git.showOutput",
+								group: "7_repository",
+								when: "scmProvider == git"
+							}
+						],
+						"scm/sourceControl": [{
+								command: "git.close",
+								group: "navigation",
+								when: "scmProvider == git"
+							}
+						],
+						"scm/resourceGroup/context": [{
+								command: "git.stageAll",
+								when: "scmProvider == git && scmResourceGroup == merge",
+								group: "1_modification"
+							}, {
+								command: "git.stageAll",
+								when: "scmProvider == git && scmResourceGroup == merge",
+								group: "inline"
+							}, {
+								command: "git.unstageAll",
+								when: "scmProvider == git && scmResourceGroup == index",
+								group: "1_modification"
+							}, {
+								command: "git.unstageAll",
+								when: "scmProvider == git && scmResourceGroup == index",
+								group: "inline"
+							}, {
+								command: "git.cleanAll",
+								when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges == mixed",
+								group: "1_modification"
+							}, {
+								command: "git.stageAll",
+								when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges == mixed",
+								group: "1_modification"
+							}, {
+								command: "git.cleanAll",
+								when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges == mixed",
+								group: "inline"
+							}, {
+								command: "git.stageAll",
+								when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges == mixed",
+								group: "inline"
+							}, {
+								command: "git.cleanAllTracked",
+								when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges != mixed",
+								group: "1_modification"
+							}, {
+								command: "git.stageAllTracked",
+								when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges != mixed",
+								group: "1_modification"
+							}, {
+								command: "git.cleanAllTracked",
+								when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges != mixed",
+								group: "inline"
+							}, {
+								command: "git.stageAllTracked",
+								when: "scmProvider == git && scmResourceGroup == workingTree && config.git.untrackedChanges != mixed",
+								group: "inline"
+							}, {
+								command: "git.cleanAllUntracked",
+								when: "scmProvider == git && scmResourceGroup == untracked",
+								group: "1_modification"
+							}, {
+								command: "git.stageAllUntracked",
+								when: "scmProvider == git && scmResourceGroup == untracked",
+								group: "1_modification"
+							}, {
+								command: "git.cleanAllUntracked",
+								when: "scmProvider == git && scmResourceGroup == untracked",
+								group: "inline"
+							}, {
+								command: "git.stageAllUntracked",
+								when: "scmProvider == git && scmResourceGroup == untracked",
+								group: "inline"
+							}
+						],
+						"scm/resourceFolder/context": [{
+								command: "git.stage",
+								when: "scmProvider == git && scmResourceGroup == merge",
+								group: "1_modification"
+							}, {
+								command: "git.stage",
+								when: "scmProvider == git && scmResourceGroup == merge",
+								group: "inline"
+							}, {
+								command: "git.unstage",
+								when: "scmProvider == git && scmResourceGroup == index",
+								group: "1_modification"
+							}, {
+								command: "git.unstage",
+								when: "scmProvider == git && scmResourceGroup == index",
+								group: "inline"
+							}, {
+								command: "git.stage",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "1_modification"
+							}, {
+								command: "git.clean",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "1_modification"
+							}, {
+								command: "git.clean",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "inline"
+							}, {
+								command: "git.stage",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "inline"
+							}, {
+								command: "git.ignore",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "1_modification@3"
+							}
+						],
+						"scm/resourceState/context": [{
+								command: "git.stage",
+								when: "scmProvider == git && scmResourceGroup == merge",
+								group: "1_modification"
+							}, {
+								command: "git.openFile",
+								when: "scmProvider == git && scmResourceGroup == merge",
+								group: "navigation"
+							}, {
+								command: "git.stage",
+								when: "scmProvider == git && scmResourceGroup == merge",
+								group: "inline"
+							}, {
+								command: "git.revealInExplorer",
+								when: "scmProvider == git && scmResourceGroup == merge",
+								group: "2_view"
+							}, {
+								command: "git.openFile2",
+								when: "scmProvider == git && scmResourceGroup == merge && config.git.showInlineOpenFileAction && config.git.openDiffOnClick",
+								group: "inline0"
+							}, {
+								command: "git.openChange",
+								when: "scmProvider == git && scmResourceGroup == merge && config.git.showInlineOpenFileAction && !config.git.openDiffOnClick",
+								group: "inline0"
+							}, {
+								command: "git.openChange",
+								when: "scmProvider == git && scmResourceGroup == index",
+								group: "navigation"
+							}, {
+								command: "git.openFile",
+								when: "scmProvider == git && scmResourceGroup == index",
+								group: "navigation"
+							}, {
+								command: "git.openHEADFile",
+								when: "scmProvider == git && scmResourceGroup == index",
+								group: "navigation"
+							}, {
+								command: "git.unstage",
+								when: "scmProvider == git && scmResourceGroup == index",
+								group: "1_modification"
+							}, {
+								command: "git.unstage",
+								when: "scmProvider == git && scmResourceGroup == index",
+								group: "inline"
+							}, {
+								command: "git.revealInExplorer",
+								when: "scmProvider == git && scmResourceGroup == index",
+								group: "2_view"
+							}, {
+								command: "git.openFile2",
+								when: "scmProvider == git && scmResourceGroup == index && config.git.showInlineOpenFileAction && config.git.openDiffOnClick",
+								group: "inline0"
+							}, {
+								command: "git.openChange",
+								when: "scmProvider == git && scmResourceGroup == index && config.git.showInlineOpenFileAction && !config.git.openDiffOnClick",
+								group: "inline0"
+							}, {
+								command: "git.openChange",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "navigation"
+							}, {
+								command: "git.openHEADFile",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "navigation"
+							}, {
+								command: "git.openFile",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "navigation"
+							}, {
+								command: "git.stage",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "1_modification"
+							}, {
+								command: "git.clean",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "1_modification"
+							}, {
+								command: "git.clean",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "inline"
+							}, {
+								command: "git.stage",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "inline"
+							}, {
+								command: "git.openFile2",
+								when: "scmProvider == git && scmResourceGroup == workingTree && config.git.showInlineOpenFileAction && config.git.openDiffOnClick",
+								group: "inline0"
+							}, {
+								command: "git.openChange",
+								when: "scmProvider == git && scmResourceGroup == workingTree && config.git.showInlineOpenFileAction && !config.git.openDiffOnClick",
+								group: "inline0"
+							}, {
+								command: "git.ignore",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "1_modification@3"
+							}, {
+								command: "git.revealInExplorer",
+								when: "scmProvider == git && scmResourceGroup == workingTree",
+								group: "2_view"
+							}, {
+								command: "git.openChange",
+								when: "scmProvider == git && scmResourceGroup == untracked",
+								group: "navigation"
+							}, {
+								command: "git.openHEADFile",
+								when: "scmProvider == git && scmResourceGroup == untracked",
+								group: "navigation"
+							}, {
+								command: "git.openFile",
+								when: "scmProvider == git && scmResourceGroup == untracked",
+								group: "navigation"
+							}, {
+								command: "git.stage",
+								when: "scmProvider == git && scmResourceGroup == untracked",
+								group: "1_modification"
+							}, {
+								command: "git.clean",
+								when: "scmProvider == git && scmResourceGroup == untracked && !gitFreshRepository",
+								group: "1_modification"
+							}, {
+								command: "git.clean",
+								when: "scmProvider == git && scmResourceGroup == untracked && !gitFreshRepository",
+								group: "inline"
+							}, {
+								command: "git.stage",
+								when: "scmProvider == git && scmResourceGroup == untracked",
+								group: "inline"
+							}, {
+								command: "git.openFile2",
+								when: "scmProvider == git && scmResourceGroup == untracked && config.git.showInlineOpenFileAction && config.git.openDiffOnClick",
+								group: "inline0"
+							}, {
+								command: "git.openChange",
+								when: "scmProvider == git && scmResourceGroup == untracked && config.git.showInlineOpenFileAction && !config.git.openDiffOnClick",
+								group: "inline0"
+							}, {
+								command: "git.ignore",
+								when: "scmProvider == git && scmResourceGroup == untracked",
+								group: "1_modification@3"
+							}
+						],
+						"editor/title": [{
+								command: "git.openFile",
+								group: "navigation",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
+							}, {
+								command: "git.openChange",
+								group: "navigation",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0 && !isInDiffEditor && resourceScheme == file"
+							}, {
+								command: "git.stageSelectedRanges",
+								group: "2_git@1",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
+							}, {
+								command: "git.unstageSelectedRanges",
+								group: "2_git@2",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
+							}, {
+								command: "git.revertSelectedRanges",
+								group: "2_git@3",
+								when: "config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
+							}
+						],
+						"editor/context": [{
+								command: "git.stageSelectedRanges",
+								group: "2_git@1",
+								when: "isInDiffRightEditor && config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
+							}, {
+								command: "git.unstageSelectedRanges",
+								group: "2_git@2",
+								when: "isInDiffRightEditor && config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
+							}, {
+								command: "git.revertSelectedRanges",
+								group: "2_git@3",
+								when: "isInDiffRightEditor && config.git.enabled && gitOpenRepositoryCount != 0 && isInDiffEditor && resourceScheme =~ /^git$|^file$/"
+							}
+						],
+						"scm/change/title": [{
+								command: "git.stageChange",
+								when: "originalResourceScheme == git"
+							}, {
+								command: "git.revertChange",
+								when: "originalResourceScheme == git"
+							}
+						]
+					},
+					configuration: {
+						title: "Git",
+						properties: {
+							"git.enabled": {
+								type: "boolean",
+								scope: "resource",
+								description: "%config.enabled%",
+							default:
+								!0
+							},
+							"git.path": {
+								type: ["string", "null"],
+								markdownDescription: "%config.path%",
+							default:
+								null,
+								scope: "machine"
+							},
+							"git.autoRepositoryDetection": {
+								type: ["boolean", "string"],
+								enum: [!0, !1, "subFolders", "openEditors"],
+								enumDescriptions: ["%config.autoRepositoryDetection.true%", "%config.autoRepositoryDetection.false%", "%config.autoRepositoryDetection.subFolders%", "%config.autoRepositoryDetection.openEditors%"],
+								description: "%config.autoRepositoryDetection%",
+							default:
+								!0
+							},
+							"git.autorefresh": {
+								type: "boolean",
+								description: "%config.autorefresh%",
+							default:
+								!0
+							},
+							"git.autofetch": {
+								type: "boolean",
+								scope: "resource",
+								description: "%config.autofetch%",
+							default:
+								!1,
+								tags: ["usesOnlineServices"]
+							},
+							"git.autofetchPeriod": {
+								type: "number",
+								scope: "resource",
+								description: "%config.autofetchPeriod%",
+							default:
+								180
+							},
+							"git.branchValidationRegex": {
+								type: "string",
+								description: "%config.branchValidationRegex%",
+							default:
+								""
+							},
+							"git.branchWhitespaceChar": {
+								type: "string",
+								description: "%config.branchWhitespaceChar%",
+							default:
+								"-"
+							},
+							"git.confirmSync": {
+								type: "boolean",
+								description: "%config.confirmSync%",
+							default:
+								!0
+							},
+							"git.countBadge": {
+								type: "string",
+								enum: ["all", "tracked", "off"],
+								enumDescriptions: ["%config.countBadge.all%", "%config.countBadge.tracked%", "%config.countBadge.off%"],
+								description: "%config.countBadge%",
+							default:
+								"all",
+								scope: "resource"
+							},
+							"git.checkoutType": {
+								type: "string",
+								enum: ["all", "local", "tags", "remote"],
+								enumDescriptions: ["%config.checkoutType.all%", "%config.checkoutType.local%", "%config.checkoutType.tags%", "%config.checkoutType.remote%"],
+								markdownDescription: "%config.checkoutType%",
+							default:
+								"all"
+							},
+							"git.ignoreLegacyWarning": {
+								type: "boolean",
+								description: "%config.ignoreLegacyWarning%",
+							default:
+								!1
+							},
+							"git.ignoreMissingGitWarning": {
+								type: "boolean",
+								description: "%config.ignoreMissingGitWarning%",
+							default:
+								!1
+							},
+							"git.ignoreLimitWarning": {
+								type: "boolean",
+								description: "%config.ignoreLimitWarning%",
+							default:
+								!1
+							},
+							"git.defaultCloneDirectory": {
+								type: "string",
+							default:
+								null,
+								description: "%config.defaultCloneDirectory%"
+							},
+							"git.enableSmartCommit": {
+								type: "boolean",
+								scope: "resource",
+								description: "%config.enableSmartCommit%",
+							default:
+								!1
+							},
+							"git.smartCommitChanges": {
+								type: "string",
+								enum: ["all", "tracked"],
+								enumDescriptions: ["%config.smartCommitChanges.all%", "%config.smartCommitChanges.tracked%"],
+								scope: "resource",
+								description: "%config.smartCommitChanges%",
+							default:
+								"all"
+							},
+							"git.suggestSmartCommit": {
+								type: "boolean",
+								scope: "resource",
+								description: "%config.suggestSmartCommit%",
+							default:
+								!0
+							},
+							"git.enableCommitSigning": {
+								type: "boolean",
+								scope: "resource",
+								description: "%config.enableCommitSigning%",
+							default:
+								!1
+							},
+							"git.confirmEmptyCommits": {
+								type: "boolean",
+								scope: "resource",
+								description: "%config.confirmEmptyCommits%",
+							default:
+								!0
+							},
+							"git.decorations.enabled": {
+								type: "boolean",
+							default:
+								!0,
+								description: "%config.decorations.enabled%"
+							},
+							"git.enableStatusBarSync": {
+								type: "boolean",
+							default:
+								!0,
+								description: "%config.enableStatusBarSync%",
+								scope: "resource"
+							},
+							"git.promptToSaveFilesBeforeCommit": {
+								type: "string",
+								enum: ["always", "staged", "never"],
+								enumDescriptions: ["%config.promptToSaveFilesBeforeCommit.always%", "%config.promptToSaveFilesBeforeCommit.staged%", "%config.promptToSaveFilesBeforeCommit.never%"],
+								scope: "resource",
+							default:
+								"always",
+								description: "%config.promptToSaveFilesBeforeCommit%"
+							},
+							"git.postCommitCommand": {
+								type: "string",
+								enum: ["none", "push", "sync"],
+								enumDescriptions: ["%config.postCommitCommand.none%", "%config.postCommitCommand.push%", "%config.postCommitCommand.sync%"],
+								markdownDescription: "%config.postCommitCommand%",
+								scope: "resource",
+							default:
+								"none"
+							},
+							"git.showInlineOpenFileAction": {
+								type: "boolean",
+							default:
+								!0,
+								description: "%config.showInlineOpenFileAction%"
+							},
+							"git.showPushSuccessNotification": {
+								type: "boolean",
+								description: "%config.showPushSuccessNotification%",
+							default:
+								!1
+							},
+							"git.inputValidation": {
+								type: "string",
+								enum: ["always", "warn", "off"],
+							default:
+								"warn",
+								description: "%config.inputValidation%"
+							},
+							"git.inputValidationLength": {
+								type: "number",
+							default:
+								72,
+								description: "%config.inputValidationLength%"
+							},
+							"git.inputValidationSubjectLength": {
+								type: ["number", "null"],
+							default:
+								50,
+								description: "%config.inputValidationSubjectLength%"
+							},
+							"git.detectSubmodules": {
+								type: "boolean",
+								scope: "resource",
+							default:
+								!0,
+								description: "%config.detectSubmodules%"
+							},
+							"git.detectSubmodulesLimit": {
+								type: "number",
+								scope: "resource",
+							default:
+								10,
+								description: "%config.detectSubmodulesLimit%"
+							},
+							"git.alwaysShowStagedChangesResourceGroup": {
+								type: "boolean",
+								scope: "resource",
+							default:
+								!1,
+								description: "%config.alwaysShowStagedChangesResourceGroup%"
+							},
+							"git.alwaysSignOff": {
+								type: "boolean",
+								scope: "resource",
+							default:
+								!1,
+								description: "%config.alwaysSignOff%"
+							},
+							"git.ignoredRepositories": {
+								type: "array",
+								items: {
+									type: "string"
+								},
+							default:
+								[],
+								scope: "window",
+								description: "%config.ignoredRepositories%"
+							},
+							"git.scanRepositories": {
+								type: "array",
+								items: {
+									type: "string"
+								},
+							default:
+								[],
+								scope: "resource",
+								description: "%config.scanRepositories%"
+							},
+							"git.showProgress": {
+								type: "boolean",
+								description: "%config.showProgress%",
+							default:
+								!0,
+								scope: "resource"
+							},
+							"git.rebaseWhenSync": {
+								type: "boolean",
+								scope: "resource",
+							default:
+								!1,
+								description: "%config.rebaseWhenSync%"
+							},
+							"git.fetchOnPull": {
+								type: "boolean",
+								scope: "resource",
+							default:
+								!1,
+								description: "%config.fetchOnPull%"
+							},
+							"git.pullTags": {
+								type: "boolean",
+								scope: "resource",
+							default:
+								!0,
+								description: "%config.pullTags%"
+							},
+							"git.autoStash": {
+								type: "boolean",
+								scope: "resource",
+							default:
+								!1,
+								description: "%config.autoStash%"
+							},
+							"git.allowForcePush": {
+								type: "boolean",
+							default:
+								!1,
+								description: "%config.allowForcePush%"
+							},
+							"git.useForcePushWithLease": {
+								type: "boolean",
+							default:
+								!0,
+								description: "%config.useForcePushWithLease%"
+							},
+							"git.confirmForcePush": {
+								type: "boolean",
+							default:
+								!0,
+								description: "%config.confirmForcePush%"
+							},
+							"git.openDiffOnClick": {
+								type: "boolean",
+								scope: "resource",
+							default:
+								!0,
+								description: "%config.openDiffOnClick%"
+							},
+							"git.supportCancellation": {
+								type: "boolean",
+								scope: "resource",
+							default:
+								!1,
+								description: "%config.supportCancellation%"
+							},
+							"git.branchSortOrder": {
+								type: "string",
+								enum: ["committerdate", "alphabetically"],
+							default:
+								"committerdate",
+								description: "%config.branchSortOrder%"
+							},
+							"git.untrackedChanges": {
+								type: "string",
+								enum: ["mixed", "separate", "hidden"],
+								enumDescriptions: ["%config.untrackedChanges.mixed%", "%config.untrackedChanges.separate%", "%config.untrackedChanges.hidden%"],
+							default:
+								"mixed",
+								description: "%config.untrackedChanges%",
+								scope: "resource"
+							},
+							"git.restoreCommitTemplateComments": {
+								type: "boolean",
+								scope: "resource",
+							default:
+								!0,
+								description: "%config.restoreCommitTemplateComments%"
+							}
+						}
+					},
+					colors: [{
+							id: "gitDecoration.addedResourceForeground",
+							description: "%colors.added%",
+							defaults: {
+								light: "#587c0c",
+								dark: "#81b88b",
+								highContrast: "#1b5225"
+							}
+						}, {
+							id: "gitDecoration.modifiedResourceForeground",
+							description: "%colors.modified%",
+							defaults: {
+								light: "#895503",
+								dark: "#E2C08D",
+								highContrast: "#E2C08D"
+							}
+						}, {
+							id: "gitDecoration.deletedResourceForeground",
+							description: "%colors.deleted%",
+							defaults: {
+								light: "#ad0707",
+								dark: "#c74e39",
+								highContrast: "#c74e39"
+							}
+						}, {
+							id: "gitDecoration.untrackedResourceForeground",
+							description: "%colors.untracked%",
+							defaults: {
+								light: "#007100",
+								dark: "#73C991",
+								highContrast: "#73C991"
+							}
+						}, {
+							id: "gitDecoration.ignoredResourceForeground",
+							description: "%colors.ignored%",
+							defaults: {
+								light: "#8E8E90",
+								dark: "#8C8C8C",
+								highContrast: "#A7A8A9"
+							}
+						}, {
+							id: "gitDecoration.conflictingResourceForeground",
+							description: "%colors.conflict%",
+							defaults: {
+								light: "#6c6cc4",
+								dark: "#6c6cc4",
+								highContrast: "#6c6cc4"
+							}
+						}, {
+							id: "gitDecoration.submoduleResourceForeground",
+							description: "%colors.submodule%",
+							defaults: {
+								light: "#1258a7",
+								dark: "#8db9e2",
+								highContrast: "#8db9e2"
+							}
+						}
+					],
+					languages: [{
+							id: "git-commit",
+							aliases: ["Git Commit Message", "git-commit"],
+							filenames: ["COMMIT_EDITMSG", "MERGE_MSG"],
+							configuration: "./languages/git-commit.language-configuration.json"
+						}, {
+							id: "git-rebase",
+							aliases: ["Git Rebase Message", "git-rebase"],
+							filenames: ["git-rebase-todo"],
+							configuration: "./languages/git-rebase.language-configuration.json"
+						}, {
+							id: "diff",
+							aliases: ["Diff", "diff"],
+							extensions: [".patch", ".diff", ".rej"],
+							configuration: "./languages/diff.language-configuration.json"
+						}, {
+							id: "ignore",
+							aliases: ["Ignore", "ignore"],
+							filenames: [".gitignore"],
+							configuration: "./languages/ignore.language-configuration.json"
+						}
+					],
+					grammars: [{
+							language: "git-commit",
+							scopeName: "text.git-commit",
+							path: "./syntaxes/git-commit.tmLanguage.json"
+						}, {
+							language: "git-rebase",
+							scopeName: "text.git-rebase",
+							path: "./syntaxes/git-rebase.tmLanguage.json"
+						}, {
+							language: "diff",
+							scopeName: "source.diff",
+							path: "./syntaxes/diff.tmLanguage.json"
+						}, {
+							language: "ignore",
+							scopeName: "source.ignore",
+							path: "./syntaxes/ignore.tmLanguage.json"
+						}
+					],
+					configurationDefaults: {
+						"[git-commit]": {
+							"editor.rulers": [72]
+						}
+					}
+				},
+				dependencies: {
+					byline: "^5.0.0",
+					"file-type": "^7.2.0",
+					"iconv-lite": "^0.4.24",
+					jschardet: "^1.6.0",
+					"vscode-extension-telemetry": "0.1.1",
+					"vscode-nls": "^4.0.0",
+					"vscode-uri": "^2.0.0",
+					which: "^1.3.0"
+				},
+				devDependencies: {
+					"@types/byline": "4.2.31",
+					"@types/file-type": "^5.2.1",
+					"@types/mocha": "2.2.43",
+					"@types/node": "^12.11.7",
+					"@types/which": "^1.0.28",
+					mocha: "^3.2.0"
+				}
+			}
+		}
+	]));
 //# sourceMappingURL=https://ticino.blob.core.windows.net/sourcemaps/27cd33d891eb23e370b672e751be9fe8b3748ac1/extensions/git/dist/main.js.map
