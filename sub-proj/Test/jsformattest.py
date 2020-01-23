@@ -83,7 +83,7 @@ class ValidateCaseRuntime(CaseRuntime):
         call(["node", "--version"])
 
 def main():
-    x64 = False
+    x64 = True # x64 is default
     release = False
     nodejs = False
     validate = False
@@ -92,13 +92,13 @@ def main():
         argv = argv.lower()
         if argv == "node" or argv == "nodejs":
             nodejs = True
-            x64 = False
+            x64 = True
             release = False
             validate = False
             break
         if argv == "validate":
             validate = True
-            x64 = False
+            x64 = True
             release = False
             nodejs = False
             break
@@ -106,6 +106,8 @@ def main():
             release = True
         if argv == "64" or argv == "x64":
             x64 = True
+        if argv == "32" or argv == "x86":
+            x64 = False
 
     # system check
     if nodejs == False:
@@ -127,7 +129,6 @@ def main():
 
     if nodejs == False and validate == False:
         if is_osx_sys():
-            x64 = False # no x64 on macOS
             jsformatter_lib_path_sel = JSFORMATTER_LIB_PATH_MAC
             if release:
                 jsformatter_lib_path_sel = JSFORMATTER_LIB_REL_PATH_MAC
