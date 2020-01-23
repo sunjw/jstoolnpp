@@ -60,7 +60,6 @@ void RealJSFormatter::Init()
 
 	m_initIndent = "";
 	m_nIndents = 0;
-	m_bIndentFix = false;
 
 	m_nLineIndents = 0;
 	m_bLineTemplate = false;
@@ -606,7 +605,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				(fixTopStack == JS_ASSIGN || fixTopStack == JS_HELPER))
 			{
 				--m_nIndents; // =({ 减掉一个缩进
-				m_bIndentFix = true;
+				m_indentFixMap[m_nIndents] = true;
 			}
 			if (m_nIndents == 0 && 
 				(fixTopStack == JS_ASSIGN || fixTopStack == JS_HELPER))
@@ -766,14 +765,16 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		// 修正({...}) 中多一次缩进
 		if(topStack != JS_ASSIGN && StackTopEq(m_blockStack, JS_BRACKET))
 		{
+			int prevIndent = m_nIndents;
+			bool bIndentFix = m_indentFixMap[prevIndent];
 			++m_nIndents;
 			m_blockStack.pop();
-			if (m_bIndentFix &&
+			if (bIndentFix &&
 				(StackTopEq(m_blockStack, JS_ASSIGN) || StackTopEq(m_blockStack, JS_HELPER)))
 			{
 				++m_nIndents; // =({
-				m_bIndentFix = false;
 			}
+			m_indentFixMap[prevIndent] = false;
 			m_blockStack.push(JS_BRACKET);
 			GetStackTop(m_blockStack, topStack);
 		}
