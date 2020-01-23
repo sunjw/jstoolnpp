@@ -987,8 +987,8 @@ var Firebug = null;
 			var sel = target.ownerDocument.defaultView.getSelection();
 			if (!this.contextMenuObject && !$("cmd_copy").getAttribute("disabled") && !sel.isCollapsed) {
 				var menuitem = FBL.createMenuItem(popup, {
-						label: "Copy"
-					});
+					label: "Copy"
+				});
 				menuitem.setAttribute("command", "cmd_copy");
 			}
 

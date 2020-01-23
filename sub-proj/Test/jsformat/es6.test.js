@@ -605,10 +605,10 @@ let target = {
 	foo: "Welcome, foo"
 };
 let proxy = new Proxy(target, {
-		get(receiver, name) {
-			return name in receiver ? receiver[name] : `Hello, ${name}`;
-		}
-	});
+	get(receiver, name) {
+		return name in receiver ? receiver[name] : `Hello, ${name}`;
+	}
+});
 proxy.foo === "Welcome, foo";
 proxy.world === "Hello, world";
 
@@ -623,17 +623,17 @@ console.log(list.sort(i10nDE.compare)); // [ "a", "ä", "z" ]
 console.log(list.sort(i10nSV.compare)); // [ "a", "z", "ä" ]
 
 var i10nUSD = new Intl.NumberFormat("en-US", {
-		style: "currency",
-		currency: "USD"
-	});
+	style: "currency",
+	currency: "USD"
+});
 var i10nGBP = new Intl.NumberFormat("en-GB", {
-		style: "currency",
-		currency: "GBP"
-	});
+	style: "currency",
+	currency: "GBP"
+});
 var i10nEUR = new Intl.NumberFormat("de-DE", {
-		style: "currency",
-		currency: "EUR"
-	});
+	style: "currency",
+	currency: "EUR"
+});
 i10nUSD.format(100200300.40) === "$100,200,300.40";
 i10nGBP.format(100200300.40) === "£100,200,300.40";
 i10nEUR.format(100200300.40) === "100.200.300,40 €";
