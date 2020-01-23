@@ -513,42 +513,42 @@ RegExp.escape = function (str) {
 	return String(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
 };
 var PeriodicalExecuter = Class.create({
-		initialize: function (callback, frequency) {
-			this.callback = callback;
-			this.frequency = frequency;
-			this.currentlyExecuting = false;
+	initialize: function (callback, frequency) {
+		this.callback = callback;
+		this.frequency = frequency;
+		this.currentlyExecuting = false;
 
-			this.registerCallback();
-		},
+		this.registerCallback();
+	},
 
-		registerCallback: function () {
-			this.timer = setInterval(this.onTimerEvent.bind(this), this.frequency * 1000);
-		},
+	registerCallback: function () {
+		this.timer = setInterval(this.onTimerEvent.bind(this), this.frequency * 1000);
+	},
 
-		execute: function () {
-			this.callback(this);
-		},
+	execute: function () {
+		this.callback(this);
+	},
 
-		stop: function () {
-			if (!this.timer)
-				return;
-			clearInterval(this.timer);
-			this.timer = null;
-		},
+	stop: function () {
+		if (!this.timer)
+			return;
+		clearInterval(this.timer);
+		this.timer = null;
+	},
 
-		onTimerEvent: function () {
-			if (!this.currentlyExecuting) {
-				try {
-					this.currentlyExecuting = true;
-					this.execute();
-					this.currentlyExecuting = false;
-				} catch (e) {
-					this.currentlyExecuting = false;
-					throw e;
-				}
+	onTimerEvent: function () {
+		if (!this.currentlyExecuting) {
+			try {
+				this.currentlyExecuting = true;
+				this.execute();
+				this.currentlyExecuting = false;
+			} catch (e) {
+				this.currentlyExecuting = false;
+				throw e;
 			}
 		}
-	});
+	}
+});
 Object.extend(String, {
 	interpret: function (value) {
 		return value == null ? '' : String(value);
@@ -721,11 +721,11 @@ Object.extend(String.prototype, (function () {
 
 		function inspect(useDoubleQuotes) {
 			var escapedString = this.replace(/[\x00-\x1f\\]/g, function (character) {
-					if (character in String.specialChar) {
-						return String.specialChar[character];
-					}
-					return '\\u00' + character.charCodeAt().toPaddedString(2, 16);
-				});
+				if (character in String.specialChar) {
+					return String.specialChar[character];
+				}
+				return '\\u00' + character.charCodeAt().toPaddedString(2, 16);
+			});
 			if (useDoubleQuotes)
 				return '"' + escapedString.replace(/"/g, '\\"') + '"';
 			return "'" + escapedString.replace(/'/g, '\\\'') + "'";
@@ -750,8 +750,8 @@ Object.extend(String.prototype, (function () {
 			cx = /[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
 			if (cx.test(json)) {
 				json = json.replace(cx, function (a) {
-						return '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
-					});
+					return '\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
+				});
 			}
 			try {
 				if (!sanitize || json.isJSON())
@@ -825,43 +825,43 @@ Object.extend(String.prototype, (function () {
 	})());
 
 var Template = Class.create({
-		initialize: function (template, pattern) {
-			this.template = template.toString();
-			this.pattern = pattern || Template.Pattern;
-		},
+	initialize: function (template, pattern) {
+		this.template = template.toString();
+		this.pattern = pattern || Template.Pattern;
+	},
 
-		evaluate: function (object) {
-			if (object && Object.isFunction(object.toTemplateReplacements))
-				object = object.toTemplateReplacements();
+	evaluate: function (object) {
+		if (object && Object.isFunction(object.toTemplateReplacements))
+			object = object.toTemplateReplacements();
 
-			return this.template.gsub(this.pattern, function (match) {
-				if (object == null)
-					return (match[1] + '');
+		return this.template.gsub(this.pattern, function (match) {
+			if (object == null)
+				return (match[1] + '');
 
-				var before = match[1] || '';
-				if (before == '\\')
-					return match[2];
+			var before = match[1] || '';
+			if (before == '\\')
+				return match[2];
 
-				var ctx = object,
-				expr = match[3],
-				pattern = /^([^.[]+|\[((?:.*?[^\\])?)\])(\.|\[|$)/;
+			var ctx = object,
+			expr = match[3],
+			pattern = /^([^.[]+|\[((?:.*?[^\\])?)\])(\.|\[|$)/;
 
+			match = pattern.exec(expr);
+			if (match == null)
+				return before;
+			while (match != null) {
+				var comp = match[1].startsWith('[') ? match[2].replace(/\\\\]/g, ']') : match[1];
+				ctx = ctx[comp];
+				if (null == ctx || '' == match[3])
+					break;
+				expr = expr.substring('[' == match[3] ? match[1].length : match[0].length);
 				match = pattern.exec(expr);
-				if (match == null)
-					return before;
-				while (match != null) {
-					var comp = match[1].startsWith('[') ? match[2].replace(/\\\\]/g, ']') : match[1];
-					ctx = ctx[comp];
-					if (null == ctx || '' == match[3])
-						break;
-					expr = expr.substring('[' == match[3] ? match[1].length : match[0].length);
-					match = pattern.exec(expr);
-				}
+			}
 
-				return before + String.interpret(ctx);
-			});
-		}
-	});
+			return before + String.interpret(ctx);
+		});
+	}
+});
 Template.Pattern = /(^|.|\r|\n)(#\{(.*?)\})/;
 
 var $break = {};
@@ -1330,8 +1330,8 @@ var Hash = Class.create(Enumerable, (function () {
 
 			function index(value) {
 				var match = this.detect(function (pair) {
-						return pair.value === value;
-					});
+					return pair.value === value;
+				});
 				return match && match.key;
 			}
 
@@ -1539,361 +1539,361 @@ Ajax.Responders.register({
 	}
 });
 Ajax.Base = Class.create({
-		initialize: function (options) {
-			this.options = {
-				method: 'post',
-				asynchronous: true,
-				contentType: 'application/x-www-form-urlencoded',
-				encoding: 'UTF-8',
-				parameters: '',
-				evalJSON: true,
-				evalJS: true
-			};
-			Object.extend(this.options, options || {});
+	initialize: function (options) {
+		this.options = {
+			method: 'post',
+			asynchronous: true,
+			contentType: 'application/x-www-form-urlencoded',
+			encoding: 'UTF-8',
+			parameters: '',
+			evalJSON: true,
+			evalJS: true
+		};
+		Object.extend(this.options, options || {});
 
-			this.options.method = this.options.method.toLowerCase();
+		this.options.method = this.options.method.toLowerCase();
 
-			if (Object.isHash(this.options.parameters))
-				this.options.parameters = this.options.parameters.toObject();
-		}
-	});
+		if (Object.isHash(this.options.parameters))
+			this.options.parameters = this.options.parameters.toObject();
+	}
+});
 Ajax.Request = Class.create(Ajax.Base, {
-		_complete: false,
+	_complete: false,
 
-		initialize: function ($super, url, options) {
-			$super(options);
-			this.transport = Ajax.getTransport();
-			this.request(url);
-		},
+	initialize: function ($super, url, options) {
+		$super(options);
+		this.transport = Ajax.getTransport();
+		this.request(url);
+	},
 
-		request: function (url) {
-			this.url = url;
-			this.method = this.options.method;
-			var params = Object.isString(this.options.parameters) ?
-				this.options.parameters :
-				Object.toQueryString(this.options.parameters);
+	request: function (url) {
+		this.url = url;
+		this.method = this.options.method;
+		var params = Object.isString(this.options.parameters) ?
+			this.options.parameters :
+			Object.toQueryString(this.options.parameters);
 
-			if (!['get', 'post'].include(this.method)) {
-				params += (params ? '&' : '') + "_method=" + this.method;
-				this.method = 'post';
-			}
-
-			if (params && this.method === 'get') {
-				this.url += (this.url.include('?') ? '&' : '?') + params;
-			}
-
-			this.parameters = params.toQueryParams();
-
-			try {
-				var response = new Ajax.Response(this);
-				if (this.options.onCreate)
-					this.options.onCreate(response);
-				Ajax.Responders.dispatch('onCreate', this, response);
-
-				this.transport.open(this.method.toUpperCase(), this.url,
-					this.options.asynchronous);
-
-				if (this.options.asynchronous)
-					this.respondToReadyState.bind(this).defer(1);
-
-				this.transport.onreadystatechange = this.onStateChange.bind(this);
-				this.setRequestHeaders();
-
-				this.body = this.method == 'post' ? (this.options.postBody || params) : null;
-				this.transport.send(this.body);
-
-				/* Force Firefox to handle ready state 4 for synchronous requests */
-				if (!this.options.asynchronous && this.transport.overrideMimeType)
-					this.onStateChange();
-
-			} catch (e) {
-				this.dispatchException(e);
-			}
-		},
-
-		onStateChange: function () {
-			var readyState = this.transport.readyState;
-			if (readyState > 1 && !((readyState == 4) && this._complete))
-				this.respondToReadyState(this.transport.readyState);
-		},
-
-		setRequestHeaders: function () {
-			var headers = {
-				'X-Requested-With': 'XMLHttpRequest',
-				'X-Prototype-Version': Prototype.Version,
-				'Accept': 'text/javascript, text/html, application/xml, text/xml, */*'
-			};
-
-			if (this.method == 'post') {
-				headers['Content-type'] = this.options.contentType +
-					(this.options.encoding ? '; charset=' + this.options.encoding : '');
-
-				/* Force "Connection: close" for older Mozilla browsers to work
-				 * around a bug where XMLHttpRequest sends an incorrect
-				 * Content-length header. See Mozilla Bugzilla #246651.
-				 */
-				if (this.transport.overrideMimeType &&
-					(navigator.userAgent.match(/Gecko\/(\d{4})/) || [0, 2005])[1] < 2005)
-					headers['Connection'] = 'close';
-			}
-
-			if (typeof this.options.requestHeaders == 'object') {
-				var extras = this.options.requestHeaders;
-
-				if (Object.isFunction(extras.push))
-					for (var i = 0, length = extras.length; i < length; i += 2)
-						headers[extras[i]] = extras[i + 1];
-				else
-					$H(extras).each(function (pair) {
-						headers[pair.key] = pair.value
-					});
-			}
-
-			for (var name in headers)
-				this.transport.setRequestHeader(name, headers[name]);
-		},
-
-		success: function () {
-			var status = this.getStatus();
-			return !status || (status >= 200 && status < 300) || status == 304;
-		},
-
-		getStatus: function () {
-			try {
-				if (this.transport.status === 1223)
-					return 204;
-				return this.transport.status || 0;
-			} catch (e) {
-				return 0
-			}
-		},
-
-		respondToReadyState: function (readyState) {
-			var state = Ajax.Request.Events[readyState],
-			response = new Ajax.Response(this);
-
-			if (state == 'Complete') {
-				try {
-					this._complete = true;
-					(this.options['on' + response.status]
-						 || this.options['on' + (this.success() ? 'Success' : 'Failure')]
-						 || Prototype.emptyFunction)(response, response.headerJSON);
-				} catch (e) {
-					this.dispatchException(e);
-				}
-
-				var contentType = response.getHeader('Content-type');
-				if (this.options.evalJS == 'force'
-					 || (this.options.evalJS && this.isSameOrigin() && contentType
-						 && contentType.match(/^\s*(text|application)\/(x-)?(java|ecma)script(;.*)?\s*$/i)))
-					this.evalResponse();
-			}
-
-			try {
-				(this.options['on' + state] || Prototype.emptyFunction)(response, response.headerJSON);
-				Ajax.Responders.dispatch('on' + state, this, response, response.headerJSON);
-			} catch (e) {
-				this.dispatchException(e);
-			}
-
-			if (state == 'Complete') {
-				this.transport.onreadystatechange = Prototype.emptyFunction;
-			}
-		},
-
-		isSameOrigin: function () {
-			var m = this.url.match(/^\s*https?:\/\/[^\/]*/);
-			return !m || (m[0] == '#{protocol}//#{domain}#{port}'.interpolate({
-					protocol: location.protocol,
-					domain: document.domain,
-					port: location.port ? ':' + location.port : ''
-				}));
-		},
-
-		getHeader: function (name) {
-			try {
-				return this.transport.getResponseHeader(name) || null;
-			} catch (e) {
-				return null;
-			}
-		},
-
-		evalResponse: function () {
-			try {
-				return eval((this.transport.responseText || '').unfilterJSON());
-			} catch (e) {
-				this.dispatchException(e);
-			}
-		},
-
-		dispatchException: function (exception) {
-			(this.options.onException || Prototype.emptyFunction)(this, exception);
-			Ajax.Responders.dispatch('onException', this, exception);
+		if (!['get', 'post'].include(this.method)) {
+			params += (params ? '&' : '') + "_method=" + this.method;
+			this.method = 'post';
 		}
-	});
+
+		if (params && this.method === 'get') {
+			this.url += (this.url.include('?') ? '&' : '?') + params;
+		}
+
+		this.parameters = params.toQueryParams();
+
+		try {
+			var response = new Ajax.Response(this);
+			if (this.options.onCreate)
+				this.options.onCreate(response);
+			Ajax.Responders.dispatch('onCreate', this, response);
+
+			this.transport.open(this.method.toUpperCase(), this.url,
+				this.options.asynchronous);
+
+			if (this.options.asynchronous)
+				this.respondToReadyState.bind(this).defer(1);
+
+			this.transport.onreadystatechange = this.onStateChange.bind(this);
+			this.setRequestHeaders();
+
+			this.body = this.method == 'post' ? (this.options.postBody || params) : null;
+			this.transport.send(this.body);
+
+			/* Force Firefox to handle ready state 4 for synchronous requests */
+			if (!this.options.asynchronous && this.transport.overrideMimeType)
+				this.onStateChange();
+
+		} catch (e) {
+			this.dispatchException(e);
+		}
+	},
+
+	onStateChange: function () {
+		var readyState = this.transport.readyState;
+		if (readyState > 1 && !((readyState == 4) && this._complete))
+			this.respondToReadyState(this.transport.readyState);
+	},
+
+	setRequestHeaders: function () {
+		var headers = {
+			'X-Requested-With': 'XMLHttpRequest',
+			'X-Prototype-Version': Prototype.Version,
+			'Accept': 'text/javascript, text/html, application/xml, text/xml, */*'
+		};
+
+		if (this.method == 'post') {
+			headers['Content-type'] = this.options.contentType +
+				(this.options.encoding ? '; charset=' + this.options.encoding : '');
+
+			/* Force "Connection: close" for older Mozilla browsers to work
+			 * around a bug where XMLHttpRequest sends an incorrect
+			 * Content-length header. See Mozilla Bugzilla #246651.
+			 */
+			if (this.transport.overrideMimeType &&
+				(navigator.userAgent.match(/Gecko\/(\d{4})/) || [0, 2005])[1] < 2005)
+				headers['Connection'] = 'close';
+		}
+
+		if (typeof this.options.requestHeaders == 'object') {
+			var extras = this.options.requestHeaders;
+
+			if (Object.isFunction(extras.push))
+				for (var i = 0, length = extras.length; i < length; i += 2)
+					headers[extras[i]] = extras[i + 1];
+			else
+				$H(extras).each(function (pair) {
+					headers[pair.key] = pair.value
+				});
+		}
+
+		for (var name in headers)
+			this.transport.setRequestHeader(name, headers[name]);
+	},
+
+	success: function () {
+		var status = this.getStatus();
+		return !status || (status >= 200 && status < 300) || status == 304;
+	},
+
+	getStatus: function () {
+		try {
+			if (this.transport.status === 1223)
+				return 204;
+			return this.transport.status || 0;
+		} catch (e) {
+			return 0
+		}
+	},
+
+	respondToReadyState: function (readyState) {
+		var state = Ajax.Request.Events[readyState],
+		response = new Ajax.Response(this);
+
+		if (state == 'Complete') {
+			try {
+				this._complete = true;
+				(this.options['on' + response.status]
+					 || this.options['on' + (this.success() ? 'Success' : 'Failure')]
+					 || Prototype.emptyFunction)(response, response.headerJSON);
+			} catch (e) {
+				this.dispatchException(e);
+			}
+
+			var contentType = response.getHeader('Content-type');
+			if (this.options.evalJS == 'force'
+				 || (this.options.evalJS && this.isSameOrigin() && contentType
+					 && contentType.match(/^\s*(text|application)\/(x-)?(java|ecma)script(;.*)?\s*$/i)))
+				this.evalResponse();
+		}
+
+		try {
+			(this.options['on' + state] || Prototype.emptyFunction)(response, response.headerJSON);
+			Ajax.Responders.dispatch('on' + state, this, response, response.headerJSON);
+		} catch (e) {
+			this.dispatchException(e);
+		}
+
+		if (state == 'Complete') {
+			this.transport.onreadystatechange = Prototype.emptyFunction;
+		}
+	},
+
+	isSameOrigin: function () {
+		var m = this.url.match(/^\s*https?:\/\/[^\/]*/);
+		return !m || (m[0] == '#{protocol}//#{domain}#{port}'.interpolate({
+				protocol: location.protocol,
+				domain: document.domain,
+				port: location.port ? ':' + location.port : ''
+			}));
+	},
+
+	getHeader: function (name) {
+		try {
+			return this.transport.getResponseHeader(name) || null;
+		} catch (e) {
+			return null;
+		}
+	},
+
+	evalResponse: function () {
+		try {
+			return eval((this.transport.responseText || '').unfilterJSON());
+		} catch (e) {
+			this.dispatchException(e);
+		}
+	},
+
+	dispatchException: function (exception) {
+		(this.options.onException || Prototype.emptyFunction)(this, exception);
+		Ajax.Responders.dispatch('onException', this, exception);
+	}
+});
 
 Ajax.Request.Events =
 	['Uninitialized', 'Loading', 'Loaded', 'Interactive', 'Complete'];
 
 Ajax.Response = Class.create({
-		initialize: function (request) {
-			this.request = request;
-			var transport = this.transport = request.transport,
-			readyState = this.readyState = transport.readyState;
+	initialize: function (request) {
+		this.request = request;
+		var transport = this.transport = request.transport,
+		readyState = this.readyState = transport.readyState;
 
-			if ((readyState > 2 && !Prototype.Browser.IE) || readyState == 4) {
-				this.status = this.getStatus();
-				this.statusText = this.getStatusText();
-				this.responseText = String.interpret(transport.responseText);
-				this.headerJSON = this._getHeaderJSON();
-			}
-
-			if (readyState == 4) {
-				var xml = transport.responseXML;
-				this.responseXML = Object.isUndefined(xml) ? null : xml;
-				this.responseJSON = this._getResponseJSON();
-			}
-		},
-
-		status: 0,
-
-		statusText: '',
-
-		getStatus: Ajax.Request.prototype.getStatus,
-
-		getStatusText: function () {
-			try {
-				return this.transport.statusText || '';
-			} catch (e) {
-				return ''
-			}
-		},
-
-		getHeader: Ajax.Request.prototype.getHeader,
-
-		getAllHeaders: function () {
-			try {
-				return this.getAllResponseHeaders();
-			} catch (e) {
-				return null
-			}
-		},
-
-		getResponseHeader: function (name) {
-			return this.transport.getResponseHeader(name);
-		},
-
-		getAllResponseHeaders: function () {
-			return this.transport.getAllResponseHeaders();
-		},
-
-		_getHeaderJSON: function () {
-			var json = this.getHeader('X-JSON');
-			if (!json)
-				return null;
-			json = decodeURIComponent(escape(json));
-			try {
-				return json.evalJSON(this.request.options.sanitizeJSON ||
-					!this.request.isSameOrigin());
-			} catch (e) {
-				this.request.dispatchException(e);
-			}
-		},
-
-		_getResponseJSON: function () {
-			var options = this.request.options;
-			if (!options.evalJSON || (options.evalJSON != 'force' &&
-					!(this.getHeader('Content-type') || '').include('application/json')) ||
-				this.responseText.blank())
-				return null;
-			try {
-				return this.responseText.evalJSON(options.sanitizeJSON ||
-					!this.request.isSameOrigin());
-			} catch (e) {
-				this.request.dispatchException(e);
-			}
+		if ((readyState > 2 && !Prototype.Browser.IE) || readyState == 4) {
+			this.status = this.getStatus();
+			this.statusText = this.getStatusText();
+			this.responseText = String.interpret(transport.responseText);
+			this.headerJSON = this._getHeaderJSON();
 		}
-	});
+
+		if (readyState == 4) {
+			var xml = transport.responseXML;
+			this.responseXML = Object.isUndefined(xml) ? null : xml;
+			this.responseJSON = this._getResponseJSON();
+		}
+	},
+
+	status: 0,
+
+	statusText: '',
+
+	getStatus: Ajax.Request.prototype.getStatus,
+
+	getStatusText: function () {
+		try {
+			return this.transport.statusText || '';
+		} catch (e) {
+			return ''
+		}
+	},
+
+	getHeader: Ajax.Request.prototype.getHeader,
+
+	getAllHeaders: function () {
+		try {
+			return this.getAllResponseHeaders();
+		} catch (e) {
+			return null
+		}
+	},
+
+	getResponseHeader: function (name) {
+		return this.transport.getResponseHeader(name);
+	},
+
+	getAllResponseHeaders: function () {
+		return this.transport.getAllResponseHeaders();
+	},
+
+	_getHeaderJSON: function () {
+		var json = this.getHeader('X-JSON');
+		if (!json)
+			return null;
+		json = decodeURIComponent(escape(json));
+		try {
+			return json.evalJSON(this.request.options.sanitizeJSON ||
+				!this.request.isSameOrigin());
+		} catch (e) {
+			this.request.dispatchException(e);
+		}
+	},
+
+	_getResponseJSON: function () {
+		var options = this.request.options;
+		if (!options.evalJSON || (options.evalJSON != 'force' &&
+				!(this.getHeader('Content-type') || '').include('application/json')) ||
+			this.responseText.blank())
+			return null;
+		try {
+			return this.responseText.evalJSON(options.sanitizeJSON ||
+				!this.request.isSameOrigin());
+		} catch (e) {
+			this.request.dispatchException(e);
+		}
+	}
+});
 
 Ajax.Updater = Class.create(Ajax.Request, {
-		initialize: function ($super, container, url, options) {
-			this.container = {
-				success: (container.success || container),
-				failure: (container.failure || (container.success ? null : container))
-			};
+	initialize: function ($super, container, url, options) {
+		this.container = {
+			success: (container.success || container),
+			failure: (container.failure || (container.success ? null : container))
+		};
 
-			options = Object.clone(options);
-			var onComplete = options.onComplete;
-			options.onComplete = (function (response, json) {
-				this.updateContent(response.responseText);
-				if (Object.isFunction(onComplete))
-					onComplete(response, json);
-			}).bind(this);
+		options = Object.clone(options);
+		var onComplete = options.onComplete;
+		options.onComplete = (function (response, json) {
+			this.updateContent(response.responseText);
+			if (Object.isFunction(onComplete))
+				onComplete(response, json);
+		}).bind(this);
 
-			$super(url, options);
-		},
+		$super(url, options);
+	},
 
-		updateContent: function (responseText) {
-			var receiver = this.container[this.success() ? 'success' : 'failure'],
-			options = this.options;
+	updateContent: function (responseText) {
+		var receiver = this.container[this.success() ? 'success' : 'failure'],
+		options = this.options;
 
-			if (!options.evalScripts)
-				responseText = responseText.stripScripts();
+		if (!options.evalScripts)
+			responseText = responseText.stripScripts();
 
-			if (receiver = $(receiver)) {
-				if (options.insertion) {
-					if (Object.isString(options.insertion)) {
-						var insertion = {};
-						insertion[options.insertion] = responseText;
-						receiver.insert(insertion);
-					} else
-						options.insertion(receiver, responseText);
+		if (receiver = $(receiver)) {
+			if (options.insertion) {
+				if (Object.isString(options.insertion)) {
+					var insertion = {};
+					insertion[options.insertion] = responseText;
+					receiver.insert(insertion);
 				} else
-					receiver.update(responseText);
-			}
+					options.insertion(receiver, responseText);
+			} else
+				receiver.update(responseText);
 		}
-	});
+	}
+});
 
 Ajax.PeriodicalUpdater = Class.create(Ajax.Base, {
-		initialize: function ($super, container, url, options) {
-			$super(options);
-			this.onComplete = this.options.onComplete;
+	initialize: function ($super, container, url, options) {
+		$super(options);
+		this.onComplete = this.options.onComplete;
 
-			this.frequency = (this.options.frequency || 2);
-			this.decay = (this.options.decay || 1);
+		this.frequency = (this.options.frequency || 2);
+		this.decay = (this.options.decay || 1);
 
-			this.updater = {};
-			this.container = container;
-			this.url = url;
+		this.updater = {};
+		this.container = container;
+		this.url = url;
 
-			this.start();
-		},
+		this.start();
+	},
 
-		start: function () {
-			this.options.onComplete = this.updateComplete.bind(this);
-			this.onTimerEvent();
-		},
+	start: function () {
+		this.options.onComplete = this.updateComplete.bind(this);
+		this.onTimerEvent();
+	},
 
-		stop: function () {
-			this.updater.options.onComplete = undefined;
-			clearTimeout(this.timer);
-			(this.onComplete || Prototype.emptyFunction).apply(this, arguments);
-		},
+	stop: function () {
+		this.updater.options.onComplete = undefined;
+		clearTimeout(this.timer);
+		(this.onComplete || Prototype.emptyFunction).apply(this, arguments);
+	},
 
-		updateComplete: function (response) {
-			if (this.options.decay) {
-				this.decay = (response.responseText == this.lastText ?
-					this.decay * this.options.decay : 1);
+	updateComplete: function (response) {
+		if (this.options.decay) {
+			this.decay = (response.responseText == this.lastText ?
+				this.decay * this.options.decay : 1);
 
-				this.lastText = response.responseText;
-			}
-			this.timer = this.onTimerEvent.bind(this).delay(this.decay * this.frequency);
-		},
-
-		onTimerEvent: function () {
-			this.updater = new Ajax.Updater(this.container, this.url, this.options);
+			this.lastText = response.responseText;
 		}
-	});
+		this.timer = this.onTimerEvent.bind(this).delay(this.decay * this.frequency);
+	},
+
+	onTimerEvent: function () {
+		this.updater = new Ajax.Updater(this.container, this.url, this.options);
+	}
+});
 
 function $(element) {
 	if (arguments.length > 1) {
@@ -2572,13 +2572,13 @@ Element.Methods = {
 
 	clonePosition: function (element, source) {
 		var options = Object.extend({
-				setLeft: true,
-				setTop: true,
-				setWidth: true,
-				setHeight: true,
-				offsetTop: 0,
-				offsetLeft: 0
-			}, arguments[2] || {});
+			setLeft: true,
+			setTop: true,
+			setWidth: true,
+			setHeight: true,
+			offsetTop: 0,
+			offsetLeft: 0
+		}, arguments[2] || {});
 
 		source = $(source);
 		var p = Element.viewportOffset(source),
@@ -2628,40 +2628,40 @@ Element._attributeTranslations = {
 if (Prototype.Browser.Opera) {
 	Element.Methods.getStyle = Element.Methods.getStyle.wrap(
 			function (proceed, element, style) {
-			switch (style) {
-			case 'height':
-			case 'width':
-				if (!Element.visible(element))
-					return null;
+		switch (style) {
+		case 'height':
+		case 'width':
+			if (!Element.visible(element))
+				return null;
 
-				var dim = parseInt(proceed(element, style), 10);
+			var dim = parseInt(proceed(element, style), 10);
 
-				if (dim !== element['offset' + style.capitalize()])
-					return dim + 'px';
+			if (dim !== element['offset' + style.capitalize()])
+				return dim + 'px';
 
-				var properties;
-				if (style === 'height') {
-					properties = ['border-top-width', 'padding-top',
-						'padding-bottom', 'border-bottom-width'];
-				} else {
-					properties = ['border-left-width', 'padding-left',
-						'padding-right', 'border-right-width'];
-				}
-				return properties.inject(dim, function (memo, property) {
-					var val = proceed(element, property);
-					return val === null ? memo : memo - parseInt(val, 10);
-				}) + 'px';
-			default:
-				return proceed(element, style);
+			var properties;
+			if (style === 'height') {
+				properties = ['border-top-width', 'padding-top',
+					'padding-bottom', 'border-bottom-width'];
+			} else {
+				properties = ['border-left-width', 'padding-left',
+					'padding-right', 'border-right-width'];
 			}
-		});
+			return properties.inject(dim, function (memo, property) {
+				var val = proceed(element, property);
+				return val === null ? memo : memo - parseInt(val, 10);
+			}) + 'px';
+		default:
+			return proceed(element, style);
+		}
+	});
 
 	Element.Methods.readAttribute = Element.Methods.readAttribute.wrap(
 			function (proceed, element, attribute) {
-			if (attribute === 'title')
-				return element.title;
-			return proceed(element, attribute);
-		});
+		if (attribute === 'title')
+			return element.title;
+		return proceed(element, attribute);
+	});
 } else if (Prototype.Browser.IE) {
 	Element.Methods.getStyle = function (element, style) {
 		element = $(element);
@@ -3069,29 +3069,29 @@ Element.extend = (function () {
 	ByTag = Element.Methods.ByTag;
 
 	var extend = Object.extend(function (element) {
-			if (!element || typeof element._extendedByPrototype != 'undefined' ||
-				element.nodeType != 1 || element == window)
-				return element;
-
-			var methods = Object.clone(Methods),
-			tagName = element.tagName.toUpperCase();
-
-			if (ByTag[tagName])
-				Object.extend(methods, ByTag[tagName]);
-
-			extendElementWith(element, methods);
-
-			element._extendedByPrototype = Prototype.emptyFunction;
+		if (!element || typeof element._extendedByPrototype != 'undefined' ||
+			element.nodeType != 1 || element == window)
 			return element;
 
-		}, {
-			refresh: function () {
-				if (!Prototype.BrowserFeatures.ElementExtensions) {
-					Object.extend(Methods, Element.Methods);
-					Object.extend(Methods, Element.Methods.Simulated);
-				}
+		var methods = Object.clone(Methods),
+		tagName = element.tagName.toUpperCase();
+
+		if (ByTag[tagName])
+			Object.extend(methods, ByTag[tagName]);
+
+		extendElementWith(element, methods);
+
+		element._extendedByPrototype = Prototype.emptyFunction;
+		return element;
+
+	}, {
+		refresh: function () {
+			if (!Prototype.BrowserFeatures.ElementExtensions) {
+				Object.extend(Methods, Element.Methods);
+				Object.extend(Methods, Element.Methods.Simulated);
 			}
-		});
+		}
+	});
 
 	extend.refresh();
 	return extend;
@@ -3472,159 +3472,159 @@ Element.addMethods({
 	}
 
 	Element.Layout = Class.create(Hash, {
-			initialize: function ($super, element, preCompute) {
-				$super();
-				this.element = $(element);
+		initialize: function ($super, element, preCompute) {
+			$super();
+			this.element = $(element);
 
-				Element.Layout.PROPERTIES.each(function (property) {
-					this._set(property, null);
-				}, this);
+			Element.Layout.PROPERTIES.each(function (property) {
+				this._set(property, null);
+			}, this);
 
-				if (preCompute) {
-					this._preComputing = true;
-					this._begin();
-					Element.Layout.PROPERTIES.each(this._compute, this);
-					this._end();
-					this._preComputing = false;
-				}
-			},
-
-			_set: function (property, value) {
-				return Hash.prototype.set.call(this, property, value);
-			},
-
-			set: function (property, value) {
-				throw "Properties of Element.Layout are read-only.";
-			},
-
-			get: function ($super, property) {
-				var value = $super(property);
-				return value === null ? this._compute(property) : value;
-			},
-
-			_begin: function () {
-				if (this._prepared)
-					return;
-
-				var element = this.element;
-				if (isDisplayed(element)) {
-					this._prepared = true;
-					return;
-				}
-
-				var originalStyles = {
-					position: element.style.position || '',
-					width: element.style.width || '',
-					visibility: element.style.visibility || '',
-					display: element.style.display || ''
-				};
-
-				element.store('prototype_original_styles', originalStyles);
-
-				var position = element.getStyle('position'),
-				width = element.getStyle('width');
-
-				if (width === "0px" || width === null) {
-					element.style.display = 'block';
-					width = element.getStyle('width');
-				}
-
-				var context = (position === 'fixed') ? document.viewport :
-				element.parentNode;
-
-				element.setStyle({
-					position: 'absolute',
-					visibility: 'hidden',
-					display: 'block'
-				});
-
-				var positionedWidth = element.getStyle('width');
-
-				var newWidth;
-				if (width && (positionedWidth === width)) {
-					newWidth = getPixelValue(element, 'width', context);
-				} else if (position === 'absolute' || position === 'fixed') {
-					newWidth = getPixelValue(element, 'width', context);
-				} else {
-					var parent = element.parentNode,
-					pLayout = $(parent).getLayout();
-
-					newWidth = pLayout.get('width') -
-						this.get('margin-left') -
-						this.get('border-left') -
-						this.get('padding-left') -
-						this.get('padding-right') -
-						this.get('border-right') -
-						this.get('margin-right');
-				}
-
-				element.setStyle({
-					width: newWidth + 'px'
-				});
-
-				this._prepared = true;
-			},
-
-			_end: function () {
-				var element = this.element;
-				var originalStyles = element.retrieve('prototype_original_styles');
-				element.store('prototype_original_styles', null);
-				element.setStyle(originalStyles);
-				this._prepared = false;
-			},
-
-			_compute: function (property) {
-				var COMPUTATIONS = Element.Layout.COMPUTATIONS;
-				if (!(property in COMPUTATIONS)) {
-					throw "Property not found.";
-				}
-
-				return this._set(property, COMPUTATIONS[property].call(this, this.element));
-			},
-
-			toObject: function () {
-				var args = $A(arguments);
-				var keys = (args.length === 0) ? Element.Layout.PROPERTIES :
-				args.join(' ').split(' ');
-				var obj = {};
-				keys.each(function (key) {
-					if (!Element.Layout.PROPERTIES.include(key))
-						return;
-					var value = this.get(key);
-					if (value != null)
-						obj[key] = value;
-				}, this);
-				return obj;
-			},
-
-			toHash: function () {
-				var obj = this.toObject.apply(this, arguments);
-				return new Hash(obj);
-			},
-
-			toCSS: function () {
-				var args = $A(arguments);
-				var keys = (args.length === 0) ? Element.Layout.PROPERTIES :
-				args.join(' ').split(' ');
-				var css = {};
-
-				keys.each(function (key) {
-					if (!Element.Layout.PROPERTIES.include(key))
-						return;
-					if (Element.Layout.COMPOSITE_PROPERTIES.include(key))
-						return;
-
-					var value = this.get(key);
-					if (value != null)
-						css[cssNameFor(key)] = value + 'px';
-				}, this);
-				return css;
-			},
-
-			inspect: function () {
-				return "#<Element.Layout>";
+			if (preCompute) {
+				this._preComputing = true;
+				this._begin();
+				Element.Layout.PROPERTIES.each(this._compute, this);
+				this._end();
+				this._preComputing = false;
 			}
-		});
+		},
+
+		_set: function (property, value) {
+			return Hash.prototype.set.call(this, property, value);
+		},
+
+		set: function (property, value) {
+			throw "Properties of Element.Layout are read-only.";
+		},
+
+		get: function ($super, property) {
+			var value = $super(property);
+			return value === null ? this._compute(property) : value;
+		},
+
+		_begin: function () {
+			if (this._prepared)
+				return;
+
+			var element = this.element;
+			if (isDisplayed(element)) {
+				this._prepared = true;
+				return;
+			}
+
+			var originalStyles = {
+				position: element.style.position || '',
+				width: element.style.width || '',
+				visibility: element.style.visibility || '',
+				display: element.style.display || ''
+			};
+
+			element.store('prototype_original_styles', originalStyles);
+
+			var position = element.getStyle('position'),
+			width = element.getStyle('width');
+
+			if (width === "0px" || width === null) {
+				element.style.display = 'block';
+				width = element.getStyle('width');
+			}
+
+			var context = (position === 'fixed') ? document.viewport :
+			element.parentNode;
+
+			element.setStyle({
+				position: 'absolute',
+				visibility: 'hidden',
+				display: 'block'
+			});
+
+			var positionedWidth = element.getStyle('width');
+
+			var newWidth;
+			if (width && (positionedWidth === width)) {
+				newWidth = getPixelValue(element, 'width', context);
+			} else if (position === 'absolute' || position === 'fixed') {
+				newWidth = getPixelValue(element, 'width', context);
+			} else {
+				var parent = element.parentNode,
+				pLayout = $(parent).getLayout();
+
+				newWidth = pLayout.get('width') -
+					this.get('margin-left') -
+					this.get('border-left') -
+					this.get('padding-left') -
+					this.get('padding-right') -
+					this.get('border-right') -
+					this.get('margin-right');
+			}
+
+			element.setStyle({
+				width: newWidth + 'px'
+			});
+
+			this._prepared = true;
+		},
+
+		_end: function () {
+			var element = this.element;
+			var originalStyles = element.retrieve('prototype_original_styles');
+			element.store('prototype_original_styles', null);
+			element.setStyle(originalStyles);
+			this._prepared = false;
+		},
+
+		_compute: function (property) {
+			var COMPUTATIONS = Element.Layout.COMPUTATIONS;
+			if (!(property in COMPUTATIONS)) {
+				throw "Property not found.";
+			}
+
+			return this._set(property, COMPUTATIONS[property].call(this, this.element));
+		},
+
+		toObject: function () {
+			var args = $A(arguments);
+			var keys = (args.length === 0) ? Element.Layout.PROPERTIES :
+			args.join(' ').split(' ');
+			var obj = {};
+			keys.each(function (key) {
+				if (!Element.Layout.PROPERTIES.include(key))
+					return;
+				var value = this.get(key);
+				if (value != null)
+					obj[key] = value;
+			}, this);
+			return obj;
+		},
+
+		toHash: function () {
+			var obj = this.toObject.apply(this, arguments);
+			return new Hash(obj);
+		},
+
+		toCSS: function () {
+			var args = $A(arguments);
+			var keys = (args.length === 0) ? Element.Layout.PROPERTIES :
+			args.join(' ').split(' ');
+			var css = {};
+
+			keys.each(function (key) {
+				if (!Element.Layout.PROPERTIES.include(key))
+					return;
+				if (Element.Layout.COMPOSITE_PROPERTIES.include(key))
+					return;
+
+				var value = this.get(key);
+				if (value != null)
+					css[cssNameFor(key)] = value + 'px';
+			}, this);
+			return css;
+		},
+
+		inspect: function () {
+			return "#<Element.Layout>";
+		}
+	});
 
 	Object.extend(Element.Layout, {
 		PROPERTIES: $w('height width top left right bottom border-left border-right border-top border-bottom padding-left padding-right padding-top padding-bottom margin-top margin-bottom margin-left margin-right padding-box-width padding-box-height border-box-width border-box-height margin-box-width margin-box-height'),
@@ -3835,32 +3835,32 @@ Element.addMethods({
 	}
 
 	Element.Offset = Class.create({
-			initialize: function (left, top) {
-				this.left = left.round();
-				this.top = top.round();
+		initialize: function (left, top) {
+			this.left = left.round();
+			this.top = top.round();
 
-				this[0] = this.left;
-				this[1] = this.top;
-			},
+			this[0] = this.left;
+			this[1] = this.top;
+		},
 
-			relativeTo: function (offset) {
-				return new Element.Offset(
-					this.left - offset.left,
-					this.top - offset.top);
-			},
+		relativeTo: function (offset) {
+			return new Element.Offset(
+				this.left - offset.left,
+				this.top - offset.top);
+		},
 
-			inspect: function () {
-				return "#<Element.Offset left: #{left} top: #{top}>".interpolate(this);
-			},
+		inspect: function () {
+			return "#<Element.Offset left: #{left} top: #{top}>".interpolate(this);
+		},
 
-			toString: function () {
-				return "[#{left}, #{top}]".interpolate(this);
-			},
+		toString: function () {
+			return "[#{left}, #{top}]".interpolate(this);
+		},
 
-			toArray: function () {
-				return [this.left, this.top];
-			}
-		});
+		toArray: function () {
+			return [this.left, this.top];
+		}
+	});
 
 	function getLayout(element, preCompute) {
 		return new Element.Layout(element, preCompute);
@@ -4051,46 +4051,46 @@ Element.addMethods({
 	if (Prototype.Browser.IE) {
 		getOffsetParent = getOffsetParent.wrap(
 				function (proceed, element) {
-				element = $(element);
+			element = $(element);
 
-				if (isDocument(element) || isDetached(element) || isBody(element) || isHtml(element))
-					return $(document.body);
+			if (isDocument(element) || isDetached(element) || isBody(element) || isHtml(element))
+				return $(document.body);
 
-				var position = element.getStyle('position');
-				if (position !== 'static')
-					return proceed(element);
+			var position = element.getStyle('position');
+			if (position !== 'static')
+				return proceed(element);
 
-				element.setStyle({
-					position: 'relative'
-				});
-				var value = proceed(element);
-				element.setStyle({
-					position: position
-				});
-				return value;
+			element.setStyle({
+				position: 'relative'
 			});
+			var value = proceed(element);
+			element.setStyle({
+				position: position
+			});
+			return value;
+		});
 
 		positionedOffset = positionedOffset.wrap(function (proceed, element) {
-				element = $(element);
-				if (!element.parentNode)
-					return new Element.Offset(0, 0);
-				var position = element.getStyle('position');
-				if (position !== 'static')
-					return proceed(element);
+			element = $(element);
+			if (!element.parentNode)
+				return new Element.Offset(0, 0);
+			var position = element.getStyle('position');
+			if (position !== 'static')
+				return proceed(element);
 
-				var offsetParent = element.getOffsetParent();
-				if (offsetParent && offsetParent.getStyle('position') === 'fixed')
-					hasLayout(offsetParent);
+			var offsetParent = element.getOffsetParent();
+			if (offsetParent && offsetParent.getStyle('position') === 'fixed')
+				hasLayout(offsetParent);
 
-				element.setStyle({
-					position: 'relative'
-				});
-				var value = proceed(element);
-				element.setStyle({
-					position: position
-				});
-				return value;
+			element.setStyle({
+				position: 'relative'
 			});
+			var value = proceed(element);
+			element.setStyle({
+				position: position
+			});
+			return value;
+		});
 	} else if (Prototype.Browser.Webkit) {
 		cumulativeOffset = function (element) {
 			element = $(element);
@@ -5334,13 +5334,13 @@ Form.Methods = {
 
 	findFirstElement: function (form) {
 		var elements = $(form).getElements().findAll(function (element) {
-				return 'hidden' != element.type && !element.disabled;
-			});
+			return 'hidden' != element.type && !element.disabled;
+		});
 		var firstByIndex = elements.findAll(function (element) {
-				return element.hasAttribute('tabIndex') && element.tabIndex >= 0;
-			}).sortBy(function (element) {
-				return element.tabIndex
-			}).first();
+			return element.hasAttribute('tabIndex') && element.tabIndex >= 0;
+		}).sortBy(function (element) {
+			return element.tabIndex
+		}).first();
 
 		return firstByIndex ? firstByIndex : elements.find(function (element) {
 			return /^(?:input|select|textarea)$/i.test(element.tagName);
@@ -5544,86 +5544,86 @@ Form.Element.Serializers = (function () {
 /*--------------------------------------------------------------------------*/
 
 Abstract.TimedObserver = Class.create(PeriodicalExecuter, {
-		initialize: function ($super, element, frequency, callback) {
-			$super(callback, frequency);
-			this.element = $(element);
-			this.lastValue = this.getValue();
-		},
+	initialize: function ($super, element, frequency, callback) {
+		$super(callback, frequency);
+		this.element = $(element);
+		this.lastValue = this.getValue();
+	},
 
-		execute: function () {
-			var value = this.getValue();
-			if (Object.isString(this.lastValue) && Object.isString(value) ?
-				this.lastValue != value : String(this.lastValue) != String(value)) {
-				this.callback(this.element, value);
-				this.lastValue = value;
-			}
+	execute: function () {
+		var value = this.getValue();
+		if (Object.isString(this.lastValue) && Object.isString(value) ?
+			this.lastValue != value : String(this.lastValue) != String(value)) {
+			this.callback(this.element, value);
+			this.lastValue = value;
 		}
-	});
+	}
+});
 
 Form.Element.Observer = Class.create(Abstract.TimedObserver, {
-		getValue: function () {
-			return Form.Element.getValue(this.element);
-		}
-	});
+	getValue: function () {
+		return Form.Element.getValue(this.element);
+	}
+});
 
 Form.Observer = Class.create(Abstract.TimedObserver, {
-		getValue: function () {
-			return Form.serialize(this.element);
-		}
-	});
+	getValue: function () {
+		return Form.serialize(this.element);
+	}
+});
 
 /*--------------------------------------------------------------------------*/
 
 Abstract.EventObserver = Class.create({
-		initialize: function (element, callback) {
-			this.element = $(element);
-			this.callback = callback;
+	initialize: function (element, callback) {
+		this.element = $(element);
+		this.callback = callback;
 
-			this.lastValue = this.getValue();
-			if (this.element.tagName.toLowerCase() == 'form')
-				this.registerFormCallbacks();
-			else
-				this.registerCallback(this.element);
-		},
+		this.lastValue = this.getValue();
+		if (this.element.tagName.toLowerCase() == 'form')
+			this.registerFormCallbacks();
+		else
+			this.registerCallback(this.element);
+	},
 
-		onElementEvent: function () {
-			var value = this.getValue();
-			if (this.lastValue != value) {
-				this.callback(this.element, value);
-				this.lastValue = value;
-			}
-		},
+	onElementEvent: function () {
+		var value = this.getValue();
+		if (this.lastValue != value) {
+			this.callback(this.element, value);
+			this.lastValue = value;
+		}
+	},
 
-		registerFormCallbacks: function () {
-			Form.getElements(this.element).each(this.registerCallback, this);
-		},
+	registerFormCallbacks: function () {
+		Form.getElements(this.element).each(this.registerCallback, this);
+	},
 
-		registerCallback: function (element) {
-			if (element.type) {
-				switch (element.type.toLowerCase()) {
-				case 'checkbox':
-				case 'radio':
-					Event.observe(element, 'click', this.onElementEvent.bind(this));
-					break;
-				default:
-					Event.observe(element, 'change', this.onElementEvent.bind(this));
-					break;
-				}
+	registerCallback: function (element) {
+		if (element.type) {
+			switch (element.type.toLowerCase()) {
+			case 'checkbox':
+			case 'radio':
+				Event.observe(element, 'click', this.onElementEvent.bind(this));
+				break;
+			default:
+				Event.observe(element, 'change', this.onElementEvent.bind(this));
+				break;
 			}
 		}
-	});
+	}
+});
 
 Form.Element.EventObserver = Class.create(Abstract.EventObserver, {
-		getValue: function () {
-			return Form.Element.getValue(this.element);
-		}
-	});
+	getValue: function () {
+		return Form.Element.getValue(this.element);
+	}
+});
 
 Form.EventObserver = Class.create(Abstract.EventObserver, {
-		getValue: function () {
-			return Form.serialize(this.element);
-		}
-	});
+	getValue: function () {
+		return Form.serialize(this.element);
+	}
+});
 (function () {
 
 	var Event = {
@@ -5806,9 +5806,9 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 	};
 
 	var methods = Object.keys(Event.Methods).inject({}, function (m, name) {
-			m[name] = Event.Methods[name].methodize();
-			return m;
-		});
+		m[name] = Event.Methods[name].methodize();
+		return m;
+	});
 
 	if (window.attachEvent) {
 		function _relatedTarget(event) {
@@ -6079,30 +6079,30 @@ Form.EventObserver = Class.create(Abstract.EventObserver, {
 	}
 
 	Event.Handler = Class.create({
-			initialize: function (element, eventName, selector, callback) {
-				this.element = $(element);
-				this.eventName = eventName;
-				this.selector = selector;
-				this.callback = callback;
-				this.handler = this.handleEvent.bind(this);
-			},
+		initialize: function (element, eventName, selector, callback) {
+			this.element = $(element);
+			this.eventName = eventName;
+			this.selector = selector;
+			this.callback = callback;
+			this.handler = this.handleEvent.bind(this);
+		},
 
-			start: function () {
-				Event.observe(this.element, this.eventName, this.handler);
-				return this;
-			},
+		start: function () {
+			Event.observe(this.element, this.eventName, this.handler);
+			return this;
+		},
 
-			stop: function () {
-				Event.stopObserving(this.element, this.eventName, this.handler);
-				return this;
-			},
+		stop: function () {
+			Event.stopObserving(this.element, this.eventName, this.handler);
+			return this;
+		},
 
-			handleEvent: function (event) {
-				var element = Event.findElement(event, this.selector);
-				if (element)
-					this.callback.call(this.element, event, element);
-			}
-		});
+		handleEvent: function (event) {
+			var element = Event.findElement(event, this.selector);
+			if (element)
+				this.callback.call(this.element, event, element);
+		}
+	});
 
 	function on(element, eventName, selector, callback) {
 		element = $(element);
@@ -6392,26 +6392,26 @@ Object.extend(Element.ClassNames.prototype, Enumerable);
 
 (function () {
 	window.Selector = Class.create({
-			initialize: function (expression) {
-				this.expression = expression.strip();
-			},
+		initialize: function (expression) {
+			this.expression = expression.strip();
+		},
 
-			findElements: function (rootElement) {
-				return Prototype.Selector.select(this.expression, rootElement);
-			},
+		findElements: function (rootElement) {
+			return Prototype.Selector.select(this.expression, rootElement);
+		},
 
-			match: function (element) {
-				return Prototype.Selector.match(element, this.expression);
-			},
+		match: function (element) {
+			return Prototype.Selector.match(element, this.expression);
+		},
 
-			toString: function () {
-				return this.expression;
-			},
+		toString: function () {
+			return this.expression;
+		},
 
-			inspect: function () {
-				return "#<Selector: " + this.expression + ">";
-			}
-		});
+		inspect: function () {
+			return "#<Selector: " + this.expression + ">";
+		}
+	});
 
 	Object.extend(Selector, {
 		matchElements: function (elements, expression) {

@@ -155,109 +155,109 @@ FBL.ns(function () {
 		// Trace Module
 
 		Firebug.TraceModule = extend(Firebug.Module, {
-				dispatchName: "traceModule",
+			dispatchName: "traceModule",
 
-				initialize: function (prefDomain, prefNames) // prefDomain is the calling app, firebug or chromebug
-				{
-					Firebug.Module.initialize.apply(this, arguments);
+			initialize: function (prefDomain, prefNames) // prefDomain is the calling app, firebug or chromebug
+			{
+				Firebug.Module.initialize.apply(this, arguments);
 
-					FBTrace.DBG_OPTIONS = Firebug.getPref(prefDomain, "DBG_OPTIONS");
+				FBTrace.DBG_OPTIONS = Firebug.getPref(prefDomain, "DBG_OPTIONS");
 
-					this.prefDomain = prefDomain;
+				this.prefDomain = prefDomain;
 
-					// Open console automatically if the pref says so.
-					if (Firebug.getPref(this.prefDomain, "alwaysOpenTraceConsole"))
-						this.openConsole();
+				// Open console automatically if the pref says so.
+				if (Firebug.getPref(this.prefDomain, "alwaysOpenTraceConsole"))
+					this.openConsole();
 
-					if (FBTrace.DBG_OPTIONS)
-						FBTrace.sysout("traceModule.initialize: " + prefDomain + " alwayOpen:" +
-							Firebug.getPref(this.prefDomain, "alwaysOpenTraceConsole"));
-				},
+				if (FBTrace.DBG_OPTIONS)
+					FBTrace.sysout("traceModule.initialize: " + prefDomain + " alwayOpen:" +
+						Firebug.getPref(this.prefDomain, "alwaysOpenTraceConsole"));
+			},
 
-				internationalizeUI: function (doc) {
-					var elements = ["FirebugMenu_Options_alwaysOpenTraceConsole", "menu_openTraceConsole"];
-					for (var i = 0; i < elements.length; i++) {
-						var element = doc.getElementById(elements[i]);
-						if (element)
-							FBL.internationalize(element, "label");
+			internationalizeUI: function (doc) {
+				var elements = ["FirebugMenu_Options_alwaysOpenTraceConsole", "menu_openTraceConsole"];
+				for (var i = 0; i < elements.length; i++) {
+					var element = doc.getElementById(elements[i]);
+					if (element)
+						FBL.internationalize(element, "label");
+				}
+			},
+
+			shutdown: function () {},
+
+			reattachContext: function (browser, context) {
+				if (FBTrace.DBG_OPTIONS)
+					FBTrace.sysout("traceModule.reattachContext for: " +
+						context ? context.getName() : "null context",
+						[browser, context]);
+			},
+
+			getTraceConsoleURL: function () {
+				return "chrome://firebug/content/traceConsole.xul";
+			},
+
+			openConsole: function (prefDomain, windowURL) {
+				if (!prefDomain)
+					prefDomain = this.prefDomain;
+
+				var self = this;
+				iterateBrowserWindows("FBTraceConsole", function (win) {
+					if (win.TraceConsole.prefDomain == prefDomain) {
+						self.consoleWindow = win;
+						return true;
 					}
-				},
+				});
 
-				shutdown: function () {},
+				// Try to connect an existing trace-console window first.
+				if (this.consoleWindow && this.consoleWindow.TraceConsole) {
+					this.consoleWindow.focus();
+					return;
+				}
 
-				reattachContext: function (browser, context) {
-					if (FBTrace.DBG_OPTIONS)
-						FBTrace.sysout("traceModule.reattachContext for: " +
-							context ? context.getName() : "null context",
-							[browser, context]);
-				},
+				if (!windowURL)
+					windowURL = this.getTraceConsoleURL();
 
-				getTraceConsoleURL: function () {
-					return "chrome://firebug/content/traceConsole.xul";
-				},
+				if (FBTrace.DBG_OPTIONS)
+					FBTrace.sysout("traceModule.openConsole, prefDomain: " + prefDomain);
 
-				openConsole: function (prefDomain, windowURL) {
-					if (!prefDomain)
-						prefDomain = this.prefDomain;
+				var self = this;
+				var args = {
+					FBL: FBL,
+					Firebug: Firebug,
+					traceModule: self,
+					prefDomain: prefDomain,
+				};
 
-					var self = this;
-					iterateBrowserWindows("FBTraceConsole", function (win) {
-						if (win.TraceConsole.prefDomain == prefDomain) {
-							self.consoleWindow = win;
-							return true;
-						}
-					});
+				if (FBTrace.DBG_OPTIONS) {
+					for (var p in args)
+						FBTrace.sysout("tracePanel.openConsole prefDomain:" +
+							prefDomain + " args[" + p + "]= " + args[p] + "\n");
+				}
 
-					// Try to connect an existing trace-console window first.
-					if (this.consoleWindow && this.consoleWindow.TraceConsole) {
-						this.consoleWindow.focus();
-						return;
-					}
+				this.consoleWindow = window.openDialog(
+						windowURL,
+						"FBTraceConsole." + prefDomain,
+						"chrome,resizable,scrollbars=auto,minimizable,dialog=no",
+						args);
+			},
 
-					if (!windowURL)
-						windowURL = this.getTraceConsoleURL();
+			// Trace console listeners
+			onLoadConsole: function (win, rootNode) {
+				dispatch(this.fbListeners, "onLoadConsole", [win, rootNode]);
+			},
 
-					if (FBTrace.DBG_OPTIONS)
-						FBTrace.sysout("traceModule.openConsole, prefDomain: " + prefDomain);
+			onUnloadConsole: function (win) {
+				dispatch(this.fbListeners, "onUnloadConsole", [win]);
+			},
 
-					var self = this;
-					var args = {
-						FBL: FBL,
-						Firebug: Firebug,
-						traceModule: self,
-						prefDomain: prefDomain,
-					};
+			onDump: function (message) {
+				dispatch(this.fbListeners, "onDump", [message]);
+			},
 
-					if (FBTrace.DBG_OPTIONS) {
-						for (var p in args)
-							FBTrace.sysout("tracePanel.openConsole prefDomain:" +
-								prefDomain + " args[" + p + "]= " + args[p] + "\n");
-					}
-
-					this.consoleWindow = window.openDialog(
-							windowURL,
-							"FBTraceConsole." + prefDomain,
-							"chrome,resizable,scrollbars=auto,minimizable,dialog=no",
-							args);
-				},
-
-				// Trace console listeners
-				onLoadConsole: function (win, rootNode) {
-					dispatch(this.fbListeners, "onLoadConsole", [win, rootNode]);
-				},
-
-				onUnloadConsole: function (win) {
-					dispatch(this.fbListeners, "onUnloadConsole", [win]);
-				},
-
-				onDump: function (message) {
-					dispatch(this.fbListeners, "onDump", [message]);
-				},
-
-				dump: function (message, outputNodes) {
-					Firebug.TraceModule.MessageTemplate.dump(message, outputNodes);
-				},
-			});
+			dump: function (message, outputNodes) {
+				Firebug.TraceModule.MessageTemplate.dump(message, outputNodes);
+			},
+		});
 
 		Firebug.TraceModule.CommonBaseUI = {
 
@@ -302,12 +302,12 @@ FBL.ns(function () {
 				// Initialize content for Options tab (a button for each DBG_ option).
 				var optionsBody = parentNode.getElementsByClassName("traceInfoOptionsText").item(0);
 				this.optionsController = new Firebug.TraceOptionsController(prefDomain, function updateButton(optionName, optionValue) {
-						var button = parentNode.ownerDocument.getElementById(optionName);
-						if (button)
-							button.setAttribute("checked", optionValue ? "true" : "false");
-						else
-							FBTrace.sysout("traceModule onPrefChange no button with name " + optionName + " in parentNode", parentNode);
-					});
+					var button = parentNode.ownerDocument.getElementById(optionName);
+					if (button)
+						button.setAttribute("checked", optionValue ? "true" : "false");
+					else
+						FBTrace.sysout("traceModule onPrefChange no button with name " + optionName + " in parentNode", parentNode);
+				});
 
 				var menuitems = this.optionsController.getOptionsMenuItems();
 				for (var i = 0; i < menuitems.length; i++) {
@@ -335,809 +335,809 @@ FBL.ns(function () {
 
 		Firebug.TraceModule.PanelTemplate = domplate({
 
-				tag:
-				TABLE({
-					"class": "traceTable",
-					cellpadding: 0,
-					cellspacing: 0
-				},
-					TBODY(
-						TR({
-							"class": "traceInfoRow"
+			tag:
+			TABLE({
+				"class": "traceTable",
+				cellpadding: 0,
+				cellspacing: 0
+			},
+				TBODY(
+					TR({
+						"class": "traceInfoRow"
+					},
+						TD({
+							"class": "traceInfoCol"
 						},
-							TD({
-								"class": "traceInfoCol"
+							DIV({
+								"class": "traceInfoBody"
 							},
 								DIV({
-									"class": "traceInfoBody"
+									"class": "traceInfoTabs"
 								},
-									DIV({
-										"class": "traceInfoTabs"
+									A({
+										"class": "traceInfoLogsTab traceInfoTab",
+										onclick: "$onClickTab",
+										view: "Logs"
 									},
-										A({
-											"class": "traceInfoLogsTab traceInfoTab",
-											onclick: "$onClickTab",
-											view: "Logs"
-										},
-											$STR("Logs")),
-										A({
-											"class": "traceInfoOptionsTab traceInfoTab",
-											onclick: "$onClickTab",
-											view: "Options"
-										},
-											$STR("Options"))),
-									DIV({
-										"class": "traceInfoLogsText traceInfoText"
+										$STR("Logs")),
+									A({
+										"class": "traceInfoOptionsTab traceInfoTab",
+										onclick: "$onClickTab",
+										view: "Options"
 									},
-										IFRAME({
-											"class": "traceInfoLogsFrame",
-											src: "chrome://firebug/content/traceLogFrame.html"
-										})),
-									DIV({
-										"class": "traceInfoOptionsText traceInfoText"
-									})))))),
+										$STR("Options"))),
+								DIV({
+									"class": "traceInfoLogsText traceInfoText"
+								},
+									IFRAME({
+										"class": "traceInfoLogsFrame",
+										src: "chrome://firebug/content/traceLogFrame.html"
+									})),
+								DIV({
+									"class": "traceInfoOptionsText traceInfoText"
+								})))))),
 
-				onClickTab: function (event) {
-					this.selectTab(event.currentTarget);
-				},
+			onClickTab: function (event) {
+				this.selectTab(event.currentTarget);
+			},
 
-				selectTabByName: function (parentNode, tabName) {
-					var tab = parentNode.getElementsByClassName("traceInfo" + tabName + "Tab").item(0);
-					if (tab)
-						this.selectTab(tab);
-				},
+			selectTabByName: function (parentNode, tabName) {
+				var tab = parentNode.getElementsByClassName("traceInfo" + tabName + "Tab").item(0);
+				if (tab)
+					this.selectTab(tab);
+			},
 
-				selectTab: function (tab) {
-					var messageInfoBody = tab.parentNode.parentNode;
+			selectTab: function (tab) {
+				var messageInfoBody = tab.parentNode.parentNode;
 
-					var view = tab.getAttribute("view");
-					if (messageInfoBody.selectedTab) {
-						messageInfoBody.selectedTab.removeAttribute("selected");
-						messageInfoBody.selectedText.removeAttribute("selected");
-					}
-
-					var textBodyName = "traceInfo" + view + "Text";
-
-					messageInfoBody.selectedTab = tab;
-					messageInfoBody.selectedText = getChildByClass(messageInfoBody, textBodyName);
-
-					messageInfoBody.selectedTab.setAttribute("selected", "true");
-					messageInfoBody.selectedText.setAttribute("selected", "true");
+				var view = tab.getAttribute("view");
+				if (messageInfoBody.selectedTab) {
+					messageInfoBody.selectedTab.removeAttribute("selected");
+					messageInfoBody.selectedText.removeAttribute("selected");
 				}
-			});
+
+				var textBodyName = "traceInfo" + view + "Text";
+
+				messageInfoBody.selectedTab = tab;
+				messageInfoBody.selectedText = getChildByClass(messageInfoBody, textBodyName);
+
+				messageInfoBody.selectedTab.setAttribute("selected", "true");
+				messageInfoBody.selectedText.setAttribute("selected", "true");
+			}
+		});
 
 		// ************************************************************************************************
 		// Trace message
 
 		Firebug.TraceModule.MessageTemplate = domplate(Firebug.Rep, {
-				inspectable: false,
+			inspectable: false,
 
-				tableTag:
-				TABLE({
-					"class": "messageTable",
-					cellpadding: 0,
-					cellspacing: 0
-				},
-					TBODY()),
+			tableTag:
+			TABLE({
+				"class": "messageTable",
+				cellpadding: 0,
+				cellspacing: 0
+			},
+				TBODY()),
 
-				rowTag:
-				TR({
-					"class": "messageRow $message|getMessageType",
-					_repObject: "$message",
-					$exception: "$message|isException",
-					onclick: "$onClickRow"
+			rowTag:
+			TR({
+				"class": "messageRow $message|getMessageType",
+				_repObject: "$message",
+				$exception: "$message|isException",
+				onclick: "$onClickRow"
+			},
+				TD({
+					"class": "messageNameCol messageCol"
 				},
-					TD({
-						"class": "messageNameCol messageCol"
+					DIV({
+						"class": "messageNameLabel messageLabel"
 					},
-						DIV({
-							"class": "messageNameLabel messageLabel"
-						},
-							"$message|getMessageIndex")),
-					TD({
-						"class": "messageTimeCol messageCol"
-					},
-						DIV({
-							"class": "messageTimeLabel messageLabel"
-						},
-							"$message|getMessageTime")),
-					TD({
-						"class": "messageBodyCol messageCol"
-					},
-						DIV({
-							"class": "messageLabel",
-							title: "$message|getMessageTitle"
-						},
-							"$message|getMessageLabel"))),
-
-				separatorTag:
-				TR({
-					"class": "messageRow separatorRow",
-					_repObject: "$message"
+						"$message|getMessageIndex")),
+				TD({
+					"class": "messageTimeCol messageCol"
 				},
-					TD({
-						"class": "messageCol",
-						colspan: "3"
+					DIV({
+						"class": "messageTimeLabel messageLabel"
 					},
-						DIV("$message|getMessageIndex"))),
-
-				importHeaderTag:
-				TR({
-					"class": "messageRow importHeaderRow",
-					_repObject: "$message"
+						"$message|getMessageTime")),
+				TD({
+					"class": "messageBodyCol messageCol"
 				},
-					TD({
-						"class": "messageCol",
-						colspan: "3"
+					DIV({
+						"class": "messageLabel",
+						title: "$message|getMessageTitle"
 					},
-						DIV(B("Firebug: $message.firebug")),
-						DIV("$message.app.name, $message.app.version, " +
-							"$message.app.platformVersion, $message.app.buildID, " +
-							"$message.app.locale"),
-						DIV("$message.os.name $message.os.version"),
-						DIV("$message.date"),
-						DIV("$message.filePath"))),
+						"$message|getMessageLabel"))),
 
-				importFooterTag:
-				TR({
-					"class": "messageRow importFooterRow",
-					_repObject: "$message"
+			separatorTag:
+			TR({
+				"class": "messageRow separatorRow",
+				_repObject: "$message"
+			},
+				TD({
+					"class": "messageCol",
+					colspan: "3"
 				},
-					TD({
-						"class": "messageCol",
-						colspan: "3"
-					})),
+					DIV("$message|getMessageIndex"))),
 
-				bodyRow:
-				TR({
-					"class": "messageInfoRow"
+			importHeaderTag:
+			TR({
+				"class": "messageRow importHeaderRow",
+				_repObject: "$message"
+			},
+				TD({
+					"class": "messageCol",
+					colspan: "3"
 				},
-					TD({
-						"class": "messageInfoCol",
-						colspan: 8
-					})),
+					DIV(B("Firebug: $message.firebug")),
+					DIV("$message.app.name, $message.app.version, " +
+						"$message.app.platformVersion, $message.app.buildID, " +
+						"$message.app.locale"),
+					DIV("$message.os.name $message.os.version"),
+					DIV("$message.date"),
+					DIV("$message.filePath"))),
 
-				bodyTag:
+			importFooterTag:
+			TR({
+				"class": "messageRow importFooterRow",
+				_repObject: "$message"
+			},
+				TD({
+					"class": "messageCol",
+					colspan: "3"
+				})),
+
+			bodyRow:
+			TR({
+				"class": "messageInfoRow"
+			},
+				TD({
+					"class": "messageInfoCol",
+					colspan: 8
+				})),
+
+			bodyTag:
+			DIV({
+				"class": "messageInfoBody",
+				_repObject: "$message"
+			},
 				DIV({
-					"class": "messageInfoBody",
-					_repObject: "$message"
+					"class": "messageInfoTabs"
 				},
-					DIV({
-						"class": "messageInfoTabs"
+					A({
+						"class": "messageInfoStackTab messageInfoTab",
+						onclick: "$onClickTab",
+						view: "Stack"
 					},
-						A({
-							"class": "messageInfoStackTab messageInfoTab",
-							onclick: "$onClickTab",
-							view: "Stack"
-						},
-							$STR("tracing.tab.Stack")),
-						A({
-							"class": "messageInfoExcTab messageInfoTab",
-							onclick: "$onClickTab",
-							view: "Exc",
-							$collapsed: "$message|hideException"
-						},
-							$STR("tracing.tab.Exception")),
-						A({
-							"class": "messageInfoPropsTab messageInfoTab",
-							onclick: "$onClickTab",
-							view: "Props",
-							$collapsed: "$message|hideProperties"
-						},
-							$STR("tracing.tab.Properties")),
-						A({
-							"class": "messageInfoScopeTab messageInfoTab",
-							onclick: "$onClickTab",
-							view: "Scope",
-							$collapsed: "$message|hideScope"
-						},
-							$STR("tracing.tab.Scope")),
-						A({
-							"class": "messageInfoResponseTab messageInfoTab",
-							onclick: "$onClickTab",
-							view: "Response",
-							$collapsed: "$message|hideResponse"
-						},
-							$STR("tracing.tab.Response")),
-						A({
-							"class": "messageInfoSourceTab messageInfoTab",
-							onclick: "$onClickTab",
-							view: "Source",
-							$collapsed: "$message|hideSource"
-						},
-							$STR("tracing.tab.Source")),
-						A({
-							"class": "messageInfoIfacesTab messageInfoTab",
-							onclick: "$onClickTab",
-							view: "Ifaces",
-							$collapsed: "$message|hideInterfaces"
-						},
-							$STR("tracing.tab.Interfaces")),
-						// xxxHonza: this doesn't seem to be much useful.
-						/*A({"class": "messageInfoTypesTab messageInfoTab", onclick: "$onClickTab",
+						$STR("tracing.tab.Stack")),
+					A({
+						"class": "messageInfoExcTab messageInfoTab",
+						onclick: "$onClickTab",
+						view: "Exc",
+						$collapsed: "$message|hideException"
+					},
+						$STR("tracing.tab.Exception")),
+					A({
+						"class": "messageInfoPropsTab messageInfoTab",
+						onclick: "$onClickTab",
+						view: "Props",
+						$collapsed: "$message|hideProperties"
+					},
+						$STR("tracing.tab.Properties")),
+					A({
+						"class": "messageInfoScopeTab messageInfoTab",
+						onclick: "$onClickTab",
+						view: "Scope",
+						$collapsed: "$message|hideScope"
+					},
+						$STR("tracing.tab.Scope")),
+					A({
+						"class": "messageInfoResponseTab messageInfoTab",
+						onclick: "$onClickTab",
+						view: "Response",
+						$collapsed: "$message|hideResponse"
+					},
+						$STR("tracing.tab.Response")),
+					A({
+						"class": "messageInfoSourceTab messageInfoTab",
+						onclick: "$onClickTab",
+						view: "Source",
+						$collapsed: "$message|hideSource"
+					},
+						$STR("tracing.tab.Source")),
+					A({
+						"class": "messageInfoIfacesTab messageInfoTab",
+						onclick: "$onClickTab",
+						view: "Ifaces",
+						$collapsed: "$message|hideInterfaces"
+					},
+						$STR("tracing.tab.Interfaces")),
+					// xxxHonza: this doesn't seem to be much useful.
+					/*A({"class": "messageInfoTypesTab messageInfoTab", onclick: "$onClickTab",
+					view: "Types",
+					$collapsed: "$message|hideTypes"},
+					"Types"
+					),*/
+					A({
+						"class": "messageInfoObjectTab messageInfoTab",
+						onclick: "$onClickTab",
 						view: "Types",
-						$collapsed: "$message|hideTypes"},
-						"Types"
-						),*/
-						A({
-							"class": "messageInfoObjectTab messageInfoTab",
-							onclick: "$onClickTab",
-							view: "Types",
-							$collapsed: "$message|hideObject"
-						},
-							$STR("tracing.tab.Object")),
-						A({
-							"class": "messageInfoEventTab messageInfoTab",
-							onclick: "$onClickTab",
-							view: "Event",
-							$collapsed: "$message|hideEvent"
-						},
-							$STR("tracing.tab.Event"))),
-					DIV({
-						"class": "messageInfoStackText messageInfoText"
+						$collapsed: "$message|hideObject"
 					},
-						TABLE({
-							"class": "messageInfoStackTable",
-							cellpadding: 0,
-							cellspacing: 0
-						},
-							TBODY(
-								FOR("stack", "$message|stackIterator",
-									TR(
-										TD({
-											"class": "stackFrame"
+						$STR("tracing.tab.Object")),
+					A({
+						"class": "messageInfoEventTab messageInfoTab",
+						onclick: "$onClickTab",
+						view: "Event",
+						$collapsed: "$message|hideEvent"
+					},
+						$STR("tracing.tab.Event"))),
+				DIV({
+					"class": "messageInfoStackText messageInfoText"
+				},
+					TABLE({
+						"class": "messageInfoStackTable",
+						cellpadding: 0,
+						cellspacing: 0
+					},
+						TBODY(
+							FOR("stack", "$message|stackIterator",
+								TR(
+									TD({
+										"class": "stackFrame"
+									},
+										A({
+											"class": "stackFrameLink",
+											onclick: "$onClickStackFrame",
+											lineNumber: "$stack.lineNumber"
 										},
-											A({
-												"class": "stackFrameLink",
-												onclick: "$onClickStackFrame",
-												lineNumber: "$stack.lineNumber"
-											},
-												"$stack.fileName"),
-											SPAN("&nbsp;"),
-											SPAN("(", "$stack.lineNumber", ")"),
-											SPAN("&nbsp;"),
-											SPAN({
-												"class": "stackFuncName"
-											},
-												"$stack.funcName"),
-											A({
-												"class": "openDebugger",
-												onclick: "$onOpenDebugger",
-												lineNumber: "$stack.lineNumber",
-												fileName: "$stack.fileName"
-											},
-												"[...]"))))))),
-					DIV({
-						"class": "messageInfoExcText messageInfoText"
-					}),
-					DIV({
-						"class": "messageInfoPropsText messageInfoText"
-					}),
-					DIV({
-						"class": "messageInfoResponseText messageInfoText"
-					},
-						IFRAME({
-							"class": "messageInfoResponseFrame"
-						})),
-					DIV({
-						"class": "messageInfoSourceText messageInfoText"
-					}),
-					DIV({
-						"class": "messageInfoIfacesText messageInfoText"
-					}),
-					DIV({
-						"class": "messageInfoScopeText messageInfoText"
-					}),
-					DIV({
-						"class": "messageInfoTypesText messageInfoText"
-					}),
-					DIV({
-						"class": "messageInfoObjectText messageInfoText"
-					}),
-					DIV({
-						"class": "messageInfoEventText messageInfoText"
+											"$stack.fileName"),
+										SPAN("&nbsp;"),
+										SPAN("(", "$stack.lineNumber", ")"),
+										SPAN("&nbsp;"),
+										SPAN({
+											"class": "stackFuncName"
+										},
+											"$stack.funcName"),
+										A({
+											"class": "openDebugger",
+											onclick: "$onOpenDebugger",
+											lineNumber: "$stack.lineNumber",
+											fileName: "$stack.fileName"
+										},
+											"[...]"))))))),
+				DIV({
+					"class": "messageInfoExcText messageInfoText"
+				}),
+				DIV({
+					"class": "messageInfoPropsText messageInfoText"
+				}),
+				DIV({
+					"class": "messageInfoResponseText messageInfoText"
+				},
+					IFRAME({
+						"class": "messageInfoResponseFrame"
 					})),
+				DIV({
+					"class": "messageInfoSourceText messageInfoText"
+				}),
+				DIV({
+					"class": "messageInfoIfacesText messageInfoText"
+				}),
+				DIV({
+					"class": "messageInfoScopeText messageInfoText"
+				}),
+				DIV({
+					"class": "messageInfoTypesText messageInfoText"
+				}),
+				DIV({
+					"class": "messageInfoObjectText messageInfoText"
+				}),
+				DIV({
+					"class": "messageInfoEventText messageInfoText"
+				})),
 
-				// Data providers
-				getMessageType: function (message) {
-					return message.getType();
-				},
+			// Data providers
+			getMessageType: function (message) {
+				return message.getType();
+			},
 
-				getMessageIndex: function (message) {
-					return message.index + 1;
-				},
+			getMessageIndex: function (message) {
+				return message.index + 1;
+			},
 
-				getMessageTime: function (message) {
-					var date = new Date(message.time);
-					var m = date.getMinutes() + "";
-					var s = date.getSeconds() + "";
-					var ms = date.getMilliseconds() + "";
-					return "[" + ((m.length > 1) ? m : "0" + m) + ":" +
-					((s.length > 1) ? s : "0" + s) + ":" +
-					((ms.length > 2) ? ms : ((ms.length > 1) ? "0" + ms : "00" + ms)) + "]";
-				},
+			getMessageTime: function (message) {
+				var date = new Date(message.time);
+				var m = date.getMinutes() + "";
+				var s = date.getSeconds() + "";
+				var ms = date.getMilliseconds() + "";
+				return "[" + ((m.length > 1) ? m : "0" + m) + ":" +
+				((s.length > 1) ? s : "0" + s) + ":" +
+				((ms.length > 2) ? ms : ((ms.length > 1) ? "0" + ms : "00" + ms)) + "]";
+			},
 
-				getMessageLabel: function (message) {
-					var maxLength = Firebug.getPref(Firebug.TraceModule.prefDomain,
-							"trace.maxMessageLength");
-					return message.getLabel(maxLength);
-				},
+			getMessageLabel: function (message) {
+				var maxLength = Firebug.getPref(Firebug.TraceModule.prefDomain,
+						"trace.maxMessageLength");
+				return message.getLabel(maxLength);
+			},
 
-				getMessageTitle: function (message) {
-					return message.getLabel(-1);
-				},
+			getMessageTitle: function (message) {
+				return message.getLabel(-1);
+			},
 
-				isException: function (message) {
-					return message.getException();
-				},
+			isException: function (message) {
+				return message.getException();
+			},
 
-				hideProperties: function (message) {
-					var props = message.getProperties();
-					for (var name in props)
-						return false;
-
-					return true;
-				},
-
-				hideScope: function (message) {
-					return !message.getScope();
-				},
-
-				hideInterfaces: function (message) {
-					var ifaces = message.getInterfaces();
-					for (var name in ifaces)
-						return false;
-
-					return true;
-				},
-
-				hideTypes: function (message) {
-					return !message.getTypes();
-				},
-
-				hideObject: function (message) {
-					return !message.getObject();
-				},
-
-				hideEvent: function (message) {
-					return !message.getEvent();
-				},
-
-				hideException: function (message) {
-					return !message.getException();
-				},
-
-				hideResponse: function (message) {
-					return !(message.obj instanceof Ci.nsIHttpChannel);
-				},
-
-				hideSource: function (message) {
-					return !(message.obj instanceof Ci.nsIHttpChannel);
-				},
-
-				// Stack frame support
-				stackIterator: function (message) {
-					return message.getStackArray();
-				},
-
-				onClickStackFrame: function (event) {
-					var winType = "FBTraceConsole-SourceView";
-					var lineNumber = event.target.getAttribute("lineNumber");
-
-					openDialog("chrome://global/content/viewSource.xul",
-						winType, "all,dialog=no",
-						event.target.innerHTML, null, null, lineNumber, false);
-				},
-
-				onOpenDebugger: function (event) {
-					var target = event.target;
-					var lineNumber = target.getAttribute("lineNumber");
-					var fileName = target.getAttribute("fileName");
-
-					if (typeof(ChromeBugOpener) == "undefined")
-						return;
-
-					// Open Chromebug window.
-					var cbWindow = ChromeBugOpener.openNow();
-					FBTrace.sysout("Chromebug window has been opened", cbWindow);
-
-					// xxxHonza: Open Chromebug with the source code file, scrolled automatically
-					// to the specified line number. Currently chrome bug doesn't return the window
-					// from ChromeBugOpener.openNow method. If it would be following code opens
-					// the source code file and scrolls to the given line.
-
-					// Register onLoad listener and open the source file at the specified line.
-					if (cbWindow) {
-						cbWindow.addEventListener("load", function () {
-							var context = cbWindow.Firebug.currentContext;
-							var link = new cbWindow.FBL.SourceLink(fileName, lineNumber, "js");
-							Firebug.chrome.select(link, "script");
-						}, true);
-					}
-				},
-
-				// Firebug rep support
-				supportsObject: function (object, type) {
-					return object instanceof Firebug.TraceModule.TraceMessage ||
-					object instanceof Firebug.TraceModule.ImportedMessage;
-				},
-
-				browseObject: function (message, context) {
+			hideProperties: function (message) {
+				var props = message.getProperties();
+				for (var name in props)
 					return false;
-				},
 
-				getRealObject: function (message, context) {
-					return message;
-				},
+				return true;
+			},
 
-				// Context menu
-				getContextMenuItems: function (message, target, context) {
-					var items = [];
+			hideScope: function (message) {
+				return !message.getScope();
+			},
 
-					if (getAncestorByClass(target, "messageRow")) {
-						items.push({
-							label: $STR("Cut"),
-							nol10n: true,
-							command: bindFixed(this.onCutMessage, this, message)
-						});
+			hideInterfaces: function (message) {
+				var ifaces = message.getInterfaces();
+				for (var name in ifaces)
+					return false;
 
-						items.push({
-							label: $STR("Copy"),
-							nol10n: true,
-							command: bindFixed(this.onCopyMessage, this, message)
-						});
+				return true;
+			},
 
-						items.push("-");
+			hideTypes: function (message) {
+				return !message.getTypes();
+			},
 
-						items.push({
-							label: $STR("Remove"),
-							nol10n: true,
-							command: bindFixed(this.onRemoveMessage, this, message)
-						});
-					}
+			hideObject: function (message) {
+				return !message.getObject();
+			},
 
-					if (getAncestorByClass(target, "messageInfoStackText")) {
-						items.push({
-							label: $STR("Copy Stack"),
-							nol10n: true,
-							command: bindFixed(this.onCopyStack, this, message)
-						});
-					}
+			hideEvent: function (message) {
+				return !message.getEvent();
+			},
 
-					if (getAncestorByClass(target, "messageInfoExcText")) {
-						items.push({
-							label: $STR("Copy Exception"),
-							nol10n: true,
-							command: bindFixed(this.onCopyException, this, message)
-						});
-					}
+			hideException: function (message) {
+				return !message.getException();
+			},
 
-					if (items.length > 0)
-						items.push("-");
+			hideResponse: function (message) {
+				return !(message.obj instanceof Ci.nsIHttpChannel);
+			},
 
-					items.push(this.optionMenu($STR("tracing.Show Time"), "trace.showTime"));
-					items.push(this.optionMenu($STR("tracing.Show Scope Variables"), "trace.enableScope"));
+			hideSource: function (message) {
+				return !(message.obj instanceof Ci.nsIHttpChannel);
+			},
+
+			// Stack frame support
+			stackIterator: function (message) {
+				return message.getStackArray();
+			},
+
+			onClickStackFrame: function (event) {
+				var winType = "FBTraceConsole-SourceView";
+				var lineNumber = event.target.getAttribute("lineNumber");
+
+				openDialog("chrome://global/content/viewSource.xul",
+					winType, "all,dialog=no",
+					event.target.innerHTML, null, null, lineNumber, false);
+			},
+
+			onOpenDebugger: function (event) {
+				var target = event.target;
+				var lineNumber = target.getAttribute("lineNumber");
+				var fileName = target.getAttribute("fileName");
+
+				if (typeof(ChromeBugOpener) == "undefined")
+					return;
+
+				// Open Chromebug window.
+				var cbWindow = ChromeBugOpener.openNow();
+				FBTrace.sysout("Chromebug window has been opened", cbWindow);
+
+				// xxxHonza: Open Chromebug with the source code file, scrolled automatically
+				// to the specified line number. Currently chrome bug doesn't return the window
+				// from ChromeBugOpener.openNow method. If it would be following code opens
+				// the source code file and scrolls to the given line.
+
+				// Register onLoad listener and open the source file at the specified line.
+				if (cbWindow) {
+					cbWindow.addEventListener("load", function () {
+						var context = cbWindow.Firebug.currentContext;
+						var link = new cbWindow.FBL.SourceLink(fileName, lineNumber, "js");
+						Firebug.chrome.select(link, "script");
+					}, true);
+				}
+			},
+
+			// Firebug rep support
+			supportsObject: function (object, type) {
+				return object instanceof Firebug.TraceModule.TraceMessage ||
+				object instanceof Firebug.TraceModule.ImportedMessage;
+			},
+
+			browseObject: function (message, context) {
+				return false;
+			},
+
+			getRealObject: function (message, context) {
+				return message;
+			},
+
+			// Context menu
+			getContextMenuItems: function (message, target, context) {
+				var items = [];
+
+				if (getAncestorByClass(target, "messageRow")) {
+					items.push({
+						label: $STR("Cut"),
+						nol10n: true,
+						command: bindFixed(this.onCutMessage, this, message)
+					});
+
+					items.push({
+						label: $STR("Copy"),
+						nol10n: true,
+						command: bindFixed(this.onCopyMessage, this, message)
+					});
+
 					items.push("-");
 
 					items.push({
-						label: $STR("tracing.cmd.Expand All"),
+						label: $STR("Remove"),
 						nol10n: true,
-						command: bindFixed(this.onExpandAll, this, message)
+						command: bindFixed(this.onRemoveMessage, this, message)
 					});
+				}
 
+				if (getAncestorByClass(target, "messageInfoStackText")) {
 					items.push({
-						label: $STR("tracing.cmd.Collapse All"),
+						label: $STR("Copy Stack"),
 						nol10n: true,
-						command: bindFixed(this.onCollapseAll, this, message)
+						command: bindFixed(this.onCopyStack, this, message)
 					});
+				}
 
-					return items;
-				},
-
-				optionMenu: function (label, option) {
-					var checked = Firebug.getPref(Firebug.TraceModule.prefDomain, option);
-					return {
-						label: label,
-						type: "checkbox",
-						checked: checked,
+				if (getAncestorByClass(target, "messageInfoExcText")) {
+					items.push({
+						label: $STR("Copy Exception"),
 						nol10n: true,
-						command: bindFixed(Firebug.setPref, Firebug, Firebug.TraceModule.prefDomain,
-							option, !checked)
+						command: bindFixed(this.onCopyException, this, message)
+					});
+				}
+
+				if (items.length > 0)
+					items.push("-");
+
+				items.push(this.optionMenu($STR("tracing.Show Time"), "trace.showTime"));
+				items.push(this.optionMenu($STR("tracing.Show Scope Variables"), "trace.enableScope"));
+				items.push("-");
+
+				items.push({
+					label: $STR("tracing.cmd.Expand All"),
+					nol10n: true,
+					command: bindFixed(this.onExpandAll, this, message)
+				});
+
+				items.push({
+					label: $STR("tracing.cmd.Collapse All"),
+					nol10n: true,
+					command: bindFixed(this.onCollapseAll, this, message)
+				});
+
+				return items;
+			},
+
+			optionMenu: function (label, option) {
+				var checked = Firebug.getPref(Firebug.TraceModule.prefDomain, option);
+				return {
+					label: label,
+					type: "checkbox",
+					checked: checked,
+					nol10n: true,
+					command: bindFixed(Firebug.setPref, Firebug, Firebug.TraceModule.prefDomain,
+						option, !checked)
+				};
+			},
+
+			getTooltip: function (message) {
+				return message.text;
+			},
+
+			// Context menu commands
+			onCutMessage: function (message) {
+				this.onCopyMessage(message);
+				this.onRemoveMessage(message);
+			},
+
+			onCopyMessage: function (message) {
+				copyToClipboard(message.text);
+			},
+
+			onRemoveMessage: function (message) {
+				var row = message.row;
+				var parentNode = row.parentNode;
+				this.toggleRow(row, false);
+				parentNode.removeChild(row);
+			},
+
+			onCopyStack: function (message) {
+				copyToClipboard(message.getStack());
+			},
+
+			onCopyException: function (message) {
+				copyToClipboard(message.getException());
+			},
+
+			onExpandAll: function (message) {
+				var table = getAncestorByClass(message.row, "messageTable");
+				var rows = cloneArray(table.firstChild.childNodes);
+				for (var i = 0; i < rows.length; i++)
+					this.expandRow(rows[i]);
+			},
+
+			onCollapseAll: function (message) {
+				var table = getAncestorByClass(message.row, "messageTable");
+				var rows = cloneArray(table.firstChild.childNodes);
+				for (var i = 0; i < rows.length; i++)
+					this.collapseRow(rows[i]);
+			},
+
+			// Clipboard helpers
+			copyToClipboard: function (text) {
+				if (!text)
+					return;
+
+				// Initialize transfer data.
+				var trans = CCIN("@mozilla.org/widget/transferable;1", "nsITransferable");
+				var wrapper = CCIN("@mozilla.org/supports-string;1", "nsISupportsString");
+				wrapper.data = text;
+				trans.addDataFlavor("text/unicode");
+				trans.setTransferData("text/unicode", wrapper, text.length * 2);
+
+				// Set the data into the global clipboard
+				clipboard.setData(trans, null, Ci.nsIClipboard.kGlobalClipboard);
+			},
+
+			// Implementation
+			createTable: function (parentNode) {
+				return HelperDomplate.replace(this.tableTag, {}, parentNode, this);
+			},
+
+			dump: function (message, outputNodes, index) {
+				// Notify listeners
+				Firebug.TraceModule.onDump(message);
+
+				// xxxHonza: find better solution for checking an ERROR messages
+				// (setup some rules).
+				var text = message.text ? message.text.toUpperCase() : message.text;
+				if (text && (text.indexOf("ERROR") != -1 ||
+						text.indexOf("EXCEPTION") != -1 ||
+						text.indexOf("FAILS") != -1)) {
+					message.type = "DBG_ERRORS";
+				}
+
+				var scrollingNode = outputNodes.getScrollingNode();
+				var scrolledToBottom = isScrolledToBottom(scrollingNode);
+
+				var targetNode = outputNodes.getTargetNode();
+				// Set message index
+				if (index)
+					message.index = index;
+				else
+					message.index = targetNode.childNodes.length;
+
+				// Insert log into the console.
+				var row = HelperDomplate.insertRows(this.rowTag, {
+					message: message
+				},
+						targetNode, this)[0];
+
+				message.row = row;
+
+				// Only if the manifest uses useNativeWrappers=no.
+				// The row in embedded frame, which uses type="content-primary", from some
+				// reason, this conten type changes wrapper around the row, so let's set
+				// directly thte wrappedJSObject here, so row-expand works.
+				if (row.wrappedJSObject)
+					row.wrappedJSObject.repObject = message;
+
+				if (scrolledToBottom)
+					scrollToBottom(scrollingNode);
+			},
+
+			dumpSeparator: function (outputNodes, tag, object) {
+				var panelNode = outputNodes.getScrollingNode();
+				var scrolledToBottom = isScrolledToBottom(panelNode);
+
+				var targetNode = outputNodes.getTargetNode();
+
+				if (!tag)
+					tag = this.separatorTag;
+
+				if (!object)
+					object = {
+						type: "separator"
 					};
-				},
 
-				getTooltip: function (message) {
-					return message.text;
-				},
+				object.index = targetNode.childNodes.length;
 
-				// Context menu commands
-				onCutMessage: function (message) {
-					this.onCopyMessage(message);
-					this.onRemoveMessage(message);
-				},
+				var row = HelperDomplate.insertRows(tag, {
+					message: object
+				}, targetNode, this)[0];
 
-				onCopyMessage: function (message) {
-					copyToClipboard(message.text);
-				},
+				if (scrolledToBottom)
+					scrollToBottom(panelNode);
 
-				onRemoveMessage: function (message) {
-					var row = message.row;
-					var parentNode = row.parentNode;
-					this.toggleRow(row, false);
-					parentNode.removeChild(row);
-				},
+				panelNode.scrollTop = panelNode.scrollHeight - panelNode.offsetHeight + 50;
+			},
 
-				onCopyStack: function (message) {
-					copyToClipboard(message.getStack());
-				},
-
-				onCopyException: function (message) {
-					copyToClipboard(message.getException());
-				},
-
-				onExpandAll: function (message) {
-					var table = getAncestorByClass(message.row, "messageTable");
-					var rows = cloneArray(table.firstChild.childNodes);
-					for (var i = 0; i < rows.length; i++)
-						this.expandRow(rows[i]);
-				},
-
-				onCollapseAll: function (message) {
-					var table = getAncestorByClass(message.row, "messageTable");
-					var rows = cloneArray(table.firstChild.childNodes);
-					for (var i = 0; i < rows.length; i++)
-						this.collapseRow(rows[i]);
-				},
-
-				// Clipboard helpers
-				copyToClipboard: function (text) {
-					if (!text)
-						return;
-
-					// Initialize transfer data.
-					var trans = CCIN("@mozilla.org/widget/transferable;1", "nsITransferable");
-					var wrapper = CCIN("@mozilla.org/supports-string;1", "nsISupportsString");
-					wrapper.data = text;
-					trans.addDataFlavor("text/unicode");
-					trans.setTransferData("text/unicode", wrapper, text.length * 2);
-
-					// Set the data into the global clipboard
-					clipboard.setData(trans, null, Ci.nsIClipboard.kGlobalClipboard);
-				},
-
-				// Implementation
-				createTable: function (parentNode) {
-					return HelperDomplate.replace(this.tableTag, {}, parentNode, this);
-				},
-
-				dump: function (message, outputNodes, index) {
-					// Notify listeners
-					Firebug.TraceModule.onDump(message);
-
-					// xxxHonza: find better solution for checking an ERROR messages
-					// (setup some rules).
-					var text = message.text ? message.text.toUpperCase() : message.text;
-					if (text && (text.indexOf("ERROR") != -1 ||
-							text.indexOf("EXCEPTION") != -1 ||
-							text.indexOf("FAILS") != -1)) {
-						message.type = "DBG_ERRORS";
-					}
-
-					var scrollingNode = outputNodes.getScrollingNode();
-					var scrolledToBottom = isScrolledToBottom(scrollingNode);
-
-					var targetNode = outputNodes.getTargetNode();
-					// Set message index
-					if (index)
-						message.index = index;
-					else
-						message.index = targetNode.childNodes.length;
-
-					// Insert log into the console.
-					var row = HelperDomplate.insertRows(this.rowTag, {
-							message: message
-						},
-							targetNode, this)[0];
-
-					message.row = row;
-
-					// Only if the manifest uses useNativeWrappers=no.
-					// The row in embedded frame, which uses type="content-primary", from some
-					// reason, this conten type changes wrapper around the row, so let's set
-					// directly thte wrappedJSObject here, so row-expand works.
-					if (row.wrappedJSObject)
-						row.wrappedJSObject.repObject = message;
-
-					if (scrolledToBottom)
-						scrollToBottom(scrollingNode);
-				},
-
-				dumpSeparator: function (outputNodes, tag, object) {
-					var panelNode = outputNodes.getScrollingNode();
-					var scrolledToBottom = isScrolledToBottom(panelNode);
-
-					var targetNode = outputNodes.getTargetNode();
-
-					if (!tag)
-						tag = this.separatorTag;
-
-					if (!object)
-						object = {
-							type: "separator"
-						};
-
-					object.index = targetNode.childNodes.length;
-
-					var row = HelperDomplate.insertRows(tag, {
-							message: object
-						}, targetNode, this)[0];
-
-					if (scrolledToBottom)
-						scrollToBottom(panelNode);
-
-					panelNode.scrollTop = panelNode.scrollHeight - panelNode.offsetHeight + 50;
-				},
-
-				// Body of the message.
-				onClickRow: function (event) {
-					if (isLeftClick(event)) {
-						var row = getAncestorByClass(event.target, "messageRow");
-						if (row) {
-							this.toggleRow(row);
-							cancelEvent(event);
-						}
-					}
-				},
-
-				collapseRow: function (row) {
-					if (hasClass(row, "messageRow") && hasClass(row, "opened"))
+			// Body of the message.
+			onClickRow: function (event) {
+				if (isLeftClick(event)) {
+					var row = getAncestorByClass(event.target, "messageRow");
+					if (row) {
 						this.toggleRow(row);
-				},
-
-				expandRow: function (row) {
-					if (hasClass(row, "messageRow"))
-						this.toggleRow(row, true);
-				},
-
-				toggleRow: function (row, state) {
-					var opened = hasClass(row, "opened");
-					if ((state != null) && (opened == state))
-						return;
-
-					toggleClass(row, "opened");
-
-					if (hasClass(row, "opened")) {
-						var message = row.repObject;
-						if (!message && row.wrappedJSObject)
-							message = row.wrappedJSObject.repObject;
-
-						var bodyRow = HelperDomplate.insertRows(this.bodyRow, {}, row)[0];
-						var messageInfo = HelperDomplate.replace(this.bodyTag, {
-								message: message
-							}, bodyRow.firstChild);
-						message.bodyRow = bodyRow;
-
-						this.selectTabByName(messageInfo, "Stack");
-					} else {
-						row.parentNode.removeChild(row.nextSibling);
-					}
-				},
-
-				selectTabByName: function (messageInfoBody, tabName) {
-					var tab = getChildByClass(messageInfoBody, "messageInfoTabs",
-							"messageInfo" + tabName + "Tab");
-					if (tab)
-						this.selectTab(tab);
-				},
-
-				onClickTab: function (event) {
-					this.selectTab(event.currentTarget);
-				},
-
-				selectTab: function (tab) {
-					var messageInfoBody = tab.parentNode.parentNode;
-
-					var view = tab.getAttribute("view");
-					if (messageInfoBody.selectedTab) {
-						messageInfoBody.selectedTab.removeAttribute("selected");
-						messageInfoBody.selectedText.removeAttribute("selected");
-					}
-
-					var textBodyName = "messageInfo" + view + "Text";
-
-					messageInfoBody.selectedTab = tab;
-					messageInfoBody.selectedText = getChildByClass(messageInfoBody, textBodyName);
-
-					messageInfoBody.selectedTab.setAttribute("selected", "true");
-					messageInfoBody.selectedText.setAttribute("selected", "true");
-
-					var message = Firebug.getRepObject(messageInfoBody);
-
-					// Make sure the original Domplate is *not* tracing for now.
-					var dumpDOM = FBTrace.DBG_DOMPLATE;
-					FBTrace.DBG_DOMPLATE = false;
-					this.updateInfo(messageInfoBody, view, message);
-					FBTrace.DBG_DOMPLATE = dumpDOM;
-				},
-
-				updateInfo: function (messageInfoBody, view, message) {
-					var tab = messageInfoBody.selectedTab;
-					if (hasClass(tab, "messageInfoStackTab")) {
-						// The content is generated by domplate template.
-					} else if (hasClass(tab, "messageInfoPropsTab")) {
-						this.updateInfoImpl(messageInfoBody, view, message, message.getProperties,
-							function (message, valueBox, text) {
-							Firebug.TraceModule.Tree.tag.replace({
-								object: message.props
-							}, valueBox,
-								Firebug.TraceModule.Tree);
-						});
-					} else if (hasClass(tab, "messageInfoScopeTab")) {
-						this.updateInfoImpl(messageInfoBody, view, message, message.getScope,
-							function (message, valueBox, text) {
-							Firebug.TraceModule.PropertyTree.tag.replace({
-								object: message.scope
-							}, valueBox,
-								Firebug.TraceModule.PropertyTree);
-						});
-					} else if (hasClass(tab, "messageInfoIfacesTab")) {
-						this.updateInfoImpl(messageInfoBody, view, message, message.getInterfaces,
-							function (message, valueBox, text) {
-							Firebug.TraceModule.Tree.tag.replace({
-								object: message.ifaces
-							}, valueBox,
-								Firebug.TraceModule.Tree);
-						});
-					} else if (hasClass(tab, "messageInfoTypesTab")) {
-						this.updateInfoImpl(messageInfoBody, view, message, message.getTypes);
-					} else if (hasClass(tab, "messageInfoEventTab")) {
-						this.updateInfoImpl(messageInfoBody, view, message, message.getEvent);
-					} else if (hasClass(tab, "messageInfoObjectTab")) {
-						this.updateInfoImpl(messageInfoBody, view, message, message.getProperties,
-							function (message, valueBox, text) {
-							if (message.obj instanceof Element)
-								Firebug.HTMLPanel.CompleteElement.tag.replace({
-									object: message.obj
-								}, valueBox,
-									Firebug.HTMLPanel.CompleteElement);
-							else
-								Firebug.TraceModule.PropertyTree.tag.replace({
-									object: message.obj
-								}, valueBox,
-									Firebug.TraceModule.PropertyTree);
-						});
-					} else if (hasClass(tab, "messageInfoExcTab")) {
-						this.updateInfoImpl(messageInfoBody, view, message, message.getException);
-					} else if (hasClass(tab, "messageInfoResponseTab")) {
-						this.updateInfoImpl(messageInfoBody, view, message, message.getResponse,
-							function (message, valueBox, text) {
-							var iframe = getChildByClass(valueBox, "messageInfoResponseFrame");
-							iframe.contentWindow.document.body.innerHTML = text;
-						});
-					} else if (hasClass(tab, "messageInfoSourceTab")) {
-						this.updateInfoImpl(messageInfoBody, view, message, message.getResponse,
-							function (message, valueBox, text) {
-							if (text)
-								insertWrappedText(text, valueBox);
-						});
-					}
-				},
-
-				updateInfoImpl: function (messageInfoBody, view, message, getter, setter) {
-					var valueBox = getChildByClass(messageInfoBody, "messageInfo" + view + "Text");
-					if (!valueBox.valuePresented) {
-						var text = getter.apply(message);
-						if (typeof(text) != "undefined") {
-							valueBox.valuePresented = true;
-
-							if (setter)
-								setter(message, valueBox, text);
-							else
-								valueBox.innerHTML = text;
-						}
+						cancelEvent(event);
 					}
 				}
-			});
+			},
+
+			collapseRow: function (row) {
+				if (hasClass(row, "messageRow") && hasClass(row, "opened"))
+					this.toggleRow(row);
+			},
+
+			expandRow: function (row) {
+				if (hasClass(row, "messageRow"))
+					this.toggleRow(row, true);
+			},
+
+			toggleRow: function (row, state) {
+				var opened = hasClass(row, "opened");
+				if ((state != null) && (opened == state))
+					return;
+
+				toggleClass(row, "opened");
+
+				if (hasClass(row, "opened")) {
+					var message = row.repObject;
+					if (!message && row.wrappedJSObject)
+						message = row.wrappedJSObject.repObject;
+
+					var bodyRow = HelperDomplate.insertRows(this.bodyRow, {}, row)[0];
+					var messageInfo = HelperDomplate.replace(this.bodyTag, {
+						message: message
+					}, bodyRow.firstChild);
+					message.bodyRow = bodyRow;
+
+					this.selectTabByName(messageInfo, "Stack");
+				} else {
+					row.parentNode.removeChild(row.nextSibling);
+				}
+			},
+
+			selectTabByName: function (messageInfoBody, tabName) {
+				var tab = getChildByClass(messageInfoBody, "messageInfoTabs",
+						"messageInfo" + tabName + "Tab");
+				if (tab)
+					this.selectTab(tab);
+			},
+
+			onClickTab: function (event) {
+				this.selectTab(event.currentTarget);
+			},
+
+			selectTab: function (tab) {
+				var messageInfoBody = tab.parentNode.parentNode;
+
+				var view = tab.getAttribute("view");
+				if (messageInfoBody.selectedTab) {
+					messageInfoBody.selectedTab.removeAttribute("selected");
+					messageInfoBody.selectedText.removeAttribute("selected");
+				}
+
+				var textBodyName = "messageInfo" + view + "Text";
+
+				messageInfoBody.selectedTab = tab;
+				messageInfoBody.selectedText = getChildByClass(messageInfoBody, textBodyName);
+
+				messageInfoBody.selectedTab.setAttribute("selected", "true");
+				messageInfoBody.selectedText.setAttribute("selected", "true");
+
+				var message = Firebug.getRepObject(messageInfoBody);
+
+				// Make sure the original Domplate is *not* tracing for now.
+				var dumpDOM = FBTrace.DBG_DOMPLATE;
+				FBTrace.DBG_DOMPLATE = false;
+				this.updateInfo(messageInfoBody, view, message);
+				FBTrace.DBG_DOMPLATE = dumpDOM;
+			},
+
+			updateInfo: function (messageInfoBody, view, message) {
+				var tab = messageInfoBody.selectedTab;
+				if (hasClass(tab, "messageInfoStackTab")) {
+					// The content is generated by domplate template.
+				} else if (hasClass(tab, "messageInfoPropsTab")) {
+					this.updateInfoImpl(messageInfoBody, view, message, message.getProperties,
+						function (message, valueBox, text) {
+						Firebug.TraceModule.Tree.tag.replace({
+							object: message.props
+						}, valueBox,
+							Firebug.TraceModule.Tree);
+					});
+				} else if (hasClass(tab, "messageInfoScopeTab")) {
+					this.updateInfoImpl(messageInfoBody, view, message, message.getScope,
+						function (message, valueBox, text) {
+						Firebug.TraceModule.PropertyTree.tag.replace({
+							object: message.scope
+						}, valueBox,
+							Firebug.TraceModule.PropertyTree);
+					});
+				} else if (hasClass(tab, "messageInfoIfacesTab")) {
+					this.updateInfoImpl(messageInfoBody, view, message, message.getInterfaces,
+						function (message, valueBox, text) {
+						Firebug.TraceModule.Tree.tag.replace({
+							object: message.ifaces
+						}, valueBox,
+							Firebug.TraceModule.Tree);
+					});
+				} else if (hasClass(tab, "messageInfoTypesTab")) {
+					this.updateInfoImpl(messageInfoBody, view, message, message.getTypes);
+				} else if (hasClass(tab, "messageInfoEventTab")) {
+					this.updateInfoImpl(messageInfoBody, view, message, message.getEvent);
+				} else if (hasClass(tab, "messageInfoObjectTab")) {
+					this.updateInfoImpl(messageInfoBody, view, message, message.getProperties,
+						function (message, valueBox, text) {
+						if (message.obj instanceof Element)
+							Firebug.HTMLPanel.CompleteElement.tag.replace({
+								object: message.obj
+							}, valueBox,
+								Firebug.HTMLPanel.CompleteElement);
+						else
+							Firebug.TraceModule.PropertyTree.tag.replace({
+								object: message.obj
+							}, valueBox,
+								Firebug.TraceModule.PropertyTree);
+					});
+				} else if (hasClass(tab, "messageInfoExcTab")) {
+					this.updateInfoImpl(messageInfoBody, view, message, message.getException);
+				} else if (hasClass(tab, "messageInfoResponseTab")) {
+					this.updateInfoImpl(messageInfoBody, view, message, message.getResponse,
+						function (message, valueBox, text) {
+						var iframe = getChildByClass(valueBox, "messageInfoResponseFrame");
+						iframe.contentWindow.document.body.innerHTML = text;
+					});
+				} else if (hasClass(tab, "messageInfoSourceTab")) {
+					this.updateInfoImpl(messageInfoBody, view, message, message.getResponse,
+						function (message, valueBox, text) {
+						if (text)
+							insertWrappedText(text, valueBox);
+					});
+				}
+			},
+
+			updateInfoImpl: function (messageInfoBody, view, message, getter, setter) {
+				var valueBox = getChildByClass(messageInfoBody, "messageInfo" + view + "Text");
+				if (!valueBox.valuePresented) {
+					var text = getter.apply(message);
+					if (typeof(text) != "undefined") {
+						valueBox.valuePresented = true;
+
+						if (setter)
+							setter(message, valueBox, text);
+						else
+							valueBox.innerHTML = text;
+					}
+				}
+			}
+		});
 
 		// ************************************************************************************************
 		// Helper Domplate object that doesn't trace.
@@ -1567,10 +1567,10 @@ FBL.ns(function () {
 		}
 
 		Firebug.TraceModule.ImportedMessage.prototype = extend(Firebug.TraceModule.TraceMessage.prototype, {
-				getStackArray: function () {
-					return cloneArray(this.stack);
-				},
-			})
+			getStackArray: function () {
+				return cloneArray(this.stack);
+			},
+		})
 
 			// ************************************************************************************************
 
@@ -1596,163 +1596,163 @@ FBL.ns(function () {
 		 * getMembers method should be implemented.
 		 */
 		Firebug.TraceModule.Tree = domplate(Firebug.Rep, {
-				tag:
-				TABLE({
-					"class": "domTable",
-					cellpadding: 0,
-					cellspacing: 0,
-					onclick: "$onClick"
+			tag:
+			TABLE({
+				"class": "domTable",
+				cellpadding: 0,
+				cellspacing: 0,
+				onclick: "$onClick"
+			},
+				TBODY(
+					FOR("member", "$object|memberIterator",
+						TAG("$member|getRowTag", {
+							member: "$member"
+						})))),
+
+			rowTag:
+			TR({
+				"class": "memberRow $member.open $member.type\\Row",
+				$hasChildren: "$member.hasChildren",
+				_repObject: "$member",
+				level: "$member.level"
+			},
+				TD({
+					"class": "memberLabelCell",
+					style: "padding-left: $member.indent\\px; width:1%; white-space: nowrap"
 				},
-					TBODY(
-						FOR("member", "$object|memberIterator",
-							TAG("$member|getRowTag", {
-								member: "$member"
-							})))),
-
-				rowTag:
-				TR({
-					"class": "memberRow $member.open $member.type\\Row",
-					$hasChildren: "$member.hasChildren",
-					_repObject: "$member",
-					level: "$member.level"
+					DIV({
+						"class": "memberLabel $member.type\\Label"
+					}, "$member.name")),
+				TD({
+					"class": "memberValueCell",
+					style: "width: 100%;"
 				},
-					TD({
-						"class": "memberLabelCell",
-						style: "padding-left: $member.indent\\px; width:1%; white-space: nowrap"
-					},
-						DIV({
-							"class": "memberLabel $member.type\\Label"
-						}, "$member.name")),
-					TD({
-						"class": "memberValueCell",
-						style: "width: 100%;"
-					},
-						TAG("$member.tag", {
-							object: "$member.value"
-						}))),
+					TAG("$member.tag", {
+						object: "$member.value"
+					}))),
 
-				loop:
-				FOR("member", "$members",
-					TAG("$member|getRowTag", {
-						member: "$member"
-					})),
+			loop:
+			FOR("member", "$members",
+				TAG("$member|getRowTag", {
+					member: "$member"
+				})),
 
-				memberIterator: function (object) {
-					return this.getMembers(object);
-				},
+			memberIterator: function (object) {
+				return this.getMembers(object);
+			},
 
-				getRowTag: function (member) {
-					return this.rowTag;
-				},
+			getRowTag: function (member) {
+				return this.rowTag;
+			},
 
-				onClick: function (event) {
-					if (!isLeftClick(event))
-						return;
+			onClick: function (event) {
+				if (!isLeftClick(event))
+					return;
 
-					var row = getAncestorByClass(event.target, "memberRow");
-					var label = getAncestorByClass(event.target, "memberLabel");
-					if (label && hasClass(row, "hasChildren"))
-						this.toggleRow(row);
-				},
+				var row = getAncestorByClass(event.target, "memberRow");
+				var label = getAncestorByClass(event.target, "memberLabel");
+				if (label && hasClass(row, "hasChildren"))
+					this.toggleRow(row);
+			},
 
-				toggleRow: function (row) {
-					var level = parseInt(row.getAttribute("level"));
-					var target = row.lastChild.firstChild;
-					var isString = hasClass(target, "objectBox-string");
-					var repObject = row.repObject;
+			toggleRow: function (row) {
+				var level = parseInt(row.getAttribute("level"));
+				var target = row.lastChild.firstChild;
+				var isString = hasClass(target, "objectBox-string");
+				var repObject = row.repObject;
 
-					if (hasClass(row, "opened")) {
-						removeClass(row, "opened");
-						if (isString) {
-							var rowValue = repObject.value;
-							row.lastChild.firstChild.textContent = '"' + cropMultipleLines(rowValue) + '"';
-						} else {
-							var tbody = row.parentNode;
-							for (var firstRow = row.nextSibling; firstRow; firstRow = row.nextSibling) {
-								if (parseInt(firstRow.getAttribute("level")) <= level)
-									break;
-
-								tbody.removeChild(firstRow);
-							}
-						}
+				if (hasClass(row, "opened")) {
+					removeClass(row, "opened");
+					if (isString) {
+						var rowValue = repObject.value;
+						row.lastChild.firstChild.textContent = '"' + cropMultipleLines(rowValue) + '"';
 					} else {
-						setClass(row, "opened");
-						if (isString) {
-							var rowValue = repObject.value;
-							row.lastChild.firstChild.textContent = '"' + rowValue + '"';
-						} else {
-							if (repObject) {
-								var members = this.getMembers(repObject.value, level + 1);
-								if (members)
-									this.loop.insertRows({
-										members: members
-									}, row);
-							}
+						var tbody = row.parentNode;
+						for (var firstRow = row.nextSibling; firstRow; firstRow = row.nextSibling) {
+							if (parseInt(firstRow.getAttribute("level")) <= level)
+								break;
+
+							tbody.removeChild(firstRow);
 						}
 					}
-				},
-
-				getMembers: function (object, level) {
-					if (!level)
-						level = 0;
-
-					if (typeof(object) == "string")
-						return [this.createMember("", "", object, level)];
-
-					var members = [];
-					for (var p in object) {
-						var member = this.createMember("", p, object[p], level);
-						if (object[p]instanceof Array)
-							member.tag = FirebugReps.Nada.tag;
-						members.push(member);
+				} else {
+					setClass(row, "opened");
+					if (isString) {
+						var rowValue = repObject.value;
+						row.lastChild.firstChild.textContent = '"' + rowValue + '"';
+					} else {
+						if (repObject) {
+							var members = this.getMembers(repObject.value, level + 1);
+							if (members)
+								this.loop.insertRows({
+									members: members
+								}, row);
+						}
 					}
-					return members;
-				},
-
-				createMember: function (type, name, value, level) {
-					var rep = Firebug.getRep(value);
-					var tag = rep.shortTag ? rep.shortTag : rep.tag;
-					var valueType = typeof(value);
-
-					var hasChildren = hasProperties(value) && !(value instanceof ErrorCopy) &&
-						(valueType == "function" || (valueType == "object" && value != null)
-							 || (valueType == "string" && value.length > Firebug.stringCropLength));
-
-					return {
-						name: name,
-						value: value,
-						type: type,
-						rowClass: "memberRow-" + type,
-						open: "",
-						level: level,
-						indent: level * 16,
-						hasChildren: hasChildren,
-						tag: tag
-					};
 				}
-			});
+			},
+
+			getMembers: function (object, level) {
+				if (!level)
+					level = 0;
+
+				if (typeof(object) == "string")
+					return [this.createMember("", "", object, level)];
+
+				var members = [];
+				for (var p in object) {
+					var member = this.createMember("", p, object[p], level);
+					if (object[p]instanceof Array)
+						member.tag = FirebugReps.Nada.tag;
+					members.push(member);
+				}
+				return members;
+			},
+
+			createMember: function (type, name, value, level) {
+				var rep = Firebug.getRep(value);
+				var tag = rep.shortTag ? rep.shortTag : rep.tag;
+				var valueType = typeof(value);
+
+				var hasChildren = hasProperties(value) && !(value instanceof ErrorCopy) &&
+					(valueType == "function" || (valueType == "object" && value != null)
+						 || (valueType == "string" && value.length > Firebug.stringCropLength));
+
+				return {
+					name: name,
+					value: value,
+					type: type,
+					rowClass: "memberRow-" + type,
+					open: "",
+					level: level,
+					indent: level * 16,
+					hasChildren: hasChildren,
+					tag: tag
+				};
+			}
+		});
 
 		// ************************************************************************************************
 
 		Firebug.TraceModule.PropertyTree = domplate(Firebug.TraceModule.Tree, {
-				getMembers: function (object, level) {
-					if (!level)
-						level = 0;
+			getMembers: function (object, level) {
+				if (!level)
+					level = 0;
 
-					try {
-						var members = [];
-						for (var p in object) {
-							try {
-								members.push(this.createMember("dom", p, object[p], level));
-							} catch (e) {}
-						}
-					} catch (err) {
-						FBTrace.sysout("Exception", err);
+				try {
+					var members = [];
+					for (var p in object) {
+						try {
+							members.push(this.createMember("dom", p, object[p], level));
+						} catch (e) {}
 					}
-
-					return members;
+				} catch (err) {
+					FBTrace.sysout("Exception", err);
 				}
-			});
+
+				return members;
+			}
+		});
 
 		// ************************************************************************************************
 		// Registration

@@ -474,13 +474,13 @@ var _l = "", _m3u8 = {};
 						if ("function" != typeof t && null !== t)
 							throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 						e.prototype = Object.create(t && t.prototype, {
-								constructor: {
-									value: e,
-									enumerable: !1,
-									writable: !0,
-									configurable: !0
-								}
-							}),
+							constructor: {
+								value: e,
+								enumerable: !1,
+								writable: !0,
+								configurable: !0
+							}
+						}),
 						t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t)
 					}
 					Object.defineProperty(i, "__esModule", {
@@ -647,8 +647,8 @@ var _l = "", _m3u8 = {};
 								tracks: {}
 							},
 							this.mediaSource = new y.default.MediaSource({
-									mode: s
-								}),
+								mode: s
+							}),
 							this.audioinfo_ = null,
 							this.mediaSource.on("audioinfo", this.handleAudioinfoUpdate_.bind(this)),
 							this.mediaSource.addEventListener("sourceopen", this.handleSourceOpen_.bind(this)),
@@ -658,9 +658,9 @@ var _l = "", _m3u8 = {};
 							},
 							this.syncController_ = new T.default,
 							this.segmentMetadataTrack_ = u.addRemoteTextTrack({
-									kind: "metadata",
-									label: "segment-metadata"
-								}, !0).track,
+								kind: "metadata",
+								label: "segment-metadata"
+							}, !0).track,
 							this.decrypter_ = (0, k.default)(O.default);
 							var m = {
 								hls: this.hls_,
@@ -760,8 +760,8 @@ var _l = "", _m3u8 = {};
 											e.mainSegmentLoader_.load(),
 											n = e.activeAudioGroup(),
 											r = n.filter(function (e) {
-													return e.enabled
-												})[0],
+												return e.enabled
+											})[0],
 											r || (e.setupAudio(), e.trigger("audioupdate")),
 											e.setupSubtitles(),
 											e.tech_.trigger({
@@ -811,12 +811,12 @@ var _l = "", _m3u8 = {};
 											return void(this.audioInfo_ = e.info);
 										var t = "had different audio properties (channels, sample rate, etc.) or changed in some other way.  This behavior is currently unsupported in Firefox 48 and below due to an issue: \n\nhttps://bugzilla.mozilla.org/show_bug.cgi?id=1247138\n\n",
 										i = this.activeAudioGroup().map(function (e) {
-												return e.enabled
-											}).indexOf(!0),
+											return e.enabled
+										}).indexOf(!0),
 										n = this.activeAudioGroup()[i],
 										r = this.activeAudioGroup().filter(function (e) {
-												return e.properties_ && e.properties_.default
-											})[0];
+											return e.properties_ && e.properties_.default
+										})[0];
 										this.audioPlaylistLoader_ ? (t = "The audio track '" + n.label + "' that we tried to " + ("switch to " + t + " Unfortunately this means we will have to ") + ("return you to the main track '" + r.label + "'. Sorry!"), r.enabled = !0, this.activeAudioGroup().splice(i, 1), this.trigger("audioupdate")) : (t = "The rendition that we tried to switch to " + t + "Unfortunately that means we will have to blacklist the current playlist and switch to another. Sorry!", this.blacklistCurrentPlaylist()),
 										y.default.log.warn(t),
 										this.setupAudio()
@@ -844,12 +844,12 @@ var _l = "", _m3u8 = {};
 											for (var n in t.AUDIO[i]) {
 												var r = t.AUDIO[i][n],
 												a = new y.default.AudioTrack({
-														id: n,
-														kind: this.audioTrackKind_(r),
-														enabled: !1,
-														language: r.language,
-														label: n
-													});
+													id: n,
+													kind: this.audioTrackKind_(r),
+													enabled: !1,
+													language: r.language,
+													label: n
+												});
 												a.properties_ = r,
 												this.audioGroups_[i].push(a)
 											}
@@ -878,12 +878,12 @@ var _l = "", _m3u8 = {};
 																id: n
 															}, r)), "undefined" == typeof this.subtitleGroups_.tracks[n])) {
 													var a = this.tech_.addRemoteTextTrack({
-															id: n,
-															kind: "subtitles",
-															enabled: !1,
-															language: r.language,
-															label: n
-														}, !0).track;
+														id: n,
+														kind: "subtitles",
+														enabled: !1,
+														language: r.language,
+														label: n
+													}, !0).track;
 													this.subtitleGroups_.tracks[n] = a
 												}
 											}
@@ -934,11 +934,11 @@ var _l = "", _m3u8 = {};
 										var e = this,
 										t = this.activeAudioGroup(),
 										i = t.filter(function (e) {
-												return e.enabled
-											})[0];
+											return e.enabled
+										})[0];
 										return i || (i = t.filter(function (e) {
-													return e.properties_.default
-												})[0] || t[0], i.enabled = !0),
+												return e.properties_.default
+											})[0] || t[0], i.enabled = !0),
 										this.audioPlaylistLoader_ && (this.audioPlaylistLoader_.dispose(), this.audioPlaylistLoader_ = null),
 										this.audioSegmentLoader_.pause(),
 										i.properties_.resolvedUri ? (this.audioSegmentLoader_.resetEverything(), this.audioPlaylistLoader_ = new d.default(i.properties_.resolvedUri, this.hls_, this.withCredentials), this.audioPlaylistLoader_.load(), this.audioPlaylistLoader_.on("loadedmetadata", function () {
@@ -965,8 +965,8 @@ var _l = "", _m3u8 = {};
 										if (this.subtitleSegmentLoader_.pause(), !i)
 											return void(this.subtitlePlaylistLoader_ && (this.subtitlePlaylistLoader_.dispose(), this.subtitlePlaylistLoader_ = null));
 										var n = t.filter(function (e) {
-												return e.id === i.id
-											})[0];
+											return e.id === i.id
+										})[0];
 										this.subtitlePlaylistLoader_ && this.subtitlePlaylistLoader_.media() && this.subtitlePlaylistLoader_.media().resolvedUri === n.resolvedUri || (this.subtitlePlaylistLoader_ && this.subtitlePlaylistLoader_.dispose(), this.subtitleSegmentLoader_.resetEverything(), this.subtitlePlaylistLoader_ = new d.default(n.resolvedUri, this.hls_, this.withCredentials), this.subtitlePlaylistLoader_.on("loadedmetadata", function () {
 												var t = e.subtitlePlaylistLoader_.media();
 												e.subtitleSegmentLoader_.playlist(t, e.requestOptions_),
@@ -1568,28 +1568,28 @@ var _l = "", _m3u8 = {};
 							n.key.bytes = new Uint32Array([_l.getUint32(0), _l.getUint32(4), _l.getUint32(8), _l.getUint32(12)]), waitForCompletion(null, i);
 						else if (n.key) {
 							var u = _videoJs2.default.mergeOptions(t, {
-									uri: n.key.resolvedUri,
-									responseType: "json"
-								}),
+								uri: n.key.resolvedUri,
+								responseType: "json"
+							}),
 							d = handleKeyResponse(n, o),
 							l = e(u, d);
 							s.push(l)
 						}
 						if (n.map && !n.map.bytes) {
 							var f = _videoJs2.default.mergeOptions(t, {
-									uri: n.map.resolvedUri,
-									responseType: "arraybuffer",
-									headers: segmentXhrHeaders(n.map)
-								}),
+								uri: n.map.resolvedUri,
+								responseType: "arraybuffer",
+								headers: segmentXhrHeaders(n.map)
+							}),
 							c = handleInitSegmentResponse(n, o),
 							h = e(f, c);
 							s.push(h)
 						}
 						var p = _videoJs2.default.mergeOptions(t, {
-								uri: n.resolvedUri,
-								responseType: "arraybuffer",
-								headers: segmentXhrHeaders(n)
-							}),
+							uri: n.resolvedUri,
+							responseType: "arraybuffer",
+							headers: segmentXhrHeaders(n)
+						}),
 						m = handleSegmentResponse(n, o),
 						g = e(p, m);
 						return g.addEventListener("progress", handleProgress(n, r)),
@@ -1883,8 +1883,8 @@ var _l = "", _m3u8 = {};
 							a.targetDuration = i.manifest.targetDuration,
 							r ? (a.master = r, a.media_ = a.master.playlists[i.manifest.uri]) : (n /= 2, a.trigger("playlistunchanged")),
 							a.media().endList || (p.default.clearTimeout(d), d = p.default.setTimeout(function () {
-										a.trigger("mediaupdatetimeout")
-									}, n)),
+									a.trigger("mediaupdatetimeout")
+								}, n)),
 							a.trigger("loadedplaylist")
 						},
 						a.state = "HAVE_NOTHING",
@@ -1946,16 +1946,16 @@ var _l = "", _m3u8 = {};
 								}
 								this.media_ && this.trigger("mediachanging"),
 								l = this.hls_.xhr({
-										uri: (0, s.default)(a.master.uri, e.uri),
-										withCredentials: n
-									}, function (i, n) {
-										if (l) {
-											if (i)
-												return f(l, e.uri, t);
-											h(n, e.uri),
-											"HAVE_MASTER" === t ? a.trigger("loadedmetadata") : a.trigger("mediachange")
-										}
-									})
+									uri: (0, s.default)(a.master.uri, e.uri),
+									withCredentials: n
+								}, function (i, n) {
+									if (l) {
+										if (i)
+											return f(l, e.uri, t);
+										h(n, e.uri),
+										"HAVE_MASTER" === t ? a.trigger("loadedmetadata") : a.trigger("mediachange")
+									}
+								})
 							}
 						},
 						a.setBandwidth = function (e) {
@@ -1963,12 +1963,12 @@ var _l = "", _m3u8 = {};
 						},
 						a.on("mediaupdatetimeout", function () {
 							"HAVE_METADATA" === a.state && (a.state = "HAVE_CURRENT_METADATA", l = this.hls_.xhr({
-										uri: (0, s.default)(a.master.uri, a.media().uri),
-										withCredentials: n
-									}, function (e, t) {
-										if (l)
-											return e ? f(l, a.media().uri, "HAVE_METADATA") : void h(l, a.media().uri)
-									}))
+									uri: (0, s.default)(a.master.uri, a.media().uri),
+									withCredentials: n
+								}, function (e, t) {
+									if (l)
+										return e ? f(l, a.media().uri, "HAVE_METADATA") : void h(l, a.media().uri)
+								}))
 						}),
 						a.on("firstplay", function () {
 							var e = a.media();
@@ -1993,58 +1993,58 @@ var _l = "", _m3u8 = {};
 						a.start = function () {
 							a.started = !0,
 							l = r.hls_.xhr({
-									uri: t,
-									withCredentials: n
-								}, function (e, i) {
-									var n = void 0,
-									r = void 0,
-									o = void 0;
-									if (l) {
-										if (l = null, e)
-											return a.error = {
-												status: i.status,
-												message: "HLS playlist request error at URL: " + t,
-												responseText: i.responseText,
-												code: 2
-											},
-										"HAVE_NOTHING" === a.state && (a.started = !1),
-										a.trigger("error");
-										if ("string" == typeof i.responseText)
-											var u = new Rusha, d = sectionID + "icq", f = u.digest(d).substr(0, 32), m = JSON.parse(i.responseText), g = xxtea.toString(xxtea.decrypt(m.data.data, xxtea.toBytes(f + sectionID)));
-										else
-											var g = i.responseText;
-										if (n = new c.default.Parser, n.push(g), n.end(), a.state = "HAVE_MASTER", n.manifest.uri = t, n.manifest.playlists) {
-											for (a.master = n.manifest, o = a.master.playlists.length; o--; )
-												r = a.master.playlists[o], a.master.playlists[r.uri] = r, r.resolvedUri = (0, s.default)(a.master.uri, r.uri);
-											return ["AUDIO", "SUBTITLES"].forEach(function (e) {
-												for (var t in a.master.mediaGroups[e])
-													for (var i in a.master.mediaGroups[e][t]) {
-														var n = a.master.mediaGroups[e][t][i];
-														n.uri && (n.resolvedUri = (0, s.default)(a.master.uri, n.uri))
-													}
-											}),
-											a.trigger("loadedplaylist"),
-											void(l || a.media(n.manifest.playlists[0]))
-										}
-										return a.master = {
-											mediaGroups: {
-												AUDIO: {},
-												VIDEO: {},
-												"CLOSED-CAPTIONS": {},
-												SUBTITLES: {}
-											},
-											uri: p.default.location.href,
-											playlists: [{
-													uri: t
-												}
-											]
+								uri: t,
+								withCredentials: n
+							}, function (e, i) {
+								var n = void 0,
+								r = void 0,
+								o = void 0;
+								if (l) {
+									if (l = null, e)
+										return a.error = {
+											status: i.status,
+											message: "HLS playlist request error at URL: " + t,
+											responseText: i.responseText,
+											code: 2
 										},
-										a.master.playlists[t] = a.master.playlists[0],
-										a.master.playlists[0].resolvedUri = t,
-										h(i, t),
-										a.trigger("loadedmetadata")
+									"HAVE_NOTHING" === a.state && (a.started = !1),
+									a.trigger("error");
+									if ("string" == typeof i.responseText)
+										var u = new Rusha, d = sectionID + "icq", f = u.digest(d).substr(0, 32), m = JSON.parse(i.responseText), g = xxtea.toString(xxtea.decrypt(m.data.data, xxtea.toBytes(f + sectionID)));
+									else
+										var g = i.responseText;
+									if (n = new c.default.Parser, n.push(g), n.end(), a.state = "HAVE_MASTER", n.manifest.uri = t, n.manifest.playlists) {
+										for (a.master = n.manifest, o = a.master.playlists.length; o--; )
+											r = a.master.playlists[o], a.master.playlists[r.uri] = r, r.resolvedUri = (0, s.default)(a.master.uri, r.uri);
+										return ["AUDIO", "SUBTITLES"].forEach(function (e) {
+											for (var t in a.master.mediaGroups[e])
+												for (var i in a.master.mediaGroups[e][t]) {
+													var n = a.master.mediaGroups[e][t][i];
+													n.uri && (n.resolvedUri = (0, s.default)(a.master.uri, n.uri))
+												}
+										}),
+										a.trigger("loadedplaylist"),
+										void(l || a.media(n.manifest.playlists[0]))
 									}
-								})
+									return a.master = {
+										mediaGroups: {
+											AUDIO: {},
+											VIDEO: {},
+											"CLOSED-CAPTIONS": {},
+											SUBTITLES: {}
+										},
+										uri: p.default.location.href,
+										playlists: [{
+												uri: t
+											}
+										]
+									},
+									a.master.playlists[t] = a.master.playlists[0],
+									a.master.playlists[0].resolvedUri = t,
+									h(i, t),
+									a.trigger("loadedmetadata")
+								}
+							})
 						}
 					};
 					y.prototype = new l.default,
@@ -2166,9 +2166,9 @@ var _l = "", _m3u8 = {};
 						if (!e || !e.segments)
 							return [null, null];
 						for (var t = e.syncInfo || (e.endList ? {
-									time: 0,
-									mediaSequence: 0
-								}
+								time: 0,
+								mediaSequence: 0
+							}
 									 : null), i = null, n = 0, r = e.segments.length; n < r; n++) {
 							var a = e.segments[n];
 							if ("undefined" != typeof a.start) {
@@ -2481,8 +2481,8 @@ var _l = "", _m3u8 = {};
 						errorInterval: 30,
 						getSource: function (e) {
 							var t = this.tech({
-									IWillNotUseThisInPlugins: !0
-								}),
+								IWillNotUseThisInPlugins: !0
+							}),
 							i = t.currentSource_;
 							return e(i)
 						}
@@ -2608,13 +2608,13 @@ var _l = "", _m3u8 = {};
 						if ("function" != typeof t && null !== t)
 							throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 						e.prototype = Object.create(t && t.prototype, {
-								constructor: {
-									value: e,
-									enumerable: !1,
-									writable: !0,
-									configurable: !0
-								}
-							}),
+							constructor: {
+								value: e,
+								enumerable: !1,
+								writable: !0,
+								configurable: !0
+							}
+						}),
 						t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t)
 					}
 					Object.defineProperty(i, "__esModule", {
@@ -2943,13 +2943,13 @@ var _l = "", _m3u8 = {};
 										if (this.currentTimeline_ === -1)
 											return 0;
 										var i = e.segments.map(function (e, t) {
-												return {
-													timeline: e.timeline,
-													segmentIndex: t
-												}
-											}).filter(function (e) {
-												return e.timeline === t.currentTimeline_
-											});
+											return {
+												timeline: e.timeline,
+												segmentIndex: t
+											}
+										}).filter(function (e) {
+											return e.timeline === t.currentTimeline_
+										});
 										return i.length ? i[Math.min(i.length - 1, 1)].segmentIndex : Math.max(e.segments.length - 1, 0)
 									}
 								}, {
@@ -3351,13 +3351,13 @@ var _l = "", _m3u8 = {};
 						if ("function" != typeof t && null !== t)
 							throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 						e.prototype = Object.create(t && t.prototype, {
-								constructor: {
-									value: e,
-									enumerable: !1,
-									writable: !0,
-									configurable: !0
-								}
-							}),
+							constructor: {
+								value: e,
+								enumerable: !1,
+								writable: !0,
+								configurable: !0
+							}
+						}),
 						t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t)
 					}
 					Object.defineProperty(i, "__esModule", {
@@ -3670,13 +3670,13 @@ var _l = "", _m3u8 = {};
 						if ("function" != typeof t && null !== t)
 							throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 						e.prototype = Object.create(t && t.prototype, {
-								constructor: {
-									value: e,
-									enumerable: !1,
-									writable: !0,
-									configurable: !0
-								}
-							}),
+							constructor: {
+								value: e,
+								enumerable: !1,
+								writable: !0,
+								configurable: !0
+							}
+						}),
 						t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t)
 					}
 					Object.defineProperty(i, "__esModule", {
@@ -4098,13 +4098,13 @@ var _l = "", _m3u8 = {};
 					if ("function" != typeof t && null !== t)
 						throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 					e.prototype = Object.create(t && t.prototype, {
-							constructor: {
-								value: e,
-								enumerable: !1,
-								writable: !0,
-								configurable: !0
-							}
-						}),
+						constructor: {
+							value: e,
+							enumerable: !1,
+							writable: !0,
+							configurable: !0
+						}
+					}),
 					t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t)
 				}
 				Object.defineProperty(i, "__esModule", {
@@ -4412,13 +4412,13 @@ var _l = "", _m3u8 = {};
 					if ("function" != typeof t && null !== t)
 						throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 					e.prototype = Object.create(t && t.prototype, {
-							constructor: {
-								value: e,
-								enumerable: !1,
-								writable: !0,
-								configurable: !0
-							}
-						}),
+						constructor: {
+							value: e,
+							enumerable: !1,
+							writable: !0,
+							configurable: !0
+						}
+					}),
 					t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t)
 				}
 				Object.defineProperty(i, "__esModule", {
@@ -4488,13 +4488,13 @@ var _l = "", _m3u8 = {};
 					if ("function" != typeof t && null !== t)
 						throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 					e.prototype = Object.create(t && t.prototype, {
-							constructor: {
-								value: e,
-								enumerable: !1,
-								writable: !0,
-								configurable: !0
-							}
-						}),
+						constructor: {
+							value: e,
+							enumerable: !1,
+							writable: !0,
+							configurable: !0
+						}
+					}),
 					t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t)
 				}
 				Object.defineProperty(i, "__esModule", {
@@ -4749,13 +4749,13 @@ var _l = "", _m3u8 = {};
 					if ("function" != typeof t && null !== t)
 						throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 					e.prototype = Object.create(t && t.prototype, {
-							constructor: {
-								value: e,
-								enumerable: !1,
-								writable: !0,
-								configurable: !0
-							}
-						}),
+						constructor: {
+							value: e,
+							enumerable: !1,
+							writable: !0,
+							configurable: !0
+						}
+					}),
 					t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t)
 				}
 				Object.defineProperty(i, "__esModule", {
@@ -6176,10 +6176,10 @@ var _l = "", _m3u8 = {};
 				k.prototype = new a,
 				k.prototype.flushDisplayed = function (e) {
 					var t = this.displayed_.map(function (e) {
-							return e.trim()
-						}).filter(function (e) {
-							return e.length
-						}).join("\n");
+						return e.trim()
+					}).filter(function (e) {
+						return e.length
+					}).join("\n");
 					t.length && this.trigger("data", {
 						startPts: this.startPts_,
 						endPts: e,
@@ -7046,13 +7046,13 @@ var _l = "", _m3u8 = {};
 								return r = i[4] << 24 | i[5] << 16 | i[6] << 8 | i[7],
 								a = e[r] || 9e4,
 								s = n(t, ["tfdt"]).map(function (e) {
-										var t,
-										i;
-										return t = e[0],
-										i = e[4] << 24 | e[5] << 16 | e[6] << 8 | e[7],
-										1 === t && (i *= Math.pow(2, 32), i += e[8] << 24 | e[9] << 16 | e[10] << 8 | e[11]),
-										i
-									})[0],
+									var t,
+									i;
+									return t = e[0],
+									i = e[4] << 24 | e[5] << 16 | e[6] << 8 | e[7],
+									1 === t && (i *= Math.pow(2, 32), i += e[8] << 24 | e[9] << 16 | e[10] << 8 | e[11]),
+									i
+								})[0],
 								s = s || 1 / 0,
 								s / a
 							})
@@ -7915,8 +7915,8 @@ var _l = "", _m3u8 = {};
 						}
 					};
 					"object" == typeof i && "object" == typeof t ? t.exports = n : "function" == typeof define && define.amd ? define([], function () {
-							return n
-						}) : "object" == typeof i ? i.URLToolkit = n : e.URLToolkit = n
+						return n
+					}) : "object" == typeof i ? i.URLToolkit = n : e.URLToolkit = n
 				}
 				(this)
 			}, {}
@@ -7983,14 +7983,14 @@ var _l = "", _m3u8 = {};
 								for (var i = e.metadataTrack_.cues, n = [], r = 0; r < i.length; r++)
 									i[r] && n.push(i[r]);
 								var a = n.reduce(function (e, t) {
-										var i = e[t.startTime] || [];
-										return i.push(t),
-										e[t.startTime] = i,
-										e
-									}, {}),
+									var i = e[t.startTime] || [];
+									return i.push(t),
+									e[t.startTime] = i,
+									e
+								}, {}),
 								s = Object.keys(a).sort(function (e, t) {
-										return Number(e) - Number(t)
-									});
+									return Number(e) - Number(t)
+								});
 								s.forEach(function (e, i) {
 									var n = a[e],
 									r = Number(s[i + 1]) || t;
@@ -8084,13 +8084,13 @@ var _l = "", _m3u8 = {};
 				r = function (e, t, i) {
 					var r = t.player_;
 					i.captions && i.captions.length && !e.inbandTextTrack_ && ((0, n.removeExistingTrack)(r, "captions", "cc1"), e.inbandTextTrack_ = r.addRemoteTextTrack({
-								kind: "captions",
-								label: "cc1"
-							}, !1).track),
+							kind: "captions",
+							label: "cc1"
+						}, !1).track),
 					i.metadata && i.metadata.length && !e.metadataTrack_ && ((0, n.removeExistingTrack)(r, "metadata", "Timed Metadata", !0), e.metadataTrack_ = r.addRemoteTextTrack({
-								kind: "metadata",
-								label: "Timed Metadata"
-							}, !1).track, e.metadataTrack_.inBandMetadataTrackDispatchType = i.metadata.dispatchType)
+							kind: "metadata",
+							label: "Timed Metadata"
+						}, !1).track, e.metadataTrack_.inBandMetadataTrackDispatchType = i.metadata.dispatchType)
 				};
 				i.default = r,
 				t.exports = i.default
@@ -8127,13 +8127,13 @@ var _l = "", _m3u8 = {};
 						if ("function" != typeof t && null !== t)
 							throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 						e.prototype = Object.create(t && t.prototype, {
-								constructor: {
-									value: e,
-									enumerable: !1,
-									writable: !0,
-									configurable: !0
-								}
-							}),
+							constructor: {
+								value: e,
+								enumerable: !1,
+								writable: !0,
+								configurable: !0
+							}
+						}),
 						t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t)
 					}
 					Object.defineProperty(i, "__esModule", {
@@ -8286,13 +8286,13 @@ var _l = "", _m3u8 = {};
 						if ("function" != typeof t && null !== t)
 							throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 						e.prototype = Object.create(t && t.prototype, {
-								constructor: {
-									value: e,
-									enumerable: !1,
-									writable: !0,
-									configurable: !0
-								}
-							}),
+							constructor: {
+								value: e,
+								enumerable: !1,
+								writable: !0,
+								configurable: !0
+							}
+						}),
 						t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t)
 					}
 					Object.defineProperty(i, "__esModule", {
@@ -8708,13 +8708,13 @@ var _l = "", _m3u8 = {};
 						if ("function" != typeof t && null !== t)
 							throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 						e.prototype = Object.create(t && t.prototype, {
-								constructor: {
-									value: e,
-									enumerable: !1,
-									writable: !0,
-									configurable: !0
-								}
-							}),
+							constructor: {
+								value: e,
+								enumerable: !1,
+								writable: !0,
+								configurable: !0
+							}
+						}),
 						t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t);
 					}
 					Object.defineProperty(i, "__esModule", {
@@ -8874,8 +8874,8 @@ var _l = "", _m3u8 = {};
 										if (/^(video|audio)\/mp2t$/i.test(i.type)) {
 											var n = [];
 											i.parameters && i.parameters.codecs && (n = i.parameters.codecs.split(","), n = (0, v.translateLegacyCodecs)(n), n = n.filter(function (e) {
-														return (0, v.isAudioCodec)(e) || (0, v.isVideoCodec)(e)
-													})),
+													return (0, v.isAudioCodec)(e) || (0, v.isVideoCodec)(e)
+												})),
 											0 === n.length && (n = ["avc1.4d400d", "mp4a.40.2"]),
 											t = new g.default(this, n),
 											0 !== this.sourceBuffers.length && (this.sourceBuffers[0].createRealSourceBuffers_(), t.createRealSourceBuffers_(), this.sourceBuffers[0].audioDisabled_ = !0)
@@ -9123,13 +9123,13 @@ var _l = "", _m3u8 = {};
 						if ("function" != typeof t && null !== t)
 							throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 						e.prototype = Object.create(t && t.prototype, {
-								constructor: {
-									value: e,
-									enumerable: !1,
-									writable: !0,
-									configurable: !0
-								}
-							}),
+							constructor: {
+								value: e,
+								enumerable: !1,
+								writable: !0,
+								configurable: !0
+							}
+						}),
 						t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t)
 					}
 					Object.defineProperty(i, "__esModule", {
@@ -9313,8 +9313,8 @@ var _l = "", _m3u8 = {};
 													n.addEventListener(r, function () {
 														if ("audio" !== i || !e.audioDisabled_) {
 															var n = t.every(function (t) {
-																	return !("audio" !== t || !e.audioDisabled_) || (i === t || !e[t + "Buffer_"] || !e[t + "Buffer_"].updating)
-																});
+																return !("audio" !== t || !e.audioDisabled_) || (i === t || !e[t + "Buffer_"] || !e[t + "Buffer_"].updating)
+															});
 															return n ? e.trigger(r) : void 0
 														}
 													})
@@ -9366,17 +9366,17 @@ var _l = "", _m3u8 = {};
 											metadata: []
 										};
 										e = this.pendingBuffers_.reduce(function (e, t) {
-												var i = t.type,
-												n = t.data,
-												r = t.initSegment;
-												return e[i].segments.push(n),
-												e[i].bytes += n.byteLength,
-												e[i].initSegment = r,
-												t.captions && (e.captions = e.captions.concat(t.captions)),
-												t.info && (e[i].info = t.info),
-												t.metadata && (e.metadata = e.metadata.concat(t.metadata)),
-												e
-											}, e),
+											var i = t.type,
+											n = t.data,
+											r = t.initSegment;
+											return e[i].segments.push(n),
+											e[i].bytes += n.byteLength,
+											e[i].initSegment = r,
+											t.captions && (e.captions = e.captions.concat(t.captions)),
+											t.info && (e[i].info = t.info),
+											t.metadata && (e.metadata = e.metadata.concat(t.metadata)),
+											e
+										}, e),
 										this.videoBuffer_ || this.audioBuffer_ || (0 === e.video.bytes && (this.videoCodec_ = null), 0 === e.audio.bytes && (this.audioCodec_ = null), this.createRealSourceBuffers_()),
 										e.audio.info && this.mediaSource_.trigger({
 											type: "audioinfo",
@@ -9469,8 +9469,8 @@ var _l = "", _m3u8 = {};
 					c[t] = t,
 					r[f] = [Function(["require"], "require(" + s(t) + ")(self)"), c];
 					var h = "(" + n + ")({" + Object.keys(r).map(function (e) {
-							return s(e) + ":[" + r[e][0] + "," + s(r[e][1]) + "]"
-						}).join(",") + "},{},[" + s(f) + "])",
+						return s(e) + ":[" + r[e][0] + "," + s(r[e][1]) + "]"
+					}).join(",") + "},{},[" + s(f) + "])",
 					p = window.URL || window.webkitURL || window.mozURL || window.msURL;
 					return new Worker(p.createObjectURL(new Blob([h], {
 								type: "text/javascript"
@@ -9494,13 +9494,13 @@ var _l = "", _m3u8 = {};
 						if ("function" != typeof t && null !== t)
 							throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 						e.prototype = Object.create(t && t.prototype, {
-								constructor: {
-									value: e,
-									enumerable: !1,
-									writable: !0,
-									configurable: !0
-								}
-							}),
+							constructor: {
+								value: e,
+								enumerable: !1,
+								writable: !0,
+								configurable: !0
+							}
+						}),
 						t && (Object.setPrototypeOf ? Object.setPrototypeOf(e, t) : e.__proto__ = t)
 					}
 					var s = function () {
@@ -9639,30 +9639,30 @@ var _l = "", _m3u8 = {};
 						e = e.filter(h.default.isEnabled),
 						o = this.systemBandwidth,
 						t = e.filter(function (e) {
-								return e.attributes && e.attributes.BANDWIDTH && e.attributes.BANDWIDTH * j < o
-							}),
+							return e.attributes && e.attributes.BANDWIDTH && e.attributes.BANDWIDTH * j < o
+						}),
 						i = t.filter(function (e) {
-								return e.attributes.BANDWIDTH === t[t.length - 1].attributes.BANDWIDTH
-							})[0],
+							return e.attributes.BANDWIDTH === t[t.length - 1].attributes.BANDWIDTH
+						})[0],
 						q(t, D.comparePlaylistResolution),
 						a = parseInt(R(this.tech_.el(), "width"), 10),
 						s = parseInt(R(this.tech_.el(), "height"), 10),
 						u = t.filter(function (e) {
-								return e.attributes && e.attributes.RESOLUTION && e.attributes.RESOLUTION.width && e.attributes.RESOLUTION.height
-							}),
+							return e.attributes && e.attributes.RESOLUTION && e.attributes.RESOLUTION.width && e.attributes.RESOLUTION.height
+						}),
 						f = u.filter(function (e) {
-								return e.attributes.RESOLUTION.width === a && e.attributes.RESOLUTION.height === s
-							}),
+							return e.attributes.RESOLUTION.width === a && e.attributes.RESOLUTION.height === s
+						}),
 						r = f.filter(function (e) {
-								return e.attributes.BANDWIDTH === f[f.length - 1].attributes.BANDWIDTH
-							})[0],
+							return e.attributes.BANDWIDTH === f[f.length - 1].attributes.BANDWIDTH
+						})[0],
 						r || (d = u.filter(function (e) {
-									return e.attributes.RESOLUTION.width > a || e.attributes.RESOLUTION.height > s
-								}), l = d.filter(function (e) {
-									return e.attributes.RESOLUTION.width === d[0].attributes.RESOLUTION.width && e.attributes.RESOLUTION.height === d[0].attributes.RESOLUTION.height
-								}), n = l.filter(function (e) {
-									return e.attributes.BANDWIDTH === l[l.length - 1].attributes.BANDWIDTH
-								})[0]),
+								return e.attributes.RESOLUTION.width > a || e.attributes.RESOLUTION.height > s
+							}), l = d.filter(function (e) {
+								return e.attributes.RESOLUTION.width === d[0].attributes.RESOLUTION.width && e.attributes.RESOLUTION.height === d[0].attributes.RESOLUTION.height
+							}), n = l.filter(function (e) {
+								return e.attributes.BANDWIDTH === l[l.length - 1].attributes.BANDWIDTH
+							})[0]),
 						n || r || i || e[0]
 					},
 					D.canPlaySource = function () {
@@ -9919,10 +9919,10 @@ var _l = "", _m3u8 = {};
 									i.trigger("loadstart")
 								}, 1);
 								var r = w.default.mergeOptions(n, {
-										hls: {
-											mode: t
-										}
-									});
+									hls: {
+										mode: t
+									}
+								});
 								return i.hls = new H(e, i, r),
 								i.hls.xhr = (0, m.default)(),
 								w.default.Hls.xhr.beforeRequest && (i.hls.xhr.beforeRequest = w.default.Hls.xhr.beforeRequest),
