@@ -800,608 +800,608 @@ FBL.ns(function () {
 			}
 		});
 
-	// ************************************************************************************************
-	// Autocompletion
+		// ************************************************************************************************
+		// Autocompletion
 
-	Firebug.AutoCompleter = function (getExprOffset, getRange, evaluator, selectMode, caseSensitive,
-		noCompleteOnBlank, noShowGlobal, showCompletionPopup, isValidProperty) {
-		var candidates = null;
-		var originalValue = null;
-		var originalOffset = -1;
-		var lastExpr = null;
-		var lastOffset = -1;
-		var exprOffset = 0;
-		var lastIndex = -2; // adding 1 will still be less then zero
-		var preParsed = null;
-		var preExpr = null;
-		var postExpr = null;
-		var completionPopup = $("fbCommandLineCompletionList");
-		var commandCompletionLineLimit = 40;
-		var reJavascriptChar = /[a-zA-Z0-9$_]/;
-		var reJavaScriptGroup = /([\{\"\/\(\'])/;
-		// current completion state values
-		var completionEnd = 0;
-		var value = "";
-		var preCompletion = "";
-		var completionStart = -1;
-		var completionEnd = -1;
-		var accepted = false;
+		Firebug.AutoCompleter = function (getExprOffset, getRange, evaluator, selectMode, caseSensitive,
+			noCompleteOnBlank, noShowGlobal, showCompletionPopup, isValidProperty) {
+			var candidates = null;
+			var originalValue = null;
+			var originalOffset = -1;
+			var lastExpr = null;
+			var lastOffset = -1;
+			var exprOffset = 0;
+			var lastIndex = -2; // adding 1 will still be less then zero
+			var preParsed = null;
+			var preExpr = null;
+			var postExpr = null;
+			var completionPopup = $("fbCommandLineCompletionList");
+			var commandCompletionLineLimit = 40;
+			var reJavascriptChar = /[a-zA-Z0-9$_]/;
+			var reJavaScriptGroup = /([\{\"\/\(\'])/;
+			// current completion state values
+			var completionEnd = 0;
+			var value = "";
+			var preCompletion = "";
+			var completionStart = -1;
+			var completionEnd = -1;
+			var accepted = false;
 
-		this.revert = function (textBox) {
-			if (originalOffset != -1) {
-				textBox.value = originalValue;
-				textBox.setSelectionRange(originalOffset, originalOffset);
+			this.revert = function (textBox) {
+				if (originalOffset != -1) {
+					textBox.value = originalValue;
+					textBox.setSelectionRange(originalOffset, originalOffset);
 
-				this.reset();
-				return true;
-			} else {
-				this.reset();
-				return false;
-			}
-		};
-
-		this.reset = function () {
-			candidates = null;
-			originalValue = null;
-			originalOffset = -1;
-			lastExpr = null;
-			lastOffset = 0;
-			exprOffset = 0;
-			lastIndex = -2;
-			accepted = false;
-		};
-
-		this.complete = function (context, textBox, completionBox, cycle, reverse, showGlobals) {
-			this.clearCandidates(textBox, completionBox);
-
-			if (!this.getVerifiedText(textBox) && !showGlobals) // then no completion is desired
-				return false;
-
-			var offset = textBox.selectionStart; // defines the cursor position
-
-			var found = this.pickCandidates(textBox, offset, context, cycle, reverse, showGlobals);
-
-			if (completionBox && found)
-				this.showCandidates(textBox, completionBox);
-
-			return found;
-		};
-
-		/*
-		 * returns true if candidate list was created
-		 */
-		this.pickCandidates = function (textBox, offset, context, cycle, reverse, showGlobals) {
-			var value = textBox.value;
-
-			if (!candidates || !cycle || offset != lastOffset) {
-				originalOffset = offset;
-				originalValue = value;
-
-				// Find the part of the string that will be parsed
-				var parseStart = getExprOffset ? getExprOffset(value, offset, context) : 0;
-				preParsed = value.substr(0, parseStart);
-				var parsed = value.substr(parseStart);
-
-				// Find the part of the string that is being completed
-				var range = getRange ? getRange(parsed, offset - parseStart, context) : null;
-				if (!range)
-					range = {
-						start: 0,
-						end: parsed.length - 1
-					};
-
-				var expr = parsed.substr(range.start, range.end - range.start + 1);
-				preExpr = parsed.substr(0, range.start);
-				postExpr = parsed.substr(range.end + 1);
-				exprOffset = parseStart + range.start;
-
-				if (FBTrace.DBG_EDITOR) {
-					var sep = (parsed.indexOf('|') > -1) ? '^' : '|';
-					FBTrace.sysout(preExpr + sep + expr + sep + postExpr + " offset: " + offset + " parseStart:" + parseStart);
+					this.reset();
+					return true;
+				} else {
+					this.reset();
+					return false;
 				}
+			};
 
-				if (!cycle) {
-					if (!expr) {
-						this.hide();
-						return false;
-					} else if (lastExpr && lastExpr.indexOf(expr) != 0) {
-						candidates = null;
-					} else if (lastExpr && lastExpr.length >= expr.length) {
-						candidates = null;
-						lastExpr = expr;
+			this.reset = function () {
+				candidates = null;
+				originalValue = null;
+				originalOffset = -1;
+				lastExpr = null;
+				lastOffset = 0;
+				exprOffset = 0;
+				lastIndex = -2;
+				accepted = false;
+			};
+
+			this.complete = function (context, textBox, completionBox, cycle, reverse, showGlobals) {
+				this.clearCandidates(textBox, completionBox);
+
+				if (!this.getVerifiedText(textBox) && !showGlobals) // then no completion is desired
+					return false;
+
+				var offset = textBox.selectionStart; // defines the cursor position
+
+				var found = this.pickCandidates(textBox, offset, context, cycle, reverse, showGlobals);
+
+				if (completionBox && found)
+					this.showCandidates(textBox, completionBox);
+
+				return found;
+			};
+
+			/*
+			 * returns true if candidate list was created
+			 */
+			this.pickCandidates = function (textBox, offset, context, cycle, reverse, showGlobals) {
+				var value = textBox.value;
+
+				if (!candidates || !cycle || offset != lastOffset) {
+					originalOffset = offset;
+					originalValue = value;
+
+					// Find the part of the string that will be parsed
+					var parseStart = getExprOffset ? getExprOffset(value, offset, context) : 0;
+					preParsed = value.substr(0, parseStart);
+					var parsed = value.substr(parseStart);
+
+					// Find the part of the string that is being completed
+					var range = getRange ? getRange(parsed, offset - parseStart, context) : null;
+					if (!range)
+						range = {
+							start: 0,
+							end: parsed.length - 1
+						};
+
+					var expr = parsed.substr(range.start, range.end - range.start + 1);
+					preExpr = parsed.substr(0, range.start);
+					postExpr = parsed.substr(range.end + 1);
+					exprOffset = parseStart + range.start;
+
+					if (FBTrace.DBG_EDITOR) {
+						var sep = (parsed.indexOf('|') > -1) ? '^' : '|';
+						FBTrace.sysout(preExpr + sep + expr + sep + postExpr + " offset: " + offset + " parseStart:" + parseStart);
+					}
+
+					if (!cycle) {
+						if (!expr) {
+							this.hide();
+							return false;
+						} else if (lastExpr && lastExpr.indexOf(expr) != 0) {
+							candidates = null;
+						} else if (lastExpr && lastExpr.length >= expr.length) {
+							candidates = null;
+							lastExpr = expr;
+							this.hide();
+							return false;
+						}
+					}
+
+					lastExpr = expr;
+					lastOffset = offset;
+
+					var searchExpr;
+
+					// Check if the cursor is at the very right edge of the expression, or
+					// somewhere in the middle of it
+					if (expr && offset != parseStart + range.end + 1) {
+						if (cycle) {
+							// We are in the middle of the expression, but we can
+							// complete by cycling to the next item in the values
+							// list after the expression
+							offset = range.start;
+							searchExpr = expr;
+							expr = "";
+						} else {
+							// We can't complete unless we are at the ridge edge
+							this.hide();
+							return false;
+						}
+					}
+
+					if (!showGlobals && !preExpr && !expr && !postExpr) {
+						// Don't complete globals unless we are forced to do so.
 						this.hide();
 						return false;
 					}
-				}
 
-				lastExpr = expr;
-				lastOffset = offset;
-
-				var searchExpr;
-
-				// Check if the cursor is at the very right edge of the expression, or
-				// somewhere in the middle of it
-				if (expr && offset != parseStart + range.end + 1) {
-					if (cycle) {
-						// We are in the middle of the expression, but we can
-						// complete by cycling to the next item in the values
-						// list after the expression
-						offset = range.start;
-						searchExpr = expr;
-						expr = "";
+					var m = reJavaScriptGroup.exec(value);
+					if (m) // then we have group operator
+					{
+						return false; // give up, we need at least to balance
 					} else {
-						// We can't complete unless we are at the ridge edge
-						this.hide();
-						return false;
+						var values = evaluator(preExpr, expr, postExpr, context);
+						if (!values) {
+							this.hide();
+							return false;
+						}
+
+						if (expr) {
+							this.setCandidatesByExpr(expr, values, reverse);
+						} else if (searchExpr) {
+							if (!this.setCandidatesBySearchExpr(searchExpr, expr, values))
+								return false;
+							expr = searchExpr;
+						} else {
+							this.setCandidatesByValues(values);
+						}
 					}
 				}
 
-				if (!showGlobals && !preExpr && !expr && !postExpr) {
-					// Don't complete globals unless we are forced to do so.
+				if (cycle)
+					expr = lastExpr;
+
+				if (!candidates.length) {
 					this.hide();
 					return false;
 				}
 
-				var m = reJavaScriptGroup.exec(value);
-				if (m) // then we have group operator
+				this.adjustLastIndex(cycle, reverse);
+
+				var completion = candidates[lastIndex];
+				preCompletion = expr.substr(0, offset - exprOffset);
+				var postCompletion = completion.substr(offset - exprOffset);
+
+				var line = preParsed + preExpr + preCompletion + postCompletion + postExpr;
+				var offsetEnd = preParsed.length + preExpr.length + completion.length;
+
+				if (selectMode) // inline completion  uses this
 				{
-					return false; // give up, we need at least to balance
+					textBox.value = line;
+					textBox.setSelectionRange(offset, offsetEnd);
 				} else {
-					var values = evaluator(preExpr, expr, postExpr, context);
-					if (!values) {
-						this.hide();
-						return false;
+					textBox.setSelectionRange(offsetEnd, offsetEnd);
+				}
+
+				// store current state of completion
+				currentLine = line;
+				completionStart = offset;
+				completionEnd = offsetEnd;
+
+				return true;
+			};
+
+			this.setCandidatesByExpr = function (expr, values, reverse) {
+				// Filter the list of values to those which begin with expr. We
+				// will then go on to complete the first value in the resulting list
+				candidates = [];
+
+				if (caseSensitive) {
+					for (var i = 0; i < values.length; ++i) {
+						var name = values[i];
+						if (name.indexOf && name.indexOf(expr) == 0)
+							candidates.push(name);
 					}
-
-					if (expr) {
-						this.setCandidatesByExpr(expr, values, reverse);
-					} else if (searchExpr) {
-						if (!this.setCandidatesBySearchExpr(searchExpr, expr, values))
-							return false;
-						expr = searchExpr;
-					} else {
-						this.setCandidatesByValues(values);
-					}
-				}
-			}
-
-			if (cycle)
-				expr = lastExpr;
-
-			if (!candidates.length) {
-				this.hide();
-				return false;
-			}
-
-			this.adjustLastIndex(cycle, reverse);
-
-			var completion = candidates[lastIndex];
-			preCompletion = expr.substr(0, offset - exprOffset);
-			var postCompletion = completion.substr(offset - exprOffset);
-
-			var line = preParsed + preExpr + preCompletion + postCompletion + postExpr;
-			var offsetEnd = preParsed.length + preExpr.length + completion.length;
-
-			if (selectMode) // inline completion  uses this
-			{
-				textBox.value = line;
-				textBox.setSelectionRange(offset, offsetEnd);
-			} else {
-				textBox.setSelectionRange(offsetEnd, offsetEnd);
-			}
-
-			// store current state of completion
-			currentLine = line;
-			completionStart = offset;
-			completionEnd = offsetEnd;
-
-			return true;
-		};
-
-		this.setCandidatesByExpr = function (expr, values, reverse) {
-			// Filter the list of values to those which begin with expr. We
-			// will then go on to complete the first value in the resulting list
-			candidates = [];
-
-			if (caseSensitive) {
-				for (var i = 0; i < values.length; ++i) {
-					var name = values[i];
-					if (name.indexOf && name.indexOf(expr) == 0)
-						candidates.push(name);
-				}
-			} else {
-				var lowerExpr = caseSensitive ? expr : expr.toLowerCase();
-				for (var i = 0; i < values.length; ++i) {
-					var name = values[i];
-					if (name.indexOf && name.toLowerCase().indexOf(lowerExpr) == 0)
-						candidates.push(name);
-				}
-			}
-
-			lastIndex = -2;
-		};
-
-		this.setCandidatesBySearchExpr = function (searchExpr, expr, values) {
-			var searchIndex = -1;
-
-			// Find the first instance of searchExpr in the values list. We
-			// will then complete the string that is found
-			if (caseSensitive) {
-				searchIndex = values.indexOf(expr);
-			} else {
-				var lowerExpr = searchExpr.toLowerCase();
-				for (var i = 0; i < values.length; ++i) {
-					var name = values[i];
-					if (name && name.toLowerCase().indexOf(lowerExpr) == 0) {
-						searchIndex = i;
-						break;
+				} else {
+					var lowerExpr = caseSensitive ? expr : expr.toLowerCase();
+					for (var i = 0; i < values.length; ++i) {
+						var name = values[i];
+						if (name.indexOf && name.toLowerCase().indexOf(lowerExpr) == 0)
+							candidates.push(name);
 					}
 				}
+
+				lastIndex = -2;
+			};
+
+			this.setCandidatesBySearchExpr = function (searchExpr, expr, values) {
+				var searchIndex = -1;
+
+				// Find the first instance of searchExpr in the values list. We
+				// will then complete the string that is found
+				if (caseSensitive) {
+					searchIndex = values.indexOf(expr);
+				} else {
+					var lowerExpr = searchExpr.toLowerCase();
+					for (var i = 0; i < values.length; ++i) {
+						var name = values[i];
+						if (name && name.toLowerCase().indexOf(lowerExpr) == 0) {
+							searchIndex = i;
+							break;
+						}
+					}
+				}
+
+				// Nothing found, so there's nothing to complete to
+				if (searchIndex == -1) {
+					this.reset();
+					return false;
+				}
+
+				candidates = cloneArray(values);
+				lastIndex = searchIndex;
+				return true;
+			};
+
+			this.setCandidatesByValues = function (values) {
+				expr = "";
+				candidates = [];
+				for (var i = 0; i < values.length; ++i) {
+					var value = values[i];
+					if (isValidProperty(value))
+						candidates.push(value);
+				}
+				lastIndex = -2;
 			}
 
-			// Nothing found, so there's nothing to complete to
-			if (searchIndex == -1) {
-				this.reset();
-				return false;
-			}
-
-			candidates = cloneArray(values);
-			lastIndex = searchIndex;
-			return true;
-		};
-
-		this.setCandidatesByValues = function (values) {
-			expr = "";
-			candidates = [];
-			for (var i = 0; i < values.length; ++i) {
-				var value = values[i];
-				if (isValidProperty(value))
-					candidates.push(value);
-			}
-			lastIndex = -2;
-		}
-
-		this.adjustLastIndex = function (cycle, reverse) {
-			if (!cycle) // we have a valid lastIndex but we are not cycling, so reset it
-				lastIndex = this.pickDefaultCandidate();
-			else if (candidates.length === 1)
-				lastIndex = 0;
-			else if (lastIndex >= candidates.length) // use default on first completion, else cycle
-				lastIndex = (lastIndex === -2) ? this.pickDefaultCandidate() : 0;
-			else if (lastIndex < 0)
-				lastIndex = (lastIndex === -2) ? this.pickDefaultCandidate() : (candidates.length - 1);
-			else // we have cycle == true
-			{
-				lastIndex += reverse ? -1 : 1;
-				if (lastIndex >= candidates.length)
+			this.adjustLastIndex = function (cycle, reverse) {
+				if (!cycle) // we have a valid lastIndex but we are not cycling, so reset it
+					lastIndex = this.pickDefaultCandidate();
+				else if (candidates.length === 1)
 					lastIndex = 0;
+				else if (lastIndex >= candidates.length) // use default on first completion, else cycle
+					lastIndex = (lastIndex === -2) ? this.pickDefaultCandidate() : 0;
 				else if (lastIndex < 0)
-					lastIndex = candidates.length - 1;
-			}
-		};
-
-		this.cycle = function (reverse) {
-			if (lastIndex < 0)
-				return false;
-
-			this.adjustLastIndex(true, reverse);
-
-			var completion = candidates[lastIndex];
-			var postCompletion = completion.substr(preCompletion.length);
-			var line = currentLine.substr(0, completionStart);
-			line += postCompletion;
-			var end = line.length;
-			line += currentLine.substr(completionEnd);
-
-			// preCompletion and completionStart do not change
-			currentLine = line;
-			completionEnd = end;
-			return true;
-		},
-
-		this.pickDefaultCandidate = function () {
-			// The shortest candidate is default value
-			var pick = 0;
-			for (var i = 1; i < candidates.length; i++) {
-				if (candidates[i].length < candidates[pick].length)
-					pick = i;
-			}
-			return pick;
-		};
-
-		this.showCandidates = function (textBox, completionBox) {
-			completionBox.value = currentLine;
-
-			if (showCompletionPopup && candidates.length && candidates.length > 1) {
-				this.popupCandidates(candidates, textBox, completionBox);
-				return false;
-			} else {
-				this.hide(candidates.length ? null : completionBox);
-			}
-			return true;
-		};
-
-		this.clearCandidates = function (textBox, completionBox) {
-			if (completionBox)
-				completionBox.value = "";
-		},
-
-		this.popupCandidates = function (candidates, textBox, completionBox) {
-			// This method should not operate on the textBox or candidates list
-			FBL.eraseNode(completionPopup);
-
-			var vbox = completionPopup.ownerDocument.createElement("vbox");
-			completionPopup.appendChild(vbox);
-			vbox.classList.add("fbCommandLineCompletions");
-
-			var title = completionPopup.ownerDocument.createElementNS("http://www.w3.org/1999/xhtml", "div");
-			title.innerHTML = $STR("console.Use Arrow keys or Enter");
-			title.classList.add('fbPopupTitle');
-			vbox.appendChild(title);
-
-			var prefix = this.getVerifiedText(textBox);
-			var pre = null;
-
-			var showTop = 0;
-			var showBottom = candidates.length;
-
-			if (candidates.length > commandCompletionLineLimit) {
-				var showBottom = commandCompletionLineLimit;
-
-				if (lastIndex > (commandCompletionLineLimit - 3)) // then implement manual scrolling
+					lastIndex = (lastIndex === -2) ? this.pickDefaultCandidate() : (candidates.length - 1);
+				else // we have cycle == true
 				{
-					if (lastIndex > (candidates.length - commandCompletionLineLimit)) // then just show the bottom
+					lastIndex += reverse ? -1 : 1;
+					if (lastIndex >= candidates.length)
+						lastIndex = 0;
+					else if (lastIndex < 0)
+						lastIndex = candidates.length - 1;
+				}
+			};
+
+			this.cycle = function (reverse) {
+				if (lastIndex < 0)
+					return false;
+
+				this.adjustLastIndex(true, reverse);
+
+				var completion = candidates[lastIndex];
+				var postCompletion = completion.substr(preCompletion.length);
+				var line = currentLine.substr(0, completionStart);
+				line += postCompletion;
+				var end = line.length;
+				line += currentLine.substr(completionEnd);
+
+				// preCompletion and completionStart do not change
+				currentLine = line;
+				completionEnd = end;
+				return true;
+			},
+
+			this.pickDefaultCandidate = function () {
+				// The shortest candidate is default value
+				var pick = 0;
+				for (var i = 1; i < candidates.length; i++) {
+					if (candidates[i].length < candidates[pick].length)
+						pick = i;
+				}
+				return pick;
+			};
+
+			this.showCandidates = function (textBox, completionBox) {
+				completionBox.value = currentLine;
+
+				if (showCompletionPopup && candidates.length && candidates.length > 1) {
+					this.popupCandidates(candidates, textBox, completionBox);
+					return false;
+				} else {
+					this.hide(candidates.length ? null : completionBox);
+				}
+				return true;
+			};
+
+			this.clearCandidates = function (textBox, completionBox) {
+				if (completionBox)
+					completionBox.value = "";
+			},
+
+			this.popupCandidates = function (candidates, textBox, completionBox) {
+				// This method should not operate on the textBox or candidates list
+				FBL.eraseNode(completionPopup);
+
+				var vbox = completionPopup.ownerDocument.createElement("vbox");
+				completionPopup.appendChild(vbox);
+				vbox.classList.add("fbCommandLineCompletions");
+
+				var title = completionPopup.ownerDocument.createElementNS("http://www.w3.org/1999/xhtml", "div");
+				title.innerHTML = $STR("console.Use Arrow keys or Enter");
+				title.classList.add('fbPopupTitle');
+				vbox.appendChild(title);
+
+				var prefix = this.getVerifiedText(textBox);
+				var pre = null;
+
+				var showTop = 0;
+				var showBottom = candidates.length;
+
+				if (candidates.length > commandCompletionLineLimit) {
+					var showBottom = commandCompletionLineLimit;
+
+					if (lastIndex > (commandCompletionLineLimit - 3)) // then implement manual scrolling
 					{
-						var showTop = candidates.length - commandCompletionLineLimit;
-						var showBottom = candidates.length;
-					} else {
-						var showTop = lastIndex - (commandCompletionLineLimit - 3);
-						var showBottom = lastIndex + 3;
+						if (lastIndex > (candidates.length - commandCompletionLineLimit)) // then just show the bottom
+						{
+							var showTop = candidates.length - commandCompletionLineLimit;
+							var showBottom = candidates.length;
+						} else {
+							var showTop = lastIndex - (commandCompletionLineLimit - 3);
+							var showBottom = lastIndex + 3;
+						}
+					}
+					// else we are in the top part of the list
+				}
+
+				for (var i = showTop; i < showBottom; i++) {
+					var hbox = completionPopup.ownerDocument.createElementNS("http://www.w3.org/1999/xhtml", "div");
+					pre = completionPopup.ownerDocument.createElementNS("http://www.w3.org/1999/xhtml", "span");
+					pre.innerHTML = escapeForTextNode(prefix);
+					var post = completionPopup.ownerDocument.createElementNS("http://www.w3.org/1999/xhtml", "span");
+					var completion = candidates[i].substr(preCompletion.length);
+					post.innerHTML = escapeForTextNode(completion);
+					if (i === lastIndex)
+						post.setAttribute('selected', 'true');
+
+					hbox.appendChild(pre);
+					hbox.appendChild(post);
+					vbox.appendChild(hbox);
+					pre.classList.add("userTypedText");
+					post.classList.add("completionText");
+				}
+
+				completionPopup.currentCompletionBox = completionBox;
+				var cmdLine = $("fbCommandLine"); // should use something relative to textbox
+				var anchor = textBox;
+				this.linuxFocusHack = textBox;
+				completionPopup.openPopup(anchor, "before_start", 0, 0, false, false);
+
+				return;
+			};
+
+			this.hide = function (box) {
+				if (box)
+					box.value = ""; // erase the text in the second track
+
+				delete completionPopup.currentCompletionBox;
+
+				if (completionPopup.state == "closed")
+					return false;
+
+				completionPopup.hidePopup();
+				return true;
+			};
+
+			this.clear = function (box) {
+				var textBox = completionPopup.currentCompletionBox;
+				if (textBox)
+					this.hide(box);
+
+				if (box)
+					box.value = ""; // erase the text in the second track
+
+				this.reset();
+			};
+
+			this.getVerifiedText = function (textBox) {
+				return textBox.value;
+			};
+
+			this.getCompletionText = function (box) {
+				return box.value;
+			};
+
+			this.handledKeyUp = function (event, context, textBox, completionBox) {
+				return; // Some of the keyDown maybe should be in keyUp
+			};
+
+			this.handledKeyDown = function (event, context, textBox, completionBox) {
+				var clearedTabWarning = this.clearTabWarning(completionBox);
+
+				if (event.altKey || event.metaKey)
+					return false;
+
+				if (event.ctrlKey && event.keyCode === 32) // Control space
+				{
+					this.complete(context, textBox, completionBox, false, false, true); // force completion incl globals
+					return true;
+				} else if (event.keyCode === 9 || // TAB
+					(event.keyCode === 39 && completionBox.value.length && textBox.selectionStart === textBox.value.length)) // right arrow
+				{
+					if (!completionBox.value.length) // then no completion text,
+					{
+						if (clearedTabWarning) // then you were warned,
+							return false; //  pass TAB along
+
+						this.setTabWarning(textBox, completionBox);
+						cancelEvent(event);
+						return true;
+					} else // complete
+					{
+						this.acceptCompletionInTextBox(textBox, completionBox);
+						cancelEvent(event);
+						return true;
+					}
+				} else if (event.keyCode === 27) // ESC, close the completer
+				{
+					if (this.hide(completionBox)) // then we closed the popup
+					{
+						cancelEvent(event); // Stop event bubbling if it was used to close the popup.
+						return true;
+					}
+				} else if (event.keyCode === 38 || event.keyCode === 40) // UP of DOWN arrow
+				{
+					if (this.getCompletionText(completionBox)) {
+						if (this.cycle(event.keyCode === 38))
+							this.showCandidates(textBox, completionBox);
+						cancelEvent(event);
+						return true;
+					}
+					// else the arrow will fall through to command history
+				}
+			};
+
+			this.clearTabWarning = function (completionBox) {
+				if (completionBox.tabWarning) {
+					completionBox.value = "";
+					delete completionBox.tabWarning;
+					return true;
+				}
+				return false;
+			};
+
+			this.setTabWarning = function (textBox, completionBox) {
+				// xxxHonza: localization
+				completionBox.value = textBox.value + "    " + "(no completions)"; // TODO need NLS <<<<<<<<<<<<<<<<
+				completionBox.tabWarning = true;
+			};
+
+			this.setCompletionOnEvent = function (event) {
+				if (completionPopup.currentCompletionBox) {
+					var selected = event.target;
+					while (selected && (selected.localName !== "div"))
+						selected = selected.parentNode;
+
+					if (selected) {
+						var completionText = selected.getElementsByClassName('completionText')[0];
+						if (!completionText)
+							return;
+
+						var completion = selected.textContent;
+						var textBox = completionPopup.currentCompletionBox;
+						textBox.value = completion;
+						if (FBTrace.DBG_EDITOR)
+							FBTrace.sysout("textBox.setCompletionOnEvent " + completion);
 					}
 				}
-				// else we are in the top part of the list
-			}
+			};
 
-			for (var i = showTop; i < showBottom; i++) {
-				var hbox = completionPopup.ownerDocument.createElementNS("http://www.w3.org/1999/xhtml", "div");
-				pre = completionPopup.ownerDocument.createElementNS("http://www.w3.org/1999/xhtml", "span");
-				pre.innerHTML = escapeForTextNode(prefix);
-				var post = completionPopup.ownerDocument.createElementNS("http://www.w3.org/1999/xhtml", "span");
-				var completion = candidates[i].substr(preCompletion.length);
-				post.innerHTML = escapeForTextNode(completion);
-				if (i === lastIndex)
-					post.setAttribute('selected', 'true');
-
-				hbox.appendChild(pre);
-				hbox.appendChild(post);
-				vbox.appendChild(hbox);
-				pre.classList.add("userTypedText");
-				post.classList.add("completionText");
-			}
-
-			completionPopup.currentCompletionBox = completionBox;
-			var cmdLine = $("fbCommandLine"); // should use something relative to textbox
-			var anchor = textBox;
-			this.linuxFocusHack = textBox;
-			completionPopup.openPopup(anchor, "before_start", 0, 0, false, false);
-
-			return;
-		};
-
-		this.hide = function (box) {
-			if (box)
-				box.value = ""; // erase the text in the second track
-
-			delete completionPopup.currentCompletionBox;
-
-			if (completionPopup.state == "closed")
-				return false;
-
-			completionPopup.hidePopup();
-			return true;
-		};
-
-		this.clear = function (box) {
-			var textBox = completionPopup.currentCompletionBox;
-			if (textBox)
-				this.hide(box);
-
-			if (box)
-				box.value = ""; // erase the text in the second track
-
-			this.reset();
-		};
-
-		this.getVerifiedText = function (textBox) {
-			return textBox.value;
-		};
-
-		this.getCompletionText = function (box) {
-			return box.value;
-		};
-
-		this.handledKeyUp = function (event, context, textBox, completionBox) {
-			return; // Some of the keyDown maybe should be in keyUp
-		};
-
-		this.handledKeyDown = function (event, context, textBox, completionBox) {
-			var clearedTabWarning = this.clearTabWarning(completionBox);
-
-			if (event.altKey || event.metaKey)
-				return false;
-
-			if (event.ctrlKey && event.keyCode === 32) // Control space
-			{
-				this.complete(context, textBox, completionBox, false, false, true); // force completion incl globals
+			this.acceptCompletionInTextBox = function (textBox, completionBox) {
+				textBox.value = completionBox.value;
+				textBox.setSelectionRange(textBox.value.length, textBox.value.length); // ensure the cursor at EOL
+				this.hide(completionBox);
 				return true;
-			} else if (event.keyCode === 9 || // TAB
-				(event.keyCode === 39 && completionBox.value.length && textBox.selectionStart === textBox.value.length)) // right arrow
-			{
-				if (!completionBox.value.length) // then no completion text,
-				{
-					if (clearedTabWarning) // then you were warned,
-						return false; //  pass TAB along
+			};
 
-					this.setTabWarning(textBox, completionBox);
-					cancelEvent(event);
-					return true;
-				} else // complete
-				{
-					this.acceptCompletionInTextBox(textBox, completionBox);
-					cancelEvent(event);
-					return true;
-				}
-			} else if (event.keyCode === 27) // ESC, close the completer
-			{
-				if (this.hide(completionBox)) // then we closed the popup
-				{
-					cancelEvent(event); // Stop event bubbling if it was used to close the popup.
-					return true;
-				}
-			} else if (event.keyCode === 38 || event.keyCode === 40) // UP of DOWN arrow
-			{
-				if (this.getCompletionText(completionBox)) {
-					if (this.cycle(event.keyCode === 38))
-						this.showCandidates(textBox, completionBox);
-					cancelEvent(event);
-					return true;
-				}
-				// else the arrow will fall through to command history
-			}
+			this.acceptCompletion = function (event) {
+				if (completionPopup.currentCompletionBox)
+					this.acceptCompletionInTextBox(getTextBox(), getCompletionBox());
+			};
+
+			this.acceptCompletion = bind(this.acceptCompletion, this);
+
+			this.focusHack = function (event) {
+				if (this.linuxFocusHack)
+					this.linuxFocusHack.focus(); // XXXjjb This does not work, but my experience with focus is that it usually does not work.
+				delete this.linuxFocusHack;
+			};
+
+			completionPopup.addEventListener("mouseover", this.setCompletionOnEvent, true);
+			completionPopup.addEventListener("click", this.acceptCompletion, true);
+			completionPopup.addEventListener("focus", this.focusHack, true);
 		};
 
-		this.clearTabWarning = function (completionBox) {
-			if (completionBox.tabWarning) {
-				completionBox.value = "";
-				delete completionBox.tabWarning;
-				return true;
-			}
-			return false;
-		};
+		// ************************************************************************************************
+		// Local Helpers
 
-		this.setTabWarning = function (textBox, completionBox) {
-			// xxxHonza: localization
-			completionBox.value = textBox.value + "    " + "(no completions)"; // TODO need NLS <<<<<<<<<<<<<<<<
-			completionBox.tabWarning = true;
-		};
-
-		this.setCompletionOnEvent = function (event) {
-			if (completionPopup.currentCompletionBox) {
-				var selected = event.target;
-				while (selected && (selected.localName !== "div"))
-					selected = selected.parentNode;
-
-				if (selected) {
-					var completionText = selected.getElementsByClassName('completionText')[0];
-					if (!completionText)
-						return;
-
-					var completion = selected.textContent;
-					var textBox = completionPopup.currentCompletionBox;
-					textBox.value = completion;
-					if (FBTrace.DBG_EDITOR)
-						FBTrace.sysout("textBox.setCompletionOnEvent " + completion);
-				}
-			}
-		};
-
-		this.acceptCompletionInTextBox = function (textBox, completionBox) {
-			textBox.value = completionBox.value;
-			textBox.setSelectionRange(textBox.value.length, textBox.value.length); // ensure the cursor at EOL
-			this.hide(completionBox);
-			return true;
-		};
-
-		this.acceptCompletion = function (event) {
-			if (completionPopup.currentCompletionBox)
-				this.acceptCompletionInTextBox(getTextBox(), getCompletionBox());
-		};
-
-		this.acceptCompletion = bind(this.acceptCompletion, this);
-
-		this.focusHack = function (event) {
-			if (this.linuxFocusHack)
-				this.linuxFocusHack.focus(); // XXXjjb This does not work, but my experience with focus is that it usually does not work.
-			delete this.linuxFocusHack;
-		};
-
-		completionPopup.addEventListener("mouseover", this.setCompletionOnEvent, true);
-		completionPopup.addEventListener("click", this.acceptCompletion, true);
-		completionPopup.addEventListener("focus", this.focusHack, true);
-	};
-
-	// ************************************************************************************************
-	// Local Helpers
-
-	function getCompletionBox() // FIXME XXXjjb I think this should be bound into the completer, dupes commandLine.js code
-	{
-		return Firebug.chrome.$("fbCommandLineCompletion");
-	}
-	function getTextBox() // FIXME XXXjjb I think this should be bound into the completer, dupes commandLine.js code
-	{
-		return Firebug.chrome.$("fbCommandLine");
-	}
-
-	function getDefaultEditor(panel) {
-		if (!defaultEditor) {
-			var doc = panel.document;
-			defaultEditor = new Firebug.InlineEditor(doc);
+		function getCompletionBox() // FIXME XXXjjb I think this should be bound into the completer, dupes commandLine.js code
+		{
+			return Firebug.chrome.$("fbCommandLineCompletion");
+		}
+		function getTextBox() // FIXME XXXjjb I think this should be bound into the completer, dupes commandLine.js code
+		{
+			return Firebug.chrome.$("fbCommandLine");
 		}
 
-		return defaultEditor;
-	}
+		function getDefaultEditor(panel) {
+			if (!defaultEditor) {
+				var doc = panel.document;
+				defaultEditor = new Firebug.InlineEditor(doc);
+			}
 
-	/**
-	 * An outsider is the first element matching the stepper element that
-	 * is not an child of group. Elements tagged with insertBefore or insertAfter
-	 * classes are also excluded from these results unless they are the sibling
-	 * of group, relative to group's parent editGroup. This allows for the proper insertion
-	 * rows when groups are nested.
-	 */
-	function getOutsider(element, group, stepper) {
-		var parentGroup = getAncestorByClass(group.parentNode, "editGroup");
-		var next;
-		do {
-			next = stepper(next || element);
-		} while (isAncestor(next, group) || isGroupInsert(next, parentGroup));
-
-		return next;
-	}
-
-	function isGroupInsert(next, group) {
-		return (!group || isAncestor(next, group))
-		 && (hasClass(next, "insertBefore") || hasClass(next, "insertAfter"));
-	}
-
-	function getNextOutsider(element, group) {
-		return getOutsider(element, group, bind(getNextByClass, FBL, "editable"));
-	}
-
-	function getPreviousOutsider(element, group) {
-		return getOutsider(element, group, bind(getPreviousByClass, FBL, "editable"));
-	}
-
-	function getInlineParent(element) {
-		var lastInline = element;
-		for (; element; element = element.parentNode) {
-			var s = element.ownerDocument.defaultView.getComputedStyle(element, "");
-			if (s.display != "inline")
-				return lastInline;
-			else
-				lastInline = element;
+			return defaultEditor;
 		}
-		return null;
+
+		/**
+		 * An outsider is the first element matching the stepper element that
+		 * is not an child of group. Elements tagged with insertBefore or insertAfter
+		 * classes are also excluded from these results unless they are the sibling
+		 * of group, relative to group's parent editGroup. This allows for the proper insertion
+		 * rows when groups are nested.
+		 */
+		function getOutsider(element, group, stepper) {
+			var parentGroup = getAncestorByClass(group.parentNode, "editGroup");
+			var next;
+			do {
+				next = stepper(next || element);
+			} while (isAncestor(next, group) || isGroupInsert(next, parentGroup));
+
+			return next;
+		}
+
+		function isGroupInsert(next, group) {
+			return (!group || isAncestor(next, group))
+			 && (hasClass(next, "insertBefore") || hasClass(next, "insertAfter"));
+		}
+
+		function getNextOutsider(element, group) {
+			return getOutsider(element, group, bind(getNextByClass, FBL, "editable"));
+		}
+
+		function getPreviousOutsider(element, group) {
+			return getOutsider(element, group, bind(getPreviousByClass, FBL, "editable"));
+		}
+
+		function getInlineParent(element) {
+			var lastInline = element;
+			for (; element; element = element.parentNode) {
+				var s = element.ownerDocument.defaultView.getComputedStyle(element, "");
+				if (s.display != "inline")
+					return lastInline;
+				else
+					lastInline = element;
+			}
+			return null;
+		}
+
+		function insertTab() {
+			insertTextIntoElement(currentEditor.input, Firebug.Editor.tabCharacter);
+		}
+
+		// ************************************************************************************************
+
+		Firebug.registerModule(Firebug.Editor);
+
+		// ************************************************************************************************
+
 	}
-
-	function insertTab() {
-		insertTextIntoElement(currentEditor.input, Firebug.Editor.tabCharacter);
-	}
-
-	// ************************************************************************************************
-
-	Firebug.registerModule(Firebug.Editor);
-
-	// ************************************************************************************************
-
-}
 });
