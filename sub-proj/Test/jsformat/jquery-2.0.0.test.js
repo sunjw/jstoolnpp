@@ -1254,35 +1254,35 @@
 
 			// Check if getElementsByTagName("*") returns only elements
 			support.getElementsByTagName = assert(function (div) {
-					div.appendChild(doc.createComment(""));
-					return !div.getElementsByTagName("*").length;
-				});
+				div.appendChild(doc.createComment(""));
+				return !div.getElementsByTagName("*").length;
+			});
 
 			// Support: IE<8
 			// Verify that getAttribute really returns attributes and not properties (excepting IE8 booleans)
 			support.attributes = assert(function (div) {
-					div.className = "i";
-					return !div.getAttribute("className");
-				});
+				div.className = "i";
+				return !div.getAttribute("className");
+			});
 
 			// Check if getElementsByClassName can be trusted
 			support.getElementsByClassName = assert(function (div) {
-					div.innerHTML = "<div class='a'></div><div class='a i'></div>";
+				div.innerHTML = "<div class='a'></div><div class='a i'></div>";
 
-					// Support: Safari<4
-					// Catch class over-caching
-					div.firstChild.className = "i";
-					// Support: Opera<10
-					// Catch gEBCN failure to find non-leading classes
-					return div.getElementsByClassName("i").length === 2;
-				});
+				// Support: Safari<4
+				// Catch class over-caching
+				div.firstChild.className = "i";
+				// Support: Opera<10
+				// Catch gEBCN failure to find non-leading classes
+				return div.getElementsByClassName("i").length === 2;
+			});
 
 			// Support: Webkit<537.32 - Safari 6.0.3/Chrome 25 (fixed in Chrome 27)
 			// Detached nodes confoundingly follow *each other*
 			support.sortDetached = assert(function (div1) {
-					// Should return 1, but returns 4 (following)
-					return div1.compareDocumentPosition(document.createElement("div")) & 1;
-				});
+				// Should return 1, but returns 4 (following)
+				return div1.compareDocumentPosition(document.createElement("div")) & 1;
+			});
 
 			// Support: IE<10
 			// Check if getElementById returns elements by name
@@ -1292,9 +1292,9 @@
 			// and the broken getElementById methods don't pick up programatically-set names,
 			// so use a roundabout getElementsByName test
 			support.getById = assert(function (div) {
-					docElem.appendChild(div).id = expando;
-					return !doc.getElementsByName || !doc.getElementsByName(expando).length;
-				});
+				docElem.appendChild(div).id = expando;
+				return !doc.getElementsByName || !doc.getElementsByName(expando).length;
+			});
 
 			// ID find and filter
 			if (support.getById) {
@@ -2551,11 +2551,11 @@
 
 			// The foundational matcher ensures that elements are reachable from top-level context(s)
 			matchContext = addCombinator(function (elem) {
-					return elem === checkContext;
-				}, implicitRelative, true),
+				return elem === checkContext;
+			}, implicitRelative, true),
 			matchAnyContext = addCombinator(function (elem) {
-					return indexOf.call(checkContext, elem) > -1;
-				}, implicitRelative, true),
+				return indexOf.call(checkContext, elem) > -1;
+			}, implicitRelative, true),
 			matchers = [function (elem, context, xml) {
 					return (!leadingRelative && (xml || context !== outermostContext)) || (
 						(checkContext = context).nodeType ?
@@ -4025,8 +4025,8 @@
 					val += "";
 				} else if (jQuery.isArray(val)) {
 					val = jQuery.map(val, function (value) {
-							return value == null ? "" : value + "";
-						});
+						return value == null ? "" : value + "";
+					});
 				}
 
 				hooks = jQuery.valHooks[this.type] || jQuery.valHooks[this.nodeName.toLowerCase()];
@@ -4423,15 +4423,15 @@
 
 				// handleObj is passed to all event handlers
 				handleObj = jQuery.extend({
-						type: type,
-						origType: origType,
-						data: data,
-						handler: handler,
-						guid: handler.guid,
-						selector: selector,
-						needsContext: selector && jQuery.expr.match.needsContext.test(selector),
-						namespace: namespaces.join(".")
-					}, handleObjIn);
+					type: type,
+					origType: origType,
+					data: data,
+					handler: handler,
+					guid: handler.guid,
+					selector: selector,
+					needsContext: selector && jQuery.expr.match.needsContext.test(selector),
+					namespace: namespaces.join(".")
+				}, handleObjIn);
 
 				// Init the event handler queue if we're the first
 				if (!(handlers = events[type])) {
@@ -4942,10 +4942,10 @@
 			var e = jQuery.extend(
 					new jQuery.Event(),
 					event, {
-					type: type,
-					isSimulated: true,
-					originalEvent: {}
-				});
+				type: type,
+				isSimulated: true,
+				originalEvent: {}
+			});
 			if (bubble) {
 				jQuery.event.trigger(e, null, elem);
 			} else {
@@ -5633,8 +5633,8 @@
 			var
 			// Snapshot the DOM in case .domManip sweeps something relevant into its fragment
 			args = jQuery.map(this, function (elem) {
-					return [elem.nextSibling, elem.parentNode];
-				}),
+				return [elem.nextSibling, elem.parentNode];
+			}),
 			i = 0;
 
 			// Make the changes, replacing each context element with the new content
@@ -7385,8 +7385,8 @@
 				// Timeout
 				if (s.async && s.timeout > 0) {
 					timeoutTimer = setTimeout(function () {
-							jqXHR.abort("timeout");
-						}, s.timeout);
+						jqXHR.abort("timeout");
+					}, s.timeout);
 				}
 
 				try {
@@ -7749,10 +7749,10 @@
 			return {
 				send: function (_, complete) {
 					script = jQuery("<script>").prop({
-							async: true,
-							charset: s.scriptCharset,
-							src: s.url
-						}).on(
+						async: true,
+						charset: s.scriptCharset,
+						src: s.url
+					}).on(
 							"load error",
 							callback = function (evt) {
 							script.remove();
@@ -8044,9 +8044,9 @@
 		index = 0,
 		length = animationPrefilters.length,
 		deferred = jQuery.Deferred().always(function () {
-				// don't match elem in the :animated selector
-				delete tick.elem;
-			}),
+			// don't match elem in the :animated selector
+			delete tick.elem;
+		}),
 		tick = function () {
 			if (stopped) {
 				return false;
@@ -8073,45 +8073,45 @@
 			}
 		},
 		animation = deferred.promise({
-				elem: elem,
-				props: jQuery.extend({}, properties),
-				opts: jQuery.extend(true, {
-					specialEasing: {}
-				}, options),
-				originalProperties: properties,
-				originalOptions: options,
-				startTime: fxNow || createFxNow(),
-				duration: options.duration,
-				tweens: [],
-				createTween: function (prop, end) {
-					var tween = jQuery.Tween(elem, animation.opts, prop, end,
-							animation.opts.specialEasing[prop] || animation.opts.easing);
-					animation.tweens.push(tween);
-					return tween;
-				},
-				stop: function (gotoEnd) {
-					var index = 0,
-					// if we are going to the end, we want to run all the tweens
-					// otherwise we skip this part
-					length = gotoEnd ? animation.tweens.length : 0;
-					if (stopped) {
-						return this;
-					}
-					stopped = true;
-					for (; index < length; index++) {
-						animation.tweens[index].run(1);
-					}
-
-					// resolve when we played the last frame
-					// otherwise, reject
-					if (gotoEnd) {
-						deferred.resolveWith(elem, [animation, gotoEnd]);
-					} else {
-						deferred.rejectWith(elem, [animation, gotoEnd]);
-					}
+			elem: elem,
+			props: jQuery.extend({}, properties),
+			opts: jQuery.extend(true, {
+				specialEasing: {}
+			}, options),
+			originalProperties: properties,
+			originalOptions: options,
+			startTime: fxNow || createFxNow(),
+			duration: options.duration,
+			tweens: [],
+			createTween: function (prop, end) {
+				var tween = jQuery.Tween(elem, animation.opts, prop, end,
+						animation.opts.specialEasing[prop] || animation.opts.easing);
+				animation.tweens.push(tween);
+				return tween;
+			},
+			stop: function (gotoEnd) {
+				var index = 0,
+				// if we are going to the end, we want to run all the tweens
+				// otherwise we skip this part
+				length = gotoEnd ? animation.tweens.length : 0;
+				if (stopped) {
 					return this;
 				}
-			}),
+				stopped = true;
+				for (; index < length; index++) {
+					animation.tweens[index].run(1);
+				}
+
+				// resolve when we played the last frame
+				// otherwise, reject
+				if (gotoEnd) {
+					deferred.resolveWith(elem, [animation, gotoEnd]);
+				} else {
+					deferred.rejectWith(elem, [animation, gotoEnd]);
+				}
+				return this;
+			}
+		}),
 		props = animation.props;
 
 		propFilter(props, animation.opts.specialEasing);
@@ -8186,33 +8186,33 @@
 
 	jQuery.Animation = jQuery.extend(Animation, {
 
-			tweener: function (props, callback) {
-				if (jQuery.isFunction(props)) {
-					callback = props;
-					props = ["*"];
-				} else {
-					props = props.split(" ");
-				}
-
-				var prop,
-				index = 0,
-				length = props.length;
-
-				for (; index < length; index++) {
-					prop = props[index];
-					tweeners[prop] = tweeners[prop] || [];
-					tweeners[prop].unshift(callback);
-				}
-			},
-
-			prefilter: function (callback, prepend) {
-				if (prepend) {
-					animationPrefilters.unshift(callback);
-				} else {
-					animationPrefilters.push(callback);
-				}
+		tweener: function (props, callback) {
+			if (jQuery.isFunction(props)) {
+				callback = props;
+				props = ["*"];
+			} else {
+				props = props.split(" ");
 			}
-		});
+
+			var prop,
+			index = 0,
+			length = props.length;
+
+			for (; index < length; index++) {
+				prop = props[index];
+				tweeners[prop] = tweeners[prop] || [];
+				tweeners[prop].unshift(callback);
+			}
+		},
+
+		prefilter: function (callback, prepend) {
+			if (prepend) {
+				animationPrefilters.unshift(callback);
+			} else {
+				animationPrefilters.push(callback);
+			}
+		}
+	});
 
 	function defaultPrefilter(elem, props, opts) {
 		/* jshint validthis: true */

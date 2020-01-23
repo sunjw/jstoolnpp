@@ -2231,8 +2231,8 @@
 					val += "";
 				} else if (jQuery.isArray(val)) {
 					val = jQuery.map(val, function (value) {
-							return value == null ? "" : value + "";
-						});
+						return value == null ? "" : value + "";
+					});
 				}
 
 				hooks = jQuery.valHooks[this.type] || jQuery.valHooks[this.nodeName.toLowerCase()];
@@ -2585,13 +2585,13 @@
 		// This is for removals
 		jQuery.each(["width", "height"], function (i, name) {
 			jQuery.attrHooks[name] = jQuery.extend(jQuery.attrHooks[name], {
-					set: function (elem, value) {
-						if (value === "") {
-							elem.setAttribute(name, "auto");
-							return value;
-						}
+				set: function (elem, value) {
+					if (value === "") {
+						elem.setAttribute(name, "auto");
+						return value;
 					}
-				});
+				}
+			});
 		});
 
 		// Set contenteditable to false on removals(#10429)
@@ -2611,11 +2611,11 @@
 	if (!jQuery.support.hrefNormalized) {
 		jQuery.each(["href", "src", "width", "height"], function (i, name) {
 			jQuery.attrHooks[name] = jQuery.extend(jQuery.attrHooks[name], {
-					get: function (elem) {
-						var ret = elem.getAttribute(name, 2);
-						return ret === null ? undefined : ret;
-					}
-				});
+				get: function (elem) {
+					var ret = elem.getAttribute(name, 2);
+					return ret === null ? undefined : ret;
+				}
+			});
 		});
 	}
 
@@ -2636,20 +2636,20 @@
 	// Accessing the parent's selectedIndex property fixes it
 	if (!jQuery.support.optSelected) {
 		jQuery.propHooks.selected = jQuery.extend(jQuery.propHooks.selected, {
-				get: function (elem) {
-					var parent = elem.parentNode;
+			get: function (elem) {
+				var parent = elem.parentNode;
 
-					if (parent) {
-						parent.selectedIndex;
+				if (parent) {
+					parent.selectedIndex;
 
-						// Make sure that it also works with optgroups, see #5701
-						if (parent.parentNode) {
-							parent.parentNode.selectedIndex;
-						}
+					// Make sure that it also works with optgroups, see #5701
+					if (parent.parentNode) {
+						parent.parentNode.selectedIndex;
 					}
-					return null;
 				}
-			});
+				return null;
+			}
+		});
 	}
 
 	// IE6/7 call enctype encoding
@@ -2670,12 +2670,12 @@
 	}
 	jQuery.each(["radio", "checkbox"], function () {
 		jQuery.valHooks[this] = jQuery.extend(jQuery.valHooks[this], {
-				set: function (elem, value) {
-					if (jQuery.isArray(value)) {
-						return (elem.checked = jQuery.inArray(jQuery(elem).val(), value) >= 0);
-					}
+			set: function (elem, value) {
+				if (jQuery.isArray(value)) {
+					return (elem.checked = jQuery.inArray(jQuery(elem).val(), value) >= 0);
 				}
-			});
+			}
+		});
 	});
 	var rformElems = /^(?:textarea|input|select)$/i,
 	rtypenamespace = /^([^\.]*|)(?:\.(.+)|)$/,
@@ -2762,14 +2762,14 @@
 
 				// handleObj is passed to all event handlers
 				handleObj = jQuery.extend({
-						type: type,
-						origType: tns[1],
-						data: data,
-						handler: handler,
-						guid: handler.guid,
-						selector: selector,
-						namespace: namespaces.join(".")
-					}, handleObjIn);
+					type: type,
+					origType: tns[1],
+					data: data,
+					handler: handler,
+					guid: handler.guid,
+					selector: selector,
+					namespace: namespaces.join(".")
+				}, handleObjIn);
 
 				// Init the event handler queue if we're the first
 				handlers = events[type];
@@ -3292,10 +3292,10 @@
 			var e = jQuery.extend(
 					new jQuery.Event(),
 					event, {
-					type: type,
-					isSimulated: true,
-					originalEvent: {}
-				});
+				type: type,
+				isSimulated: true,
+				originalEvent: {}
+			});
 			if (bubble) {
 				jQuery.event.trigger(e, null, elem);
 			} else {
@@ -3893,59 +3893,59 @@
 
 		// Check if getElementsByTagName("*") returns only elements
 		assertTagNameNoComments = assert(function (div) {
-				div.appendChild(document.createComment(""));
-				return !div.getElementsByTagName("*").length;
-			}),
+			div.appendChild(document.createComment(""));
+			return !div.getElementsByTagName("*").length;
+		}),
 
 		// Check if getAttribute returns normalized href attributes
 		assertHrefNotNormalized = assert(function (div) {
-				div.innerHTML = "<a href='#'></a>";
-				return div.firstChild && typeof div.firstChild.getAttribute !== strundefined &&
-				div.firstChild.getAttribute("href") === "#";
-			}),
+			div.innerHTML = "<a href='#'></a>";
+			return div.firstChild && typeof div.firstChild.getAttribute !== strundefined &&
+			div.firstChild.getAttribute("href") === "#";
+		}),
 
 		// Check if attributes should be retrieved by attribute nodes
 		assertAttributes = assert(function (div) {
-				div.innerHTML = "<select></select>";
-				var type = typeof div.lastChild.getAttribute("multiple");
-				// IE8 returns a string for some attributes even when not present
-				return type !== "boolean" && type !== "string";
-			}),
+			div.innerHTML = "<select></select>";
+			var type = typeof div.lastChild.getAttribute("multiple");
+			// IE8 returns a string for some attributes even when not present
+			return type !== "boolean" && type !== "string";
+		}),
 
 		// Check if getElementsByClassName can be trusted
 		assertUsableClassName = assert(function (div) {
-				// Opera can't find a second classname (in 9.6)
-				div.innerHTML = "<div class='hidden e'></div><div class='hidden'></div>";
-				if (!div.getElementsByClassName || !div.getElementsByClassName("e").length) {
-					return false;
-				}
+			// Opera can't find a second classname (in 9.6)
+			div.innerHTML = "<div class='hidden e'></div><div class='hidden'></div>";
+			if (!div.getElementsByClassName || !div.getElementsByClassName("e").length) {
+				return false;
+			}
 
-				// Safari 3.2 caches class attributes and doesn't catch changes
-				div.lastChild.className = "e";
-				return div.getElementsByClassName("e").length === 2;
-			}),
+			// Safari 3.2 caches class attributes and doesn't catch changes
+			div.lastChild.className = "e";
+			return div.getElementsByClassName("e").length === 2;
+		}),
 
 		// Check if getElementById returns elements by name
 		// Check if getElementsByName privileges form controls or returns elements by ID
 		assertUsableName = assert(function (div) {
-				// Inject content
-				div.id = expando + 0;
-				div.innerHTML = "<a name='" + expando + "'></a><div name='" + expando + "'></div>";
-				docElem.insertBefore(div, docElem.firstChild);
+			// Inject content
+			div.id = expando + 0;
+			div.innerHTML = "<a name='" + expando + "'></a><div name='" + expando + "'></div>";
+			docElem.insertBefore(div, docElem.firstChild);
 
-				// Test
-				var pass = document.getElementsByName &&
-					// buggy browsers will return fewer than the correct 2
-					document.getElementsByName(expando).length === 2 +
-					// buggy browsers will return more than the correct 0
-					document.getElementsByName(expando + 0).length;
-				assertGetIdNotName = !document.getElementById(expando);
+			// Test
+			var pass = document.getElementsByName &&
+				// buggy browsers will return fewer than the correct 2
+				document.getElementsByName(expando).length === 2 +
+				// buggy browsers will return more than the correct 0
+				document.getElementsByName(expando + 0).length;
+			assertGetIdNotName = !document.getElementById(expando);
 
-				// Cleanup
-				docElem.removeChild(div);
+			// Cleanup
+			docElem.removeChild(div);
 
-				return pass;
-			});
+			return pass;
+		});
 
 		// If slice is not available, provide a backup
 		try {
@@ -4813,10 +4813,10 @@
 
 					// Cast descendant combinators to space
 					matched = tokens.push({
-							part: match.pop().replace(rtrim, " "),
-							string: match[0],
-							captures: match
-						});
+						part: match.pop().replace(rtrim, " "),
+						string: match[0],
+						captures: match
+					});
 				}
 
 				// Filters
@@ -4827,10 +4827,10 @@
 						group += match[0];
 						soFar = soFar.slice(match[0].length);
 						matched = tokens.push({
-								part: type,
-								string: match.shift(),
-								captures: match
-							});
+							part: type,
+							string: match.shift(),
+							captures: match
+						});
 					}
 				}
 
@@ -5632,8 +5632,8 @@
 
 		} else if (typeof qualifier === "string") {
 			var filtered = jQuery.grep(elements, function (elem) {
-					return elem.nodeType === 1;
-				});
+				return elem.nodeType === 1;
+			});
 
 			if (isSimple.test(qualifier)) {
 				return jQuery.filter(qualifier, filtered, !keep);
@@ -8025,8 +8025,8 @@
 				// Timeout
 				if (s.async && s.timeout > 0) {
 					timeoutTimer = setTimeout(function () {
-							jqXHR.abort("timeout");
-						}, s.timeout);
+						jqXHR.abort("timeout");
+					}, s.timeout);
 				}
 
 				try {
@@ -8698,9 +8698,9 @@
 		tweenerIndex = 0,
 		length = animationPrefilters.length,
 		deferred = jQuery.Deferred().always(function () {
-				// don't match elem in the :animated selector
-				delete tick.elem;
-			}),
+			// don't match elem in the :animated selector
+			delete tick.elem;
+		}),
 		tick = function () {
 			var currentTime = fxNow || createFxNow(),
 			remaining = Math.max(0, animation.startTime + animation.duration - currentTime),
@@ -8722,42 +8722,42 @@
 			}
 		},
 		animation = deferred.promise({
-				elem: elem,
-				props: jQuery.extend({}, properties),
-				opts: jQuery.extend(true, {
-					specialEasing: {}
-				}, options),
-				originalProperties: properties,
-				originalOptions: options,
-				startTime: fxNow || createFxNow(),
-				duration: options.duration,
-				tweens: [],
-				createTween: function (prop, end, easing) {
-					var tween = jQuery.Tween(elem, animation.opts, prop, end,
-							animation.opts.specialEasing[prop] || animation.opts.easing);
-					animation.tweens.push(tween);
-					return tween;
-				},
-				stop: function (gotoEnd) {
-					var index = 0,
-					// if we are going to the end, we want to run all the tweens
-					// otherwise we skip this part
-					length = gotoEnd ? animation.tweens.length : 0;
+			elem: elem,
+			props: jQuery.extend({}, properties),
+			opts: jQuery.extend(true, {
+				specialEasing: {}
+			}, options),
+			originalProperties: properties,
+			originalOptions: options,
+			startTime: fxNow || createFxNow(),
+			duration: options.duration,
+			tweens: [],
+			createTween: function (prop, end, easing) {
+				var tween = jQuery.Tween(elem, animation.opts, prop, end,
+						animation.opts.specialEasing[prop] || animation.opts.easing);
+				animation.tweens.push(tween);
+				return tween;
+			},
+			stop: function (gotoEnd) {
+				var index = 0,
+				// if we are going to the end, we want to run all the tweens
+				// otherwise we skip this part
+				length = gotoEnd ? animation.tweens.length : 0;
 
-					for (; index < length; index++) {
-						animation.tweens[index].run(1);
-					}
-
-					// resolve when we played the last frame
-					// otherwise, reject
-					if (gotoEnd) {
-						deferred.resolveWith(elem, [animation, gotoEnd]);
-					} else {
-						deferred.rejectWith(elem, [animation, gotoEnd]);
-					}
-					return this;
+				for (; index < length; index++) {
+					animation.tweens[index].run(1);
 				}
-			}),
+
+				// resolve when we played the last frame
+				// otherwise, reject
+				if (gotoEnd) {
+					deferred.resolveWith(elem, [animation, gotoEnd]);
+				} else {
+					deferred.rejectWith(elem, [animation, gotoEnd]);
+				}
+				return this;
+			}
+		}),
 		props = animation.props;
 
 		propFilter(props, animation.opts.specialEasing);
@@ -8832,33 +8832,33 @@
 
 	jQuery.Animation = jQuery.extend(Animation, {
 
-			tweener: function (props, callback) {
-				if (jQuery.isFunction(props)) {
-					callback = props;
-					props = ["*"];
-				} else {
-					props = props.split(" ");
-				}
-
-				var prop,
-				index = 0,
-				length = props.length;
-
-				for (; index < length; index++) {
-					prop = props[index];
-					tweeners[prop] = tweeners[prop] || [];
-					tweeners[prop].unshift(callback);
-				}
-			},
-
-			prefilter: function (callback, prepend) {
-				if (prepend) {
-					animationPrefilters.unshift(callback);
-				} else {
-					animationPrefilters.push(callback);
-				}
+		tweener: function (props, callback) {
+			if (jQuery.isFunction(props)) {
+				callback = props;
+				props = ["*"];
+			} else {
+				props = props.split(" ");
 			}
-		});
+
+			var prop,
+			index = 0,
+			length = props.length;
+
+			for (; index < length; index++) {
+				prop = props[index];
+				tweeners[prop] = tweeners[prop] || [];
+				tweeners[prop].unshift(callback);
+			}
+		},
+
+		prefilter: function (callback, prepend) {
+			if (prepend) {
+				animationPrefilters.unshift(callback);
+			} else {
+				animationPrefilters.push(callback);
+			}
+		}
+	});
 
 	function defaultPrefilter(elem, props, opts) {
 		var index,

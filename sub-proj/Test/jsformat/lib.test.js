@@ -861,15 +861,15 @@ try { /*@explore*/
 			}
 
 			elt.__setClassTimeout = context.setTimeout(function () {
-					delete elt.__setClassTimeout;
+				delete elt.__setClassTimeout;
 
-					if (elt.__invisibleAtSetPoint)
-						FBL.setClassTimed(elt, name, context, timeout);
-					else {
-						delete elt.__invisibleAtSetPoint;
-						FBL.removeClass(elt, name);
-					}
-				}, timeout);
+				if (elt.__invisibleAtSetPoint)
+					FBL.setClassTimed(elt, name, context, timeout);
+				else {
+					delete elt.__invisibleAtSetPoint;
+					FBL.removeClass(elt, name);
+				}
+			}, timeout);
 		};
 
 		this.cancelClassTimed = function (elt, name, context) {
@@ -2459,8 +2459,8 @@ try { /*@explore*/
 					trace.frames.splice(50, originalLength - 100);
 					var excuse = "(eliding " + (originalLength - 100) + " frames)";
 					trace.frames[50] = new this.StackFrame({
-							href: excuse
-						}, 0, excuse, []);
+						href: excuse
+					}, 0, excuse, []);
 				}
 
 			} catch (exc) {

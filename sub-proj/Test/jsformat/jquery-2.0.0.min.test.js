@@ -515,21 +515,21 @@
 		l = ut.setDocument = function (e) {
 			var t = e ? e.ownerDocument || e : v;
 			return t !== c && 9 === t.nodeType && t.documentElement ? (c = t, f = t.documentElement, p = !o(t), b.getElementsByTagName = at(function (e) {
-						return e.appendChild(t.createComment("")),
-						!e.getElementsByTagName("*").length
-					}), b.attributes = at(function (e) {
-						return e.className = "i",
-						!e.getAttribute("className")
-					}), b.getElementsByClassName = at(function (e) {
-						return e.innerHTML = "<div class='a'></div><div class='a i'></div>",
-						e.firstChild.className = "i",
-						2 === e.getElementsByClassName("i").length
-					}), b.sortDetached = at(function (e) {
-						return 1 & e.compareDocumentPosition(c.createElement("div"))
-					}), b.getById = at(function (e) {
-						return f.appendChild(e).id = y,
-						!t.getElementsByName || !t.getElementsByName(y).length
-					}), b.getById ? (r.find.ID = function (e, t) {
+					return e.appendChild(t.createComment("")),
+					!e.getElementsByTagName("*").length
+				}), b.attributes = at(function (e) {
+					return e.className = "i",
+					!e.getAttribute("className")
+				}), b.getElementsByClassName = at(function (e) {
+					return e.innerHTML = "<div class='a'></div><div class='a i'></div>",
+					e.firstChild.className = "i",
+					2 === e.getElementsByClassName("i").length
+				}), b.sortDetached = at(function (e) {
+					return 1 & e.compareDocumentPosition(c.createElement("div"))
+				}), b.getById = at(function (e) {
+					return f.appendChild(e).id = y,
+					!t.getElementsByName || !t.getElementsByName(y).length
+				}), b.getById ? (r.find.ID = function (e, t) {
 					if (typeof t.getElementById !== j && p) {
 						var n = t.getElementById(e);
 						return n && n.parentNode ? [n] : []
@@ -1117,11 +1117,11 @@
 			u = s || r.relative[" "],
 			l = s ? 1 : 0,
 			c = yt(function (e) {
-					return e === t
-				}, u, !0),
+				return e === t
+			}, u, !0),
 			f = yt(function (e) {
-					return F.call(t, e) > -1
-				}, u, !0),
+				return F.call(t, e) > -1
+			}, u, !0),
 			p = [function (e, n, r) {
 					return !s && (r || n !== a) || ((t = n).nodeType ? c(e, n, r) : f(e, n, r))
 				}
@@ -1444,8 +1444,8 @@
 						 : {}, function () {
 						t.boxSizing = 4 === i.offsetWidth
 					}), e.getComputedStyle && (t.pixelPosition = "1%" !== (e.getComputedStyle(i, null) || {}).top, t.boxSizingReliable = "4px" === (e.getComputedStyle(i, null) || {
-								width: "4px"
-							}).width, r = i.appendChild(o.createElement("div")), r.style.cssText = i.style.cssText = s, r.style.marginRight = r.style.width = "0", i.style.width = "1px", t.reliableMarginRight = !parseFloat((e.getComputedStyle(r, null) || {}).marginRight)), a.removeChild(n))
+							width: "4px"
+						}).width, r = i.appendChild(o.createElement("div")), r.style.cssText = i.style.cssText = s, r.style.marginRight = r.style.width = "0", i.style.width = "1px", t.reliableMarginRight = !parseFloat((e.getComputedStyle(r, null) || {}).marginRight)), a.removeChild(n))
 			}), t) : t
 	}
 	({});
@@ -1777,8 +1777,8 @@
 						var i,
 						o = x(this);
 						1 === this.nodeType && (i = r ? e.call(this, n, o.val()) : e, null == i ? i = "" : "number" == typeof i ? i += "" : x.isArray(i) && (i = x.map(i, function (e) {
-											return null == e ? "" : e + ""
-										})), t = x.valHooks[this.type] || x.valHooks[this.nodeName.toLowerCase()], t && "set" in t && t.set(this, i, "value") !== undefined || (this.value = i))
+										return null == e ? "" : e + ""
+									})), t = x.valHooks[this.type] || x.valHooks[this.nodeName.toLowerCase()], t && "set" in t && t.set(this, i, "value") !== undefined || (this.value = i))
 					});
 				if (i)
 					return t = x.valHooks[i.type] || x.valHooks[i.nodeName.toLowerCase()], t && "get" in t && (n = t.get(i, "value")) !== undefined ? n : (n = i.value, "string" == typeof n ? n.replace($, "") : null == n ? "" : n)
@@ -1948,15 +1948,15 @@
 				c = t.length;
 				while (c--)
 					u = X.exec(t[c]) || [], d = m = u[1], g = (u[2] || "").split(".").sort(), d && (p = x.event.special[d] || {}, d = (o ? p.delegateType : p.bindType) || d, p = x.event.special[d] || {}, f = x.extend({
-								type: d,
-								origType: m,
-								data: i,
-								handler: n,
-								guid: n.guid,
-								selector: o,
-								needsContext: o && x.expr.match.needsContext.test(o),
-								namespace: g.join(".")
-							}, s), (h = l[d]) || (h = l[d] = [], h.delegateCount = 0, p.setup && p.setup.call(e, i, g, a) !== !1 || e.addEventListener && e.addEventListener(d, a, !1)), p.add && (p.add.call(e, f), f.handler.guid || (f.handler.guid = n.guid)), o ? h.splice(h.delegateCount++, 0, f) : h.push(f), x.event.global[d] = !0);
+							type: d,
+							origType: m,
+							data: i,
+							handler: n,
+							guid: n.guid,
+							selector: o,
+							needsContext: o && x.expr.match.needsContext.test(o),
+							namespace: g.join(".")
+						}, s), (h = l[d]) || (h = l[d] = [], h.delegateCount = 0, p.setup && p.setup.call(e, i, g, a) !== !1 || e.addEventListener && e.addEventListener(d, a, !1)), p.add && (p.add.call(e, f), f.handler.guid || (f.handler.guid = n.guid)), o ? h.splice(h.delegateCount++, 0, f) : h.push(f), x.event.global[d] = !0);
 				e = null
 			}
 		},
@@ -2136,10 +2136,10 @@
 		},
 		simulate: function (e, t, n, r) {
 			var i = x.extend(new x.Event, n, {
-					type: e,
-					isSimulated: !0,
-					originalEvent: {}
-				});
+				type: e,
+				isSimulated: !0,
+				originalEvent: {}
+			});
 			r ? x.event.trigger(i, null, t) : x.event.dispatch.call(t, i),
 			i.isDefaultPrevented() && n.preventDefault()
 		}
@@ -2514,8 +2514,8 @@
 		},
 		replaceWith: function () {
 			var e = x.map(this, function (e) {
-					return [e.nextSibling, e.parentNode]
-				}),
+				return [e.nextSibling, e.parentNode]
+			}),
 			t = 0;
 			return this.domManip(arguments, function (n) {
 				var r = e[t++],
@@ -3266,8 +3266,8 @@
 				T.readyState = 1,
 				u && p.trigger("ajaxSend", [T, c]),
 				c.async && c.timeout > 0 && (s = setTimeout(function () {
-							T.abort("timeout")
-						}, c.timeout));
+						T.abort("timeout")
+					}, c.timeout));
 				try {
 					v = 1,
 					n.send(m, k)
@@ -3403,10 +3403,10 @@
 			return {
 				send: function (r, i) {
 					t = x("<script>").prop({
-							async: !0,
-							charset: e.scriptCharset,
-							src: e.url
-						}).on("load error", n = function (e) {
+						async: !0,
+						charset: e.scriptCharset,
+						src: e.url
+					}).on("load error", n = function (e) {
 							t.remove(),
 							n = null,
 							e && i("error" === e.type ? 404 : 200, e.type)
@@ -3551,8 +3551,8 @@
 		o = 0,
 		s = Cn.length,
 		a = x.Deferred().always(function () {
-				delete u.elem
-			}),
+			delete u.elem
+		}),
 		u = function () {
 			if (i)
 				return !1;
@@ -3568,32 +3568,32 @@
 			1 > o && u ? n : (a.resolveWith(e, [l]), !1)
 		},
 		l = a.promise({
-				elem: e,
-				props: x.extend({}, t),
-				opts: x.extend(!0, {
-					specialEasing: {}
-				}, n),
-				originalProperties: t,
-				originalOptions: n,
-				startTime: vn || Nn(),
-				duration: n.duration,
-				tweens: [],
-				createTween: function (t, n) {
-					var r = x.Tween(e, l.opts, t, n, l.opts.specialEasing[t] || l.opts.easing);
-					return l.tweens.push(r),
-					r
-				},
-				stop: function (t) {
-					var n = 0,
-					r = t ? l.tweens.length : 0;
-					if (i)
-						return this;
-					for (i = !0; r > n; n++)
-						l.tweens[n].run(1);
-					return t ? a.resolveWith(e, [l, t]) : a.rejectWith(e, [l, t]),
-					this
-				}
-			}),
+			elem: e,
+			props: x.extend({}, t),
+			opts: x.extend(!0, {
+				specialEasing: {}
+			}, n),
+			originalProperties: t,
+			originalOptions: n,
+			startTime: vn || Nn(),
+			duration: n.duration,
+			tweens: [],
+			createTween: function (t, n) {
+				var r = x.Tween(e, l.opts, t, n, l.opts.specialEasing[t] || l.opts.easing);
+				return l.tweens.push(r),
+				r
+			},
+			stop: function (t) {
+				var n = 0,
+				r = t ? l.tweens.length : 0;
+				if (i)
+					return this;
+				for (i = !0; r > n; n++)
+					l.tweens[n].run(1);
+				return t ? a.resolveWith(e, [l, t]) : a.rejectWith(e, [l, t]),
+				this
+			}
+		}),
 		c = l.props;
 		for (jn(c, l.opts.specialEasing); s > o; o++)
 			if (r = Cn[o].call(l, e, c, l.opts))
@@ -3623,18 +3623,18 @@
 				t[r] = i
 	}
 	x.Animation = x.extend(Sn, {
-			tweener: function (e, t) {
-				x.isFunction(e) ? (t = e, e = ["*"]) : e = e.split(" ");
-				var n,
-				r = 0,
-				i = e.length;
-				for (; i > r; r++)
-					n = e[r], kn[n] = kn[n] || [], kn[n].unshift(t)
-			},
-			prefilter: function (e, t) {
-				t ? Cn.unshift(e) : Cn.push(e)
-			}
-		});
+		tweener: function (e, t) {
+			x.isFunction(e) ? (t = e, e = ["*"]) : e = e.split(" ");
+			var n,
+			r = 0,
+			i = e.length;
+			for (; i > r; r++)
+				n = e[r], kn[n] = kn[n] || [], kn[n].unshift(t)
+		},
+		prefilter: function (e, t) {
+			t ? Cn.unshift(e) : Cn.push(e)
+		}
+	});
 	function Dn(e, t, n) {
 		var r,
 		i,
@@ -3994,7 +3994,7 @@
 	},
 	x.fn.andSelf = x.fn.addBack,
 	"object" == typeof module && "object" == typeof module.exports ? module.exports = x : "function" == typeof define && define.amd && define("jquery", [], function () {
-			return x
-		}),
+		return x
+	}),
 	"object" == typeof e && "object" == typeof e.document && (e.jQuery = e.$ = x)
 })(window);
