@@ -195,18 +195,18 @@
 		},
 		clone: function (G) {
 			var E = this.map(function () {
-					if (!o.support.noCloneEvent && !o.isXMLDoc(this)) {
-						var I = this.outerHTML;
-						if (!I) {
-							var J = this.ownerDocument.createElement("div");
-							J.appendChild(this.cloneNode(true));
-							I = J.innerHTML
-						}
-						return o.clean([I.replace(/ jQuery\d+="(?:\d+|null)"/g, "").replace(/^\s*/, "")])[0]
-					} else {
-						return this.cloneNode(true)
+				if (!o.support.noCloneEvent && !o.isXMLDoc(this)) {
+					var I = this.outerHTML;
+					if (!I) {
+						var J = this.ownerDocument.createElement("div");
+						J.appendChild(this.cloneNode(true));
+						I = J.innerHTML
 					}
-				});
+					return o.clean([I.replace(/ jQuery\d+="(?:\d+|null)"/g, "").replace(/^\s*/, "")])[0]
+				} else {
+					return this.cloneNode(true)
+				}
+			});
 			if (G === true) {
 				var H = this.find("*").andSelf(),
 				F = 0;
@@ -505,8 +505,8 @@
 			remove: function (E, F) {
 				if (E.nodeType == 1) {
 					E.className = F !== g ? o.grep(E.className.split(/\s+/), function (G) {
-							return !o.className.has(F, G)
-						}).join(" ") : ""
+						return !o.className.has(F, G)
+					}).join(" ") : ""
 				}
 			},
 			has: function (F, E) {
@@ -586,8 +586,8 @@
 				} else {
 					if (I.currentStyle) {
 						var J = F.replace(/\-(\w)/g, function (N, O) {
-								return O.toUpperCase()
-							});
+							return O.toUpperCase()
+						});
 						L = I.currentStyle[F] || I.currentStyle[J];
 						if (!/^\d+(px)?$/i.test(L) && /^\d/.test(L)) {
 							var H = E.left,
@@ -626,8 +626,8 @@
 				}
 				if (typeof S === "string") {
 					S = S.replace(/(<(\w+)[^>]*?)\/>/g, function (U, V, T) {
-							return T.match(/^(abbr|br|col|img|input|link|meta|param|hr|area|embed)$/i) ? U : V + "></" + T + ">"
-						});
+						return T.match(/^(abbr|br|col|img|input|link|meta|param|hr|area|embed)$/i) ? U : V + "></" + T + ">"
+					});
 					var O = S.replace(/^\s+/, "").substring(0, 10).toLowerCase();
 					var Q = !O.indexOf("<opt") && [1, "<select multiple='multiple'>", "</select>"] || !O.indexOf("<leg") && [1, "<fieldset>", "</fieldset>"] || O.match(/^<(thead|tbody|tfoot|colg|cap)/) && [1, "<table>", "</table>"] || !O.indexOf("<tr") && [2, "<table><tbody>", "</tbody></table>"] || (!O.indexOf("<td") || !O.indexOf("<th")) && [3, "<table><tbody><tr>", "</tr></tbody></table>"] || !O.indexOf("<col") && [2, "<table><tbody></tbody><colgroup>", "</colgroup></table>"] || !o.support.htmlSerialize && [1, "div<div>", "</div>"] || [0, "", ""];
 					L.innerHTML = Q[1] + S + Q[2];
@@ -714,8 +714,8 @@
 				return J.filter && J.filter.indexOf("opacity=") >= 0 ? (parseFloat(J.filter.match(/opacity=([^)]*)/)[1]) / 100) + "" : ""
 			}
 			G = G.replace(/-([a-z])/ig, function (M, N) {
-					return N.toUpperCase()
-				});
+				return N.toUpperCase()
+			});
 			if (L) {
 				J[G] = K
 			}
@@ -1909,8 +1909,8 @@
 			}
 			var E = o.data(I, "events") || o.data(I, "events", {}),
 			J = o.data(I, "handle") || o.data(I, "handle", function () {
-					return typeof o !== "undefined" && !o.event.triggered ? o.event.handle.apply(arguments.callee.elem, arguments) : g
-				});
+				return typeof o !== "undefined" && !o.event.triggered ? o.event.handle.apply(arguments.callee.elem, arguments) : g
+			});
 			J.elem = I;
 			o.each(F.split(/\s+/), function (M, N) {
 				var O = N.split(".");
@@ -2239,9 +2239,9 @@
 		},
 		one: function (G, H, F) {
 			var E = o.event.proxy(F || H, function (I) {
-					o(this).unbind(I, E);
-					return (F || H).apply(this, arguments)
-				});
+				o(this).unbind(I, E);
+				return (F || H).apply(this, arguments)
+			});
 			return this.each(function () {
 				o.event.add(this, G, E, F && H)
 			})
@@ -3064,17 +3064,17 @@
 			F.elem = this.elem;
 			if (F() && o.timers.push(F) && !n) {
 				n = setInterval(function () {
-						var K = o.timers;
-						for (var J = 0; J < K.length; J++) {
-							if (!K[J]()) {
-								K.splice(J--, 1)
-							}
+					var K = o.timers;
+					for (var J = 0; J < K.length; J++) {
+						if (!K[J]()) {
+							K.splice(J--, 1)
 						}
-						if (!K.length) {
-							clearInterval(n);
-							n = g
-						}
-					}, 13)
+					}
+					if (!K.length) {
+						clearInterval(n);
+						n = g
+					}
+				}, 13)
 			}
 		},
 		show: function () {

@@ -122,8 +122,8 @@
 			});
 		else if (typeof b === "string") {
 			var e = c.grep(a, function (f) {
-					return f.nodeType === 1
-				});
+				return f.nodeType === 1
+			});
 			if (Na.test(b))
 				return c.filter(b, e, !d);
 			else
@@ -1104,8 +1104,8 @@
 						r += "";
 					else if (c.isArray(r))
 						r = c.map(r, function (C) {
-								return C == null ? "" : C + ""
-							});
+							return C == null ? "" : C + ""
+						});
 					if (c.isArray(r) && ta.test(this.type))
 						this.checked = c.inArray(x.val(), r) >= 0;
 					else if (c.nodeName(this, "select")) {
@@ -1611,8 +1611,8 @@
 				d = a.checked;
 			else if (b === "select-multiple")
 				d = a.selectedIndex > -1 ? c.map(a.options, function (e) {
-						return e.selected
-					}).join("-") : "";
+					return e.selected
+				}).join("-") : "";
 			else if (a.nodeName.toLowerCase() === "select")
 				d = a.selectedIndex;
 			return d
@@ -1703,9 +1703,9 @@
 				e = B
 			}
 			var l = b === "one" ? c.proxy(f, function (o) {
-					c(this).unbind(o, l);
-					return f.apply(this, arguments)
-				}) : f;
+				c(this).unbind(o, l);
+				return f.apply(this, arguments)
+			}) : f;
 			if (d === "unload" && b !== "one")
 				this.one(d, e, f);
 			else {
@@ -2960,18 +2960,18 @@
 		},
 		clone: function (a) {
 			var b = this.map(function () {
-					if (!c.support.noCloneEvent && !c.isXMLDoc(this)) {
-						var d = this.outerHTML,
-						e = this.ownerDocument;
-						if (!d) {
-							d = e.createElement("div");
-							d.appendChild(this.cloneNode(true));
-							d = d.innerHTML
-						}
-						return c.clean([d.replace(za, "").replace(fb, '="$1">').replace($, "")], e)[0]
-					} else
-						return this.cloneNode(true)
-				});
+				if (!c.support.noCloneEvent && !c.isXMLDoc(this)) {
+					var d = this.outerHTML,
+					e = this.ownerDocument;
+					if (!d) {
+						d = e.createElement("div");
+						d.appendChild(this.cloneNode(true));
+						d = d.innerHTML
+					}
+					return c.clean([d.replace(za, "").replace(fb, '="$1">').replace($, "")], e)[0]
+				} else
+					return this.cloneNode(true)
+			});
 			if (a === true) {
 				na(this, b);
 				na(this.find("*"), b.find("*"))

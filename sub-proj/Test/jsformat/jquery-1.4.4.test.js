@@ -1666,8 +1666,8 @@
 					val += "";
 				} else if (jQuery.isArray(val)) {
 					val = jQuery.map(val, function (value) {
-							return value == null ? "" : value + "";
-						});
+						return value == null ? "" : value + "";
+					});
 				}
 
 				if (jQuery.isArray(val) && rradiocheck.test(this.type)) {
@@ -2594,8 +2594,8 @@
 			} else if (type === "select-multiple") {
 				val = elem.selectedIndex > -1 ?
 					jQuery.map(elem.options, function (elem) {
-						return elem.selected;
-					}).join("-") :
+					return elem.selected;
+				}).join("-") :
 					"";
 
 			} else if (elem.nodeName.toLowerCase() === "select") {
@@ -2743,9 +2743,9 @@
 			}
 
 			var handler = name === "one" ? jQuery.proxy(fn, function (event) {
-					jQuery(this).unbind(event, handler);
-					return fn.apply(this, arguments);
-				}) : fn;
+				jQuery(this).unbind(event, handler);
+				return fn.apply(this, arguments);
+			}) : fn;
 
 			if (type === "unload" && name !== "one") {
 				this.one(type, data, fn);
@@ -4677,8 +4677,8 @@
 
 		} else if (typeof qualifier === "string") {
 			var filtered = jQuery.grep(elements, function (elem) {
-					return elem.nodeType === 1;
-				});
+				return elem.nodeType === 1;
+			});
 
 			if (isSimple.test(qualifier)) {
 				return jQuery.filter(qualifier, filtered, !keep);
@@ -4878,32 +4878,32 @@
 		clone: function (events) {
 			// Do the clone
 			var ret = this.map(function () {
-					if (!jQuery.support.noCloneEvent && !jQuery.isXMLDoc(this)) {
-						// IE copies events bound via attachEvent when
-						// using cloneNode. Calling detachEvent on the
-						// clone will also remove the events from the orignal
-						// In order to get around this, we use innerHTML.
-						// Unfortunately, this means some modifications to
-						// attributes in IE that are actually only stored
-						// as properties will not be copied (such as the
-						// the name attribute on an input).
-						var html = this.outerHTML,
-						ownerDocument = this.ownerDocument;
+				if (!jQuery.support.noCloneEvent && !jQuery.isXMLDoc(this)) {
+					// IE copies events bound via attachEvent when
+					// using cloneNode. Calling detachEvent on the
+					// clone will also remove the events from the orignal
+					// In order to get around this, we use innerHTML.
+					// Unfortunately, this means some modifications to
+					// attributes in IE that are actually only stored
+					// as properties will not be copied (such as the
+					// the name attribute on an input).
+					var html = this.outerHTML,
+					ownerDocument = this.ownerDocument;
 
-						if (!html) {
-							var div = ownerDocument.createElement("div");
-							div.appendChild(this.cloneNode(true));
-							html = div.innerHTML;
-						}
-
-						return jQuery.clean([html.replace(rinlinejQuery, "")
-								// Handle the case in IE 8 where action=/test/> self-closes a tag
-								.replace(raction, '="$1">')
-								.replace(rleadingWhitespace, "")], ownerDocument)[0];
-					} else {
-						return this.cloneNode(true);
+					if (!html) {
+						var div = ownerDocument.createElement("div");
+						div.appendChild(this.cloneNode(true));
+						html = div.innerHTML;
 					}
-				});
+
+					return jQuery.clean([html.replace(rinlinejQuery, "")
+							// Handle the case in IE 8 where action=/test/> self-closes a tag
+							.replace(raction, '="$1">')
+							.replace(rleadingWhitespace, "")], ownerDocument)[0];
+				} else {
+					return this.cloneNode(true);
+				}
+			});
 
 			// Copy the events from the original to the clone
 			if (events === true) {

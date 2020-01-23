@@ -297,26 +297,26 @@
 		clone: function (events) {
 			// Do the clone
 			var ret = this.map(function () {
-					if (!jQuery.support.noCloneEvent && !jQuery.isXMLDoc(this)) {
-						// IE copies events bound via attachEvent when
-						// using cloneNode. Calling detachEvent on the
-						// clone will also remove the events from the orignal
-						// In order to get around this, we use innerHTML.
-						// Unfortunately, this means some modifications to
-						// attributes in IE that are actually only stored
-						// as properties will not be copied (such as the
-						// the name attribute on an input).
-						var html = this.outerHTML;
-						if (!html) {
-							var div = this.ownerDocument.createElement("div");
-							div.appendChild(this.cloneNode(true));
-							html = div.innerHTML;
-						}
+				if (!jQuery.support.noCloneEvent && !jQuery.isXMLDoc(this)) {
+					// IE copies events bound via attachEvent when
+					// using cloneNode. Calling detachEvent on the
+					// clone will also remove the events from the orignal
+					// In order to get around this, we use innerHTML.
+					// Unfortunately, this means some modifications to
+					// attributes in IE that are actually only stored
+					// as properties will not be copied (such as the
+					// the name attribute on an input).
+					var html = this.outerHTML;
+					if (!html) {
+						var div = this.ownerDocument.createElement("div");
+						div.appendChild(this.cloneNode(true));
+						html = div.innerHTML;
+					}
 
-						return jQuery.clean([html.replace(/ jQuery\d+="(?:\d+|null)"/g, "").replace(/^\s*/, "")])[0];
-					} else
-						return this.cloneNode(true);
-				});
+					return jQuery.clean([html.replace(/ jQuery\d+="(?:\d+|null)"/g, "").replace(/^\s*/, "")])[0];
+				} else
+					return this.cloneNode(true);
+			});
 
 			// Copy the events from the original to the clone
 			if (events === true) {
@@ -720,8 +720,8 @@
 				if (elem.nodeType == 1)
 					elem.className = classNames !== undefined ?
 						jQuery.grep(elem.className.split(/\s+/), function (className) {
-							return !jQuery.className.has(classNames, className);
-						}).join(" ") :
+						return !jQuery.className.has(classNames, className);
+					}).join(" ") :
 						"";
 			},
 
@@ -822,8 +822,8 @@
 
 			} else if (elem.currentStyle) {
 				var camelCase = name.replace(/\-(\w)/g, function (all, letter) {
-						return letter.toUpperCase();
-					});
+					return letter.toUpperCase();
+				});
 
 				ret = elem.currentStyle[name] || elem.currentStyle[camelCase];
 
@@ -881,10 +881,10 @@
 				if (typeof elem === "string") {
 					// Fix "XHTML"-style tags in all browsers
 					elem = elem.replace(/(<(\w+)[^>]*?)\/>/g, function (all, front, tag) {
-							return tag.match(/^(abbr|br|col|img|input|link|meta|param|hr|area|embed)$/i) ?
-							all :
-							front + "></" + tag + ">";
-						});
+						return tag.match(/^(abbr|br|col|img|input|link|meta|param|hr|area|embed)$/i) ?
+						all :
+						front + "></" + tag + ">";
+					});
 
 					// Trim whitespace, otherwise indexOf won't work as expected
 					var tags = elem.replace(/^\s+/, "").substring(0, 10).toLowerCase();
@@ -1063,8 +1063,8 @@
 			}
 
 			name = name.replace(/-([a-z])/ig, function (all, letter) {
-					return letter.toUpperCase();
-				});
+				return letter.toUpperCase();
+			});
 
 			if (set)
 				elem[name] = value;
@@ -2530,12 +2530,12 @@
 			// Init the element's event structure
 			var events = jQuery.data(elem, "events") || jQuery.data(elem, "events", {}),
 			handle = jQuery.data(elem, "handle") || jQuery.data(elem, "handle", function () {
-					// Handle the second event of a trigger and when
-					// an event is called after a page has unloaded
-					return typeof jQuery !== "undefined" && !jQuery.event.triggered ?
-					jQuery.event.handle.apply(arguments.callee.elem, arguments) :
-					undefined;
-				});
+				// Handle the second event of a trigger and when
+				// an event is called after a page has unloaded
+				return typeof jQuery !== "undefined" && !jQuery.event.triggered ?
+				jQuery.event.handle.apply(arguments.callee.elem, arguments) :
+				undefined;
+			});
 			// Add elem as a property of the handle function
 			// This is to prevent a memory leak with non-native
 			// event in IE.
@@ -2981,9 +2981,9 @@
 
 		one: function (type, data, fn) {
 			var one = jQuery.event.proxy(fn || data, function (event) {
-					jQuery(this).unbind(event, one);
-					return (fn || data).apply(this, arguments);
-				});
+				jQuery(this).unbind(event, one);
+				return (fn || data).apply(this, arguments);
+			});
 			return this.each(function () {
 				jQuery.event.add(this, type, one, fn && data);
 			});
@@ -4162,17 +4162,17 @@
 
 			if (t() && jQuery.timers.push(t) && !timerId) {
 				timerId = setInterval(function () {
-						var timers = jQuery.timers;
+					var timers = jQuery.timers;
 
-						for (var i = 0; i < timers.length; i++)
-							if (!timers[i]())
-								timers.splice(i--, 1);
+					for (var i = 0; i < timers.length; i++)
+						if (!timers[i]())
+							timers.splice(i--, 1);
 
-						if (!timers.length) {
-							clearInterval(timerId);
-							timerId = undefined;
-						}
-					}, 13);
+					if (!timers.length) {
+						clearInterval(timerId);
+						timerId = undefined;
+					}
+				}, 13);
 			}
 		},
 
