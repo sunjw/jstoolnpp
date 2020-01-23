@@ -1254,8 +1254,8 @@ YUI.add("get", function (a) {
 				}
 				if (y.timeout) {
 					y.timer = setTimeout(function () {
-							q(z);
-						}, y.timeout);
+						q(z);
+					}, y.timeout);
 				}
 				if (y.type === "script") {
 					A = s(x, G, y.attributes);
@@ -1304,12 +1304,12 @@ YUI.add("get", function (a) {
 					g();
 				}
 				l[C] = a.merge(z, {
-						tId: C,
-						type: y,
-						url: x,
-						finished: false,
-						nodes: []
-					});
+					tId: C,
+					type: y,
+					url: x,
+					finished: false,
+					nodes: []
+				});
 				A = l[C];
 				A.win = A.win || a.config.win;
 				A.context = A.context || A;

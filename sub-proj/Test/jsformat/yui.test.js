@@ -2974,8 +2974,8 @@ YUI.add('get', function (Y) {
 				if (q.timeout) {
 					// q.timer = L.later(q.timeout, q, _timeout, id);
 					q.timer = setTimeout(function () {
-							_timeout(id);
-						}, q.timeout);
+						_timeout(id);
+					}, q.timeout);
 				}
 
 				if (q.type === "script") {
@@ -3061,12 +3061,12 @@ YUI.add('get', function (Y) {
 				}
 
 				queues[id] = Y.merge(opts, {
-						tId: id,
-						type: type,
-						url: url,
-						finished: false,
-						nodes: []
-					});
+					tId: id,
+					type: type,
+					url: url,
+					finished: false,
+					nodes: []
+				});
 
 				q = queues[id];
 				q.win = q.win || Y.config.win;
