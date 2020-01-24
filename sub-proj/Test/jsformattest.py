@@ -107,7 +107,8 @@ def main():
         if argv == "64" or argv == "x64":
             x64 = True
         if argv == "32" or argv == "x86":
-            x64 = False
+            if not is_osx_sys():
+                x64 = False
 
     # system check
     if nodejs == False:
