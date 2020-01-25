@@ -105,7 +105,7 @@ public:
 	typedef stack<size_t> SizeStack;
 	typedef queue<Token> TokenQueue;
 	typedef map<string, char> StrCharMap;
-	typedef map<int, bool> IntBoolMap;
+	typedef set<int> IntSet;
 	typedef set<string> StrSet;
 
 	explicit JSParser();

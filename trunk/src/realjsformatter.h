@@ -84,7 +84,7 @@ private:
 	StrCharMap m_blockMap;
 	CharStack m_blockStack;
 	int m_nIndents; // 缩进数量, 不用计算 blockStack, 效果不好
-	IntBoolMap m_indentFixMap;
+	IntSet m_indentFixSet;
 
 	// 使用栈是为了解决在判断条件中出现循环的问题
 	BoolStack m_brcNeedStack; // if 之类的后面的括号

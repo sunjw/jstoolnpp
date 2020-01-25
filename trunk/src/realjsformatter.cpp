@@ -605,7 +605,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				(fixTopStack == JS_ASSIGN || fixTopStack == JS_HELPER))
 			{
 				--m_nIndents; // =({ ¼õµôÒ»¸öËõ½ø
-				m_indentFixMap[m_nIndents] = true;
+				m_indentFixSet.insert(m_nIndents);
 			}
 			if (m_nIndents == 0 && 
 				(fixTopStack == JS_ASSIGN || fixTopStack == JS_HELPER))
@@ -766,7 +766,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if(topStack != JS_ASSIGN && StackTopEq(m_blockStack, JS_BRACKET))
 		{
 			int prevIndent = m_nIndents;
-			bool bIndentFix = m_indentFixMap[prevIndent];
+			bool bIndentFix = (m_indentFixSet.find(prevIndent) != m_indentFixSet.end());
 			++m_nIndents;
 			m_blockStack.pop();
 			if (bIndentFix &&
@@ -774,7 +774,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			{
 				++m_nIndents; // =({
 			}
-			m_indentFixMap[prevIndent] = false;
+			m_indentFixSet.erase(prevIndent);
 			m_blockStack.push(JS_BRACKET);
 			GetStackTop(m_blockStack, topStack);
 		}
