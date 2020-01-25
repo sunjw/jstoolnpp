@@ -133,6 +133,7 @@ class RealJSFormatter extends JSParser.JSParser {
 
         this.m_initIndent = ""; // initial indent
         this.m_nIndents = 0; // indent count
+        this.m_indentFixSet = new Set();
 
         this.m_nLineIndents = 0;
         this.m_bLineTemplate = false;
@@ -483,7 +484,7 @@ class RealJSFormatter extends JSParser.JSParser {
             }
 
             if (fixTopStack == JSParser.JS_BRACKET) {
-                --this.m_nIndents; // ({ minus indent
+                --this.m_nIndents; // minus indent for ({
             }
 
             if (bPrevFunc) {
