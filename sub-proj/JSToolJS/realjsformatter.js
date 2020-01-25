@@ -635,7 +635,7 @@ class RealJSFormatter extends JSParser.JSParser {
                 this.m_blockStack.pop();
                 if (bIndentFix &&
                     (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_ASSIGN) ||
-                        StackTopEq(this.m_blockStack, JSParser.JS_HELPER))) {
+                        JSParser.StackTopEq(this.m_blockStack, JSParser.JS_HELPER))) {
                     ++this.m_nIndents; // =({
                 }
                 this.m_indentFixSet.delete(prevIndent);
