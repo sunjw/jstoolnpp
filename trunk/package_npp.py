@@ -21,10 +21,11 @@ logging.basicConfig(
     ])
 
 VERSION_FILE = './src/version.h'
+RELEASED_FILES_DIR = './ReleasedFiles'
 DLL_FILE_NAME = 'JSMinNPP.dll'
 DLL_UNI_32_DIR = './Unicode Release'
 DLL_UNI_64_DIR = './x64/Unicode Release'
-RELEASED_FILES_DIR = './ReleasedFiles'
+SRC_LIST = ['icon_048.png', 'jsMinNpp.sln', 'jsMinNpp.vcproj', 'src']
 
 version = 0
 
@@ -67,6 +68,15 @@ def package_dll():
     dll_uni_64_zip_full = os.path.join(released_files_dir_full, 'JSToolNPP.%s.uni.64.zip' % (version))
     #logger.info(dll_uni_64_zip_full)
     call(['7z', 'a', dll_uni_64_zip_full, DLL_FILE_NAME])
+    # Go back
+    os.chdir(cwd)
+
+    logger.info('Package src...')
+    src_zip_full = os.path.join(released_files_dir_full, 'JSToolNPP.%s.src.zip' % (version))
+    logger.info(src_zip_full)
+    cmd_list = ['7z', 'a', src_zip_full]
+    cmd_list.extend(SRC_LIST)
+    call(cmd_list)
     # Go back
     os.chdir(cwd)
 
