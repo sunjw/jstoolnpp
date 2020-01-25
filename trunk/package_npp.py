@@ -5,6 +5,7 @@
 #
 import logging
 import os
+import platform
 import re
 
 from logging.handlers import RotatingFileHandler
@@ -28,6 +29,9 @@ DLL_UNI_64_DIR = './x64/Unicode Release'
 SRC_LIST = ['icon_048.png', 'jsMinNpp.sln', 'jsMinNpp.vcproj', 'src']
 
 version = 0
+
+def is_windows_sys():
+    return (platform.system() == "Windows")
 
 def read_file(file_path):
     file_content = ''
@@ -82,6 +86,10 @@ def package_dll():
 
 def main():
     global version
+
+    if not is_windows_sys():
+        logger.error('Only support Windows.')
+        return
 
     os.chdir(os.path.dirname(__file__))
 
