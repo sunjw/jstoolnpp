@@ -485,6 +485,22 @@ class RealJSFormatter extends JSParser.JSParser {
 
             if (fixTopStack == JSParser.JS_BRACKET) {
                 --this.m_nIndents; // minus indent for ({
+                this.m_blockStack.pop();
+                fixTopStack = JSParser.GetStackTop(this.m_blockStack);
+                if (this.m_nIndents > 0 && this.m_bAssign &&
+                    (fixTopStack == JSParser.JS_ASSIGN || fixTopStack == JSParser.JS_HELPER)) {
+                    --this.m_nIndents; // minus indent for =({
+                    this.m_indentFixSet.add(this.m_nIndents);
+                }
+                if (this.m_nIndents == 0 &&
+                    (fixTopStack == JSParser.JS_ASSIGN || fixTopStack == JSParser.JS_HELPER)) {
+                    this.m_blockStack.pop();
+                    if (fixTopStack == JSParser.JS_HELPER) {
+                        this.m_blockStack.pop();
+                    }
+                }
+                this.m_blockStack.push(JSParser.JS_BRACKET);
+                fixTopStack = JSParser.GetStackTop(this.m_blockStack);
             }
 
             if (bPrevFunc) {
@@ -611,8 +627,21 @@ class RealJSFormatter extends JSParser.JSParser {
             //char tmpTopStack;
             //GetStackTop(m_blockStack, tmpTopStack);
             // fix indent in ({...})
-            if (topStack != JSParser.JS_ASSIGN && JSParser.StackTopEq(this.m_blockStack, JSParser.JS_BRACKET))
+            if (topStack != JSParser.JS_ASSIGN &&
+                JSParser.StackTopEq(this.m_blockStack, JSParser.JS_BRACKET)) {
+                var prevIndent = this.m_nIndents;
+                var bIndentFix = this.m_indentFixSet.has(prevIndent);
                 ++this.m_nIndents;
+                this.m_blockStack.pop();
+                if (bIndentFix &&
+                    (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_ASSIGN) ||
+                        StackTopEq(this.m_blockStack, JSParser.JS_HELPER))) {
+                    ++this.m_nIndents; // =({
+                }
+                this.m_indentFixSet.delete(prevIndent);
+                this.m_blockStack.push(JSParser.JS_BRACKET);
+                topStack = JSParser.GetStackTop(this.m_blockStack);
+            }
             // fix indent in ({...}) end
 
             this.PopMultiBlock(topStack);
