@@ -44,8 +44,7 @@ $cur_version = $download_array["JSMinNpp"]["version"];
                     <p>&nbsp;</p>
                     <p>What's New in <a class="smoothAnchor" href="#install"><?php echo $cur_version; ?></a>:</p>
                     <ul class="indentList discList">
-                        <li>Fix some bugs related to regular expression.  </li>
-                        <li>Fix some node module security alerts.</li>
+                        <li>Tweak nested block indent.</li>
                     </ul>
                 </div>
             </div>
