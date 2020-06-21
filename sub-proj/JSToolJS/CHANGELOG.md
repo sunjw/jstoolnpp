@@ -1,3 +1,6 @@
+1.2006.0  
+[Common] Fix some bugs related to regular expression.  
+
 1.2001.1  
 [Common] Tweak nested block indent.  
 
