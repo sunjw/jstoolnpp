@@ -35,7 +35,7 @@ void JSParser::Init()
 	m_lineCount = 1; // 行号从 1 开始
 	m_tokenCount = 0;
 
-	m_strBeforeReg = "(,=:[!&|?+{};>\n";
+	m_strBeforeReg = "(,=:[!&|?+*{};>\n";
 
 	m_bRegular = false;
 	m_iRegBracket = 0;
