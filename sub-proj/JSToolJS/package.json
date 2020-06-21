@@ -2,7 +2,7 @@
     "name": "jstool",
     "displayName": "JSTool",
     "description": "JS (JSON) Tool for VSC",
-    "version": "1.2006.1",
+    "version": "1.2006.0",
     "publisher": "sunjw",
     "license": "GPL-2.0",
     "engines": {
