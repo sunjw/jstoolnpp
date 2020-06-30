@@ -100,7 +100,7 @@ if ($checking) {
                     <p>&nbsp;</p>
                     <p>What's New in <a class="smoothAnchor" href="#download"><?php echo $cur_version; ?></a>:</p>
                     <ul class="indentList discList">
-                        <li>Tweak nested block indent.</li>
+                        <li>Fix some bugs related to regular expression.</li>
                     </ul>
                 </div>
             </div>
