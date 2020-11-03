@@ -8,7 +8,7 @@ Really helpful to JavaScript coder on Notepad++ and Visual Studio Code. Easy to 
 Made in China.  
 Project site: http://www.sunjw.us/jstool
 
-[![Buy Me a Coffee at ko-fi.com](https://cdn.ko-fi.com/cdn/kofi2.png?v=2 | height=36px)](https://ko-fi.com/Y8Y72L3FZ)
+<a href="https://ko-fi.com/Y8Y72L3FZ"><img src="https://cdn.ko-fi.com/cdn/kofi2.png?v=2" alt="Buy Me a Coffee at ko-fi.com" height="36"></a>
 
 #### FEATURES
  * JavaScript minify.
