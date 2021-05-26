@@ -3,27 +3,15 @@
 .vs
 *.pyc
 
-sub-proj/JSFormatter/Debug/*
-sub-proj/JSFormatter/Release/*
-sub-proj/JSFormatter/x64/*
 sub-proj/JSFormatter/JSFormatter.xcodeproj/xcuserdata/*
 sub-proj/JSFormatter/JSFormatter.xcodeproj/xcshareddata/*
-sub-proj/JSFormatterTest/Debug/*
-sub-proj/JSFormatterTest/Release/*
-sub-proj/JSFormatterTest/x64/*
+
 sub-proj/JSFormatterTest/JSFormatterTest.xcodeproj/xcuserdata/*
 sub-proj/JSFormatterTest/JSFormatterTest.xcodeproj/xcshareddata/*
-
-sub-proj/JsonPP/Debug/*
-sub-proj/JsonPP/Release/*
-sub-proj/JsonPP/x64/*
 
 sub-proj/JSFNodeNative/out.js
 sub-proj/JSFNodeNative/node_modules/ffi/build/*
 sub-proj/JSFNodeNative/node_modules/ref/build/*
-
-sub-proj/JSParserTest/Debug/*
-sub-proj/JSParserTest/Release/*
 
 sub-proj/JsonPP/tests/out.js
 sub-proj/JsonPP/tests/out.json
