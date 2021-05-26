@@ -26,7 +26,7 @@ RELEASED_FILES_DIR = './ReleasedFiles'
 DLL_FILE_NAME = 'JSMinNPP.dll'
 DLL_UNI_32_DIR = './Unicode Release'
 DLL_UNI_64_DIR = './x64/Unicode Release'
-SRC_LIST = ['icon_048.png', 'jsMinNpp.sln', 'jsMinNpp.vcproj', 'src']
+SRC_LIST = ['icon_048.png', 'jsMinNpp15.sln', 'jsMinNpp.vcxproj', 'src']
 
 version = 0
 
