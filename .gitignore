@@ -3,10 +3,6 @@
 .vs
 *.pyc
 
-sub-proj/JSFNodeNative/out.js
-sub-proj/JSFNodeNative/node_modules/ffi/build/*
-sub-proj/JSFNodeNative/node_modules/ref/build/*
-
 sub-proj/JsonPP/tests/out.js
 sub-proj/JsonPP/tests/out.json
 
