@@ -388,6 +388,9 @@ DerivedData/
 ## Gcc Patch
 /*.gcno
 
+Unicode Debug/*
+Unicode Release/*
+
 *.old
 *.suo
 *.user
