@@ -3,12 +3,6 @@
 .vs
 *.pyc
 
-sub-proj/JSFormatter/JSFormatter.xcodeproj/xcuserdata/*
-sub-proj/JSFormatter/JSFormatter.xcodeproj/xcshareddata/*
-
-sub-proj/JSFormatterTest/JSFormatterTest.xcodeproj/xcuserdata/*
-sub-proj/JSFormatterTest/JSFormatterTest.xcodeproj/xcshareddata/*
-
 sub-proj/JSFNodeNative/out.js
 sub-proj/JSFNodeNative/node_modules/ffi/build/*
 sub-proj/JSFNodeNative/node_modules/ref/build/*
@@ -19,14 +13,4 @@ sub-proj/JsonPP/tests/out.json
 sub-proj/Test/*/out*.js
 sub-proj/Test/*/out*.json
 
-trunk/DerivedData/*
-trunk/JSTool.xcworkspace/xcuserdata/*
-trunk/JSTool.xcworkspace/xcshareddata/*
-
-*.aps
-*.ncb
 *.old
-*.suo
-*.user
-*.VC.db
-UpgradeLog*
