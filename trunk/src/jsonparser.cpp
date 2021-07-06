@@ -27,7 +27,7 @@ using namespace sunjwbase;
 void JsonParser::RecursiveProc(JsonValue& jsonValue)
 {
 	// initial job
-	if(m_nRecuLevel == 0)
+	if (m_nRecuLevel == 0)
 	{
 		StartParse();
 
@@ -45,12 +45,12 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 	bool bGetKey = false;
 	bool bGetSplitor = false;
 
-	while(GetToken()) // 获得下一个 m_tokenA 和 m_tokenB
+	while (GetToken()) // 获得下一个 m_tokenA 和 m_tokenB
 	{
 		// JsonParser 忽略换行, 其它的解析器可能不要忽略
-		if(m_tokenA.code == "\r\n" || 
+		if (m_tokenA.code == "\r\n" ||
 			m_tokenA.code == "\n" ||
-			m_tokenA.type == COMMENT_TYPE_1 || 
+			m_tokenA.type == COMMENT_TYPE_1 ||
 			m_tokenA.type == COMMENT_TYPE_2)
 		{
 			continue;
@@ -62,19 +62,19 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 		 * 已经识别负数
 		 * 已经识别正则表达式
 		 */
-		if(m_tokenA.code == "{")
+		if (m_tokenA.code == "{")
 		{
 			m_blockStack.push(JS_BLOCK);
 			long blockLine = m_tokenA.line;
 
-			if(stackTop == JS_EMPTY)
+			if (stackTop == JS_EMPTY)
 			{
 				jsonValue.SetValueType(JsonValue::MAP_VALUE);
 				RecursiveProc(jsonValue);
 			}
 			else
 			{
-				if(stackTop == JS_SQUARE)
+				if (stackTop == JS_SQUARE)
 				{
 					jsonValue.ArrayPut(JsonValue());
 
@@ -85,7 +85,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 					innerValue.line = blockLine;
 				}
-				else if(stackTop == JS_BLOCK)
+				else if (stackTop == JS_BLOCK)
 				{
 					jsonValue.MapPut(key, JsonValue());
 
@@ -103,12 +103,12 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			continue;
 		}
 
-		if(m_tokenA.code == "}")
+		if (m_tokenA.code == "}")
 		{
 			bGetKey = false;
 			bGetSplitor = false;
 
-			if(m_blockStack.size() > 0)
+			if (m_blockStack.size() > 0)
 			{
 				m_blockStack.pop();
 				--m_nRecuLevel;
@@ -117,19 +117,19 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			return;
 		}
 
-		if(m_tokenA.code == "[")
+		if (m_tokenA.code == "[")
 		{
 			m_blockStack.push(JS_SQUARE);
 			long squareLine = m_tokenA.line;
 
-			if(stackTop == JS_EMPTY)
+			if (stackTop == JS_EMPTY)
 			{
 				jsonValue.SetValueType(JsonValue::ARRAY_VALUE);
 				RecursiveProc(jsonValue);
 			}
 			else
 			{
-				if(stackTop == JS_SQUARE)
+				if (stackTop == JS_SQUARE)
 				{
 					jsonValue.ArrayPut(JsonValue());
 
@@ -140,7 +140,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 
 					innerValue.line = squareLine;
 				}
-				else if(stackTop == JS_BLOCK)
+				else if (stackTop == JS_BLOCK)
 				{
 					jsonValue.MapPut(key, JsonValue());
 
@@ -158,9 +158,9 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			continue;
 		}
 
-		if(m_tokenA.code == "]")
+		if (m_tokenA.code == "]")
 		{
-			if(m_blockStack.size() > 0)
+			if (m_blockStack.size() > 0)
 			{
 				m_blockStack.pop();
 				--m_nRecuLevel;
@@ -169,28 +169,30 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			return;
 		}
 
-		if(stackTop == JS_BLOCK)
+		if (stackTop == JS_BLOCK)
 		{
-			if(!bGetKey && m_tokenA.code != ",")
+			if (!bGetKey && m_tokenA.code != ",")
 			{
 				key = m_tokenA.code;
 				keyLine = m_tokenA.line;
 
-				if((key[0] == '\'' && key[key.length() - 1] == '\'') ||
+				if ((key[0] == '\'' && key[key.length() - 1] == '\'') ||
 					key[0] == '"' && key[key.length() - 1] == '"')
+				{
 					key = key.substr(1, key.length() - 2);
+				}
 
 				bGetKey = true;
 				continue;
 			}
 
-			if(bGetKey && !bGetSplitor && m_tokenA.code == ":")
+			if (bGetKey && !bGetSplitor && m_tokenA.code == ":")
 			{
 				bGetSplitor = true;
 				continue;
 			}
 
-			if(bGetKey && bGetSplitor)
+			if (bGetKey && bGetSplitor)
 			{
 				strValue = ReadStrValue();
 				valLine = m_tokenA.line;
@@ -206,9 +208,9 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 			}
 		}
 
-		if(stackTop == JS_SQUARE)
+		if (stackTop == JS_SQUARE)
 		{
-			if(m_tokenA.code != ",")
+			if (m_tokenA.code != ",")
 			{
 				strValue = ReadStrValue();
 				valLine = m_tokenA.line;
@@ -223,7 +225,7 @@ void JsonParser::RecursiveProc(JsonValue& jsonValue)
 	}
 
 	// finished job
-	if(m_nRecuLevel == 1)
+	if (m_nRecuLevel == 1)
 	{
 		//FlushLineBuffer();
 
@@ -236,7 +238,7 @@ string JsonParser::ReadStrValue()
 {
 	string ret(m_tokenA.code);
 	// fix decimal number value bug
-	if(m_tokenB.code == ".")
+	if (m_tokenB.code == ".")
 	{
 		// maybe it's a decimal
 		string strDec(m_tokenA.code);
@@ -252,11 +254,13 @@ string JsonParser::ReadStrValue()
 
 void JsonParser::GenStrJsonValue(JsonValue& jsonValue, string value)
 {
-	if(value[0] == '\'' || value[0] == '"')
+	if (value[0] == '\'' || value[0] == '"')
 	{
-		if((value[0] == '\'' && value[value.length() - 1] == '\'') ||
+		if ((value[0] == '\'' && value[value.length() - 1] == '\'') ||
 			value[0] == '"' && value[value.length() - 1] == '"')
+		{
 			value = value.substr(1, value.length() - 2);
+		}
 
 		/*
 		 * STRING_VALUE 存入的时候会把周围的引号去掉
@@ -269,15 +273,15 @@ void JsonParser::GenStrJsonValue(JsonValue& jsonValue, string value)
 
 		jsonValue.SetValueType(JsonValue::STRING_VALUE);
 	}
-	else if(IsNumChar(value[0]) || value[0] == '-' || value[0] == '+')
+	else if (IsNumChar(value[0]) || value[0] == '-' || value[0] == '+')
 	{
 		jsonValue.SetValueType(JsonValue::NUMBER_VALUE);
 	}
-	else if(value == "true" || value == "false")
+	else if (value == "true" || value == "false")
 	{
 		jsonValue.SetValueType(JsonValue::BOOL_VALUE);
 	}
-	else if(value[0] == '/')
+	else if (value[0] == '/')
 	{
 		jsonValue.SetValueType(JsonValue::REGULAR_VALUE);
 	}
