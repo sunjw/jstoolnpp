@@ -63,12 +63,12 @@ struct _FormatterOption
 
 #ifdef __cplusplus
 	_FormatterOption():
-        chIndent('\t'),
-        nChPerInd(1),
-        eCRRead(SKIP_READ_CR),
-        eCRPut(NOT_PUT_CR),
-        eBracNL(NO_NEWLINE_BRAC),
-        eEmpytIndent(NO_INDENT_IN_EMPTYLINE)
+		chIndent('\t'),
+		nChPerInd(1),
+		eCRRead(SKIP_READ_CR),
+		eCRPut(NOT_PUT_CR),
+		eBracNL(NO_NEWLINE_BRAC),
+		eEmpytIndent(NO_INDENT_IN_EMPTYLINE)
 	{}
 
 	_FormatterOption(char op_chIndent,
@@ -77,12 +77,12 @@ struct _FormatterOption
 					CR_PUT op_eCRPut,
 					BRAC_NEWLINE op_eBracNL,
 					EMPTYLINE_INDENT op_eEmpytIndent):
-        chIndent(op_chIndent),
-        nChPerInd(op_nChPerInd),
-        eCRRead(op_eCRRead),
-        eCRPut(op_eCRPut),
-        eBracNL(op_eBracNL),
-        eEmpytIndent(op_eEmpytIndent)
+		chIndent(op_chIndent),
+		nChPerInd(op_nChPerInd),
+		eCRRead(op_eCRRead),
+		eCRPut(op_eCRPut),
+		eBracNL(op_eBracNL),
+		eEmpytIndent(op_eEmpytIndent)
 	{}
 #endif
 };
