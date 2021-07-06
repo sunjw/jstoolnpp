@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
 		string line;
 		while (getline(inFileStream1, line))
 		{
-		    outFileStream1 << line;
+			outFileStream1 << line;
 		}
 
 		outFileStream1.close();
@@ -170,10 +170,10 @@ int main(int argc, char *argv[])
 	if (!processed)
 	{
 		cout << "Usage: jsformatter [input file] [output file]" << "\n\n"
-			<< "  --version    Display version info." << endl;
+			<< "  --version	Display version info." << endl;
 	}
 
 
-    return 0;
+	return 0;
 }
 

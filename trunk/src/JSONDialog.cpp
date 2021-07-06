@@ -61,8 +61,8 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 
 			m_hTree = GetDlgItem(hWnd, IDC_TREE_JSON); // tree control
 			::SendMessage(hWnd, DM_SETDEFID, 
-                        (WPARAM) IDC_BTN_SEARCH, 
-                        (LPARAM) 0);
+						(WPARAM) IDC_BTN_SEARCH, 
+						(LPARAM) 0);
 
 			HWND hJsonPathEdit = GetDlgItem(hWnd, IDC_JSONPATH);
 			
@@ -115,7 +115,7 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 	case WM_COMMAND:
 		{
 			switch (LOWORD(wParam))
-            {
+			{
 				case IDC_BTN_REFRESH:
 					refreshTree(m_hCurrScintilla);
 					break;
@@ -265,7 +265,7 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 
 	size_t jsLen, jsLenSel;
 	jsLen = ::SendMessage(m_hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
-    //if (jsLen == 0) 
+	//if (jsLen == 0) 
 	//	return;
 
 	size_t selStart = ::SendMessage(m_hCurrScintilla, SCI_GETSELECTIONSTART, 0, 0);

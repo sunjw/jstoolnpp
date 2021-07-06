@@ -43,7 +43,7 @@ LRESULT CALLBACK EditControlEx::EditControlProc(
 	EditControlEx *pEditControlEx = (EditControlEx *)(::GetWindowLongPtr(hEditControl, GWLP_USERDATA));
 
 	switch (message)
-    {
+	{
 	case WM_KEYDOWN:
 		{
 			if((::GetKeyState(VK_CONTROL) & 0xFF00) == 0xFF00)

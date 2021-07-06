@@ -48,7 +48,7 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
-        case IDCLOSE:
+		case IDCLOSE:
 		case IDCANCEL:
 			// ÷ÿ–¬∂¡»°≈‰÷√
 			LoadOption(g_nppData._nppHandle, g_struOptions);

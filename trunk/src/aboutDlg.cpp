@@ -25,10 +25,10 @@ BOOL CALLBACK dlgProcAbout(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam
 			}
 		case WM_COMMAND:
 			switch (LOWORD(wParam))
-            {
-                case IDCLOSE:
+			{
+				case IDCLOSE:
 				case IDCANCEL:
-			    {
+				{
 					::EndDialog(hwnd, 0);
 					return TRUE;
 				}

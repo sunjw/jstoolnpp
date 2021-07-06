@@ -76,6 +76,6 @@ int main(int argc, char *argv[])
 		cout << "Usage: jsonpp [--sort] [input file] [output file]" << endl;
 	}
 
-    return 0;
+	return 0;
 }
 
