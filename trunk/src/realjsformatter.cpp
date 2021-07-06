@@ -539,7 +539,9 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				}
 			}
 			else
+			{
 				++m_nIndents;
+			}
 		}
 		else if (m_tokenA.code == ")" &&
 			(m_tokenB.code == "{" || IsInlineComment(m_tokenB) || bHaveNewLine))
