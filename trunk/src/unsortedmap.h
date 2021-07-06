@@ -59,8 +59,10 @@ public:
 	iterator erase(const key_type& key)
 	{
 		typename unsorted_map::iterator itr = find(key);
-		if(itr != end())
+		if (itr != end())
+		{
 			itr = erase(itr);
+		}
 
 		return itr;
 	}
@@ -83,10 +85,12 @@ public:
 	iterator find(const key_type& key)
 	{
         typename unsorted_map::iterator itr = m_list.begin();
-        for(; itr != m_list.end(); ++itr)
+        for (; itr != m_list.end(); ++itr)
         {
-            if(key == itr->first)
-                return itr;
+			if (key == itr->first)
+			{
+				return itr;
+			}
         }
         
         return m_list.end();
@@ -95,10 +99,12 @@ public:
 	const_iterator find(const key_type& key) const
 	{
         typename unsorted_map::const_iterator itr = m_list.begin();
-        for(; itr != m_list.end(); ++itr)
+        for (; itr != m_list.end(); ++itr)
         {
-            if(key == itr->first)
-                return itr;
+			if (key == itr->first)
+			{
+				return itr;
+			}
         }
         
         return m_list.end();
@@ -108,7 +114,7 @@ public:
 	mapped_type& operator[](const key_type& key)
 	{
 		typename unsorted_map::iterator itr = find(key);
-		if(itr == m_list.end())
+		if (itr == m_list.end())
 		{
 			// 没有, 插入一个
 			m_list.push_back(pair_type(key, mapped_type()));

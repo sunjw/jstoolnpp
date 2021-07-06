@@ -39,8 +39,10 @@ using namespace std;
 template<class T>
 bool GetStackTop(const stack<T>& stk, T& ret)
 {
-	if(stk.size() == 0)
+	if (stk.size() == 0)
+	{
 		return false;
+	}
 	ret = stk.top();
 	return true;
 }
@@ -48,8 +50,10 @@ bool GetStackTop(const stack<T>& stk, T& ret)
 template<class T>
 bool StackTopEq(const stack<T>& stk, T eq)
 {
-	if(stk.size() == 0)
+	if (stk.size() == 0)
+	{
 		return false;
+	}
 	return (eq == stk.top());
 }
 
