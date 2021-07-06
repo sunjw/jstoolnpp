@@ -33,12 +33,12 @@ class JsonPPStringIO extends JsonPP.JsonParser {
 function Main() {
     //prepareEnv();
 
-    var printVersion = false;
-    var inputJSFile = "";
-    var outputJSFile = "";
-    var sortJS = false;
+    let printVersion = false;
+    let inputJSFile = "";
+    let outputJSFile = "";
+    let sortJS = false;
 
-    var argvLen = process.argv.length;
+    let argvLen = process.argv.length;
     if (argvLen == 3 && process.argv[2] == "--version") {
         printVersion = true;
     } else if (argvLen == 4) {
@@ -61,16 +61,16 @@ function Main() {
     if (printVersion) {
         log("JSFormatterJS version: " + JsonPP.VERSION);
     } else {
-        var inputJS = FileSystem.readFileSync(inputJSFile, "binary");
+        let inputJS = FileSystem.readFileSync(inputJSFile, "binary");
         inputJS = inputJS.toString();
         //log("inputJS:\n" + inputJS);
 
-        var jsonppStrIO = new JsonPPStringIO(inputJS);
+        let jsonppStrIO = new JsonPPStringIO(inputJS);
         jsonppStrIO.m_debug = true;
-        var jsonValue = new JsonPP.JsonValue();
+        let jsonValue = new JsonPP.JsonValue();
         jsonppStrIO.Go(jsonValue);
 
-        var resultJS = "";
+        let resultJS = "";
         if (!sortJS) {
             resultJS = jsonValue.ToString();
         } else {
