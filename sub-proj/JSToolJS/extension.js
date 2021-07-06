@@ -8,7 +8,7 @@ const RealJSFormatter = require("./realjsformatter.js");
 const JsonPP = require("./jsonpp.js");
 const JsonTreeView = require("./jsonpptreeview.js");
 
-var jsonTreeProvider = 0;
+let jsonTreeProvider = 0;
 
 class JSFormatStringIO extends RealJSFormatter.RealJSFormatter {
 
@@ -50,11 +50,11 @@ class JsonPPStringIO extends JsonPP.JsonParser {
 }
 
 function guessJSON(jsCode) {
-    var maybeJSON = false;
-    var charJSON = 0;
-    var jsCodeLen = jsCode.length;
-    for (var i = 0; i < jsCodeLen; ++i) {
-        var ch = jsCode.charAt(i);
+    let maybeJSON = false;
+    let charJSON = 0;
+    let jsCodeLen = jsCode.length;
+    for (let i = 0; i < jsCodeLen; ++i) {
+        let ch = jsCode.charAt(i);
         if (ch == ' ' || ch == '\t' ||
             ch == '\r' || ch == '\n') {
             continue; // Skip over whitespaces at beginning
@@ -70,8 +70,8 @@ function guessJSON(jsCode) {
         return false;
     }
 
-    for (var i = (jsCodeLen - 1); i >= 0; --i) {
-        var ch = jsCode.charAt(i);
+    for (let i = (jsCodeLen - 1); i >= 0; --i) {
+        let ch = jsCode.charAt(i);
         if (ch == ' ' || ch == '\t' ||
             ch == '\r' || ch == '\n') {
             continue; // Skip over whitespaces at the end
@@ -93,7 +93,7 @@ function makeFormatOptionFromTextEditor(textEditor) {
     let document = textEditor.document;
     let docEol = document.eol;
 
-    var formatOption = new RealJSFormatter.FormatterOption();
+    let formatOption = new RealJSFormatter.FormatterOption();
     formatOption.chIndent = editorIndentSpace ? ' ' : '\t';
     formatOption.nChPerInd = editorIndentSpace ? editorTabSize : 1;
     formatOption.eCRPut = (docEol == vscode.EndOfLine.CRLF) ? RealJSFormatter.CR_PUT.PUT_CR : RealJSFormatter.CR_PUT.NOT_PUT_CR;
@@ -109,7 +109,7 @@ function makeFormatOptionFromFormattingOptions(formatOptions, textDocument) {
 
     let docEol = textDocument.eol;
 
-    var formatOption = new RealJSFormatter.FormatterOption();
+    let formatOption = new RealJSFormatter.FormatterOption();
     formatOption.chIndent = editorIndentSpace ? ' ' : '\t';
     formatOption.nChPerInd = editorIndentSpace ? editorTabSize : 1;
     formatOption.eCRPut = (docEol == vscode.EndOfLine.CRLF) ? RealJSFormatter.CR_PUT.PUT_CR : RealJSFormatter.CR_PUT.NOT_PUT_CR;
@@ -138,7 +138,7 @@ function minJS(inNewDoc) {
             VSCUtils.replaceWithRange(editBuilder, allRange, resultJS);
 
             if (docLangId != "javascript" && docLangId != "json") {
-                var newDocLangId = "javascript";
+                let newDocLangId = "javascript";
                 if (guessJSON(resultJS)) {
                     newDocLangId = "json";
                 }
@@ -146,7 +146,7 @@ function minJS(inNewDoc) {
             }
         });
     } else {
-        var newDocLangId = "javascript";
+        let newDocLangId = "javascript";
         if (guessJSON(resultJS)) {
             newDocLangId = "json";
         }
@@ -165,11 +165,11 @@ function formatJS() {
     let document = editor.document;
     let docLangId = document.languageId;
 
-    var formatAllText = true;
-    var inputJS;
-    var currentLine;
-    var newSelRange;
-    var initIndent;
+    let formatAllText = true;
+    let inputJS;
+    let currentLine;
+    let newSelRange;
+    let initIndent;
     if (editorSelection.isEmpty) {
         inputJS = document.getText();
         currentLine = editorSelection.active.line;
@@ -188,7 +188,7 @@ function formatJS() {
 
         initIndent = "";
         let inputJSLen = inputJS.length;
-        for (var i = 0; i < inputJSLen; ++i) {
+        for (let i = 0; i < inputJSLen; ++i) {
             let ch = inputJS.charAt(i);
             if (ch != ' ' && ch != '\t') {
                 break;
@@ -200,16 +200,16 @@ function formatJS() {
     //VSCUtils.log("inputJS:\n" + inputJS);
 
     // Make format option
-    var formatOption = makeFormatOptionFromTextEditor(editor);
+    let formatOption = makeFormatOptionFromTextEditor(editor);
 
     // Format
-    var jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
+    let jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
     if (!formatAllText) {
         jsfStrIO.SetInitIndent(initIndent);
     }
     //jsfStrIO.m_debug = true;
     jsfStrIO.Go();
-    var resultJS = jsfStrIO.outputJS;
+    let resultJS = jsfStrIO.outputJS;
     let currentLineJSF = currentLine + 1;
     let formattedLineJSF = jsfStrIO.GetFormattedLine(currentLineJSF);
     if (formattedLineJSF < 1) {
@@ -235,7 +235,7 @@ function formatJS() {
         }
 
         if (formatAllText && docLangId != "javascript" && docLangId != "json") {
-            var newDocLangId = "javascript";
+            let newDocLangId = "javascript";
             if (guessJSON(resultJS)) {
                 newDocLangId = "json";
             }
@@ -254,22 +254,22 @@ function formatJS() {
 }
 
 function formatJSAsRegisterFormatter(document, options) {
-    var inputJS = document.getText();
+    let inputJS = document.getText();
     //VSCUtils.log("inputJS:\n" + inputJS);
 
     // Make format option
-    var formatOption = makeFormatOptionFromFormattingOptions(options, document);
+    let formatOption = makeFormatOptionFromFormattingOptions(options, document);
 
     // Format
-    var jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
+    let jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
     //jsfStrIO.m_debug = true;
     jsfStrIO.Go();
-    var resultJS = jsfStrIO.outputJS;
+    let resultJS = jsfStrIO.outputJS;
     //VSCUtils.log(resultJS);
 
     let allRange = VSCUtils.getAllRangeFromTextDocument(document);
 
-    var resultEdit = [];
+    let resultEdit = [];
     resultEdit.push(vscode.TextEdit.replace(allRange, resultJS));
 
     return resultEdit;
@@ -286,15 +286,15 @@ function JSONSort(inNewDoc) {
     let docLangId = document.languageId;
 
     let inputJSON = document.getText();
-    var jsonppStrIO = new JsonPPStringIO(inputJSON);
+    let jsonppStrIO = new JsonPPStringIO(inputJSON);
     //jsonppStrIO.m_debug = true;
-    var jsonValue = new JsonPP.JsonValue();
+    let jsonValue = new JsonPP.JsonValue();
     jsonppStrIO.Go(jsonValue);
     let sortedJSON = jsonValue.ToStringSorted();
 
     // format
-    var formatOption = makeFormatOptionFromTextEditor(editor);
-    var jsfStrIO = new JSFormatStringIO(sortedJSON, formatOption);
+    let formatOption = makeFormatOptionFromTextEditor(editor);
+    let jsfStrIO = new JSFormatStringIO(sortedJSON, formatOption);
     //jsfStrIO.m_debug = true;
     jsfStrIO.Go();
     sortedJSON = jsfStrIO.outputJS;
@@ -322,9 +322,9 @@ function refreshJSONTreeView() {
 
     let document = editor.document;
     let inputJSON = document.getText();
-    var jsonppStrIO = new JsonPPStringIO(inputJSON);
+    let jsonppStrIO = new JsonPPStringIO(inputJSON);
     //jsonppStrIO.m_debug = true;
-    var jsonValue = new JsonPP.JsonValue();
+    let jsonValue = new JsonPP.JsonValue();
     jsonppStrIO.Go(jsonValue);
 
     jsonTreeProvider = new JsonTreeView.JsonTreeProvider(jsonValue);
