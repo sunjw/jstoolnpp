@@ -173,9 +173,13 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 tstring JSONDialog::convertJsonStrToDialogTstr(const string& str)
 {
 	if (m_bUTF8Json)
+	{
 		return strtotstrutf8(str);
+	}
 	else
+	{
 		return strtotstr(str);
+	}
 }
 
 void JSONDialog::onShow()
@@ -220,8 +224,10 @@ Delete all items from the tree and creates the root node
 HTREEITEM JSONDialog::initTree()
 {
 	int TreeCount = TreeView_GetCount(GetDlgItem(m_hDlg, IDC_TREE_JSON));
-	if(TreeCount>0)
+	if (TreeCount > 0)
+	{
 		TreeView_DeleteAllItems(GetDlgItem(m_hDlg, IDC_TREE_JSON));
+	}
 
 	HTREEITEM root = insertTree(TEXT("ROOT"), -1, TVI_ROOT);
 	
@@ -232,7 +238,7 @@ HTREEITEM JSONDialog::insertTree(LPCTSTR text, LPARAM lparam, HTREEITEM parentNo
 {
 	TV_INSERTSTRUCT tvinsert;
 
-	if(parentNode == TVI_ROOT)
+	if (parentNode == TVI_ROOT)
 	{
 		tvinsert.hParent = NULL;
 		tvinsert.hInsertAfter = TVI_ROOT;
@@ -260,7 +266,9 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 	m_hCurrScintilla = hCurrScintilla;
 	// Rebuild JsonTree.
 	if (m_jsonTree != NULL)
+	{
 		delete m_jsonTree;
+	}
 	m_jsonTree = new JsonTree(m_hCurrScintilla, m_hDlg, m_hTree);
 
 	size_t jsLen, jsLenSel;
@@ -274,7 +282,7 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 
 	char *pJS;
 
-	if(!bFormatSel)
+	if (!bFormatSel)
 	{
 		pJS = new char[jsLen+1];
 		::SendMessage(m_hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
@@ -293,7 +301,7 @@ void JSONDialog::refreshTree(HWND hCurrScintilla)
 	m_bUTF8Json = FALSE;
 
 	int codePage = (int)::SendMessage(m_hCurrScintilla, SCI_GETCODEPAGE, 0, 0);
-	if(codePage == 65001)
+	if (codePage == 65001)
 	{
 		// UTF-8
 		m_bUTF8Json = TRUE;
@@ -322,7 +330,7 @@ void JSONDialog::drawTree(const JsonValue& jsonValue)
 	rootNode = initTree();
 
 	const JsonValue::VALUE_TYPE& valType = jsonValue.GetValueType();
-	if(valType == JsonValue::UNKNOWN_VALUE)
+	if (valType == JsonValue::UNKNOWN_VALUE)
 	{
 		::MessageBox(g_nppData._nppHandle, TEXT("Cannot parse json..."), TEXT("JSON Viewer"), MB_OK);
 		return;
@@ -337,12 +345,12 @@ void JSONDialog::insertJsonValue(const JsonValue& jsonValue, HTREEITEM node)
 {
 	JsonValue::VALUE_TYPE valType = jsonValue.GetValueType();
 	
-	if(valType == JsonValue::MAP_VALUE)
+	if (valType == JsonValue::MAP_VALUE)
 	{
 		const JsonUnsortedMap& mapValue = jsonValue.GetMapValue();
 
 		JsonUnsortedMap::const_iterator itr = mapValue.begin();
-		for(; itr != mapValue.end(); ++itr)
+		for (; itr != mapValue.end(); ++itr)
 		{
 			const string& key = itr->first;
 			const JsonValue& value = itr->second;
@@ -350,7 +358,7 @@ void JSONDialog::insertJsonValue(const JsonValue& jsonValue, HTREEITEM node)
 			insertJsonValue(key, value, node);
 		}
 	}
-	else if(valType == JsonValue::ARRAY_VALUE)
+	else if (valType == JsonValue::ARRAY_VALUE)
 	{
 		const JsonVec& arrayValue = jsonValue.GetArrayValue();
 
@@ -358,7 +366,7 @@ void JSONDialog::insertJsonValue(const JsonValue& jsonValue, HTREEITEM node)
 
 		JsonVec::const_iterator itr = arrayValue.begin();
 		JsonVec::size_type count = 0;
-		for(; itr != arrayValue.end(); ++itr, ++count)
+		for (; itr != arrayValue.end(); ++itr, ++count)
 		{
 			const JsonValue& value = *itr;
 			
@@ -377,7 +385,7 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 
 	JsonValue::VALUE_TYPE valType = jsonValue.GetValueType();
 
-	if(valType == JsonValue::UNKNOWN_VALUE ||
+	if (valType == JsonValue::UNKNOWN_VALUE ||
 		valType == JsonValue::NUMBER_VALUE ||
 		valType == JsonValue::BOOL_VALUE ||
 		valType == JsonValue::REGULAR_VALUE)
@@ -386,7 +394,7 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 		tstr.append(convertJsonStrToDialogTstr(jsonValue.GetStrValue()));
 		insertTree(tstr.c_str(), jsonValue.line, node);
 	}
-	else if(valType == JsonValue::STRING_VALUE)
+	else if (valType == JsonValue::STRING_VALUE)
 	{
 		tstr.append(TEXT(JSON_TREE_SPLITOR));
 		tstr.append(TEXT("\""));
@@ -394,15 +402,16 @@ void JSONDialog::insertJsonValue(const string& key, const JsonValue& jsonValue, 
 		tstr.append(TEXT("\""));
 		insertTree(tstr.c_str(), jsonValue.line, node);
 	}
-	if(valType == JsonValue::MAP_VALUE ||
+
+	if (valType == JsonValue::MAP_VALUE ||
 		valType == JsonValue::ARRAY_VALUE)
 	{
-		if(valType == JsonValue::MAP_VALUE)
+		if (valType == JsonValue::MAP_VALUE)
 		{
 			tstr.append(TEXT(JSON_TREE_SPLITOR));
 			tstr.append(TEXT("[Object]"));
 		}
-		if(valType == JsonValue::ARRAY_VALUE)
+		if (valType == JsonValue::ARRAY_VALUE)
 		{
 			tstr.append(TEXT(JSON_TREE_SPLITOR));
 			tstr.append(TEXT("[Array]"));
@@ -417,7 +426,9 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 {
 	LPNMHDR lpnmh = (LPNMHDR)lParam;
 	if (lpnmh->idFrom != IDC_TREE_JSON)
+	{
 		return; // Not click inside JsonTree
+	}
 
 	switch (lpnmh->code)
 	{
@@ -426,7 +437,9 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 		{
 			BOOL bRightClick = FALSE;
 			if (lpnmh->code == NM_RCLICK)
+			{
 				bRightClick = TRUE;
+			}
 
 			DWORD dwPos = GetMessagePos();
 			POINT ptScreen, ptClient;
@@ -440,7 +453,9 @@ void JSONDialog::clickJsonTree(LPARAM lParam)
 			ht.pt = ptClient;
 			HTREEITEM hItem = m_jsonTree->hitTest(&ht);
 			if (hItem == NULL)
+			{
 				return; // No hit
+			}
 
 			if (!bRightClick && (ht.flags & TVHT_ONITEMLABEL))
 			{
@@ -564,7 +579,9 @@ void JSONDialog::search()
 	}
 
 	if (htiSelected == NULL)
+	{
 		return; // Still NULL, return.
+	}
 
 	/*
 	 * Now, we have a valid "selectedItem".
@@ -592,7 +609,9 @@ void JSONDialog::contextMenuCopy(COPY_TYPE copyType)
 {
 	HTREEITEM htiSelected = m_jsonTree->getSelection();
 	if (htiSelected == NULL)
+	{
 		return;
+	}
 
 	const int bufLen = 1024;
 	TCHAR buf[bufLen] = {0};
@@ -627,7 +646,9 @@ void JSONDialog::contextMenuExpand(BOOL bExpand)
 {
 	HTREEITEM htiSelected = m_jsonTree->getSelection();
 	if (htiSelected == NULL)
+	{
 		return;
+	}
 
 	HTREEITEM htiRoot = m_jsonTree->getRoot();
 
@@ -637,10 +658,14 @@ void JSONDialog::contextMenuExpand(BOOL bExpand)
 	while (htiNext != NULL)
 	{
 		if (!(htiNext == htiRoot && !bExpand))
+		{
 			m_jsonTree->expandItem(htiNext, flag);
+		}
 		htiNext = m_jsonTree->nextItem(htiNext, htiSelected);
 	}
 
 	if (bExpand && !m_jsonTree->isItemVisible(htiSelected))
+	{
 		m_jsonTree->selectItem(htiSelected, TRUE);
+	}
 }
