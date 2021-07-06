@@ -77,7 +77,7 @@ BOOL APIENTRY DllMain(HANDLE hModule,
 			g_hInst = (HINSTANCE)hModule;
 			s_jsonDialog.init((HINSTANCE)g_hInst, g_nppData._nppHandle);
 
-			for(int i = 0; i < s_nbFunc; ++i)
+			for (int i = 0; i < s_nbFunc; ++i)
 			{
 				s_funcItem[i]._init2Check = false;
 				// If you don't need the shortcut, you have to make it NULL
@@ -234,7 +234,9 @@ static void trim(char *source)
 			source[realStart] != '\t' &&
 			source[realStart] != '\r' &&
 			source[realStart] != '\n')
+		{
 			break;
+		}
 	}
 
 	size_t copyLen = len + 1;
@@ -255,7 +257,9 @@ static bool guessJson(const string& jsCode)
 		char ch = jsCode[i];
 		if (ch == ' ' || ch == '\t' ||
 			ch == '\r' || ch == '\n')
+		{
 			continue; // Skip over whitespaces at beginning
+		}
 		if (ch == '{' || ch == '[')
 		{
 			maybeJson = true;
@@ -265,7 +269,9 @@ static bool guessJson(const string& jsCode)
 	}
 
 	if (!maybeJson)
+	{
 		return false;
+	}
 
 	long long llCodeLen = jsCodeLen;
 	for (long long i = llCodeLen - 1; i >= 0; --i)
@@ -273,10 +279,14 @@ static bool guessJson(const string& jsCode)
 		char ch = jsCode[i];
 		if (ch == ' ' || ch == '\t' ||
 			ch == '\r' || ch == '\n')
+		{
 			continue; // Skip over whitespaces at the end
+		}
 		if ((charJson == '{' && ch == '}') ||
 			(charJson == '[' && ch == ']'))
+		{
 			return true;
+		}
 
 		break;
 	}
@@ -307,7 +317,9 @@ static void jsMin(bool bNewFile)
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
 	if (jsLen == 0)
+	{
 		return;
+	}
 
 	//::SendMessage(hCurrScintilla, SCI_SETSEL, 0, jsLen);
 
@@ -344,7 +356,7 @@ static void jsMin(bool bNewFile)
 
 		trim((char *)pJSMin);
 
-		if(bNewFile)
+		if (bNewFile)
 		{
 			// Open a new document
 			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_FILE_NEW);
@@ -358,7 +370,9 @@ static void jsMin(bool bNewFile)
 		// Set file's language
 		int newIdmLang = IDM_LANG_JS;
 		if (guessJson(string((char *)pJSMin)))
+		{
 			newIdmLang = IDM_LANG_JSON;
+		}
 		::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, newIdmLang);
 	}
 	catch(runtime_error ex)
@@ -384,8 +398,10 @@ void jsMinNew()
 static void makeFormatOption(HWND hCurrScintilla, FormatterOption *pFormatterOption)
 {
 	int _nChPerInd = g_struOptions.nChPerInd;
-	if(g_struOptions.chIndent == '\t')
+	if (g_struOptions.chIndent == '\t')
+	{
 		_nChPerInd = 1;
+	}
 
 	CR_PUT _eCRPut = PUT_CR;
 	int _nPutCR = g_struOptions.nPutCR;
@@ -420,7 +436,9 @@ void jsFormat()
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);
 	if (jsLen == 0)
+	{
 		return;
+	}
 
 	size_t selStart = ::SendMessage(hCurrScintilla, SCI_GETSELECTIONSTART, 0, 0);
 	size_t selEnd = ::SendMessage(hCurrScintilla, SCI_GETSELECTIONEND, 0, 0);
@@ -433,7 +451,7 @@ void jsFormat()
 	int currentPos;
 	int line;
 
-	if(!bFormatSel)
+	if (!bFormatSel)
 	{
 		// 格式化全部
 		pJS = new char[jsLen+1];
@@ -447,20 +465,24 @@ void jsFormat()
 		// 格式化选中部分
 		char testChar;
 		// 找行头
-		while(selStart > 0)
+		while (selStart > 0)
 		{
 			testChar = (char)::SendMessage(hCurrScintilla, SCI_GETCHARAT, selStart - 1, 0);
-			if(testChar == '\r' || testChar == '\n')
+			if (testChar == '\r' || testChar == '\n')
+			{
 				break;
+			}
 
 			--selStart;
 		}
 		// 找行尾
-		while(selEnd < jsLen)
+		while (selEnd < jsLen)
 		{
 			testChar = (char)::SendMessage(hCurrScintilla, SCI_GETCHARAT, selEnd, 0);
-			if(testChar == '\r' || testChar == '\n')
+			if (testChar == '\r' || testChar == '\n')
+			{
 				break;
+			}
 
 			++selEnd;
 		}
@@ -475,11 +497,13 @@ void jsFormat()
 		::SendMessage(hCurrScintilla, SCI_GETSELTEXT, jsLen, (LPARAM)pJS);
 
 		// 得到 Initial Indent
-		for(size_t i = 0; i < jsLenSel; ++i)
+		for (size_t i = 0; i < jsLenSel; ++i)
 		{
 			testChar = pJS[i];
-			if(testChar != ' ' && testChar != '\t')
+			if (testChar != ' ' && testChar != '\t')
+			{
 				break;
+			}
 			initIndent += testChar;
 		}
 	}
@@ -491,16 +515,20 @@ void jsFormat()
 
 		string strJSFormat;
 		JSFormatString jsformat(pJS, &strJSFormat, formatterOption);
-		if(bFormatSel)
+		if (bFormatSel)
+		{
 			jsformat.SetInitIndent(initIndent);
+		}
 		jsformat.Go();
 
-		if(!bFormatSel)
+		if (!bFormatSel)
 		{
 			::SendMessage(hCurrScintilla, SCI_SETTEXT, 0, (LPARAM)(strJSFormat.c_str()));
 			int newIdmLang = IDM_LANG_JS;
 			if (guessJson(strJSFormat))
+			{
 				newIdmLang = IDM_LANG_JSON;
+			}
 			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, newIdmLang);
 
 			// line starts from 0, lineFixed starts from 1
@@ -516,16 +544,20 @@ void jsFormat()
 		else
 		{
 			// 清理多出来的换行
-			if((strJSFormat.length() >= 2) && strJSFormat[strJSFormat.length() - 2] == '\r')
+			if ((strJSFormat.length() >= 2) && strJSFormat[strJSFormat.length() - 2] == '\r')
+			{
 				strJSFormat = strJSFormat.substr(0, strJSFormat.length() - 2);
+			}
 			else
+			{
 				strJSFormat = strJSFormat.substr(0, strJSFormat.length() - 1);
+			}
 			
 			::SendMessage(hCurrScintilla, SCI_REPLACESEL, 0, (LPARAM)strJSFormat.c_str());
 			::SendMessage(hCurrScintilla, SCI_SETCURRENTPOS, selStart, 0);
 		}
 	}
-	catch(exception ex)
+	catch (exception ex)
 	{
 		::MessageBox(g_nppData._nppHandle, TEXT("ERROR"), TEXT("JSFormat"), MB_OK);
 	}
@@ -541,7 +573,9 @@ static void jsonSort(bool bNewFile)
 
 	size_t jsLen = ::SendMessage(hCurrScintilla, SCI_GETTEXTLENGTH, 0, 0);;
 	if (jsLen == 0)
+	{
 		return;
+	}
 
 	//::SendMessage(hCurrScintilla, SCI_SETSEL, 0, jsLen);
 
@@ -571,7 +605,7 @@ static void jsonSort(bool bNewFile)
 
 		const char *pJsonSortedFormat = strJSFormat.c_str();
 
-		if(bNewFile)
+		if (bNewFile)
 		{
 			// Open a new document
 			::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_FILE_NEW);
@@ -585,7 +619,7 @@ static void jsonSort(bool bNewFile)
 		// Set file's language
 		::SendMessage(g_nppData._nppHandle, NPPM_MENUCOMMAND, 0, IDM_LANG_JSON);
 	}
-	catch(runtime_error ex)
+	catch (runtime_error ex)
 	{
 		::MessageBox(g_nppData._nppHandle, TEXT("ERROR"), TEXT("JSON Sort"), MB_OK);
 		//cout << "Error: " << ex.what() << endl;
@@ -698,7 +732,9 @@ static void changeUpdateMenuString(LPTSTR pszString)
 static int readInternetString(LPCTSTR pszUrl, tstring *tstrResp)
 {
 	if (pszUrl == NULL || tstrResp == NULL)
+	{
 		return -1;
+	}
 
 	HINTERNET hInternet = NULL;
 	hInternet = ::InternetOpen(TEXT("JSToolNpp"), NULL, NULL, NULL, NULL);
@@ -719,10 +755,14 @@ static int readInternetString(LPCTSTR pszUrl, tstring *tstrResp)
 	do
 	{
 		if (!::InternetReadFile(hConnect, buffer, 1024, &dwSizeOut))
+		{
 			break;
+		}
 
 		if (dwSizeOut == 0)
+		{
 			break;
+		}
 
 		tstring tstrTmp = strtotstr(string(buffer));
 		tstrResp->append(tstrTmp);
@@ -738,7 +778,9 @@ static int readInternetString(LPCTSTR pszUrl, tstring *tstrResp)
 static void splitVersionToArray(const string& strVersion, int *versionArray)
 {
 	if (versionArray == NULL)
+	{
 		return;
+	}
 
 	size_t startIdx = 0;
 	for (int i = 0; i < 4; ++i)
@@ -758,7 +800,9 @@ static void splitVersionToArray(const string& strVersion, int *versionArray)
 		versionArray[i] = atoi(strSubver.c_str());
 
 		if (findIdx == string::npos)
+		{
 			break;
+		}
 
 		startIdx = findIdx + 1;
 	}
