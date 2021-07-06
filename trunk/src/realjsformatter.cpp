@@ -116,14 +116,18 @@ void RealJSFormatter::PrintAdditionalDebug(string& strDebugOutput)
 
 int RealJSFormatter::GetFormattedLine(int originalLine)
 {
-	if(originalLine <= 0 || m_lineFormattedVec.size() <= (size_t)originalLine)
+	if (originalLine <= 0 || m_lineFormattedVec.size() <= (size_t)originalLine)
+	{
 		return -1;
+	}
 
-	for(int l = originalLine; l > 0; --l)
+	for (int l = originalLine; l > 0; --l)
 	{
 		int formattedLine = m_lineFormattedVec[l];
-		if(formattedLine != -1)
+		if (formattedLine != -1)
+		{
 			return formattedLine;
+		}
 	}
 
 	return -1;
@@ -133,19 +137,19 @@ void RealJSFormatter::ProcessQuote(Token& token)
 {
 	char chFirst = token.code[0];
 	char chLast = token.code[token.code.length() - 1];
-	if(token.type == STRING_TYPE && 
+	if (token.type == STRING_TYPE &&
 		((chFirst == '"' && chLast == '"') ||
 		(chFirst == '\'' && chLast == '\'')))
 	{
 		string tokenNewCode;
 		string tokenLine;
 		size_t tokenLen = token.code.length();
-		for(size_t i = 0; i < tokenLen; ++i)
+		for (size_t i = 0; i < tokenLen; ++i)
 		{
 			char ch = token.code[i];
 			tokenLine += ch;
 
-			if(ch == '\n' || i == (tokenLen - 1))
+			if (ch == '\n' || i == (tokenLen - 1))
 			{
 				tokenNewCode.append(TrimSpace(tokenLine));
 				tokenLine = "";
@@ -162,25 +166,29 @@ void RealJSFormatter::PutToken(const Token& token,
 {
 	// debug
 	/*size_t length = token.size();
-	for(size_t i = 0; i < length; ++i)
+	for (size_t i = 0; i < length; ++i)
+	{
 		PutChar(token[i]);
+	}
 	PutChar('\n');*/
 	// debug
 	PutString(leftStyle);
 	PutString(token);
 	PutString(rightStyle);
-	if(!(m_bCommentPut && m_bNewLine))
+	if (!(m_bCommentPut && m_bNewLine))
+	{
 		m_bCommentPut = false; // 这个一定会发生在注释之后的任何输出后面
+	}
 }
 
 void RealJSFormatter::PutString(const Token& token)
 {
 	size_t length = token.code.size();
 	//char topStack = m_blockStack.top();
-	for(size_t i = 0; i < length; ++i)
+	for (size_t i = 0; i < length; ++i)
 	{
-		if(m_bNewLine && (m_bCommentPut || 
-			((m_struOption.eBracNL == NEWLINE_BRAC || token.code[i] != '{') && 
+		if (m_bNewLine && (m_bCommentPut ||
+			((m_struOption.eBracNL == NEWLINE_BRAC || token.code[i] != '{') &&
 			token.code[i] != ',' && token.code[i] != ';' && !IsInlineComment(token))))
 		{
 			// 换行后面不是紧跟着 {,; 才真正换
@@ -191,19 +199,25 @@ void RealJSFormatter::PutString(const Token& token)
 			m_bNewLine = false;
 			m_nIndents = m_nIndents < 0 ? 0 : m_nIndents; // 出错修正
 			m_nLineIndents = m_nIndents;
-			if(token.code[i] == '{' || token.code[i] == ',' || token.code[i] == ';') // 行结尾是注释, 使得{,;不得不换行
+			if (token.code[i] == '{' || token.code[i] == ',' || token.code[i] == ';') // 行结尾是注释, 使得{,;不得不换行
+			{
 				--m_nLineIndents;
+			}
 		}
 
-		if(m_bNewLine && !m_bCommentPut &&
-			((m_struOption.eBracNL == NO_NEWLINE_BRAC && token.code[i] == '{') || 
-			token.code[i] == ',' || token.code[i] == ';' || IsInlineComment(token)))
+		if (m_bNewLine && !m_bCommentPut &&
+			((m_struOption.eBracNL == NO_NEWLINE_BRAC && token.code[i] == '{') ||
+				token.code[i] == ',' || token.code[i] == ';' || IsInlineComment(token)))
+		{
 			m_bNewLine = false;
+		}
 
-		if(m_lineBuffer.length() == 0 && m_bTemplatePut)
+		if (m_lineBuffer.length() == 0 && m_bTemplatePut)
+		{
 			m_bLineTemplate = true;
+		}
 
-		if(token.code[i] == '\n')
+		if (token.code[i] == '\n')
 		{
 			m_bNewLine = true;
 		}
@@ -211,8 +225,10 @@ void RealJSFormatter::PutString(const Token& token)
 		{
 			m_lineBuffer += token.code[i];
 			int tokenLine = (int)token.line;
-			if(tokenLine != -1)
+			if (tokenLine != -1)
+			{
 				m_lineWaitVec.push_back(tokenLine);
+			}
 		}
 	}
 }
@@ -232,92 +248,116 @@ void RealJSFormatter::PutLineBuffer()
 {
 	// Map original line count to formatted line count
 	size_t i = 0;
-	while(1)
+	while (1)
 	{
-		if(i >= m_lineWaitVec.size())
+		if (i >= m_lineWaitVec.size())
 		{
 			m_lineWaitVec.clear();
 			break;
 		}
 
 		int oldLine = m_lineWaitVec[i];
-		if((size_t)oldLine >= m_lineFormattedVec.size())
+		if ((size_t)oldLine >= m_lineFormattedVec.size())
 		{
 			m_lineFormattedVec.resize(m_lineFormattedVec.size()*2, -1);
 			continue;
 		}
 
-		if(m_lineFormattedVec[oldLine] == -1)
+		if (m_lineFormattedVec[oldLine] == -1)
+		{
 			m_lineFormattedVec[oldLine] = m_nFormattedLineCount;
+		}
 		++i;
 	}
 
 	string line;
-	if(m_bLineTemplate && m_bTemplatePut)
+	if (m_bLineTemplate && m_bTemplatePut)
+	{
 		line.append(m_lineBuffer); // 原样输出 Template String
+	}
 	else
+	{
 		line.append(TrimRightSpace(m_lineBuffer));
+	}
 	
-	if((!m_bLineTemplate || (m_bTemplatePut && m_lineBuffer[0] == '`')) && 
+	if ((!m_bLineTemplate || (m_bTemplatePut && m_lineBuffer[0] == '`')) &&
 		(line != "" || m_struOption.eEmpytIndent == INDENT_IN_EMPTYLINE)) // Fix "JSLint unexpect space" bug
 	{
-		for(size_t i = 0; i < m_initIndent.length(); ++i)
+		for (size_t i = 0; i < m_initIndent.length(); ++i)
+		{
 			PutChar(m_initIndent[i]); // 先输出预缩进
+		}
 
-		for(int c = 0; c < m_nLineIndents; ++c)
-			for(int c2 = 0; c2 < m_struOption.nChPerInd; ++c2)
+		for (int c = 0; c < m_nLineIndents; ++c)
+		{
+			for (int c2 = 0; c2 < m_struOption.nChPerInd; ++c2)
+			{
 				PutChar(m_struOption.chIndent); // 输出缩进
+			}
+		}
 	}
 	
 	// 加上换行
-	if(m_struOption.eCRPut == PUT_CR)
+	if (m_struOption.eCRPut == PUT_CR)
+	{
 		line.append("\r"); //PutChar('\r');
+	}
 	line.append("\n"); //PutChar('\n');
 
 	// 输出 line
-	for(size_t i = 0; i < line.length(); ++i)
+	for (size_t i = 0; i < line.length(); ++i)
 	{
 		int ch = line[i];
 		PutChar(ch);
-		if(ch == '\n')
+		if (ch == '\n')
+		{
 			++m_nFormattedLineCount;
+		}
 	}
 }
 
 void RealJSFormatter::PopMultiBlock(char previousStackTop)
 {
-	if(m_tokenB.code == ";") // 如果 m_tokenB 是 ;, 弹出多个块的任务留给它
+	if (m_tokenB.code == ";") // 如果 m_tokenB 是 ;, 弹出多个块的任务留给它
+	{
 		return;
+	}
 
-	if(!((previousStackTop == JS_IF && m_tokenB.code == "else") ||
+	if (!((previousStackTop == JS_IF && m_tokenB.code == "else") ||
 		(previousStackTop == JS_DO && m_tokenB.code == "while") ||
 		(previousStackTop == JS_TRY && m_tokenB.code == "catch")))
 	{
 		char topStack;
-		if(!GetStackTop(m_blockStack, topStack))
+		if (!GetStackTop(m_blockStack, topStack))
+		{
 			return;
+		}
 		// ; 还可能可能结束多个 if, do, while, for, try, catch
-		while(topStack == JS_IF || topStack == JS_FOR || topStack == JS_WHILE ||
+		while (topStack == JS_IF || topStack == JS_FOR || topStack == JS_WHILE ||
 			topStack == JS_DO || topStack == JS_ELSE || topStack == JS_TRY || topStack == JS_CATCH)
 		{
-			if(topStack == JS_IF || topStack == JS_FOR ||
+			if (topStack == JS_IF || topStack == JS_FOR ||
 				topStack == JS_WHILE || topStack == JS_CATCH ||
 				topStack == JS_ELSE || topStack == JS_TRY)
 			{
 				m_blockStack.pop();
 				--m_nIndents;
 			}
-			else if(topStack == JS_DO)
+			else if (topStack == JS_DO)
 			{
 				--m_nIndents;
 			}
 
-			if((topStack == JS_IF && m_tokenB.code == "else") ||
+			if ((topStack == JS_IF && m_tokenB.code == "else") ||
 				(topStack == JS_DO /*&& m_tokenB.code == "while"*/) ||
 				(topStack == JS_TRY && m_tokenB.code == "catch"))
+			{
 				break; // 直到刚刚结束一个 if...else, do..., try...catch
-			if(!GetStackTop(m_blockStack, topStack))
+			}
+			if (!GetStackTop(m_blockStack, topStack))
+			{
 				break;
+			}
 		}
 	}
 }
@@ -333,19 +373,25 @@ void RealJSFormatter::Go()
 
 	StartParse();
 
-	while(GetToken())
+	while (GetToken())
 	{
 		bHaveNewLine = false; // bHaveNewLine 表示后面将要换行, m_bNewLine 表示已经换行了
 		tokenAFirst = m_tokenA.code[0];
 		tokenBFirst = m_tokenB.code.size() ? m_tokenB.code[0] : 0;
-		if(tokenBFirst == '\r')
+		if (tokenBFirst == '\r')
+		{
 			tokenBFirst = '\n';
-		if(tokenBFirst == '\n' || m_tokenB.type == COMMENT_TYPE_1)
+		}
+		if (tokenBFirst == '\n' || m_tokenB.type == COMMENT_TYPE_1)
+		{
 			bHaveNewLine = true;
+		}
 
-		if(!m_bBlockStmt && m_tokenA.code != "{" && m_tokenA.code != "\n"
+		if (!m_bBlockStmt && m_tokenA.code != "{" && m_tokenA.code != "\n"
 			&& m_tokenA.type != COMMENT_TYPE_1 && m_tokenA.type != COMMENT_TYPE_2)
+		{
 			m_bBlockStmt = true;
+		}
 
 		bool bCommentInline = false;
 
@@ -355,26 +401,28 @@ void RealJSFormatter::Go()
 		 * 下一次循环时自动会用 m_tokenB 覆盖 m_tokenA
 		 */
 		//PutToken(m_tokenA);
-		switch(m_tokenA.type)
+		switch (m_tokenA.type)
 		{
 		case REGULAR_TYPE:
 			PutToken(m_tokenA); // 正则表达式直接输出, 前后没有任何样式
 			break;
 		case COMMENT_TYPE_1:
 		case COMMENT_TYPE_2:
-			if(m_tokenA.code[1] == '*')
+			if (m_tokenA.code[1] == '*')
 			{
 				// 多行注释
-				if(!bHaveNewLine)
+				if (!bHaveNewLine)
 				{
-					if(IsInlineComment(m_tokenA))
+					if (IsInlineComment(m_tokenA))
+					{
 						bCommentInline = true;
+					}
 
-					if(!bCommentInline)
+					if (!bCommentInline)
 					{
 						PutToken(m_tokenA, string(""), string("\n")); // 需要换行
 					}
-					else if(m_tokenB.type != OPER_TYPE || m_tokenB.code == "{") // { 依靠前一个 token 提供空格
+					else if (m_tokenB.type != OPER_TYPE || m_tokenB.code == "{") // { 依靠前一个 token 提供空格
 					{
 						PutToken(m_tokenA, string(""), string(" ")); // 不需要换行
 					}
@@ -395,8 +443,10 @@ void RealJSFormatter::Go()
 			}
 
 			// 内联注释就当作没有注释, 透明的
-			if(!bCommentInline)
+			if (!bCommentInline)
+			{
 				m_bCommentPut = true;
+			}
 
 			break;
 		case OPER_TYPE:
@@ -409,10 +459,14 @@ void RealJSFormatter::Go()
 		}
 	}
 
-	if(!m_bLineTemplate)
+	if (!m_bLineTemplate)
+	{
 		m_lineBuffer = Trim(m_lineBuffer);
-	if(m_lineBuffer.length())
+	}
+	if (m_lineBuffer.length())
+	{
 		PutLineBuffer();
+	}
 
 	EndParse();
 }
@@ -423,49 +477,55 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 	GetStackTop(m_blockStack, topStack);
 	string strRight(" ");
 
-	if(m_tokenA.code == "(" || m_tokenA.code == ")" ||
+	if (m_tokenA.code == "(" || m_tokenA.code == ")" ||
 		m_tokenA.code == "[" || m_tokenA.code == "]" ||
 		m_tokenA.code == "!" || m_tokenA.code == "!!" ||
 		m_tokenA.code == "~" || m_tokenA.code == ".")
 	{
 		// ()[]!. 都是前后没有样式的运算符
-		if((m_tokenA.code == ")" || m_tokenA.code == "]") &&
+		if ((m_tokenA.code == ")" || m_tokenA.code == "]") &&
 			(topStack == JS_ASSIGN || topStack == JS_HELPER))
 		{
-			if(topStack == JS_ASSIGN)
+			if (topStack == JS_ASSIGN)
+			{
 				--m_nIndents;
+			}
 			m_blockStack.pop();
 		}
 		GetStackTop(m_blockStack, topStack);
-		if((m_tokenA.code == ")" && topStack == JS_BRACKET) ||
+		if ((m_tokenA.code == ")" && topStack == JS_BRACKET) ||
 			(m_tokenA.code == "]" && topStack == JS_SQUARE))
 		{
 			// )] 需要弹栈, 减少缩进
 			m_blockStack.pop();
 			--m_nIndents;
 			GetStackTop(m_blockStack, topStack);
-			if(topStack == JS_ASSIGN || topStack == JS_HELPER)
+			if (topStack == JS_ASSIGN || topStack == JS_HELPER)
+			{
 				m_blockStack.pop();
+			}
 		}
 
 		GetStackTop(m_blockStack, topStack);
-		if(m_tokenA.code == ")" && !m_brcNeedStack.top() &&
+		if (m_tokenA.code == ")" && !m_brcNeedStack.top() &&
 			(topStack == JS_IF || topStack == JS_FOR || topStack == JS_WHILE ||
 			topStack == JS_SWITCH || topStack == JS_CATCH))
 		{
 			// 栈顶的 if, for, while, switch, catch 正在等待 ), 之后换行增加缩进
 			// 这里的空格和下面的空格是留给 { 的, m_bNLBracket 为 true 则不需要空格了
 			string rightDeco = m_tokenB.code != ";" ? strRight : "";
-			if(!bHaveNewLine)
+			if (!bHaveNewLine)
+			{
 				rightDeco.append("\n");
+			}
 			PutToken(m_tokenA, string(""), rightDeco);
 			//bBracket = true;
 			m_brcNeedStack.pop();
 			m_bBlockStmt = false; // 等待 statment
-			if(StackTopEq(m_blockStack, JS_WHILE))
+			if (StackTopEq(m_blockStack, JS_WHILE))
 			{
 				m_blockStack.pop();
-				if(StackTopEq(m_blockStack, JS_DO))
+				if (StackTopEq(m_blockStack, JS_DO))
 				{
 					// 结束 do...while
 					m_blockStack.pop();
@@ -481,22 +541,30 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			else
 				++m_nIndents;
 		}
-		else if(m_tokenA.code == ")" && 
+		else if (m_tokenA.code == ")" &&
 			(m_tokenB.code == "{" || IsInlineComment(m_tokenB) || bHaveNewLine))
+		{
 			PutToken(m_tokenA, string(""), strRight); // { 或者/**/或者换行之前留个空格
+		}
 		else
+		{
 			PutToken(m_tokenA); // 正常输出
+		}
 
-		if(m_tokenA.code == "(" || m_tokenA.code == "[")
+		if (m_tokenA.code == "(" || m_tokenA.code == "[")
 		{
 			// ([ 入栈, 增加缩进
 			GetStackTop(m_blockStack, topStack);
-			if(topStack == JS_ASSIGN)
+			if (topStack == JS_ASSIGN)
 			{
-				if(!m_bAssign)
+				if (!m_bAssign)
+				{
 					--m_nIndents;
+				}
 				else
+				{
 					m_blockStack.push(JS_HELPER);
+				}
 			}
 			m_blockStack.push(m_blockMap[m_tokenA.code]);
 			++m_nIndents;
@@ -505,10 +573,10 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		return;
 	}
 
-	if(m_tokenA.code == ";")
+	if (m_tokenA.code == ";")
 	{
 		GetStackTop(m_blockStack, topStack);
-		if(topStack == JS_ASSIGN)
+		if (topStack == JS_ASSIGN)
 		{
 			--m_nIndents;
 			m_blockStack.pop();
@@ -517,7 +585,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		GetStackTop(m_blockStack, topStack);
 
 		// ; 结束 if, else, while, for, try, catch
-		if(topStack == JS_IF || topStack == JS_FOR ||
+		if (topStack == JS_IF || topStack == JS_FOR ||
 			topStack == JS_WHILE || topStack == JS_CATCH)
 		{
 			m_blockStack.pop();
@@ -525,13 +593,13 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			// 下面的 } 有同样的处理
 			PopMultiBlock(topStack);
 		}
-		if(topStack == JS_ELSE || topStack == JS_TRY)
+		if (topStack == JS_ELSE || topStack == JS_TRY)
 		{
 			m_blockStack.pop();
 			--m_nIndents;
 			PopMultiBlock(topStack);
 		}
-		if(topStack == JS_DO)
+		if (topStack == JS_DO)
 		{
 			--m_nIndents;
 			PopMultiBlock(topStack);
@@ -540,42 +608,52 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		// 对于 do{} 也一样
 
 		GetStackTop(m_blockStack, topStack);
-		if(topStack != JS_BRACKET && !bHaveNewLine && !IsInlineComment(m_tokenB))
+		if (topStack != JS_BRACKET && !bHaveNewLine && !IsInlineComment(m_tokenB))
+		{
 			PutToken(m_tokenA, string(""), strRight.append("\n")); // 如果不是 () 里的 ; 就换行
-		else if(topStack == JS_BRACKET || m_tokenB.type == COMMENT_TYPE_1 ||
+		}
+		else if (topStack == JS_BRACKET || m_tokenB.type == COMMENT_TYPE_1 ||
 			IsInlineComment(m_tokenB))
+		{
 			PutToken(m_tokenA, string(""), strRight); // (; ) 空格
+		}
 		else
+		{
 			PutToken(m_tokenA);
+		}
 
 		return; // ;
 	}
 
-	if(m_tokenA.code == ",")
+	if (m_tokenA.code == ",")
 	{
-		if(StackTopEq(m_blockStack, JS_ASSIGN))
+		if (StackTopEq(m_blockStack, JS_ASSIGN))
 		{
 			--m_nIndents;
 			m_blockStack.pop();
 		}
-		if(StackTopEq(m_blockStack, JS_BLOCK) && !bHaveNewLine)
+		if (StackTopEq(m_blockStack, JS_BLOCK) && !bHaveNewLine)
+		{
 			PutToken(m_tokenA, string(""), strRight.append("\n")); // 如果是 {} 里的
+		}
 		else
+		{
 			PutToken(m_tokenA, string(""), strRight);
+		}
 
 		return; // ,
 	}
 
-	if(m_tokenA.code == "{")
+	if (m_tokenA.code == "{")
 	{
 		GetStackTop(m_blockStack, topStack);
-		if(topStack == JS_IF || topStack == JS_FOR ||
+		if (topStack == JS_IF || topStack == JS_FOR ||
 			topStack == JS_WHILE || topStack == JS_DO ||
 			topStack == JS_ELSE || topStack == JS_SWITCH ||
 			topStack == JS_TRY || topStack == JS_CATCH ||
 			topStack == JS_ASSIGN)
 		{
-			if(!m_bBlockStmt || topStack == JS_ASSIGN)//(topStack == JS_ASSIGN && !m_bAssign))
+			if (!m_bBlockStmt || topStack == JS_ASSIGN)//(topStack == JS_ASSIGN && !m_bAssign))
 			{
 				//m_blockStack.pop(); // 不把那个弹出来, 遇到 } 时一起弹
 				--m_nIndents;
@@ -590,13 +668,13 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		// 修正({...}) 中多一次缩进
 		bool bPrevFunc = (topStack == JS_FUNCTION);
 		char fixTopStack = topStack;
-		if(bPrevFunc)
+		if (bPrevFunc)
 		{
 			m_blockStack.pop(); // 弹掉 JS_FUNCTION
 			GetStackTop(m_blockStack, fixTopStack);
 		}
 
-		if(fixTopStack == JS_BRACKET)
+		if (fixTopStack == JS_BRACKET)
 		{
 			--m_nIndents; // ({ 减掉一个缩进
 			m_blockStack.pop();
@@ -620,7 +698,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			GetStackTop(m_blockStack, fixTopStack);
 		}
 
-		if(bPrevFunc)
+		if (bPrevFunc)
 		{
 			m_blockStack.push(JS_FUNCTION); // 压回 JS_FUNCTION
 		}
@@ -634,11 +712,11 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		 * 这是为了解决 { 在新行时, 前面会多一个空格的问题
 		 * 因为算法只能向后, 不能向前看
 		 */
-		if(m_tokenB.code == "}")
+		if (m_tokenB.code == "}")
 		{
 			// 空 {}
 			m_bEmptyBracket = true;
-			if(m_bNewLine == false && m_struOption.eBracNL == NEWLINE_BRAC &&
+			if (m_bNewLine == false && m_struOption.eBracNL == NEWLINE_BRAC &&
 				(topStack == JS_IF || topStack == JS_FOR ||
 				topStack == JS_WHILE || topStack == JS_SWITCH ||
 				topStack == JS_CATCH || topStack == JS_FUNCTION))
@@ -653,27 +731,33 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		else
 		{
 			string strLeft = (m_struOption.eBracNL == NEWLINE_BRAC && !m_bNewLine) ? string("\n") : string("");
-			if(!bHaveNewLine && !IsInlineComment(m_tokenB)) // 需要换行
+			if (!bHaveNewLine && !IsInlineComment(m_tokenB)) // 需要换行
+			{
 				PutToken(m_tokenA, strLeft, strRight.append("\n"));
+			}
 			else
+			{
 				PutToken(m_tokenA, strLeft, strRight);
+			}
 		}
 
 		return; // {
 	}
 
-	if(m_tokenA.code == "}")
+	if (m_tokenA.code == "}")
 	{
 		// 激进的策略, } 一直弹到 {
 		// 这样做至少可以使得 {} 之后是正确的
-		while(GetStackTop(m_blockStack, topStack))
+		while (GetStackTop(m_blockStack, topStack))
 		{
-			if(topStack == JS_BLOCK)
+			if (topStack == JS_BLOCK)
+			{
 				break;
+			}
 
 			m_blockStack.pop();
 
-			switch(topStack)
+			switch (topStack)
 			{
 			case JS_IF:
 			case JS_FOR:
@@ -690,20 +774,22 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				break;
 			}
 
-			/*if(!GetStackTop(m_blockStack, topStack))
-				break;*/
+			/*if (!GetStackTop(m_blockStack, topStack))
+			{
+				break;
+			}*/
 		}
 
-		if(topStack == JS_BLOCK)
+		if (topStack == JS_BLOCK)
 		{
 			// 弹栈, 减小缩进
 			m_blockStack.pop();
 			--m_nIndents;
 			bool bGetTop = GetStackTop(m_blockStack, topStack);
 
-			if(bGetTop)
+			if (bGetTop)
 			{
-				switch(topStack)
+				switch (topStack)
 				{
 				case JS_IF:
 				case JS_FOR:
@@ -725,30 +811,34 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 
 		string leftStyle("");
-		if(!m_bNewLine)
+		if (!m_bNewLine)
+		{
 			leftStyle = "\n";
-		if(m_bEmptyBracket)
+		}
+		if (m_bEmptyBracket)
 		{
 			leftStyle = "";
 			strRight.append("\n");
 			m_bEmptyBracket = false;
 		}
 
-		if((!bHaveNewLine && 
+		if ((!bHaveNewLine &&
 			m_tokenB.code != ";" && m_tokenB.code != "," && m_tokenB.code != "=" &&
-			!IsInlineComment(m_tokenB)) && 
-			(m_struOption.eBracNL == NEWLINE_BRAC || 
+			!IsInlineComment(m_tokenB)) &&
+			(m_struOption.eBracNL == NEWLINE_BRAC ||
 			!((topStack == JS_DO && m_tokenB.code == "while") ||
 			(topStack == JS_IF && m_tokenB.code == "else") ||
 			(topStack == JS_TRY && m_tokenB.code == "catch") ||
 			m_tokenB.code == ")")))
 		{
-			if(strRight.length() == 0 || strRight[strRight.length() - 1] != '\n')
+			if (strRight.length() == 0 || strRight[strRight.length() - 1] != '\n')
+			{
 				strRight.append("\n"); // 一些情况换行, 不要重复换行
+			}
 
 			PutToken(m_tokenA, leftStyle, strRight);
 		}
-		else if(m_tokenB.type == STRING_TYPE || 
+		else if (m_tokenB.type == STRING_TYPE ||
 			m_tokenB.type == COMMENT_TYPE_1 ||
 			IsInlineComment(m_tokenB))
 		{
@@ -763,7 +853,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		//char tmpTopStack;
 		//GetStackTop(m_blockStack, tmpTopStack);
 		// 修正({...}) 中多一次缩进
-		if(topStack != JS_ASSIGN && StackTopEq(m_blockStack, JS_BRACKET))
+		if (topStack != JS_ASSIGN && StackTopEq(m_blockStack, JS_BRACKET))
 		{
 			int prevIndent = m_nIndents;
 			bool bIndentFix = (m_indentFixSet.find(prevIndent) != m_indentFixSet.end());
@@ -785,49 +875,55 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		return; // }
 	}
 
-	if(m_tokenA.code == "++" || m_tokenA.code == "--" ||
+	if (m_tokenA.code == "++" || m_tokenA.code == "--" ||
 		m_tokenA.code == "\n" || m_tokenA.code == "\r\n")
 	{
 		PutToken(m_tokenA);
 		return;
 	}
 
-	if(m_tokenA.code == ":" && StackTopEq(m_blockStack, JS_CASE))
+	if (m_tokenA.code == ":" && StackTopEq(m_blockStack, JS_CASE))
 	{
 		// case, default
-		if(!bHaveNewLine)
+		if (!bHaveNewLine)
+		{
 			PutToken(m_tokenA, string(""), strRight.append("\n"));
+		}
 		else
+		{
 			PutToken(m_tokenA, string(""), strRight);
+		}
 		m_blockStack.pop();
 		return;
 	}
 
-	if(m_tokenA.code == "::" || m_tokenA.code == "->")
+	if (m_tokenA.code == "::" || m_tokenA.code == "->")
 	{
 		PutToken(m_tokenA);
 		return;
 	}
 
-	if(StackTopEq(m_blockStack, JS_ASSIGN))
+	if (StackTopEq(m_blockStack, JS_ASSIGN))
+	{
 		m_bAssign = true;
+	}
 
-	if(m_tokenA.code == "=" && !StackTopEq(m_blockStack, JS_ASSIGN))
+	if (m_tokenA.code == "=" && !StackTopEq(m_blockStack, JS_ASSIGN))
 	{
 		m_blockStack.push(m_blockMap[m_tokenA.code]);
 		++m_nIndents;
 		m_bAssign = false;
 	}
 
-	if(m_tokenA.code == "?")
+	if (m_tokenA.code == "?")
 	{
 		++m_nQuestOperCount;
 		m_QuestOperStackCount.push(m_blockStack.size());
 	}
 
-	if(m_tokenA.code == ":")
+	if (m_tokenA.code == ":")
 	{
-		if(m_nQuestOperCount > 0 && 
+		if (m_nQuestOperCount > 0 &&
 			(m_QuestOperStackCount.top() >= m_blockStack.size() ||
 			StackTopEq(m_blockStack, JS_ASSIGN)))
 		{
@@ -847,16 +943,18 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char tokenBFirst)
 {
 	bool bTokenAPropName = false;
-	if(m_tokenPreA.code == ".")
+	if (m_tokenPreA.code == ".")
+	{
 		bTokenAPropName = true;
+	}
 
-	if(!bTokenAPropName && 
+	if (!bTokenAPropName &&
 		(m_tokenA.code == "case" || m_tokenA.code == "default"))
 	{
 		// case, default 往里面缩一格
 		--m_nIndents;
 		string rightDeco = string(" ");
-		if(m_tokenA.code == "default" && m_tokenB.code == ":")
+		if (m_tokenA.code == "default" && m_tokenB.code == ":")
 		{
 			rightDeco = string("");
 		}
@@ -866,7 +964,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		return;
 	}
 
-	if(!bTokenAPropName && 
+	if (!bTokenAPropName &&
 		(m_tokenA.code == "do" ||
 		(m_tokenA.code == "else" && m_tokenB.code != "if") ||
 		m_tokenA.code == "try" || m_tokenA.code == "finally"))
@@ -879,15 +977,17 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		m_bBlockStmt = false; // 等待 block 内部的 statment
 
 		PutString(string(" "));
-		if((m_tokenB.type == STRING_TYPE || m_struOption.eBracNL == NEWLINE_BRAC) && !bHaveNewLine)
+		if ((m_tokenB.type == STRING_TYPE || m_struOption.eBracNL == NEWLINE_BRAC) && !bHaveNewLine)
+		{
 			PutString(string("\n"));
+		}
 
 		return;
 	}
 
-	if(!bTokenAPropName && m_tokenA.code == "function")
+	if (!bTokenAPropName && m_tokenA.code == "function")
 	{
-		if(StackTopEq(m_blockStack, JS_ASSIGN))
+		if (StackTopEq(m_blockStack, JS_ASSIGN))
 		{
 			--m_nIndents;
 			m_blockStack.pop();
@@ -895,10 +995,12 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		m_blockStack.push(m_blockMap[m_tokenA.code]); // 把 function 也压入栈, 遇到 } 弹掉
 	}
 
-	if(StackTopEq(m_blockStack, JS_ASSIGN))
+	if (StackTopEq(m_blockStack, JS_ASSIGN))
+	{
 		m_bAssign = true;
+	}
 
-	if(m_tokenB.type == STRING_TYPE || 
+	if (m_tokenB.type == STRING_TYPE ||
 		m_tokenB.type == COMMENT_TYPE_1 ||
 		m_tokenB.type == COMMENT_TYPE_2 ||
 		m_tokenB.code == "{")
@@ -910,13 +1012,13 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		return;
 	}
 
-	if(!bTokenAPropName &&
+	if (!bTokenAPropName &&
 		(m_specKeywordSet.find(m_tokenA.code) != m_specKeywordSet.end() &&
 		m_tokenB.code != ";"))
 	{
 		PutToken(m_tokenA, string(""), string(" "));
 	}
-	else if(m_tokenA.code[0] == '`' && m_tokenA.code[m_tokenA.code.length()-1] == '`')
+	else if (m_tokenA.code[0] == '`' && m_tokenA.code[m_tokenA.code.length()-1] == '`')
 	{
 		m_bTemplatePut = true;
 		PutToken(m_tokenA);
@@ -928,7 +1030,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		PutToken(m_tokenA);
 	}
 
-	if(!bTokenAPropName && 
+	if (!bTokenAPropName &&
 		(m_tokenA.code == "if" || m_tokenA.code == "for" ||
 		m_tokenA.code == "while" || m_tokenA.code == "catch"))
 	{
@@ -938,7 +1040,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 
 	}
 
-	if(!bTokenAPropName && m_tokenA.code == "switch")
+	if (!bTokenAPropName && m_tokenA.code == "switch")
 	{
 		//bBracket = false;
 		m_brcNeedStack.push(false);
