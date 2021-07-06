@@ -90,8 +90,10 @@ BOOL CALLBACK JSONDialog::run_dlgProc(UINT message, WPARAM wParam, LPARAM lParam
 				SWP_SHOWWINDOW);
 
 			int iMinDlgWidth = 215 * fDeskScale;  // 170 + 45
-			if(iDlgWidth < iMinDlgWidth)
+			if (iDlgWidth < iMinDlgWidth)
+			{
 				iDlgWidth = iMinDlgWidth;
+			}
 
 			int iSearchEditWidth = iDlgWidth - (170 * fDeskScale);
 

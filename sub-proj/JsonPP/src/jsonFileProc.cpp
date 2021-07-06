@@ -12,7 +12,7 @@ JsonFileProc::JsonFileProc(const tstring& intputFile)
 void JsonFileProc::GetJsonValue(JsonValue& jsonValue)
 { 
 	m_ifile.open(m_strInputFile.c_str());
-	if(m_ifile)
+	if (m_ifile)
 	{
 		Go(jsonValue);
 	}
@@ -22,12 +22,16 @@ void JsonFileProc::GetJsonValue(JsonValue& jsonValue)
 void JsonFileProc::Save(const JsonValue& jsonValue, const tstring& outputFile, bool sort)
 {
 	m_ofile.open(tstrtostr(outputFile).c_str());
-	if(m_ofile)
+	if (m_ofile)
 	{
-		if(!sort)
+		if (!sort)
+		{
 			m_ofile << jsonValue.ToString();
+		}
 		else
+		{
 			m_ofile << jsonValue.ToStringSorted();
+		}
 	}
 	m_ofile.close();
 }
@@ -35,7 +39,9 @@ void JsonFileProc::Save(const JsonValue& jsonValue, const tstring& outputFile, b
 int JsonFileProc::GetChar()
 {
 	int ret = m_ifile.get();
-	if(ret == EOF)
+	if (ret == EOF)
+	{
 		return 0;
+	}
 	return ret;
 }

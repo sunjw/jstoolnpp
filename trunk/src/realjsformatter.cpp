@@ -1007,8 +1007,10 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	{
 		PutToken(m_tokenA, string(""), string(" "));
 
-		//if(m_blockStack.top() != 't' && IsType(m_tokenA))
-			//m_blockStack.push('t'); // 声明变量
+		//if (m_blockStack.top() != 't' && IsType(m_tokenA))
+		//{
+		//	m_blockStack.push('t'); // 声明变量
+		//}
 		return;
 	}
 
