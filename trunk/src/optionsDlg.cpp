@@ -23,26 +23,42 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		}
 
 		if (g_struOptions.bNLBracket)
+		{
 			CheckDlgButton(hwnd, IDC_NEWLINECHECK, TRUE);
+		}
 		else
+		{
 			CheckDlgButton(hwnd, IDC_NEWLINECHECK, FALSE);
+		}
 
 		if (g_struOptions.bKeepTopComt)
+		{
 			CheckDlgButton(hwnd, IDC_KEEPCOMTCHECK, TRUE);
+		}
 		else
+		{
 			CheckDlgButton(hwnd, IDC_KEEPCOMTCHECK, FALSE);
+		}
 
 		setIndent(hwnd, (g_struOptions.chIndent == INDENT_SPACE ? TRUE : FALSE));
 
 		if (g_struOptions.bIndentInEmpty)
+		{
 			CheckDlgButton(hwnd, IDC_EMPTYINDENT, TRUE);
+		}
 		else
+		{
 			CheckDlgButton(hwnd, IDC_EMPTYINDENT, FALSE);
+		}
 
 		if (g_struOptions.bDisableVersionCheck)
+		{
 			CheckDlgButton(hwnd, IDC_NEWVERSIONCHECK, TRUE);
+		}
 		else
+		{
 			CheckDlgButton(hwnd, IDC_NEWVERSIONCHECK, FALSE);
+		}
 
 		return TRUE;
 	case WM_COMMAND:
@@ -57,11 +73,17 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		case IDOK:
 			// ±£¥Ê…Ë÷√
 			if (IsDlgButtonChecked(hwnd, IDC_AUTORADIO))
+			{
 				g_struOptions.nPutCR = EOL_AUTO;
+			}
 			else if (IsDlgButtonChecked(hwnd, IDC_WINRADIO))
+			{
 				g_struOptions.nPutCR = EOL_CRLF;
+			}
 			else if (IsDlgButtonChecked(hwnd, IDC_UNIXRADIO))
+			{
 				g_struOptions.nPutCR = EOL_LF;
+			}
 			g_struOptions.chIndent = IsDlgButtonChecked(hwnd, IDC_SPACECHECK) ? INDENT_SPACE : INDENT_TAB;
 			g_struOptions.bKeepTopComt = 
 				IsDlgButtonChecked(hwnd, IDC_KEEPCOMTCHECK) ? true : false;
