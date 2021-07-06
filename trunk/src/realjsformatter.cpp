@@ -681,7 +681,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			--m_nIndents; // ({ 减掉一个缩进
 			m_blockStack.pop();
 			GetStackTop(m_blockStack, fixTopStack);
-			if (m_nIndents > 0 && m_bAssign &&
+			if (m_nIndents > 0 && m_nIndents > m_nLineIndents && m_bAssign &&
 				(fixTopStack == JS_ASSIGN || fixTopStack == JS_HELPER))
 			{
 				--m_nIndents; // =({ 减掉一个缩进
