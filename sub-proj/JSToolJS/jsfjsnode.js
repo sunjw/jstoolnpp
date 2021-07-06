@@ -60,11 +60,11 @@ class JSFormatStringIO extends RealJSFormatter.RealJSFormatter {
 function Main() {
     //prepareEnv();
 
-    var printVersion = false;
-    var inputJSFile = "";
-    var outputJSFile = "";
+    let printVersion = false;
+    let inputJSFile = "";
+    let outputJSFile = "";
 
-    var argvLen = process.argv.length;
+    let argvLen = process.argv.length;
     if (argvLen == 3 && process.argv[2] == "--version") {
         printVersion = true;
     } else if (argvLen == 4) {
@@ -82,21 +82,21 @@ function Main() {
     if (printVersion) {
         log("JSFormatterJS version: " + RealJSFormatter.VERSION);
     } else {
-        var inputJS = FileSystem.readFileSync(inputJSFile, "binary");
+        let inputJS = FileSystem.readFileSync(inputJSFile, "binary");
         inputJS = inputJS.toString();
         //log("inputJS:\n" + inputJS);
 
-        var formatOption = new RealJSFormatter.FormatterOption();
+        let formatOption = new RealJSFormatter.FormatterOption();
         formatOption.chIndent = '\t';
         formatOption.nChPerInd = 1;
         formatOption.eCRPut = RealJSFormatter.CR_PUT.PUT_CR;
         formatOption.eBracNL = RealJSFormatter.BRAC_NEWLINE.NO_NEWLINE_BRAC;
         formatOption.eEmpytIndent = RealJSFormatter.EMPTYLINE_INDENT.NO_INDENT_IN_EMPTYLINE;
 
-        var jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
+        let jsfStrIO = new JSFormatStringIO(inputJS, formatOption);
         jsfStrIO.m_debug = true;
         jsfStrIO.Go();
-        var resultJS = jsfStrIO.outputJS;
+        let resultJS = jsfStrIO.outputJS;
 
         FileSystem.writeFileSync(outputJSFile, resultJS, "binary");
         log("Done");
