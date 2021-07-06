@@ -156,7 +156,7 @@ JsonValue& JsonValue::operator[](const string& key)
 
 void JsonValue::ChangeType(VALUE_TYPE newType)
 {
-	switch(newType)
+	switch (newType)
 	{
 	case JsonValue::STRING_VALUE:
 	case JsonValue::NUMBER_VALUE:
@@ -233,7 +233,7 @@ string JsonValue::ToString(int nRecuLevel, bool sort) const
 {
 	string ret("");
 
-	switch(m_valType)
+	switch (m_valType)
 	{
 	case JsonValue::STRING_VALUE:
 		{
