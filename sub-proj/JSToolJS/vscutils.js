@@ -25,10 +25,10 @@ function newDocument(workspace, window, language, text) {
 
 function getAllRangeFromTextDocument(textDocument) {
     let allText = textDocument.getText();
-    var start = new vscode.Position(0, 0);
-    var lines = allText.split(LineSeperator);
-    var end = new vscode.Position(lines.length - 1, lines[lines.length - 1].length);
-    var allRange = new vscode.Range(start, end);
+    let start = new vscode.Position(0, 0);
+    let lines = allText.split(LineSeperator);
+    let end = new vscode.Position(lines.length - 1, lines[lines.length - 1].length);
+    let allRange = new vscode.Range(start, end);
     return allRange;
 }
 
