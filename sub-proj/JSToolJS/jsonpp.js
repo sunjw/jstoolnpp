@@ -25,23 +25,23 @@ const JSParser = require('./jsparser.js');
 const VERSION = JSParser.VERSION;
 
 function JsonMapToString(jsonMap, nRecuLevel, sort) {
-    var ret = "";
+    let ret = "";
 
     ++nRecuLevel;
 
     ret += "{";
     ret += "\n";
 
-    var keysItr = jsonMap.keys();
-    var keysArray = Array.from(keysItr);
+    let keysItr = jsonMap.keys();
+    let keysArray = Array.from(keysItr);
     if (sort) {
         keysArray.sort();
     }
-    for (var i = 0; i < keysArray.length; ++i) {
-        var key = keysArray[i];
-        var value = jsonMap.get(key);
+    for (let i = 0; i < keysArray.length; ++i) {
+        let key = keysArray[i];
+        let value = jsonMap.get(key);
 
-        for (var r = 0; r < nRecuLevel; ++r) {
+        for (let r = 0; r < nRecuLevel; ++r) {
             ret += "\t";
         }
         ret += "\"";
@@ -59,7 +59,7 @@ function JsonMapToString(jsonMap, nRecuLevel, sort) {
         ret += "\n";
     }
 
-    for (var r = 0; r < nRecuLevel - 1; ++r) {
+    for (let r = 0; r < nRecuLevel - 1; ++r) {
         ret += "\t";
     }
     ret += "}";
@@ -159,7 +159,7 @@ class JsonValue {
     }
 
     ToString(nRecuLevel = 0, sort = false) {
-        var ret = "";
+        let ret = "";
 
         switch (this.m_valType) {
         case JsonValue.STRING_VALUE:
@@ -174,14 +174,14 @@ class JsonValue {
             ret += this.m_value;
             break;
         case JsonValue.MAP_VALUE:
-            var mapString = JsonMapToString(this.m_value, nRecuLevel, sort);
+            let mapString = JsonMapToString(this.m_value, nRecuLevel, sort);
             ret += mapString;
             break;
         case JsonValue.ARRAY_VALUE:
             ret += "[";
 
-            for (var i = 0; i < this.m_value.length; ++i) {
-                var value = this.m_value[i];
+            for (let i = 0; i < this.m_value.length; ++i) {
+                let value = this.m_value[i];
 
                 ret += value.ToString(nRecuLevel, sort);
                 if (i != (this.m_value.length - 1)) {
@@ -232,17 +232,17 @@ class JsonParser extends JSParser.JSParser {
         ++this.m_nRecuLevel;
         // initial job
 
-        var stackTop = JSParser.GetStackTop(this.m_blockStack);
+        let stackTop = JSParser.GetStackTop(this.m_blockStack);
         if (stackTop == undefined) {
             stackTop = JSParser.JS_EMPTY;
         }
 
-        var key,
+        let key,
         strValue;
-        var keyLine,
+        let keyLine,
         valLine;
-        var bGetKey = false;
-        var bGetSplitor = false;
+        let bGetKey = false;
+        let bGetSplitor = false;
         while (this.GetToken()) // Get next m_tokenA, m_tokenB
         {
             // JsonParser ignore newline, other parser may not
@@ -261,7 +261,7 @@ class JsonParser extends JSParser.JSParser {
              */
             if (this.m_tokenA.code == "{") {
                 this.m_blockStack.push(JSParser.JS_BLOCK);
-                var blockLine = this.m_tokenA.line;
+                let blockLine = this.m_tokenA.line;
 
                 if (stackTop == JSParser.JS_EMPTY) {
                     jsonValue.SetValueType(JsonValue.MAP_VALUE);
@@ -270,8 +270,8 @@ class JsonParser extends JSParser.JSParser {
                     if (stackTop == JSParser.JS_SQUARE) {
                         jsonValue.ArrayPut(new JsonValue());
 
-                        var curArray = jsonValue.GetValue();
-                        var innerValue = curArray[curArray.length - 1];
+                        let curArray = jsonValue.GetValue();
+                        let innerValue = curArray[curArray.length - 1];
                         innerValue.SetValueType(JsonValue.MAP_VALUE);
 
                         this.RecursiveProc(innerValue);
@@ -280,7 +280,7 @@ class JsonParser extends JSParser.JSParser {
                     } else if (stackTop == JSParser.JS_BLOCK) {
                         jsonValue.MapPut(key, new JsonValue());
 
-                        var innerValue = jsonValue.GetValue().get(key);
+                        let innerValue = jsonValue.GetValue().get(key);
                         innerValue.SetValueType(JsonValue.MAP_VALUE);
 
                         this.RecursiveProc(innerValue);
@@ -308,7 +308,7 @@ class JsonParser extends JSParser.JSParser {
 
             if (this.m_tokenA.code == "[") {
                 this.m_blockStack.push(JSParser.JS_SQUARE);
-                var squareLine = this.m_tokenA.line;
+                let squareLine = this.m_tokenA.line;
 
                 if (stackTop == JSParser.JS_EMPTY) {
                     jsonValue.SetValueType(JsonValue.ARRAY_VALUE);
@@ -317,8 +317,8 @@ class JsonParser extends JSParser.JSParser {
                     if (stackTop == JSParser.JS_SQUARE) {
                         jsonValue.ArrayPut(new JsonValue());
 
-                        var curArray = jsonValue.GetValue();
-                        var innerValue = curArray[curArray.length - 1];
+                        let curArray = jsonValue.GetValue();
+                        let innerValue = curArray[curArray.length - 1];
                         innerValue.SetValueType(JsonValue.ARRAY_VALUE);
 
                         this.RecursiveProc(innerValue);
@@ -327,7 +327,7 @@ class JsonParser extends JSParser.JSParser {
                     } else if (stackTop == JSParser.JS_BLOCK) {
                         jsonValue.MapPut(key, new JsonValue());
 
-                        var innerValue = jsonValue.GetValue().get(key);
+                        let innerValue = jsonValue.GetValue().get(key);
                         innerValue.SetValueType(JsonValue.ARRAY_VALUE);
 
                         this.RecursiveProc(innerValue);
@@ -374,7 +374,7 @@ class JsonParser extends JSParser.JSParser {
                     valLine = this.m_tokenA.line;
 
                     jsonValue.MapPut(key, new JsonValue());
-                    var jValue = jsonValue.GetValue().get(key);
+                    let jValue = jsonValue.GetValue().get(key);
                     this.GenStrJsonValue(jValue, strValue);
 
                     jValue.line = keyLine;
@@ -389,7 +389,7 @@ class JsonParser extends JSParser.JSParser {
                     strValue = this.ReadStrValue();
                     valLine = this.m_tokenA.line;
 
-                    var jValue = new JsonValue();
+                    let jValue = new JsonValue();
                     this.GenStrJsonValue(jValue, strValue);
                     jValue.line = valLine;
 
@@ -408,11 +408,11 @@ class JsonParser extends JSParser.JSParser {
     }
 
     ReadStrValue() {
-        var ret = this.m_tokenA.code;
+        let ret = this.m_tokenA.code;
         // fix decimal number value bug
         if (this.m_tokenB.code == ".") {
             // maybe it's a decimal
-            var strDec = this.m_tokenA.code;
+            let strDec = this.m_tokenA.code;
             this.GetToken();
             strDec += ".";
             strDec += this.m_tokenB.code;
