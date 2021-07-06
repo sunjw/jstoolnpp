@@ -38,16 +38,22 @@ void LoadOption(HWND nppHandle, StruOptions& struOptions)
 		if (struOptions.nPutCR != EOL_AUTO &&
 			struOptions.nPutCR != EOL_CRLF &&
 			struOptions.nPutCR != EOL_LF)
+		{
 			struOptions.nPutCR = EOL_AUTO;
+		}
 	}
 
 	if (map.find(keyChIndent) != itrEnd)
 	{
 		string strIndent = map[keyChIndent].GetStrValue();
 		if (!strIndent.compare(OPT_INDENT_TAB))
+		{
 			struOptions.chIndent = INDENT_TAB;
+		}
 		else if (!strIndent.compare(OPT_INDENT_SPACE))
+		{
 			struOptions.chIndent = INDENT_SPACE;
+		}
 	}
 
 	if (map.find(keyChPerInd) != itrEnd)
@@ -58,25 +64,33 @@ void LoadOption(HWND nppHandle, StruOptions& struOptions)
 	if (map.find(keyNLBracket) != itrEnd)
 	{
 		if (!map[keyNLBracket].GetStrValue().compare("1"))
+		{
 			struOptions.bNLBracket = true;
+		}
 	}
 
 	if (map.find(keyKeepTopComt) != itrEnd)
 	{
 		if (!map[keyKeepTopComt].GetStrValue().compare("1"))
+		{
 			struOptions.bKeepTopComt = true;
+		}
 	}
 
 	if (map.find(keyIndentInEmpty) != itrEnd)
 	{
 		if (!map[keyIndentInEmpty].GetStrValue().compare("1"))
+		{
 			struOptions.bIndentInEmpty = true;
+		}
 	}
 
 	if (map.find(keyDisableVersionCheck) != itrEnd)
 	{
 		if (!map[keyDisableVersionCheck].GetStrValue().compare("1"))
+		{
 			struOptions.bDisableVersionCheck = true;
+		}
 	}
 }
 

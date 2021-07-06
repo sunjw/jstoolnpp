@@ -53,7 +53,9 @@ BOOL TreeViewController::selectItem(HTREEITEM hti, BOOL firstVisible /*= FALSE*/
 {
 	UINT flag = TVGN_CARET;
 	if (firstVisible)
+	{
 		flag = TVGN_FIRSTVISIBLE;
+	}
 	return TreeView_Select(m_hWndTree, hti, flag);
 }
 
@@ -73,10 +75,14 @@ BOOL TreeViewController::isItemVisible(HTREEITEM hti)
 	RECT rect = {0};
 	BOOL ret = TreeView_GetItemRect(m_hWndTree, hti, &rect, FALSE);
 	if (ret == FALSE)
+	{
 		return FALSE;
+	}
 
 	if (rect.top < 0)
+	{
 		return FALSE;
+	}
 
 	return TRUE;
 }
@@ -112,21 +118,27 @@ HTREEITEM TreeViewController::nextItem(HTREEITEM htiCurrent, HTREEITEM htiNextRo
 	
 	// Does it has child.
 	htiNext = TreeView_GetChild(m_hWndTree, htiCurrent);
-	if(htiNext != NULL)
+	if (htiNext != NULL)
+	{
 		return htiNext;
+	}
 
 	// Has no child. So find its sibling.
 	htiNext = TreeView_GetNextSibling(m_hWndTree, htiCurrent);
-	if(htiNext != NULL)
+	if (htiNext != NULL)
+	{
 		return htiNext;
+	}
 
 	// Has no child and no sibling. Find its parent's (parent's parent's ...) sibling.
 	HTREEITEM htiParent = htiCurrent;
-	while((htiParent = TreeView_GetParent(m_hWndTree, htiParent)) != htiNextRoot)
+	while ((htiParent = TreeView_GetParent(m_hWndTree, htiParent)) != htiNextRoot)
 	{
 		htiNext = TreeView_GetNextSibling(m_hWndTree, htiParent);
-		if(htiNext != NULL)
+		if (htiNext != NULL)
+		{
 			return htiNext;
+		}
 	}
 
 	return NULL;

@@ -189,9 +189,13 @@ std::string sunjwbase::asciiconvjson(std::string& strJsonUtf16)
 			{
 				int num = 0;
 				if (n[j] > 'a')
+				{
 					num = n[j] - 'a' + 10;
+				}
 				else if (n[j] > '0')
+				{
 					num = n[j] - '0';
+				}
 
 				utf16 += (int)(num * pow(16.0, 3.0 - j));
 			}
@@ -208,10 +212,14 @@ std::string sunjwbase::strtrim_right(const std::string& s, const std::string& sp
 {
 	std::string d(s);
 	std::string::size_type i(d.find_last_not_of(spaces));
-	if(i == std::string::npos)
+	if (i == std::string::npos)
+	{
 		return "";
+	}
 	else
+	{
 		return d.erase(d.find_last_not_of(spaces) + 1);
+	}
 }  // end of trim_right
 
 std::string sunjwbase::strtrim_left(const std::string& s, const std::string& spaces)
@@ -224,10 +232,14 @@ std::wstring sunjwbase::strtrim_right(const std::wstring& s, const std::wstring&
 {
 	std::wstring d(s);
 	std::wstring::size_type i(d.find_last_not_of(spaces));
-	if(i == std::wstring::npos)
+	if (i == std::wstring::npos)
+	{
 		return L"";
+	}
 	else
+	{
 		return d.erase(d.find_last_not_of(spaces) + 1);
+	}
 }
 
 std::wstring sunjwbase::strtrim_left(const std::wstring& s, const std::wstring& spaces)
@@ -243,7 +255,7 @@ std::string sunjwbase::strreplace(const std::string& base, const std::string& sr
 	std::string::size_type srcLen = src.size();
 	std::string::size_type desLen = des.size();
 	pos = ret.find(src, pos);
-	while((pos != std::string::npos))
+	while ((pos != std::string::npos))
 	{
 		ret.replace(pos, srcLen, des);
 		pos = ret.find(src, pos + desLen);
@@ -259,7 +271,7 @@ std::wstring sunjwbase::strreplace(const std::wstring& base, const std::wstring&
 	std::wstring::size_type srcLen = src.size();
 	std::wstring::size_type desLen = des.size();
 	pos = ret.find(src, pos);
-	while((pos != std::wstring::npos))
+	while ((pos != std::wstring::npos))
 	{
 		ret.replace(pos, srcLen, des);
 		pos = ret.find(src, pos + desLen);
@@ -311,21 +323,29 @@ std::string sunjwbase::str_lower(const std::string& str)
 
 std::string sunjwbase::itostr(int num, int idx /* = 10 */)
 {
-	if(idx > 16)
+	if (idx > 16)
+	{
 		idx = 16;
+	}
 	char temp[2] = {0};
 	std::string ret;
-	while(1)
+	while (1)
 	{
 		int n = num % idx;
-		if(n < 10)
+		if (n < 10)
+		{
 			temp[0] = n + '0';
+		}
 		else
+		{
 			temp[0] = n - 10 + 'A';
+		}
 		ret = temp + ret;
 		num /= idx;
-		if(num == 0)
+		if (num == 0)
+		{
 			break;
+		}
 	}
 	
 	return ret;
@@ -336,7 +356,8 @@ std::string sunjwbase::strappendformat(std::string& str, const char *format, ...
 	int size = 100;
 	std::string temp;
 	va_list vl;
-	while (1) {
+	while (1)
+	{
 		temp.resize(size);
 		va_start(vl, format);
 #if defined (WIN32)
@@ -345,14 +366,19 @@ std::string sunjwbase::strappendformat(std::string& str, const char *format, ...
 		int n = vsnprintf((char *)temp.c_str(), size, format, vl);
 #endif
 		va_end(vl);
-		if (n > -1 && n < size) {
+		if (n > -1 && n < size)
+		{
 			temp.resize(n);
 			break;
 		}
 		if (n > -1)
+		{
 			size = n + 1; // not large enough
+		}
 		else
+		{
 			size *= 2;
+		}
 	}
 	str.append(temp);
 	
@@ -361,15 +387,19 @@ std::string sunjwbase::strappendformat(std::string& str, const char *format, ...
 
 bool sunjwbase::str_startwith(const std::string& str, const std::string& target)
 {
-	if(str.length() < target.length())
+	if (str.length() < target.length())
+	{
 		return false;
+	}
 
 	// Length is enough, let's check content.
 	size_t i = 0;
-	for(; i < target.length(); ++i)
+	for (; i < target.length(); ++i)
 	{
-		if(str[i] != target[i])
+		if (str[i] != target[i])
+		{
 			return false;
+		}
 	}
 
 	return (i == target.length());
@@ -377,17 +407,21 @@ bool sunjwbase::str_startwith(const std::string& str, const std::string& target)
 
 bool sunjwbase::str_endwith(const std::string& str, const std::string& target)
 {
-	if(str.length() < target.length())
+	if (str.length() < target.length())
+	{
 		return false;
+	}
 
 	// Length is enough, let's check content.
 	size_t str_len = str.length();
 	size_t target_len = target.length();
 	size_t i = 0;
-	for(; i < target.length(); ++i)
+	for (; i < target.length(); ++i)
 	{
-		if(str[str_len - target_len + i] != target[i])
+		if (str[str_len - target_len + i] != target[i])
+		{
 			return false;
+		}
 	}
 
 	return (i == target.length());
