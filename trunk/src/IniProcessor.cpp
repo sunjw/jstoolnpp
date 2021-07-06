@@ -17,8 +17,10 @@ using namespace sunjwbase;
 
 IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool bRefresh)
 {
-	if(!bRefresh && m_iniMap.size() > 0)
+	if (!bRefresh && m_iniMap.size() > 0)
+	{
 		return m_iniMap;
+	}
 	
 	m_iniMap.clear();
 
@@ -32,11 +34,11 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 	string key;
 	string value;
 
-	while(true)
+	while (true)
 	{
-		if(!getline(in, line)) // eof
+		if (!getline(in, line)) // eof
 		{
-			if(bProcSection && bSection)
+			if (bProcSection && bSection)
 			{
 				AddSection(sectionName, sectionMap);
 			}
@@ -44,10 +46,10 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 		}
 
 		line = strtrim_right(line);
-		if(bMultiLine)
+		if (bMultiLine)
 		{
 			value.append(line);
-			if(value.length() > 0 && value[value.length() - 1] == '\\')
+			if (value.length() > 0 && value[value.length() - 1] == '\\')
 			{
 				// value 结尾是 \ 表示多行
 				value[value.length() - 1] = '\n';
@@ -56,7 +58,7 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 			else
 			{
 				bMultiLine = false;
-				if(bProcSection && bSection)
+				if (bProcSection && bSection)
 				{
 					sectionMap[key] = value;
 				}
@@ -70,17 +72,19 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 		}
 		line = strtrim(line);
 
-		if(line.length() <= 1 || 
+		if (line.length() <= 1 ||
 			line[0] == ';' ||
 			line[0] == '#' ||
 			(line[0] == '/' && line[1] == '/'))
+		{
 			continue; // 注释行
+		}
 
-		if(bProcSection && 
+		if (bProcSection &&
 			line[0] == '[' &&
 			line[line.length() - 1] == ']')
 		{
-			if(bSection)
+			if (bSection)
 			{
 				AddSection(sectionName, sectionMap);
 			}
@@ -93,7 +97,7 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 		}
 
 		size_t eqPos = line.find("=");
-		if(eqPos != string::npos)
+		if (eqPos != string::npos)
 		{
 			key = line.substr(0, eqPos);
 			key = strtrim(key);
@@ -101,7 +105,7 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 			value = eqPos + 1 >= line.length() ?
 				"" : line.substr(eqPos + 1);
 			value = strtrim(value);
-			if(value.length() > 0 && value[value.length() - 1] == '\\')
+			if (value.length() > 0 && value[value.length() - 1] == '\\')
 			{
 				// value 结尾是 \ 表示多行
 				value[value.length() - 1] = '\n';
@@ -109,9 +113,11 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 				continue;
 			}
 			else
+			{
 				bMultiLine = false;
+			}
 
-			if(bProcSection && bSection)
+			if (bProcSection && bSection)
 			{
 				sectionMap[key] = value;
 			}
@@ -128,7 +134,7 @@ IniProcessor::IniMap IniProcessor::GetInfo(istream& in, bool bProcSection, bool 
 void IniProcessor::AddSection(const string& sectionName, const IniValue::StrMap& sectionMap)
 {
 	IniValue iniValue = m_iniMap[sectionName];// = sectionMap;
-	if(iniValue.IsStrValue())
+	if (iniValue.IsStrValue())
 	{
 		iniValue.SetMode(false);
 		iniValue.SetMapValue(sectionMap);
@@ -136,7 +142,7 @@ void IniProcessor::AddSection(const string& sectionName, const IniValue::StrMap&
 	else
 	{
 		IniValue::StrMap::const_iterator itr = sectionMap.begin();
-		for(; itr != sectionMap.end(); ++itr)
+		for (; itr != sectionMap.end(); ++itr)
 		{
 			iniValue.Put((*itr).first, (*itr).second);
 		}
@@ -154,12 +160,12 @@ string IniProcessor::ToString(const IniProcessor::IniMap& map) const
 	string line;
 	string key;
 	IniValue value;
-	for(; iniItr != map.end(); ++iniItr)
+	for (; iniItr != map.end(); ++iniItr)
 	{
 		key = (*iniItr).first;
 		value = (*iniItr).second;
 
-		if(value.IsStrValue())
+		if (value.IsStrValue())
 		{
 			line = key;
 			line.append("=");
@@ -172,7 +178,7 @@ string IniProcessor::ToString(const IniProcessor::IniMap& map) const
 		}
 	}
 
-	while(!sectionList.empty())
+	while (!sectionList.empty())
 	{
 		key = sectionList.front().first;
 		value = sectionList.front().second;

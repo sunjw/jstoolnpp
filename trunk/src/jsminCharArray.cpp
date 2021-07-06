@@ -9,14 +9,20 @@ JSMinCharArray::JSMinCharArray(const unsigned char *input, unsigned char *output
 int JSMinCharArray::getChar()
 {
 	if (getPos <= inLen)
+	{
 		return in[getPos++];
+	}
 	else
+	{
 		return EOF;
+	}
 }
 
 void JSMinCharArray::put(int _Ch)
 {
 	if (_Ch == '\n' && bPutCR)
+	{
 		out[putPos++] = '\r';
+	}
 	out[putPos++] = _Ch;
 }

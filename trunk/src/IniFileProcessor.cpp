@@ -22,7 +22,7 @@ void IniFileProcessor::Save()
 	ofstream out(strFileName.c_str());
 #endif
 
-	if(out)
+	if (out)
 	{
 		out << ToString();
 	}

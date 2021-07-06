@@ -3,7 +3,7 @@
 #include <Windows.h>
 
 EditControlEx::EditControlEx(HWND hDlg, int editControlId):
-	m_hDlg(hDlg), m_hEditControl(NULL), 
+	m_hDlg(hDlg), m_hEditControl(NULL),
 	m_editControlId(editControlId),
 	m_oldEditControlProc(NULL)
 {
@@ -46,13 +46,13 @@ LRESULT CALLBACK EditControlEx::EditControlProc(
 	{
 	case WM_KEYDOWN:
 		{
-			if((::GetKeyState(VK_CONTROL) & 0xFF00) == 0xFF00)
+			if ((::GetKeyState(VK_CONTROL) & 0xFF00) == 0xFF00)
 			{
-				if(wParam == 'A' || wParam == 'a')  
-				{  
+				if (wParam == 'A' || wParam == 'a')
+				{
 					::SendMessage(pEditControlEx->m_hEditControl, EM_SETSEL, 0, -1);
 					return TRUE;  
-				}  
+				}
 			}
 		}
 		break;

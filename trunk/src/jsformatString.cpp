@@ -13,9 +13,13 @@ JSFormatString::JSFormatString(const char *input,
 int JSFormatString::GetChar()
 {
 	if (getPos <= inLen)
+	{
 		return in[getPos++];
+	}
 	else
+	{
 		return 0;
+	}
 }
 
 void JSFormatString::PutChar(int ch)
