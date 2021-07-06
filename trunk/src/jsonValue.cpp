@@ -34,8 +34,10 @@ JsonValue::JsonValue(const JsonValue& rhs)
 
 JsonValue& JsonValue::operator=(const JsonValue& rhs)
 {
-	if(this == &rhs)
+	if (this == &rhs)
+	{
 		return *this;
+	}
 
 	m_valType = rhs.m_valType;
 	m_strValue = rhs.m_strValue;
@@ -54,12 +56,14 @@ string JsonValue::GetStrValue() const
 void JsonValue::SetStrValue(const string& str)
 {
 	m_strValue = str;
-	if(m_valType != JsonValue::STRING_VALUE && 
-		m_valType != JsonValue::NUMBER_VALUE && 
-		m_valType != JsonValue::BOOL_VALUE && 
-		m_valType != JsonValue::REGULAR_VALUE && 
+	if (m_valType != JsonValue::STRING_VALUE &&
+		m_valType != JsonValue::NUMBER_VALUE &&
+		m_valType != JsonValue::BOOL_VALUE &&
+		m_valType != JsonValue::REGULAR_VALUE &&
 		m_valType != JsonValue::UNKNOWN_VALUE)
-	ChangeType(JsonValue::STRING_VALUE);
+	{
+		ChangeType(JsonValue::STRING_VALUE);
+	}
 }
 
 JsonVec& JsonValue::GetArrayValue()
@@ -107,18 +111,21 @@ void JsonValue::MapPut(const string& key, const JsonValue& value)
 // Has specified string key for map value
 bool JsonValue::HasKey(const string& key) const
 {
-	if(m_valType != MAP_VALUE)
+	if (m_valType != MAP_VALUE)
+	{
 		return false;
+	}
 
-	
 	return (m_mapValue.find(key) != m_mapValue.end());
 }
 
 // Has specified index for array value
 bool JsonValue::HasKey(const JsonVec::size_type idx) const
 {
-	if(m_valType != ARRAY_VALUE)
+	if (m_valType != ARRAY_VALUE)
+	{
 		return false;
+	}
 
 	return (m_arrayValue.size() > idx);
 }
@@ -129,7 +136,7 @@ JsonValue& JsonValue::operator[](JsonVec::size_type idx)
 	// Change to ARRAY_VALUE
 	ChangeType(JsonValue::ARRAY_VALUE);
 
-	while(m_arrayValue.size() <= idx)
+	while (m_arrayValue.size() <= idx)
 	{
 		// need to expand
 		m_arrayValue.push_back(JsonValue());
@@ -183,32 +190,40 @@ static string JsonMapToString(const _JsonMap& jsonMap, int nRecuLevel, bool sort
 	ret.append("\n");
 
 	_JsonMap::const_iterator itr = jsonMap.begin();
-	for(; itr != jsonMap.end(); ++itr)
+	for (; itr != jsonMap.end(); ++itr)
 	{
 		const string& key = itr->first;
 		const JsonValue& value = itr->second;
 
-		for(int r = 0; r < nRecuLevel; ++ r)
+		for (int r = 0; r < nRecuLevel; ++r)
+		{
 			ret.append("\t");
+		}
 		ret.append("\"");
 		ret.append(key);
 		ret.append("\"");
 		ret.append(": ");
-		if(!sort)
+		if (!sort)
+		{
 			ret.append(value.ToString(nRecuLevel));
+		}
 		else
+		{
 			ret.append(value.ToStringSorted(nRecuLevel));
+		}
 		_JsonMap::const_iterator temp = itr;
 		++temp;
-		if(temp != jsonMap.end())
+		if (temp != jsonMap.end())
 		{
 			ret.append(",");
 		}
 		ret.append("\n");
 	}
 
-	for(int r = 0; r < nRecuLevel - 1; ++ r)
+	for (int r = 0; r < nRecuLevel - 1; ++r)
+	{
 		ret.append("\t");
+	}
 	ret.append("}");
 
 	return ret;
@@ -236,7 +251,7 @@ string JsonValue::ToString(int nRecuLevel, bool sort) const
 	case JsonValue::MAP_VALUE:
 		{
 			string mapString;
-			if(!sort)
+			if (!sort)
 			{
 				mapString = JsonMapToString(m_mapValue, nRecuLevel, sort);
 			}
@@ -255,14 +270,14 @@ string JsonValue::ToString(int nRecuLevel, bool sort) const
 			ret.append("[");
 			
 			JsonVec::const_iterator itr = m_arrayValue.begin();
-			for(; itr != m_arrayValue.end(); ++itr)
+			for (; itr != m_arrayValue.end(); ++itr)
 			{
 				const JsonValue& value = *itr;
 
 				ret.append(value.ToString(nRecuLevel, sort));
 				JsonVec::const_iterator temp = itr;
 				++temp;
-				if(temp != m_arrayValue.end())
+				if (temp != m_arrayValue.end())
 				{
 					ret.append(", ");
 				}

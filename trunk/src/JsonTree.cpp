@@ -33,30 +33,32 @@ HTREEITEM JsonTree::doSearch(const tstring& tstrSearchKey,
 							 HTREEITEM htiCurrent, 
 							 bool bSkipCurrent)
 {
-	if(bSkipCurrent)
+	if (bSkipCurrent)
+	{
 		htiCurrent = nextItem(htiCurrent);
+	}
 
 	TCHAR buf[1024] = {0};
 	TVITEM tvi = {0};
-	while(htiCurrent != NULL)
+	while (htiCurrent != NULL)
 	{
-		if(getTVItem(htiCurrent, buf, 1024, &tvi))
+		if (getTVItem(htiCurrent, buf, 1024, &tvi))
 		{
 			tstring tstrTreeText = tvi.pszText;
 			tstring tstrKey, tstrValue;
 			splitNodeText(tstrTreeText, tstrKey, tstrValue);
 
-			if(tstrValue == TEXT("[Object]") || tstrValue == TEXT("[Array]"))
+			if (tstrValue == TEXT("[Object]") || tstrValue == TEXT("[Array]"))
 			{
 				// Just search key
-				if(strfind_ci(tstrKey, tstrSearchKey) >= 0)
+				if (strfind_ci(tstrKey, tstrSearchKey) >= 0)
 				{
 					return htiCurrent; // found
 				}
 			}
 			else
 			{
-				if(strfind_ci(tstrTreeText, tstrSearchKey) >= 0)
+				if (strfind_ci(tstrTreeText, tstrSearchKey) >= 0)
 				{
 					return htiCurrent; // found
 				}
@@ -95,12 +97,18 @@ tstring JsonTree::getJsonNodePath(HTREEITEM hti)
 			else
 			{
 				if (tstrTreeText == TEXT("ROOT"))
+				{
 					tstrKey = TEXT("ROOT");
+				}
 
 				if (tstrJsonPath[0] == TEXT('['))
+				{
 					tstrJsonPath = tstrKey + tstrJsonPath;
+				}
 				else
+				{
 					tstrJsonPath = tstrKey + TEXT(".") + tstrJsonPath;
+				}
 			}
 		}
 
@@ -118,10 +126,10 @@ void JsonTree::jumpToSciLine(HTREEITEM hti, int iLineBase)
 {
 	TCHAR buf[1024] = {0};
 	TVITEM tvi = {0};
-	if(getTVItem(hti, buf, 1024, &tvi))
+	if (getTVItem(hti, buf, 1024, &tvi))
 	{
 		long line = (long)tvi.lParam;
-		if(line >= 0)
+		if (line >= 0)
 		{
 			::SendMessage(m_hScintilla, SCI_GOTOLINE, line - 1 + iLineBase, 0);
 		}
@@ -142,7 +150,9 @@ void JsonTree::splitNodeText(const tstring& tstrText,
 			// fallback, the first
 			pos = tstrText.find(tstring(TEXT(JSON_TREE_SPLITOR)), 0);
 			if (pos == tstring::npos)
+			{
 				return; // still not able to find
+			}
 
 			splitPos = pos + 1;
 			break;

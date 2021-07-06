@@ -10,8 +10,12 @@ JsonStringProc::JsonStringProc(const string& string)
 
 int JsonStringProc::GetChar()
 {
-	if(m_pos < m_strlen)
+	if (m_pos < m_strlen)
+	{
 		return m_string[m_pos++];
+	}
 	else
+	{
 		return 0;
+	}
 }
