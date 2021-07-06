@@ -57,7 +57,7 @@ int JSMin::isAlphanum(int c)
 */
 int JSMin::isBlank(int c)
 {
-	return (c == ' ' || c == '\t' || c == '\r' || c == '\n');
+    return (c == ' ' || c == '\t' || c == '\r' || c == '\n');
 }
 
 /* get -- return the next character from stdin. Watch out for lookahead. If
@@ -76,7 +76,7 @@ int JSMin::get()
         return c;
     }
     if (c == '\r') {
-		return keepFirstComt ? '\r' : '\n';
+        return keepFirstComt ? '\r' : '\n';
     }
     return ' ';
 }
@@ -98,12 +98,13 @@ int JSMin::peek()
 int JSMin::next()
 {
     int c = get();
-	if(keepFirstComt && c != '/' && !isBlank(c))
-		keepFirstComt = false;
+    if (keepFirstComt && c != '/' && !isBlank(c)) {
+        keepFirstComt = false;
+    }
     if (c == '/') {
         switch (peek()) {
         case '/':
-			keepFirstComt = false;
+            keepFirstComt = false;
             for (;;) {
                 c = get();
                 if (c <= '\n') {
@@ -112,36 +113,36 @@ int JSMin::next()
             }
             break;
         case '*':
-			get();
-			
-			if(keepFirstComt) {
-				put('/');
-				put('*');
-			}
+            get();
+
+            if (keepFirstComt) {
+                put('/');
+                put('*');
+            }
 
             while (c != ' ') {
-				char comtContent;
+                char comtContent;
                 switch (comtContent = get()) {
                 case '*':
                     if (peek() == '/') {
-						if (keepFirstComt) {
-							put('*');
-							put('/');
-							//put('\n');
-							keepFirstComt = false;
-						}
+                        if (keepFirstComt) {
+                            put('*');
+                            put('/');
+                            //put('\n');
+                            keepFirstComt = false;
+                        }
 
                         get();
                         c = ' ';
                     }
                     break;
                 case EOF:
-					throw runtime_error("Error: JSMIN Unterminated comment.");
+                    throw runtime_error("Error: JSMIN Unterminated comment.");
                     /*fprintf(stderr, "Error: JSMIN Unterminated comment.\n");
                     exit(1);*/
                 }
-				if(keepFirstComt && comtContent != '\r') {
-					put(comtContent);
+                if (keepFirstComt && comtContent != '\r') {
+                    put(comtContent);
                 }
             }
             break;
@@ -187,7 +188,7 @@ void JSMin::action(int d)
                     theA = get();
                 }
                 if (theA == EOF) {
-					throw runtime_error("Error: JSMIN unterminated string literal.");
+                    throw runtime_error("Error: JSMIN unterminated string literal.");
                     /*fprintf(stderr, "Error: JSMIN unterminated string literal.");
                     exit(1);*/
                 }
