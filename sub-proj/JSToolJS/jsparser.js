@@ -31,15 +31,17 @@ function CopyObject(source) {
 }
 
 function GetStackTop(stk) {
-    if (stk.length == 0)
+    if (stk.length == 0) {
         return undefined;
-    var ret = stk[stk.length - 1];
+    }
+    let ret = stk[stk.length - 1];
     return ret;
 }
 
 function StackTopEq(stk, eq) {
-    if (stk.length == 0)
+    if (stk.length == 0) {
         return false;
+    }
     return (eq == stk[stk.length - 1]);
 }
 
@@ -149,8 +151,9 @@ class JSParser {
     }
 
     IsInlineComment(token) {
-        if (token.type != COMMENT_TYPE_2)
+        if (token.type != COMMENT_TYPE_2) {
             return false;
+        }
 
         return token.inlineComment;
     }
@@ -162,8 +165,9 @@ class JSParser {
     }
 
     IsShebang() {
-        if (this.m_tokenCount == 0 && this.m_charA == '#' && this.m_charB == '!')
+        if (this.m_tokenCount == 0 && this.m_charA == '#' && this.m_charB == '!') {
             return true;
+        }
         return false;
     }
 
@@ -229,15 +233,15 @@ class JSParser {
             this.m_tokenB.type = STRING_TYPE; // +/-
         }
 
-        var bQuote = false;
-        var bComment = false;
-        var bRegularFlags = false;
-        var bShebang = false; // Unix Shebang
-        var bFirst = true;
-        var bNum = false; // is number or not
-        var bLineBegin = false;
-        var chQuote = ''; // quote is ' or "
-        var chComment = ''; // comment is / or *
+        let bQuote = false;
+        let bComment = false;
+        let bRegularFlags = false;
+        let bShebang = false; // Unix Shebang
+        let bFirst = true;
+        let bNum = false; // is number or not
+        let bLineBegin = false;
+        let chQuote = ''; // quote is ' or "
+        let chComment = ''; // comment is / or *
         while (1) {
             this.m_charA = this.m_charB;
             if (this.m_charA == '\0') {
@@ -256,8 +260,9 @@ class JSParser {
                 this.m_charA = '\n';
             }
 
-            if (this.m_charA == '\n')
+            if (this.m_charA == '\n') {
                 ++this.m_lineCount;
+            }
 
             /*
              * operate m_charA depend on m_charB
@@ -284,8 +289,9 @@ class JSParser {
 
                 if (this.m_charA == ']' && this.m_iRegBracket > 0) {
                     --this.m_iRegBracket;
-                    if (bRegularFlags)
+                    if (bRegularFlags) {
                         bRegularFlags = false;
+                    }
                 }
 
                 if (this.m_charA == '/' &&
@@ -327,8 +333,9 @@ class JSParser {
                     this.m_charB = this.GetChar();
                 }
 
-                if (this.m_charA == chQuote) // quote end
+                if (this.m_charA == chQuote) { // quote end
                     return;
+                }
 
                 continue;
             }
@@ -337,15 +344,17 @@ class JSParser {
                 // in comment, output all
                 if (this.m_tokenB.type == COMMENT_TYPE_2) {
                     // remove all \t and ' ' in every /*...*/ line
-                    if (bLineBegin && (this.m_charA == '\t' || this.m_charA == ' '))
+                    if (bLineBegin && (this.m_charA == '\t' || this.m_charA == ' ')) {
                         continue;
-                    else if (bLineBegin && this.m_charA == '*')
+                    } else if (bLineBegin && this.m_charA == '*') {
                         this.m_tokenB.code += ' ';
+                    }
 
                     bLineBegin = false;
 
-                    if (this.m_charA == '\n')
+                    if (this.m_charA == '\n') {
                         bLineBegin = true;
+                    }
                 }
                 this.m_tokenB.code += this.m_charA;
 
@@ -365,8 +374,9 @@ class JSParser {
                     // until newline
                     this.m_tokenB.type = COMMENT_TYPE_1;
                     this.m_tokenB.inlineComment = false;
-                    if (this.m_charA == '\n')
+                    if (this.m_charA == '\n') {
                         return;
+                    }
                 }
 
                 continue;
@@ -376,8 +386,9 @@ class JSParser {
                 // is Shebang, until newline
                 this.m_tokenB.code += this.m_charA;
 
-                if (this.m_charA == '\n')
+                if (this.m_charA == '\n') {
                     return;
+                }
 
                 continue;
             }
@@ -388,7 +399,7 @@ class JSParser {
 
                 // handle something like 82e-2, 442e+6, 555E-6
                 // direct number
-                var bNumOld = bNum;
+                let bNumOld = bNum;
                 if (bFirst || bNumOld) {
                     // only number before
                     bNum = this.IsNumChar(this.m_charA);
@@ -409,8 +420,9 @@ class JSParser {
                     return;
                 }
             } else {
-                if (this.IsBlankChar(this.m_charA))
+                if (this.IsBlankChar(this.m_charA)) {
                     continue; // ignore blank char
+                }
 
                 if (this.IsQuote(this.m_charA)) {
                     // quote
@@ -493,8 +505,8 @@ class JSParser {
          * and last char in m_tokenA is following rules below
          */
         //size_t last = m_tokenA.size() > 0 ? m_tokenA.size() - 1 : 0;
-        var tokenALast = this.m_tokenA.code.length > 0 ? this.m_tokenA.code.charAt(this.m_tokenA.code.length - 1) : 0;
-        var tokenBFirst = this.m_tokenB.code.charAt(0);
+        let tokenALast = this.m_tokenA.code.length > 0 ? this.m_tokenA.code.charAt(this.m_tokenA.code.length - 1) : 0;
+        let tokenBFirst = this.m_tokenB.code.charAt(0);
         if (tokenBFirst == '/' && this.m_tokenB.type != COMMENT_TYPE_1 &&
             this.m_tokenB.type != COMMENT_TYPE_2 &&
             ((this.m_tokenA.type != STRING_TYPE && this.m_strBeforeReg.indexOf(tokenALast) != -1) ||
@@ -513,9 +525,10 @@ class JSParser {
          * and m_charB is NormalChar
          * then m_tokenB is a +/- number
          */
-        var tokenRealPre = this.m_tokenA;
-        if (this.m_tokenA.type == COMMENT_TYPE_2)
+        let tokenRealPre = this.m_tokenA;
+        if (this.m_tokenA.type == COMMENT_TYPE_2) {
             tokenRealPre = this.m_tokenABeforeComment;
+        }
 
         if (this.m_tokenB.type == OPER_TYPE && (this.m_tokenB.code == "-" || this.m_tokenB.code == "+") &&
             (tokenRealPre.type != STRING_TYPE ||
@@ -538,7 +551,7 @@ class JSParser {
          * jump over newline before else, while, catch, ',', ';', ')', {
          * if newline is not followed by strings descripted before, re-add newline
          */
-        var c = 0;
+        let c = 0;
         while (this.m_tokenB.code == "\n" || this.m_tokenB.code == "\r\n") {
             ++c;
             this.GetTokenRaw();
@@ -556,13 +569,14 @@ class JSParser {
         if (this.m_tokenB.code != "else" && this.m_tokenB.code != "while" && this.m_tokenB.code != "catch" &&
             this.m_tokenB.code != "," && this.m_tokenB.code != ";" && this.m_tokenB.code != ")") {
             // push newline into queue
-            if (this.m_tokenA.code == "{" && this.m_tokenB.code == "}")
+            if (this.m_tokenA.code == "{" && this.m_tokenB.code == "}") {
                 return; // empty {}
+            }
 
-            var temp;
+            let temp;
             c = c > 2 ? 2 : c;
             for (; c > 0; --c) {
-                var temp = new Token();
+                let temp = new Token();
                 temp.code = "\n";
                 temp.type = OPER_TYPE;
                 this.m_tokenBQueue.push(temp);
@@ -578,7 +592,7 @@ class JSParser {
     PrintDebug() {
         if (this.m_debug) {
             this.m_strDebugOutput = "";
-            var buf = "";
+            let buf = "";
             //SNPRINTF(buf, 1000, "Processed tokens: %ld\n", m_tokenCount);
             //m_strDebugOutput.append(buf);
             this.m_strDebugOutput = this.m_strDebugOutput + "Processed tokens: " + this.m_tokenCount + "\n";

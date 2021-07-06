@@ -40,18 +40,18 @@ class JsonTreeProvider {
     }
 
     getTreeItem(element) {
-        var treeItem = element.treeItem;
+        let treeItem = element.treeItem;
         if (treeItem != 0) {
             return treeItem;
         }
 
-        var collapState = vscode.TreeItemCollapsibleState.NONE;
+        let collapState = vscode.TreeItemCollapsibleState.NONE;
 
-        var itemLabel = element.key;
-        var jsonValue = element.value;
+        let itemLabel = element.key;
+        let jsonValue = element.value;
 
-        var valueType = jsonValue.GetValueType();
-        var valueLabel = "";
+        let valueType = jsonValue.GetValueType();
+        let valueLabel = "";
         switch (valueType) {
         case JsonPP.JsonValue.MAP_VALUE:
             valueLabel = "[Object]";
@@ -66,7 +66,7 @@ class JsonTreeProvider {
             break;
         }
 
-        var isRoot = this.isRootNode(element);
+        let isRoot = this.isRootNode(element);
         if (isRoot) {
             collapState = vscode.TreeItemCollapsibleState.Expanded;
         } else {
@@ -102,29 +102,29 @@ class JsonTreeProvider {
 
     getChildren(element) {
         if (element) {
-            var children = element.children;
+            let children = element.children;
             if (children != 0) {
                 return children;
             }
 
             children = [];
-            var jsonValue = element.value;
-            var valueType = jsonValue.GetValueType();
+            let jsonValue = element.value;
+            let valueType = jsonValue.GetValueType();
             switch (valueType) {
             case JsonPP.JsonValue.MAP_VALUE:
-                var mapValue = jsonValue.GetValue();
-                var keysItr = mapValue.keys();
-                var keysArray = Array.from(keysItr);
-                for (var i = 0; i < keysArray.length; ++i) {
-                    var key = keysArray[i];
-                    var value = mapValue.get(key);
+                let mapValue = jsonValue.GetValue();
+                let keysItr = mapValue.keys();
+                let keysArray = Array.from(keysItr);
+                for (let i = 0; i < keysArray.length; ++i) {
+                    let key = keysArray[i];
+                    let value = mapValue.get(key);
                     children.push(new JsonTreeNode(key, value, element));
                 }
                 break;
             case JsonPP.JsonValue.ARRAY_VALUE:
-                var arrayValue = jsonValue.GetValue();
-                for (var i = 0; i < arrayValue.length; ++i) {
-                    var value = arrayValue[i];
+                let arrayValue = jsonValue.GetValue();
+                for (let i = 0; i < arrayValue.length; ++i) {
+                    let value = arrayValue[i];
                     children.push(new JsonTreeNode(i, value, element));
                 }
                 break;
@@ -142,7 +142,7 @@ class JsonTreeProvider {
         if (!textEditor || !element) {
             return;
         }
-        var line = element.value.line - 1;
+        let line = element.value.line - 1;
         if (line >= 0) {
             VSCUtils.moveToLine(textEditor, line);
         }
@@ -152,7 +152,7 @@ class JsonTreeProvider {
         if (!element) {
             return;
         }
-        var treeItem = element.treeItem;
+        let treeItem = element.treeItem;
         VSCUtils.copyToClipboard(treeItem.label);
     }
 
@@ -160,7 +160,7 @@ class JsonTreeProvider {
         if (!element) {
             return;
         }
-        var keyString = convertJsonValueToString(element.key);
+        let keyString = convertJsonValueToString(element.key);
         VSCUtils.copyToClipboard(keyString);
     }
 
@@ -168,7 +168,7 @@ class JsonTreeProvider {
         if (!element) {
             return;
         }
-        var valueLabel = element.valueLabel;
+        let valueLabel = element.valueLabel;
         if (raw) {
             VSCUtils.copyToClipboard(valueLabel);
             return;
@@ -177,9 +177,9 @@ class JsonTreeProvider {
             VSCUtils.copyToClipboard(valueLabel);
             return;
         }
-        var valueToEscape = "{\"value\":" + valueLabel + "}";
-        var valueJson = JSON.parse(valueToEscape);
-        var valueEscaped = valueJson.value;
+        let valueToEscape = "{\"value\":" + valueLabel + "}";
+        let valueJson = JSON.parse(valueToEscape);
+        let valueEscaped = valueJson.value;
         if (typeof valueEscaped !== 'string' && !(valueEscaped instanceof String)) {
             valueEscaped = JSON.stringify(valueEscaped);
         }
@@ -187,13 +187,13 @@ class JsonTreeProvider {
     }
 
     copyElemPath(element) {
-        var jsonPath = "";
+        let jsonPath = "";
         while (element) {
-            var elemKey = element.key;
-            var elemValue = element.value;
-            var elemParent = this.getParent(element);
+            let elemKey = element.key;
+            let elemValue = element.value;
+            let elemParent = this.getParent(element);
             if (elemParent) {
-                var elementParentType = elemParent.value.GetValueType();
+                let elementParentType = elemParent.value.GetValueType();
                 if (elementParentType == JsonPP.JsonValue.ARRAY_VALUE) {
                     elemKey = "[" + elemKey + "]";
                 }
@@ -201,7 +201,7 @@ class JsonTreeProvider {
             if (jsonPath == "") {
                 jsonPath = jsonPath + elemKey;
             } else {
-                var elementValueType = elemValue.GetValueType();
+                let elementValueType = elemValue.GetValueType();
                 if (elementValueType == JsonPP.JsonValue.ARRAY_VALUE) {
                     jsonPath = elemKey + jsonPath;
                 } else {
