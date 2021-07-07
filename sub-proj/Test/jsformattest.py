@@ -102,7 +102,7 @@ def main():
             release = False
             nodejs = False
             break
-        if argv == "release":
+        if argv == "release" or argv == "rel":
             release = True
         if argv == "64" or argv == "x64":
             x64 = True
