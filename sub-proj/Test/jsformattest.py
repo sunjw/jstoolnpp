@@ -11,76 +11,76 @@ from subprocess import call
 from util import *
 from testbase import *
 
-TEST_CASE_DIR = "jsformat"
+TEST_CASE_DIR = 'jsformat'
 
-JSFORMATTER_PATH_WIN = "../../trunk/debug/JSFormatterTest.exe"
-JSFORMATTER_REL_PATH_WIN = "../../trunk/release/JSFormatterTest.exe"
-JSFORMATTER_PATH_WIN_64 = "../../trunk/x64/debug/JSFormatterTest.exe"
-JSFORMATTER_REL_PATH_WIN_64 = "../../trunk/x64/release/JSFormatterTest.exe"
-JSFORMATTER_LIB_PATH_MAC = "../../trunk/DerivedData/JSTool/Build/Products/Debug"
-JSFORMATTER_LIB_REL_PATH_MAC = "../../trunk/DerivedData/JSTool/Build/Products/Release"
-JSFORMATTER_PATH_MAC = "../../trunk/DerivedData/JSTool/Build/Products/Debug/JSFormatterTest"
-JSFORMATTER_REL_PATH_MAC = "../../trunk/DerivedData/JSTool/Build/Products/Release/JSFormatterTest"
-JSFORMATTER_NODEJS_SCRIPT_PATH = "../JSToolJS/jsfjsnode.js"
+JSFORMATTER_PATH_WIN = '../../trunk/debug/JSFormatterTest.exe'
+JSFORMATTER_REL_PATH_WIN = '../../trunk/release/JSFormatterTest.exe'
+JSFORMATTER_PATH_WIN_64 = '../../trunk/x64/debug/JSFormatterTest.exe'
+JSFORMATTER_REL_PATH_WIN_64 = '../../trunk/x64/release/JSFormatterTest.exe'
+JSFORMATTER_LIB_PATH_MAC = '../../trunk/DerivedData/JSTool/Build/Products/Debug'
+JSFORMATTER_LIB_REL_PATH_MAC = '../../trunk/DerivedData/JSTool/Build/Products/Release'
+JSFORMATTER_PATH_MAC = '../../trunk/DerivedData/JSTool/Build/Products/Debug/JSFormatterTest'
+JSFORMATTER_REL_PATH_MAC = '../../trunk/DerivedData/JSTool/Build/Products/Release/JSFormatterTest'
+JSFORMATTER_NODEJS_SCRIPT_PATH = '../JSToolJS/jsfjsnode.js'
 
 class MacOSCaseRuntime(CaseRuntime):
     def __init__(self, runtime_path, lib_path):
         super(MacOSCaseRuntime, self).__init__(runtime_path)
         self.lib_path = lib_path
-        os.environ["DYLD_LIBRARY_PATH"] = self.lib_path
+        os.environ['DYLD_LIBRARY_PATH'] = self.lib_path
 
     def dump_name(self):
-        log("macOSCaseRuntime")
+        log('macOSCaseRuntime')
 
     def dump_info(self):
-        log("DYLD_LIBRARY_PATH=%s" % (os.environ["DYLD_LIBRARY_PATH"]))
+        log('DYLD_LIBRARY_PATH=%s' % (os.environ['DYLD_LIBRARY_PATH']))
 
 class NodeCaseRuntime(CaseRuntime):
     def _case_execute(self, test_case):
-        call(["node", self.runtime_path, test_case.source, self.get_out_path_from_case(test_case)])
+        call(['node', self.runtime_path, test_case.source, self.get_out_path_from_case(test_case)])
 
     def dump_name(self):
-        log("NodeCaseRuntime")
+        log('NodeCaseRuntime')
 
     def dump_version(self):
-        call(["node", self.runtime_path, "--version"])
-        log("node version: ")
-        call(["node", "--version"])
+        call(['node', self.runtime_path, '--version'])
+        log('node version: ')
+        call(['node', '--version'])
 
 class ValidateCaseRuntime(CaseRuntime):
     def __init__(self, runtime_path, nodejs_script_path):
         super(ValidateCaseRuntime, self).__init__(runtime_path)
         self.nodejs_script_path = nodejs_script_path
-        self.out_cpp = "outcpp.js"
-        self.out_js = "outjs.js"
+        self.out_cpp = 'outcpp.js'
+        self.out_js = 'outjs.js'
 
     def _case_execute(self, test_case):
-        log("Call cpp...")
+        log('Call cpp...')
         call([self.runtime_path, test_case.source, os.path.join(test_case.case_dir, self.out_cpp)])
-        log("Call node...")
-        call(["node", self.nodejs_script_path, test_case.source, os.path.join(test_case.case_dir, self.out_js)])
+        log('Call node...')
+        call(['node', self.nodejs_script_path, test_case.source, os.path.join(test_case.case_dir, self.out_js)])
 
     def _case_result(self, test_case):
-        result = "ERROR"
-        outcpp_md5 = hashlib.md5(open(os.path.join(test_case.case_dir, self.out_cpp), "rb").read()).hexdigest()
-        outjs_md5 = hashlib.md5(open(os.path.join(test_case.case_dir, self.out_js), "rb").read()).hexdigest()
+        result = 'ERROR'
+        outcpp_md5 = hashlib.md5(open(os.path.join(test_case.case_dir, self.out_cpp), 'rb').read()).hexdigest()
+        outjs_md5 = hashlib.md5(open(os.path.join(test_case.case_dir, self.out_js), 'rb').read()).hexdigest()
         if outcpp_md5 == outjs_md5:
-            result = "PASS"
+            result = 'PASS'
 
         log(result)
         return result
 
     def dump_name(self):
-        log("ValidateCaseRuntime")
+        log('ValidateCaseRuntime')
 
     def dump_info(self):
-        log("%s vs. %s" % (self.runtime_path, self.nodejs_script_path))
+        log('%s vs. %s' % (self.runtime_path, self.nodejs_script_path))
 
     def dump_version(self):
-        call([self.runtime_path, "--version"])
-        call(["node", self.nodejs_script_path, "--version"])
-        log("node version: ")
-        call(["node", "--version"])
+        call([self.runtime_path, '--version'])
+        call(['node', self.nodejs_script_path, '--version'])
+        log('node version: ')
+        call(['node', '--version'])
 
 def main():
     x64 = True # x64 is default
@@ -90,23 +90,23 @@ def main():
 
     for argv in sys.argv:
         argv = argv.lower()
-        if argv == "node" or argv == "nodejs":
+        if argv == 'node' or argv == 'nodejs':
             nodejs = True
             x64 = True
             release = False
             validate = False
             break
-        if argv == "validate":
+        if argv == 'validate':
             validate = True
             x64 = True
             release = False
             nodejs = False
             break
-        if argv == "release" or argv == "rel":
+        if argv == 'release' or argv == 'rel':
             release = True
-        if argv == "64" or argv == "x64":
+        if argv == '64' or argv == 'x64':
             x64 = True
-        if argv == "32" or argv == "x86":
+        if argv == '32' or argv == 'x86':
             if not is_osx_sys():
                 x64 = False
 
@@ -114,19 +114,19 @@ def main():
     if nodejs == False:
         if not is_windows_sys() and not is_osx_sys():
             if is_linux_sys():
-                log("Only node support Linux.")
+                log('Only node support Linux.')
             else:
-                log("Unknown operating system.")
+                log('Unknown operating system.')
             return
     else:
         if not is_windows_sys() and not is_osx_sys() and not is_linux_sys():
-            log("Unknown operating system.")
+            log('Unknown operating system.')
             return
 
     # prepare path
-    jsformatter_path_sel = ""
-    jsformatter_lib_path_sel = ""
-    jsformatter_nodejs_script_sel = ""
+    jsformatter_path_sel = ''
+    jsformatter_lib_path_sel = ''
+    jsformatter_nodejs_script_sel = ''
 
     if nodejs == False and validate == False:
         if is_osx_sys():
@@ -163,7 +163,7 @@ def main():
         case_runtime = NodeCaseRuntime(jsformatter_nodejs_script_sel)
     if validate:
         if is_osx_sys():
-            log("Validate only support Windows.")
+            log('Validate only support Windows.')
             return
         case_runtime = ValidateCaseRuntime(jsformatter_path_sel, jsformatter_nodejs_script_sel)
 
@@ -176,16 +176,16 @@ def main():
     allpass = True
     idx = 1
     for name, case in test_cases.items():
-        log("name: " + name)
-        log("source: " + case.source)
-        log("result: " + case.result)
-        log("running...")
+        log('name: ' + name)
+        log('source: ' + case.source)
+        log('result: ' + case.result)
+        log('running...')
 
         result = case_runtime.run_case(case)
-        log("[%d/%d]" % (idx, len(test_cases)))
-        log("")
+        log('[%d/%d]' % (idx, len(test_cases)))
+        log('')
 
-        if result == "ERROR":
+        if result == 'ERROR':
             allpass = False
             break
 
@@ -195,10 +195,10 @@ def main():
     duration_time = (end_time - start_time) / 1000.0
 
     if allpass:
-        log("%d cases ALL PASS, took %.2fs." % (len(test_cases), duration_time))
+        log('%d cases ALL PASS, took %.2fs.' % (len(test_cases), duration_time))
 
-    log("Test args: x64=%r, release=%r, nodejs=%r, validate=%r" % (x64, release, nodejs, validate))
-    log("")
+    log('Test args: x64=%r, release=%r, nodejs=%r, validate=%r' % (x64, release, nodejs, validate))
+    log('')
 
     case_runtime.dump_name()
     case_runtime.dump_info()
