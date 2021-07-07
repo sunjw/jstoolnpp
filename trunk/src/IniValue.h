@@ -1,7 +1,7 @@
 /*
  * IniValue class header file
  * Author: Sun Junwen
- * Version: 1.1
+ * Version: 1.1.1
  */
 #ifndef _INI_VALUE_H_
 #define _INI_VALUE_H_

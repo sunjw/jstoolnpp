@@ -1,7 +1,7 @@
 /*
  * IniProcessor class implementation file
  * Author: Sun Junwen
- * Version: 1.2.8
+ * Version: 1.2.9
  */
 #include <cstdlib>
 #include <string>

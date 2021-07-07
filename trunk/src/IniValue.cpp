@@ -1,7 +1,7 @@
 /*
  * IniValue class implementation file
  * Author: Sun Junwen
- * Version: 1.1
+ * Version: 1.1.1
  */
 #include <cstdlib>
 #include <string>

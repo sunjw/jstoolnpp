@@ -1,7 +1,7 @@
 /*
  * IniFileProcessor class implementation file
  * Author: Sun Junwen
- * Version: 1.0.1
+ * Version: 1.0.2
  */
 #include "IniFileProcessor.h"
 

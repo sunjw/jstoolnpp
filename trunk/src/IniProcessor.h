@@ -1,7 +1,7 @@
 /*
  * IniProcessor class header file
  * Author: Sun Junwen
- * Version: 1.2.8
+ * Version: 1.2.9
  */
 #ifndef _INI_PROCESSOR_H_
 #define _INI_PROCESSOR_H_
