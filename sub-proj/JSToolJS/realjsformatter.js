@@ -362,7 +362,7 @@ class RealJSFormatter extends JSParser.JSParser {
             topStack = JSParser.GetStackTop(this.m_blockStack);
             if ((this.m_tokenA.code == ")" && topStack == JSParser.JS_BRACKET) ||
                 (this.m_tokenA.code == "]" && topStack == JSParser.JS_SQUARE)) {
-                // )] need pop stack and minus indent
+                // )] need pop stack and reduce indent
                 this.m_blockStack.pop();
                 --this.m_nIndents;
                 topStack = JSParser.GetStackTop(this.m_blockStack);
@@ -505,12 +505,12 @@ class RealJSFormatter extends JSParser.JSParser {
             }
 
             if (fixTopStack == JSParser.JS_BRACKET) {
-                --this.m_nIndents; // minus indent for ({
+                --this.m_nIndents; // reduce indent for ({
                 this.m_blockStack.pop();
                 fixTopStack = JSParser.GetStackTop(this.m_blockStack);
                 if (this.m_nIndents > 0 && this.m_bAssign &&
                     (fixTopStack == JSParser.JS_ASSIGN || fixTopStack == JSParser.JS_HELPER)) {
-                    --this.m_nIndents; // minus indent for =({
+                    --this.m_nIndents; // reduce indent for =({
                     this.m_indentFixSet.add(this.m_nIndents);
                 }
                 if (this.m_nIndents == 0 &&
@@ -592,7 +592,7 @@ class RealJSFormatter extends JSParser.JSParser {
             }
 
             if (topStack == JSParser.JS_BLOCK) {
-                // pop and minus indent
+                // pop and reduce indent
                 this.m_blockStack.pop();
                 --this.m_nIndents;
                 topStack = JSParser.GetStackTop(this.m_blockStack);
@@ -735,7 +735,7 @@ class RealJSFormatter extends JSParser.JSParser {
 
         if (!bTokenAPropName &&
             (this.m_tokenA.code == "case" || this.m_tokenA.code == "default")) {
-            // minus indent for case, default
+            // reduce indent for case, default
             --this.m_nIndents;
             let rightDeco = " ";
             if (this.m_tokenA.code == "default" && this.m_tokenB.code == ":") {
