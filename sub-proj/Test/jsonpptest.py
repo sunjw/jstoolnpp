@@ -85,7 +85,7 @@ def main():
         argv = argv.lower()
         if argv == 'node' or argv == 'nodejs':
             nodejs = True
-        if argv == 'release':
+        if argv == 'release' or argv == 'rel':
             release = True
         if argv == 'sort' or argv == 'sorted':
             sort_json = True
