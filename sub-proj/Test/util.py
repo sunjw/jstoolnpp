@@ -11,13 +11,13 @@ def log(message):
     print(message)
 
 def is_windows_sys():
-    return (platform.system() == "Windows")
+    return (platform.system() == 'Windows')
 
 def is_osx_sys():
-    return (platform.system() == "Darwin")
+    return (platform.system() == 'Darwin')
 
 def is_linux_sys():
-    return (platform.system() == "Linux")
+    return (platform.system() == 'Linux')
 
 def current_millis():
     return int(round(time.time() * 1000))

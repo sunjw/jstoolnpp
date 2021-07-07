@@ -10,12 +10,12 @@ from subprocess import call
 
 from util import *
 
-OUTPUT_FILE_NAME = "out.js"
+OUTPUT_FILE_NAME = 'out.js'
 
 class TestCase:
-    case_dir = ""
-    source = ""
-    result = ""
+    case_dir = ''
+    source = ''
+    result = ''
 
 class CaseGenerator(object):
     def __init__(self, case_dir):
@@ -23,7 +23,7 @@ class CaseGenerator(object):
 
     def _is_result_file(self, file):
         filename_no_ext = os.path.splitext(file)[0]
-        if filename_no_ext.endswith(".test"):
+        if filename_no_ext.endswith('.test'):
             return True
         return False
 
@@ -37,7 +37,7 @@ class CaseGenerator(object):
         return case_name
 
     def _filter_out_case(self, case):
-        return (case.source == "" or case.result == "")
+        return (case.source == '' or case.result == '')
 
     def _make_test_case(self, files):
         test_cases = {}
@@ -82,11 +82,11 @@ class CaseRuntime(object):
         call([self.runtime_path, test_case.source, self.get_out_path_from_case(test_case)])
 
     def _case_result(self, test_case):
-        result = "ERROR"
-        out_md5 = hashlib.md5(open(self.get_out_path_from_case(test_case), "rb").read()).hexdigest()
-        result_md5 = hashlib.md5(open(test_case.result, "rb").read()).hexdigest()
+        result = 'ERROR'
+        out_md5 = hashlib.md5(open(self.get_out_path_from_case(test_case), 'rb').read()).hexdigest()
+        result_md5 = hashlib.md5(open(test_case.result, 'rb').read()).hexdigest()
         if out_md5 == result_md5:
-            result = "PASS"
+            result = 'PASS'
 
         log(result)
         return result
@@ -99,10 +99,10 @@ class CaseRuntime(object):
         return os.path.join(test_case.case_dir, self.out_file)
 
     def dump_name(self):
-        log("CaseRuntime")
+        log('CaseRuntime')
 
     def dump_info(self):
-        log("Using %s" % (self.runtime_path))
+        log('Using %s' % (self.runtime_path))
 
     def dump_version(self):
-        call([self.runtime_path, "--version"])
+        call([self.runtime_path, '--version'])
