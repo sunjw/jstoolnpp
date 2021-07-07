@@ -899,7 +899,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		return;
 	}
 
-	if (m_tokenA.code == "::" || m_tokenA.code == "->")
+	if (m_tokenA.code == "::" || m_tokenA.code == "->" || m_tokenA.code == "?.")
 	{
 		PutToken(m_tokenA);
 		return;

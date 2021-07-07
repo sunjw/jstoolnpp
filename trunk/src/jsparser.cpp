@@ -407,6 +407,28 @@ void JSParser::GetTokenRaw()
 				}
 				return;
 			}
+			else if (m_charA == '?' && m_charB == '.')
+			{
+				m_tokenB.type = OPER_TYPE;
+				m_tokenB.code.push_back(m_charA);
+
+				int prevCharB = m_charB;
+				m_charB = GetChar();
+				if (!IsNumChar(m_charB))
+				{
+					// ?.xyz
+					m_tokenB.code.push_back(prevCharB);
+				}
+				else
+				{
+					// ? .123
+					m_tokenBQueue.push(m_tokenB);
+					m_tokenB.code = prevCharB;
+					m_tokenB.type = OPER_TYPE;
+					m_tokenB.line = m_lineCount;
+				}
+				return;
+			}
 			else
 			{
 				// 还是单字符的
