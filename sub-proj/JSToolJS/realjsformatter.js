@@ -587,7 +587,7 @@ class RealJSFormatter extends JSParser.JSParser {
                 }
 
                 /*if (!GetStackTop(m_blockStack, topStack)) {
-                    break;
+                break;
                 }*/
             }
 
