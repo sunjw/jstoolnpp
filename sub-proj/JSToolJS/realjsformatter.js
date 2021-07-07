@@ -692,7 +692,7 @@ class RealJSFormatter extends JSParser.JSParser {
             return;
         }
 
-        if (this.m_tokenA.code == "::" || this.m_tokenA.code == "->") {
+        if (this.m_tokenA.code == "::" || this.m_tokenA.code == "->" || this.m_tokenA.code == "?.") {
             this.PutToken(this.m_tokenA);
             return;
         }

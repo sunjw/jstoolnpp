@@ -482,6 +482,23 @@ class JSParser {
                         }
                     }
                     return;
+                } else if (this.m_charA == '?' && this.m_charB == '.') {
+                    this.m_tokenB.type = OPER_TYPE;
+                    this.m_tokenB.code += this.m_charA;
+
+                    let prevCharB = this.m_charB;
+                    this.m_charB = this.GetChar();
+                    if (!this.IsNumChar(this.m_charB)) {
+                        // ?.xyz
+                        this.m_tokenB.code += prevCharB;
+                    } else {
+                        // ? .123
+                        this.m_tokenBQueue.push(this.m_tokenB);
+                        this.m_tokenB = new Token();
+                        this.m_tokenB.code = prevCharB;
+                        this.m_tokenB.type = OPER_TYPE;
+                        this.m_tokenB.line = this.m_lineCount;
+                    }
                 } else {
                     // still...single char operator
                     this.m_tokenB.type = OPER_TYPE;
