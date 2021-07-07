@@ -326,8 +326,31 @@ class Circle extends Shape {
 	constructor(id, x, y, radius) {
 		super(id, x, y);
 	}
+
 	toString() {
 		return "Circle > " + super.toString();
+	}
+
+	optional() {
+		let nestedProp = obj.first?.second;
+		let result = someInterface.customMethod?.();
+		try {
+			// ... do something with the data
+		} catch (err) {
+			onError?.(err.message); // no exception if onError is undefined
+		}
+		let nestedProp = obj?.['prop' + 'Name'];
+		let object = {};
+		object?.property = 1; // Uncaught SyntaxError: Invalid left-hand side in assignment
+		let arrayItem = arr?.[42];
+
+		const dogName = adventurer.dog?.name;
+		adventurer.dog?.run();
+
+		let xyz = jalsfdj ? .99 : .088;
+		let abcd = jalsfdj ? .99 : 0.088;
+
+		let abcd = jalsfdj ? adventurer.dog?.name : adventurer.dog?.namex;
 	}
 }
 
