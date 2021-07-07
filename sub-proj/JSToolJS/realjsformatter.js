@@ -508,7 +508,7 @@ class RealJSFormatter extends JSParser.JSParser {
                 --this.m_nIndents; // reduce indent for ({
                 this.m_blockStack.pop();
                 fixTopStack = JSParser.GetStackTop(this.m_blockStack);
-                if (this.m_nIndents > 0 && this.m_bAssign &&
+                if (this.m_nIndents > 0 && this.m_nIndents > this.m_nLineIndents && this.m_bAssign &&
                     (fixTopStack == JSParser.JS_ASSIGN || fixTopStack == JSParser.JS_HELPER)) {
                     --this.m_nIndents; // reduce indent for =({
                     this.m_indentFixSet.add(this.m_nIndents);
