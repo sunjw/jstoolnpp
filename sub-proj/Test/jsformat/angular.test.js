@@ -4455,18 +4455,18 @@
 		},
 		providerInjector = (providerCache.$injector =
 				createInternalInjector(providerCache, function (serviceName, caller) {
-				if (angular.isString(caller)) {
-					path.push(caller);
-				}
-				throw $injectorMinErr('unpr', "Unknown provider: {0}", path.join(' <- '));
-			})),
+					if (angular.isString(caller)) {
+						path.push(caller);
+					}
+					throw $injectorMinErr('unpr', "Unknown provider: {0}", path.join(' <- '));
+				})),
 		instanceCache = {},
 		protoInstanceInjector =
 			createInternalInjector(instanceCache, function (serviceName, caller) {
-			var provider = providerInjector.get(serviceName + providerSuffix, caller);
-			return instanceInjector.invoke(
-				provider.$get, provider, undefined, serviceName);
-		}),
+				var provider = providerInjector.get(serviceName + providerSuffix, caller);
+				return instanceInjector.invoke(
+					provider.$get, provider, undefined, serviceName);
+			}),
 		instanceInjector = protoInstanceInjector;
 
 		providerCache['$injector' + providerSuffix] = {
@@ -8508,8 +8508,8 @@
 							if (isNgAttr = NG_ATTR_BINDING.test(ngAttrName)) {
 								name = name.replace(PREFIX_REGEXP, '')
 									.substr(8).replace(/_(.)/g, function (match, letter) {
-									return letter.toUpperCase();
-								});
+										return letter.toUpperCase();
+									});
 							}
 
 							var multiElementMatch = ngAttrName.match(MULTI_ELEMENT_DIR_RE);
@@ -8807,15 +8807,15 @@
 
 								childTranscludeFn = compilationGenerator(mightHaveMultipleTransclusionError, $template, transcludeFn, terminalPriority,
 										replaceDirective && replaceDirective.name, {
-									// Don't pass in:
-									// - controllerDirectives - otherwise we'll create duplicates controllers
-									// - newIsolateScopeDirective or templateDirective - combining templates with
-									//   element transclusion doesn't make sense.
-									//
-									// We need only nonTlbTranscludeDirective so that we prevent putting transclusion
-									// on the same element more than once.
-									nonTlbTranscludeDirective: nonTlbTranscludeDirective
-								});
+										// Don't pass in:
+										// - controllerDirectives - otherwise we'll create duplicates controllers
+										// - newIsolateScopeDirective or templateDirective - combining templates with
+										//   element transclusion doesn't make sense.
+										//
+										// We need only nonTlbTranscludeDirective so that we prevent putting transclusion
+										// on the same element more than once.
+										nonTlbTranscludeDirective: nonTlbTranscludeDirective
+									});
 							} else {
 
 								var slots = createMap();
@@ -8879,8 +8879,8 @@
 								$compileNode.empty(); // clear contents
 								childTranscludeFn = compilationGenerator(mightHaveMultipleTransclusionError, $template, transcludeFn, undefined,
 										undefined, {
-									needsNewScope: directive.$$isolateScope || directive.$$newScope
-								});
+										needsNewScope: directive.$$isolateScope || directive.$$newScope
+									});
 								childTranscludeFn.$$slots = slots;
 							}
 						}
@@ -8951,12 +8951,12 @@
 
 							nodeLinkFn = compileTemplateUrl(directives.splice(i, directives.length - i), $compileNode,
 									templateAttrs, jqCollection, hasTranscludeDirective && childTranscludeFn, preLinkFns, postLinkFns, {
-								controllerDirectives: controllerDirectives,
-								newScopeDirective: (newScopeDirective !== directive) && newScopeDirective,
-								newIsolateScopeDirective: newIsolateScopeDirective,
-								templateDirective: templateDirective,
-								nonTlbTranscludeDirective: nonTlbTranscludeDirective
-							});
+									controllerDirectives: controllerDirectives,
+									newScopeDirective: (newScopeDirective !== directive) && newScopeDirective,
+									newIsolateScopeDirective: newIsolateScopeDirective,
+									templateDirective: templateDirective,
+									nonTlbTranscludeDirective: nonTlbTranscludeDirective
+								});
 							ii = directives.length;
 						} else if (directive.compile) {
 							try {
@@ -11721,9 +11721,9 @@
 
 				var jsonpDone = jsonpReq(url.replace('JSON_CALLBACK', 'angular.callbacks.' + callbackId),
 						callbackId, function (status, text) {
-					completeRequest(callback, status, callbacks[callbackId].data, "", text);
-					callbacks[callbackId] = noop;
-				});
+						completeRequest(callback, status, callbacks[callbackId].data, "", text);
+						callbacks[callbackId] = noop;
+					});
 			} else {
 
 				var xhr = createXhr(method, url);

@@ -1690,8 +1690,8 @@ License: MIT
 							if (n = za.test(l))
 								k =
 									k.replace(Vc, "").substr(8).replace(/_(.)/g, function (a, b) {
-									return b.toUpperCase()
-								});
+										return b.toUpperCase()
+									});
 							(l = l.match(Ba)) && R(l[1]) && (v = k, C = k.substr(0, k.length - 5) + "end", k = k.substr(0, k.length - 6));
 							l = ya(k.toLowerCase());
 							h[l] = k;
@@ -4853,8 +4853,8 @@ License: MIT
 			f = [];
 			for (g = k.reduce(function (a,
 							b) {
-					return a && !b
-				}, !0); 0 > h; )
+						return a && !b
+					}, !0); 0 > h; )
 				k.unshift(0), h++;
 			0 < h ? f = k.splice(h) : (f = k, k = [0]);
 			h = [];
@@ -7927,8 +7927,8 @@ License: MIT
 					var f = b(e.ngBindHtml),
 					g =
 						b(e.ngBindHtml, function (a) {
-						return (a || "").toString()
-					});
+							return (a || "").toString()
+						});
 					d.$$addBindingClass(c);
 					return function (b, c, e) {
 						d.$$addBindingInfo(c, e.ngBindHtml);

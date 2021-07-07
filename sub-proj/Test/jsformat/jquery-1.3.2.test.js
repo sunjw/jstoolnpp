@@ -720,8 +720,8 @@
 				if (elem.nodeType == 1)
 					elem.className = classNames !== undefined ?
 						jQuery.grep(elem.className.split(/\s+/), function (className) {
-						return !jQuery.className.has(classNames, className);
-					}).join(" ") :
+							return !jQuery.className.has(classNames, className);
+						}).join(" ") :
 						"";
 			},
 

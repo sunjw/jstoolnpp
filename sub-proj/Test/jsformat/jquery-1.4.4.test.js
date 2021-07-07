@@ -2594,8 +2594,8 @@
 			} else if (type === "select-multiple") {
 				val = elem.selectedIndex > -1 ?
 					jQuery.map(elem.options, function (elem) {
-					return elem.selected;
-				}).join("-") :
+						return elem.selected;
+					}).join("-") :
 					"";
 
 			} else if (elem.nodeName.toLowerCase() === "select") {

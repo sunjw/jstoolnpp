@@ -1785,8 +1785,8 @@
 			route = route.replace(escapeRegExp, '\\$&')
 				.replace(optionalParam, '(?:$1)?')
 				.replace(namedParam, function (match, optional) {
-				return optional ? match : '([^/?]+)';
-			})
+					return optional ? match : '([^/?]+)';
+				})
 				.replace(splatParam, '([^?]*?)');
 			return new RegExp('^' + route + '(?:\\?([\\s\\S]*))?$');
 		},

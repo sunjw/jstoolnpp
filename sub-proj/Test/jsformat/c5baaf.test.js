@@ -8710,8 +8710,8 @@
 									operation: e,
 									error: t
 								}) => !t && function (e) {
-							return "Pull" === e || "Push" === e || "Sync" === e || "Fetch" === e
-						}
+								return "Pull" === e || "Push" === e || "Sync" === e || "Fetch" === e
+							}
 								(e));
 						o.onceEvent(r)(this.onFirstGoodRemoteOperation, this, this.disposables)
 					}
@@ -9168,9 +9168,9 @@
 									method: r,
 									options: n
 								}) => {
-							const o = this.createCommand(e, t, r, n);
-							return n.diff ? a.commands.registerDiffInformationCommand(e, o) : a.commands.registerCommand(e, o)
-						})
+								const o = this.createCommand(e, t, r, n);
+								return n.diff ? a.commands.registerDiffInformationCommand(e, o) : a.commands.registerCommand(e, o)
+							})
 					}
 					async refresh(e) {
 						await e.status()

@@ -2628,40 +2628,40 @@ Element._attributeTranslations = {
 if (Prototype.Browser.Opera) {
 	Element.Methods.getStyle = Element.Methods.getStyle.wrap(
 			function (proceed, element, style) {
-		switch (style) {
-		case 'height':
-		case 'width':
-			if (!Element.visible(element))
-				return null;
+			switch (style) {
+			case 'height':
+			case 'width':
+				if (!Element.visible(element))
+					return null;
 
-			var dim = parseInt(proceed(element, style), 10);
+				var dim = parseInt(proceed(element, style), 10);
 
-			if (dim !== element['offset' + style.capitalize()])
-				return dim + 'px';
+				if (dim !== element['offset' + style.capitalize()])
+					return dim + 'px';
 
-			var properties;
-			if (style === 'height') {
-				properties = ['border-top-width', 'padding-top',
-					'padding-bottom', 'border-bottom-width'];
-			} else {
-				properties = ['border-left-width', 'padding-left',
-					'padding-right', 'border-right-width'];
+				var properties;
+				if (style === 'height') {
+					properties = ['border-top-width', 'padding-top',
+						'padding-bottom', 'border-bottom-width'];
+				} else {
+					properties = ['border-left-width', 'padding-left',
+						'padding-right', 'border-right-width'];
+				}
+				return properties.inject(dim, function (memo, property) {
+					var val = proceed(element, property);
+					return val === null ? memo : memo - parseInt(val, 10);
+				}) + 'px';
+			default:
+				return proceed(element, style);
 			}
-			return properties.inject(dim, function (memo, property) {
-				var val = proceed(element, property);
-				return val === null ? memo : memo - parseInt(val, 10);
-			}) + 'px';
-		default:
-			return proceed(element, style);
-		}
-	});
+		});
 
 	Element.Methods.readAttribute = Element.Methods.readAttribute.wrap(
 			function (proceed, element, attribute) {
-		if (attribute === 'title')
-			return element.title;
-		return proceed(element, attribute);
-	});
+			if (attribute === 'title')
+				return element.title;
+			return proceed(element, attribute);
+		});
 } else if (Prototype.Browser.IE) {
 	Element.Methods.getStyle = function (element, style) {
 		element = $(element);
@@ -4051,24 +4051,24 @@ Element.addMethods({
 	if (Prototype.Browser.IE) {
 		getOffsetParent = getOffsetParent.wrap(
 				function (proceed, element) {
-			element = $(element);
+				element = $(element);
 
-			if (isDocument(element) || isDetached(element) || isBody(element) || isHtml(element))
-				return $(document.body);
+				if (isDocument(element) || isDetached(element) || isBody(element) || isHtml(element))
+					return $(document.body);
 
-			var position = element.getStyle('position');
-			if (position !== 'static')
-				return proceed(element);
+				var position = element.getStyle('position');
+				if (position !== 'static')
+					return proceed(element);
 
-			element.setStyle({
-				position: 'relative'
+				element.setStyle({
+					position: 'relative'
+				});
+				var value = proceed(element);
+				element.setStyle({
+					position: position
+				});
+				return value;
 			});
-			var value = proceed(element);
-			element.setStyle({
-				position: position
-			});
-			return value;
-		});
 
 		positionedOffset = positionedOffset.wrap(function (proceed, element) {
 			element = $(element);

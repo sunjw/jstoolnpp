@@ -4942,10 +4942,10 @@
 			var e = jQuery.extend(
 					new jQuery.Event(),
 					event, {
-				type: type,
-				isSimulated: true,
-				originalEvent: {}
-			});
+					type: type,
+					isSimulated: true,
+					originalEvent: {}
+				});
 			if (bubble) {
 				jQuery.event.trigger(e, null, elem);
 			} else {
