@@ -10,12 +10,12 @@ from subprocess import call
 from util import *
 from testbase import *
 
-TEST_CASE_DIR = "jsonpp"
-OUTPUT_FILE_NAME = "out.json"
+TEST_CASE_DIR = 'jsonpp'
+OUTPUT_FILE_NAME = 'out.json'
 
-JSONPP_PATH_WIN = "../../trunk/debug/JsonPP.exe"
-JSONPP_REL_PATH_WIN = "../../trunk/release/JsonPP.exe"
-JSONPP_NODEJS_SCRIPT_PATH = "../JSToolJS/jsonppjsnode.js"
+JSONPP_PATH_WIN = '../../trunk/debug/JsonPP.exe'
+JSONPP_REL_PATH_WIN = '../../trunk/release/JsonPP.exe'
+JSONPP_NODEJS_SCRIPT_PATH = '../JSToolJS/jsonppjsnode.js'
 
 class NativeCaseRuntime(CaseRuntime):
     def __init__(self, runtime_path, sort):
@@ -27,10 +27,10 @@ class NativeCaseRuntime(CaseRuntime):
         if not self.sort:
             call([self.runtime_path, test_case.source, self.get_out_path_from_case(test_case)])
         else:
-            call([self.runtime_path, "--sort", test_case.source, self.get_out_path_from_case(test_case)])
+            call([self.runtime_path, '--sort', test_case.source, self.get_out_path_from_case(test_case)])
 
     def dump_name(self):
-        log("NativeCaseRuntime")
+        log('NativeCaseRuntime')
 
 class NodeCaseRuntime(CaseRuntime):
     def __init__(self, runtime_path, sort):
@@ -40,17 +40,17 @@ class NodeCaseRuntime(CaseRuntime):
 
     def _case_execute(self, test_case):
         if not self.sort:
-            call(["node", self.runtime_path, test_case.source, self.get_out_path_from_case(test_case)])
+            call(['node', self.runtime_path, test_case.source, self.get_out_path_from_case(test_case)])
         else:
-            call(["node", self.runtime_path, "--sort", test_case.source, self.get_out_path_from_case(test_case)])
+            call(['node', self.runtime_path, '--sort', test_case.source, self.get_out_path_from_case(test_case)])
 
     def dump_name(self):
-        log("NodeCaseRuntime")
+        log('NodeCaseRuntime')
 
     def dump_version(self):
-        call(["node", self.runtime_path, "--version"])
-        log("node version: ")
-        call(["node", "--version"])
+        call(['node', self.runtime_path, '--version'])
+        log('node version: ')
+        call(['node', '--version'])
 
 class JSONPPCaseGenerator(CaseGenerator):
     def __init__(self, case_dir, sort_json):
@@ -60,16 +60,16 @@ class JSONPPCaseGenerator(CaseGenerator):
     def _is_result_file(self, file):
         filename_no_ext = os.path.splitext(file)[0]
         if not self.sort_json:
-            if filename_no_ext.endswith(".test") and not filename_no_ext.endswith(".sort.test"):
+            if filename_no_ext.endswith('.test') and not filename_no_ext.endswith('.sort.test'):
                 return True
         else:
-            if filename_no_ext.endswith(".sort.test"):
+            if filename_no_ext.endswith('.sort.test'):
                 return True
         return False
 
     def _result_file_to_case_name(self, file):
         filename_no_ext = os.path.splitext(file)[0]
-        case_name = ""
+        case_name = ''
         if not self.sort_json:
             case_name = filename_no_ext[:-5] # remove .test
         else:
@@ -83,11 +83,11 @@ def main():
 
     for argv in sys.argv:
         argv = argv.lower()
-        if argv == "node" or argv == "nodejs":
+        if argv == 'node' or argv == 'nodejs':
             nodejs = True
-        if argv == "release":
+        if argv == 'release':
             release = True
-        if argv == "sort" or argv == "sorted":
+        if argv == 'sort' or argv == 'sorted':
             sort_json = True
 
     if nodejs:
@@ -95,12 +95,12 @@ def main():
 
     # system check
     if not nodejs and not is_windows_sys():
-        log("JsonPP native test only supports Windows.")
+        log('JsonPP native test only supports Windows.')
         return
 
     # prepare path
-    jsonpp_path_sel = ""
-    jsonpp_nodejs_script_sel = ""
+    jsonpp_path_sel = ''
+    jsonpp_nodejs_script_sel = ''
 
     if not nodejs:
         jsonpp_path_sel = JSONPP_PATH_WIN
@@ -125,16 +125,16 @@ def main():
     allpass = True
     idx = 1
     for name, case in test_cases.items():
-        log("name: " + name)
-        log("source: " + case.source)
-        log("result: " + case.result)
-        log("running...")
+        log('name: ' + name)
+        log('source: ' + case.source)
+        log('result: ' + case.result)
+        log('running...')
 
         result = case_runtime.run_case(case)
-        log("[%d/%d]" % (idx, len(test_cases)))
-        log("")
+        log('[%d/%d]' % (idx, len(test_cases)))
+        log('')
 
-        if result == "ERROR":
+        if result == 'ERROR':
             allpass = False
             break
 
@@ -144,10 +144,10 @@ def main():
     duration_time = (end_time - start_time) / 1000.0
 
     if allpass:
-        log("%d cases ALL PASS, took %.2fs." % (len(test_cases), duration_time))
+        log('%d cases ALL PASS, took %.2fs.' % (len(test_cases), duration_time))
 
-    log("Test args: release=%r, nodejs=%r, sort=%r" % (release, nodejs, sort_json))
-    log("")
+    log('Test args: release=%r, nodejs=%r, sort=%r' % (release, nodejs, sort_json))
+    log('')
 
     case_runtime.dump_name()
     case_runtime.dump_info()
