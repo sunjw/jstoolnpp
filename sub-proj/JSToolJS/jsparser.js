@@ -468,7 +468,7 @@ class JSParser {
                     this.m_charB = this.GetChar();
                     if ((this.m_tokenB.code == "==" || this.m_tokenB.code == "!=" ||
                             this.m_tokenB.code == "<<" || this.m_tokenB.code == ">>") && this.m_charB == '=') {
-                        // 3 chars: ===, !==, <<=, >>=
+                        // ===, !==, <<=, >>=
                         this.m_tokenB.code += this.m_charB;
                         this.m_charB = this.GetChar();
                     } else if (this.m_tokenB.code == ">>" && this.m_charB == '>') {
@@ -480,6 +480,11 @@ class JSParser {
                             this.m_tokenB.code += this.m_charB;
                             this.m_charB = this.GetChar();
                         }
+                    } else if ((this.m_tokenB.code == "&&" || this.m_tokenB.code == "||" ||
+                            this.m_tokenB.code == "??") && this.m_charB == '=') {
+                        // &&=, ||=, ??=
+                        this.m_tokenB.code += this.m_charB;
+                        this.m_charB = this.GetChar();
                     }
                     return;
                 } else if (this.m_charA == '?' && this.m_charB == '.') {
