@@ -389,6 +389,17 @@ let numbers = [ ...fibonacci(1000) ];
 //  generic asynchronous control-flow driver
 function async (proc, ...params) {
     var iterator = proc(...params);
+
+    var kjlksdf = 2**3;   // 8
+    var ghjfgj = 3**2;   // 9
+    var tjty = 3**2.5; // 15.588457268119896
+    var werg = 10**-1; // 0.1
+    var asfasd = NaN**2; // NaN
+
+
+    var jthgn = -(2**2); // -4
+    var jdfjgf = (-2)**2; // 4
+
     return new Promise((resolve, reject) => {
         let loop = (value) => {
             let result;
