@@ -390,7 +390,7 @@ void JSParser::GetTokenRaw()
 				if ((m_tokenB.code == "==" || m_tokenB.code == "!=" ||
 					m_tokenB.code == "<<" || m_tokenB.code == ">>") && m_charB == '=')
 				{
-					// Èý×Ö·û ===, !==, <<=, >>=
+					// ===, !==, <<=, >>=
 					m_tokenB.code.push_back(m_charB);
 					m_charB = GetChar();
 				}
@@ -404,6 +404,13 @@ void JSParser::GetTokenRaw()
 						m_tokenB.code.push_back(m_charB);
 						m_charB = GetChar();
 					}
+				}
+				else if ((m_tokenB.code == "&&" || m_tokenB.code == "||" ||
+					m_tokenB.code == "??") && m_charB == '=')
+				{
+					// &&=, ||=, ??=
+					m_tokenB.code.push_back(m_charB);
+					m_charB = GetChar();
 				}
 				return;
 			}
