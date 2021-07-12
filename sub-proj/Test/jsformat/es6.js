@@ -296,6 +296,56 @@ class Circle extends Shape {
 
 class Rectangle extends Shape {
     static defaultRectangle () {
+        const a = { duration: 50, title: '' };
+
+        a.duration||=10;
+        console.log(a.duration);
+        // expected output: 50
+        
+        a.title||='title is empty.';
+        console.log(a.title);
+        // expected output: "title is empty"
+
+        a=x||(x=y);
+
+        const a = { duration: 50 };
+
+        a.duration??=10;
+        console.log(a.duration);
+        // expected output: 50
+
+        a.speed??=25;
+        console.log(a.speed);
+        // expected output: 25
+
+        function config(options) {
+            options.duration??=100;
+            options.speed??=25;
+            return options;
+        }
+
+        config({ duration: 125 }); // { duration: 125, speed: 25 }
+        config({}); // { duration: 100, speed: 25 }
+
+        let a = 1;
+        let b = 0;
+
+        a&&=2;
+        console.log(a);
+        // expected output: 2
+
+        b&&=2;
+        console.log(b);
+        // expected output: 0
+
+        let x = 0;
+        let y = 1;
+
+        x&&= 0; // 0
+        x&&=1; // 0
+        y&&=1; // 1
+        y&&= 0; // 0
+
         return new Rectangle("default", 0, 0, 100, 100);
     }
 }
