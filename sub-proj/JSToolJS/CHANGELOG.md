@@ -1,3 +1,8 @@
+1.2107.2  
+[Common] Tweak nested block indent.  
+[Common] Fix some bugs related to ES 2020 new operators.  
+[NPP] Change to use VS 2017.  
+
 1.2006.0  
 [Common] Fix some bugs related to regular expression.  
 
