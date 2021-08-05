@@ -8,7 +8,7 @@ import os
 import sys
 from subprocess import call
 
-import util
+import comm_util
 from testbase import *
 
 TEST_CASE_DIR = 'jsformat'
@@ -30,21 +30,21 @@ class MacOSCaseRuntime(CaseRuntime):
         os.environ['DYLD_LIBRARY_PATH'] = self.lib_path
 
     def dump_name(self):
-        util.log('macOSCaseRuntime')
+        comm_util.log_print('macOSCaseRuntime')
 
     def dump_info(self):
-        util.log('DYLD_LIBRARY_PATH=%s' % (os.environ['DYLD_LIBRARY_PATH']))
+        comm_util.log_print('DYLD_LIBRARY_PATH=%s' % (os.environ['DYLD_LIBRARY_PATH']))
 
 class NodeCaseRuntime(CaseRuntime):
     def _case_execute(self, test_case):
         call(['node', self.runtime_path, test_case.source, self.get_out_path_from_case(test_case)])
 
     def dump_name(self):
-        util.log('NodeCaseRuntime')
+        comm_util.log_print('NodeCaseRuntime')
 
     def dump_version(self):
         call(['node', self.runtime_path, '--version'])
-        util.log('node version: ')
+        comm_util.log_print('node version: ')
         call(['node', '--version'])
 
 class ValidateCaseRuntime(CaseRuntime):
@@ -55,9 +55,9 @@ class ValidateCaseRuntime(CaseRuntime):
         self.out_js = 'outjs.js'
 
     def _case_execute(self, test_case):
-        util.log('Call cpp...')
+        comm_util.log_print('Call cpp...')
         call([self.runtime_path, test_case.source, os.path.join(test_case.case_dir, self.out_cpp)])
-        util.log('Call node...')
+        comm_util.log_print('Call node...')
         call(['node', self.nodejs_script_path, test_case.source, os.path.join(test_case.case_dir, self.out_js)])
 
     def _case_result(self, test_case):
@@ -67,19 +67,19 @@ class ValidateCaseRuntime(CaseRuntime):
         if outcpp_md5 == outjs_md5:
             result = 'PASS'
 
-        util.log(result)
+        comm_util.log_print(result)
         return result
 
     def dump_name(self):
-        util.log('ValidateCaseRuntime')
+        comm_util.log_print('ValidateCaseRuntime')
 
     def dump_info(self):
-        util.log('%s vs. %s' % (self.runtime_path, self.nodejs_script_path))
+        comm_util.log_print('%s vs. %s' % (self.runtime_path, self.nodejs_script_path))
 
     def dump_version(self):
         call([self.runtime_path, '--version'])
         call(['node', self.nodejs_script_path, '--version'])
-        util.log('node version: ')
+        comm_util.log_print('node version: ')
         call(['node', '--version'])
 
 def main():
@@ -107,20 +107,20 @@ def main():
         if argv == '64' or argv == 'x64':
             x64 = True
         if argv == '32' or argv == 'x86':
-            if not util.is_osx_sys():
+            if not comm_util.is_osx_sys():
                 x64 = False
 
     # system check
     if nodejs == False:
-        if not util.is_windows_sys() and not util.is_osx_sys():
-            if util.is_linux_sys():
-                util.log('Only node support Linux.')
+        if not comm_util.is_windows_sys() and not comm_util.is_osx_sys():
+            if comm_util.is_linux_sys():
+                comm_util.log_print('Only node support Linux.')
             else:
-                util.log('Unknown operating system.')
+                comm_util.log_print('Unknown operating system.')
             return
     else:
-        if not util.is_windows_sys() and not util.is_osx_sys() and not util.is_linux_sys():
-            util.log('Unknown operating system.')
+        if not comm_util.is_windows_sys() and not comm_util.is_osx_sys() and not comm_util.is_linux_sys():
+            comm_util.log_print('Unknown operating system.')
             return
 
     # prepare path
@@ -129,12 +129,12 @@ def main():
     jsformatter_nodejs_script_sel = ''
 
     if nodejs == False and validate == False:
-        if util.is_osx_sys():
+        if comm_util.is_osx_sys():
             jsformatter_lib_path_sel = JSFORMATTER_LIB_PATH_MAC
             if release:
                 jsformatter_lib_path_sel = JSFORMATTER_LIB_REL_PATH_MAC
 
-        if util.is_windows_sys():
+        if comm_util.is_windows_sys():
             jsformatter_path_sel = JSFORMATTER_PATH_WIN
             if release and x64:
                 jsformatter_path_sel = JSFORMATTER_REL_PATH_WIN_64
@@ -142,7 +142,7 @@ def main():
                 jsformatter_path_sel = JSFORMATTER_PATH_WIN_64
             elif release:
                 jsformatter_path_sel = JSFORMATTER_REL_PATH_WIN
-        if util.is_osx_sys():
+        if comm_util.is_osx_sys():
             jsformatter_path_sel = JSFORMATTER_PATH_MAC
             if release:
                 jsformatter_path_sel = JSFORMATTER_REL_PATH_MAC
@@ -155,15 +155,15 @@ def main():
     # make runtime
     case_runtime = 0
     if nodejs == False and validate == False:
-        if util.is_windows_sys():
+        if comm_util.is_windows_sys():
             case_runtime = CaseRuntime(jsformatter_path_sel)
-        if util.is_osx_sys():
+        if comm_util.is_osx_sys():
             case_runtime = MacOSCaseRuntime(jsformatter_path_sel, jsformatter_lib_path_sel)
     if nodejs:
         case_runtime = NodeCaseRuntime(jsformatter_nodejs_script_sel)
     if validate:
-        if util.is_osx_sys():
-            util.log('Validate only support Windows.')
+        if comm_util.is_osx_sys():
+            comm_util.log_print('Validate only support Windows.')
             return
         case_runtime = ValidateCaseRuntime(jsformatter_path_sel, jsformatter_nodejs_script_sel)
 
@@ -172,18 +172,18 @@ def main():
     test_cases = case_generator.generate()
 
     # run cases
-    start_time = util.current_millis()
+    start_time = comm_util.get_cur_timestamp_millis()
     allpass = True
     idx = 1
     for name, case in test_cases.items():
-        util.log('name: ' + name)
-        util.log('source: ' + case.source)
-        util.log('result: ' + case.result)
-        util.log('running...')
+        comm_util.log_print('name: ' + name)
+        comm_util.log_print('source: ' + case.source)
+        comm_util.log_print('result: ' + case.result)
+        comm_util.log_print('running...')
 
         result = case_runtime.run_case(case)
-        util.log('[%d/%d]' % (idx, len(test_cases)))
-        util.log('')
+        comm_util.log_print('[%d/%d]' % (idx, len(test_cases)))
+        comm_util.log_print('')
 
         if result == 'ERROR':
             allpass = False
@@ -191,14 +191,14 @@ def main():
 
         idx += 1
 
-    end_time = util.current_millis()
+    end_time = comm_util.get_cur_timestamp_millis()
     duration_time = (end_time - start_time) / 1000.0
 
     if allpass:
-        util.log('%d cases ALL PASS, took %.2fs.' % (len(test_cases), duration_time))
+        comm_util.log_print('%d cases ALL PASS, took %.2fs.' % (len(test_cases), duration_time))
 
-    util.log('Test args: x64=%r, release=%r, nodejs=%r, validate=%r' % (x64, release, nodejs, validate))
-    util.log('')
+    comm_util.log_print('Test args: x64=%r, release=%r, nodejs=%r, validate=%r' % (x64, release, nodejs, validate))
+    comm_util.log_print('')
 
     case_runtime.dump_name()
     case_runtime.dump_info()
