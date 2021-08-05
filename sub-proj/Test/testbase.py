@@ -8,7 +8,7 @@ import hashlib
 import os
 from subprocess import call
 
-import util
+import comm_util
 
 OUTPUT_FILE_NAME = 'out.js'
 
@@ -70,7 +70,7 @@ class CaseGenerator(object):
         return test_cases_ordered
 
     def generate(self):
-        files = util.list_file(self.case_dir)
+        files = comm_util.list_file(self.case_dir)
         return self._make_test_case(files)
 
 class CaseRuntime(object):
@@ -88,7 +88,7 @@ class CaseRuntime(object):
         if out_md5 == result_md5:
             result = 'PASS'
 
-        util.log(result)
+        comm_util.log_print(result)
         return result
 
     def run_case(self, test_case):
@@ -99,10 +99,10 @@ class CaseRuntime(object):
         return os.path.join(test_case.case_dir, self.out_file)
 
     def dump_name(self):
-        util.log('CaseRuntime')
+        comm_util.log_print('CaseRuntime')
 
     def dump_info(self):
-        util.log('Using %s' % (self.runtime_path))
+        comm_util.log_print('Using %s' % (self.runtime_path))
 
     def dump_version(self):
         call([self.runtime_path, '--version'])
