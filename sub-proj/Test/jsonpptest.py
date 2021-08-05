@@ -7,7 +7,7 @@ import os
 import sys
 from subprocess import call
 
-from util import *
+import util
 from testbase import *
 
 TEST_CASE_DIR = 'jsonpp'
@@ -30,7 +30,7 @@ class NativeCaseRuntime(CaseRuntime):
             call([self.runtime_path, '--sort', test_case.source, self.get_out_path_from_case(test_case)])
 
     def dump_name(self):
-        log('NativeCaseRuntime')
+        util.log('NativeCaseRuntime')
 
 class NodeCaseRuntime(CaseRuntime):
     def __init__(self, runtime_path, sort):
@@ -45,11 +45,11 @@ class NodeCaseRuntime(CaseRuntime):
             call(['node', self.runtime_path, '--sort', test_case.source, self.get_out_path_from_case(test_case)])
 
     def dump_name(self):
-        log('NodeCaseRuntime')
+        util.log('NodeCaseRuntime')
 
     def dump_version(self):
         call(['node', self.runtime_path, '--version'])
-        log('node version: ')
+        util.log('node version: ')
         call(['node', '--version'])
 
 class JSONPPCaseGenerator(CaseGenerator):
@@ -94,8 +94,8 @@ def main():
         release = False
 
     # system check
-    if not nodejs and not is_windows_sys():
-        log('JsonPP native test only supports Windows.')
+    if not nodejs and not util.is_windows_sys():
+        util.log('JsonPP native test only supports Windows.')
         return
 
     # prepare path
@@ -121,18 +121,18 @@ def main():
     test_cases = case_generator.generate()
 
     # run cases
-    start_time = current_millis()
+    start_time = util.current_millis()
     allpass = True
     idx = 1
     for name, case in test_cases.items():
-        log('name: ' + name)
-        log('source: ' + case.source)
-        log('result: ' + case.result)
-        log('running...')
+        util.log('name: ' + name)
+        util.log('source: ' + case.source)
+        util.log('result: ' + case.result)
+        util.log('running...')
 
         result = case_runtime.run_case(case)
-        log('[%d/%d]' % (idx, len(test_cases)))
-        log('')
+        util.log('[%d/%d]' % (idx, len(test_cases)))
+        util.log('')
 
         if result == 'ERROR':
             allpass = False
@@ -140,14 +140,14 @@ def main():
 
         idx += 1
 
-    end_time = current_millis()
+    end_time = util.current_millis()
     duration_time = (end_time - start_time) / 1000.0
 
     if allpass:
-        log('%d cases ALL PASS, took %.2fs.' % (len(test_cases), duration_time))
+        util.log('%d cases ALL PASS, took %.2fs.' % (len(test_cases), duration_time))
 
-    log('Test args: release=%r, nodejs=%r, sort=%r' % (release, nodejs, sort_json))
-    log('')
+    util.log('Test args: release=%r, nodejs=%r, sort=%r' % (release, nodejs, sort_json))
+    util.log('')
 
     case_runtime.dump_name()
     case_runtime.dump_info()
