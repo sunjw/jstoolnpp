@@ -107,19 +107,19 @@ def main():
         if argv == '64' or argv == 'x64':
             x64 = True
         if argv == '32' or argv == 'x86':
-            if not comm_util.is_osx_sys():
+            if not comm_util.is_macos():
                 x64 = False
 
     # system check
     if nodejs == False:
-        if not comm_util.is_windows_sys() and not comm_util.is_osx_sys():
-            if comm_util.is_linux_sys():
+        if not comm_util.is_windows() and not comm_util.is_macos():
+            if comm_util.is_linux():
                 comm_util.log_print('Only node support Linux.')
             else:
                 comm_util.log_print('Unknown operating system.')
             return
     else:
-        if not comm_util.is_windows_sys() and not comm_util.is_osx_sys() and not comm_util.is_linux_sys():
+        if not comm_util.is_windows() and not comm_util.is_macos() and not comm_util.is_linux():
             comm_util.log_print('Unknown operating system.')
             return
 
@@ -129,12 +129,12 @@ def main():
     jsformatter_nodejs_script_sel = ''
 
     if nodejs == False and validate == False:
-        if comm_util.is_osx_sys():
+        if comm_util.is_macos():
             jsformatter_lib_path_sel = JSFORMATTER_LIB_PATH_MAC
             if release:
                 jsformatter_lib_path_sel = JSFORMATTER_LIB_REL_PATH_MAC
 
-        if comm_util.is_windows_sys():
+        if comm_util.is_windows():
             jsformatter_path_sel = JSFORMATTER_PATH_WIN
             if release and x64:
                 jsformatter_path_sel = JSFORMATTER_REL_PATH_WIN_64
@@ -142,7 +142,7 @@ def main():
                 jsformatter_path_sel = JSFORMATTER_PATH_WIN_64
             elif release:
                 jsformatter_path_sel = JSFORMATTER_REL_PATH_WIN
-        if comm_util.is_osx_sys():
+        if comm_util.is_macos():
             jsformatter_path_sel = JSFORMATTER_PATH_MAC
             if release:
                 jsformatter_path_sel = JSFORMATTER_REL_PATH_MAC
@@ -155,14 +155,14 @@ def main():
     # make runtime
     case_runtime = 0
     if nodejs == False and validate == False:
-        if comm_util.is_windows_sys():
+        if comm_util.is_windows():
             case_runtime = CaseRuntime(jsformatter_path_sel)
-        if comm_util.is_osx_sys():
+        if comm_util.is_macos():
             case_runtime = MacOSCaseRuntime(jsformatter_path_sel, jsformatter_lib_path_sel)
     if nodejs:
         case_runtime = NodeCaseRuntime(jsformatter_nodejs_script_sel)
     if validate:
-        if comm_util.is_osx_sys():
+        if comm_util.is_macos():
             comm_util.log_print('Validate only support Windows.')
             return
         case_runtime = ValidateCaseRuntime(jsformatter_path_sel, jsformatter_nodejs_script_sel)

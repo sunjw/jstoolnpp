@@ -94,7 +94,7 @@ def main():
         release = False
 
     # system check
-    if not nodejs and not comm_util.is_windows_sys():
+    if not nodejs and not comm_util.is_windows():
         comm_util.log_print('JsonPP native test only supports Windows.')
         return
 
