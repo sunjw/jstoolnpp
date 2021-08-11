@@ -62,8 +62,8 @@ class ValidateCaseRuntime(CaseRuntime):
 
     def _case_result(self, test_case):
         result = 'ERROR'
-        outcpp_md5 = hashlib.md5(open(os.path.join(test_case.case_dir, self.out_cpp), 'rb').read()).hexdigest()
-        outjs_md5 = hashlib.md5(open(os.path.join(test_case.case_dir, self.out_js), 'rb').read()).hexdigest()
+        outcpp_md5 = comm_util.md5_file(os.path.join(test_case.case_dir, self.out_cpp))
+        outjs_md5 = comm_util.md5_file(os.path.join(test_case.case_dir, self.out_js))
         if outcpp_md5 == outjs_md5:
             result = 'PASS'
 

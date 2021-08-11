@@ -85,3 +85,8 @@ def md5_str(input_str, encode='utf-8'):
     md5hash = hashlib.md5()
     md5hash.update(input_str.encode(encode))
     return md5hash.hexdigest()
+
+
+def md5_file(file_path):
+    filemd5 = hashlib.md5(open(file_path, 'rb').read()).hexdigest()
+    return filemd5

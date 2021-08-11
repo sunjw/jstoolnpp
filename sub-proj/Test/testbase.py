@@ -83,8 +83,8 @@ class CaseRuntime(object):
 
     def _case_result(self, test_case):
         result = 'ERROR'
-        out_md5 = hashlib.md5(open(self.get_out_path_from_case(test_case), 'rb').read()).hexdigest()
-        result_md5 = hashlib.md5(open(test_case.result, 'rb').read()).hexdigest()
+        out_md5 = comm_util.md5_file(self.get_out_path_from_case(test_case))
+        result_md5 = comm_util.md5_file(test_case.result)
         if out_md5 == result_md5:
             result = 'PASS'
 
