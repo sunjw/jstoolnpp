@@ -407,6 +407,8 @@ class RealJSFormatter extends JSParser.JSParser {
             } else if (this.m_tokenA.code == ")" &&
                 (this.m_tokenB.code == "{" || this.IsInlineComment(this.m_tokenB) || bHaveNewLine)) {
                 this.PutToken(this.m_tokenA, "", strRight); // a space for {, /**/ or newline
+            } else if (this.m_tokenA.code == "]" && this.m_tokenB.code == "of") {
+                this.PutToken(this.m_tokenA, "", " ");
             } else {
                 this.PutToken(this.m_tokenA); // output directly
             }
