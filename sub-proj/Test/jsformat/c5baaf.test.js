@@ -10903,14 +10903,14 @@
 					checkIgnoreSoon() {
 						const e = new Map(this.queue.entries());
 						this.queue.clear();
-						for (const [, t]of e) {
+						for (const [, t] of e) {
 							const e = [...t.queue.keys()];
 							t.repository.checkIgnore(e).then(e => {
-								for (const [r, n]of t.queue.entries())
+								for (const [r, n] of t.queue.entries())
 									n.resolve(e.has(r))
 							}, e => {
 								"IsInSubmodule" !== e.gitErrorCode && console.error(e);
-								for (const [, r]of t.queue.entries())
+								for (const [, r] of t.queue.entries())
 									r.reject(e)
 							})
 						}
