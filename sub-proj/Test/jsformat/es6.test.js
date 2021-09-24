@@ -184,7 +184,7 @@ h({
 });
 
 var list = [7, 42];
-var[a = 1, b = 2, c = 3, d] = list;
+var [a = 1, b = 2, c = 3, d] = list;
 
 //  lib/math.js
 export function sum(x, y) {
@@ -633,7 +633,7 @@ m.set("hello", 42);
 m.set(s, 34);
 m.get(s) === 34;
 m.size === 2;
-for (let[key, val]of m.entries())
+for (let [key, val]of m.entries())
 	console.log(key + " = " + val);
 
 let isMarked = new WeakSet();
@@ -802,3 +802,14 @@ export default {
 		}
 	},
 }
+
+import {
+	xxx,
+	xxx
+}
+from 'xxx';
+
+const [x, x] = [x, x];
+const [x, x] = [x, x];
+for (const [x, x]of xxx()) {}
+for (let [x, x]of xxx()) {}

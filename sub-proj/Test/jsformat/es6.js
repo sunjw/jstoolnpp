@@ -690,3 +690,10 @@ export default {
         }
      },
 }
+
+import { xxx, xxx } from 'xxx';
+
+const [x, x] = [x, x];
+const [x, x] = [x, x];
+for (const [x, x] of xxx()) {}
+for (let [x, x] of xxx()) {}

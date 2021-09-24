@@ -1375,7 +1375,7 @@
 						i = Promise.race([i, r])
 					}
 					try {
-						const[e, t, n] = await i;
+						const [e, t, n] = await i;
 						return {
 							exitCode: e,
 							stdout: t,
@@ -1616,7 +1616,7 @@
 						const r = /^\s*(\w+)\s+=\s+(.*)$/.exec(e);
 						if (!r)
 							return;
-						const[, n, s] = r;
+						const [, n, s] = r;
 						switch (n) {
 						case "path":
 							i.path = s;
@@ -3964,7 +3964,7 @@
 						t = i.join(this.repository.root, ".git", "rebase-apply"),
 						r = i.join(this.repository.root, ".git", "rebase-merge");
 						try {
-							const[n, i, s] = await Promise.all([new Promise(e => o.exists(t, e)), new Promise(e => o.exists(r, e)), new Promise((t, r) => o.readFile(e, "utf8", (e, n) => e ? r(e) : t(n)))]);
+							const [n, i, s] = await Promise.all([new Promise(e => o.exists(t, e)), new Promise(e => o.exists(r, e)), new Promise((t, r) => o.readFile(e, "utf8", (e, n) => e ? r(e) : t(n)))]);
 							if (!n && !i)
 								return;
 							return await this.getCommit(s.trim())
@@ -10708,7 +10708,7 @@
 					const o = r.reduce((e, t) => {
 						if (0 === e.length)
 							return e.push(t), e;
-						const[r, ...o] = e,
+						const [r, ...o] = e,
 						i = t.intersection(r);
 						return i ? [i, ...o] : t.start.line === r.end.line + 1 ? [new n.Range(r.start, t.end), ...o] : [t, ...e]
 					}, []);
@@ -10903,14 +10903,14 @@
 					checkIgnoreSoon() {
 						const e = new Map(this.queue.entries());
 						this.queue.clear();
-						for (const[, t]of e) {
+						for (const [, t]of e) {
 							const e = [...t.queue.keys()];
 							t.repository.checkIgnore(e).then(e => {
-								for (const[r, n]of t.queue.entries())
+								for (const [r, n]of t.queue.entries())
 									n.resolve(e.has(r))
 							}, e => {
 								"IsInSubmodule" !== e.gitErrorCode && console.error(e);
-								for (const[, r]of t.queue.entries())
+								for (const [, r]of t.queue.entries())
 									r.reject(e)
 							})
 						}
