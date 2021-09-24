@@ -170,17 +170,17 @@ class RealJSFormatter extends JSParser.JSParser {
         this.m_blockMap["["] = JSParser.JS_SQUARE;
         this.m_blockMap["="] = JSParser.JS_ASSIGN;
 
-        this.m_specKeywordSet = []; // keywords need followed by ()
-        this.m_specKeywordSet.push("if");
-        this.m_specKeywordSet.push("for");
-        this.m_specKeywordSet.push("while");
-        this.m_specKeywordSet.push("switch");
-        this.m_specKeywordSet.push("catch");
-        this.m_specKeywordSet.push("function");
-        this.m_specKeywordSet.push("with");
-        this.m_specKeywordSet.push("return");
-        this.m_specKeywordSet.push("throw");
-        this.m_specKeywordSet.push("delete");
+        this.m_bracketKeywordSet = []; // keywords need followed by ()
+        this.m_bracketKeywordSet.push("if");
+        this.m_bracketKeywordSet.push("for");
+        this.m_bracketKeywordSet.push("while");
+        this.m_bracketKeywordSet.push("switch");
+        this.m_bracketKeywordSet.push("catch");
+        this.m_bracketKeywordSet.push("function");
+        this.m_bracketKeywordSet.push("with");
+        this.m_bracketKeywordSet.push("return");
+        this.m_bracketKeywordSet.push("throw");
+        this.m_bracketKeywordSet.push("delete");
 
         this.m_declareKeywordSet = []; // keywords need followed by ()
         this.m_declareKeywordSet.push("var");
@@ -798,7 +798,7 @@ class RealJSFormatter extends JSParser.JSParser {
         }
 
         if (!bTokenAPropName &&
-            (this.m_specKeywordSet.includes(this.m_tokenA.code) &&
+            (this.m_bracketKeywordSet.includes(this.m_tokenA.code) &&
                 this.m_tokenB.code != ";")) {
             this.PutToken(this.m_tokenA, "", " ");
         } else if (this.m_tokenA.code[0] == '`' && this.m_tokenA.code[this.m_tokenA.code.length - 1] == '`') {
