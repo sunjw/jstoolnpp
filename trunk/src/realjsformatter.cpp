@@ -105,6 +105,10 @@ void RealJSFormatter::Init()
 	m_specKeywordSet.insert("return");
 	m_specKeywordSet.insert("throw");
 	m_specKeywordSet.insert("delete");
+
+	m_declareKeywordSet.insert("var");
+	m_declareKeywordSet.insert("let");
+	m_declareKeywordSet.insert("const");
 }
 
 void RealJSFormatter::PrintAdditionalDebug(string& strDebugOutput)
@@ -547,6 +551,10 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			(m_tokenB.code == "{" || IsInlineComment(m_tokenB) || bHaveNewLine))
 		{
 			PutToken(m_tokenA, string(""), strRight); // { 或者/**/或者换行之前留个空格
+		}
+		else if (m_tokenA.code == "]" && m_tokenB.code == "of")
+		{
+			PutToken(m_tokenA, string(""), string(" "));
 		}
 		else
 		{
@@ -1005,7 +1013,9 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	if (m_tokenB.type == STRING_TYPE ||
 		m_tokenB.type == COMMENT_TYPE_1 ||
 		m_tokenB.type == COMMENT_TYPE_2 ||
-		m_tokenB.code == "{")
+		m_tokenB.code == "{" ||
+		(m_declareKeywordSet.find(m_tokenA.code) != m_declareKeywordSet.end() &&
+			m_tokenB.code == "["))
 	{
 		PutToken(m_tokenA, string(""), string(" "));
 
