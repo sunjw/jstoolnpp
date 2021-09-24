@@ -95,16 +95,16 @@ void RealJSFormatter::Init()
 	m_blockMap[string("[")] = JS_SQUARE;
 	m_blockMap[string("=")] = JS_ASSIGN;
 
-	m_specKeywordSet.insert("if");
-	m_specKeywordSet.insert("for");
-	m_specKeywordSet.insert("while");
-	m_specKeywordSet.insert("switch");
-	m_specKeywordSet.insert("catch");
-	m_specKeywordSet.insert("function");
-	m_specKeywordSet.insert("with");
-	m_specKeywordSet.insert("return");
-	m_specKeywordSet.insert("throw");
-	m_specKeywordSet.insert("delete");
+	m_bracketKeywordSet.insert("if");
+	m_bracketKeywordSet.insert("for");
+	m_bracketKeywordSet.insert("while");
+	m_bracketKeywordSet.insert("switch");
+	m_bracketKeywordSet.insert("catch");
+	m_bracketKeywordSet.insert("function");
+	m_bracketKeywordSet.insert("with");
+	m_bracketKeywordSet.insert("return");
+	m_bracketKeywordSet.insert("throw");
+	m_bracketKeywordSet.insert("delete");
 
 	m_declareKeywordSet.insert("var");
 	m_declareKeywordSet.insert("let");
@@ -1027,7 +1027,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	}
 
 	if (!bTokenAPropName &&
-		(m_specKeywordSet.find(m_tokenA.code) != m_specKeywordSet.end() &&
+		(m_bracketKeywordSet.find(m_tokenA.code) != m_bracketKeywordSet.end() &&
 		m_tokenB.code != ";"))
 	{
 		PutToken(m_tokenA, string(""), string(" "));

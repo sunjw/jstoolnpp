@@ -80,7 +80,7 @@ private:
 	IntVector m_lineFormattedVec;
 	IntVector m_lineWaitVec;
 
-	StrSet m_specKeywordSet; // 后面要跟着括号的关键字集合
+	StrSet m_bracketKeywordSet; // 后面要跟着括号的关键字集合
 	StrSet m_declareKeywordSet;
 	StrCharMap m_blockMap;
 	CharStack m_blockStack;
