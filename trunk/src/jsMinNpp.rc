@@ -14,13 +14,11 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// 中文(中华人民共和国) resources
+// 中文(简体，中国) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_CHS)
-#ifdef _WIN32
 LANGUAGE LANG_CHINESE, SUBLANG_CHINESE_SIMPLIFIED
 #pragma code_page(936)
-#endif //_WIN32
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -70,6 +68,7 @@ END
 // remains consistent on all systems.
 IDI_JS_ICON             ICON                    "js_icon_048.ico"
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Dialog
@@ -92,7 +91,6 @@ BEGIN
 #else
     LTEXT           "x86",IDC_STATIC,90,43,50,8
 #endif
-    //PUSHBUTTON      "Project Home",IDC_PROPAGE,10,108,50,14
 END
 
 IDD_OPTIONSBOX DIALOGEX 0, 0, 241, 202
@@ -169,7 +167,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
+GUIDELINES DESIGNINFO
 BEGIN
     IDD_ABOUTBOX, DIALOG
     BEGIN
@@ -200,8 +198,9 @@ END
 // Bitmap
 //
 
-IDB_BITMAP_JSONVIEW			BITMAP                  "jsonviewer.bmp"
-#endif    // 中文(中华人民共和国) resources
+IDB_BITMAP_JSONVIEW     BITMAP                  "jsonviewer.bmp"
+
+#endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
