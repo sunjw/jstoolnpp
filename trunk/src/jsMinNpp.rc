@@ -106,7 +106,7 @@ BEGIN
     GROUPBOX        "Min",IDC_STATIC,7,55,227,28
     CONTROL         "Keep comments (/*...*/ ) at the top of codes.",IDC_KEEPCOMTCHECK,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,67,163,10
-    GROUPBOX        "Format",IDC_STATIC,7,86,227,56
+    GROUPBOX        "Format",IDC_STATIC,7,86,227,42
     LTEXT           "Indent:",IDC_STATIC,13,98,25,8
     CONTROL         "",IDC_SPACECHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,98,10,10
     LTEXT           "Use",IDC_STATIC_USE,52,99,13,8,SS_NOTIFY
@@ -197,6 +197,17 @@ END
 //
 
 IDB_BITMAP_JSONVIEW     BITMAP                  "jsonviewer.bmp"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_OPTIONSBOX AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
 
 #endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////
