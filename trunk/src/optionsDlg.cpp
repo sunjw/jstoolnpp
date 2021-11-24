@@ -22,15 +22,6 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			break;
 		}
 
-		if (g_struOptions.bNLBracket)
-		{
-			CheckDlgButton(hwnd, IDC_NEWLINECHECK, TRUE);
-		}
-		else
-		{
-			CheckDlgButton(hwnd, IDC_NEWLINECHECK, FALSE);
-		}
-
 		if (g_struOptions.bKeepTopComt)
 		{
 			CheckDlgButton(hwnd, IDC_KEEPCOMTCHECK, TRUE);
@@ -113,9 +104,6 @@ BOOL CALLBACK dlgProcOptions(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 			return TRUE;
 		case IDC_SPACECHECK:
 			setIndent(hwnd, IsDlgButtonChecked(hwnd, IDC_SPACECHECK));
-			return TRUE;
-		case IDC_NEWLINECHECK:
-			g_struOptions.bNLBracket = (IsDlgButtonChecked(hwnd, IDC_NEWLINECHECK) == TRUE);
 			return TRUE;
 		}
 		return FALSE;
