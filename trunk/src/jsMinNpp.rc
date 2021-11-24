@@ -112,8 +112,6 @@ BEGIN
     LTEXT           "Use",IDC_STATIC_USE,52,99,13,8,SS_NOTIFY
     EDITTEXT        IDC_COUNTEDIT,68,96,17,12,ES_AUTOHSCROLL | ES_NUMBER
     LTEXT           "spaces instead of tab (\\t).",IDC_STATIC_SPACE,90,99,88,8,SS_NOTIFY
-    LTEXT           "{ ... } :",IDC_STATIC,13,125,24,8
-    CONTROL         "New line before '{'.",IDC_NEWLINECHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,125,79,10
     CONTROL         "Keep indent in empty line. (NOT recommended)",IDC_EMPTYINDENT,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,42,112,172,10
     GROUPBOX        "Other",IDC_STATIC,7,145,227,28
