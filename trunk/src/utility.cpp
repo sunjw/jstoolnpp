@@ -61,14 +61,6 @@ void LoadOption(HWND nppHandle, StruOptions& struOptions)
 		struOptions.nChPerInd = atoi(map[keyChPerInd].GetStrValue().c_str());
 	}
 
-	if (map.find(keyNLBracket) != itrEnd)
-	{
-		if (!map[keyNLBracket].GetStrValue().compare("1"))
-		{
-			struOptions.bNLBracket = true;
-		}
-	}
-
 	if (map.find(keyKeepTopComt) != itrEnd)
 	{
 		if (!map[keyKeepTopComt].GetStrValue().compare("1"))
