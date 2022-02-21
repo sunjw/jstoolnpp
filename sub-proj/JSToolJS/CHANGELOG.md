@@ -1,3 +1,8 @@
+1.2202.0  
+[Common] Fix some bugs related to ES6.  
+[NPP] Remove "New line before '{'" option.  
+[VSC] Some tweak.  
+
 1.2107.2  
 [Common] Tweak nested block indent.  
 [Common] Fix some bugs related to ES 2020 new operators.  
