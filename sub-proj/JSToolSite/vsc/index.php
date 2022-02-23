@@ -44,8 +44,7 @@ $cur_version = $download_array["JSMinNpp"]["version"];
                     <p>&nbsp;</p>
                     <p>What's New in <a href="https://marketplace.visualstudio.com/items?itemName=sunjw.jstool" target="_blank"><?php echo $cur_version; ?></a>:</p>
                     <ul class="indentList discList">
-                        <li>Tweak nested block indent.</li>
-                        <li>Fix some bugs related to ES 2020 new operators.</li>
+                        <li>Fix some bugs related to ES6.</li>
                     </ul>
                     <p>&nbsp;</p>
                     <p><a href='https://ko-fi.com/Y8Y72L3FZ' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi4.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a></p>
