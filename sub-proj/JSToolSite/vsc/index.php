@@ -42,7 +42,7 @@ $cur_version = $download_array["JSMinNpp"]["version"];
                         <li>JSON tree viewer.</li>
                     </ul>
                     <p>&nbsp;</p>
-                    <p>What's New in <a class="smoothAnchor" href="#install"><?php echo $cur_version; ?></a>:</p>
+                    <p>What's New in <a href="https://marketplace.visualstudio.com/items?itemName=sunjw.jstool" target="_blank"><?php echo $cur_version; ?></a>:</p>
                     <ul class="indentList discList">
                         <li>Tweak nested block indent.</li>
                         <li>Fix some bugs related to ES 2020 new operators.</li>
