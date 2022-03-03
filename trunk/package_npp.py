@@ -11,6 +11,9 @@ import re
 from logging.handlers import RotatingFileHandler
 from subprocess import call
 
+# pip3 install pywin32
+from win32api import GetFileVersionInfo, LOWORD, HIWORD
+
 log_path = './log/debug.log'
 logger = logging.getLogger('RunTime')
 logging.basicConfig(
@@ -31,7 +34,7 @@ SRC_LIST = ['icon_048.png', 'jsMinNpp15.sln', 'jsMinNpp.vcxproj', 'src']
 version = 0
 
 def is_windows_sys():
-    return (platform.system() == "Windows")
+    return (platform.system() == 'Windows')
 
 def read_file(file_path):
     file_content = ''
@@ -50,6 +53,12 @@ def read_version_h():
     if len(version_parts) > 3:
         version_value = version_parts[0] + '.' + version_parts[1] + '.' + version_parts[2]
     return version_value
+
+def read_version_exe(filename):
+    info = GetFileVersionInfo(filename, '\\')
+    ms = info['FileVersionMS']
+    ls = info['FileVersionLS']
+    return '%s.%s.%s.%s' % (HIWORD(ms), LOWORD(ms), HIWORD(ls), LOWORD(ls))
 
 def package_dll():
     global version
