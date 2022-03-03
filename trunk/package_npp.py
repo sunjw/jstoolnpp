@@ -21,7 +21,7 @@ logging.basicConfig(
         logging.StreamHandler()
     ])
 
-VERSION_FILE = './src/version.h'
+VERSION_FILE_H = './src/version.h'
 RELEASED_FILES_DIR = './ReleasedFiles'
 DLL_FILE_NAME = 'JSMinNPP.dll'
 DLL_UNI_32_DIR = './Unicode Release'
@@ -39,8 +39,8 @@ def read_file(file_path):
         file_content = f.read()
     return file_content
 
-def get_version():
-    version_file_content = read_file(VERSION_FILE)
+def read_version_h():
+    version_file_content = read_file(VERSION_FILE_H)
     reg = re.compile('VERSION_VALUE "(.*)"')
     #logger.info(version_file_content)
     reg_match = reg.search(version_file_content)
@@ -93,7 +93,7 @@ def main():
 
     os.chdir(os.path.dirname(__file__))
 
-    version = get_version()
+    version = read_version_h()
     logger.info('Version: %s' % (version))
 
     package_dll()
