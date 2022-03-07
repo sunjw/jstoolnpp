@@ -652,8 +652,12 @@ void jsonTree()
 		s_jsonDialog.create(&data);
 
 		// define the default docking behaviour
-		data.uMask = DWS_DF_CONT_LEFT;
+		data.uMask = DWS_DF_CONT_LEFT | DWS_ICONTAB;
 
+		HICON hIcon = (HICON)::LoadImage(s_jsonDialog.getHinst(),
+			MAKEINTRESOURCE(IDI_JS_ICON), IMAGE_ICON,
+			48, 48, LR_LOADTRANSPARENT);
+		data.hIconTab = hIcon;
 		data.pszModuleName = s_jsonDialog.getPluginFileName();
 		data.pszName = TEXT("JSToolNpp JSON Viewer");
 
