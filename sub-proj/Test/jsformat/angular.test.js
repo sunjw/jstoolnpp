@@ -4630,8 +4630,7 @@
 							delete cache[serviceName];
 						}
 						throw err;
-					}
-					finally {
+					} finally {
 						path.shift();
 					}
 				}
@@ -5897,8 +5896,7 @@
 		function completeOutstandingRequest(fn) {
 			try {
 				fn.apply(null, sliceArgs(arguments, 1));
-			}
-			finally {
+			} finally {
 				outstandingRequestCount--;
 				if (outstandingRequestCount === 0) {
 					while (outstandingRequestCallbacks.length) {
@@ -7905,8 +7903,7 @@
 							// Reset the queue to trigger a new schedule next time there is a change
 							onChangesQueue = undefined;
 						});
-					}
-					finally {
+					} finally {
 						onChangesTtl++;
 					}
 				}
@@ -15704,8 +15701,7 @@
 						runningChecksEnabled = true;
 						try {
 							return fn(scope, locals, assign, inputs);
-						}
-						finally {
+						} finally {
 							runningChecksEnabled = expensiveCheckOldValue;
 						}
 					}
@@ -17597,14 +17593,12 @@
 							beginPhase('$apply');
 							try {
 								return this.$eval(expr);
-							}
-							finally {
+							} finally {
 								clearPhase();
 							}
 						} catch (e) {
 							$exceptionHandler(e);
-						}
-						finally {
+						} finally {
 							try {
 								$rootScope.$digest();
 							} catch (e) {
@@ -19437,8 +19431,7 @@
 						} catch (e) {
 							deferred.reject(e);
 							$exceptionHandler(e);
-						}
-						finally {
+						} finally {
 							delete deferreds[promise.$$timeoutId];
 						}
 

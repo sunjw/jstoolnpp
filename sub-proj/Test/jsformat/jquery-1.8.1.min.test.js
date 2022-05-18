@@ -2578,8 +2578,7 @@
 				return a(b)
 			} catch (c) {
 				return !1
-			}
-			finally {
+			} finally {
 				b = null
 			}
 		},

@@ -926,8 +926,7 @@
 				} catch (err) {
 					if (FBTrace.DBG_OPTIONS)
 						FBTrace.sysout("firebug.updatePref EXCEPTION:" + err, err);
-				}
-				finally {
+				} finally {
 					delete optionUpdateMap[name];
 				}
 

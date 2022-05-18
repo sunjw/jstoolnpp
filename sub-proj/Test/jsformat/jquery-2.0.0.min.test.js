@@ -448,8 +448,7 @@
 				return !!e(t)
 			} catch (n) {
 				return !1
-			}
-			finally {
+			} finally {
 				t.parentNode && t.parentNode.removeChild(t),
 				t = null
 			}

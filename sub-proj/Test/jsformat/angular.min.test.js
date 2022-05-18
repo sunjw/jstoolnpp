@@ -1066,8 +1066,7 @@ License: MIT
 				} catch (f) {
 					throw a[b] === k && delete a[b],
 					f;
-				}
-				finally {
+				} finally {
 					l.shift()
 				}
 			}
@@ -1227,8 +1226,7 @@ License: MIT
 		function e(a) {
 			try {
 				a.apply(null, Aa.call(arguments, 1))
-			}
-			finally {
+			} finally {
 				if (L--, 0 === L)
 					for (; x.length; )
 						try {
@@ -1568,8 +1566,7 @@ License: MIT
 								$[a]();
 							$ = u
 						})
-					}
-					finally {
+					} finally {
 						pa++
 					}
 				}
@@ -3519,8 +3516,7 @@ License: MIT
 						x = !0;
 						try {
 							return a(c, d, e, f)
-						}
-						finally {
+						} finally {
 							x = g
 						}
 					}
@@ -4161,14 +4157,12 @@ License: MIT
 							n("$apply");
 							try {
 								return this.$eval(a)
-							}
-							finally {
+							} finally {
 								w.$$phase = null
 							}
 						} catch (b) {
 							f(b)
-						}
-						finally {
+						} finally {
 							try {
 								w.$digest()
 							} catch (c) {
@@ -4589,8 +4583,7 @@ License: MIT
 						} catch (b) {
 							p.reject(b),
 							e(b)
-						}
-						finally {
+						} finally {
 							delete g[q.$$timeoutId]
 						}
 						n || a.$apply()

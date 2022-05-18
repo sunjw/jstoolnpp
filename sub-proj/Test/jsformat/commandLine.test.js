@@ -73,8 +73,7 @@ FBL.ns(function () {
 					if (FBTrace.DBG_ERRORS || FBTrace.DBG_COMMANDLINE)
 						FBTrace.sysout("commandLine.evaluate with context.stopped:" + context.stopped +
 							" EXCEPTION " + exc, exc);
-				}
-				finally {
+				} finally {
 					Firebug.Debugger.endInternalOperation(debuggerState);
 				}
 

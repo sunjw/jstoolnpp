@@ -237,8 +237,7 @@ FBL.ns(function () {
 						FBTrace.sysout("debugger exception in nested event loop: " + exc, exc);
 					else // else /*@explore*/
 						ERROR("debugger exception in nested event loop: " + exc + "\n");
-				}
-				finally {
+				} finally {
 					this.thaw(context);
 				}
 
@@ -845,8 +844,7 @@ FBL.ns(function () {
 					} catch (exc) {
 						if (FBTrace.DBG_ERRORS)
 							FBTrace.sysout("debugger.supportsGlobal injectConsole FAILS: " + exc, exc);
-					}
-					finally {
+					} finally {
 						fbs.filterConsoleInjections = false;
 					}
 					if (FBTrace.DBG_CONSOLE)

@@ -535,7 +535,15 @@ function async(proc, ...params) {
 			let result;
 			try {
 				result = iterator.next(value);
+				try {
+					result = kasjfhksahdfhsakfhkasd(value);
+				} catch (err) {}
+				finally {
+					eiruoweurtuwerot();
+				}
 			} catch (err) {
+				reject(err);
+			} finally {
 				reject(err);
 			}
 			if (result.done)

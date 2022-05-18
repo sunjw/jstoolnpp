@@ -279,12 +279,10 @@ var _l = "", _m3u8 = {};
 						} catch (e) {
 							r = !0,
 							a = e
-						}
-						finally {
+						} finally {
 							try {
 								!n && o.return && o.return()
-							}
-							finally {
+							} finally {
 								if (r)
 									throw a
 							}
@@ -2322,12 +2320,10 @@ var _l = "", _m3u8 = {};
 							} catch (e) {
 								r = !0,
 								a = e
-							}
-							finally {
+							} finally {
 								try {
 									!n && o.return && o.return()
-								}
-								finally {
+								} finally {
 									if (r)
 										throw a
 								}
@@ -4511,12 +4507,10 @@ var _l = "", _m3u8 = {};
 						} catch (e) {
 							r = !0,
 							a = e
-						}
-						finally {
+						} finally {
 							try {
 								!n && o.return && o.return()
-							}
-							finally {
+							} finally {
 								if (r)
 									throw a
 							}

@@ -19150,8 +19150,7 @@ n.callMain = n.la = function (a) {
 	} catch (h) {
 		h instanceof y || ("SimulateInfiniteLoop" == h ? n.noExitRuntime = j : (h && ("object" ===
 						typeof h && h.stack) && n.e("exception thrown: " + [h, h.stack]), b(h)))
-	}
-	finally {}
+	} finally {}
 };
 function nb(a) {
 	function d() {

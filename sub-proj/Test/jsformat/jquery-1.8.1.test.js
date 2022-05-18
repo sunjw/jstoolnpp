@@ -3884,8 +3884,7 @@
 				return fn(div);
 			} catch (e) {
 				return false;
-			}
-			finally {
+			} finally {
 				// release memory in IE
 				div = null;
 			}

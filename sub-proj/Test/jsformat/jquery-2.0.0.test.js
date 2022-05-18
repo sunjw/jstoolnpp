@@ -1095,8 +1095,7 @@
 				return !!fn(div);
 			} catch (e) {
 				return false;
-			}
-			finally {
+			} finally {
 				if (div.parentNode) {
 					div.parentNode.removeChild(div);
 				}

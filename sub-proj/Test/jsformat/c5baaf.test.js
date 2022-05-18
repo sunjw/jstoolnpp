@@ -1381,8 +1381,7 @@
 							stdout: t,
 							stderr: n
 						}
-					}
-					finally {
+					} finally {
 						h.dispose(r)
 					}
 				}
@@ -3790,8 +3789,7 @@
 							throw r = e,
 							"NotAGitRepository" === e.gitErrorCode && (this.state = 1),
 							e
-						}
-						finally {
+						} finally {
 							this._operations.end(e),
 							this._onDidRunOperation.fire({
 								operation: e,
@@ -12538,8 +12536,7 @@
 								u = new o(u, this);
 								try {
 									return this._zoneDelegate.invoke(this, e, t, r, n)
-								}
-								finally {
+								} finally {
 									u = u.parent
 								}
 							},
@@ -12555,8 +12552,7 @@
 										if (this._zoneDelegate.handleError(this, e))
 											throw e
 									}
-								}
-								finally {
+								} finally {
 									u = u.parent
 								}
 							},
@@ -12574,8 +12570,7 @@
 										if (this._zoneDelegate.handleError(this, e))
 											throw e
 									}
-								}
-								finally {
+								} finally {
 									u = u.parent,
 									l = n
 								}
@@ -12661,16 +12656,14 @@
 										(t)
 									}
 									return t
-								}
-								finally {
+								} finally {
 									e == this.zone && this._updateTaskCount(t.type, 1)
 								}
 							},
 							e.prototype.invokeTask = function (e, t, r, n) {
 								try {
 									return this._invokeTaskZS ? this._invokeTaskZS.onInvokeTask(this._invokeTaskDlgt, this._invokeTaskCurrZone, e, t, r, n) : t.callback.apply(r, n)
-								}
-								finally {
+								} finally {
 									e != this.zone || "eventTask" == t.type || t.data && t.data.isPeriodic || this._updateTaskCount(t.type, -1)
 								}
 							},
@@ -12704,8 +12697,7 @@
 									};
 									try {
 										this.hasTask(this.zone, i)
-									}
-									finally {
+									} finally {
 										this._parentDelegate && this._parentDelegate._updateTaskCount(e, t)
 									}
 								}
@@ -12728,8 +12720,7 @@
 									f++;
 									try {
 										return t.runTask(a, this, arguments)
-									}
-									finally {
+									} finally {
 										1 == f && y(),
 										f--
 									}
