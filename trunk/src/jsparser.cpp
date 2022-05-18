@@ -558,7 +558,8 @@ void JSParser::PrepareTokenB()
 		m_tokenB.inlineComment = true;
 	}
 
-	if (m_tokenB.code != "else" && m_tokenB.code != "while" && m_tokenB.code != "catch" &&
+	if (m_tokenB.code != "else" && m_tokenB.code != "while" && 
+		m_tokenB.code != "catch" && m_tokenB.code != "finally" &&
 		m_tokenB.code != "," && m_tokenB.code != ";" && m_tokenB.code != ")")
 	{
 		// 将去掉的换行压入队列, 先处理
