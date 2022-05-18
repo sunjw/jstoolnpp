@@ -455,7 +455,6 @@ void RealJSFormatter::Go()
 			break;
 		case OPER_TYPE:
 			ProcessOper(bHaveNewLine, tokenAFirst, tokenBFirst);
-
 			break;
 		case STRING_TYPE:
 			ProcessString(bHaveNewLine, tokenAFirst, tokenBFirst);
