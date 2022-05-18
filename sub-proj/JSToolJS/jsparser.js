@@ -588,7 +588,8 @@ class JSParser {
             this.m_tokenB.inlineComment = true;
         }
 
-        if (this.m_tokenB.code != "else" && this.m_tokenB.code != "while" && this.m_tokenB.code != "catch" &&
+        if (this.m_tokenB.code != "else" && this.m_tokenB.code != "while" &&
+            this.m_tokenB.code != "catch" && this.m_tokenB.code != "finally" &&
             this.m_tokenB.code != "," && this.m_tokenB.code != ";" && this.m_tokenB.code != ")") {
             // push newline into queue
             if (this.m_tokenA.code == "{" && this.m_tokenB.code == "}") {

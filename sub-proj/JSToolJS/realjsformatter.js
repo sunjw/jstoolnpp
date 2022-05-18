@@ -263,7 +263,6 @@ class RealJSFormatter extends JSParser.JSParser {
                 break;
             case JSParser.OPER_TYPE:
                 this.ProcessOper(bHaveNewLine, tokenAFirst, tokenBFirst);
-
                 break;
             case JSParser.STRING_TYPE:
                 this.ProcessString(bHaveNewLine, tokenAFirst, tokenBFirst);
@@ -642,6 +641,7 @@ class RealJSFormatter extends JSParser.JSParser {
                     !((topStack == JSParser.JS_DO && this.m_tokenB.code == "while") ||
                         (topStack == JSParser.JS_IF && this.m_tokenB.code == "else") ||
                         (topStack == JSParser.JS_TRY && this.m_tokenB.code == "catch") ||
+                        ((topStack == JSParser.JS_TRY || topStack == JSParser.JS_CATCH) && this.m_tokenB.code == "finally") ||
                         this.m_tokenB.code == ")"))) {
                 if (strRight.length == 0 || strRight.charAt(strRight.length - 1) != '\n') {
                     strRight += "\n"; // no double newline in some situation
