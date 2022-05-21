@@ -90,7 +90,7 @@ def main():
 
     for argv in sys.argv:
         argv = argv.lower()
-        if argv == 'node' or argv == 'nodejs':
+        if argv == 'node' or argv == 'nodejs' or argv == 'js':
             nodejs = True
             x64 = True
             release = False
