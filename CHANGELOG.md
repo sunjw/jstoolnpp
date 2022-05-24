@@ -1,3 +1,6 @@
+1.2205.0  
+[Common] Tweak "finally" block format.  
+
 1.2202.0  
 [Common] Fix some bugs related to ES6.  
 [NPP] Remove "New line before '{'" option.  
