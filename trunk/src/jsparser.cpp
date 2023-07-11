@@ -42,6 +42,8 @@ void JSParser::Init()
 
 	m_bPosNeg = false;
 
+	m_bTempLite = false;
+
 	m_bGetTokenInit = false;
 }
 
@@ -122,6 +124,14 @@ void JSParser::GetTokenRaw()
 	bool bLineBegin = false;
 	char chQuote = 0; // 记录引号类型 ' 或 "
 	char chComment = 0; // 注释类型 / 或 *
+
+	if (m_bTempLite)
+	{
+		bQuote = true;
+		chQuote = '`';
+		m_tokenB.type = STRING_TYPE;
+		m_tokenB.code.push_back(m_charA);
+	}
 
 	while (1)
 	{
@@ -231,6 +241,13 @@ void JSParser::GetTokenRaw()
 
 			if (m_charA == chQuote) // 引号结束
 			{
+				return;
+			}
+
+			if (chQuote == '`' && m_charA == '$' && m_charB == '{') // 模版字面量
+			{
+				m_tokenB.code.push_back(m_charB);
+				m_charB = GetChar();
 				return;
 			}
 
@@ -463,6 +480,7 @@ bool JSParser::GetToken()
 
 	PrepareRegular(); // 判断正则
 	PreparePosNeg(); // 判断正负数
+	PrepareTempLite(); // 判断模版字面量
 
 	++m_tokenCount;
 	m_tokenPreA = m_tokenA;
@@ -531,6 +549,16 @@ void JSParser::PreparePosNeg()
 		// m_tokenB 实际上是正负数
 		m_bPosNeg = true;
 		GetTokenRaw();
+	}
+}
+
+void JSParser::PrepareTempLite()
+{
+	if (m_tokenB.code == "}" && StackTopEq(m_blockStack, JS_TEMP_LITE))
+	{
+		m_bTempLite = true;
+		GetTokenRaw();
+		m_bTempLite = false;
 	}
 }
 

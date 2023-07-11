@@ -44,6 +44,8 @@ public:
 	static string Trim(const string& str);
 	static string TrimSpace(const string& str);
 	static string TrimRightSpace(const string& str);
+	static bool StartWith(const string& str, const string& target);
+	static bool Endwith(const string& str, const string& target);
 
 	inline void SetInitIndent(const string& initIndent)
 	{ m_initIndent = initIndent; }
@@ -83,7 +85,6 @@ private:
 	StrSet m_bracketKeywordSet; // 后面要跟着括号的关键字集合
 	StrSet m_declareKeywordSet;
 	StrCharMap m_blockMap;
-	CharStack m_blockStack;
 	int m_nIndents; // 缩进数量, 不用计算 blockStack, 效果不好
 	IntSet m_indentFixSet;
 

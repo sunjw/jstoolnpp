@@ -87,6 +87,7 @@ bool StackTopEq(const stack<T>& stk, T eq)
 #define JS_SQUARE '['
 #define JS_ASSIGN '='
 #define JS_QUEST_MARK '?'
+#define JS_TEMP_LITE '$'
 #define JS_HELPER '\\'
 #define JS_STUB ' '
 #define JS_EMPTY 0
@@ -130,6 +131,9 @@ protected:
 	Token m_tokenPreA;
 	Token m_tokenA;
 	Token m_tokenB;
+
+	CharStack m_blockStack;
+
 	long m_lineCount;
 	long m_tokenCount;
 
@@ -201,6 +205,7 @@ private:
 
 	void PrepareRegular(); // 通过词法判断 tokenB 正则
 	void PreparePosNeg(); // 通过词法判断 tokenB 正负数
+	void PrepareTempLite(); // 通过词法判断 tokenB 模版字面量
 	void PrepareTokenB();
 
 	void PrintDebug();
@@ -214,6 +219,8 @@ private:
 	int m_iRegBracket; // 正则表达式中出现的 [] 深度
 
 	bool m_bPosNeg; // tokenB 实际是正负数
+
+	bool m_bTempLite; // tokenB 实际是模版字面量
 
 	bool m_bGetTokenInit; // 是否是第一次执行 GetToken
 

@@ -54,6 +54,40 @@ string RealJSFormatter::TrimRightSpace(const string& str)
 	return ret.erase(ret.find_last_not_of(" \t") + 1);
 }
 
+bool RealJSFormatter::StartWith(const string& str, const string& target)
+{
+	if(str.length() < target.length())
+		return false;
+
+	// Length is enough, let's check content.
+	size_t i = 0;
+	for(; i < target.length(); ++i)
+	{
+		if(str[i] != target[i])
+			return false;
+	}
+
+	return (i == target.length());
+}
+
+bool RealJSFormatter::Endwith(const string& str, const string& target)
+{
+	if(str.length() < target.length())
+		return false;
+
+	// Length is enough, let's check content.
+	size_t str_len = str.length();
+	size_t target_len = target.length();
+	size_t i = 0;
+	for(; i < target.length(); ++i)
+	{
+		if(str[str_len - target_len + i] != target[i])
+			return false;
+	}
+
+	return (i == target.length());
+}
+
 void RealJSFormatter::Init()
 {
 	m_tokenCount = 0;
@@ -1010,6 +1044,16 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		m_bAssign = true;
 	}
 
+	if (Endwith(m_tokenA.code, "${"))
+	{
+		m_blockStack.push(JS_TEMP_LITE);
+	}
+
+	if (StackTopEq(m_blockStack, JS_TEMP_LITE) && StartWith(m_tokenA.code, "}"))
+	{
+		m_blockStack.pop();
+	}
+
 	if (m_tokenB.type == STRING_TYPE ||
 		m_tokenB.type == COMMENT_TYPE_1 ||
 		m_tokenB.type == COMMENT_TYPE_2 ||
@@ -1032,7 +1076,8 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	{
 		PutToken(m_tokenA, string(""), string(" "));
 	}
-	else if (m_tokenA.code[0] == '`' && m_tokenA.code[m_tokenA.code.length()-1] == '`')
+	else if ((StartWith(m_tokenA.code, "`") || StartWith(m_tokenA.code, "}")) &&
+			(Endwith(m_tokenA.code, "`") || Endwith(m_tokenA.code, "${")))
 	{
 		m_bTemplatePut = true;
 		PutToken(m_tokenA);
