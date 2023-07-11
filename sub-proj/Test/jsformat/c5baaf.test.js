@@ -2406,7 +2406,7 @@
 							if (!e.stdout)
 								return "";
 							const t = i.homedir();
-							let r = e.stdout.trim().replace(/^~([^\/]*)\//, (e, r) => `${r?o.join(o.dirname(t),r):t}/`);
+							let r = e.stdout.trim().replace(/^~([^\/]*)\//, (e, r) => `${r ? o.join(o.dirname(t), r) : t}/`);
 							return o.isAbsolute(r) || (r = o.join(this.repositoryRoot, r)),
 							(await y(r, "utf8")).trim()
 						} catch (e) {
@@ -3182,7 +3182,7 @@
 							this.transientDisposables.push(e),
 							e.event(this.emitter.fire, this.emitter, this.transientDisposables)
 						} catch (e) {
-							s.env.logLevel <= s.LogLevel.Error && this.outputChannel.appendLine(`Failed to watch ref '${r}', is most likely packed.\n${e.stack||e}`)
+							s.env.logLevel <= s.LogLevel.Error && this.outputChannel.appendLine(`Failed to watch ref '${r}', is most likely packed.\n${e.stack || e}`)
 						}
 					}
 					dispose() {
@@ -3226,7 +3226,7 @@
 							u = e.event,
 							this.disposables.push(e)
 						} catch (e) {
-							s.env.logLevel <= s.LogLevel.Error && r.appendLine(`Failed to watch '${this.dotGit}', reverting to legacy API file watched. Some events might be lost.\n${e.stack||e}`),
+							s.env.logLevel <= s.LogLevel.Error && r.appendLine(`Failed to watch '${this.dotGit}', reverting to legacy API file watched. Some events might be lost.\n${e.stack || e}`),
 							u = d.filterEvent(i, e => /\/\.git($|\/)/.test(e.path))
 						}
 						d.anyEvent(a, u)(this.onFileChange, this, this.disposables),
@@ -8797,9 +8797,7 @@
 					}
 					get command() {
 						const e = !!this.repository.rebaseCommit,
-						t = `$(git-branch) ${this.repository.headLabel}${e?`($ {
-							i(0, null)
-						})`:""}`;
+						t = `$(git-branch) ${this.repository.headLabel}${e ? ` (${i(0, null)})` : ""}`;
 						return {
 							command: "git.checkout",
 							tooltip: `${this.repository.headLabel}`,
@@ -9502,7 +9500,7 @@
 					async stage(...e) {
 						if (this.outputChannel.appendLine(`git.stage ${e.length}`), 0 === (e = e.filter(e => !!e)).length || e[0] && !(e[0].resourceUri instanceof a.Uri)) {
 							const t = this.getSCMResource();
-							if (this.outputChannel.appendLine(`git.stage.getSCMResource ${t?t.resourceUri.toString():null}`), !t)
+							if (this.outputChannel.appendLine(`git.stage.getSCMResource ${t ? t.resourceUri.toString() : null}`), !t)
 								return;
 							e = [t]
 						}
@@ -9712,7 +9710,7 @@
 						const r = t.reduce((e, t) => e + (7 === t.type ? 1 : 0), 0);
 						let n,
 						o = f(37, null);
-						if (1 === t.length ? r > 0 ? (n = f(38, null, s.basename(t[0].resourceUri.fsPath)), o = f(39, null)) : 6 === t[0].type ? (o = f(40, null), n = f(41, null, s.basename(t[0].resourceUri.fsPath))) : n = f(42, null, s.basename(t[0].resourceUri.fsPath)) : (t.every(e => 6 === e.type) ? (o = f(43, null), n = f(44, null, t.length)) : n = f(45, null, t.length), r > 0 && (n = `${n}\n\n${f(46,null,r)}`)), await a.window.showWarningMessage(n, {
+						if (1 === t.length ? r > 0 ? (n = f(38, null, s.basename(t[0].resourceUri.fsPath)), o = f(39, null)) : 6 === t[0].type ? (o = f(40, null), n = f(41, null, s.basename(t[0].resourceUri.fsPath))) : n = f(42, null, s.basename(t[0].resourceUri.fsPath)) : (t.every(e => 6 === e.type) ? (o = f(43, null), n = f(44, null, t.length)) : n = f(45, null, t.length), r > 0 && (n = `${n}\n\n${f(46, null, r)}`)), await a.window.showWarningMessage(n, {
 								modal: !0
 							}, o) !== o)
 							return;
@@ -10444,7 +10442,7 @@
 					}
 					getSCMResource(e) {
 						e = e || a.window.activeTextEditor && a.window.activeTextEditor.document.uri,
-						this.outputChannel.appendLine(`git.getSCMResource.uri ${e&&e.toString()}`);
+						this.outputChannel.appendLine(`git.getSCMResource.uri ${e && e.toString()}`);
 						for (const e of this.model.repositories.map(e => e.root))
 							this.outputChannel.appendLine(`repo root ${e}`);
 						if (e) {
