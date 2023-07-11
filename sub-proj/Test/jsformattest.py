@@ -3,7 +3,6 @@
 # Author: Sun Junwen
 # Date: 2014-01-04
 #
-import hashlib
 import os
 import sys
 from subprocess import call
@@ -17,23 +16,9 @@ JSFORMATTER_PATH_WIN = '../../trunk/debug/JSFormatterTest.exe'
 JSFORMATTER_REL_PATH_WIN = '../../trunk/release/JSFormatterTest.exe'
 JSFORMATTER_PATH_WIN_64 = '../../trunk/x64/debug/JSFormatterTest.exe'
 JSFORMATTER_REL_PATH_WIN_64 = '../../trunk/x64/release/JSFormatterTest.exe'
-JSFORMATTER_LIB_PATH_MAC = '../../trunk/DerivedData/JSTool/Build/Products/Debug'
-JSFORMATTER_LIB_REL_PATH_MAC = '../../trunk/DerivedData/JSTool/Build/Products/Release'
 JSFORMATTER_PATH_MAC = '../../trunk/DerivedData/JSTool/Build/Products/Debug/JSFormatterTest'
 JSFORMATTER_REL_PATH_MAC = '../../trunk/DerivedData/JSTool/Build/Products/Release/JSFormatterTest'
 JSFORMATTER_NODEJS_SCRIPT_PATH = '../JSToolJS/jsfjsnode.js'
-
-class MacOSCaseRuntime(CaseRuntime):
-    def __init__(self, runtime_path, lib_path):
-        super(MacOSCaseRuntime, self).__init__(runtime_path)
-        self.lib_path = lib_path
-        os.environ['DYLD_LIBRARY_PATH'] = self.lib_path
-
-    def dump_name(self):
-        comm_util.log_print('macOSCaseRuntime')
-
-    def dump_info(self):
-        comm_util.log_print('DYLD_LIBRARY_PATH=%s' % (os.environ['DYLD_LIBRARY_PATH']))
 
 class NodeCaseRuntime(CaseRuntime):
     def _case_execute(self, test_case):
@@ -125,15 +110,9 @@ def main():
 
     # prepare path
     jsformatter_path_sel = ''
-    jsformatter_lib_path_sel = ''
     jsformatter_nodejs_script_sel = ''
 
     if nodejs == False and validate == False:
-        if comm_util.is_macos():
-            jsformatter_lib_path_sel = JSFORMATTER_LIB_PATH_MAC
-            if release:
-                jsformatter_lib_path_sel = JSFORMATTER_LIB_REL_PATH_MAC
-
         if comm_util.is_windows():
             jsformatter_path_sel = JSFORMATTER_PATH_WIN
             if release and x64:
@@ -155,10 +134,7 @@ def main():
     # make runtime
     case_runtime = 0
     if nodejs == False and validate == False:
-        if comm_util.is_windows():
-            case_runtime = CaseRuntime(jsformatter_path_sel)
-        if comm_util.is_macos():
-            case_runtime = MacOSCaseRuntime(jsformatter_path_sel, jsformatter_lib_path_sel)
+        case_runtime = CaseRuntime(jsformatter_path_sel)
     if nodejs:
         case_runtime = NodeCaseRuntime(jsformatter_nodejs_script_sel)
     if validate:
