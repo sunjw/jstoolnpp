@@ -796,7 +796,14 @@ class RealJSFormatter extends JSParser.JSParser {
             this.m_tokenB.type == JSParser.COMMENT_TYPE_2 ||
             this.m_tokenB.code == "{" ||
             (this.m_declareKeywordSet.includes(this.m_tokenA.code) && this.m_tokenB.code == "[")) {
-            this.PutToken(this.m_tokenA, "", " ");
+            if (this.m_tokenA.type == JSParser.STRING_TYPE &&
+                this.m_tokenA.code.startsWith("${")) {
+                this.m_bTemplatePut = true;
+                this.PutToken(this.m_tokenA);
+                this.m_bTemplatePut = false;
+            } else {
+                this.PutToken(this.m_tokenA, "", " ");
+            }
 
             //if(m_blockStack.top() != 't' && IsType(m_tokenA))
             //m_blockStack.push('t'); // variable statment
