@@ -147,7 +147,13 @@ class JSParser {
 
     IsQuote(ch) {
         // quote
-        return (ch == '\'' || ch == '\"' || ch == '`');
+        return (ch == '\'' || ch == '\"');
+    }
+
+    IsTemplate(ch)
+    {
+        // template
+        return (ch == '`');
     }
 
     IsInlineComment(token) {
@@ -424,7 +430,7 @@ class JSParser {
                     continue; // ignore blank char
                 }
 
-                if (this.IsQuote(this.m_charA)) {
+                if (this.IsQuote(this.m_charA) || this.IsTemplate(this.m_charA)) {
                     // quote
                     bQuote = true;
                     chQuote = this.m_charA;
@@ -452,7 +458,8 @@ class JSParser {
                 }
 
                 if (this.IsSingleOper(this.m_charA) ||
-                    this.IsNormalChar(this.m_charB) || this.IsBlankChar(this.m_charB) || this.IsQuote(this.m_charB)) {
+                    this.IsNormalChar(this.m_charB) || this.IsBlankChar(this.m_charB) ||
+                    this.IsQuote(this.m_charB) || this.IsTemplate(this.m_charB)) {
                     this.m_tokenB.type = OPER_TYPE;
                     this.m_tokenB.code = this.m_charA; // single char operator
                     return;
