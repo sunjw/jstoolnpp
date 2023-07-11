@@ -83,7 +83,7 @@ def main():
 
     for argv in sys.argv:
         argv = argv.lower()
-        if argv == 'node' or argv == 'nodejs':
+        if argv == 'node' or argv == 'nodejs' or argv == 'js':
             nodejs = True
         if argv == 'release' or argv == 'rel':
             release = True
