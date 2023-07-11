@@ -20,7 +20,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 'use strict';
 
-const VERSION = "1.2205.0.0";
+const VERSION = "1.2307.0.0";
 
 function StringReplaceAll(string, target, replace) {
     return string.replace(new RegExp(target, 'g'), replace);
