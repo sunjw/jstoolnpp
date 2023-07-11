@@ -85,11 +85,29 @@ DLLAPI int JSFGetFormattedLine(JSFormatter *jsf, int originalLine)
 	return ((RealJSFormatter *)jsf)->GetFormattedLine(originalLine);
 }
 
+#ifdef _M_AMD64
+// WIN64
+#define VERSION_VALUE_ARCH VERSION_VALUE " x64"
+#else
+#ifdef __arm64__
+// macOS
+#define VERSION_VALUE_ARCH VERSION_VALUE " arm64"
+#else
+// else
+#define VERSION_VALUE_ARCH VERSION_VALUE
+#endif
+#endif
+
+#ifdef _DEBUG
+#define DEBUG 1
+#endif
+#if DEBUG
+#define VERSION_VALUE_ARCH_CONFIG VERSION_VALUE_ARCH " debug"
+#else
+#define VERSION_VALUE_ARCH_CONFIG VERSION_VALUE_ARCH " release"
+#endif
+
 DLLAPI const char *JSFGetVersion()
 {
-#ifdef _WIN64
-	return VERSION_VALUE " x64";
-#else
-	return VERSION_VALUE;
-#endif
+	return VERSION_VALUE_ARCH_CONFIG;
 }
