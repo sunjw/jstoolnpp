@@ -258,11 +258,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				DEAD_CODE_STRIPPING = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/sunjw/xcode_workspace/jstoolnpp/trunk/DerivedData/JSTool/Build/Products/Debug,
-					/Users/sunjw/xcode_workspace/jstoolnpp/trunk/DerivedData/JSTool/Build/Products/Release,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -275,11 +271,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "-";
 				DEAD_CODE_STRIPPING = YES;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/sunjw/xcode_workspace/jstoolnpp/trunk/DerivedData/JSTool/Build/Products/Debug,
-					/Users/sunjw/xcode_workspace/jstoolnpp/trunk/DerivedData/JSTool/Build/Products/Release,
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
