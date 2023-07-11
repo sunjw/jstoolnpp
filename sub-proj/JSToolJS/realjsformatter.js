@@ -118,8 +118,6 @@ class RealJSFormatter extends JSParser.JSParser {
 
         this.m_lineWaitVec = [];
 
-        this.m_blockStack = [];
-
         // stack used for solving loop in if
         this.m_brcNeedStack = []; // () after if
 
@@ -785,6 +783,14 @@ class RealJSFormatter extends JSParser.JSParser {
             this.m_bAssign = true;
         }
 
+        if (this.m_tokenA.code.endsWith("${")) {
+            this.m_blockStack.push(JSParser.JS_TEMP_LITE);
+        }
+
+        if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_TEMP_LITE) && this.m_tokenA.code.startsWith("}")) {
+            this.m_blockStack.pop();
+        }
+
         if (this.m_tokenB.type == JSParser.STRING_TYPE ||
             this.m_tokenB.type == JSParser.COMMENT_TYPE_1 ||
             this.m_tokenB.type == JSParser.COMMENT_TYPE_2 ||
@@ -801,7 +807,8 @@ class RealJSFormatter extends JSParser.JSParser {
             (this.m_bracketKeywordSet.includes(this.m_tokenA.code) &&
                 this.m_tokenB.code != ";")) {
             this.PutToken(this.m_tokenA, "", " ");
-        } else if (this.m_tokenA.code[0] == '`' && this.m_tokenA.code[this.m_tokenA.code.length - 1] == '`') {
+        } else if ((this.m_tokenA.code.startsWith("`") || this.m_tokenA.code.startsWith("}")) &&
+            (this.m_tokenA.code.endsWith("`") || this.m_tokenA.code.endsWith("${"))) {
             this.m_bTemplatePut = true;
             this.PutToken(this.m_tokenA);
             this.m_bTemplatePut = false;

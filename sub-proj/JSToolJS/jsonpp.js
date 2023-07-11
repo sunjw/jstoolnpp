@@ -214,7 +214,6 @@ class JsonParser extends JSParser.JSParser {
         super();
 
         this.m_nRecuLevel = 0;
-        this.m_blockStack = [];
     }
 
     Go(jsonValue) {

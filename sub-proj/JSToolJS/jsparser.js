@@ -75,6 +75,7 @@ const JS_BRACKET = '(';
 const JS_SQUARE = '[';
 const JS_ASSIGN = '=';
 const JS_QUEST_MARK = '?';
+const JS_TEMP_LITE = '$'
 const JS_HELPER = '\\';
 const JS_STUB = ' ';
 const JS_EMPTY = '\0';
@@ -100,6 +101,9 @@ class JSParser {
         this.m_tokenB = new Token();
 
         this.m_tokenBQueue = [];
+
+        this.m_blockStack = [];
+
         this.m_startClock = 0;
         this.m_endClock = 0;
         this.m_duration = 0;
@@ -113,6 +117,7 @@ class JSParser {
         this.m_bRegular = false;
         this.m_iRegBracket = 0;
         this.m_bPosNeg = false;
+        this.m_bTempLite = false;
         this.m_bGetTokenInit = false;
     }
 
@@ -150,8 +155,7 @@ class JSParser {
         return (ch == '\'' || ch == '\"');
     }
 
-    IsTemplate(ch)
-    {
+    IsTemplate(ch) {
         // template
         return (ch == '`');
     }
@@ -187,6 +191,7 @@ class JSParser {
 
         this.PrepareRegular(); // recognize regular
         this.PreparePosNeg(); // recognize +/-
+        this.PrepareTempLite(); // recognize template literals 
 
         ++this.m_tokenCount;
         this.m_tokenPreA = CopyObject(this.m_tokenA);
@@ -248,6 +253,13 @@ class JSParser {
         let bLineBegin = false;
         let chQuote = ''; // quote is ' or "
         let chComment = ''; // comment is / or *
+
+        if (this.m_bTempLite) {
+            bQuote = true;
+            chQuote = '`';
+            this.m_tokenB.type = STRING_TYPE;
+            this.m_tokenB.code.push_back(this.m_charA);
+        }
         while (1) {
             this.m_charA = this.m_charB;
             if (this.m_charA == '\0') {
@@ -340,6 +352,12 @@ class JSParser {
                 }
 
                 if (this.m_charA == chQuote) { // quote end
+                    return;
+                }
+
+                if (chQuote == '`' && this.m_charA == '$' && this.m_charB == '{') { // template literals
+                    this.m_tokenB.code.push_back(this.m_charB);
+                    this.m_charB = this.GetChar();
                     return;
                 }
 
@@ -570,6 +588,14 @@ class JSParser {
             // m_tokenB is a +/- number
             this.m_bPosNeg = true;
             this.GetTokenRaw();
+        }
+    }
+
+    PrepareTempLite() {
+        if (this.m_tokenB.code == "}" && StackTopEq(this.m_blockStack, JS_TEMP_LITE)) {
+            this.m_bTempLite = true;
+            this.GetTokenRaw();
+            this.m_bTempLite = false;
         }
     }
 
