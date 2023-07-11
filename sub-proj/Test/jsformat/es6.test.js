@@ -79,8 +79,8 @@ function quux(strings, ...values) {
 	values[0] === 42
 }
 
-quux `foo\n${ 42 }bar`
-String.raw `foo\n${ 42 }bar` === "foo\\n42bar"
+quux `foo\n${42}bar`
+String.raw `foo\n${42}bar` === "foo\\n42bar"
 
 var xxx = 0b111110111;
 var yyy = sdfasdf - -0o767;
