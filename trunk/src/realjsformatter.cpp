@@ -1061,7 +1061,17 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		(m_declareKeywordSet.find(m_tokenA.code) != m_declareKeywordSet.end() &&
 			m_tokenB.code == "["))
 	{
-		PutToken(m_tokenA, string(""), string(" "));
+		if (m_tokenA.type == STRING_TYPE &&
+			Endwith(m_tokenA.code, "${"))
+		{
+			m_bTemplatePut = true;
+			PutToken(m_tokenA);
+			m_bTemplatePut = false;
+		}
+		else
+		{
+			PutToken(m_tokenA, string(""), string(" "));
+		}
 
 		//if (m_blockStack.top() != 't' && IsType(m_tokenA))
 		//{
