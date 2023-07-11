@@ -797,7 +797,7 @@ class RealJSFormatter extends JSParser.JSParser {
             this.m_tokenB.code == "{" ||
             (this.m_declareKeywordSet.includes(this.m_tokenA.code) && this.m_tokenB.code == "[")) {
             if (this.m_tokenA.type == JSParser.STRING_TYPE &&
-                this.m_tokenA.code.startsWith("${")) {
+                this.m_tokenA.code.endsWith("${")) {
                 this.m_bTemplatePut = true;
                 this.PutToken(this.m_tokenA);
                 this.m_bTemplatePut = false;

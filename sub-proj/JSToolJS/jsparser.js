@@ -75,7 +75,7 @@ const JS_BRACKET = '(';
 const JS_SQUARE = '[';
 const JS_ASSIGN = '=';
 const JS_QUEST_MARK = '?';
-const JS_TEMP_LITE = '$'
+const JS_TEMP_LITE = '$';
 const JS_HELPER = '\\';
 const JS_STUB = ' ';
 const JS_EMPTY = '\0';
@@ -191,7 +191,7 @@ class JSParser {
 
         this.PrepareRegular(); // recognize regular
         this.PreparePosNeg(); // recognize +/-
-        this.PrepareTempLite(); // recognize template literals 
+        this.PrepareTempLite(); // recognize template literals
 
         ++this.m_tokenCount;
         this.m_tokenPreA = CopyObject(this.m_tokenA);
@@ -258,7 +258,7 @@ class JSParser {
             bQuote = true;
             chQuote = '`';
             this.m_tokenB.type = STRING_TYPE;
-            this.m_tokenB.code.push_back(this.m_charA);
+            this.m_tokenB.code += this.m_charA;
         }
         while (1) {
             this.m_charA = this.m_charB;
@@ -356,7 +356,7 @@ class JSParser {
                 }
 
                 if (chQuote == '`' && this.m_charA == '$' && this.m_charB == '{') { // template literals
-                    this.m_tokenB.code.push_back(this.m_charB);
+                    this.m_tokenB.code += this.m_charB;
                     this.m_charB = this.GetChar();
                     return;
                 }
@@ -704,6 +704,7 @@ exports.JS_BRACKET = JS_BRACKET;
 exports.JS_SQUARE = JS_SQUARE;
 exports.JS_ASSIGN = JS_ASSIGN;
 exports.JS_QUEST_MARK = JS_QUEST_MARK;
+exports.JS_TEMP_LITE = JS_TEMP_LITE;
 exports.JS_HELPER = JS_HELPER;
 exports.JS_STUB = JS_STUB;
 exports.JS_EMPTY = JS_EMPTY;
