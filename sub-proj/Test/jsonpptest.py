@@ -13,8 +13,8 @@ from testbase import *
 TEST_CASE_DIR = 'jsonpp'
 OUTPUT_FILE_NAME = 'out.json'
 
-JSONPP_PATH_WIN = '../../trunk/debug/JsonPP.exe'
-JSONPP_REL_PATH_WIN = '../../trunk/release/JsonPP.exe'
+JSONPP_PATH_WIN = '../../trunk/x64/debug/JsonPP.exe'
+JSONPP_REL_PATH_WIN = '../../trunk/x64/release/JsonPP.exe'
 JSONPP_NODEJS_SCRIPT_PATH = '../JSToolJS/jsonppjsnode.js'
 
 class NativeCaseRuntime(CaseRuntime):
