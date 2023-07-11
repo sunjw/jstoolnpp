@@ -165,7 +165,13 @@ protected:
 	bool inline IsQuote(int ch)
 	{
 		// ÒýºÅ
-		return (ch == '\'' || ch == '\"' || ch == '`');
+		return (ch == '\'' || ch == '\"');
+	}
+
+	bool inline IsTemplate(int ch)
+	{
+		// Ä£°æ
+		return (ch == '`');
 	}
 
 	bool IsInlineComment(const Token& token);

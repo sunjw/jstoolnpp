@@ -340,7 +340,7 @@ void JSParser::GetTokenRaw()
 				continue; // ºöÂÔ¿Õ°××Ö·û
 			}
 
-			if (IsQuote(m_charA))
+			if (IsQuote(m_charA) || IsTemplate(m_charA))
 			{
 				// ÒýºÅ
 				bQuote = true;
@@ -371,7 +371,8 @@ void JSParser::GetTokenRaw()
 			}
 
 			if (IsSingleOper(m_charA) ||
-				IsNormalChar(m_charB) || IsBlankChar(m_charB) || IsQuote(m_charB))
+				IsNormalChar(m_charB) || IsBlankChar(m_charB) ||
+				IsQuote(m_charB) || IsTemplate(m_charB))
 			{
 				m_tokenB.type = OPER_TYPE;
 				m_tokenB.code = m_charA; // µ¥×Ö·û·ûºÅ
