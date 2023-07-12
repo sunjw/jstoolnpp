@@ -587,7 +587,7 @@ void JSParser::PrepareTokenB()
 		m_tokenB.inlineComment = true;
 	}
 
-	if (m_tokenB.code != "else" && m_tokenB.code != "while" &&
+	if (m_tokenB.code != "else" && /*m_tokenB.code != "while" &&*/
 		m_tokenB.code != "catch" && m_tokenB.code != "finally" &&
 		m_tokenB.code != "," && m_tokenB.code != ";" && m_tokenB.code != ")")
 	{
@@ -595,6 +595,24 @@ void JSParser::PrepareTokenB()
 		if (m_tokenA.code == "{" && m_tokenB.code == "}")
 		{
 			return; // Пе {}
+		}
+
+		if (m_tokenA.code == "}" && m_tokenB.code == "while" &&
+			StackTopEq(m_blockStack, JS_BLOCK))
+		{
+			bool eatNewLine = false;
+			char topStack;
+			GetStackTop(m_blockStack, topStack);
+			m_blockStack.pop();
+			if (StackTopEq(m_blockStack, JS_DO))
+			{
+				eatNewLine = true;
+			}
+			m_blockStack.push(topStack);
+			if (eatNewLine)
+			{
+				return;
+			}
 		}
 
 		Token temp;
