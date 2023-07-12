@@ -621,12 +621,26 @@ class JSParser {
             this.m_tokenB.inlineComment = true;
         }
 
-        if (this.m_tokenB.code != "else" && this.m_tokenB.code != "while" &&
+        if (this.m_tokenB.code != "else" && /*this.m_tokenB.code != "while" &&*/
             this.m_tokenB.code != "catch" && this.m_tokenB.code != "finally" &&
             this.m_tokenB.code != "," && this.m_tokenB.code != ";" && this.m_tokenB.code != ")") {
             // push newline into queue
             if (this.m_tokenA.code == "{" && this.m_tokenB.code == "}") {
                 return; // empty {}
+            }
+
+            if (this.m_tokenA.code == "}" && this.m_tokenB.code == "while" &&
+                StackTopEq(this.m_blockStack, JS_BLOCK)) {
+                let eatNewLine = false;
+                let topStack = GetStackTop(this.m_blockStack);
+                this.m_blockStack.pop();
+                if (StackTopEq(this.m_blockStack, JS_DO)) {
+                    eatNewLine = true;
+                }
+                this.m_blockStack.push(topStack);
+                if (eatNewLine) {
+                    return;
+                }
             }
 
             let temp;
