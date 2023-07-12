@@ -260,6 +260,7 @@ class JSParser {
             this.m_tokenB.type = STRING_TYPE;
             this.m_tokenB.code += this.m_charA;
         }
+
         while (1) {
             this.m_charA = this.m_charB;
             if (this.m_charA == '\0') {

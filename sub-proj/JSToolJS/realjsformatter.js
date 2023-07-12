@@ -200,6 +200,7 @@ class RealJSFormatter extends JSParser.JSParser {
         let tokenBFirst = '';
 
         this.StartParse();
+
         while (this.GetToken()) {
             bHaveNewLine = false; // bHaveNewLine means there will be newline, m_bNewLine means already has newline
             tokenAFirst = this.m_tokenA.code.charAt(0);
