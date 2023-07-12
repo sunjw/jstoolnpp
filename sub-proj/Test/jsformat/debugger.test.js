@@ -1180,6 +1180,7 @@ FBL.ns(function () {
 				var innerScriptArray = [];
 				try {
 					var source = script.functionSource;
+
 					while (innerScripts.hasMoreElements()) {
 						var inner = innerScripts.getNext();
 						source += "\n" + inner.functionSource;

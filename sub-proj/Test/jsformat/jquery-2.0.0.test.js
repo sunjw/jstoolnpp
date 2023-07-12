@@ -1979,6 +1979,7 @@
 								nodeIndex = cache[0] === dirruns && cache[1];
 								diff = cache[0] === dirruns && cache[2];
 								node = nodeIndex && parent.childNodes[nodeIndex];
+
 								while ((node = ++nodeIndex && node && node[dir] ||
 
 											// Fallback to seeking `elem` from the start
@@ -2292,6 +2293,7 @@
 			soFar = selector;
 			groups = [];
 			preFilters = Expr.preFilter;
+
 			while (soFar) {
 
 				// Comma and first run
@@ -3801,6 +3803,7 @@
 				type = undefined;
 			}
 			type = type || "fx";
+
 			while (i--) {
 				tmp = data_priv.get(elements[i], type + "queueHooks");
 				if (tmp && tmp.empty) {
@@ -3940,6 +3943,7 @@
 					self = jQuery(this),
 					state = stateVal,
 					classNames = value.match(core_rnotwhite) || [];
+
 					while ((className = classNames[i++])) {
 						// check each className given, space separated list
 						state = isBool ? state : !self.hasClass(className);
@@ -4093,6 +4097,7 @@
 					options = elem.options,
 					values = jQuery.makeArray(value),
 					i = options.length;
+
 					while (i--) {
 						option = options[i];
 						if ((option.selected = jQuery.inArray(jQuery(option).val(), values) >= 0)) {
@@ -5414,6 +5419,7 @@
 		dir: function (elem, dir, until) {
 			var matched = [],
 			truncate = until !== undefined;
+
 			while ((elem = elem[dir]) && elem.nodeType !== 9) {
 				if (elem.nodeType === 1) {
 					if (truncate && jQuery(elem).is(until)) {
@@ -6082,6 +6088,7 @@
 
 				wrap.map(function () {
 					var elem = this;
+
 					while (elem.firstElementChild) {
 						elem = elem.firstElementChild;
 					}
@@ -6167,6 +6174,7 @@
 		var capName = name.charAt(0).toUpperCase() + name.slice(1),
 		origName = name,
 		i = cssPrefixes.length;
+
 		while (i--) {
 			name = cssPrefixes[i] + capName;
 			if (name in style) {
@@ -8854,6 +8862,7 @@
 		offsetParent: function () {
 			return this.map(function () {
 				var offsetParent = this.offsetParent || docElem;
+
 				while (offsetParent && (!jQuery.nodeName(offsetParent, "html") && jQuery.css(offsetParent, "position") === "static")) {
 					offsetParent = offsetParent.offsetParent;
 				}

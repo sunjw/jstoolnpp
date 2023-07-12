@@ -2005,6 +2005,7 @@
 				type = undefined;
 			}
 			type = type || "fx";
+
 			while (i--) {
 				tmp = jQuery._data(elements[i], type + "queueHooks");
 				if (tmp && tmp.empty) {
@@ -2151,6 +2152,7 @@
 					self = jQuery(this),
 					state = stateVal,
 					classNames = value.split(core_rspace);
+
 					while ((className = classNames[i++])) {
 						// check each className given, space separated list
 						state = isBool ? state : !self.hasClass(className);
@@ -4649,6 +4651,7 @@
 			}
 
 			var cur = a.nextSibling;
+
 			while (cur) {
 				if (cur === b) {
 					return -1;
@@ -4711,6 +4714,7 @@
 			}
 
 			cur = bup;
+
 			while (cur) {
 				bp.unshift(cur);
 				cur = cur.parentNode;
@@ -4785,6 +4789,7 @@
 			i = 0;
 			preFilters = Expr.preFilter;
 			filters = Expr.filter;
+
 			while (soFar) {
 
 				// Comma and first run
@@ -5446,6 +5451,7 @@
 
 			for (; i < l; i++) {
 				cur = this[i];
+
 				while (cur && cur.ownerDocument && cur !== context && cur.nodeType !== 11) {
 					if (pos ? pos.index(cur) > -1 : jQuery.find.matchesSelector(cur, selectors)) {
 						ret.push(cur);
@@ -5589,6 +5595,7 @@
 		dir: function (elem, dir, until) {
 			var matched = [],
 			cur = elem[dir];
+
 			while (cur && cur.nodeType !== 9 && (until === undefined || cur.nodeType !== 1 || !jQuery(cur).is(until))) {
 				if (cur.nodeType === 1) {
 					matched.push(cur);
@@ -5723,6 +5730,7 @@
 
 				wrap.map(function () {
 					var elem = this;
+
 					while (elem.firstChild && elem.firstChild.nodeType === 1) {
 						elem = elem.firstChild;
 					}
@@ -6599,6 +6607,7 @@
 		var capName = name.charAt(0).toUpperCase() + name.slice(1),
 		origName = name,
 		i = cssPrefixes.length;
+
 		while (i--) {
 			name = cssPrefixes[i] + capName;
 			if (name in style) {

@@ -422,6 +422,7 @@ FBL.ns(function () {
 					return;
 
 				var files = [];
+
 				while (prevTableBody.firstChild) {
 					var row = prevTableBody.firstChild;
 					if (hasClass(row, "netRow") && hasClass(row, "hasHeaders") && !hasClass(row, "history")) {

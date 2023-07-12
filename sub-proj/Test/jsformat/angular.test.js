@@ -3103,6 +3103,7 @@
 			element = element.documentElement;
 		}
 		var names = isArray(name) ? name : [name];
+
 		while (element) {
 			for (var i = 0, ii = names.length; i < ii; i++) {
 				if (isDefined(value = jqLite.data(element, names[i])))
@@ -3506,6 +3507,7 @@
 
 				eventFns.push(fn);
 			};
+
 			while (i--) {
 				type = types[i];
 				if (MOUSE_EVENT_MAP[type]) {
@@ -9465,6 +9467,7 @@
 							}
 						});
 						afterTemplateChildLinkFn = compileNodes($compileNode[0].childNodes, childTranscludeFn);
+
 						while (linkQueue.length) {
 							var scope = linkQueue.shift(),
 							beforeTemplateLinkNode = linkQueue.shift(),
@@ -10023,6 +10026,7 @@
 		if (i <= 1) {
 			return jqNodes;
 		}
+
 		while (i--) {
 			var node = jqNodes[i];
 			if (node.nodeType === NODE_TYPE_COMMENT) {
@@ -11307,6 +11311,7 @@
 							chain.push(interceptor.response, interceptor.responseError);
 						}
 					});
+
 					while (chain.length) {
 						var thenFn = chain.shift();
 						var rejectFn = chain.shift();
@@ -12106,6 +12111,7 @@
 					exp,
 					concat = [],
 					expressionPositions = [];
+
 					while (index < textLength) {
 						if (((startIndex = text.indexOf(startSymbol, index)) != -1) &&
 							((endIndex = text.indexOf(endSymbol, startIndex + startSymbolLength)) != -1)) {
@@ -12457,6 +12463,7 @@
 	function encodePath(path) {
 		var segments = path.split('/'),
 		i = segments.length;
+
 		while (i--) {
 			segments[i] = encodeUriSegment(segments[i]);
 		}
@@ -13747,6 +13754,7 @@
 			this.text = text;
 			this.index = 0;
 			this.tokens = [];
+
 			while (this.index < this.text.length) {
 				var ch = this.text.charAt(this.index);
 				if (ch === '"' || ch === "'") {
@@ -14178,6 +14186,7 @@
 				arguments: args,
 				filter: true
 			};
+
 			while (this.expect(':')) {
 				args.push(this.expression());
 			}
@@ -17295,6 +17304,7 @@
 						do { // "while dirty" loop
 							dirty = false;
 							current = target;
+
 							while (asyncQueue.length) {
 								try {
 									asyncTask = asyncQueue.shift();
@@ -17374,6 +17384,7 @@
 						} while (dirty || asyncQueue.length);
 
 						clearPhase();
+
 						while (postDigestQueue.length) {
 							try {
 								postDigestQueue.shift()();
@@ -20718,6 +20729,7 @@
 			if (!isDate(date) || !isFinite(date.getTime())) {
 				return date;
 			}
+
 			while (format) {
 				match = DATE_FORMATS_SPLIT.exec(format);
 				if (match) {

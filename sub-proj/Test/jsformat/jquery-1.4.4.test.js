@@ -450,6 +450,7 @@
 
 						// Reset the list of functions
 						readyList = null;
+
 						while ((fn = ready[i++])) {
 							fn.call(document, jQuery);
 						}
@@ -1555,6 +1556,7 @@
 					self = jQuery(this),
 					state = stateVal,
 					classNames = value.split(rspaces);
+
 					while ((className = classNames[i++])) {
 						// check each className given, space seperated list
 						state = isBool ? state : !self.hasClass(className);
@@ -1911,6 +1913,7 @@
 			var type,
 			i = 0,
 			namespaces;
+
 			while ((type = types[i++])) {
 				handleObj = handleObjIn ?
 					jQuery.extend({}, handleObjIn) : {
@@ -2033,6 +2036,7 @@
 			// Handle multiple events separated by a space
 			// jQuery(...).unbind("mouseover mouseout", fn);
 			types = types.split(" ");
+
 			while ((type = types[i++])) {
 				origType = type;
 				handleObj = null;
@@ -2865,6 +2869,7 @@
 			}
 
 			types = (types || "").split(" ");
+
 			while ((type = types[i++]) != null) {
 				match = rnamespaces.exec(type);
 				namespaces = "";
@@ -3133,6 +3138,7 @@
 					set = Expr.relative[parts[0]] ?
 						[context] :
 						Sizzle(parts.shift(), context);
+
 					while (parts.length) {
 						selector = parts.shift();
 
@@ -3174,6 +3180,7 @@
 					} else {
 						prune = false;
 					}
+
 					while (parts.length) {
 						cur = parts.pop();
 						pop = cur;
@@ -3304,6 +3311,7 @@
 			result = [],
 			curLoop = set,
 			isXMLFilter = set && set[0] && Sizzle.isXML(set[0]);
+
 			while (expr && set.length) {
 				for (var type in Expr.filter) {
 					if ((match = Expr.leftMatch[type].exec(expr)) != null && match[2]) {
@@ -3991,6 +3999,7 @@
 				}
 
 				cur = bup;
+
 				while (cur) {
 					bp.unshift(cur);
 					cur = cur.parentNode;
@@ -4018,6 +4027,7 @@
 				}
 
 				var cur = a.nextSibling;
+
 				while (cur) {
 					if (cur === b) {
 						return -1;
@@ -4270,6 +4280,7 @@
 					var match = false;
 
 					elem = elem[dir];
+
 					while (elem) {
 						if (elem.sizcache === doneName) {
 							match = checkSet[elem.sizset];
@@ -4302,6 +4313,7 @@
 					var match = false;
 
 					elem = elem[dir];
+
 					while (elem) {
 						if (elem.sizcache === doneName) {
 							match = checkSet[elem.sizset];
@@ -4469,6 +4481,7 @@
 								selector;
 						}
 					}
+
 					while (cur && cur.ownerDocument && cur !== context) {
 						for (selector in matches) {
 							match = matches[selector];
@@ -4495,6 +4508,7 @@
 
 			for (i = 0, l = this.length; i < l; i++) {
 				cur = this[i];
+
 				while (cur) {
 					if (pos ? pos.index(cur) > -1 : jQuery.find.matchesSelector(cur, selectors)) {
 						ret.push(cur);
@@ -4627,6 +4641,7 @@
 		dir: function (elem, dir, until) {
 			var matched = [],
 			cur = elem[dir];
+
 			while (cur && cur.nodeType !== 9 && (until === undefined || cur.nodeType !== 1 || !jQuery(cur).is(until))) {
 				if (cur.nodeType === 1) {
 					matched.push(cur);
@@ -4756,6 +4771,7 @@
 
 				wrap.map(function () {
 					var elem = this;
+
 					while (elem.firstChild && elem.firstChild.nodeType === 1) {
 						elem = elem.firstChild;
 					}
@@ -6990,6 +7006,7 @@
 			prevComputedStyle = defaultView ? defaultView.getComputedStyle(elem, null) : elem.currentStyle,
 			top = elem.offsetTop,
 			left = elem.offsetLeft;
+
 			while ((elem = elem.parentNode) && elem !== body && elem !== docElem) {
 				if (jQuery.offset.supportsFixedPosition && prevComputedStyle.position === "fixed") {
 					break;

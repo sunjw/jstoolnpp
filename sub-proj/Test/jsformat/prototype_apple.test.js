@@ -590,6 +590,7 @@ Object.extend(String.prototype, (function () {
 				replacement = replacement('');
 				return replacement + source.split('').join(replacement) + replacement;
 			}
+
 			while (source.length > 0) {
 				if (match = source.match(pattern)) {
 					result += source.slice(0, match.index);
@@ -849,6 +850,7 @@ var Template = Class.create({
 			match = pattern.exec(expr);
 			if (match == null)
 				return before;
+
 			while (match != null) {
 				var comp = match[1].startsWith('[') ? match[2].replace(/\\\\]/g, ']') : match[1];
 				ctx = ctx[comp];
@@ -2229,6 +2231,7 @@ Element.Methods = {
 		element = $(element);
 		maximumLength = maximumLength || -1;
 		var elements = [];
+
 		while (element = element[property]) {
 			if (element.nodeType == 1)
 				elements.push(Element.extend(element));
@@ -2466,6 +2469,7 @@ Element.Methods = {
 
 		if (ancestor.contains)
 			return ancestor.contains(element) && ancestor !== element;
+
 		while (element = element.parentNode)
 			if (element == ancestor)
 				return true;
@@ -3358,6 +3362,7 @@ Element.addMethods({
 
 		var descendants = element.getElementsByTagName('*'),
 		i = descendants.length;
+
 		while (i--)
 			purgeElement(descendants[i]);
 
@@ -3917,6 +3922,7 @@ Element.addMethods({
 		var isInline = (Element.getStyle(element, 'display') === 'inline');
 		if (!isInline && element.offsetParent)
 			return $(element.offsetParent);
+
 		while ((element = element.parentNode) && element !== document.body) {
 			if (Element.getStyle(element, 'position') !== 'static') {
 				return isHtml(element) ? $(document.body) : $(element);
@@ -4243,6 +4249,7 @@ Prototype._original_property = window.Sizzle;
 		prune = true,
 		contextXML = isXML(context),
 		soFar = selector;
+
 		while ((chunker.exec(""), m = chunker.exec(soFar)) !== null) {
 			soFar = m[3];
 
@@ -4261,6 +4268,7 @@ Prototype._original_property = window.Sizzle;
 				set = Expr.relative[parts[0]] ?
 					[context] :
 					Sizzle(parts.shift(), context);
+
 				while (parts.length) {
 					selector = parts.shift();
 
@@ -4291,6 +4299,7 @@ Prototype._original_property = window.Sizzle;
 				} else {
 					prune = false;
 				}
+
 				while (parts.length) {
 					var cur = parts.pop(),
 					pop = cur;
@@ -4413,6 +4422,7 @@ Prototype._original_property = window.Sizzle;
 		match,
 		anyFound,
 		isXMLFilter = set && set[0] && isXML(set[0]);
+
 		while (expr && set.length) {
 			for (var type in Expr.filter) {
 				if ((match = Expr.match[type].exec(expr)) != null) {
@@ -5111,6 +5121,7 @@ Prototype._original_property = window.Sizzle;
 				}
 				elem = elem[dir];
 				var match = false;
+
 				while (elem) {
 					if (elem.sizcache === doneName) {
 						match = checkSet[elem.sizset];
@@ -5146,6 +5157,7 @@ Prototype._original_property = window.Sizzle;
 				}
 				elem = elem[dir];
 				var match = false;
+
 				while (elem) {
 					if (elem.sizcache === doneName) {
 						match = checkSet[elem.sizset];
@@ -5194,6 +5206,7 @@ Prototype._original_property = window.Sizzle;
 		later = "",
 		match,
 		root = context.nodeType ? [context] : context;
+
 		while ((match = Expr.match.PSEUDO.exec(selector))) {
 			later += match[0];
 			selector = selector.replace(Expr.match.PSEUDO, "");

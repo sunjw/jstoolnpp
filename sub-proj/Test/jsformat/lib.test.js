@@ -702,6 +702,7 @@ try { /*@explore*/
 
 			var walker = node.ownerDocument.createTreeWalker(node,
 					Ci.nsIDOMNodeFilter.SHOW_ALL, null, true);
+
 			while (node) {
 				if (node.repObject)
 					node.repObject = null;
@@ -1221,6 +1222,7 @@ try { /*@explore*/
 			var index = 1;
 			var parts = ["//", "*"];
 			var lastRule = null;
+
 			while (rule.length && rule != lastRule) {
 				lastRule = rule;
 
@@ -3006,6 +3008,7 @@ try { /*@explore*/
 			var windowList = wm.getZOrderDOMWindowEnumerator(windowType, true);
 			if (!windowList.hasMoreElements())
 				windowList = wm.getEnumerator(windowType);
+
 			while (windowList.hasMoreElements()) {
 				if (callback(windowList.getNext()))
 					return true;

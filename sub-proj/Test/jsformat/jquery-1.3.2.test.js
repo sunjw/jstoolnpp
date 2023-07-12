@@ -223,6 +223,7 @@
 
 				wrap.map(function () {
 					var elem = this;
+
 					while (elem.firstChild)
 						elem = elem.firstChild;
 
@@ -1478,6 +1479,7 @@
 
 			// Reset the position of the chunker regexp (start from head)
 			chunker.lastIndex = 0;
+
 			while ((m = chunker.exec(selector)) !== null) {
 				parts.push(m[1]);
 
@@ -1494,6 +1496,7 @@
 					set = Expr.relative[parts[0]] ?
 						[context] :
 						Sizzle(parts.shift(), context);
+
 					while (parts.length) {
 						selector = parts.shift();
 
@@ -1517,6 +1520,7 @@
 				} else {
 					prune = false;
 				}
+
 				while (parts.length) {
 					var cur = parts.pop(),
 					pop = cur;
@@ -1630,6 +1634,7 @@
 			match,
 			anyFound,
 			isXMLFilter = set && set[0] && isXML(set[0]);
+
 			while (expr && set.length) {
 				for (var type in Expr.filter) {
 					if ((match = Expr.match[type].exec(expr)) != null) {
@@ -2327,6 +2332,7 @@
 					}
 					elem = elem[dir];
 					var match = false;
+
 					while (elem) {
 						if (elem.sizcache === doneName) {
 							match = checkSet[elem.sizset];
@@ -2362,6 +2368,7 @@
 					}
 					elem = elem[dir];
 					var match = false;
+
 					while (elem) {
 						if (elem.sizcache === doneName) {
 							match = checkSet[elem.sizset];
@@ -4324,6 +4331,7 @@
 			prevComputedStyle = defaultView.getComputedStyle(elem, null),
 			top = elem.offsetTop,
 			left = elem.offsetLeft;
+
 			while ((elem = elem.parentNode) && elem !== body && elem !== docElem) {
 				computedStyle = defaultView.getComputedStyle(elem, null);
 				top -= elem.scrollTop,
