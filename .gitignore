@@ -8,5 +8,6 @@ sub-proj/JsonPP/tests/out.json
 
 sub-proj/Test/*/out*.js
 sub-proj/Test/*/out*.json
+sub-proj/Test/*/debug.js
 
 *.old
