@@ -35,7 +35,6 @@ public:
 
 private:
 	int m_nRecuLevel; // ¿éµÝ¹é²ã´Î
-	JSParser::CharStack m_blockStack;
 
 	// performance info
 	clock_t m_startClock;
