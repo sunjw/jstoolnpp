@@ -12,9 +12,12 @@ from testbase import *
 
 TEST_CASE_DIR = 'jsonpp'
 OUTPUT_FILE_NAME = 'out.json'
+WIN_ARM64 = 'ARM64'
 
 JSONPP_PATH_WIN = '../../trunk/x64/debug/JsonPP.exe'
 JSONPP_REL_PATH_WIN = '../../trunk/x64/release/JsonPP.exe'
+JSONPP_PATH_WIN_ARM64 = '../../trunk/arm64/debug/JsonPP.exe'
+JSONPP_REL_PATH_WIN_ARM64 = '../../trunk/arm64/release/JsonPP.exe'
 JSONPP_NODEJS_SCRIPT_PATH = '../JSToolJS/jsonppjsnode.js'
 
 class NativeCaseRuntime(CaseRuntime):
@@ -81,6 +84,11 @@ def main():
     sort_json = False
     nodejs = False
 
+    win_arm64 = False
+    machine = comm_util.get_machine()
+    if comm_util.is_windows() and machine == WIN_ARM64:
+        win_arm64 = True
+
     for argv in sys.argv:
         argv = argv.lower()
         if argv == 'node' or argv == 'nodejs' or argv == 'js':
@@ -97,15 +105,23 @@ def main():
     if not nodejs and not comm_util.is_windows():
         comm_util.log_print('JsonPP native test only supports Windows.')
         return
+    if nodejs and win_arm64:
+        comm_util.log_print('JsonPP node test only supports Windows x64.')
+        return
 
     # prepare path
     jsonpp_path_sel = ''
     jsonpp_nodejs_script_sel = ''
 
     if not nodejs:
-        jsonpp_path_sel = JSONPP_PATH_WIN
-        if release:
-            jsonpp_path_sel = JSONPP_REL_PATH_WIN
+        if not win_arm64:
+            jsonpp_path_sel = JSONPP_PATH_WIN
+            if release:
+                jsonpp_path_sel = JSONPP_REL_PATH_WIN
+        else:
+            jsonpp_path_sel = JSONPP_PATH_WIN_ARM64
+            if release:
+                jsonpp_path_sel = JSONPP_REL_PATH_WIN_ARM64
     else:
         jsonpp_nodejs_script_sel = JSONPP_NODEJS_SCRIPT_PATH
 
