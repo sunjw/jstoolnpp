@@ -72,11 +72,11 @@ class ValidateCaseRuntime(CaseRuntime):
 
 def main():
     x64 = True # x64 is default
-    win_arm64 = False
     release = False
     nodejs = False
     validate = False
 
+    win_arm64 = False
     machine = comm_util.get_machine()
     if comm_util.is_windows() and machine == WIN_ARM64:
         win_arm64 = True
