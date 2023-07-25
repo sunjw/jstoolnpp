@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.1525
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "JSMinNPP", "JSMinNPP.vcxproj", "{1590D7CD-7D3A-4AB7-A355-EE02F7FB987D}"
 EndProject
@@ -97,10 +97,12 @@ Global
 		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Release|x64.ActiveCfg = Release|Win32
 		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Debug|Win32.ActiveCfg = Debug|Win32
 		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Debug|Win32.Build.0 = Debug|Win32
-		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Debug|x64.ActiveCfg = Debug|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Debug|x64.ActiveCfg = Debug|x64
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Debug|x64.Build.0 = Debug|x64
 		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Release|Win32.ActiveCfg = Release|Win32
 		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Release|Win32.Build.0 = Release|Win32
-		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Release|x64.ActiveCfg = Release|Win32
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Release|x64.ActiveCfg = Release|x64
+		{67ADE6AC-4162-4F16-932F-A99F00211A14}.Unicode Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
