@@ -93,8 +93,13 @@ DLLAPI int JSFGetFormattedLine(JSFormatter *jsf, int originalLine)
 // macOS
 #define VERSION_VALUE_ARCH VERSION_VALUE " arm64"
 #else
+#ifdef _M_ARM64
+// WIN ARM64
+#define VERSION_VALUE_ARCH VERSION_VALUE " arm64"
+#else
 // else
 #define VERSION_VALUE_ARCH VERSION_VALUE
+#endif
 #endif
 #endif
 
