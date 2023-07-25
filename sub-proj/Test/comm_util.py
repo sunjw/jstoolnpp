@@ -77,6 +77,10 @@ def is_linux():
     return (platform.system() == 'Linux')
 
 
+def get_machine():
+    return platform.machine()
+
+
 def call_command(args_list, is_shell=False):
     subprocess.call(args_list, shell=is_shell)
 
