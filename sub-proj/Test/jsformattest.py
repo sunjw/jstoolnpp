@@ -11,11 +11,14 @@ import comm_util
 from testbase import *
 
 TEST_CASE_DIR = 'jsformat'
+WIN_ARM64 = 'ARM64'
 
 JSFORMATTER_PATH_WIN = '../../trunk/debug/JSFormatterTest.exe'
 JSFORMATTER_REL_PATH_WIN = '../../trunk/release/JSFormatterTest.exe'
 JSFORMATTER_PATH_WIN_64 = '../../trunk/x64/debug/JSFormatterTest.exe'
 JSFORMATTER_REL_PATH_WIN_64 = '../../trunk/x64/release/JSFormatterTest.exe'
+JSFORMATTER_PATH_WIN_ARM64 = '../../trunk/arm64/debug/JSFormatterTest.exe'
+JSFORMATTER_REL_PATH_WIN_ARM64 = '../../trunk/arm64/release/JSFormatterTest.exe'
 JSFORMATTER_PATH_MAC = '../../trunk/DerivedData/JSTool/Build/Products/Debug/JSFormatterTest'
 JSFORMATTER_REL_PATH_MAC = '../../trunk/DerivedData/JSTool/Build/Products/Release/JSFormatterTest'
 JSFORMATTER_NODEJS_SCRIPT_PATH = '../JSToolJS/jsfjsnode.js'
@@ -69,9 +72,14 @@ class ValidateCaseRuntime(CaseRuntime):
 
 def main():
     x64 = True # x64 is default
+    win_arm64 = False
     release = False
     nodejs = False
     validate = False
+
+    machine = comm_util.get_machine()
+    if comm_util.is_windows() and machine == WIN_ARM64:
+        win_arm64 = True
 
     for argv in sys.argv:
         argv = argv.lower()
@@ -92,18 +100,21 @@ def main():
         if argv == '64' or argv == 'x64':
             x64 = True
         if argv == '32' or argv == 'x86':
-            if not comm_util.is_macos():
+            if not comm_util.is_macos() and not win_arm64:
                 x64 = False
 
     # system check
     if nodejs == False:
         if not comm_util.is_windows() and not comm_util.is_macos():
             if comm_util.is_linux():
-                comm_util.log_print('Only node support Linux.')
+                comm_util.log_print('Linux only support node.')
             else:
                 comm_util.log_print('Unknown operating system.')
             return
     else:
+        if win_arm64:
+            comm_util.log_print('Windows ARM64 not support Node.')
+            return
         if not comm_util.is_windows() and not comm_util.is_macos() and not comm_util.is_linux():
             comm_util.log_print('Unknown operating system.')
             return
@@ -113,7 +124,7 @@ def main():
     jsformatter_nodejs_script_sel = ''
 
     if nodejs == False and validate == False:
-        if comm_util.is_windows():
+        if comm_util.is_windows() and not win_arm64:
             jsformatter_path_sel = JSFORMATTER_PATH_WIN
             if release and x64:
                 jsformatter_path_sel = JSFORMATTER_REL_PATH_WIN_64
@@ -121,6 +132,10 @@ def main():
                 jsformatter_path_sel = JSFORMATTER_PATH_WIN_64
             elif release:
                 jsformatter_path_sel = JSFORMATTER_REL_PATH_WIN
+        if comm_util.is_windows() and win_arm64:
+            jsformatter_path_sel = JSFORMATTER_PATH_WIN_ARM64
+            if release:
+                jsformatter_path_sel = JSFORMATTER_REL_PATH_WIN_ARM64
         if comm_util.is_macos():
             jsformatter_path_sel = JSFORMATTER_PATH_MAC
             if release:
@@ -138,8 +153,8 @@ def main():
     if nodejs:
         case_runtime = NodeCaseRuntime(jsformatter_nodejs_script_sel)
     if validate:
-        if comm_util.is_macos():
-            comm_util.log_print('Validate only support Windows.')
+        if comm_util.is_macos() or win_arm64:
+            comm_util.log_print('Validate only support Windows x64.')
             return
         case_runtime = ValidateCaseRuntime(jsformatter_path_sel, jsformatter_nodejs_script_sel)
 
