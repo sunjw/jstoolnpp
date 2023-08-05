@@ -29,6 +29,17 @@ RELEASED_FILES_DIR = './ReleasedFiles'
 DLL_FILE_NAME = 'JSMinNPP.dll'
 DLL_UNI_32_DIR = './Unicode Release'
 DLL_UNI_64_DIR = './x64/Unicode Release'
+PACKAGE_UNI_32_INFO = {
+    'log_name': 'uni.32',
+    'build_dir': DLL_UNI_32_DIR,
+    'package_name': 'JSToolNPP.%s.uni.32.zip'
+}
+PACKAGE_UNI_64_INFO = {
+    'log_name': 'uni.64',
+    'build_dir': DLL_UNI_64_DIR,
+    'package_name': 'JSToolNPP.%s.uni.64.zip'
+}
+PACKAGE_INFO_LIST = [PACKAGE_UNI_32_INFO, PACKAGE_UNI_64_INFO]
 SRC_LIST = ['icon_048.png', 'jsMinNpp15.sln', 'jsMinNpp.vcxproj', 'src']
 
 version = 0
@@ -69,31 +80,19 @@ def package_dll():
 
     released_files_dir_full = os.path.join(cwd, RELEASED_FILES_DIR)
 
-    logger.info('Package uni.32...')
-    os.chdir(DLL_UNI_32_DIR)
-    dll_uni_32_zip_full = os.path.join(released_files_dir_full, 'JSToolNPP.%s.uni.32.zip' % (version))
-    #logger.info(dll_uni_32_zip_full)
-    dll_uni_32_version = read_version_exe(DLL_FILE_NAME)
-    #logger.info(dll_uni_32_version)
-    if not dll_uni_32_version == version_full:
-        logger.error('Version not match, want: %s, found %s' % (version, dll_uni_32_version))
-        return
-    call(['7z', 'a', dll_uni_32_zip_full, DLL_FILE_NAME])
-    # Go back
-    os.chdir(cwd)
-
-    logger.info('Package uni.64...')
-    os.chdir(DLL_UNI_64_DIR)
-    dll_uni_64_zip_full = os.path.join(released_files_dir_full, 'JSToolNPP.%s.uni.64.zip' % (version))
-    #logger.info(dll_uni_64_zip_full)
-    dll_uni_64_version = read_version_exe(DLL_FILE_NAME)
-    #logger.info(dll_uni_64_version)
-    if not dll_uni_64_version == version_full:
-        logger.error('Version not match, want: %s, found %s' % (version, dll_uni_64_version))
-        return
-    call(['7z', 'a', dll_uni_64_zip_full, DLL_FILE_NAME])
-    # Go back
-    os.chdir(cwd)
+    for package_info_itr in PACKAGE_INFO_LIST:
+        logger.info('Package %s...' % (package_info_itr['log_name']))
+        os.chdir(package_info_itr['build_dir'])
+        dll_zip_full = os.path.join(released_files_dir_full, package_info_itr['package_name'] % (version))
+        #logger.info(dll_zip_full)
+        dll_version = read_version_exe(DLL_FILE_NAME)
+        #logger.info(dll_version)
+        if not dll_version == version_full:
+            logger.error('Version not match, want: %s, but found %s' % (version, dll_version))
+            return
+        call(['7z', 'a', dll_zip_full, DLL_FILE_NAME])
+        # Go back
+        os.chdir(cwd)
 
     logger.info('Package src...')
     src_zip_full = os.path.join(released_files_dir_full, 'JSToolNPP.%s.src.zip' % (version))
