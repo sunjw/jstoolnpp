@@ -29,6 +29,7 @@ RELEASED_FILES_DIR = './ReleasedFiles'
 DLL_FILE_NAME = 'JSMinNPP.dll'
 DLL_UNI_32_DIR = './Unicode Release'
 DLL_UNI_64_DIR = './x64/Unicode Release'
+DLL_UNI_ARM64_DIR = './ARM64/Unicode Release'
 PACKAGE_UNI_32_INFO = {
     'log_name': 'uni.32',
     'build_dir': DLL_UNI_32_DIR,
@@ -39,7 +40,12 @@ PACKAGE_UNI_64_INFO = {
     'build_dir': DLL_UNI_64_DIR,
     'package_name': 'JSToolNPP.%s.uni.64.zip'
 }
-PACKAGE_INFO_LIST = [PACKAGE_UNI_32_INFO, PACKAGE_UNI_64_INFO]
+PACKAGE_UNI_ARM64_INFO = {
+    'log_name': 'uni.arm64',
+    'build_dir': DLL_UNI_ARM64_DIR,
+    'package_name': 'JSToolNPP.%s.uni.arm64.zip'
+}
+PACKAGE_INFO_LIST = [PACKAGE_UNI_32_INFO, PACKAGE_UNI_64_INFO, PACKAGE_UNI_ARM64_INFO]
 SRC_LIST = ['icon_048.png', 'jsMinNpp15.sln', 'jsMinNpp.vcxproj', 'src']
 
 version = 0
