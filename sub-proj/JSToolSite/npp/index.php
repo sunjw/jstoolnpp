@@ -125,6 +125,7 @@ if ($checking) {
                             <div>
                                 <p>Unicode build:</p>
                                 <p>x64 - JSToolNPP.<?php echo $cur_version; ?>.uni.64.zip:&nbsp;<a href="https://sourceforge.net/projects/jsminnpp/files/Uni/JSToolNPP.<?php echo $cur_version; ?>.uni.64.zip/download" target="_blank">Download from SourceForge.net</a></p>
+                                <p>arm64 - JSToolNPP.<?php echo $cur_version; ?>.uni.arm64.zip:&nbsp;<a href="https://sourceforge.net/projects/jsminnpp/files/Uni/JSToolNPP.<?php echo $cur_version; ?>.uni.arm64.zip/download" target="_blank">Download from SourceForge.net</a></p>
                                 <p>win32 - JSToolNPP.<?php echo $cur_version; ?>.uni.32.zip:&nbsp;<a href="https://sourceforge.net/projects/jsminnpp/files/Uni/JSToolNPP.<?php echo $cur_version; ?>.uni.32.zip/download" target="_blank">Download from SourceForge.net</a></p>
                             </div>
                         </li>
