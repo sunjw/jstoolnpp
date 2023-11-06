@@ -796,7 +796,7 @@ class RealJSFormatter extends JSParser.JSParser {
         if (this.m_tokenB.type == JSParser.STRING_TYPE ||
             this.m_tokenB.type == JSParser.COMMENT_TYPE_1 ||
             this.m_tokenB.type == JSParser.COMMENT_TYPE_2 ||
-            this.m_tokenB.code == "{" ||
+            this.m_tokenB.code == "{" || this.m_tokenB.code == "#" ||
             (this.m_declareKeywordSet.includes(this.m_tokenA.code) && this.m_tokenB.code == "[")) {
             if (this.m_tokenA.type == JSParser.STRING_TYPE &&
                 this.m_tokenA.code.endsWith("${")) {
