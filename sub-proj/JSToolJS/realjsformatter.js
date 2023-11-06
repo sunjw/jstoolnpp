@@ -353,7 +353,8 @@ class RealJSFormatter extends JSParser.JSParser {
         if (this.m_tokenA.code == "(" || this.m_tokenA.code == ")" ||
             this.m_tokenA.code == "[" || this.m_tokenA.code == "]" ||
             this.m_tokenA.code == "!" || this.m_tokenA.code == "!!" ||
-            this.m_tokenA.code == "~" || this.m_tokenA.code == ".") {
+            this.m_tokenA.code == "~" || this.m_tokenA.code == "." ||
+            this.m_tokenA.code == "#") {
             // ()[]!. with no format
             if ((this.m_tokenA.code == ")" || this.m_tokenA.code == "]") &&
                 (topStack == JSParser.JS_ASSIGN || topStack == JSParser.JS_HELPER)) {

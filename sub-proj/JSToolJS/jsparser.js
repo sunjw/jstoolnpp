@@ -146,7 +146,7 @@ class JSParser {
         // single operator
         return (ch == '.' || ch == '(' || ch == ')' ||
             ch == '[' || ch == ']' || ch == '{' || ch == '}' ||
-            ch == ',' || ch == ';' || ch == '~' ||
+            ch == ',' || ch == ';' || ch == '~' || ch == '#' ||
             ch == '\n');
     }
 
