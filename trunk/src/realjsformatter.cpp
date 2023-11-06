@@ -517,7 +517,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 	if (m_tokenA.code == "(" || m_tokenA.code == ")" ||
 		m_tokenA.code == "[" || m_tokenA.code == "]" ||
 		m_tokenA.code == "!" || m_tokenA.code == "!!" ||
-		m_tokenA.code == "~" || m_tokenA.code == ".")
+		m_tokenA.code == "~" || m_tokenA.code == "." ||
+		m_tokenA.code == "#")
 	{
 		// ()[]!. 都是前后没有样式的运算符
 		if ((m_tokenA.code == ")" || m_tokenA.code == "]") &&
@@ -1057,7 +1058,7 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 	if (m_tokenB.type == STRING_TYPE ||
 		m_tokenB.type == COMMENT_TYPE_1 ||
 		m_tokenB.type == COMMENT_TYPE_2 ||
-		m_tokenB.code == "{" ||
+		m_tokenB.code == "{" || m_tokenB.code == "#" ||
 		(m_declareKeywordSet.find(m_tokenA.code) != m_declareKeywordSet.end() &&
 			m_tokenB.code == "["))
 	{
