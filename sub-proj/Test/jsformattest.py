@@ -112,9 +112,6 @@ def main():
                 comm_util.log_print('Unknown operating system.')
             return
     else:
-        if win_arm64:
-            comm_util.log_print('Windows ARM64 not support Node.')
-            return
         if not comm_util.is_windows() and not comm_util.is_macos() and not comm_util.is_linux():
             comm_util.log_print('Unknown operating system.')
             return
