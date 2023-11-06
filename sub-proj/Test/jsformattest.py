@@ -140,6 +140,8 @@ def main():
     if validate:
         # validate test only support Windows x64 relase build
         jsformatter_path_sel = JSFORMATTER_REL_PATH_WIN_64
+        if win_arm64:
+            jsformatter_path_sel = JSFORMATTER_REL_PATH_WIN_ARM64
     if nodejs or validate:
         jsformatter_nodejs_script_sel = JSFORMATTER_NODEJS_SCRIPT_PATH
 
@@ -150,8 +152,8 @@ def main():
     if nodejs:
         case_runtime = NodeCaseRuntime(jsformatter_nodejs_script_sel)
     if validate:
-        if comm_util.is_macos() or win_arm64:
-            comm_util.log_print('Validate only support Windows x64.')
+        if comm_util.is_macos():
+            comm_util.log_print('Validate only support Windows.')
             return
         case_runtime = ValidateCaseRuntime(jsformatter_path_sel, jsformatter_nodejs_script_sel)
 
