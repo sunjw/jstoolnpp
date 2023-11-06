@@ -105,9 +105,6 @@ def main():
     if not nodejs and not comm_util.is_windows():
         comm_util.log_print('JsonPP native test only supports Windows.')
         return
-    if nodejs and win_arm64:
-        comm_util.log_print('JsonPP node test only supports Windows x64.')
-        return
 
     # prepare path
     jsonpp_path_sel = ''
