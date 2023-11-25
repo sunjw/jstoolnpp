@@ -832,7 +832,6 @@ class RealJSFormatter extends JSParser.JSParser {
             // indent after read ()
             this.m_brcNeedStack.push(false);
             this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
-
         }
 
         if (!bTokenAPropName && this.m_tokenA.code == "switch") {
