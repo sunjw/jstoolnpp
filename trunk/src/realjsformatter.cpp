@@ -442,7 +442,15 @@ void RealJSFormatter::Go()
 		switch (m_tokenA.type)
 		{
 		case REGULAR_TYPE:
-			PutToken(m_tokenA); // 正则表达式直接输出, 前后没有任何样式
+			if (m_tokenPreA.type == STRING_TYPE &&
+				m_bracketKeywordSet.find(m_tokenPreA.code) == m_bracketKeywordSet.end())
+			{
+				PutToken(m_tokenA, string(" "));
+			}
+			else
+			{
+				PutToken(m_tokenA); // 正则表达式直接输出, 前后没有任何样式
+			}
 			break;
 		case COMMENT_TYPE_1:
 		case COMMENT_TYPE_2:

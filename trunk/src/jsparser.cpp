@@ -515,7 +515,8 @@ void JSParser::PrepareRegular()
 	if (tokenBFirst == '/' && m_tokenB.type != COMMENT_TYPE_1 &&
 		m_tokenB.type != COMMENT_TYPE_2 &&
 		((m_tokenA.type != STRING_TYPE && m_strBeforeReg.find(tokenALast) != string::npos) ||
-			(m_tokenA.code == "return" || m_tokenA.code == "throw")))
+			(m_tokenA.code == "return" || m_tokenA.code == "throw" ||
+				m_tokenA.code == "in" || m_tokenA.code == "of")))
 	{
 		m_bRegular = true;
 		GetTokenRaw(); // 把正则内容加到 m_tokenB
