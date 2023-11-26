@@ -1107,7 +1107,6 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		// 等待 (), () 到来后才能加缩进
 		m_brcNeedStack.push(false);
 		m_blockStack.push(m_blockMap[m_tokenA.code]);
-
 	}
 
 	if (!bTokenAPropName && m_tokenA.code == "switch")
