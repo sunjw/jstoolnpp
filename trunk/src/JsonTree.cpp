@@ -96,9 +96,9 @@ tstring JsonTree::getJsonNodePath(HTREEITEM hti)
 			}
 			else
 			{
-				if (tstrTreeText == TEXT("ROOT"))
+				if (tstrTreeText == TEXT(JSON_TREE_ROOT))
 				{
-					tstrKey = TEXT("ROOT");
+					tstrKey = TEXT(JSON_TREE_ROOT);
 				}
 
 				if (tstrJsonPath[0] == TEXT('['))

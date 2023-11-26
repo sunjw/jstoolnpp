@@ -231,7 +231,7 @@ HTREEITEM JSONDialog::initTree()
 		TreeView_DeleteAllItems(GetDlgItem(m_hDlg, IDC_TREE_JSON));
 	}
 
-	HTREEITEM root = insertTree(TEXT("ROOT"), -1, TVI_ROOT);
+	HTREEITEM root = insertTree(TEXT(JSON_TREE_ROOT), -1, TVI_ROOT);
 	
 	return root;		
 }

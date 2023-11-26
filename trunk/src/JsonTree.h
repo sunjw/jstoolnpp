@@ -25,6 +25,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include "PluginInterface.h"
 #include "TreeViewController.h"
 
+#define JSON_TREE_ROOT "$"
 #define JSON_TREE_SPLITOR ": "
 
 class JsonTree: public TreeViewController
