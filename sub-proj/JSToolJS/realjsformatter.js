@@ -227,7 +227,12 @@ class RealJSFormatter extends JSParser.JSParser {
             //PutToken(m_tokenA);
             switch (this.m_tokenA.type) {
             case JSParser.REGULAR_TYPE:
-                this.PutToken(this.m_tokenA); // directly output regular without any format
+                if (this.m_tokenPreA.type == JSParser.STRING_TYPE &&
+                    !this.m_bracketKeywordSet.includes(this.m_tokenPreA.code)) {
+                    this.PutToken(this.m_tokenA, " ");
+                } else {
+                    this.PutToken(this.m_tokenA); // directly output regular without any format
+                }
                 break;
             case JSParser.COMMENT_TYPE_1:
             case JSParser.COMMENT_TYPE_2:

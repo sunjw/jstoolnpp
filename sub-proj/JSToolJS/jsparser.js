@@ -558,7 +558,8 @@ class JSParser {
         if (tokenBFirst == '/' && this.m_tokenB.type != COMMENT_TYPE_1 &&
             this.m_tokenB.type != COMMENT_TYPE_2 &&
             ((this.m_tokenA.type != STRING_TYPE && this.m_strBeforeReg.indexOf(tokenALast) != -1) ||
-                (this.m_tokenA.code == "return" || this.m_tokenA.code == "throw"))) {
+                (this.m_tokenA.code == "return" || this.m_tokenA.code == "throw" ||
+                    this.m_tokenA.code == "in" || this.m_tokenA.code == "of"))) {
             this.m_bRegular = true;
             this.GetTokenRaw(); // put regular into m_tokenB
         }
