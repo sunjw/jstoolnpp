@@ -29,7 +29,7 @@ class JsonTreeProvider {
      * A implementation of TreeDataProvider
      */
     constructor(rootJsonValue) {
-        this.rootNode = new JsonTreeNode("ROOT", rootJsonValue, 0);
+        this.rootNode = new JsonTreeNode("$", rootJsonValue, 0);
     }
 
     isRootNode(element) {
