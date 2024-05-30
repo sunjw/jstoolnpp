@@ -1,7 +1,7 @@
 /*
  * strhelper implementation file
  * Author: Sun Junwen
- * Version: 2.2.1
+ * Version: 2.2.2
  * Provides converting from tstring, string and wstring to each other
  * And provides string's utf8 converting.
  * Provides triming function to string and wstring.
@@ -35,7 +35,7 @@ namespace sunjwbase
 	// Windows convert
 	static std::string _wstrtostr(const std::wstring& wstr, UINT codePage)
 	{
-		// Convert a wstring to a specified code page encoded string 
+		// Convert a wstring to a specified code page encoded string
 		size_t strLen = WideCharToMultiByte(codePage, 0, wstr.c_str(), (int)wstr.length(), NULL, 0, NULL, NULL);
 		std::string strTo;
 		char *szTo = new char[strLen + 1];
@@ -45,10 +45,10 @@ namespace sunjwbase
 		delete[] szTo;
 		return strTo;
 	}
-	
+
 	static std::wstring _strtowstr(const std::string& str, UINT codePage)
 	{
-		// Convert a specified code page encoded string to a wstring 
+		// Convert a specified code page encoded string to a wstring
 		size_t wstrLen = MultiByteToWideChar(codePage, 0, str.c_str(), -1, NULL, 0);
 		std::wstring wstrTo;
 		wchar_t *wszTo = new wchar_t[wstrLen + 1];
@@ -71,27 +71,27 @@ std::string sunjwbase::striconv(const std::string& input,
 	size_t outleft = inleft * 4 + 1; // should be large enough
 	char* outptr = new char[outleft];
 	bzero(outptr, outleft);
-	
+
 	strcpy(inptr, input.c_str());
-	
+
 	iconv_t cd; // conversion descriptor
 	if ((cd = iconv_open(to_code.c_str(), from_code.c_str())) == (iconv_t) (-1))
 	{
 		iconv_close(cd); // failed clean
 		return input;
 	}
-	
+
 	char* in = inptr;
 	char* out = outptr;
 	outleft = iconv(cd, &in, &inleft, &out, &outleft);
-	
+
 	iconv_close(cd);
-	
+
 	std::string strRet(outptr);
-	
+
 	delete[] inptr;
 	delete[] outptr;
-	
+
 	return strRet;
 }
 #endif
@@ -141,7 +141,7 @@ std::string sunjwbase::wstrtostr(const std::wstring& wstr)
 	std::string str(char_buf);
 	delete[] char_buf;
 	setlocale(LC_ALL, "C");
-	
+
 	return str;
 #endif
 }
@@ -161,7 +161,7 @@ std::wstring sunjwbase::strtowstr(const std::string& str)
 	std::wstring wstr(wct_buf, num_chars);
 	delete[] wct_buf;
 	setlocale(LC_ALL, "C");
-	
+
 	return wstr;
 #endif
 }
@@ -181,7 +181,7 @@ std::string sunjwbase::asciiconvjson(std::string& strJsonUtf16)
 			n[1] = strJsonUtf16[i + 3];
 			n[2] = strJsonUtf16[i + 4];
 			n[3] = strJsonUtf16[i + 5];
-			
+
 			i += 5;
 
 			int utf16 = 0;
@@ -260,7 +260,7 @@ std::string sunjwbase::strreplace(const std::string& base, const std::string& sr
 		ret.replace(pos, srcLen, des);
 		pos = ret.find(src, pos + desLen);
 	}
-	
+
 	return ret;
 }
 
@@ -276,7 +276,7 @@ std::wstring sunjwbase::strreplace(const std::wstring& base, const std::wstring&
 		ret.replace(pos, srcLen, des);
 		pos = ret.find(src, pos + desLen);
 	}
-	
+
 	return ret;
 }
 
@@ -347,7 +347,7 @@ std::string sunjwbase::itostr(int num, int idx /* = 10 */)
 			break;
 		}
 	}
-	
+
 	return ret;
 }
 
@@ -361,45 +361,36 @@ std::string sunjwbase::strappendformat(std::string& str, const char *format, ...
 		temp.resize(size);
 		va_start(vl, format);
 #if defined (WIN32)
-		int n = vsnprintf_s((char *)temp.c_str(), size, size, format, vl);
+		int n = vsnprintf_s((char *)temp.data(), size, _TRUNCATE, format, vl);
 #else
-		int n = vsnprintf((char *)temp.c_str(), size, format, vl);
+		int n = vsnprintf((char *)temp.data(), size, format, vl);
 #endif
 		va_end(vl);
-		if (n > -1 && n < size)
-		{
-			temp.resize(n);
+		if (n > -1 && n < size) {
+			// temp.resize(n);
 			break;
 		}
 		if (n > -1)
-		{
 			size = n + 1; // not large enough
-		}
 		else
-		{
 			size *= 2;
-		}
 	}
-	str.append(temp);
-	
+	str.append(temp.c_str());
+
 	return str;
 }
 
 bool sunjwbase::str_startwith(const std::string& str, const std::string& target)
 {
 	if (str.length() < target.length())
-	{
 		return false;
-	}
 
 	// Length is enough, let's check content.
 	size_t i = 0;
 	for (; i < target.length(); ++i)
 	{
 		if (str[i] != target[i])
-		{
 			return false;
-		}
 	}
 
 	return (i == target.length());
@@ -408,9 +399,7 @@ bool sunjwbase::str_startwith(const std::string& str, const std::string& target)
 bool sunjwbase::str_endwith(const std::string& str, const std::string& target)
 {
 	if (str.length() < target.length())
-	{
 		return false;
-	}
 
 	// Length is enough, let's check content.
 	size_t str_len = str.length();
@@ -419,9 +408,7 @@ bool sunjwbase::str_endwith(const std::string& str, const std::string& target)
 	for (; i < target.length(); ++i)
 	{
 		if (str[str_len - target_len + i] != target[i])
-		{
 			return false;
-		}
 	}
 
 	return (i == target.length());
