@@ -185,6 +185,9 @@ class RealJSFormatter extends JSParser.JSParser {
         this.m_declareKeywordSet.push("var");
         this.m_declareKeywordSet.push("let");
         this.m_declareKeywordSet.push("const");
+        for (let i = 0; i < this.m_declareKeywordSet.length; ++i) {
+            this.m_blockMap[this.m_declareKeywordSet[i]] = JSParser.JS_DECL;
+        }
 
     }
 
@@ -490,8 +493,9 @@ class RealJSFormatter extends JSParser.JSParser {
             }
             if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_BLOCK) && !bHaveNewLine) {
                 this.m_blockStack.pop();
-                if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_IMPORT)) {
-                    this.PutToken(this.m_tokenA, "", strRight); // inside import {}
+                if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_IMPORT) ||
+                    JSParser.StackTopEq(this.m_blockStack, JSParser.JS_DECL)) {
+                    this.PutToken(this.m_tokenA, "", strRight); // inside import/const {}
                 } else {
                     this.PutToken(this.m_tokenA, "", strRight + "\n"); // inside {}
                 }
@@ -554,10 +558,12 @@ class RealJSFormatter extends JSParser.JSParser {
             }
             // fix more indents in ({...}), end
 
-            this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]); // push and indent
-            if (topStack != JSParser.JS_IMPORT) {
+            if (topStack != JSParser.JS_IMPORT &&
+                topStack != JSParser.JS_DECL) {
                 ++this.m_nIndents; // no newline with import
             }
+
+            this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]); // push and indent
 
             /*
              * spaces between { are prepared by operator before
@@ -578,10 +584,12 @@ class RealJSFormatter extends JSParser.JSParser {
             } else {
                 let strLeft = (this.m_struOption.eBracNL == BRAC_NEWLINE.NEWLINE_BRAC &&
                     topStack != JSParser.JS_IMPORT &&
+                    topStack != JSParser.JS_DECL &&
                     !this.m_bNewLine) ? "\n" : "";
                 if (!bHaveNewLine &&
                     !this.IsInlineComment(this.m_tokenB) &&
-                    topStack != JSParser.JS_IMPORT) { // need newline
+                    topStack != JSParser.JS_IMPORT &&
+                    topStack != JSParser.JS_DECL) { // need newline
                     this.PutToken(this.m_tokenA, strLeft, strRight + "\n");
                 } else {
                     this.PutToken(this.m_tokenA, strLeft, strRight);
@@ -625,8 +633,11 @@ class RealJSFormatter extends JSParser.JSParser {
             if (topStack == JSParser.JS_BLOCK) {
                 // pop and reduce indent
                 this.m_blockStack.pop();
-                --this.m_nIndents;
                 topStack = JSParser.GetStackTop(this.m_blockStack);
+                if (topStack != JSParser.JS_IMPORT &&
+                    topStack != JSParser.JS_DECL) {
+                    --this.m_nIndents;
+                }
 
                 if (topStack != undefined) {
                     switch (topStack) {
@@ -639,6 +650,8 @@ class RealJSFormatter extends JSParser.JSParser {
                     case JSParser.JS_SWITCH:
                     case JSParser.JS_ASSIGN:
                     case JSParser.JS_FUNCTION:
+                    case JSParser.JS_IMPORT:
+                    case JSParser.JS_DECL:
                     case JSParser.JS_HELPER:
                         this.m_blockStack.pop();
                         break;
@@ -658,7 +671,8 @@ class RealJSFormatter extends JSParser.JSParser {
                 strRight += "\n";
                 this.m_bEmptyBracket = false;
             }
-            if (topStack == JSParser.JS_IMPORT) {
+            if (topStack == JSParser.JS_IMPORT ||
+                topStack == JSParser.JS_DECL) {
                 leftStyle = " ";
             }
 
@@ -671,6 +685,7 @@ class RealJSFormatter extends JSParser.JSParser {
                         (topStack == JSParser.JS_TRY && this.m_tokenB.code == "catch") ||
                         ((topStack == JSParser.JS_TRY || topStack == JSParser.JS_CATCH) && this.m_tokenB.code == "finally") ||
                         topStack == JSParser.JS_IMPORT ||
+                        topStack == JSParser.JS_DECL ||
                         this.m_tokenB.code == ")"))) {
                 if (strRight.length == 0 || strRight.charAt(strRight.length - 1) != '\n') {
                     strRight += "\n"; // no double newline in some situation
@@ -841,6 +856,10 @@ class RealJSFormatter extends JSParser.JSParser {
             //m_blockStack.push('t'); // variable statment
 
             if (this.m_tokenA.code == "import") {
+                this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
+            }
+
+            if (this.m_declareKeywordSet.includes(this.m_tokenA.code) && this.m_tokenB.code == "{") {
                 this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
             }
 

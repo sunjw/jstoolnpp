@@ -71,6 +71,7 @@ const JS_TRY = 'r';
 const JS_CATCH = 'h';
 const JS_FUNCTION = 'n';
 const JS_IMPORT = 'm';
+const JS_DECL = 'v';
 const JS_BLOCK = '{';
 const JS_BRACKET = '(';
 const JS_SQUARE = '[';
@@ -632,18 +633,34 @@ class JSParser {
                 return; // empty {}
             }
 
+            let eatNewLine = false;
+
             if (this.m_tokenA.code == "}" && this.m_tokenB.code == "while" &&
                 StackTopEq(this.m_blockStack, JS_BLOCK)) {
-                let eatNewLine = false;
                 let topStack = GetStackTop(this.m_blockStack);
                 this.m_blockStack.pop();
                 if (StackTopEq(this.m_blockStack, JS_DO)) {
                     eatNewLine = true;
                 }
                 this.m_blockStack.push(topStack);
-                if (eatNewLine) {
-                    return;
-                }
+            }
+
+            let needRepush = false;
+            if (StackTopEq(this.m_blockStack, JS_BLOCK)) {
+                let topStack = GetStackTop(this.m_blockStack);
+                this.m_blockStack.pop();
+                needRepush = true;
+            }
+            if ((this.m_tokenA.code != ";" && StackTopEq(this.m_blockStack, JS_IMPORT)) ||
+                StackTopEq(this.m_blockStack, JS_DECL)) {
+                eatNewLine = true;
+            }
+            if (needRepush) {
+                this.m_blockStack.push(JS_BLOCK);
+            }
+
+            if (eatNewLine) {
+                return;
             }
 
             let temp;
@@ -717,6 +734,7 @@ exports.JS_TRY = JS_TRY;
 exports.JS_CATCH = JS_CATCH;
 exports.JS_FUNCTION = JS_FUNCTION;
 exports.JS_IMPORT = JS_IMPORT;
+exports.JS_DECL = JS_DECL;
 exports.JS_BLOCK = JS_BLOCK;
 exports.JS_BRACKET = JS_BRACKET;
 exports.JS_SQUARE = JS_SQUARE;
