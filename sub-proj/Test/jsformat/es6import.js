@@ -10,6 +10,13 @@ import {
 } from "module-name";
 import { "string name" as alias } from "module-name";
 import defaultExport, { export1, export2 } from "module-name";
+
+const {
+  ipcRenderer,
+  webUtils
+} = require('electron');
+const remote = require('@electron/remote');
+
 import defaultExport, * as name from "module-name";
 import "module-name";
 
