@@ -560,7 +560,7 @@ class RealJSFormatter extends JSParser.JSParser {
 
             if (topStack != JSParser.JS_IMPORT &&
                 topStack != JSParser.JS_DECL) {
-                ++this.m_nIndents; // no newline with import
+                ++this.m_nIndents; // no newline with import/const
             }
 
             this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]); // push and indent
