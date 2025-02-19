@@ -123,6 +123,7 @@ void RealJSFormatter::Init()
 	m_blockMap[string("try")] = JS_TRY;
 	m_blockMap[string("finally")] = JS_TRY; // 等同于 try
 	m_blockMap[string("catch")] = JS_CATCH;
+	m_blockMap[string("import")] = JS_IMPORT;
 	m_blockMap[string("function")] = JS_FUNCTION;
 	m_blockMap[string("{")] = JS_BLOCK;
 	m_blockMap[string("(")] = JS_BRACKET;
@@ -658,6 +659,10 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 		// do 在读取到 while 后才修改计数
 		// 对于 do{} 也一样
+		if (topStack == JS_IMPORT)
+		{
+			m_blockStack.pop();
+		}
 
 		GetStackTop(m_blockStack, topStack);
 		if (topStack != JS_BRACKET && !bHaveNewLine && !IsInlineComment(m_tokenB))
@@ -684,9 +689,23 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			--m_nIndents;
 			m_blockStack.pop();
 		}
+		if (m_tokenB.code == "*")
+		{
+			strRight = ""; // followed by *
+		}
 		if (StackTopEq(m_blockStack, JS_BLOCK) && !bHaveNewLine)
 		{
-			PutToken(m_tokenA, string(""), strRight.append("\n")); // 如果是 {} 里的
+			m_blockStack.pop();
+			if (StackTopEq(m_blockStack, JS_IMPORT))
+			{
+				PutToken(m_tokenA, string(""), strRight); // inside import {}
+			}
+			else
+			{
+				PutToken(m_tokenA, string(""), strRight.append("\n")); // inside {}
+			}
+			m_blockStack.push(JS_BLOCK);
+
 		}
 		else
 		{
@@ -757,7 +776,10 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		// 修正({...}) 中多一次缩进 end
 
 		m_blockStack.push(m_blockMap[m_tokenA.code]); // 入栈, 增加缩进
-		++m_nIndents;
+		if (topStack != JS_IMPORT)
+		{
+			++m_nIndents; // no newline with import
+		}
 
 		/*
 		 * { 之间的空格都是由之前的符号准备好的
@@ -782,8 +804,14 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 		else
 		{
-			string strLeft = (m_struOption.eBracNL == NEWLINE_BRAC && !m_bNewLine) ? string("\n") : string("");
-			if (!bHaveNewLine && !IsInlineComment(m_tokenB)) // 需要换行
+			string strLeft = (m_struOption.eBracNL == NEWLINE_BRAC &&
+				topStack != JS_IMPORT &&
+				//topStack != JS_DECL &&
+				!m_bNewLine) ? "\n" : "";
+			if (!bHaveNewLine &&
+				!IsInlineComment(m_tokenB) &&
+				topStack != JS_IMPORT/* &&
+				topStack != JSParser.JS_DECL*/) // need newline
 			{
 				PutToken(m_tokenA, strLeft, strRight.append("\n"));
 			}
@@ -873,6 +901,11 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			strRight.append("\n");
 			m_bEmptyBracket = false;
 		}
+		if (topStack == JS_IMPORT /*||
+			topStack == JS_DECL*/)
+		{
+			leftStyle = " ";
+		}
 
 		if ((!bHaveNewLine &&
 			m_tokenB.code != ";" && m_tokenB.code != "," && m_tokenB.code != "=" &&
@@ -882,6 +915,7 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			(topStack == JS_IF && m_tokenB.code == "else") ||
 			(topStack == JS_TRY && m_tokenB.code == "catch") ||
 			((topStack == JS_TRY || topStack == JS_CATCH) && m_tokenB.code == "finally") ||
+			topStack == JS_IMPORT ||
 			m_tokenB.code == ")")))
 		{
 			if (strRight.length() == 0 || strRight[strRight.length() - 1] != '\n')
@@ -1058,7 +1092,8 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		m_blockStack.push(JS_TEMP_LITE);
 	}
 
-	if (StackTopEq(m_blockStack, JS_TEMP_LITE) && StartWith(m_tokenA.code, "}"))
+	if (StackTopEq(m_blockStack, JS_TEMP_LITE) &&
+		StartWith(m_tokenA.code, "}"))
 	{
 		m_blockStack.pop();
 	}
@@ -1086,6 +1121,12 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		//{
 		//	m_blockStack.push('t'); // 声明变量
 		//}
+
+		if (m_tokenA.code == "import")
+		{
+			m_blockStack.push(m_blockMap[m_tokenA.code]);
+		}
+
 		return;
 	}
 
@@ -1119,7 +1160,6 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 
 	if (!bTokenAPropName && m_tokenA.code == "switch")
 	{
-		//bBracket = false;
 		m_brcNeedStack.push(false);
 		m_blockStack.push(m_blockMap[m_tokenA.code]);
 	}

@@ -81,6 +81,7 @@ bool StackTopEq(const stack<T>& stk, T eq)
 #define JS_CASE 'c'
 #define JS_TRY 'r'
 #define JS_CATCH 'h'
+#define JS_IMPORT 'm'
 #define JS_FUNCTION 'n'
 #define JS_BLOCK '{'
 #define JS_BRACKET '('
