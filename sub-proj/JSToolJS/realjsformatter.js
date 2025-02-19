@@ -481,6 +481,9 @@ class RealJSFormatter extends JSParser.JSParser {
                 --this.m_nIndents;
                 this.m_blockStack.pop();
             }
+            if (this.m_tokenB.code == "*") {
+                strRight = ""; // followed by *
+            }
             if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_BLOCK) && !bHaveNewLine) {
                 this.PutToken(this.m_tokenA, "", strRight + "\n"); // inside {}
             } else {
