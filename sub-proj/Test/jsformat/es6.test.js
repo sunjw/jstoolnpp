@@ -197,11 +197,7 @@ import * as math from "lib/math";
 console.log("2π = " + math.sum(math.pi, math.pi));
 
 //  otherApp.js
-import {
-	sum,
-	pi
-}
-from "lib/math";
+import { sum, pi } from "lib/math";
 console.log("2π = " + sum(pi, pi));
 
 //  lib/mathplusplus.js
@@ -209,11 +205,7 @@ export * from "lib/math";
 export var e = 2.71828182846;
 export default (x) => Math.exp(x);
 //  someApp.js
-import exp, {
-	pi,
-	e
-}
-from "lib/mathplusplus";
+import exp, { pi, e } from "lib/mathplusplus";
 console.log("e^{π} = " + exp(pi));
 
 class Shape {
@@ -811,11 +803,7 @@ export default {
 	},
 }
 
-import {
-	xxx,
-	xxx
-}
-from 'xxx';
+import { xxx, xxx } from 'xxx';
 
 const [x, x] = [x, x];
 const [x, x] = [x, x];
