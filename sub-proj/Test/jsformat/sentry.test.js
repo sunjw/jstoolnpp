@@ -100,15 +100,7 @@ var Sentry = function (t) {
 	}
 	var g = /^(?:(\w+):)\/\/(?:(\w+)(?::(\w+))?@)([\w.-]+)(?::(\d+))?\/(.+)/;
 	function _(t, n = !1) {
-		const {
-			host: e,
-			path: r,
-			pass: i,
-			port: s,
-			projectId: o,
-			protocol: u,
-			publicKey: a
-		} = t;
+		const { host: e, path: r, pass: i, port: s, projectId: o, protocol: u, publicKey: a } = t;
 		return `${u}://${a}${n && i ? `:${i}` : ""}@${e}${s ? `:${s}` : ""}/${r ? `${r}/` : r}${o}`
 	}
 	function b(t) {
@@ -669,10 +661,7 @@ function it(t) {
 	return t.exception && t.exception.values ? t.exception.values[0] : void 0
 }
 function st(t) {
-	const {
-		message: n,
-		event_id: e
-	} = t;
+	const { message: n, event_id: e } = t;
 	if (n)
 		return n;
 	var r = it(t);
@@ -942,9 +931,7 @@ var gt = {
 	nowSeconds: () => Date.now() / 1e3
 };
 var _t = function () {
-	const {
-		performance: t
-	} = e();
+	const { performance: t } = e();
 	if (t && t.now)
 		return {
 			now: () => t.now(),
@@ -1005,9 +992,7 @@ function jt(t, n) {
 		}), e]
 }
 (() => {
-	const {
-		performance: t
-	} = e();
+	const { performance: t } = e();
 	if (t && t.now) {
 		var n = 36e5,
 		r = t.now(),
@@ -1496,16 +1481,10 @@ class Ut {
 		return this.B
 	}
 	addBreadcrumb(t, n) {
-		const {
-			scope: r,
-			client: i
-		} = this.getStackTop();
+		const { scope: r, client: i } = this.getStackTop();
 		if (!r || !i)
 			return;
-		const {
-			beforeBreadcrumb: s = null,
-			maxBreadcrumbs: o = Lt
-		} = i.getOptions && i.getOptions() || {};
+		const { beforeBreadcrumb: s = null, maxBreadcrumbs: o = Lt } = i.getOptions && i.getOptions() || {};
 		if (!(o <= 0)) {
 			var u = {
 				timestamp: wt(),
@@ -1558,10 +1537,7 @@ class Ut {
 		e && e.setContext(t, n)
 	}
 	configureScope(t) {
-		const {
-			scope: n,
-			client: e
-		} = this.getStackTop();
+		const { scope: n, client: e } = this.getStackTop();
 		n && e && t(n)
 	}
 	run(t) {
@@ -1612,17 +1588,12 @@ class Ut {
 		n && n.setSession()
 	}
 	startSession(t) {
-		const {
-			scope: n,
-			client: r
-		} = this.getStackTop(), {
+		const { scope: n, client: r } = this.getStackTop(), {
 			release: i,
 			environment: s
 		} = r && r.getOptions() || {};
 		var o = e();
-		const {
-			userAgent: u
-		} = o.navigator || {};
+		const { userAgent: u } = o.navigator || {};
 		var a = It({
 			release: i,
 			environment: s,
@@ -1645,20 +1616,14 @@ class Ut {
 		return a
 	}
 	J() {
-		const {
-			scope: t,
-			client: n
-		} = this.getStackTop();
+		const { scope: t, client: n } = this.getStackTop();
 		if (t) {
 			var e = t.getSession();
 			e && n && n.captureSession && n.captureSession(e)
 		}
 	}
 	X(t) {
-		const {
-			scope: n,
-			client: e
-		} = this.getStackTop();
+		const { scope: n, client: e } = this.getStackTop();
 		e && t(e, n)
 	}
 	W(t, ...n) {
@@ -1736,10 +1701,7 @@ function Kt(t) {
 function Gt(t) {
 	if (!t || !t.sdk)
 		return;
-	const {
-		name: n,
-		version: e
-	} = t.sdk;
+	const { name: n, version: e } = t.sdk;
 	return {
 		name: n,
 		version: e
@@ -1748,9 +1710,7 @@ function Gt(t) {
 function Vt(t, n, e, r) {
 	var i = Gt(e),
 	s = t.type || "event";
-	const {
-		transactionSampling: o
-	} = t.sdkProcessingMetadata || {}, {
+	const { transactionSampling: o } = t.sdkProcessingMetadata || {}, {
 		method: u,
 		rate: a
 	} = o || {};
@@ -1968,10 +1928,7 @@ class tn {
 		return !1 !== this.getOptions().enabled && void 0 !== this.tt
 	}
 	ct(t, n, e) {
-		const {
-			normalizeDepth: r = 3,
-			normalizeMaxBreadth: i = 1e3
-		} = this.getOptions();
+		const { normalizeDepth: r = 3, normalizeMaxBreadth: i = 1e3 } = this.getOptions();
 		var s = {
 			...t,
 			event_id: t.event_id || n.event_id || et(),
@@ -2025,12 +1982,7 @@ class tn {
 	}
 	ft(t) {
 		var n = this.getOptions();
-		const {
-			environment: e,
-			release: r,
-			dist: i,
-			maxValueLength: s = 250
-		} = n;
+		const { environment: e, release: r, dist: i, maxValueLength: s = 250 } = n;
 		"environment" in t || (t.environment = "environment" in n ? e : "production"),
 		void 0 === t.release && void 0 !== r && (t.release = r),
 		void 0 === t.dist && void 0 !== i && (t.dist = i),
@@ -2048,10 +2000,7 @@ class tn {
 		return this.dt(t, n, e).then((t => t.event_id), (t => {}))
 	}
 	dt(t, n, e) {
-		const {
-			beforeSend: r,
-			sampleRate: i
-		} = this.getOptions();
+		const { beforeSend: r, sampleRate: i } = this.getOptions();
 		if (!this.it())
 			return vt(new m("SDK not enabled, will not capture event."));
 		var s = "transaction" === t.type;
@@ -2216,10 +2165,7 @@ class un {
 									return [t.message];
 								if (t.exception)
 									try {
-										const {
-											type: n = "",
-											value: e = ""
-										} = t.exception.values && t.exception.values[0] || {};
+										const { type: n = "", value: e = "" } = t.exception.values && t.exception.values[0] || {};
 										return [`${e}`, `${n}: ${e}`]
 									} catch (t) {
 										return []
@@ -2474,12 +2420,7 @@ function bn(t) {
 	if (t.endTimestamp) {
 		if (t.xhr.__sentry_own_request__)
 			return;
-		const {
-			method: n,
-			url: e,
-			status_code: r,
-			body: i
-		} = t.xhr.__sentry_xhr__ || {};
+		const { method: n, url: e, status_code: r, body: i } = t.xhr.__sentry_xhr__ || {};
 		Ht().addBreadcrumb({
 			category: "xhr",
 			data: {
@@ -2833,13 +2774,7 @@ function Yn() {
 			const [n, e, r] = ee();
 			if (!n.getIntegration(Qn))
 				return;
-			const {
-				msg: i,
-				url: s,
-				line: o,
-				column: a,
-				error: f
-			} = t;
+			const { msg: i, url: s, line: o, column: a, error: f } = t;
 			if (Kn() || f && f.__sentry_own_request__)
 				return;
 			const h = void 0 === f && c(i) ? function (t, n, e, r) {
@@ -3385,10 +3320,7 @@ t.showReportDialog = function (t = {}, n = Ht()) {
 	const r = e();
 	if (!r.document)
 		return;
-	const {
-		client: i,
-		scope: s
-	} = n.getStackTop(),
+	const { client: i, scope: s } = n.getStackTop(),
 	o = t.dsn || i && i.getDsn();
 	if (!o)
 		return;

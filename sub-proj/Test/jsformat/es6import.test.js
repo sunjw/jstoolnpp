@@ -18,12 +18,8 @@ import("./data.json", {
 
 (async() => {
 	if (somethingIsTrue) {
-		const {
-		default:
-			myDefault,
-			foo,
-			bar,
-		} = await import("/modules/my-module.js");
+		const { default:
+		myDefault, foo, bar,  } = await import("/modules/my-module.js");
 	}
 })();
 

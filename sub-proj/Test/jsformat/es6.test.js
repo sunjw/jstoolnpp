@@ -152,11 +152,7 @@ obj = {
 	}
 };
 
-var {
-	op,
-	lhs,
-	rhs
-} = getASTNode();
+var { op, lhs, rhs } = getASTNode();
 
 function f([name, val]) {
 	console.log(name, val);

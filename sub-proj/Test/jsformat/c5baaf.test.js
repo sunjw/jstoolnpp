@@ -1741,11 +1741,7 @@
 						const t = this.stream(["show", e]);
 						if (!t.stdout)
 							return Promise.reject("Can't open file from git");
-						const {
-							exitCode: r,
-							stdout: n,
-							stderr: o
-						} = await S(t);
+						const { exitCode: r, stdout: n, stderr: o } = await S(t);
 						if (r) {
 							const e = new k({
 								message: "Could not show object.",
@@ -1764,10 +1760,7 @@
 									message: "Path not known by git",
 									gitErrorCode: "UnknownPath"
 								});
-							const {
-								mode: r,
-								object: n
-							} = e[0],
+							const { mode: r, object: n } = e[0],
 							o = await this.run(["cat-file", "-s", n]);
 							return {
 								mode: r,
@@ -1781,11 +1774,7 @@
 								message: "Path not known by git",
 								gitErrorCode: "UnknownPath"
 							});
-						const {
-							mode: n,
-							object: o,
-							size: i
-						} = r[0];
+						const { mode: n, object: o, size: i } = r[0];
 						return {
 							mode: n,
 							object: o,
@@ -1793,15 +1782,11 @@
 						}
 					}
 					async lstree(e, t) {
-						const {
-							stdout: r
-						} = await this.run(["ls-tree", "-l", e, "--", t]);
+						const { stdout: r } = await this.run(["ls-tree", "-l", e, "--", t]);
 						return I(r)
 					}
 					async lsfiles(e) {
-						const {
-							stdout: t
-						} = await this.run(["ls-files", "--stage", "--", e]);
+						const { stdout: t } = await this.run(["ls-files", "--stage", "--", e]);
 						return D(t)
 					}
 					async getGitRelativePath(e, t) {
@@ -1973,10 +1958,7 @@
 							stdio: [null, null, null]
 						});
 						r.stdin.end(t, "utf8");
-						const {
-							exitCode: n,
-							stdout: o
-						} = await S(r),
+						const { exitCode: n, stdout: o } = await S(r),
 						i = o.toString("utf8");
 						if (n)
 							throw new k({
@@ -3172,10 +3154,7 @@
 						if (this.transientDisposables = d.dispose(this.transientDisposables), !this.repository.HEAD || !this.repository.HEAD.upstream)
 							return;
 						this.transientDisposables = d.dispose(this.transientDisposables);
-						const {
-							name: e,
-							remote: t
-						} = this.repository.HEAD.upstream,
+						const { name: e, remote: t } = this.repository.HEAD.upstream,
 						r = i.join(this.repository.dotGit, "refs", "remotes", t, e);
 						try {
 							const e = f.watch(r);
@@ -3819,10 +3798,7 @@
 						return e.filter(e => !t.has(e))
 					}
 					async updateModelState() {
-						const {
-							status: e,
-							didHitLimit: t
-						} = await this.repository.getStatus(),
+						const { status: e, didHitLimit: t } = await this.repository.getStatus(),
 						r = s.workspace.getConfiguration("git"),
 						n = s.workspace.getConfiguration("git", s.Uri.file(this.repository.root)),
 						o = !0 === r.get("ignoreLimitWarning"),
@@ -4542,11 +4518,7 @@
 					const i = o.window.createOutputChannel("Git");
 					o.commands.registerCommand("git.showOutput", () => i.show()),
 					t.push(i);
-					const {
-						name: s,
-						version: a,
-						aiKey: c
-					} = r(177),
+					const { name: s, version: a, aiKey: c } = r(177),
 					u = new p.default(s, a, c);
 					if (y.push(() => u.dispose()), !o.workspace.getConfiguration("git", null).get("enabled")) {
 						const r = h.filterEvent(o.workspace.onDidChangeConfiguration, e => e.affectsConfiguration("git")),
@@ -9212,10 +9184,7 @@
 								[o] = r.indexGroup.resourceStates.filter(e => e.resourceUri.toString() === t);
 								n = o ? "" : "HEAD"
 							}
-							const {
-								size: o,
-								object: i
-							} = await r.getObjectDetails(n, e.fsPath), {
+							const { size: o, object: i } = await r.getObjectDetails(n, e.fsPath), {
 								mimetype: c
 							} = await r.detectObjectType(i);
 							if ("text/plain" === c)
@@ -9682,9 +9651,7 @@
 						n = r.uri;
 						if ("git" !== n.scheme)
 							return;
-						const {
-							ref: o
-						} = p.fromGitUri(n);
+						const { ref: o } = p.fromGitUri(n);
 						if ("" !== o)
 							return;
 						const i = p.toGitUri(n, "HEAD"),
@@ -10447,9 +10414,7 @@
 							this.outputChannel.appendLine(`repo root ${e}`);
 						if (e) {
 							if ("git" === e.scheme) {
-								const {
-									path: t
-								} = p.fromGitUri(e);
+								const { path: t } = p.fromGitUri(e);
 								e = a.Uri.file(t)
 							}
 							if ("file" === e.scheme) {
@@ -10798,11 +10763,7 @@
 						this.changedRepositoryRoots.clear()
 					}
 					async provideTextDocumentContent(e) {
-						let {
-							path: t,
-							ref: r,
-							submoduleOf: n
-						} = s.fromGitUri(e);
+						let { path: t, ref: r, submoduleOf: n } = s.fromGitUri(e);
 						if (n) {
 							const e = this.model.getRepository(n);
 							return e ? "index" === r ? await e.diffIndexWithHEAD(t) : await e.diffWithHEAD(t) : ""
@@ -11034,10 +10995,7 @@
 						e.setEncoding("utf8"),
 						e.on("data", e => r.push(e)),
 						e.on("end", () => {
-							const {
-								request: e,
-								host: n
-							} = JSON.parse(r.join(""));
+							const { request: e, host: n } = JSON.parse(r.join(""));
 							this.prompt(n, e).then(e => {
 								t.writeHead(200),
 								t.end(JSON.stringify(e))
