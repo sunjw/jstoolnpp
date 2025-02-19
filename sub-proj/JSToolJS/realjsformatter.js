@@ -180,7 +180,7 @@ class RealJSFormatter extends JSParser.JSParser {
         this.m_bracketKeywordSet.push("throw");
         this.m_bracketKeywordSet.push("delete");
 
-        this.m_declareKeywordSet = []; // keywords need followed by ()
+        this.m_declareKeywordSet = [];
         this.m_declareKeywordSet.push("var");
         this.m_declareKeywordSet.push("let");
         this.m_declareKeywordSet.push("const");
