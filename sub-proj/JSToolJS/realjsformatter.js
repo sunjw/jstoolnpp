@@ -162,6 +162,7 @@ class RealJSFormatter extends JSParser.JSParser {
         this.m_blockMap["try"] = JSParser.JS_TRY;
         this.m_blockMap["finally"] = JSParser.JS_TRY; // equal to try
         this.m_blockMap["catch"] = JSParser.JS_CATCH;
+        this.m_blockMap["import"] = JSParser.JS_IMPORT;
         this.m_blockMap["function"] = JSParser.JS_FUNCTION;
         this.m_blockMap["{"] = JSParser.JS_BLOCK;
         this.m_blockMap["("] = JSParser.JS_BRACKET;
@@ -462,6 +463,9 @@ class RealJSFormatter extends JSParser.JSParser {
             }
             // change count when read "while" after "do"
             // the same to do{}
+            if (topStack == JSParser.JS_IMPORT) {
+                this.m_blockStack.pop();
+            }
 
             topStack = JSParser.GetStackTop(this.m_blockStack);
             if (topStack != JSParser.JS_BRACKET && !bHaveNewLine && !this.IsInlineComment(this.m_tokenB)) {
@@ -485,7 +489,14 @@ class RealJSFormatter extends JSParser.JSParser {
                 strRight = ""; // followed by *
             }
             if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_BLOCK) && !bHaveNewLine) {
-                this.PutToken(this.m_tokenA, "", strRight + "\n"); // inside {}
+                this.m_blockStack.pop();
+                if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_IMPORT)) {
+                    this.PutToken(this.m_tokenA, "", strRight); // inside import {}
+                } else {
+                    this.PutToken(this.m_tokenA, "", strRight + "\n"); // inside {}
+                }
+                this.m_blockStack.push(JSParser.JS_BLOCK);
+
             } else {
                 this.PutToken(this.m_tokenA, "", strRight);
             }
@@ -544,7 +555,9 @@ class RealJSFormatter extends JSParser.JSParser {
             // fix more indents in ({...}), end
 
             this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]); // push and indent
-            ++this.m_nIndents;
+            if (topStack != JSParser.JS_IMPORT) {
+                ++this.m_nIndents; // no newline with import
+            }
 
             /*
              * spaces between { are prepared by operator before
@@ -563,8 +576,12 @@ class RealJSFormatter extends JSParser.JSParser {
                     this.PutToken(this.m_tokenA);
                 }
             } else {
-                let strLeft = (this.m_struOption.eBracNL == BRAC_NEWLINE.NEWLINE_BRAC && !this.m_bNewLine) ? "\n" : "";
-                if (!bHaveNewLine && !this.IsInlineComment(this.m_tokenB)) { // need newline
+                let strLeft = (this.m_struOption.eBracNL == BRAC_NEWLINE.NEWLINE_BRAC &&
+                    topStack != JSParser.JS_IMPORT &&
+                    !this.m_bNewLine) ? "\n" : "";
+                if (!bHaveNewLine &&
+                    !this.IsInlineComment(this.m_tokenB) &&
+                    topStack != JSParser.JS_IMPORT) { // need newline
                     this.PutToken(this.m_tokenA, strLeft, strRight + "\n");
                 } else {
                     this.PutToken(this.m_tokenA, strLeft, strRight);
@@ -641,6 +658,9 @@ class RealJSFormatter extends JSParser.JSParser {
                 strRight += "\n";
                 this.m_bEmptyBracket = false;
             }
+            if (topStack == JSParser.JS_IMPORT) {
+                leftStyle = " ";
+            }
 
             if ((!bHaveNewLine &&
                     this.m_tokenB.code != ";" && this.m_tokenB.code != "," && this.m_tokenB.code != "=" &&
@@ -650,6 +670,7 @@ class RealJSFormatter extends JSParser.JSParser {
                         (topStack == JSParser.JS_IF && this.m_tokenB.code == "else") ||
                         (topStack == JSParser.JS_TRY && this.m_tokenB.code == "catch") ||
                         ((topStack == JSParser.JS_TRY || topStack == JSParser.JS_CATCH) && this.m_tokenB.code == "finally") ||
+                        topStack == JSParser.JS_IMPORT ||
                         this.m_tokenB.code == ")"))) {
                 if (strRight.length == 0 || strRight.charAt(strRight.length - 1) != '\n') {
                     strRight += "\n"; // no double newline in some situation
@@ -797,7 +818,8 @@ class RealJSFormatter extends JSParser.JSParser {
             this.m_blockStack.push(JSParser.JS_TEMP_LITE);
         }
 
-        if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_TEMP_LITE) && this.m_tokenA.code.startsWith("}")) {
+        if (JSParser.StackTopEq(this.m_blockStack, JSParser.JS_TEMP_LITE) &&
+            this.m_tokenA.code.startsWith("}")) {
             this.m_blockStack.pop();
         }
 
@@ -817,6 +839,11 @@ class RealJSFormatter extends JSParser.JSParser {
 
             //if(m_blockStack.top() != 't' && IsType(m_tokenA))
             //m_blockStack.push('t'); // variable statment
+
+            if (this.m_tokenA.code == "import") {
+                this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
+            }
+
             return;
         }
 
@@ -843,7 +870,6 @@ class RealJSFormatter extends JSParser.JSParser {
         }
 
         if (!bTokenAPropName && this.m_tokenA.code == "switch") {
-            //bBracket = false;
             this.m_brcNeedStack.push(false);
             this.m_blockStack.push(this.m_blockMap[this.m_tokenA.code]);
         }
