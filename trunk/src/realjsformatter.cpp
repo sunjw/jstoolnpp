@@ -144,6 +144,10 @@ void RealJSFormatter::Init()
 	m_declareKeywordSet.insert("var");
 	m_declareKeywordSet.insert("let");
 	m_declareKeywordSet.insert("const");
+    for (StrSet::iterator itr = m_declareKeywordSet.begin(); itr != m_declareKeywordSet.end(); ++itr)
+    {
+        m_blockMap[*itr] = JS_DECL;
+    }
 }
 
 void RealJSFormatter::PrintAdditionalDebug(string& strDebugOutput)
@@ -696,9 +700,10 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		if (StackTopEq(m_blockStack, JS_BLOCK) && !bHaveNewLine)
 		{
 			m_blockStack.pop();
-			if (StackTopEq(m_blockStack, JS_IMPORT))
+			if (StackTopEq(m_blockStack, JS_IMPORT) ||
+				StackTopEq(m_blockStack, JS_DECL))
 			{
-				PutToken(m_tokenA, string(""), strRight); // inside import {}
+				PutToken(m_tokenA, string(""), strRight); // inside import/const {}
 			}
 			else
 			{
@@ -775,11 +780,13 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		}
 		// 修正({...}) 中多一次缩进 end
 
-		m_blockStack.push(m_blockMap[m_tokenA.code]); // 入栈, 增加缩进
-		if (topStack != JS_IMPORT)
+		if (topStack != JS_IMPORT &&
+			topStack != JS_DECL)
 		{
-			++m_nIndents; // no newline with import
+			++m_nIndents; // no newline with import/const
 		}
+
+		m_blockStack.push(m_blockMap[m_tokenA.code]); // push and indent
 
 		/*
 		 * { 之间的空格都是由之前的符号准备好的
@@ -806,12 +813,12 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 		{
 			string strLeft = (m_struOption.eBracNL == NEWLINE_BRAC &&
 				topStack != JS_IMPORT &&
-				//topStack != JS_DECL &&
+				topStack != JS_DECL &&
 				!m_bNewLine) ? "\n" : "";
 			if (!bHaveNewLine &&
 				!IsInlineComment(m_tokenB) &&
-				topStack != JS_IMPORT/* &&
-				topStack != JSParser.JS_DECL*/) // need newline
+				topStack != JS_IMPORT &&
+				topStack != JS_DECL) // need newline
 			{
 				PutToken(m_tokenA, strLeft, strRight.append("\n"));
 			}
@@ -862,10 +869,14 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 
 		if (topStack == JS_BLOCK)
 		{
-			// 弹栈, 减小缩进
+			// pop and reduce indent
 			m_blockStack.pop();
-			--m_nIndents;
 			bool bGetTop = GetStackTop(m_blockStack, topStack);
+			if (topStack != JS_IMPORT &&
+				topStack != JS_DECL)
+			{
+				--m_nIndents;
+			}
 
 			if (bGetTop)
 			{
@@ -880,11 +891,13 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 				case JS_SWITCH:
 				case JS_ASSIGN:
 				case JS_FUNCTION:
+				case JS_IMPORT:
+				case JS_DECL:
 				case JS_HELPER:
 					m_blockStack.pop();
 					break;
 				case JS_DO:
-					// 缩进已经处理, do 留给 while
+					// do left for while
 					break;
 				}
 			}
@@ -901,8 +914,8 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			strRight.append("\n");
 			m_bEmptyBracket = false;
 		}
-		if (topStack == JS_IMPORT /*||
-			topStack == JS_DECL*/)
+		if (topStack == JS_IMPORT ||
+			topStack == JS_DECL)
 		{
 			leftStyle = " ";
 		}
@@ -916,11 +929,12 @@ void RealJSFormatter::ProcessOper(bool bHaveNewLine, char tokenAFirst, char toke
 			(topStack == JS_TRY && m_tokenB.code == "catch") ||
 			((topStack == JS_TRY || topStack == JS_CATCH) && m_tokenB.code == "finally") ||
 			topStack == JS_IMPORT ||
+			topStack == JS_DECL ||
 			m_tokenB.code == ")")))
 		{
 			if (strRight.length() == 0 || strRight[strRight.length() - 1] != '\n')
 			{
-				strRight.append("\n"); // 一些情况换行, 不要重复换行
+				strRight.append("\n"); // no double newline in some situation
 			}
 
 			PutToken(m_tokenA, leftStyle, strRight);
@@ -1123,6 +1137,11 @@ void RealJSFormatter::ProcessString(bool bHaveNewLine, char tokenAFirst, char to
 		//}
 
 		if (m_tokenA.code == "import")
+		{
+			m_blockStack.push(m_blockMap[m_tokenA.code]);
+		}
+
+		if (m_declareKeywordSet.find(m_tokenA.code) != m_declareKeywordSet.end() && m_tokenB.code == "{")
 		{
 			m_blockStack.push(m_blockMap[m_tokenA.code]);
 		}

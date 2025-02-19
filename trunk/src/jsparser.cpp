@@ -598,10 +598,11 @@ void JSParser::PrepareTokenB()
 			return; // Пе {}
 		}
 
+		bool eatNewLine = false;
+
 		if (m_tokenA.code == "}" && m_tokenB.code == "while" &&
 			StackTopEq(m_blockStack, JS_BLOCK))
 		{
-			bool eatNewLine = false;
 			char topStack;
 			GetStackTop(m_blockStack, topStack);
 			m_blockStack.pop();
@@ -610,10 +611,29 @@ void JSParser::PrepareTokenB()
 				eatNewLine = true;
 			}
 			m_blockStack.push(topStack);
-			if (eatNewLine)
-			{
-				return;
-			}
+		}
+
+		bool needRepush = false;
+		if (StackTopEq(m_blockStack, JS_BLOCK))
+		{
+			char topStack;
+			GetStackTop(m_blockStack, topStack);
+			m_blockStack.pop();
+			needRepush = true;
+		}
+		if ((m_tokenA.code != ";" && StackTopEq(m_blockStack, JS_IMPORT)) ||
+			StackTopEq(m_blockStack, JS_DECL))
+		{
+			eatNewLine = true;
+		}
+		if (needRepush)
+		{
+			m_blockStack.push(JS_BLOCK);
+		}
+
+		if (eatNewLine)
+		{
+			return;
 		}
 
 		Token temp;
