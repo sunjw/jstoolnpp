@@ -454,7 +454,7 @@ void jsFormat()
 	if (!bFormatSel)
 	{
 		// 格式化全部
-		pJS = new char[jsLen+1];
+		pJS = new char[jsLen+10];
 		::SendMessage(hCurrScintilla, SCI_GETTEXT, jsLen + 1, (LPARAM)pJS);
 
 		currentPos = (int)::SendMessage(hCurrScintilla, SCI_GETCURRENTPOS, 0, 0);
@@ -493,8 +493,8 @@ void jsFormat()
 
 		// 获得 Sel
 		jsLenSel = ::SendMessage(hCurrScintilla, SCI_GETSELTEXT, 0, 0);
-		pJS = new char[jsLenSel];
-		::SendMessage(hCurrScintilla, SCI_GETSELTEXT, jsLen, (LPARAM)pJS);
+		pJS = new char[jsLenSel+10];
+		::SendMessage(hCurrScintilla, SCI_GETSELTEXT, 0, (LPARAM)pJS);
 
 		// 得到 Initial Indent
 		for (size_t i = 0; i < jsLenSel; ++i)
