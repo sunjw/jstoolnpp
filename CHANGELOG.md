@@ -1,3 +1,7 @@
+1.2503.0  
+[Common] Fix ES6 import format.  
+[NPP] Fix potential crash on non-English Windows.  
+
 1.2312.0  
 [Common] Fix regular expression format.  
 [Common] Change "ROOT" to "$" in JSON viewer.  
