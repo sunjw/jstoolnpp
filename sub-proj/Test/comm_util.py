@@ -26,7 +26,7 @@ def log_err(message):
 
 
 def get_cur_timestamp():
-    return math.floor(time.mktime(datetime.datetime.today().timetuple()))
+    return math.floor(time.mktime(datetime.datetime.now().timetuple()))
 
 
 def get_cur_timestamp_millis():
@@ -139,8 +139,9 @@ def write_file_text(file_path, file_content, eol=None):
 
 def read_file_binary(file_path):
     if not os.path.exists(file_path):
-        return ''
-    file_content = open(file_path, 'rb').read()
+        return b''
+    with open(file_path, 'rb') as f:
+        file_content = f.read()
     return file_content
 
 
@@ -192,7 +193,8 @@ def md5_str(input_str, encode='utf-8'):
 
 
 def md5_file(file_path):
-    filemd5 = hashlib.md5(open(file_path, 'rb').read()).hexdigest()
+    with open(file_path, 'rb') as f:
+        filemd5 = hashlib.md5(f.read()).hexdigest()
     return filemd5
 
 
